@@ -208,7 +208,6 @@
 		39012F281F8ED262002E3D31 /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
 		3905274C1C874D35007E0BB7 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3905274B1C874D35007E0BB7 /* NotificationCenter.framework */; };
 		3905274F1C874D35007E0BB7 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3905274E1C874D35007E0BB7 /* TodayViewController.swift */; };
-		390527561C874D35007E0BB7 /* Today.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3905274A1C874D35007E0BB7 /* Today.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		39098DC41CAD5ACB00AE87F3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 391AEFD11C8F11ED00691F84 /* Images.xcassets */; };
 		391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */; };
@@ -234,7 +233,6 @@
 		396E38F21EE0C8ED00CC180F /* FxAPushMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3905B4D41E8E7A6B0027D953 /* FxAPushMessageHandler.swift */; };
 		396E38F31EE0C90D00CC180F /* FxALoginHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F99FED1E3A71F800F353B4 /* FxALoginHelper.swift */; };
 		397848DE1ED86605004C0C0B /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397848DD1ED86605004C0C0B /* NotificationService.swift */; };
-		397848E21ED86605004C0C0B /* NotificationService.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 397848DB1ED86605004C0C0B /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A359E31BFCCE94006B9E87 /* UserActivityHandler.swift */; };
 		39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */; };
 		39AC591A1CC574AB0042C2F5 /* HomePageSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39AC59191CC574AA0042C2F5 /* HomePageSettingsViewController.swift */; };
@@ -544,7 +542,6 @@
 		E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7561A793CF20022C5E0 /* FiraSans-Regular.ttf */; };
 		E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7571A793CF20022C5E0 /* FiraSans-SemiBold.ttf */; };
 		E4B7B7861A793CF20022C5E0 /* FiraSans-UltraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B75F1A793CF20022C5E0 /* FiraSans-UltraLight.ttf */; };
-		E4BA8A351B4B0A1700BC2E95 /* ViewLater.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E4BA8A2B1B4B0A1600BC2E95 /* ViewLater.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E4BA8A8A1B4B10F400BC2E95 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
 		E4BA8AA81B4B15EF00BC2E95 /* ActionRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BA8AA11B4B15EF00BC2E95 /* ActionRequestHandler.swift */; };
 		E4BA8AAD1B4B15EF00BC2E95 /* ViewLater.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4BA8AA61B4B15EF00BC2E95 /* ViewLater.xcassets */; };
@@ -760,8 +757,6 @@
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
 		F84B22241A09122500AAB793 /* HomePanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* HomePanelViewController.swift */; };
-		F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B22491A0920C600AAB793 /* ShareTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		F84B22661A09210A00AAB793 /* SendTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B225C1A09210A00AAB793 /* SendTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F8708D2A1A0970B40051AB07 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8708D201A0970990051AB07 /* ActionViewController.swift */; };
 		F8708D2C1A0970B40051AB07 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8708D221A0970990051AB07 /* MainInterface.storyboard */; };
 		F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8708D251A0970990051AB07 /* Images.xcassets */; };
@@ -934,20 +929,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
 			remoteInfo = Shared;
-		};
-		390527541C874D35007E0BB7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 390527491C874D35007E0BB7;
-			remoteInfo = Today;
-		};
-		397848E01ED86605004C0C0B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 397848DA1ED86605004C0C0B;
-			remoteInfo = NotificationService;
 		};
 		3B43E3D51D95C48D00BBA9DB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1215,13 +1196,6 @@
 			remoteGlobalIDString = 28F951FA19D0F9FA00DCE892;
 			remoteInfo = FxA;
 		};
-		E4BA8A331B4B0A1700BC2E95 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4BA8A2A1B4B0A1600BC2E95;
-			remoteInfo = ViewLater;
-		};
 		E4D567241ADECE2700F1EFE7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1313,20 +1287,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		F84B22511A0920C600AAB793 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F84B22481A0920C600AAB793;
-			remoteInfo = ShareToFirefox;
-		};
-		F84B22641A09210A00AAB793 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F84B225B1A09210A00AAB793;
-			remoteInfo = SendToDevice;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1385,11 +1345,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				390527561C874D35007E0BB7 /* Today.appex in Embed App Extensions */,
-				397848E21ED86605004C0C0B /* NotificationService.appex in Embed App Extensions */,
-				F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */,
-				F84B22661A09210A00AAB793 /* SendTo.appex in Embed App Extensions */,
-				E4BA8A351B4B0A1700BC2E95 /* ViewLater.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4389,11 +4344,6 @@
 				2FCAE2301ABB51F800877008 /* PBXTargetDependency */,
 				282731741ABC9BE700AA1954 /* PBXTargetDependency */,
 				E69DB0891E97DEAA008A67E6 /* PBXTargetDependency */,
-				397848E11ED86605004C0C0B /* PBXTargetDependency */,
-				F84B22651A09210A00AAB793 /* PBXTargetDependency */,
-				F84B22521A0920C600AAB793 /* PBXTargetDependency */,
-				390527551C874D35007E0BB7 /* PBXTargetDependency */,
-				E4BA8A341B4B0A1700BC2E95 /* PBXTargetDependency */,
 			);
 			name = Client;
 			productName = Client;
@@ -5999,16 +5949,6 @@
 			target = 288A2D851AB8B3260023ABC3 /* Shared */;
 			targetProxy = 2FCAE23B1ABB520700877008 /* PBXContainerItemProxy */;
 		};
-		390527551C874D35007E0BB7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 390527491C874D35007E0BB7 /* Today */;
-			targetProxy = 390527541C874D35007E0BB7 /* PBXContainerItemProxy */;
-		};
-		397848E11ED86605004C0C0B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 397848DA1ED86605004C0C0B /* NotificationService */;
-			targetProxy = 397848E01ED86605004C0C0B /* PBXContainerItemProxy */;
-		};
 		3B43E3D61D95C48D00BBA9DB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
@@ -6144,11 +6084,6 @@
 			name = FxA;
 			targetProxy = E4A888181A95679500CDC337 /* PBXContainerItemProxy */;
 		};
-		E4BA8A341B4B0A1700BC2E95 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4BA8A2A1B4B0A1600BC2E95 /* ViewLater */;
-			targetProxy = E4BA8A331B4B0A1700BC2E95 /* PBXContainerItemProxy */;
-		};
 		E4D567251ADECE2700F1EFE7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E4D567171ADECE2700F1EFE7 /* ReadingList */;
@@ -6203,16 +6138,6 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = F84B21D41A090F8100AAB793 /* PBXContainerItemProxy */;
-		};
-		F84B22521A0920C600AAB793 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F84B22481A0920C600AAB793 /* ShareTo */;
-			targetProxy = F84B22511A0920C600AAB793 /* PBXContainerItemProxy */;
-		};
-		F84B22651A09210A00AAB793 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F84B225B1A09210A00AAB793 /* SendTo */;
-			targetProxy = F84B22641A09210A00AAB793 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
