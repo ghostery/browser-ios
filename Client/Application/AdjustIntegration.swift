@@ -4,7 +4,9 @@
 
 import Foundation
 import Shared
+/* Cliqz: Disable Adjust Integration
 import AdjustSdk
+*/
 
 private let AdjustIntegrationErrorDomain = "org.mozilla.ios.Firefox.AdjustIntegrationErrorDomain"
 
@@ -41,7 +43,7 @@ class AdjustIntegration: NSObject {
     /// the Info.plist file if Adjust should be enabled, and if so, what its application token and
     /// environment are. If those keys are either missing or empty in the Info.plist then it is
     /// assumed that Adjust is not enabled for this build.
-
+    /* Cliqz: Disable Adjust Integration
     fileprivate func getConfig() -> ADJConfig? {
         guard let settings = getSettings() else {
             return nil
@@ -54,7 +56,7 @@ class AdjustIntegration: NSObject {
         config?.delegate = self
         return config
     }
-
+ 
     /// Returns the Adjust settings from our Info.plist. If the settings are missing or invalid, such as an unknown
     /// environment, then it will return nil.
 
@@ -121,14 +123,18 @@ class AdjustIntegration: NSObject {
     fileprivate func shouldTrackRetention() -> Bool {
         return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
     }
+    */
 }
-
+/* Cliqz: Disable Adjust Integration
 extension AdjustIntegration: AdjustDelegate {
+*/
+extension AdjustIntegration {
     /// This is called as part of `UIApplication.didFinishLaunchingWithOptions()`. We always initialize the
     /// Adjust SDK. We always let it send the initial attribution ping. Session tracking is only enabled if
     /// the Send Anonymous Usage Data setting is turned on.
 
     func triggerApplicationDidFinishLaunchingWithOptions(_ launchOptions: [AnyHashable: Any]?) {
+        /* Cliqz: Disable Adjust Integration
         do {
             if let config = getConfig() {
                 // Always initialize Adjust - otherwise we cannot enable/disable it later. Their SDK must be
@@ -151,6 +157,7 @@ extension AdjustIntegration: AdjustDelegate {
             Logger.browserLogger.error("Adjust - Disabling because we failed to configure: \(error)")
             Adjust.setEnabled(false)
         }
+        */
     }
 
     /// This is called when Adjust has figured out the attribution. It will call us with a summary
@@ -158,7 +165,7 @@ extension AdjustIntegration: AdjustDelegate {
     /// that we know we have done a single attribution ping to Adjust.
     ///
     /// Here we also disable Adjust based on the Send Anonymous Usage Data setting.
-
+    /* Cliqz: Disable Adjust Integration
     func adjustAttributionChanged(_ attribution: ADJAttribution!) {
         do {
             Logger.browserLogger.info("Adjust - Saving attribution info to disk")
@@ -175,21 +182,24 @@ extension AdjustIntegration: AdjustDelegate {
             Adjust.setEnabled(false)
         }
     }
+    */
 
     /// This is called from the Settings screen. The settings screen will remember the choice in the
     /// profile and then use this method to disable or enable Adjust.
     
     static func setEnabled(_ enabled: Bool) {
+        /* Cliqz: Disable Adjust Integration
         Adjust.setEnabled(enabled)
+        */
     }
     
     /// Store the deeplink url from Adjust SDK. Per Adjust documentation, any interstitial view launched could interfere
     /// with launching the deeplink. We let the interstial view decide what to do with deeplink.
     /// Ref: https://github.com/adjust/ios_sdk#deferred-deep-linking-scenario
-    
+    /* Cliqz: Disable Adjust Integration
     func adjustDeeplinkResponse(_ deeplink: URL!) -> Bool {
         profile.prefs.setString("\(deeplink)", forKey: "AdjustDeeplinkKey")
         return true
     }
-
+    */
 }
