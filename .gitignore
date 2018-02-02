@@ -60,6 +60,7 @@ python-env/
 .idea
 
 Carthage/
+Cartfile.resolved
 
 ThirdParty/google-breakpad
 
