@@ -10,7 +10,10 @@
 #import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
 #import "ThirdParty/Apple/UIImage+ImageEffects.h"
 
+
+/* Cliqz: Remove BuddyBuildSDK
 #import <BuddyBuildSDK/BuddyBuildSDK.h>
+*/
 
 #import "Shared-Bridging-Header.h"
 #import "Storage-Bridging-Header.h"
