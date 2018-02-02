@@ -3,13 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+/* Cliqz: Disable FireFox Telemetry
 import Telemetry
+*/
 
 //
 // 'Unified Telemetry' is the name for Mozilla's telemetry system
 //
 class UnifiedTelemetry {
     init(profile: Profile) {
+        /* Cliqz: Disable FireFox Telemetry
         NotificationCenter.default.addObserver(self, selector: #selector(uploadError), name: Telemetry.notificationReportError, object: nil)
 
         let telemetryConfig = Telemetry.default.configuration
@@ -56,11 +59,15 @@ class UnifiedTelemetry {
 
        Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
        Telemetry.default.add(pingBuilderType: MobileEventPingBuilder.self)
+        */
+        
     }
 
     @objc func uploadError(notification: NSNotification) {
+        /* Cliqz: Disable FireFox Telemetry
         guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
         Sentry.shared.send(message: "Upload Error", tag: SentryTag.unifiedTelemetry, severity: .info, description: error.debugDescription)
+        */
     }
 }
 
@@ -110,10 +117,14 @@ extension UnifiedTelemetry {
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String : Any?]? = nil) {
+        /* Cliqz: Disable FireFox Telemetry
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value.rawValue, extras: extras)
+        */
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String : Any?]? = nil) {
+        /* Cliqz: Disable FireFox Telemetry
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value, extras: extras)
+        */
     }
 }
