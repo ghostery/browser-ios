@@ -39,12 +39,17 @@ DerivedData
 /provisioning-profiles
 /assets
 #build tools
-/fastlane/Appfile
 /fastlane/Snapfile
 /fastlane/SnapshotHelper.swift
 /fastlane/frames
 /fastlane/scripts
 /fastlane/templates
+#fastlane certificates, provisioning profiles, and symbolic files
+*.cer
+*.mobileprovision
+*.dSYM.zip
+#gemfile lock
+Gemfile.lock
 
 #python environment
 python-env/
