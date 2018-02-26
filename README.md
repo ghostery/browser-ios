@@ -1,4 +1,4 @@
-Ghostery for iOS
+Cliqz for iOS
 ===============
 
 This branch (master)
