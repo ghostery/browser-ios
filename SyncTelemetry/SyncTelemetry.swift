@@ -40,6 +40,7 @@ open class SyncTelemetry {
     }
 
     open class func send(ping: SyncTelemetryPing, docType: TelemetryDocType) {
+        /* Cliqz: Disable sending SyncTelemetry
         let docID = UUID().uuidString
         let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         let buildID = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
@@ -81,6 +82,7 @@ open class SyncTelemetry {
         SessionManager.default.request(request).response { response in
             log.debug("Ping response: \(response.response?.statusCode ?? -1).")
         }
+        */
     }
 
     private static func commonPingFormat(forType type: TelemetryDocType) -> [String: Any] {

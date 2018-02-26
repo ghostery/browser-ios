@@ -292,13 +292,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
+        /* Cliqz: Disabled UserNotifications
         UNUserNotificationCenter.current().delegate = self
         self.registerNotificationCategories()
+         */
 
+        /* Cliqz: Remove BuddyBuildSDK
         #if BUDDYBUILD
             print("Setting up BuddyBuild SDK")
             BuddyBuildSDK.setup()
         #endif
+        */
         
         window!.makeKeyAndVisible()
 

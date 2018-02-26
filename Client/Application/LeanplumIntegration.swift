@@ -5,7 +5,9 @@
 import Foundation
 import AdSupport
 import Shared
+/* Cliqz: Disable LeanPlum Integration
 import Leanplum
+ */
 
 private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
@@ -92,7 +94,9 @@ class LeanPlumClient {
     // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.
+    /* Cliqz: Disable LeanPlum Integration
     private var useFxAPrePush: LPVar = LPVar.define("useFxAPrePush", with: false)
+    */
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
@@ -101,11 +105,17 @@ class LeanPlumClient {
     }
     
     func isLPEnabled() -> Bool {
+        /* Cliqz: Disable LeanPlum Integration
         return enabled && Leanplum.hasStarted()
+        */
+        return false
     }
 
     static func shouldEnable(profile: Profile) -> Bool {
+        /* Cliqz: Disable LeanPlum Integration
         return AppConstants.MOZ_ENABLE_LEANPLUM && (profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true)
+        */
+        return false
     }
 
     func setup(profile: Profile) {
@@ -113,6 +123,7 @@ class LeanPlumClient {
     }
 
     fileprivate func start() {
+        /* Cliqz: Disable LeanPlum Integration
         guard let settings = getSettings(), supportedLocales.contains(Locale.current.identifier), !Leanplum.hasStarted() else {
             enabled = false
             log.error("LeanplumIntegration - Could not be started")
@@ -156,6 +167,7 @@ class LeanPlumClient {
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
         })
+        */
     }
 
     // Events
@@ -163,6 +175,7 @@ class LeanPlumClient {
         guard isLPEnabled() else {
             return
         }
+        /* Cliqz: Disable LeanPlum Integration
         ensureMainThread {
             guard !self.isPrivateMode() else {
                 return
@@ -173,28 +186,36 @@ class LeanPlumClient {
                 Leanplum.track(event.rawValue)
             }
         }
+        */
     }
 
     func set(attributes: [AnyHashable: Any]) {
         guard isLPEnabled() else {
             return
         }
+        /* Cliqz: Disable LeanPlum Integration
         ensureMainThread {
             if !self.isPrivateMode() {
                 Leanplum.setUserAttributes(attributes)
             }
         }
+        */
     }
 
     func set(enabled: Bool) {
         // Setting up Test Mode stops sending things to server.
         if enabled { start() }
         self.enabled = enabled
+        /* Cliqz: Disable LeanPlum Integration
         Leanplum.setTestModeEnabled(!enabled)
+        */
     }
     
     func isFxAPrePushEnabled() -> Bool {
+        /* Cliqz: Disable LeanPlum Integration
        return AppConstants.MOZ_FXA_LEANPLUM_AB_PUSH_TEST && useFxAPrePush.boolValue()
+        */
+        return false
     }
 
     /*
@@ -233,6 +254,7 @@ class LeanPlumClient {
         return (prefs?.stringForKey(PrefsKeys.KeyMailToOption) ?? "mailto:") == "mailto:"
     }
 
+    /* Cliqz: Disable LeanPlum Integration
     private func getSettings() -> LPSettings? {
         let bundle = Bundle.main
         guard let appId = bundle.object(forInfoDictionaryKey: LPAppIdKey) as? String,
@@ -299,6 +321,7 @@ class LeanPlumClient {
         // Register or update the custom Leanplum message
         Leanplum.defineAction(LPMessage.FxAPrePush, of: kLeanplumActionKindMessage, withArguments: args, withOptions: [:], withResponder: responder)
     }
+    */
 }
 
 extension UIApplication {
