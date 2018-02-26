@@ -79,3 +79,10 @@ MozBuildID.xcconfig
 
 # Node.js
 node_modules
+
+# Cliqz
+node_modules/
+JSEngine/*
+Pods/
+Podfile.lock
+artifacts/
