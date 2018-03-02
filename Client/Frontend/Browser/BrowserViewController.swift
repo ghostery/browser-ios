@@ -49,7 +49,10 @@ class BrowserViewController: UIViewController {
     let webViewContainerToolbar = UIView()
     var statusBarOverlay: UIView!
     fileprivate(set) var toolbar: TabToolbar?
+    /* Cliqz: Replace Search Controller
     fileprivate var searchController: SearchViewController?
+    */
+    fileprivate var searchController: CliqzSearchViewController?
     fileprivate var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
     fileprivate var searchLoader: SearchLoader?
@@ -764,15 +767,22 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        /* Cliqz: Replace Search Controller
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         searchController = SearchViewController(isPrivate: isPrivate)
         searchController!.searchEngines = profile.searchEngines
         searchController!.searchDelegate = self
         searchController!.profile = self.profile
-
+        
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
         searchLoader?.addListener(searchController!)
-
+        */
+        //Cliqz: Replace Search Controller
+        searchController = CliqzSearchViewController(profile: self.profile)
+        searchController?.delegate = self
+        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+        searchLoader!.addListener(HistoryListener.shared)
+        
         addChildViewController(searchController!)
         view.addSubview(searchController!.view)
         searchController!.view.snp.makeConstraints { make in
@@ -1760,6 +1770,21 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let navController = ModalSettingsNavigationController(rootViewController: settingsNavigationController)
 
         self.present(navController, animated: true, completion: nil)
+    }
+}
+
+//Cliqz: Replace Search Controller
+extension BrowserViewController: SearchViewDelegate {
+    func didSelectURL(_ url: URL, searchQuery: String?) {
+        finishEditingAndSubmit(url, visitType: VisitType.typed)
+    }
+    
+    func autoCompeleteQuery(_ autoCompleteText: String) {
+        urlBar.setAutocompleteSuggestion(autoCompleteText)
+    }
+    
+    func dismissKeyboard() {
+        urlBar.hideKeyboard()
     }
 }
 
@@ -2835,6 +2860,13 @@ extension BrowserViewController: ClientPickerViewControllerDelegate, Instruction
         profile.sendItems([shareItem], toClients: clients).uponQueue(.main) { _ in
             self.popToBVC()
         }
+    }
+}
+
+//Cliqz: Cards Subscription
+extension BrowserViewController: RemoteNotificationDelegate {
+    func presentViewController(_ viewControllerToPresent: UIViewController, animated flag: Bool) {
+        self.present(viewControllerToPresent, animated: flag, completion: nil)
     }
 }
 

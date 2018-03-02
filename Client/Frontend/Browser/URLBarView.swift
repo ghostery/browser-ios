@@ -655,6 +655,13 @@ extension URLBarView: Themeable {
     }
 }
 
+// Cliqz: hide keyboard
+extension URLBarView {
+    func hideKeyboard() {
+        locationTextField?.resignFirstResponder()
+    }
+}
+
 // We need a subclass so we can setup the shadows correctly
 // This subclass creates a strong shadow on the URLBar
 class TabLocationContainerView: UIView {
