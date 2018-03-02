@@ -19,7 +19,9 @@ typealias SearchLoader = _SearchLoader<AnyObject, AnyObject>
  * Shared data source for the SearchViewController and the URLBar domain completion.
  * Since both of these use the same SQL query, we can perform the query once and dispatch the results.
  */
-class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController> {
+//Cliqz: Replace Search Controller - Change: HistoryListener instead of SearchViewController
+//class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController> {
+class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, HistoryListener> {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
     fileprivate let frecentHistory: FrecentHistory

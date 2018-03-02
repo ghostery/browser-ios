@@ -21,6 +21,8 @@ def project_pods
     pod 'RNDeviceInfo', :path => './node_modules/react-native-device-info'
     pod 'RNSqlite2', :path => './node_modules/react-native-sqlite-2/ios/'
     pod 'RNViewShot', :path => './node_modules/react-native-view-shot/'
+    pod 'CRToast'
+    pod 'SVProgressHUD'
 end
 
 target 'Client' do

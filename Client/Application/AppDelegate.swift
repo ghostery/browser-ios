@@ -70,6 +70,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.backgroundColor = UIColor.white
+        
+        //Cliqz: Cards Subscription
+        SubscriptionsHandler.sharedInstance.configureRemoteNotifications()
 
         // Short circuit the app if we want to email logs from the debug menu
         if DebugSettingsBundleOptions.launchIntoEmailComposer {
@@ -141,6 +144,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
+        
+        //Cliqz: Cards Subscription
+        SubscriptionsHandler.sharedInstance.delegate = browserViewController
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
@@ -175,6 +181,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
         setUpDeepLinks(application: application)
+        
+        _ = Engine.sharedInstance
 
         log.info("startApplication end")
         return true
@@ -739,11 +747,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(deviceToken)
+        //Cliqz: Cards Subscription
+        let deviceTokenString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        SubscriptionsHandler.sharedInstance.didRegisterForRemoteNotifications(withDeviceToken: deviceTokenString)
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("failed to register. \(error)")
         FxALoginHelper.sharedInstance.apnsRegisterDidFail()
+        //Cliqz: Cards Subscription
+        SubscriptionsHandler.sharedInstance.didFailToRegisterForRemoteNotifications(withError: error)
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
@@ -791,6 +804,9 @@ extension AppDelegate {
                 return completionHandler(.newData)
             }
         }
+        
+        //Cliqz: Cards Subscription
+        SubscriptionsHandler.sharedInstance.didReceiveRemoteNotification(userInfo, fetchCompletionHandler: completionHandler)
 
         // By now, we've dealt with any sent tab notifications.
         //
@@ -820,6 +836,21 @@ extension AppDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
         let completionHandler: (UIBackgroundFetchResult) -> Void = { _ in }
         self.application(application, didReceiveRemoteNotification: userInfo, fetchCompletionHandler: completionHandler)
+    }
+}
+
+// Cliqz: Useful when presenting pop-ups
+extension AppDelegate {
+    func presentContollerOnTop(controller: UIViewController) {
+        
+        var rootViewController = UIApplication.shared.keyWindow?.rootViewController
+        if let navigationController = rootViewController as? UINavigationController {
+            rootViewController = navigationController.viewControllers.first
+        }
+        if let tabBarController = rootViewController as? UITabBarController {
+            rootViewController = tabBarController.selectedViewController
+        }
+        rootViewController?.present(controller, animated: true, completion: nil)
     }
 }
 
