@@ -447,8 +447,6 @@
 		AFB8F82120458B5100375A88 /* QuerySuggestionBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7C520458B5000375A88 /* QuerySuggestionBridge.m */; };
 		AFB8F82220458B5100375A88 /* ShareCardModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7C620458B5000375A88 /* ShareCardModule.swift */; };
 		AFB8F82320458B5100375A88 /* ShareCardModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7C720458B5000375A88 /* ShareCardModuleBridge.m */; };
-		AFB8F82420458B5100375A88 /* SubscriptionModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7C820458B5000375A88 /* SubscriptionModule.swift */; };
-		AFB8F82520458B5100375A88 /* SubscriptionModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7C920458B5000375A88 /* SubscriptionModuleBridge.m */; };
 		AFB8F82620458B5100375A88 /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7CA20458B5000375A88 /* Telemetry.swift */; };
 		AFB8F82720458B5100375A88 /* TelemetryBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7CB20458B5000375A88 /* TelemetryBridge.m */; };
 		AFB8F82820458B5100375A88 /* UserAgentConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7CC20458B5000375A88 /* UserAgentConstants.swift */; };
@@ -456,7 +454,6 @@
 		AFB8F82A20458B5100375A88 /* QuerySuggestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7CE20458B5000375A88 /* QuerySuggestions.swift */; };
 		AFB8F82B20458B5100375A88 /* SettingsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7CF20458B5000375A88 /* SettingsPrefs.swift */; };
 		AFB8F82C20458B5100375A88 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7D020458B5000375A88 /* StringExtension.swift */; };
-		AFB8F82D20458B5100375A88 /* SubscriptionsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F7D120458B5000375A88 /* SubscriptionsHandler.swift */; };
 		AFB8F8332045A38200375A88 /* Cliqz.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFB8F8322045A38200375A88 /* Cliqz.xcassets */; };
 		AFB8F8352045B3BF00375A88 /* FeedbackUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB8F8342045B3BE00375A88 /* FeedbackUI.swift */; };
 		AFB8F8492045C10E00375A88 /* jsengine.bundle.js in Resources */ = {isa = PBXBuildFile; fileRef = AFB8F8482045C10D00375A88 /* jsengine.bundle.js */; };
@@ -1926,8 +1923,6 @@
 		AFB8F7C520458B5000375A88 /* QuerySuggestionBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuerySuggestionBridge.m; sourceTree = "<group>"; };
 		AFB8F7C620458B5000375A88 /* ShareCardModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareCardModule.swift; sourceTree = "<group>"; };
 		AFB8F7C720458B5000375A88 /* ShareCardModuleBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareCardModuleBridge.m; sourceTree = "<group>"; };
-		AFB8F7C820458B5000375A88 /* SubscriptionModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionModule.swift; sourceTree = "<group>"; };
-		AFB8F7C920458B5000375A88 /* SubscriptionModuleBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubscriptionModuleBridge.m; sourceTree = "<group>"; };
 		AFB8F7CA20458B5000375A88 /* Telemetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Telemetry.swift; sourceTree = "<group>"; };
 		AFB8F7CB20458B5000375A88 /* TelemetryBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TelemetryBridge.m; sourceTree = "<group>"; };
 		AFB8F7CC20458B5000375A88 /* UserAgentConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAgentConstants.swift; sourceTree = "<group>"; };
@@ -1935,7 +1930,6 @@
 		AFB8F7CE20458B5000375A88 /* QuerySuggestions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuerySuggestions.swift; sourceTree = "<group>"; };
 		AFB8F7CF20458B5000375A88 /* SettingsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPrefs.swift; sourceTree = "<group>"; };
 		AFB8F7D020458B5000375A88 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
-		AFB8F7D120458B5000375A88 /* SubscriptionsHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionsHandler.swift; sourceTree = "<group>"; };
 		AFB8F8322045A38200375A88 /* Cliqz.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Cliqz.xcassets; sourceTree = "<group>"; };
 		AFB8F8342045B3BE00375A88 /* FeedbackUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackUI.swift; sourceTree = "<group>"; };
 		AFB8F8482045C10D00375A88 /* jsengine.bundle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = jsengine.bundle.js; path = JSEngine/jsengine.bundle.js; sourceTree = SOURCE_ROOT; };
@@ -3231,7 +3225,6 @@
 				AFB8F7CE20458B5000375A88 /* QuerySuggestions.swift */,
 				AFB8F7CF20458B5000375A88 /* SettingsPrefs.swift */,
 				AFB8F7D020458B5000375A88 /* StringExtension.swift */,
-				AFB8F7D120458B5000375A88 /* SubscriptionsHandler.swift */,
 				AFB8F8322045A38200375A88 /* Cliqz.xcassets */,
 			);
 			path = CliqzSearch;
@@ -3565,8 +3558,6 @@
 				AFB8F7C520458B5000375A88 /* QuerySuggestionBridge.m */,
 				AFB8F7C620458B5000375A88 /* ShareCardModule.swift */,
 				AFB8F7C720458B5000375A88 /* ShareCardModuleBridge.m */,
-				AFB8F7C820458B5000375A88 /* SubscriptionModule.swift */,
-				AFB8F7C920458B5000375A88 /* SubscriptionModuleBridge.m */,
 				AFB8F7CA20458B5000375A88 /* Telemetry.swift */,
 				AFB8F7CB20458B5000375A88 /* TelemetryBridge.m */,
 				AFB8F7CC20458B5000375A88 /* UserAgentConstants.swift */,
@@ -6282,7 +6273,6 @@
 				3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */,
 				AFB8F7F820458B5100375A88 /* AWSURLRequestRetryHandler.m in Sources */,
 				AFB8F7EA20458B5100375A88 /* AWSMTLReflection.m in Sources */,
-				AFB8F82520458B5100375A88 /* SubscriptionModuleBridge.m in Sources */,
 				745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */,
 				AFB8F7E720458B5100375A88 /* AWSMTLManagedObjectAdapter.m in Sources */,
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
@@ -6307,7 +6297,6 @@
 				AFB8F7F420458B5100375A88 /* AWSNetworking.m in Sources */,
 				AFB8F80020458B5100375A88 /* AWSSTSService.m in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
-				AFB8F82420458B5100375A88 /* SubscriptionModule.swift in Sources */,
 				AFB8F82120458B5100375A88 /* QuerySuggestionBridge.m in Sources */,
 				E68E7ADE1CAC208A00FDCA76 /* RemovePasscodeViewController.swift in Sources */,
 				74C027451B2A348C001B1E88 /* SessionData.swift in Sources */,
@@ -6427,7 +6416,6 @@
 				392ED6B71D06E85E009D9B62 /* NewTabChoiceViewController.swift in Sources */,
 				E4B3348C1BC01D8F004E2BFF /* AdjustIntegration.swift in Sources */,
 				AFB8F80D20458B5100375A88 /* AWSSNSModel.m in Sources */,
-				AFB8F82D20458B5100375A88 /* SubscriptionsHandler.swift in Sources */,
 				E65075541E37F6FC006961AC /* DynamicFontHelper.swift in Sources */,
 				AFB8F81420458B5100375A88 /* Engine.swift in Sources */,
 				C4E3984C1D21F2FD004E89BA /* TabTrayButtonExtensions.swift in Sources */,

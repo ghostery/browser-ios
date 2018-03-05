@@ -20,7 +20,7 @@
     "readability": "git+https://github.com/mozilla/readability.git",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.10.0",
-    "browser-core": "https://s3.amazonaws.com/cdncliqz/update/edge/react-native/v3.24/3.24.2.tgz",
+    "browser-core": "http://cdn2.cliqz.com/update/edge/react-native/v3.24/3.24.3.tgz",
     "buffer": "5.0.7",
     "https-browserify": "1.0.0",
     "path-browserify": "0.0.0",
