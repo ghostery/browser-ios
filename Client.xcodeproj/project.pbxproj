@@ -7349,6 +7349,7 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MOZ_BUNDLE_DISPLAY_NAME = "New Cliqz";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -8429,6 +8430,7 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MOZ_BUNDLE_DISPLAY_NAME = "New Cliqz";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -9084,6 +9086,7 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MOZ_BUNDLE_DISPLAY_NAME = "New Cliqz";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -9561,6 +9564,7 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MOZ_BUNDLE_DISPLAY_NAME = "New Cliqz";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
