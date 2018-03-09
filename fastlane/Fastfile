@@ -1,26 +1,71 @@
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
 
-fastlane_version "1.39.0"
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
 
-default_platform :ios
+default_platform(:ios)
 
+platform :ios do
+  desc "Description of what the lane does"
 
-import_build_tools(
-  url: 'git@github.com:mozilla/firefox-ios-build-tools.git',
-  clone_folder: "../build-tools",
-)
+  # Configuring Sentry DSN
+  sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
+    
+  # Building ReactNative Entension
+  sh("cd .. && npm run bundle")
+  
+  
+  lane :beta do    
 
-#move all the build tools to the right places
-clone_folder = "../../build-tools"
-sh("rsync -a #{clone_folder}/scripts ../")
-sh("rsync -a #{clone_folder}/fastlane/Appfile Appfile")
-sh("rsync -a #{clone_folder}/fastlane/Snapfile Snapfile")
-sh("rsync -a #{clone_folder}/fastlane/SnapshotHelper.swift SnapshotHelper.swift")
-sh("rsync -a #{clone_folder}/fastlane/scripts .")
-sh("rsync -a #{clone_folder}/fastlane/frames .")
-sh("rsync -a #{clone_folder}/fastlane/templates .")
+    create_keychain(
+      name: ENV["MATCH_KEYCHAIN_NAME"],
+      password: ENV["MATCH_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
 
-#import the fastfile
-import "#{clone_folder}/fastlane/BaseFastfile"
+    match(
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+      keychain_password: ENV["MATCH_PASSWORD"],
+      git_branch: "new-browser-ios-beta",
+      readonly: true,
+      verbose: true
+    )
+
+    increment_build_number(
+      build_number: latest_testflight_build_number + 1,
+      xcodeproj: "Client.xcodeproj"
+    )
+
+    build_app(
+      workspace: "Client.xcworkspace",
+      clean: "true",
+      scheme: "Firefox",
+      export_options: {
+        provisioningProfiles: { 
+          "com.cliqz.ios.newCliqz" => "match AppStore com.cliqz.ios.newCliqz",
+          "com.cliqz.ios.newCliqz.NotificationService" => "match AppStore *",
+          "com.cliqz.ios.newCliqz.SendTo" => "match AppStore *", 
+          "com.cliqz.ios.newCliqz.ShareTo" => "match AppStore *", 
+          "com.cliqz.ios.newCliqz.Today" => "match AppStore *", 
+          "com.cliqz.ios.newCliqz.ViewLater" => "match AppStore *"
+        }
+      }
+    )
+
+    upload_to_testflight(
+      changelog: "Nightly build",
+      demo_account_required: "false",
+      skip_waiting_for_build_processing: "true"
+    )
+  end
+
+end
