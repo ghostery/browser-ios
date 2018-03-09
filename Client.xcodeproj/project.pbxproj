@@ -5336,8 +5336,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftRouter.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
