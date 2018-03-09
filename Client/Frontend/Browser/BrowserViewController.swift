@@ -500,9 +500,11 @@ class BrowserViewController: UIViewController {
         // On iPhone, if we are about to show the On-Boarding, blank out the tab so that it does
         // not flash before we present. This change of alpha also participates in the animation when
         // the intro view is dismissed.
+        /* Cliqz: Disabled showing IntroView
         if UIDevice.current.userInterfaceIdiom == .phone {
             self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
         }
+        */
 
         if !displayedRestoreTabsAlert && !cleanlyBackgrounded() && crashedLastLaunch() {
             displayedRestoreTabsAlert = true
@@ -548,7 +550,9 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        /* Cliqz: Disabled showing IntroView
         presentIntroViewController()
+        */
         self.webViewContainerToolbar.isHidden = false
 
         screenshotHelper.viewIsVisible = true
