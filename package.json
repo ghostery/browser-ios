@@ -5,8 +5,8 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "dev-server": "node node_modules/react-native/local-cli/cli.js start",
-    "dev-bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./JSEngine/jsengine.bundle.js --assets-dest ./JSEngine/ && cp -R ./node_modules/browser-core/build/assets/ ./JSEngine/assets/",
-    "bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./JSEngine/jsengine.bundle.js --assets-dest ./JSEngine/ --dev false && cp -R ./node_modules/browser-core/build/assets/ ./JSEngine/assets/",
+    "dev-bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
+    "bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ --dev false && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
     "postinstall": "sed -i '' 's#<fishhook/fishhook.h>#\"fishhook.h\"#g' ./node_modules/react-native/Libraries/WebSocket/RCTReconnectingWebSocket.m"
   },
   "repository": {
