@@ -1773,21 +1773,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 }
 
-//Cliqz: Replace Search Controller
-extension BrowserViewController: SearchViewDelegate {
-    func didSelectURL(_ url: URL, searchQuery: String?) {
-        finishEditingAndSubmit(url, visitType: VisitType.typed)
-    }
-    
-    func autoCompeleteQuery(_ autoCompleteText: String) {
-        urlBar.setAutocompleteSuggestion(autoCompleteText)
-    }
-    
-    func dismissKeyboard() {
-        urlBar.hideKeyboard()
-    }
-}
-
 extension BrowserViewController: TabManagerDelegate {
 
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {

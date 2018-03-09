@@ -19,7 +19,10 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
+				/* Cliqz: Replaced ActivityStreamPanel with Freshtab
                     return ActivityStreamPanel(profile: profile)
+				*/
+				return FreshtabViewController(profile: profile)
             },
             imageName: "TopSites",
             accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label"),

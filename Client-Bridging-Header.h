@@ -14,11 +14,6 @@
 /* Cliqz: Remove BuddyBuildSDK
 #import <BuddyBuildSDK/BuddyBuildSDK.h>
 */
-// Cliqz: AWS 
-#import "AWSCore.h"
-#import "AWSSNSService.h"
-#import "AWSSNS.h"
-
 
 #import "Shared-Bridging-Header.h"
 #import "Storage-Bridging-Header.h"
