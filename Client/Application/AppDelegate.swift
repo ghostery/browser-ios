@@ -109,6 +109,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         Logger.browserLogger.newLogWithDate(logDate)
 
         let profile = getProfile(application)
+        
+        // Cliqz: set SettingsPrefs profile
+        SettingsPrefs.shared.profile = profile
 
         unifiedTelemetry = UnifiedTelemetry(profile: profile)
 
