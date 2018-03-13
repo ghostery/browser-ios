@@ -49,6 +49,10 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let humanWebSetting = HumanWebSetting(settings: self)
         generalSettings += [humanWebSetting]
 
+        // Cliqz: Automatic Forget Tab Setting
+        let autoForgetTabSetting = AutoForgetTabSetting(settings: self)
+        generalSettings += [autoForgetTabSetting]
+        
         settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
         
         var privacySettings = [Setting]()
