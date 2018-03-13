@@ -24,3 +24,21 @@ class HumanWebSetting: CliqzOnOffSetting {
     }
 }
 
+
+class AutoForgetTabSetting: CliqzOnOffSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("Automatic Forget Tab", tableName: "Cliqz", comment: " [Settings] Automatic Forget Tab")
+    }
+    
+    override func isOn() -> Bool {
+        return SettingsPrefs.shared.getAutoForgetTabPref()
+    }
+    
+    override func getSubSettingViewController() -> SubSettingsTableViewController {
+        return AutoForgetTabTableViewController()
+    }
+    
+}
+
+
