@@ -208,13 +208,17 @@ extension NewsViewController {
 	}
 	
 	fileprivate func showMoreNews() {
+        self.newsTableView?.beginUpdates()
 		let indexPaths = getExtraNewsIndexPaths()
 		self.newsTableView?.insertRows(at:indexPaths, with: .automatic)
+        self.newsTableView?.endUpdates()
 	}
 	
 	fileprivate func showLessNews() {
+        self.newsTableView?.beginUpdates()
 		let indexPaths = getExtraNewsIndexPaths()
 		self.newsTableView?.deleteRows(at:indexPaths, with: .automatic)
+        self.newsTableView?.endUpdates()
 	}
 	
 	fileprivate func getExtraNewsIndexPaths() -> [IndexPath] {

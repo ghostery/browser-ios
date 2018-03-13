@@ -130,7 +130,7 @@ class FreshtabViewController: UIViewController, HomePanel {
 			isScrollable = true
 			return freshTabHeight - viewHeight
 		} else {
-			return 10.0
+			return 0.0
 		}
 		
 	}
