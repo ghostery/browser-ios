@@ -44,6 +44,11 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
                                                        defaultValue: SettingsPrefs.shared.getBlockExplicitContentPref(),
                                                        titleText: NSLocalizedString("Block Explicit Content", tableName: "Cliqz", comment: "[Settings] Block explicit content"))
         generalSettings += [blockExplicitContentSettings]
+        
+        // Cliqz: Human web Setting
+        let humanWebSetting = HumanWebSetting(settings: self)
+        generalSettings += [humanWebSetting]
+
         settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
         
         var privacySettings = [Setting]()
