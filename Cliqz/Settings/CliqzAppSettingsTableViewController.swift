@@ -25,34 +25,13 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let cliqzTabTitle = NSLocalizedString("Cliqz Tab", tableName: "Cliqz", comment: "[Settings] Cliqz Tab section header")
         settings += [ SettingSection(title: NSAttributedString(string: cliqzTabTitle), children: cliqzTabSettings)]
         
+        // Browsing & History Settings
+        let browsingAndHistorySettings = generateBrowsingAndHistorySettings(prefs: prefs)
+        let browsingAndHistoryTitle = NSLocalizedString("Browsing & History", tableName: "Cliqz", comment: "[Settings] Browsing & History section header")
+        settings += [ SettingSection(title: NSAttributedString(string: browsingAndHistoryTitle), children: browsingAndHistorySettings)]
         
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
-        var generalSettings: [Setting] = [
-            SearchSetting(settings: self),
-            BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
-                        titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
-            BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
-                        titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
-            ]
         
-       
-        // There is nothing to show in the Customize section if we don't include the compact tab layout
-        // setting on iPad. When more options are added that work on both device types, this logic can
-        // be changed.
-        
-        if AppConstants.MOZ_CLIPBOARD_BAR {
-            generalSettings += [
-                BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
-                            titleText: Strings.SettingsOfferClipboardBarTitle,
-                            statusText: Strings.SettingsOfferClipboardBarStatus)
-            ]
-        }
-        
-        // Cliqz: Automatic Forget Tab Setting
-        let autoForgetTabSetting = AutoForgetTabSetting(settings: self)
-        generalSettings += [autoForgetTabSetting]
-        
-        settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
         
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
@@ -116,5 +95,25 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let showNewsSetting = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.ShowNewsPrefKey, defaultValue: true, titleText: showNewsTitle)
         
         return [showTopSitesSetting, showNewsSetting]
+    }
+    
+    private func generateBrowsingAndHistorySettings(prefs: Prefs) -> [Setting] {
+        var browsingAndHistorySettings: [Setting] = [
+            BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
+                        titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
+            BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
+                        titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
+            
+            ]
+        
+        if AppConstants.MOZ_CLIPBOARD_BAR {
+            browsingAndHistorySettings += [
+                BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
+                            titleText: Strings.SettingsOfferClipboardBarTitle,
+                            statusText: Strings.SettingsOfferClipboardBarStatus)
+            ]
+        }
+        
+        return browsingAndHistorySettings
     }
 }
