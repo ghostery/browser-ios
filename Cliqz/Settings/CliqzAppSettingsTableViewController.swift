@@ -20,6 +20,11 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let searchSettingsTitle = NSLocalizedString("Search", tableName: "Cliqz", comment: "[Settings] Search section title")
         settings += [ SettingSection(title: NSAttributedString(string: searchSettingsTitle), children: searchSettings)]
         
+        // Cliqz Tab Settings
+        let cliqzTabSettings = generateCliqzTabSettings(prefs: prefs)
+        let cliqzTabTitle = NSLocalizedString("Cliqz Tab", tableName: "Cliqz", comment: "[Settings] Cliqz Tab section header")
+        settings += [ SettingSection(title: NSAttributedString(string: cliqzTabTitle), children: cliqzTabSettings)]
+        
         
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
         var generalSettings: [Setting] = [
@@ -100,5 +105,16 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
             searchSettings = [blockExplicitContentSettings, humanWebSetting]
         }
         return searchSettings
+    }
+    
+    private func generateCliqzTabSettings(prefs: Prefs) -> [Setting] {
+        
+        let showTopSitesTitle = NSLocalizedString("Show most visited websites", tableName: "Cliqz", comment: "[Settings] Show most visited websites")
+        let showTopSitesSetting = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.ShowTopSitesPrefKey, defaultValue: true, titleText: showTopSitesTitle)
+        
+        let showNewsTitle = NSLocalizedString("Show News", tableName: "Cliqz", comment: "[Settings] Show News")
+        let showNewsSetting = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.ShowNewsPrefKey, defaultValue: true, titleText: showNewsTitle)
+        
+        return [showTopSitesSetting, showNewsSetting]
     }
 }
