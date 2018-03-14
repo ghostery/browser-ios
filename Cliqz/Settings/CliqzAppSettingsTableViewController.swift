@@ -13,10 +13,15 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
 
     override func generateSettings() -> [SettingSection] {
         var settings = [SettingSection]()
+        let prefs = profile.prefs
+        
+        // Search Settings
+        let searchSettings = generateSearchSettings(prefs: prefs)
+        let searchSettingsTitle = NSLocalizedString("Search", tableName: "Cliqz", comment: "[Settings] Search section title")
+        settings += [ SettingSection(title: NSAttributedString(string: searchSettingsTitle), children: searchSettings)]
+        
         
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
-       
-        let prefs = profile.prefs
         var generalSettings: [Setting] = [
             SearchSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
@@ -38,17 +43,6 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
             ]
         }
         
-        // Cliqz: Block Explicit Content Setting
-        let blockExplicitContentSettings = BoolSetting(prefs: prefs,
-                                                       prefKey: SettingsPrefs.BlockExplicitContentPrefKey,
-                                                       defaultValue: SettingsPrefs.shared.getBlockExplicitContentPref(),
-                                                       titleText: NSLocalizedString("Block Explicit Content", tableName: "Cliqz", comment: "[Settings] Block explicit content"))
-        generalSettings += [blockExplicitContentSettings]
-        
-        // Cliqz: Human web Setting
-        let humanWebSetting = HumanWebSetting(settings: self)
-        generalSettings += [humanWebSetting]
-
         // Cliqz: Automatic Forget Tab Setting
         let autoForgetTabSetting = AutoForgetTabSetting(settings: self)
         generalSettings += [autoForgetTabSetting]
@@ -81,4 +75,30 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         return settings
     }
 
+    
+    // MARK:- Helper methods
+    private func generateSearchSettings(prefs: Prefs) -> [Setting] {
+        let querySuggestionTitle = NSLocalizedString("Search Query Suggestions", tableName: "Cliqz", comment: "[Settings] Search Query Suggestions")
+        let querySuggestionSettings = BoolSetting(prefs: prefs,
+                                                  prefKey: SettingsPrefs.querySuggestionPrefKey,
+                                                  defaultValue: SettingsPrefs.shared.getQuerySuggestionPref(),
+                                                  titleText: querySuggestionTitle)
+        
+        let blockExplicitContentTitle = NSLocalizedString("Block Explicit Content", tableName: "Cliqz", comment: "[Settings] Block explicit content")
+        let blockExplicitContentSettings = BoolSetting(prefs: prefs,
+                                                       prefKey: SettingsPrefs.BlockExplicitContentPrefKey,
+                                                       defaultValue: SettingsPrefs.shared.getBlockExplicitContentPref(),
+                                                       titleText: blockExplicitContentTitle)
+        
+        let humanWebSetting = HumanWebSetting(settings: self)
+        
+        
+        var searchSettings: [Setting]!
+        if QuerySuggestions.querySuggestionEnabledForCurrentRegion() {
+            searchSettings = [querySuggestionSettings, blockExplicitContentSettings, humanWebSetting]
+        } else {
+            searchSettings = [blockExplicitContentSettings, humanWebSetting]
+        }
+        return searchSettings
+    }
 }
