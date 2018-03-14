@@ -30,25 +30,13 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let browsingAndHistoryTitle = NSLocalizedString("Browsing & History", tableName: "Cliqz", comment: "[Settings] Browsing & History section header")
         settings += [ SettingSection(title: NSAttributedString(string: browsingAndHistoryTitle), children: browsingAndHistorySettings)]
         
-        let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
-        
-        
-        var privacySettings = [Setting]()
-        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-        privacySettings.append(TouchIDPasscodeSetting(settings: self))
-        
-        privacySettings.append(ClearPrivateDataSetting(settings: self))
-        
-        privacySettings += [
-            BoolSetting(prefs: prefs,
-                        prefKey: "settings.closePrivateTabs",
-                        defaultValue: false,
-                        titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
-                        statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
-        ]
+        // Privacy Settings
+        let privacyTitle = NSLocalizedString("Privacy", tableName: "Cliqz", comment: "[Settings] Privacy section header")
+        let privacySettings = generatePrivacySettings(prefs: prefs)
+        settings += [ SettingSection(title: NSAttributedString(string: privacyTitle), children: privacySettings)]
+
         
         settings += [
-            SettingSection(title: NSAttributedString(string: privacyTitle), children: privacySettings),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 OpenSupportPageSetting(delegate: settingsDelegate),
                 ]),
@@ -115,5 +103,26 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         }
         
         return browsingAndHistorySettings
+    }
+    
+    
+    private func generatePrivacySettings(prefs: Prefs) -> [Setting] {
+        
+        var privacySettings = [Setting]()
+        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
+        privacySettings.append(TouchIDPasscodeSetting(settings: self))
+        privacySettings += [AutoForgetTabSetting(settings: self)]
+        
+        privacySettings += [
+            BoolSetting(prefs: prefs,
+                        prefKey: "settings.closePrivateTabs",
+                        defaultValue: false,
+                        titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
+                        statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
+        ]
+        
+        privacySettings.append(ClearPrivateDataSetting(settings: self))
+        
+        return privacySettings
     }
 }
