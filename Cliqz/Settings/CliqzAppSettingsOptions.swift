@@ -70,3 +70,62 @@ class AdBlockerSetting: CliqzOnOffSetting {
         return AdBlockerSettingsTableViewController()
     }
 }
+
+
+class SupportSetting: Setting {
+    
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("FAQ & Support", tableName: "Cliqz", comment: "[Settings] FAQ & Support"),attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue])
+    }
+    
+    override var url: URL? {
+        return URL(string: "https://cliqz.com/support")
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        navigationController?.dismiss(animated: true, completion: {})
+        self.delegate?.settingsOpenURLInNewTab(self.url!)
+        
+        // TODO: Telemetry
+        /*
+        // Cliqz: log telemetry signal
+        let contactSignal = TelemetryLogEventType.Settings("main", "click", "contact", nil, nil)
+        TelemetryLogger.sharedInstance.logEvent(contactSignal)
+        */
+    }
+    
+}
+
+class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("Get the best out of CLIQZ", tableName: "Cliqz", comment: "[Settings] Get the best out of CLIQZ")
+    }
+    
+    override func getPageName() -> String {
+        return "tips-ios"
+    }
+}
+
+class ReportWebsiteSetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("Report Website", tableName: "Cliqz", comment: "[Settings] Report Website")
+    }
+    
+    override func getPageName() -> String {
+        return "report-url"
+    }
+}
+
+class MyOffrzSetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("About MyOffrz", tableName: "Cliqz", comment: "[Settings] About MyOffrz")
+    }
+    
+    override func getPageName() -> String {
+        return "myoffrz"
+    }
+}
+
