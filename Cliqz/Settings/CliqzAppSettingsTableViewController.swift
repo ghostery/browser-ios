@@ -35,15 +35,11 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let privacySettings = generatePrivacySettings(prefs: prefs)
         settings += [ SettingSection(title: NSAttributedString(string: privacyTitle), children: privacySettings)]
 
-        
-        settings += [
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
-                OpenSupportPageSetting(delegate: settingsDelegate),
-                ]),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
-                VersionSetting(settings: self)
-                ])]
-        
+        // Help Settings
+        let helpTitle = NSLocalizedString("Help", tableName: "Cliqz", comment: "[Settings] Help section header")
+        let helpSettings = generateHelpSettings(prefs: prefs)
+        settings += [ SettingSection(title: NSAttributedString(string: helpTitle), children: helpSettings)]
+
         return settings
     }
 
@@ -109,21 +105,30 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     
     private func generatePrivacySettings(prefs: Prefs) -> [Setting] {
         
-        var privacySettings = [Setting]()
-        privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
-        privacySettings.append(TouchIDPasscodeSetting(settings: self))
-        privacySettings += [AutoForgetTabSetting(settings: self)]
-        
-        privacySettings += [
-            BoolSetting(prefs: prefs,
-                        prefKey: "settings.closePrivateTabs",
-                        defaultValue: false,
-                        titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
-                        statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
-        ]
-        
-        privacySettings.append(ClearPrivateDataSetting(settings: self))
+        let privacySettings = [ LoginsSetting(settings: self, delegate: settingsDelegate),
+                                TouchIDPasscodeSetting(settings: self),
+                                AutoForgetTabSetting(settings: self),
+                                BoolSetting(prefs: prefs,
+                                            prefKey: "settings.closePrivateTabs",
+                                            defaultValue: false,
+                                            titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
+                                            statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'")),
+                                ClearPrivateDataSetting(settings: self)]
         
         return privacySettings
     }
+    
+    private func generateHelpSettings(prefs: Prefs) -> [Setting] {
+        
+        let helpSettings = [
+            SupportSetting(delegate: settingsDelegate),
+            CliqzTipsAndTricksSetting(),
+            ReportWebsiteSetting(),
+            MyOffrzSetting()
+        ]
+        
+        return helpSettings
+    }
+    
+    
 }
