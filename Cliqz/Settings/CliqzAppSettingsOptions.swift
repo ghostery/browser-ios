@@ -42,3 +42,18 @@ class AutoForgetTabSetting: CliqzOnOffSetting {
 }
 
 
+class LimitMobileDataUsageSetting: CliqzOnOffSetting {
+    override func getTitle() -> String {
+        return NSLocalizedString("Limit Mobile Data Usage", tableName: "Cliqz", comment: "[Settings] Limit Mobile Data Usage")
+    }
+    
+    override func isOn() -> Bool {
+        return SettingsPrefs.shared.getLimitMobileDataUsagePref()
+    }
+    
+    override func getSubSettingViewController() -> SubSettingsTableViewController {
+        return LimitMobileDataUsageTableViewController()
+    }
+    
+}
+

@@ -52,6 +52,7 @@
 		1E3CBC2320581C4B00898B05 /* AutoForgetTabTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC2220581C4B00898B05 /* AutoForgetTabTableViewController.swift */; };
 		1E3CBC252058213500898B05 /* CliqzOnOffSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC242058213500898B05 /* CliqzOnOffSetting.swift */; };
 		1EAFE4A3205934C8006A36B4 /* CliqzAppSettingsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */; };
+		1EAFE4CF205A5C0A006A36B4 /* LimitMobileDataUsageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE4CE205A5C0A006A36B4 /* LimitMobileDataUsageTableViewController.swift */; };
 		2805F5A61B8BCA7A00268FD1 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		28078A471B1507EF0053B46A /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		280CB1371C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */; };
@@ -1461,6 +1462,7 @@
 		1E3CBC202058149900898B05 /* ToggleSubSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleSubSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1E3CBC2220581C4B00898B05 /* AutoForgetTabTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoForgetTabTableViewController.swift; sourceTree = "<group>"; };
 		1E3CBC242058213500898B05 /* CliqzOnOffSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzOnOffSetting.swift; sourceTree = "<group>"; };
+		1EAFE4CE205A5C0A006A36B4 /* LimitMobileDataUsageTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitMobileDataUsageTableViewController.swift; sourceTree = "<group>"; };
 		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Sync/Synchronizers/Bookmarks/BookmarksSynchronizer.swift; sourceTree = SOURCE_ROOT; };
 		28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksHelpers.swift; sourceTree = "<group>"; };
 		28126F6D1C2F94F9006466CC /* SQLiteBookmarksModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksModel.swift; sourceTree = "<group>"; };
@@ -2486,6 +2488,7 @@
 				1E3CBC202058149900898B05 /* ToggleSubSettingsTableViewController.swift */,
 				1E3CBC18205805E200898B05 /* HumanWebSettingsTableViewController.swift */,
 				1E3CBC2220581C4B00898B05 /* AutoForgetTabTableViewController.swift */,
+				1EAFE4CE205A5C0A006A36B4 /* LimitMobileDataUsageTableViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -5979,6 +5982,7 @@
 				4FF07D882063C99E001385A8 /* OffrzDataSource.swift in Sources */,
 				39F819C61FD70F5D009E31E4 /* TabEventHandlers.swift in Sources */,
 				4FBBC1502035E02900445AD1 /* NewsViewCell.swift in Sources */,
+				1EAFE4CF205A5C0A006A36B4 /* LimitMobileDataUsageTableViewController.swift in Sources */,
 				E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */,
 				EB2A63341F3B49A7004EF8B0 /* ContentBlockerHelper.swift in Sources */,
 				FA6B2AC21D41F02D00429414 /* Punycode.swift in Sources */,
