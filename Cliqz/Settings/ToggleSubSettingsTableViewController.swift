@@ -28,11 +28,11 @@ class ToggleSubSettingsTableViewController: SubSettingsTableViewController {
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
         control.addTarget(self, action: #selector(switchValueChanged(_:)), for: UIControlEvents.valueChanged)
-        control.isOn = toggles[indexPath.row]
+        control.isOn = toggles[indexPath.section]
         control.isEnabled = true
         control.tag = indexPath.section
 
-        cell.textLabel?.text = toggleTitles[indexPath.row]
+        cell.textLabel?.text = toggleTitles[indexPath.section]
         cell.accessoryView = control
         cell.selectionStyle = .none
         cell.isUserInteractionEnabled = true

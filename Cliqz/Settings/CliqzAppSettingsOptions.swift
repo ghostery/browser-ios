@@ -57,3 +57,16 @@ class LimitMobileDataUsageSetting: CliqzOnOffSetting {
     
 }
 
+class AdBlockerSetting: CliqzOnOffSetting {
+    override func getTitle() -> String {
+        return NSLocalizedString("Block Ads", tableName: "Cliqz", comment: "[Settings] Block Ads")
+    }
+    
+    override func isOn() -> Bool {
+        return SettingsPrefs.shared.getAdBlockerPref()
+    }
+    
+    override func getSubSettingViewController() -> SubSettingsTableViewController {
+        return AdBlockerSettingsTableViewController()
+    }
+}
