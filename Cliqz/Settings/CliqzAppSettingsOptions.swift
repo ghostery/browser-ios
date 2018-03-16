@@ -23,7 +23,42 @@ class HumanWebSetting: CliqzOnOffSetting {
         return HumanWebSettingsTableViewController()
     }
 }
-
+class CliqzSearchSetting: Setting, SearchEnginePickerDelegate {
+    let profile: Profile
+    var navigationController: UINavigationController?
+    
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+    
+    override var style: UITableViewCellStyle { return .value1 }
+    
+    override var status: NSAttributedString { return NSAttributedString(string: profile.searchEngines.defaultEngine.shortName) }
+    
+    override var accessibilityIdentifier: String? { return "Search" }
+    
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(title: NSAttributedString(string: NSLocalizedString("Complementary Search", tableName: "Cliqz", comment: "[Settings] Complementary Search"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        let searchEnginePicker = SearchEnginePicker()
+        // Order alphabetically, so that picker is always consistently ordered.
+        // Every engine is a valid choice for the default engine, even the current default engine.
+        let searchEngines = profile.searchEngines
+        searchEnginePicker.engines = searchEngines.orderedEngines.sorted { e, f in e.shortName < f.shortName }
+        searchEnginePicker.delegate = self
+        searchEnginePicker.selectedSearchEngineName = searchEngines.defaultEngine.shortName
+        navigationController?.pushViewController(searchEnginePicker, animated: true)
+        self.navigationController = navigationController
+    }
+    
+    func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine searchEngine: OpenSearchEngine?) {
+        if let engine = searchEngine {
+            profile.searchEngines.defaultEngine = engine
+        }
+        _ = navigationController?.popViewController(animated: true)
+    }
+}
 
 class AutoForgetTabSetting: CliqzOnOffSetting {
     
