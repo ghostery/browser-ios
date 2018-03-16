@@ -9,17 +9,50 @@
 import Foundation
 
 class AppStatus {
+    static let AppId = "1065837334"
     
     class func isRelease() -> Bool {
-        #if BETA
+//        #if BETA
             return false
-        #else
-            return true
-        #endif
+//        #else
+//            return true
+//        #endif
     }
     
     class func isDebug() -> Bool {
         return _isDebugAssertConfiguration()
     }
     
+    class func distVersion() -> String {
+        let versionDescriptor = AppStatus.getVersionDescriptor()
+        return "\(versionDescriptor.version.trim()) (\(versionDescriptor.buildNumber))"
+    }
+    
+    class func extensionVersion() -> String {
+        
+        if let path = Bundle.main.path(forResource: "cliqz", ofType: "json"),
+            let jsonData = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe) as Data,
+            let jsonResult: NSDictionary = try! JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
+            
+            if let extensionVersion : String = jsonResult["EXTENSION_VERSION"] as? String {
+                return extensionVersion
+            }
+        }
+        return ""
+    }
+    
+    fileprivate class func getVersionDescriptor() -> (version: String, buildNumber: String) {
+        
+        var version = "0"
+        var buildNumber = "0"
+        
+        if let shortVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            version = shortVersion
+        }
+        if let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+            buildNumber = bundleVersion
+        }
+        
+        return (version, buildNumber)
+    }
 }

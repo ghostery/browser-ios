@@ -548,6 +548,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         AboutHomeHandler.register(server)
         AboutLicenseHandler.register(server)
         SessionRestoreHandler.register(server)
+        
+        //Cliqz: register the Eula handler
+        AboutEulaHandler.register(server)
 
         // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task
         // catching and handling the error seemed to fix things, but we're not sure why.

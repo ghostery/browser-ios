@@ -36,3 +36,19 @@ extension GCDWebServerDataResponse {
         self.init(data: data, contentType: "application/xhtml+xml; charset=utf-8")
     }
 }
+
+// Cliqz: Added handler for Eula
+struct AboutEulaHandler {
+    static func register(_ webServer: WebServer) {
+        webServer.registerHandlerForMethod("GET", module: "about", resource: "eula") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
+            let path = Bundle.main.path(forResource: "Eula", ofType: "html")
+            do {
+                let html = try NSString(contentsOfFile: path!, encoding: String.Encoding.utf8.rawValue) as String
+                return GCDWebServerDataResponse(html: html)
+            } catch {
+                debugPrint("Unable to register webserver \(error)")
+            }
+            return GCDWebServerResponse(statusCode: 200)
+        }
+    }
+}
