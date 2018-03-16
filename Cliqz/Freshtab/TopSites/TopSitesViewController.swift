@@ -42,16 +42,17 @@ class TopSitesViewController: UIViewController, HomePanel {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.setupComponents()
+        self.setConstraints()
 		
 		self.dataSource.observable.asObserver().subscribe({ value in
 			self.updateViews()
+            self.topSitesCollection?.alpha = 1.0
 		}).disposed(by: disposeBag)
 
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		self.updateViews()
 	}
 
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -63,24 +64,23 @@ class TopSitesViewController: UIViewController, HomePanel {
 		super.viewWillLayoutSubviews()
 		self.topSitesCollection?.collectionViewLayout.invalidateLayout()
 	}
-
-	override func updateViewConstraints() {
-		super.updateViewConstraints()
-		if self.emptyTopSitesHint?.superview != nil {
-			self.emptyTopSitesHint!.snp.makeConstraints({ (make) in
-				make.top.equalTo(self.view).offset(8)
-				make.left.right.equalTo(self.view)
-				make.height.equalTo(14)
-			})
-		}
-		let topSitesHeight = getTopSitesHeight()
-		self.topSitesCollection?.snp.remakeConstraints { (make) in
-			make.top.equalTo(self.view).offset(FreshtabViewUX.topOffset)
-			make.left.equalTo(self.view).offset(FreshtabViewUX.TopSitesOffset)
-			make.right.equalTo(self.view).offset(-FreshtabViewUX.TopSitesOffset)
-			make.height.equalTo(topSitesHeight)
-		}
-	}
+    
+    fileprivate func setConstraints() {
+        if self.emptyTopSitesHint?.superview != nil {
+            self.emptyTopSitesHint!.snp.makeConstraints({ (make) in
+                make.top.equalTo(self.view).offset(8)
+                make.left.right.equalTo(self.view)
+                make.height.equalTo(14)
+            })
+        }
+        let topSitesHeight = getTopSitesHeight()
+        self.topSitesCollection?.snp.makeConstraints { (make) in
+            make.top.equalTo(self.view).offset(FreshtabViewUX.topOffset)
+            make.left.equalTo(self.view).offset(FreshtabViewUX.TopSitesOffset)
+            make.right.equalTo(self.view).offset(-FreshtabViewUX.TopSitesOffset)
+            make.height.equalTo(topSitesHeight)
+        }
+    }
 
 	func getTopSitesHeight() -> CGFloat {
 		//TODO(Refactoring): Should be inluded back during integration
@@ -91,9 +91,10 @@ class TopSitesViewController: UIViewController, HomePanel {
 
 		if self.dataSource.topSitesCount() > TopSitesUX.TopSitesCountOnRow && !UIDevice.current.isSmallIphoneDevice() {
 			return TopSitesUX.TopSitesMaxHeight
-		} else {
-			return TopSitesUX.TopSitesMinHeight
 		}
+        
+        return TopSitesUX.TopSitesMinHeight
+		
 	}
 	
 	@objc fileprivate func cancelActions(_ sender: UITapGestureRecognizer) {
@@ -112,6 +113,7 @@ extension TopSitesViewController {
 		self.topSitesCollection?.isScrollEnabled = false
 		self.topSitesCollection?.accessibilityLabel = "topSites"
 		self.view.addSubview(self.topSitesCollection!)
+        self.topSitesCollection?.alpha = 0.0
 		
 		self.emptyTopSitesHint = UILabel()
 		self.emptyTopSitesHint?.text = NSLocalizedString("Empty TopSites hint", tableName: "Cliqz", comment: "Hint on Freshtab when there is no topsites")
@@ -128,6 +130,13 @@ extension TopSitesViewController {
 			} else {
 				self.emptyTopSitesHint?.isHidden = false
 			}
+            
+            let topSitesHeight = self.getTopSitesHeight()
+            
+            self.topSitesCollection?.snp.updateConstraints { (make) in
+                make.height.equalTo(topSitesHeight)
+            }
+            
 			self.topSitesCollection?.reloadData()
 			self.updateViewConstraints()
 			self.parent?.updateViewConstraints()
@@ -169,7 +178,9 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopSite", for: indexPath) as! TopSiteViewCell
 		cell.tag = -1
 		cell.delegate = self
+        
 		if let topSite = self.dataSource.getTopSite(at: indexPath.row) {
+            
 			cell.tag = indexPath.row
 			let url = topSite.url
 			LogoLoader.loadLogo(url, completionBlock: { (img, logoInfo, error) in

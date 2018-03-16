@@ -20,7 +20,7 @@ class CliqzURLBar: URLBarView {
         //cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.setTitleColor(.white, for: .normal)
-        cancelButton.setTitleColor(UIColor(colorString: "2B5993"), for: UIControlState.highlighted)
+        cancelButton.setTitleColor(UIColor.cliqzBlueTwoSecondary, for: UIControlState.highlighted)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
         cancelButton.addTarget(self, action: #selector(SELdidClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
@@ -145,5 +145,12 @@ class CliqzURLBar: URLBarView {
         }
         
     }
-
 }
+
+// Cliqz: hide keyboard
+extension CliqzURLBar {
+    func hideKeyboard() {
+        locationTextField?.resignFirstResponder()
+    }
+}
+

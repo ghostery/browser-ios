@@ -15,6 +15,8 @@ import RxSwift
 private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
 class TopSitesDataSource {
+    
+    static let instance = TopSitesDataSource()
 
 	let observable = BehaviorSubject(value: false)
 
@@ -22,8 +24,10 @@ class TopSitesDataSource {
 
 	private var topSites = [Site]()
 
-	init(profile: Profile) {
-		self.profile = profile
+	init() {
+        if let delegate = UIApplication.shared.delegate as? AppDelegate, let profile = delegate.profile {
+            self.profile = profile
+        }
 		self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
 		let _ = self.loadTopSites()
 	}

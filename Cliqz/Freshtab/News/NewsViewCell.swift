@@ -31,7 +31,7 @@ class NewsCellViewModel {
 			let t = news.breakingLabel {
 			fullTitle.append(NSAttributedString(string: t.uppercased() + ": ", attributes: [NSForegroundColorAttributeName: UIColor(rgb: 0xE64C66)]))
 		} else if let locallbl = news.localLabel {
-			fullTitle.append(NSAttributedString(string: locallbl.uppercased() + ": ", attributes: [NSForegroundColorAttributeName: UIColor.CliqzThemeColor]))
+			fullTitle.append(NSAttributedString(string: locallbl.uppercased() + ": ", attributes: [NSForegroundColorAttributeName: UIColor.cliqzBluePrimary]))
 		}
 		if let shortTitle = news.shortTitle {
 			fullTitle.append(NSAttributedString(string: shortTitle))
@@ -58,7 +58,13 @@ class NewsViewCell: ClickableUITableViewCell {
 				self.fakeLogoView = placeholder
 			}
 			viewModel?.logo.asObservable().subscribe(onNext: { (img) in
-				self.logoImageView.image = img
+                self.logoImageView.image = img
+                self.logoImageView.alpha = 0.0
+                self.logoImageView.transform = CGAffineTransform.init(scaleX: 0.95, y: 0.95)
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.logoImageView.alpha = 1.0
+                    self.logoImageView.transform = CGAffineTransform.identity
+                })
 			}, onError: { (_) in
 				self.logoImageView.image = nil
 			}, onCompleted: nil, onDisposed: nil).disposed(by: disposeBag)

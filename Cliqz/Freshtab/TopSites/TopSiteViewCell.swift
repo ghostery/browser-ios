@@ -96,14 +96,14 @@ class TopSiteViewCell: UICollectionViewCell {
 	}
 	
 	fileprivate func startWobbling() {
-		let startAngle = -M_PI_4/10
-		let endAngle = M_PI_4/10
+		let startAngle = -Double.pi/40
+		let endAngle = Double.pi/40
 		
 		let wobblingAnimation = CAKeyframeAnimation.init(keyPath: "transform.rotation")
 		wobblingAnimation.values = [startAngle, endAngle]
 		wobblingAnimation.duration = 0.13
 		wobblingAnimation.autoreverses = true
-		wobblingAnimation.repeatCount = FLT_MAX
+		wobblingAnimation.repeatCount = Float.greatestFiniteMagnitude
 		wobblingAnimation.timingFunction = CAMediaTimingFunction.init(name:kCAMediaTimingFunctionLinear)
         self.logoContainerView.layer.shouldRasterize = true
 		self.layer.add(wobblingAnimation, forKey: "rotation")

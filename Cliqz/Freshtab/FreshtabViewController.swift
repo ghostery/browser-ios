@@ -49,8 +49,8 @@ class FreshtabViewController: UIViewController, HomePanel {
 	init(profile: Profile) {
 		super.init(nibName: nil, bundle: nil)
 		self.profile = profile
-		self.topSitesDataSource = TopSitesDataSource(profile: profile)
-		self.newsDataSource = NewsDataSource()
+		self.topSitesDataSource = TopSitesDataSource.instance
+		self.newsDataSource = NewsDataSource.instance
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -60,6 +60,9 @@ class FreshtabViewController: UIViewController, HomePanel {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.setupViews()
+        self.setupConstraints()
+        
+        self.normalModeView?.alpha = 0.0
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -71,6 +74,13 @@ class FreshtabViewController: UIViewController, HomePanel {
 		
 		updateViews()
 	}
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIView.animate(withDuration: 0.05, delay: 0.1, options: .allowAnimatedContent, animations: {
+            self.normalModeView?.alpha = 1.0
+        }, completion: nil)
+    }
 
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
@@ -84,41 +94,67 @@ class FreshtabViewController: UIViewController, HomePanel {
 			self?.updateViewConstraints()
 		}
 	}
+    
+    func setupConstraints() {
+        if !isForgetMode {
+            self.scrollView.snp.makeConstraints({ (make) in
+                make.top.left.bottom.right.equalTo(self.view)
+            })
+            let topSitesHeight = self.topSitesViewController?.getTopSitesHeight() ?? 0
+            self.topSitesViewController?.view.snp.makeConstraints({ (make) in
+                make.top.equalTo(self.normalModeView!).offset(FreshtabViewUX.topOffset)
+                make.left.equalTo(self.normalModeView!).offset(FreshtabViewUX.TopSitesOffset)
+                make.right.equalTo(self.normalModeView!).offset(-FreshtabViewUX.TopSitesOffset)
+                make.height.equalTo(topSitesHeight)
+            })
+            
+            // news table
+            let newsHeight = self.newsViewController?.getNewsHeight() ?? 0
+            self.newsViewController?.view.snp.makeConstraints { (make) in
+                make.left.equalTo(self.view).offset(21)
+                make.right.equalTo(self.view).offset(-21)
+                make.height.equalTo(newsHeight)
+                make.top.equalTo((self.topSitesViewController?.view.snp.bottom)!).offset(FreshtabViewUX.topOffset)
+            }
+            
+            // normalModeView height
+            let invisibleFreshTabHeight = getInvisibleFreshTabHeight(topSitesHeight: topSitesHeight, newsHeight: newsHeight)
+            let normalModeViewHeight = self.view.bounds.height + invisibleFreshTabHeight
+            
+            self.normalModeView?.snp.makeConstraints({ (make) in
+                make.top.left.bottom.right.equalTo(scrollView)
+                make.width.equalTo(self.view)
+                make.height.equalTo(normalModeViewHeight)
+            })
+        }
+    }
 
 	override func updateViewConstraints() {
-		super.updateViewConstraints()
+        
 		if !isForgetMode {
-			self.scrollView.snp.remakeConstraints({ (make) in
-				make.top.left.bottom.right.equalTo(self.view)
-			})
+
 			let topSitesHeight = self.topSitesViewController?.getTopSitesHeight() ?? 0
-			self.topSitesViewController?.view.snp.remakeConstraints({ (make) in
-				make.top.equalTo(self.normalModeView!).offset(FreshtabViewUX.topOffset)
-				make.left.equalTo(self.normalModeView!).offset(FreshtabViewUX.TopSitesOffset)
-				make.right.equalTo(self.normalModeView!).offset(-FreshtabViewUX.TopSitesOffset)
+			self.topSitesViewController?.view.snp.updateConstraints({ (make) in
 				make.height.equalTo(topSitesHeight)
 			})
 
 			// news table
-			let newsHeight = self.newsViewController?.getNewsHeight() ?? 0
-			self.newsViewController?.view.snp.remakeConstraints { (make) in
-				make.left.equalTo(self.view).offset(21)
-				make.right.equalTo(self.view).offset(-21)
-				make.height.equalTo(newsHeight)
-			make.top.equalTo((self.topSitesViewController?.view.snp.bottom)!).offset(FreshtabViewUX.topOffset)
-			}
+            let newsHeight = self.newsViewController?.getNewsHeight() ?? 0
+            self.newsViewController?.view.snp.updateConstraints { (make) in
+                make.height.equalTo(newsHeight)
+            }
 
 			// normalModeView height
 			let invisibleFreshTabHeight = getInvisibleFreshTabHeight(topSitesHeight: topSitesHeight, newsHeight: newsHeight)
 			let normalModeViewHeight = self.view.bounds.height + invisibleFreshTabHeight
 			
-			self.normalModeView?.snp.remakeConstraints({ (make) in
-				make.top.left.bottom.right.equalTo(scrollView)
-				make.width.equalTo(self.view)
+			self.normalModeView?.snp.updateConstraints({ (make) in
 				make.height.equalTo(normalModeViewHeight)
 			})
-
 		}
+        
+        //Apple says this should be at the end
+        super.updateViewConstraints()
 	}
 
 	private func getInvisibleFreshTabHeight(topSitesHeight: CGFloat, newsHeight: CGFloat) -> CGFloat {
