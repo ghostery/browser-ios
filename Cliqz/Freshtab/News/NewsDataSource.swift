@@ -10,6 +10,8 @@ import Foundation
 import RxSwift
 
 class NewsDataSource {
+    
+    static let instance = NewsDataSource()
 	
 	private var lastNews = [News]()
 

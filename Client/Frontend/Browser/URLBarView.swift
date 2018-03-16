@@ -669,25 +669,17 @@ extension URLBarView: Themeable {
         locationBorderColor = UIColor.URLBar.Border.colorFor(theme).withAlphaComponent(0.3)
         locationActiveBorderColor = UIColor.URLBar.ActiveBorder.colorFor(theme)
         */
-        locationBorderColor = UIColor(colorString: "E7ECEE")
-        locationActiveBorderColor = UIColor(colorString: "E7ECEE")
+        locationBorderColor = UIColor.cliqzGrayOneSecondary
+        locationActiveBorderColor = UIColor.cliqzGrayOneSecondary
         cancelTintColor = UIColor.Browser.Tint.colorFor(theme)
         /* Cliqz
         showQRButtonTintColor = UIColor.Browser.Tint.colorFor(theme)
         backgroundColor = UIColor.Browser.Background.colorFor(theme)
         */
         showQRButtonTintColor = UIColor.white
-        backgroundColor = UIColor(colorString: "00AEF0")
+        backgroundColor = UIColor.cliqzBluePrimary
         line.backgroundColor = UIColor.Browser.URLBarDivider.colorFor(theme)
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
-    }
-}
-
-// TODO: Put this in CliqzURLBar
-// Cliqz: hide keyboard
-extension URLBarView {
-    func hideKeyboard() {
-        locationTextField?.resignFirstResponder()
     }
 }
 

@@ -27,7 +27,7 @@ class NewsViewController: UIViewController, HomePanel {
 
 	fileprivate var isNewsExpanded = false
 
-	fileprivate var newsTableView: UITableView?
+    var newsTableView: UITableView?
 	fileprivate var expandNewsbutton = UIButton()
 
 	init(dataSource: NewsDataSource) {
@@ -57,13 +57,23 @@ class NewsViewController: UIViewController, HomePanel {
 		self.newsTableView?.reloadData()
 	}
 
-	override func updateViewConstraints() {
-		super.updateViewConstraints()
-		let newsHeight = getNewsHeight()
-		self.newsTableView?.snp.updateConstraints({ (make) in
-			make.height.equalTo(newsHeight)
-		})
-	}
+    override func updateViewConstraints() {
+        
+        let newsHeight = getNewsHeight()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            self.newsTableView?.snp.updateConstraints({ (make) in
+                make.height.equalTo(newsHeight)
+            })
+            
+            UIView.animate(withDuration: 0.25, animations: {
+                self.view.layoutSubviews()
+            })
+        }
+        
+        //Apple says this should be at the end
+        super.updateViewConstraints()
+    }
 
 	func getNewsHeight() -> CGFloat {
 //		guard SettingsPrefs.shared.getShowNewsPref() && self.news.count != 0 else {
@@ -210,14 +220,14 @@ extension NewsViewController {
 	fileprivate func showMoreNews() {
         self.newsTableView?.beginUpdates()
 		let indexPaths = getExtraNewsIndexPaths()
-		self.newsTableView?.insertRows(at:indexPaths, with: .automatic)
+		self.newsTableView?.insertRows(at:indexPaths, with: .none)
         self.newsTableView?.endUpdates()
 	}
 	
 	fileprivate func showLessNews() {
         self.newsTableView?.beginUpdates()
 		let indexPaths = getExtraNewsIndexPaths()
-		self.newsTableView?.deleteRows(at:indexPaths, with: .automatic)
+		self.newsTableView?.deleteRows(at:indexPaths, with: .none)
         self.newsTableView?.endUpdates()
 	}
 	
