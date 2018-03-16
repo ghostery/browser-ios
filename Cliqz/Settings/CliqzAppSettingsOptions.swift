@@ -129,3 +129,77 @@ class MyOffrzSetting: ShowCliqzPageSetting {
     }
 }
 
+
+class RateUsSetting: Setting {
+    
+    init() {
+        super.init(title: NSAttributedString(string: NSLocalizedString("Rate Us", tableName: "Cliqz", comment: "[Settings] Rate Us"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]))
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        var urlString: String!
+        if #available(iOS 11.0, *) {
+            urlString = "itms-apps://itunes.apple.com/app/id\(AppStatus.AppId)"
+        } else {
+            urlString = "http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=\(AppStatus.AppId)&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8"
+        }
+        
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url, options: [String : Any](), completionHandler: nil)
+        }
+    }
+}
+
+
+class AboutSetting: Setting {
+    
+    override var style: UITableViewCellStyle { return .value1 }
+    
+    override var status: NSAttributedString { return NSAttributedString(string: "Version \(AppStatus.distVersion())") }
+    
+    init() {
+        let title = NSLocalizedString("About", tableName: "Cliqz", comment: "[Settings] About")
+        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+    }
+    
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+    
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = AboutSettingsTableViewController()
+        viewController.title = self.title?.string
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+class EulaSetting: LocalResourceSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("EULA", tableName: "Cliqz", comment: "[Settings -> About] EULA")
+    }
+    
+    override func getResource() -> (String, String) {
+        return ("eula", "about")
+    }
+}
+
+class CliqzLicenseAndAcknowledgementsSetting: LocalResourceSetting {
+    override func getTitle() -> String {
+        return NSLocalizedString("Licenses", tableName: "Cliqz", comment: "[Settings -> About] Licenses")
+    }
+    
+    override func getResource() -> (String, String) {
+        return ("license", "about")
+    }
+}
+
+class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("Privacy Policy", tableName: "Cliqz", comment: "[Settings -> About] Privacy Policy")
+    }
+    
+    override func getPageName() -> String {
+        return "mobile/privacy-cliqz-for-ios"
+    }
+}

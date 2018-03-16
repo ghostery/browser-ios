@@ -40,6 +40,12 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let helpSettings = generateHelpSettings(prefs: prefs)
         settings += [ SettingSection(title: NSAttributedString(string: helpTitle), children: helpSettings)]
 
+        
+        // About Settings
+        let aboutTitle = NSLocalizedString("About", tableName: "Cliqz", comment: "[Settings] About section header")
+        let aboutSettings = generateAboutSettings(prefs: prefs)
+        settings += [ SettingSection(title: NSAttributedString(string: aboutTitle), children: aboutSettings)]
+
         return settings
     }
 
@@ -128,6 +134,11 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         ]
         
         return helpSettings
+    }
+    
+    private func generateAboutSettings(prefs: Prefs) -> [Setting] {
+        
+        return [RateUsSetting(), AboutSetting()]
     }
     
     
