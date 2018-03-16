@@ -5,7 +5,10 @@
 import Shared
 import SnapKit
 
+/* Cliqz
 private struct URLBarViewUX {
+ */
+struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0xB0D5FB)
 
@@ -79,9 +82,12 @@ class URLBarView: UIView {
 
     var toolbarIsShowing = false
     var topTabsIsShowing = false
-
+    
+    /* Cliqz
     fileprivate var locationTextField: ToolbarTextField?
-
+     */
+    var locationTextField: ToolbarTextField?
+    
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
     /// and the Cancel button is visible (allowing the user to leave overlay mode). Overlay mode
     /// is *not* tied to the location text field's editing state; for instance, when selecting
@@ -114,13 +120,19 @@ class URLBarView: UIView {
         return tabsButton
     }()
 
+    /* Cliqz
     fileprivate lazy var progressBar: GradientProgressBar = {
+    */
+    lazy var progressBar: GradientProgressBar = {
         let progressBar = GradientProgressBar()
         progressBar.clipsToBounds = false
         return progressBar
     }()
-
+    
+    /* Cliqz
     fileprivate lazy var cancelButton: UIButton = {
+     */
+    lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
@@ -129,7 +141,10 @@ class URLBarView: UIView {
         return cancelButton
     }()
     
+    /* Cliqz
     fileprivate lazy var showQRScannerButton: InsetButton = {
+    */
+    lazy var showQRScannerButton: InsetButton = {
         let button = InsetButton()
         button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = "urlBar-scanQRCode"
@@ -139,8 +154,11 @@ class URLBarView: UIView {
         button.setContentCompressionResistancePriority(1000, for: .horizontal)
         return button
     }()
-
+    
+    /* Cliqz
     fileprivate lazy var scrollToTopButton: UIButton = {
+    */
+    lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(SELtappedScrollToTopArea), for: .touchUpInside)
         return button
@@ -192,9 +210,11 @@ class URLBarView: UIView {
         // Make sure we hide any views that shouldn't be showing in non-overlay mode.
         updateViewsForOverlayModeAndToolbarChanges()
     }
-
+    
+    /*Cliqz
     fileprivate func setupConstraints() {
-        
+    */
+    func setupConstraints() {
         line.snp.makeConstraints { make in
             make.bottom.leading.trailing.equalTo(self)
             make.height.equalTo(1)
@@ -645,16 +665,25 @@ extension URLBarView: Themeable {
 
         progressBar.setGradientColors(startColor: UIColor.LoadingBar.Start.colorFor(theme), endColor: UIColor.LoadingBar.End.colorFor(theme))
         currentTheme = theme
+        /* Cliqz
         locationBorderColor = UIColor.URLBar.Border.colorFor(theme).withAlphaComponent(0.3)
         locationActiveBorderColor = UIColor.URLBar.ActiveBorder.colorFor(theme)
+        */
+        locationBorderColor = UIColor(colorString: "E7ECEE")
+        locationActiveBorderColor = UIColor(colorString: "E7ECEE")
         cancelTintColor = UIColor.Browser.Tint.colorFor(theme)
+        /* Cliqz
         showQRButtonTintColor = UIColor.Browser.Tint.colorFor(theme)
         backgroundColor = UIColor.Browser.Background.colorFor(theme)
+        */
+        showQRButtonTintColor = UIColor.white
+        backgroundColor = UIColor(colorString: "00AEF0")
         line.backgroundColor = UIColor.Browser.URLBarDivider.colorFor(theme)
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
     }
 }
 
+// TODO: Put this in CliqzURLBar
 // Cliqz: hide keyboard
 extension URLBarView {
     func hideKeyboard() {

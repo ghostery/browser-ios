@@ -23,7 +23,6 @@ extension HistoryListener: LoaderListener {
 }
 
 protocol SearchViewDelegate: class {
-
     func didSelectURL(_ url: URL, searchQuery: String?)
     func autoCompeleteQuery(_ autoCompleteText: String)
 	func dismissKeyboard()

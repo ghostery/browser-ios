@@ -42,7 +42,10 @@ private struct BrowserViewControllerUX {
 class BrowserViewController: UIViewController {
     var homePanelController: HomePanelViewController?
     var webViewContainer: UIView!
+    /* Cliqz: Replace URLBar
     var urlBar: URLBarView!
+    */
+    var urlBar: CliqzURLBar!
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
@@ -340,7 +343,10 @@ class BrowserViewController: UIViewController {
         view.addSubview(topTouchArea)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
+        /* Cliqz
         urlBar = URLBarView()
+        */
+        urlBar = CliqzURLBar()
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
