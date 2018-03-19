@@ -402,8 +402,10 @@ class TabTrayController: UIViewController {
 
     func didClickSettingsItem() {
         assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
-
+        /* Cliqz: Change Settings
         let settingsTableViewController = AppSettingsTableViewController()
+        */
+        let settingsTableViewController = CliqzAppSettingsTableViewController()
         settingsTableViewController.profile = profile
         settingsTableViewController.tabManager = tabManager
         settingsTableViewController.settingsDelegate = self
