@@ -183,7 +183,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         let subscriptions = SubscriptionsHandler.sharedInstance.getSubscriptions()
 		let params = ["adultContentFilter" : isBlocked ? "conservative" : "liberal",
 		              "incognito" : self.privateMode,
-                      "backend_country" : "DE",//self.getCountry(),
+                      "backend_country" : SettingsPrefs.shared.getRegionPref(),
                       "suggestionsEnabled"  : QuerySuggestions.isEnabled(),
                       "subscriptions" : subscriptions] as [String : Any]
         
@@ -202,13 +202,6 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         }
     }
     
-    fileprivate func getCountry() -> String {
-        if let country = SettingsPrefs.shared.getRegionPref() {
-            return country
-        }
-        return SettingsPrefs.shared.getDefaultRegion()
-    }
-	
     //MARK: - Reset TopSites
     func showBlockedTopSites(_ notification: Notification) {
         Engine.sharedInstance.getBridge().publishEvent("mobile-browser:restore-blocked-topsites", args: [])

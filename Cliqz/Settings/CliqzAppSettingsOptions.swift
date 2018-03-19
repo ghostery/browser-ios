@@ -9,6 +9,41 @@
 import Foundation
 
 // MARK:- cliqz settings
+class RegionalSetting: Setting {
+    let profile: Profile
+    
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+    
+    override var style: UITableViewCellStyle { return .value1 }
+    
+    override var status: NSAttributedString {
+        let region = SettingsPrefs.shared.getRegionPref()
+        let localizedRegionName = RegionalSettingsTableViewController.getLocalizedRegionName(region)
+        return NSAttributedString(string: localizedRegionName)
+    }
+    
+    override var accessibilityIdentifier: String? { return "Search Results for" }
+    
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        let title = NSLocalizedString("Search Results for", tableName: "Cliqz" , comment: "[Settings] Search Results for")
+        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = RegionalSettingsTableViewController()
+        viewController.title = self.title?.string
+        navigationController?.pushViewController(viewController, animated: true)
+        
+        // TODO: Telemetry
+        /*
+        // log Telemerty signal
+        let blcokAdsSingal = TelemetryLogEventType.Settings("main", "click", "search_results_from", nil, nil)
+        TelemetryLogger.sharedInstance.logEvent(blcokAdsSingal)
+        */
+    }
+}
+
 class HumanWebSetting: CliqzOnOffSetting {
     
     override func getTitle() -> String {

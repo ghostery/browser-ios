@@ -15,14 +15,8 @@ class QuerySuggestions: NSObject {
     
     //MARK:- public APIs
     class func querySuggestionEnabledForCurrentRegion() -> Bool {
-        var region: String
-        if let userRegion = SettingsPrefs.shared.getRegionPref() {
-            region = userRegion
-        } else {
-            region = SettingsPrefs.shared.getDefaultRegion()
-        }
-        
-        return region == "DE"
+        let userRegion = SettingsPrefs.shared.getRegionPref()
+        return userRegion == "DE"
     }
     
     class func isEnabled() -> Bool {
