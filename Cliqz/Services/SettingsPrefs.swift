@@ -126,19 +126,13 @@ class SettingsPrefs {
         self.updatePref(SettingsPrefs.blockPopupsPrefKey, value: newValue as AnyObject)
     }
 
-    func getRegionPref() -> String? {
-        return self.getStringPref(SettingsPrefs.countryPrefKey)
-    }
-
-    func getDefaultRegion() -> String {
-        let currentLocale = Locale.current
-		let langToRegionMapping = ["de": "DE", "en": "US", "fr": "FR"]
-        if let languageCode = currentLocale.languageCode,
-			langToRegionMapping.keys.contains(languageCode),
-			let val = langToRegionMapping[languageCode] {
-            return val
+    func getRegionPref() -> String {
+        if let countryPref = self.getStringPref(SettingsPrefs.countryPrefKey) {
+            return countryPref
         }
-        return "DE"
+        let defaultRegion = getDefaultRegion()
+        updateRegionPref(defaultRegion)
+        return defaultRegion
     }
 
     func updateRegionPref(_ newValue: String) {
@@ -220,6 +214,20 @@ class SettingsPrefs {
             return p.prefs.stringForKey(forKey)
         }
         return nil
+    }
+    
+    fileprivate func getDefaultRegion() -> String {
+        if let regioncode = Locale.current.regionCode {
+            switch regioncode {
+            case "DE", "AT", "CH": // Germany, Austria, Switzerland
+                return "DE"
+            case "FR":
+                return "FR"
+            default:
+                return "US"
+            }
+        }
+        return "US"
     }
     
 }

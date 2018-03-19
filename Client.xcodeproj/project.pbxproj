@@ -59,6 +59,7 @@
 		1EAFE4E5205BD88A006A36B4 /* LocalResourceSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE4E4205BD88A006A36B4 /* LocalResourceSetting.swift */; };
 		1EAFE4EC205BDB51006A36B4 /* Eula.html in Resources */ = {isa = PBXBuildFile; fileRef = 1EAFE4EB205BDB50006A36B4 /* Eula.html */; };
 		1EAFE4F0205BDEC0006A36B4 /* cliqz.json in Resources */ = {isa = PBXBuildFile; fileRef = 1EAFE4EF205BDEC0006A36B4 /* cliqz.json */; };
+		1EAFE4F6205C18C8006A36B4 /* RegionalSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE4F5205C18C8006A36B4 /* RegionalSettingsTableViewController.swift */; };
 		2805F5A61B8BCA7A00268FD1 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		28078A471B1507EF0053B46A /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		280CB1371C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */; };
@@ -1475,6 +1476,7 @@
 		1EAFE4E4205BD88A006A36B4 /* LocalResourceSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalResourceSetting.swift; sourceTree = "<group>"; };
 		1EAFE4EB205BDB50006A36B4 /* Eula.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Eula.html; sourceTree = "<group>"; };
 		1EAFE4EF205BDEC0006A36B4 /* cliqz.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cliqz.json; path = "node_modules/browser-core/build/config/cliqz.json"; sourceTree = SOURCE_ROOT; };
+		1EAFE4F5205C18C8006A36B4 /* RegionalSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalSettingsTableViewController.swift; sourceTree = "<group>"; };
 		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Sync/Synchronizers/Bookmarks/BookmarksSynchronizer.swift; sourceTree = SOURCE_ROOT; };
 		28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksHelpers.swift; sourceTree = "<group>"; };
 		28126F6D1C2F94F9006466CC /* SQLiteBookmarksModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksModel.swift; sourceTree = "<group>"; };
@@ -2505,6 +2507,7 @@
 				1EAFE4CE205A5C0A006A36B4 /* LimitMobileDataUsageTableViewController.swift */,
 				1EAFE4DE205A604F006A36B4 /* AdBlockerSettingsTableViewController.swift */,
 				1EAFE4E2205BC7D9006A36B4 /* AboutSettingsTableViewController.swift */,
+				1EAFE4F5205C18C8006A36B4 /* RegionalSettingsTableViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -5998,6 +6001,7 @@
 				1EAFE4DF205A604F006A36B4 /* AdBlockerSettingsTableViewController.swift in Sources */,
 				745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */,
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
+				1EAFE4F6205C18C8006A36B4 /* RegionalSettingsTableViewController.swift in Sources */,
 				4F0445DB203333BF00E2C0C7 /* TopSitesViewController.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */,
