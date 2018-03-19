@@ -94,6 +94,9 @@ extension PhotonActionSheetProtocol {
         }
 
         let openSettings = PhotonActionSheetItem(title: Strings.AppMenuSettingsTitleString, iconString: "menu-Settings") { action in
+            /* Cliqz: Change Settings
+            let settingsTableViewController = AppSettingsTableViewController()
+            */
             let settingsTableViewController = CliqzAppSettingsTableViewController()
             settingsTableViewController.profile = self.profile
             settingsTableViewController.tabManager = self.tabManager
