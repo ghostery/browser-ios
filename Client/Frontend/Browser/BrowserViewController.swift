@@ -347,6 +347,7 @@ class BrowserViewController: UIViewController {
         urlBar = URLBarView()
         */
         urlBar = CliqzURLBar()
+		NotificationCenter.default.addObserver(self, selector: #selector(urlBarDidPressPageCliqzOptions), name: URLBarDidPressPageOptionsNotification, object: nil)
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
@@ -1039,7 +1040,11 @@ class BrowserViewController: UIViewController {
         webView.customUserAgent = ua != UserAgent.defaultUserAgent() ? ua : nil
     }
 
+	/* Cliqz: removed fileprivate
     fileprivate func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
+	*/
+	func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
+
         let helper = ShareExtensionHelper(url: url, tab: tab)
 
         let controller = helper.createActivityViewController({ [unowned self] completed, _ in

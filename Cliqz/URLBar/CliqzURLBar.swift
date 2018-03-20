@@ -8,13 +8,23 @@
 
 import UIKit
 
+let URLBarDidPressPageOptionsNotification = Notification.Name(rawValue: "NotificationURLBarDidPressPageOptions")
+
+extension URLBarDelegate {
+	
+	func urlBarDidPressCliqzPageOptions(_ urlBar: URLBarView, from button: UIButton) {
+		NotificationCenter.default.post(name: URLBarDidPressPageOptionsNotification, object: button)
+	}
+
+}
+
 class CliqzURLBar: URLBarView {
-    
+
     struct UXOverrides {
         static let TextFieldBorderWidthSelected: CGFloat = 2.0
         static let LineHeight: CGFloat = 0.0
     }
-    
+
     override lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
         //cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
@@ -26,7 +36,7 @@ class CliqzURLBar: URLBarView {
         cancelButton.alpha = 0
         return cancelButton
     }()
-    
+
     override func setupConstraints() {
         line.snp.makeConstraints { make in
             make.bottom.leading.trailing.equalTo(self)
@@ -145,6 +155,10 @@ class CliqzURLBar: URLBarView {
         }
         
     }
+	
+	override func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
+		self.delegate?.urlBarDidPressCliqzPageOptions(self, from: tabLocationView.pageOptionsButton)
+	}
 }
 
 // Cliqz: hide keyboard
@@ -153,4 +167,3 @@ extension CliqzURLBar {
         locationTextField?.resignFirstResponder()
     }
 }
-
