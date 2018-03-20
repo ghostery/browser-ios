@@ -133,6 +133,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
             SupportSetting(delegate: settingsDelegate),
             CliqzTipsAndTricksSetting(),
             ReportWebsiteSetting(),
+            SendCrashReportsSetting(settings: self),
             MyOffrzSetting()
         ]
         

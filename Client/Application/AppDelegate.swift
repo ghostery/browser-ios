@@ -89,8 +89,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.
+        /* Cliqz: Use `getSendCrashReportsPref()` instead of `SendUsageData`
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
         Sentry.shared.setup(sendUsageData: sendUsageData)
+        */
+        let sendCrashReports = SettingsPrefs.shared.getSendCrashReportsPref()
+        Sentry.shared.setup(sendUsageData: sendCrashReports)
         
         // Set the Firefox UA for browsing.
         setUserAgent()

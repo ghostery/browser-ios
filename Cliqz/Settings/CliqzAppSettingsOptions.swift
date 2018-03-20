@@ -188,6 +188,20 @@ class ReportWebsiteSetting: ShowCliqzPageSetting {
     }
 }
 
+class SendCrashReportsSetting: CliqzOnOffSetting {
+    override func getTitle() -> String {
+        return NSLocalizedString("Send Crash Reports", tableName: "Cliqz", comment: "[Settings] Send Crash Reports")
+    }
+    
+    override func isOn() -> Bool {
+        return SettingsPrefs.shared.getSendCrashReportsPref()
+    }
+    
+    override func getSubSettingViewController() -> SubSettingsTableViewController {
+        return SendCrashReportsTableViewController()
+    }
+}
+
 class MyOffrzSetting: ShowCliqzPageSetting {
     
     override func getTitle() -> String {
