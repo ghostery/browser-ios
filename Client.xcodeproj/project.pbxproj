@@ -60,6 +60,7 @@
 		1EAFE56E205FFE82006A36B4 /* AdBlockerSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE568205FFE82006A36B4 /* AdBlockerSettingsTableViewController.swift */; };
 		1EAFE56F205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE569205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift */; };
 		1EAFE570205FFE82006A36B4 /* RegionalSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */; };
+		1EEA368120613C17003B6AD5 /* SendCrashReportsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */; };
 		2805F5A61B8BCA7A00268FD1 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		28078A471B1507EF0053B46A /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		280CB1371C20E0A3005AF147 /* BookmarksSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */; };
@@ -1477,6 +1478,7 @@
 		1EAFE568205FFE82006A36B4 /* AdBlockerSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdBlockerSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1EAFE569205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HumanWebSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionalSettingsTableViewController.swift; sourceTree = "<group>"; };
+		1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCrashReportsTableViewController.swift; sourceTree = "<group>"; };
 		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Sync/Synchronizers/Bookmarks/BookmarksSynchronizer.swift; sourceTree = SOURCE_ROOT; };
 		28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksHelpers.swift; sourceTree = "<group>"; };
 		28126F6D1C2F94F9006466CC /* SQLiteBookmarksModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksModel.swift; sourceTree = "<group>"; };
@@ -2524,6 +2526,7 @@
 				1EAFE569205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift */,
 				1EAFE566205FFE82006A36B4 /* LimitMobileDataUsageTableViewController.swift */,
 				1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */,
+				1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */,
 			);
 			path = "Custom Settings";
 			sourceTree = "<group>";
@@ -5997,6 +6000,7 @@
 				E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */,
 				4F69309A2048185600FB0B2E /* TopSitesDataSource.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
+				1EEA368120613C17003B6AD5 /* SendCrashReportsTableViewController.swift in Sources */,
 				4F3046B8204FF65800C99162 /* LocationManager.swift in Sources */,
 				D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
