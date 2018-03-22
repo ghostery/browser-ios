@@ -41,7 +41,10 @@ class HomePanels {
                 controller.interactivePopGestureRecognizer?.delegate = nil
                 return controller
             },
+			/* Cliqz: changed the icon
             imageName: "Bookmarks",
+			*/
+			imageName: "Favorite",
             accessibilityLabel: NSLocalizedString("Bookmarks", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.Bookmarks"),
 
@@ -54,7 +57,10 @@ class HomePanels {
                 controller.interactivePopGestureRecognizer?.delegate = nil
                 return controller
             },
+			/* Cliqz: changed the icon
             imageName: "History",
+			*/
+			imageName: "CliqzHistory",
             accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.History"),
 
@@ -64,7 +70,10 @@ class HomePanels {
                 controller.profile = profile
                 return controller
             },
+			/* Cliqz: changed the icon
             imageName: "ReadingList",
+			*/
+			imageName: "Offrz",
             accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.ReadingList"),
         ]
