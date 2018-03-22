@@ -21,7 +21,10 @@ protocol TabLocationViewDelegate {
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }
 
+/* Cliqz: removed private modifier
 private struct TabLocationViewUX {
+*/
+struct TabLocationViewUX {
     static let HostFontColor = UIColor.black
     static let BaseURLFontColor = UIColor.gray
     static let LocationContentInset = 8
@@ -46,6 +49,8 @@ class TabLocationView: UIView {
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
+            // Cliqz: Update VideoDownloadButton visibility
+            updateVideoDownloadButton()
             setNeedsUpdateConstraints()
         }
     }
@@ -55,6 +60,9 @@ class TabLocationView: UIView {
             return readerModeButton.readerModeState
         }
         set (newReaderModeState) {
+            //Cliqz: prevent ReaderModeButton from showing on youTube urls
+            guard let url = url, !url.isYoutubeURL() else { return }
+            
             if newReaderModeState != self.readerModeButton.readerModeState {
                 let wasHidden = readerModeButton.isHidden
                 self.readerModeButton.readerModeState = newReaderModeState
@@ -114,7 +122,10 @@ class TabLocationView: UIView {
         return urlTextField
     }()
 
+    /* Cliqz: removed private modifier
     fileprivate lazy var lockImageView: UIImageView = {
+    */
+    lazy var lockImageView: UIImageView = {
         let lockImageView = UIImageView(image: UIImage.templateImageNamed("lock_verified"))
         lockImageView.isHidden = true
         lockImageView.tintColor = UIColor.Defaults.LockGreen
@@ -124,7 +135,10 @@ class TabLocationView: UIView {
         return lockImageView
     }()
 
+    /* Cliqz: removed private modifier
     fileprivate lazy var readerModeButton: ReaderModeButton = {
+    */
+    lazy var readerModeButton: ReaderModeButton = {
         let readerModeButton = ReaderModeButton(frame: .zero)
         readerModeButton.isHidden = true
         readerModeButton.addTarget(self, action: #selector(SELtapReaderModeButton), for: .touchUpInside)
