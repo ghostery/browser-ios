@@ -95,7 +95,10 @@ class URLBarView: UIView {
     var inOverlayMode = false
 
     lazy var locationView: TabLocationView = {
+        /* Cliqz: replaced TabLocationView with CliqzTabLocationView
         let locationView = TabLocationView()
+        */
+        let locationView = CliqzTabLocationView()
         locationView.translatesAutoresizingMaskIntoConstraints = false
         locationView.readerModeState = ReaderModeState.unavailable
         locationView.delegate = self

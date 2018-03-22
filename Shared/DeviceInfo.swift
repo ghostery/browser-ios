@@ -67,4 +67,15 @@ open class DeviceInfo {
             return false
         }
     }
+    
+    // Cliqz: added hasWwanConnectivity() method to check if the device is connected via wwan
+    open class func hasWwanConnectivity() -> Bool {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .online(.wwan):
+            return true
+        default:
+            return false
+        }
+    }
 }

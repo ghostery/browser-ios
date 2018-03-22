@@ -347,7 +347,9 @@ class BrowserViewController: UIViewController {
         urlBar = URLBarView()
         */
         urlBar = CliqzURLBar()
-		NotificationCenter.default.addObserver(self, selector: #selector(urlBarDidPressPageCliqzOptions), name: URLBarDidPressPageOptionsNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(urlBarDidPressPageCliqzOptions), name: URLBarDidPressPageOptionsNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(urlBarDidPressVideoDownload), name: URLBarDidPressVideoDownloadNotification, object: nil)
+        
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
