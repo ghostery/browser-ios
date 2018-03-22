@@ -336,6 +336,12 @@
 		4FBBC1502035E02900445AD1 /* NewsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBBC14F2035E02900445AD1 /* NewsViewCell.swift */; };
 		4FBBC1522035E5C400445AD1 /* NewsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBBC1512035E5C400445AD1 /* NewsDataSource.swift */; };
 		4FD19FC5205A9F7700547DD5 /* NativeContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */; };
+		4FF07D852063C99E001385A8 /* OffrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D802063C99D001385A8 /* OffrView.swift */; };
+		4FF07D862063C99E001385A8 /* OffrzViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D812063C99D001385A8 /* OffrzViewController.swift */; };
+		4FF07D872063C99E001385A8 /* OffrzEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */; };
+		4FF07D882063C99E001385A8 /* OffrzDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D832063C99E001385A8 /* OffrzDataSource.swift */; };
+		4FF07D892063C99E001385A8 /* OffrzOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D842063C99E001385A8 /* OffrzOnboardingView.swift */; };
+		4FF07D8B2063CA46001385A8 /* OffrzDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D8A2063CA46001385A8 /* OffrzDataService.swift */; };
 		5002717C41BC7C50F67F1CAD /* StateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50027345B49B967409DDA348 /* StateTests.swift */; };
 		554867231DC3935A00183DAA /* HomePageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554867221DC3935A00183DAA /* HomePageTests.swift */; };
 		55A747171DC46FC400CE1B57 /* HomePageUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A747161DC46FC400CE1B57 /* HomePageUITest.swift */; };
@@ -1438,8 +1444,6 @@
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
 		19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeanplumIntegration.swift; sourceTree = "<group>"; };
 		1E066FAB204D5B1C0017C800 /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Client.entitlements; sourceTree = "<group>"; };
-		1E36FE75204D5646004C92F7 /* SendTo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SendTo.entitlements; sourceTree = "<group>"; };
-		1EA89EE1204D593F002448F0 /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
 		1EAFE515205FBBBC006A36B4 /* CliqzLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CliqzLaunchScreen.xib; sourceTree = "<group>"; };
 		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Sync/Synchronizers/Bookmarks/BookmarksSynchronizer.swift; sourceTree = SOURCE_ROOT; };
 		28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksHelpers.swift; sourceTree = "<group>"; };
@@ -1714,6 +1718,12 @@
 		4FBBC14F2035E02900445AD1 /* NewsViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsViewCell.swift; sourceTree = "<group>"; };
 		4FBBC1512035E5C400445AD1 /* NewsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDataSource.swift; sourceTree = "<group>"; };
 		4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeContextMenu.swift; sourceTree = "<group>"; };
+		4FF07D802063C99D001385A8 /* OffrView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrView.swift; sourceTree = "<group>"; };
+		4FF07D812063C99D001385A8 /* OffrzViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzViewController.swift; sourceTree = "<group>"; };
+		4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzEmptyView.swift; sourceTree = "<group>"; };
+		4FF07D832063C99E001385A8 /* OffrzDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzDataSource.swift; sourceTree = "<group>"; };
+		4FF07D842063C99E001385A8 /* OffrzOnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzOnboardingView.swift; sourceTree = "<group>"; };
+		4FF07D8A2063CA46001385A8 /* OffrzDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzDataService.swift; sourceTree = "<group>"; };
 		50027345B49B967409DDA348 /* StateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StateTests.swift; path = SyncTests/StateTests.swift; sourceTree = "<group>"; };
 		554867221DC3935A00183DAA /* HomePageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageTests.swift; sourceTree = "<group>"; };
 		55A747161DC46FC400CE1B57 /* HomePageUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageUITest.swift; sourceTree = "<group>"; };
@@ -3078,6 +3088,7 @@
 		4F8F3C0D202CB39F001C1A0F /* Cliqz */ = {
 			isa = PBXGroup;
 			children = (
+				4FF07D712063C754001385A8 /* MyOffrz */,
 				AFE484C32056836400554B2E /* URLBar */,
 				4F30F51D20516CF00049E4F6 /* Custom Views */,
 				4F30F4E4205165E80049E4F6 /* React Components */,
@@ -3110,6 +3121,19 @@
 				4F6930992048185600FB0B2E /* TopSitesDataSource.swift */,
 			);
 			path = TopSites;
+			sourceTree = "<group>";
+		};
+		4FF07D712063C754001385A8 /* MyOffrz */ = {
+			isa = PBXGroup;
+			children = (
+				4FF07D8A2063CA46001385A8 /* OffrzDataService.swift */,
+				4FF07D802063C99D001385A8 /* OffrView.swift */,
+				4FF07D832063C99E001385A8 /* OffrzDataSource.swift */,
+				4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */,
+				4FF07D842063C99E001385A8 /* OffrzOnboardingView.swift */,
+				4FF07D812063C99D001385A8 /* OffrzViewController.swift */,
+			);
+			path = MyOffrz;
 			sourceTree = "<group>";
 		};
 		7B0B1B9C1C1B69F500DF4AB5 /* Extensions */ = {
@@ -5920,6 +5944,7 @@
 				4F0445DB203333BF00E2C0C7 /* TopSitesViewController.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */,
+				4FF07D882063C99E001385A8 /* OffrzDataSource.swift in Sources */,
 				39F819C61FD70F5D009E31E4 /* TabEventHandlers.swift in Sources */,
 				4FBBC1502035E02900445AD1 /* NewsViewCell.swift in Sources */,
 				E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */,
@@ -5960,6 +5985,7 @@
 				D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */,
 				D31CF65C1CC1959A001D0BD0 /* PrivilegedRequest.swift in Sources */,
 				D8D33A7D1FBD080300A20A28 /* SnapKitExtensions.swift in Sources */,
+				4FF07D862063C99E001385A8 /* OffrzViewController.swift in Sources */,
 				E650755C1E37F747006961AC /* Swizzling.m in Sources */,
 				74821FC51DB56A2500EEEA72 /* OpenWithSettingsViewController.swift in Sources */,
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
@@ -5969,6 +5995,7 @@
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */,
 				4F0445DD203333F200E2C0C7 /* NewsViewController.swift in Sources */,
+				4FF07D8B2063CA46001385A8 /* OffrzDataService.swift in Sources */,
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
 				E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */,
@@ -5980,6 +6007,7 @@
 				4F30F5172051670C0049E4F6 /* Telemetry.swift in Sources */,
 				4F30F50F2051670C0049E4F6 /* JSBridgeBridge.m in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
+				4FF07D892063C99E001385A8 /* OffrzOnboardingView.swift in Sources */,
 				742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */,
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				E689C7301E0C7617008BAADB /* NSAttributedStringExtensions.swift in Sources */,
@@ -6024,6 +6052,7 @@
 				E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */,
 				4F30F5122051670C0049E4F6 /* QuerySuggestionBridge.m in Sources */,
 				3BB50E201D627539004B33DF /* ActivityStreamPanel.swift in Sources */,
+				4FF07D872063C99E001385A8 /* OffrzEmptyView.swift in Sources */,
 				4F30F5192051670C0049E4F6 /* UserAgentConstants.swift in Sources */,
 				4F3046B1204FF18700C99162 /* AppStatus.swift in Sources */,
 				F84B22241A09122500AAB793 /* HomePanelViewController.swift in Sources */,
@@ -6095,6 +6124,7 @@
 				4F30F51B2051670C0049E4F6 /* Engine.swift in Sources */,
 				F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
+				4FF07D852063C99E001385A8 /* OffrView.swift in Sources */,
 				4F3046AF204FF14200C99162 /* SubscriptionsHandler.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				7B0B1B791C1B69C900DF4AB5 /* ClientPickerViewController.swift in Sources */,

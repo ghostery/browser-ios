@@ -66,9 +66,13 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
+			/* Cliqz: removed Reading List panel
                 let controller = ReadingListPanel()
                 controller.profile = profile
                 return controller
+			*/
+				let controller = OffrzViewController(dataSource: OffrzDataSource.shared)
+				return controller
             },
 			/* Cliqz: changed the icon
             imageName: "ReadingList",
