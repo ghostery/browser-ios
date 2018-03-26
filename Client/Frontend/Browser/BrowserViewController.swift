@@ -2470,6 +2470,15 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             }
             actionSheetController.addAction(openNewPrivateTabAction)
 
+            // Cliqz: Added Action handler for the long press to download Youtube videos
+            if url.isYoutubeURL() {
+                let downloadVideoTitle = NSLocalizedString("Download youtube video", tableName: "Cliqz", comment: "Context menu item for opening a link in a new tab")
+                let downloadVideo =  UIAlertAction(title: downloadVideoTitle, style: UIAlertActionStyle.default) { (action: UIAlertAction) in
+                    self.downloadVideoFromURL(dialogTitle!, sourceRect: CGRect(origin: touchPoint, size: touchSize))
+                }
+                actionSheetController.addAction(downloadVideo)
+            }
+            
             let copyTitle = NSLocalizedString("Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
             let copyAction = UIAlertAction(title: copyTitle, style: .default) { (action: UIAlertAction) -> Void in
                 UIPasteboard.general.url = url as URL

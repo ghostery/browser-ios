@@ -16,7 +16,7 @@ extension BrowserViewController {
         }
     }
     
-    private func downloadVideoFromURL(_ url: String, sourceRect: CGRect) {
+    func downloadVideoFromURL(_ url: String, sourceRect: CGRect) {
         
         let hudMessage = NSLocalizedString("Retrieving video information", tableName: "Cliqz", comment: "[VidoeDownloader] HUD message displayed while youtube downloader grabing the download URLs of the video")
         FeedbackUI.showLoadingHUD(hudMessage)
