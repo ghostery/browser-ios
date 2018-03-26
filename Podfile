@@ -32,6 +32,7 @@ target 'Client' do
 	pod 'AWSCore', '~> 2.6'
 	pod 'AWSSNS', '~> 2.6'
 	pod 'RxSwift', '~> 4.0'
+    pod 'RealmSwift'
 
 end
 

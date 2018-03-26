@@ -210,6 +210,9 @@ class Tab: NSObject {
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
             self.userScriptManager = UserScriptManager(tab: self)
             tabDelegate?.tab?(self, didCreateWebView: webView)
+            
+            //Cliqz: Privacy
+            self.addPrivacy()
         }
     }
 
@@ -250,6 +253,8 @@ class Tab: NSObject {
             webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
+        //Cliqz: Remove notification observer
+        NotificationCenter.default.removeObserver(self)
     }
 
     var loading: Bool {

@@ -73,6 +73,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         //Cliqz: Cards Subscription
         SubscriptionsHandler.sharedInstance.configureRemoteNotifications()
+        //Cliqz: load the tracker list
+        TrackerList.instance.loadTrackerList()
 
         // Short circuit the app if we want to email logs from the debug menu
         if DebugSettingsBundleOptions.launchIntoEmailComposer {
