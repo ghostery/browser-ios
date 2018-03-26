@@ -46,7 +46,6 @@
 		1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */; };
 		1E3CBC1D205806F000898B05 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC1C205806F000898B05 /* DateExtension.swift */; };
 		1EAFE4A3205934C8006A36B4 /* CliqzAppSettingsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */; };
-		1EAFE4EC205BDB51006A36B4 /* Eula.html in Resources */ = {isa = PBXBuildFile; fileRef = 1EAFE4EB205BDB50006A36B4 /* Eula.html */; };
 		1EAFE4F0205BDEC0006A36B4 /* cliqz.json in Resources */ = {isa = PBXBuildFile; fileRef = 1EAFE4EF205BDEC0006A36B4 /* cliqz.json */; };
 		1EAFE524205FBBBC006A36B4 /* CliqzLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EAFE515205FBBBC006A36B4 /* CliqzLaunchScreen.xib */; };
 		1EAFE55F205FFE21006A36B4 /* LocalResourceSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE55A205FFE21006A36B4 /* LocalResourceSetting.swift */; };
@@ -60,6 +59,7 @@
 		1EAFE56E205FFE82006A36B4 /* AdBlockerSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE568205FFE82006A36B4 /* AdBlockerSettingsTableViewController.swift */; };
 		1EAFE56F205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE569205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift */; };
 		1EAFE570205FFE82006A36B4 /* RegionalSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */; };
+		1EBB08B92068FC9700C6DFFE /* Eula.html in Resources */ = {isa = PBXBuildFile; fileRef = 1EBB08AA2068FC9600C6DFFE /* Eula.html */; };
 		1EEA368120613C17003B6AD5 /* SendCrashReportsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */; };
 		2805F5A61B8BCA7A00268FD1 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
 		28078A471B1507EF0053B46A /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
@@ -1464,7 +1464,6 @@
 		1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsOptions.swift; sourceTree = "<group>"; };
 		1E3CBC1C205806F000898B05 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
-		1EAFE4EB205BDB50006A36B4 /* Eula.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Eula.html; sourceTree = "<group>"; };
 		1EAFE4EF205BDEC0006A36B4 /* cliqz.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cliqz.json; path = "node_modules/browser-core/build/config/cliqz.json"; sourceTree = SOURCE_ROOT; };
 		1EAFE515205FBBBC006A36B4 /* CliqzLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CliqzLaunchScreen.xib; sourceTree = "<group>"; };
 		1EAFE55A205FFE21006A36B4 /* LocalResourceSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalResourceSetting.swift; sourceTree = "<group>"; };
@@ -1478,6 +1477,7 @@
 		1EAFE568205FFE82006A36B4 /* AdBlockerSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdBlockerSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1EAFE569205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HumanWebSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionalSettingsTableViewController.swift; sourceTree = "<group>"; };
+		1EBB08AA2068FC9600C6DFFE /* Eula.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Eula.html; sourceTree = "<group>"; };
 		1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCrashReportsTableViewController.swift; sourceTree = "<group>"; };
 		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Sync/Synchronizers/Bookmarks/BookmarksSynchronizer.swift; sourceTree = SOURCE_ROOT; };
 		28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksHelpers.swift; sourceTree = "<group>"; };
@@ -3091,6 +3091,7 @@
 				4F3046BA204FF69200C99162 /* logo-database.json */,
 				4F3046AC204FF0EA00C99162 /* Cliqz.xcassets */,
 				4F304597204FEE5500C99162 /* jsengine.bundle.js */,
+				1EBB08AA2068FC9600C6DFFE /* Eula.html */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -3844,7 +3845,6 @@
 		E699220D1B94E3EF007C480D /* About */ = {
 			isa = PBXGroup;
 			children = (
-				1EAFE4EB205BDB50006A36B4 /* Eula.html */,
 				E69922121B94E3EF007C480D /* Licenses.html */,
 			);
 			path = About;
@@ -5319,7 +5319,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D38A1EE01CB458EC0080C842 /* CertError.html in Resources */,
-				1EAFE4EC205BDB51006A36B4 /* Eula.html in Resources */,
 				0BA1E0301B051A07007675AF /* NetError.css in Resources */,
 				1EAFE4F0205BDEC0006A36B4 /* cliqz.json in Resources */,
 				D03F8F21200EABB0003C2224 /* __firefox__.js in Resources */,
@@ -5371,6 +5370,7 @@
 				D0FCF7F71FE45E5D004A7995 /* PrintHandler.js in Resources */,
 				D0FCF8011FE47563004A7995 /* FormPostHandler.js in Resources */,
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
+				1EBB08B92068FC9700C6DFFE /* Eula.html in Resources */,
 				EB2A633F1F3B514B004EF8B0 /* disconnect-social.json in Resources */,
 				D0C95DF8200EAE3000E4E51C /* NightModeHelper.js in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
