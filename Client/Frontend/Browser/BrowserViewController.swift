@@ -1825,6 +1825,9 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
+            
+            //Cliqz: Update Ghostery Count
+            NotificationCenter.default.post(name: didChangeTabNotification, object: nil, userInfo: ["url": webView.url as Any])
 
             if webView.url == nil {
                 // The web view can go gray if it was zombified due to memory pressure.
