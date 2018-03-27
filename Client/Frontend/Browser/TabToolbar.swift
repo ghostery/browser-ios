@@ -39,8 +39,12 @@ protocol TabToolbarDelegate: class {
 open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
 
+    /* Cliqz: changed the icons of ImageReload & ImageStop
     let ImageReload = UIImage.templateImageNamed("nav-refresh")
     let ImageStop = UIImage.templateImageNamed("nav-stop")
+    */
+    let ImageReload = UIImage.templateImageNamed("cliqz-nav-refresh")
+    let ImageStop = UIImage.templateImageNamed("cliqz-nav-stop")
 
     var loading: Bool = false {
         didSet {
@@ -210,7 +214,10 @@ class TabToolbar: UIView {
         setupAccessibility()
 
         addSubview(contentView)
+        /* Cliqz: used CliqzTabToolbarHelper instead of TabToolbarHelper
         helper = TabToolbarHelper(toolbar: self)
+        */
+        helper = CliqzTabToolbarHelper(toolbar: self)
         addButtons(actionButtons)
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually

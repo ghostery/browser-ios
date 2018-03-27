@@ -11,7 +11,10 @@ private struct TabsButtonUX {
     static let TitleBackgroundColor: UIColor = UIColor.white
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
+    /* Cliqz: Changed the stroke width of the TabsButton
     static let BorderStrokeWidth: CGFloat = 3
+    */
+    static let BorderStrokeWidth: CGFloat = 1
 }
 
 class TabsButton: UIButton {
@@ -106,7 +109,10 @@ class TabsButton: UIButton {
             make.edges.equalTo(insideButton)
         }
         insideButton.snp.remakeConstraints { (make) -> Void in
+            /* Cliqz: changed the size of the actual tabs button
             make.size.equalTo(24)
+            */
+            make.size.equalTo(20)
             make.center.equalTo(self)
         }
     }
