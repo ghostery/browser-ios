@@ -76,9 +76,11 @@ class CliqzTabLocationView: TabLocationView {
             return
         }
         videoDownloadButton.isHidden = !url.isYoutubeURL()
-        readerModeButton.isHidden = !videoDownloadButton.isHidden
         if !videoDownloadButton.isHidden {
             separatorLine.isHidden = false
+            readerModeButton.isHidden = true
+        } else {
+            separatorLine.isHidden = readerModeButton.isHidden
         }
     }
     
