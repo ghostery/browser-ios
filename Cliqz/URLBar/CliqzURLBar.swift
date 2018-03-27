@@ -60,6 +60,11 @@ class CliqzURLBar: URLBarView {
         }
     }
     
+    override func commonInit() {
+        super.commonInit()
+        helper = CliqzTabToolbarHelper(toolbar: self)
+    }
+    
     override func setupConstraints() {
         
         if ghosteryButton.superview == nil {

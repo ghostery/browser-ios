@@ -45,6 +45,7 @@
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
 		1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */; };
 		1E3CBC1D205806F000898B05 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC1C205806F000898B05 /* DateExtension.swift */; };
+		1E7B7688206A8AC000FD0BA5 /* CliqzTabToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */; };
 		1EAFE4A3205934C8006A36B4 /* CliqzAppSettingsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */; };
 		1EAFE4F0205BDEC0006A36B4 /* cliqz.json in Resources */ = {isa = PBXBuildFile; fileRef = 1EAFE4EF205BDEC0006A36B4 /* cliqz.json */; };
 		1EAFE524205FBBBC006A36B4 /* CliqzLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EAFE515205FBBBC006A36B4 /* CliqzLaunchScreen.xib */; };
@@ -1491,6 +1492,7 @@
 		1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsOptions.swift; sourceTree = "<group>"; };
 		1E3CBC1C205806F000898B05 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTabToolbar.swift; sourceTree = "<group>"; };
 		1EAFE4EF205BDEC0006A36B4 /* cliqz.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cliqz.json; path = "node_modules/browser-core/build/config/cliqz.json"; sourceTree = SOURCE_ROOT; };
 		1EAFE515205FBBBC006A36B4 /* CliqzLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CliqzLaunchScreen.xib; sourceTree = "<group>"; };
 		1EAFE55A205FFE21006A36B4 /* LocalResourceSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalResourceSetting.swift; sourceTree = "<group>"; };
@@ -3430,6 +3432,7 @@
 			children = (
 				AFE484D22056838500554B2E /* CliqzURLBar.swift */,
 				1EEA36DC206401EB003B6AD5 /* CliqzTabLocationView.swift */,
+				1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */,
 			);
 			path = URLBar;
 			sourceTree = "<group>";
@@ -6207,6 +6210,7 @@
 				E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */,
+				1E7B7688206A8AC000FD0BA5 /* CliqzTabToolbar.swift in Sources */,
 				1EAFE55F205FFE21006A36B4 /* LocalResourceSetting.swift in Sources */,
 				4F0445DD203333F200E2C0C7 /* NewsViewController.swift in Sources */,
 				4FF07D8B2063CA46001385A8 /* OffrzDataService.swift in Sources */,

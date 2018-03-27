@@ -201,7 +201,10 @@ class URLBarView: UIView {
         commonInit()
     }
 
+    /* Cliqz: remove private modifier
     fileprivate func commonInit() {
+    */
+    func commonInit() {
         locationContainer.addSubview(locationView)
     
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton].forEach { addSubview($0) }
