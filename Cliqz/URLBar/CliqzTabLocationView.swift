@@ -46,6 +46,8 @@ class CliqzTabLocationView: TabLocationView {
             make.trailing.equalTo(separatorLine.snp.leading).offset(-9)
             make.size.equalTo(24)
         }
+
+        lockImageView.tintColor = UIColor.black
     }
     
     
