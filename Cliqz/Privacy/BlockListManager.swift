@@ -59,13 +59,17 @@ final class BlockListManager {
                     if blfm == nil {
                         blfm = BlockListFileManager()
                     }
-                    self.loadQueue?.addOperation {
-                        let json = blfm!.json(forIdentifier: id)
-                        listStore?.compileContentRuleList(forIdentifier: id, encodedContentRuleList: json) { (ruleList, error) in
-                            guard let ruleList = ruleList else { fatalError("problem compiling \(id)") }
-                            returnList.append(ruleList)
-                            dispatchGroup.leave()
+                    if let json = blfm!.json(forIdentifier: id) {
+                        self.loadQueue?.addOperation {
+                            listStore?.compileContentRuleList(forIdentifier: id, encodedContentRuleList: json) { (ruleList, error) in
+                                guard let ruleList = ruleList else { fatalError("problem compiling \(id)") }
+                                returnList.append(ruleList)
+                                dispatchGroup.leave()
+                            }
                         }
+                    }
+                    else {
+                        debugPrint("json not found for identifier = \(id)")
                     }
                 }
             }
@@ -96,6 +100,7 @@ final class BlockListIdentifiers {
         if let id_dict = jsonObject as? [String: Any] {
             return Array(id_dict.keys)
         }
+        
         return []
     }
 }
@@ -111,16 +116,20 @@ final class BlockListFileManager {
         ghosteryBlockDict = BlockListFileManager.parseGhosteryBlockList()
     }
     
-    func json(forIdentifier: String) -> String {
+    func json(forIdentifier: String) -> String? {
         
+        //first look in the ghostery list
         if let json = ghosteryBlockDict[forIdentifier] {
             return json
         }
-        //otherwise
-        //search the bundle for a json and parse it.
-        let path = Bundle.main.path(forResource: forIdentifier, ofType: "json")!
-        guard let jsonFileContent = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) else { fatalError("Rule list for \(forIdentifier) doesn't exist!") }
-        return jsonFileContent
+        
+        //then look in the bundle
+        if let path = Bundle.main.path(forResource: forIdentifier, ofType: "json") {
+            guard let jsonFileContent = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) else { fatalError("Rule list for \(forIdentifier) doesn't exist!") }
+            return jsonFileContent
+        }
+        
+        return nil
     }
     
     class private func parseGhosteryBlockList() -> [BugID:BugJson] {
