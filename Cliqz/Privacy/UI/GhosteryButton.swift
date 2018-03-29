@@ -112,10 +112,19 @@ class GhosteryCount {
     init() {
         NotificationCenter.default.addObserver(self, selector: #selector(newTrackerDetected), name: detectedTrackerNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(newTabSelected), name: didChangeTabNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(urlChanged), name: urlChangedNotification, object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func urlChanged(notification: Notification) {
+        guard let del = UIApplication.shared.delegate as? AppDelegate, let currentTab = del.tabManager.selectedTab else {return}
+        if let tab = notification.object as? Tab, tab == currentTab, let currentUrl = self.dataSource?.currentUrl() {
+            let count = TrackerList.instance.detectedTrackerCountForPage(currentUrl.absoluteString)
+            self.delegate?.updateCount(count: count)
+        }
     }
     
     @objc func newTrackerDetected(notification: Notification) {

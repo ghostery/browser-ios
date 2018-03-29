@@ -7,6 +7,9 @@
 //
 
 import WebKit
+import Shared
+
+let urlChangedNotification = Notification.Name(rawValue: "URLChangedNotification")
 
 extension Tab {
     
@@ -76,6 +79,16 @@ extension Tab {
             }
         }
         setupBlocking()
+    }
+    
+    func sendURLChangedNotification() {
+        
+        var userInfo: [String: URL] = [:]
+        if let url = self.webView?.url {
+            userInfo["url"] = url
+        }
+        
+        NotificationCenter.default.post(name: urlChangedNotification, object: self, userInfo: userInfo)
     }
     
 }
