@@ -53,7 +53,7 @@ extension Tab {
                         webView.configuration.userContentController.removeAllContentRuleLists()
                         lists.forEach(webView.configuration.userContentController.add)
                         debugPrint("WebView added blocklists")
-                        self.reload()
+                        webView.reload()
                     }
                 }
             })
