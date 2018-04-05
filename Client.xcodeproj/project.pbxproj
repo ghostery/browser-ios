@@ -45,7 +45,12 @@
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
 		1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */; };
 		1E3CBC1D205806F000898B05 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC1C205806F000898B05 /* DateExtension.swift */; };
+		1E3FBF59207763FE00FAE3FD /* BrowserViewController+Connect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FBF58207763FE00FAE3FD /* BrowserViewController+Connect.swift */; };
+		1E4CFBE7207380AD00B26E85 /* ConnectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBE6207380AD00B26E85 /* ConnectTableViewController.swift */; };
+		1E4CFBF92073A5BD00B26E85 /* AddConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBF82073A5BD00B26E85 /* AddConnectionViewController.swift */; };
+		1E4CFBFB2073A5CC00B26E85 /* EditConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBFA2073A5CC00B26E85 /* EditConnectionViewController.swift */; };
 		1E7B7688206A8AC000FD0BA5 /* CliqzTabToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */; };
+		1E7B76AF206B9CB500FD0BA5 /* ConnectDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */; };
 		1EAFE4A3205934C8006A36B4 /* CliqzAppSettingsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */; };
 		1EAFE4F0205BDEC0006A36B4 /* cliqz.json in Resources */ = {isa = PBXBuildFile; fileRef = 1EAFE4EF205BDEC0006A36B4 /* cliqz.json */; };
 		1EAFE524205FBBBC006A36B4 /* CliqzLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EAFE515205FBBBC006A36B4 /* CliqzLaunchScreen.xib */; };
@@ -1492,7 +1497,12 @@
 		1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsOptions.swift; sourceTree = "<group>"; };
 		1E3CBC1C205806F000898B05 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		1E3FBF58207763FE00FAE3FD /* BrowserViewController+Connect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+Connect.swift"; sourceTree = "<group>"; };
+		1E4CFBE6207380AD00B26E85 /* ConnectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTableViewController.swift; sourceTree = "<group>"; };
+		1E4CFBF82073A5BD00B26E85 /* AddConnectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddConnectionViewController.swift; sourceTree = "<group>"; };
+		1E4CFBFA2073A5CC00B26E85 /* EditConnectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditConnectionViewController.swift; sourceTree = "<group>"; };
 		1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTabToolbar.swift; sourceTree = "<group>"; };
+		1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectDataSource.swift; sourceTree = "<group>"; };
 		1EAFE4EF205BDEC0006A36B4 /* cliqz.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cliqz.json; path = "node_modules/browser-core/build/config/cliqz.json"; sourceTree = SOURCE_ROOT; };
 		1EAFE515205FBBBC006A36B4 /* CliqzLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CliqzLaunchScreen.xib; sourceTree = "<group>"; };
 		1EAFE55A205FFE21006A36B4 /* LocalResourceSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalResourceSetting.swift; sourceTree = "<group>"; };
@@ -2561,6 +2571,17 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		1E7B769F206B9C4900FD0BA5 /* Connect */ = {
+			isa = PBXGroup;
+			children = (
+				1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */,
+				1E4CFBE6207380AD00B26E85 /* ConnectTableViewController.swift */,
+				1E4CFBF82073A5BD00B26E85 /* AddConnectionViewController.swift */,
+				1E4CFBFA2073A5CC00B26E85 /* EditConnectionViewController.swift */,
+			);
+			path = Connect;
+			sourceTree = "<group>";
+		};
 		1EAFE54B205FFD9E006A36B4 /* Base Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -3216,6 +3237,7 @@
 				4F30F52620517C210049E4F6 /* SearchViewDelegate.swift */,
 				4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */,
 				1EEA36EC2067DD6F003B6AD5 /* VideoDownloader.swift */,
+				1E3FBF58207763FE00FAE3FD /* BrowserViewController+Connect.swift */,
 			);
 			path = BrowserViewController;
 			sourceTree = "<group>";
@@ -3223,6 +3245,7 @@
 		4F8F3C0D202CB39F001C1A0F /* Cliqz */ = {
 			isa = PBXGroup;
 			children = (
+				1E7B769F206B9C4900FD0BA5 /* Connect */,
 				4FF07D712063C754001385A8 /* MyOffrz */,
 				AF6FA95E20652C1100D7F9F0 /* Privacy */,
 				AFE484C32056836400554B2E /* URLBar */,
@@ -4910,7 +4933,7 @@
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0800;
-				ORGANIZATIONNAME = Mozilla;
+				ORGANIZATIONNAME = Cliqz;
 				TargetAttributes = {
 					2827315D1ABC9BE600AA1954 = {
 						CreatedOnToolsVersion = 6.2;
@@ -6191,6 +6214,7 @@
 				AF53D3BC206A346B0012A11F /* TabExtension.swift in Sources */,
 				1EAFE563205FFE21006A36B4 /* ShowCliqzPageSetting.swift in Sources */,
 				E689C6FA1E0C6E98008BAADB /* FxAContentViewController.swift in Sources */,
+				1E4CFBF92073A5BD00B26E85 /* AddConnectionViewController.swift in Sources */,
 				C4E3983D1D21F1E7004E89BA /* TopTabsViews.swift in Sources */,
 				3B0943811D6CC4FC004F24E1 /* FilledPageControl.swift in Sources */,
 				FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */,
@@ -6204,6 +6228,7 @@
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */,
 				D31CF65C1CC1959A001D0BD0 /* PrivilegedRequest.swift in Sources */,
+				1E3FBF59207763FE00FAE3FD /* BrowserViewController+Connect.swift in Sources */,
 				D8D33A7D1FBD080300A20A28 /* SnapKitExtensions.swift in Sources */,
 				4FF07D862063C99E001385A8 /* OffrzViewController.swift in Sources */,
 				E650755C1E37F747006961AC /* Swizzling.m in Sources */,
@@ -6220,12 +6245,14 @@
 				4FF07D8B2063CA46001385A8 /* OffrzDataService.swift in Sources */,
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
+				1E4CFBE7207380AD00B26E85 /* ConnectTableViewController.swift in Sources */,
 				1EEA36D72063F87C003B6AD5 /* URLExtension.swift in Sources */,
 				E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */,
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				AF6FA99220652D4600D7F9F0 /* TrieNode.swift in Sources */,
 				4F30F5152051670C0049E4F6 /* SubscriptionModule.swift in Sources */,
 				4FD19FC5205A9F7700547DD5 /* NativeContextMenu.swift in Sources */,
+				1E4CFBFB2073A5CC00B26E85 /* EditConnectionViewController.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				4F30F5172051670C0049E4F6 /* Telemetry.swift in Sources */,
@@ -6353,6 +6380,7 @@
 				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
 				1EAFE56C205FFE82006A36B4 /* LimitMobileDataUsageTableViewController.swift in Sources */,
+				1E7B76AF206B9CB500FD0BA5 /* ConnectDataSource.swift in Sources */,
 				19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */,
 				E65D89181C8647420006EA35 /* AppAuthenticator.swift in Sources */,
 				1EEA36D52063E105003B6AD5 /* FileManagerExtension.swift in Sources */,
@@ -7639,6 +7667,7 @@
 					"$(PROJECT_DIR)/Cliqz/Third-Party/KKDomain/Carthage/Build/Mac",
 					"$(PROJECT_DIR)/Cliqz/Third-Party/KKDomain/Carthage/Build/tvOS",
 					"$(PROJECT_DIR)/Cliqz/Third-Party/KKDomain/Carthage/Build/watchOS",
+					"$(PROJECT_DIR)/node_modules/react-native-webrtc/ios",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9858,6 +9887,7 @@
 					"$(PROJECT_DIR)/Cliqz/Third-Party/KKDomain/Carthage/Build/Mac",
 					"$(PROJECT_DIR)/Cliqz/Third-Party/KKDomain/Carthage/Build/tvOS",
 					"$(PROJECT_DIR)/Cliqz/Third-Party/KKDomain/Carthage/Build/watchOS",
+					"$(PROJECT_DIR)/node_modules/react-native-webrtc/ios",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
