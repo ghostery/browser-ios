@@ -84,11 +84,11 @@ class SubSettingsTableViewController : UITableViewController {
         return footer
     }
     
-    func getUITableViewCell(_ cellIdentifier: String? = SubSettingsTableViewController.DefaultCellIdentifier) -> UITableViewCell {
+    func getUITableViewCell(_ cellIdentifier: String = SubSettingsTableViewController.DefaultCellIdentifier, style: UITableViewCellStyle = UITableViewCellStyle.default) -> UITableViewCell {
         var cell: UITableViewCell!
-        cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier!)
+        cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)
         if cell == nil {
-            cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: cellIdentifier)
+            cell = UITableViewCell(style: style, reuseIdentifier: cellIdentifier)
         }
         return cell
     }

@@ -9,6 +9,27 @@
 import Foundation
 
 // MARK:- cliqz settings
+class CliqzConnectSetting: Setting {
+    
+    let profile: Profile
+    
+    
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        
+        let title = NSLocalizedString("Connect", tableName: "Cliqz", comment: "[Settings] Connect")
+        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+    }
+    
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = ConnectTableViewController()
+        viewController.title = self.title?.string
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 class RegionalSetting: Setting {
     let profile: Profile
     

@@ -17,7 +17,7 @@ def project_pods
     ]
     pod 'yoga', :path => yoga_path
     pod 'RNFS', :path => './node_modules/react-native-fs'
-#    pod 'react-native-webrtc', :path => './node_modules/react-native-webrtc'
+    pod 'react-native-webrtc', :path => './node_modules/react-native-webrtc'
     pod 'RNDeviceInfo', :path => './node_modules/react-native-device-info'
     pod 'RNSqlite2', :path => './node_modules/react-native-sqlite-2/ios/'
     pod 'RNViewShot', :path => './node_modules/react-native-view-shot/'

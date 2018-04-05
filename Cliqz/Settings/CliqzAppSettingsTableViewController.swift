@@ -15,6 +15,12 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         var settings = [SettingSection]()
         let prefs = profile.prefs
         
+        // Connect
+        let conenctSettings = [CliqzConnectSetting(settings: self)]
+        let connectSettingsTitle = NSLocalizedString("Connect", tableName: "Cliqz", comment: "[Settings] Connect section title")
+        let connectSettingsFooter = NSLocalizedString("Connect Cliqz on your computer with Cliqz on your iOS device. This will allow you to send tabs from your desktop to your mobile device. You can also directly download videos from your desktop browser to your mobile device.", tableName: "Cliqz", comment: "[Settings] Connect section footer")
+        settings += [ SettingSection(title: NSAttributedString(string: connectSettingsTitle), footerTitle: NSAttributedString(string: connectSettingsFooter), children: conenctSettings)]
+        
         // Search Settings
         let searchSettings = generateSearchSettings(prefs: prefs)
         let searchSettingsTitle = NSLocalizedString("Search", tableName: "Cliqz", comment: "[Settings] Search section title")

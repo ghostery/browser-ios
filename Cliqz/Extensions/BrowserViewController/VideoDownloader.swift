@@ -60,7 +60,7 @@ extension BrowserViewController {
         self.present(actionSheet, animated: true, completion: nil)
     }
     
-    private func doDownloadVideo(_ url: String) {
+    func doDownloadVideo(_ url: String) {
         let labelText = NSLocalizedString("Your video is being downloaded.", tableName: "Cliqz", comment: "[VidoeDownloader] Toast message shown when youtube video download started")
         DispatchQueue.main.async { [weak self] in
             let toast = ButtonToast(labelText: labelText, buttonText: Strings.OKString) { (_) in }
