@@ -250,6 +250,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             notifyTextChanged?()
         } else {
             hideCursor = false
+            //Cliqz: Always notify text change
+            notifyTextChanged?()
         }
     }
 
