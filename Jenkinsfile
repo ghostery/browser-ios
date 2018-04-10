@@ -46,10 +46,24 @@ node('mac-mini-ios') {
     ) { 
         nodeId ->
         node(nodeId) {
-            stage("Checkout") {
-                checkout scm
-            }
             try {
+                stage("Checkout") {
+                    checkout scm
+                    withCredentials([file(credentialsId: 'ceb2d5e9-fc88-418f-aa65-ce0e0d2a7ea1', variable: 'CLIQZ_CI_SSH_KEY')]) {
+                        sh '''#!/bin/bash -l
+                            set -x
+                            set -e
+                            mkdir -p ~/.ssh
+                            cp $CLIQZ_CI_SSH_KEY ~/.ssh/id_rsa
+                            chmod 600 ~/.ssh/id_rsa
+                            echo $CLIQZ_CI_SSH_KEY
+                            ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+                            sudo -H python -m ensurepip
+                            sudo -H pip install --upgrade pip
+                            git clone -b version2.0 --single-branch --depth=1 git@github.com:cliqz/autobots.git
+                        '''
+                    }
+                }
                 stage('Prepare') {
                     sh '''#!/bin/bash -l
                         set -e
@@ -71,14 +85,63 @@ node('mac-mini-ios') {
                         '''
                     }
                 }
+                stage('Setup Test Environment'){
+                    sh '''#!/bin/bash -l
+                        set -e
+                        npm install -g appium
+                        npm install -g wd
+                        appium &
+                        echo $! > appium.pid
+                    '''
+                }
+                stage('Run Tests') {
+                    withEnv([
+                        'platformName=ios',
+                        'udid=185B34BB-DCB8-4A17-BDCA-843086B67193',
+                        'deviceName=iPhone 6',
+                        'platformVersion=11.2',
+                        'MODULE=testSmoke',
+                        'TEST=SmokeTest',
+                        'bundleID=com.cliqz.ios.newCliqz'
+                        ]) {
+                        timeout(60) {
+                            sh '''#!/bin/bash -l
+                                set -x
+                                set -e
+                                chmod 0755 autobots/requirements.txt
+                                sudo -H pip install -r autobots/requirements.txt
+                                sleep 10
+                                python autobots/testRunner.py
+                            '''
+                        }
+                    }
+                }
             }
             catch(all) {
                 jobStatus = 'FAIL'
             }
             finally {
+                stage('Upload Results') {
+                    try {
+                        archiveArtifacts allowEmptyArchive: true, artifacts: 'autobots/*.log'
+                        junit "autobots/test-reports/*.xml"
+                        zip archive: true, dir: 'autobots/screenshots', glob: '', zipFile: 'autobots/screenshots.zip'
+                    } catch (e) {
+                        // no screenshots, no problem
+                    }
+                }
                 stage('Cleanup') {
                     sh '''#!/bin/bash -l
+                        set -x
+                        set -e
+                        kill `cat appium.pid` || true
+                        rm -f appium.pid
                         xcrun simctl uninstall booted com.cliqz.ios.newCliqz || true
+                        xcrun simctl uninstall booted com.apple.test.WebDriverAgentRunner-Runner || true
+                        xcrun simctl uninstall booted com.apple.test.AppiumTests-Runner || true
+                        rm -rf autobots
+                        npm uninstall -g appium
+                        npm uninstall -g wd
                     '''
                 }
             }
