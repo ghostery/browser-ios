@@ -59,6 +59,8 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, HistoryListener> {
                 profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
             }
 
+            // Cliqz: disable auto complete from both history and top domains
+            /*
             let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
             currentDbQuery = deferred as? Cancellable
 
@@ -92,6 +94,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, HistoryListener> {
                     }
                 }
             }
+            */
         }
     }
 
