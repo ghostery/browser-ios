@@ -75,10 +75,22 @@ public extension UIDevice {
 	
 	// Find better name
 	func isiPad() -> Bool {
-		return modelName.starts(with: "iPad")
+		return userInterfaceIdiom == .pad
 	}
 
     func isSmallIphoneDevice() -> Bool {
 		return modelName.starts(with: "iPhone 4") || modelName.starts(with: "iPhone 5") || modelName.starts(with: "iPhone SE")
+    }
+    
+    var isPortrait: Bool {
+        let orientation = UIDevice.current.orientation
+        switch orientation {
+        case .portrait, .portraitUpsideDown:
+            return true
+        case .landscapeLeft, .landscapeRight:
+            return false
+        default: // unknown or faceUp or FaceDown
+            return UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height
+        }
     }
 }

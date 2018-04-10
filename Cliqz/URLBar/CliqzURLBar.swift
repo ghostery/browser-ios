@@ -221,6 +221,36 @@ class CliqzURLBar: URLBarView {
 	override func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
 		self.delegate?.urlBarDidPressCliqzPageOptions(self, from: tabLocationView.pageOptionsButton)
 	}
+    
+    // MARK:- keyboard Accessory View
+    override func createLocationTextField() {
+        super.createLocationTextField()
+        
+        let keyboardAccessoryView = KeyboardAccessoryView.sharedInstance
+        keyboardAccessoryView.setHandelAccessoryViewAction { [weak self] (action) in
+            switch (action) {
+            case .AutoComplete(let completion):
+                self?.locationTextField?.text = completion
+            }
+        }
+        locationTextField?.inputAccessoryView = keyboardAccessoryView
+    }
+    
+    override func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
+        if let view = autocompleteTextField.inputAccessoryView as? KeyboardAccessoryView {
+            view.updateCurrentQuery(text)
+        }
+        super.autocompleteTextField(autocompleteTextField, didEnterText: text)
+    }
+    
+    override func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        if let view = autocompleteTextField.inputAccessoryView as? KeyboardAccessoryView {
+            view.updateCurrentQuery("")
+        }
+        return super.autocompleteTextFieldShouldClear(autocompleteTextField)
+    }
+    
+    
 }
 
 // Cliqz: hide keyboard
