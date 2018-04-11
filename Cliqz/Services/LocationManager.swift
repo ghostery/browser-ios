@@ -13,6 +13,7 @@ open class LocationManager: NSObject, CLLocationManagerDelegate {
     static let NotificationUserLocationAvailable = "NotificationUserLocationAvailable"
     static let NotificationShowOpenLocationSettingsAlert = "NotificationShowOpenLocationSettingsAlert"
     private var enableLocationInProgress = false
+    private var permissionCallbacks: [(Bool) -> Void] = []
 
 	fileprivate let manager = CLLocationManager()
     fileprivate var location: CLLocation? {
@@ -35,22 +36,26 @@ open class LocationManager: NSObject, CLLocationManagerDelegate {
         return self.location
     }
     
-    open func askForLocationAccess () {
+    open func askForLocationAccess (callback: ((Bool) -> Void)? = nil) {
         //TelemetryLogger.sharedInstance.logEvent(.LocationServicesStatus("try_show", nil))
         self.manager.requestWhenInUseAuthorization()
         enableLocationInProgress = true
+        if callback != nil {
+            permissionCallbacks.append(callback!)
+        }
     }
     
-	open func shareLocation() {
+	open func shareLocation(callback: ((Bool) -> Void)? = nil) {
         let authorizationStatus = CLLocationManager.authorizationStatus()
         if authorizationStatus == .denied {
             NotificationCenter.default.post(name: Notification.Name(rawValue: LocationManager.NotificationShowOpenLocationSettingsAlert), object: CLLocationManager.locationServicesEnabled())
-	enableLocationInProgress = true
+            enableLocationInProgress = true
+            callback?(false)
         } else if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
             self.startUpdatingLocation()
-            
+            callback?(true)
         } else if CLLocationManager.locationServicesEnabled() {
-            askForLocationAccess()
+            askForLocationAccess(callback: callback)
         }
         
 	}
@@ -70,15 +75,28 @@ open class LocationManager: NSObject, CLLocationManagerDelegate {
 	}
     
     open func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        let permission: Bool
+        
         switch status {
         case .denied, .notDetermined, .restricted:
             self.location = nil
+            permission = false
         default:
 			if let l = self.manager.location {
 				self.location = l
 			}
+            permission = true
             break
         }
+        
+        //call the callbacks with the permission
+        for callback in permissionCallbacks {
+            callback(permission)
+        }
+        
+        //empty the array
+        permissionCallbacks = []
         
         let currentLocationStatus = LocalDataStore.objectForKey(locationStatusKey)
         if currentLocationStatus == nil || currentLocationStatus as! String != status.stringValue() {

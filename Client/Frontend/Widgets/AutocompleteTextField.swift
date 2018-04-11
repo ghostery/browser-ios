@@ -50,6 +50,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             self.textDidChange(self)
         }
     }
+    //Cliqz: Cliqz Search
+    private var lastText: String?
 
     override var accessibilityValue: String? {
         get {
@@ -253,6 +255,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             //Cliqz: Always notify text change
             notifyTextChanged?()
         }
+        //Cliqz: Cliqz Search
+        Engine.sharedInstance.sendUrlBarInputEvent(newString: textField.text, lastString: lastText)
+        lastText = textField.text
     }
 
     // Reset the cursor to the end of the text field.
