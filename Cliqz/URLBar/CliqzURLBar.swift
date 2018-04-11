@@ -221,7 +221,7 @@ class CliqzURLBar: URLBarView {
 	override func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
 		self.delegate?.urlBarDidPressCliqzPageOptions(self, from: tabLocationView.pageOptionsButton)
 	}
-    
+
     // MARK:- keyboard Accessory View
     override func createLocationTextField() {
         super.createLocationTextField()
@@ -250,7 +250,15 @@ class CliqzURLBar: URLBarView {
         return super.autocompleteTextFieldShouldClear(autocompleteTextField)
     }
     
+    override func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+        super.enterOverlayMode(locationText, pasted: pasted, search: search)
+        Engine.sharedInstance.sendUrlBarFocusEvent()
+    }
     
+    override func leaveOverlayMode(didCancel cancel: Bool = false) {
+        super.leaveOverlayMode(didCancel: cancel)
+        Engine.sharedInstance.sendUrlBarNotInFocusEvent()
+    }
 }
 
 // Cliqz: hide keyboard

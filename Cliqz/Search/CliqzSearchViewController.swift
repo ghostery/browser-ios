@@ -35,11 +35,9 @@ let CallSearchNotification = NSNotification.Name(rawValue: "mobile-search:call")
 let MapSearchNotification = NSNotification.Name(rawValue: "mobile-search:map")
 let ShareLocationSearchNotification = NSNotification.Name(rawValue: "mobile-search:share-location")
 
-//let SearchEngineChangedNotification = Notification.Name(rawValue: "SearchEngineChangedNotification")
+let SearchEngineChangedNotification = Notification.Name(rawValue: "SearchEngineChangedNotification")
 
 class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAlertViewDelegate  {
-    
-    fileprivate var lastQuery: String?
     
     let searchView = Engine.sharedInstance.rootView
 
@@ -50,11 +48,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 
 	weak var delegate: SearchViewDelegate?
 	
-	var searchQuery: String? {
-		didSet {
-			self.loadData(searchQuery!)
-		}
-	}
+	var searchQuery: String? = nil
     
     var profile: Profile
     
@@ -72,7 +66,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         NotificationCenter.default.addObserver(self, selector: #selector(autocomplete(_:)), name: AutoCompleteNotification, object: nil)
         
         //TODO: Send notification when search engine is changed
-        //NotificationCenter.default.addObserver(self, selector: #selector(searchEngineChanged), name: SearchEngineChangedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(searchEngineChanged), name: SearchEngineChangedNotification, object: nil)
         
     }
     
@@ -102,8 +96,6 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 
         self.updateExtensionPreferences()
         self.updateExtensionSearchEngine()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(searchWithLastQuery), name: NSNotification.Name(rawValue: LocationManager.NotificationUserLocationAvailable), object: nil)
 	}
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -119,41 +111,9 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 		super.didReceiveMemoryWarning()
     }
 
-    func sendUrlBarFocusEvent() {
-        Engine.sharedInstance.getBridge().publishEvent("mobile-browser:urlbar-focus", args: [])
-    }
-
 	func isHistoryUptodate() -> Bool {
 		return true
 	}
-    func searchWithLastQuery() {
-        if let query = lastQuery {
-            search(query)
-        }
-    }
-    
-	func loadData(_ query: String) {
-        guard query != lastQuery else {
-            return
-        }
-        if query == "" && lastQuery == nil {
-            return
-        }
-        
-		search(query)
-	}
-    
-    fileprivate func search(_ query: String) {
-        var parameters: Array<Any> = [query/*.escape()*/]
-        if let l = LocationManager.sharedInstance.getUserLocation() {
-            parameters += [true, l.coordinate.latitude, l.coordinate.longitude]
-        }
-        //self.javaScriptBridge.publishEvent("search", parameters: parameters)
-        //TODO: Bridge can return null, so implement a queue, on Engine level.
-        Engine.sharedInstance.getBridge().publishEvent("search", args: parameters)
-        
-        lastQuery = query
-    }
     
     func updatePrivateMode(_ privateMode: Bool) {
         if privateMode != self.privateMode {
@@ -185,7 +145,8 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 		              "incognito" : self.privateMode,
                       "backend_country" : SettingsPrefs.shared.getRegionPref(),
                       "suggestionsEnabled"  : QuerySuggestions.isEnabled(),
-                      "subscriptions" : subscriptions] as [String : Any]
+                      "subscriptions" : subscriptions,
+                      "share_location": LocationManager.sharedInstance.isLocationAcessEnabled() ? "yes" : "ask"] as [String : Any]
         
         //javaScriptBridge.publishEvent("notify-preferences", parameters: params)
         Engine.sharedInstance.getBridge().publishEvent("mobile-browser:notify-preferences", args: [params])
@@ -257,7 +218,7 @@ extension CliqzSearchViewController {
     fileprivate func callPhoneNumber(_ phoneNumber: String) {
         let trimmedPhoneNumber = phoneNumber.removeWhitespaces()
         if let url = URL(string: "tel://\(trimmedPhoneNumber)") {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     
@@ -289,29 +250,34 @@ extension CliqzSearchViewController {
             message = NSLocalizedString("To share your location, go to the settings for the CLIQZ app:\n1.Tap Location\n2.Enable 'While Using'", tableName: "Cliqz", comment: "Alert message for turning on location service when clicking share location on local card")
             settingsAction = UIAlertAction(title: settingsOptionTitle, style: .default) { (_) -> Void in
                 if let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) {
-                    UIApplication.shared.openURL(settingsUrl)
+                    UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
                 }
             }
         } else {
             message = NSLocalizedString("To share your location, go to the settings of your smartphone:\n1.Turn on Location Services\n2.Select the CLIQZ App\n3.Enable 'While Using'", tableName: "Cliqz", comment: "Alert message for turning on location service when clicking share location on local card")
             settingsAction = UIAlertAction(title: settingsOptionTitle, style: .default) { (_) -> Void in
                 if let settingsUrl = URL(string: "App-Prefs:root=Privacy&path=LOCATION") {
-                    UIApplication.shared.openURL(settingsUrl)
+                    UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
                 }
             }
         }
         
         let title = NSLocalizedString("Turn on Location Services", tableName: "Cliqz", comment: "Alert title for turning on location service when clicking share location on local card")
         
-        let alertController = UIAlertController (title: title, message: message, preferredStyle: .alert)
-        
-        let notNowOptionTitle = NSLocalizedString("Not Now", tableName: "Cliqz", comment: "Not now option for turning on location service")
-        let cancelAction = UIAlertAction(title: notNowOptionTitle, style: .default, handler: nil)
-        
-        alertController.addAction(cancelAction)
-        alertController.addAction(settingsAction)
-        
-        present(alertController, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            if let delegate = UIApplication.shared.delegate as? AppDelegate {
+                let alertController = UIAlertController (title: title, message: message, preferredStyle: .alert)
+                
+                let notNowOptionTitle = NSLocalizedString("Not Now", tableName: "Cliqz", comment: "Not now option for turning on location service")
+                let cancelAction = UIAlertAction(title: notNowOptionTitle, style: .default, handler: nil)
+                
+                alertController.addAction(cancelAction)
+                alertController.addAction(settingsAction)
+                
+                //self.present(alertController, animated: true, completion: nil)
+                delegate.presentContollerOnTop(controller: alertController)
+            }
+        }
         
     }
 }
