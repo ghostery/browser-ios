@@ -210,6 +210,16 @@
                </Test>
             </SkippedTests>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "82F43432207E44C100FA40AF"
+               BuildableName = "AppiumTests.xctest"
+               BlueprintName = "AppiumTests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
