@@ -86,7 +86,7 @@ MozBuildID.xcconfig
 node_modules
 
 #Cliqz
-JSEngine/*
+Cliqz/JSEngine/*
 Pods/
 Podfile.lock
 artifacts/
