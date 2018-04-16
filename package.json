@@ -16,7 +16,7 @@
   "license": "MPL-2.0",
   "dependencies": {
     "@cliqz/indexeddbshim": "3.4.1",
-    "browser-core": "https://s3.amazonaws.com/cdncliqz/update/edge/react-native/v3.26/3.26.0.tgz",
+    "browser-core": "https://s3.amazonaws.com/cdncliqz/update/edge/react-native/v3.26/3.26.1.tgz",
     "buffer": "5.0.7",
     "glob": "^7.1.2",
     "https-browserify": "1.0.0",
