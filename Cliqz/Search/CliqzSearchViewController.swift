@@ -48,7 +48,13 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 
 	weak var delegate: SearchViewDelegate?
 	
-	var searchQuery: String? = nil
+    var lastSearchQuery: String? = nil
+    
+    var searchQuery: String? = nil {
+        willSet {
+            lastSearchQuery = searchQuery
+        }
+    }
     
     var profile: Profile
     
@@ -232,6 +238,12 @@ extension CliqzSearchViewController {
 //MARK: - Autocomplete Notification
 extension CliqzSearchViewController {
     @objc func autocomplete(_ notification: Notification) {
+        
+        if let searchQuery = searchQuery, let lastSearchQuery = lastSearchQuery,  searchQuery.count < lastSearchQuery.count {
+            // don't call auto complete if user is backspacing
+            return
+        }
+        
         if let str = notification.object as? String {
             delegate?.autoCompeleteQuery(str)
         }
