@@ -78,6 +78,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         notifyTextChanged = debounce(0.1, action: {
             if self.isEditing {
                 self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.normalizeString(self.text ?? ""))
+                
+                //Cliqz: Cliqz Search
+                Engine.sharedInstance.sendUrlBarInputEvent(newString: self.text, lastString: self.lastText)
+                self.lastText = self.text
             }
         })
     }
@@ -255,9 +259,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             //Cliqz: Always notify text change
             notifyTextChanged?()
         }
-        //Cliqz: Cliqz Search
-        Engine.sharedInstance.sendUrlBarInputEvent(newString: textField.text, lastString: lastText)
-        lastText = textField.text
     }
 
     // Reset the cursor to the end of the text field.
