@@ -49,6 +49,7 @@
 		1E4CFBE7207380AD00B26E85 /* ConnectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBE6207380AD00B26E85 /* ConnectTableViewController.swift */; };
 		1E4CFBF92073A5BD00B26E85 /* AddConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBF82073A5BD00B26E85 /* AddConnectionViewController.swift */; };
 		1E4CFBFB2073A5CC00B26E85 /* EditConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBFA2073A5CC00B26E85 /* EditConnectionViewController.swift */; };
+		1E7A3DC22085FCCA00F53E90 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A3DC12085FCCA00F53E90 /* assets */; };
 		1E7B7688206A8AC000FD0BA5 /* CliqzTabToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */; };
 		1E7B76AF206B9CB500FD0BA5 /* ConnectDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */; };
 		1EAFE4A3205934C8006A36B4 /* CliqzAppSettingsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */; };
@@ -1507,6 +1508,7 @@
 		1E4CFBE6207380AD00B26E85 /* ConnectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTableViewController.swift; sourceTree = "<group>"; };
 		1E4CFBF82073A5BD00B26E85 /* AddConnectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddConnectionViewController.swift; sourceTree = "<group>"; };
 		1E4CFBFA2073A5CC00B26E85 /* EditConnectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditConnectionViewController.swift; sourceTree = "<group>"; };
+		1E7A3DC12085FCCA00F53E90 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = Cliqz/JSEngine/assets; sourceTree = SOURCE_ROOT; };
 		1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTabToolbar.swift; sourceTree = "<group>"; };
 		1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectDataSource.swift; sourceTree = "<group>"; };
 		1EAFE4EF205BDEC0006A36B4 /* cliqz.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cliqz.json; path = "node_modules/browser-core/build/config/cliqz.json"; sourceTree = SOURCE_ROOT; };
@@ -3187,6 +3189,7 @@
 		4F304596204FEE3B00C99162 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1E7A3DC12085FCCA00F53E90 /* assets */,
 				1EAFE515205FBBBC006A36B4 /* CliqzLaunchScreen.xib */,
 				1EAFE4EF205BDEC0006A36B4 /* cliqz.json */,
 				4F30F5422051E3F90049E4F6 /* etld.plist */,
@@ -5543,6 +5546,7 @@
 				D0C95E34200FDB3200E4E51C /* MetadataHelper.js in Resources */,
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,
+				1E7A3DC22085FCCA00F53E90 /* assets in Resources */,
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
 				E4B7B7781A793CF20022C5E0 /* FiraSans-Italic.ttf in Resources */,
 				D0C95DFC200EAF2900E4E51C /* FxASignIn.js in Resources */,
