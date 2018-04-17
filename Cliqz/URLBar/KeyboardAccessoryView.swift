@@ -86,7 +86,7 @@ class KeyboardAccessoryView: UIView {
     }
     
     private func refreshView() {
-        if (UIDevice.current.isPortrait || UIDevice.current.isiPad()) && !querySuggestionView.getCurrentQuery().isEmpty {
+        if (UIDevice.current.isPortrait || UIDevice.current.isiPad()) && QuerySuggestions.isEnabled() && !querySuggestionView.getCurrentQuery().isEmpty {
             self.isHidden = false
         } else {
              self.isHidden = true
