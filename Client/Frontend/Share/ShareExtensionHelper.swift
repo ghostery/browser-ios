@@ -39,7 +39,12 @@ class ShareExtensionHelper: NSObject {
         }
         activityItems.append(self)
 
+        /* Cliqz: Added Application activities
         let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        */
+        let applicationActivities = getApplicationActivities()
+        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
+
 
         // Hide 'Add to Reading List' which currently uses Safari.
         // We would also hide View Later, if possible, but the exclusion list doesn't currently support

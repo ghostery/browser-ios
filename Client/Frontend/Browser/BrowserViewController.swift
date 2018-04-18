@@ -352,6 +352,8 @@ class BrowserViewController: UIViewController {
         // Cliqz: Add observers for Connection features
         NotificationCenter.default.addObserver(self, selector: #selector(openTabViaConnect), name: SendTabNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(downloadVideoViaConnect), name: DownloadVideoNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(openSettings), name: ShowSettingsNotification, object: nil)
+        
         
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
@@ -1581,6 +1583,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        /* Cliqz: Show Cliqz share Menu instead of FireFox one
         var actions: [[PhotonActionSheetItem]] = []
 
         actions.append(getHomePanelActions())
@@ -1588,6 +1591,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         // force a modal if the menu is being displayed in compact split screen
         let shouldSupress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
         presentSheetWith(actions: actions, on: self, from: button, supressPopover: shouldSupress)
+        */
+        if let tab = tabManager.selectedTab, let url = tab.url {
+            presentActivityViewController(url, tab: tab, sourceView: button.superview, sourceRect: button.frame, arrowDirection: .up)
+        }
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
