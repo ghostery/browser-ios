@@ -141,8 +141,8 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
         cell.appId = trackers[c]?[indexPath.row].appId ?? 0
         cell.delegate = self
 		cell.statusIcon.image = (trackers[c]?[indexPath.row].isBlocked ?? false ? UIImage(named: "blockTracker") : UIImage(named: "trustTracker"))
-		print("AAAAAA - \(trackers[c]?[indexPath.row].category)")
-        
+//		print("AAAAAA - \(trackers[c]?[indexPath.row].category)")
+		
         return cell
     }
 	
