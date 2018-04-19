@@ -63,21 +63,22 @@ class ControlCenterViewController: UIViewController {
 	private func setupComponents() {
 		createPanelSwitchControl()
 
-		let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(donePressed))
-		toolBar.setItems([done], animated: false)
-		view.addSubview(toolBar)
+//		let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(donePressed))
+//		toolBar.setItems([done], animated: false)
+//		view.addSubview(toolBar)
 		
-		toolBar.snp.makeConstraints { (make) in
-			make.bottom.left.right.equalToSuperview()
-		}
+//		toolBar.snp.makeConstraints { (make) in
+//			make.bottom.left.right.equalToSuperview()
+//		}
 
 		panelContainerView = UIView()
 		view.addSubview(panelContainerView)
+		panelContainerView.backgroundColor = UIColor.white
 
 		panelContainerView.snp.makeConstraints { make in
-			make.top.equalTo(self.panelSwitchControl.snp.bottom).offset(10)
+			make.top.equalTo(self.panelSwitchControl.snp.bottom).offset(5)
 			make.left.right.equalTo(self.view)
-			make.bottom.equalTo(self.toolBar.snp.top)
+			make.bottom.equalTo(self.view)
 		}
 
 	}
@@ -92,6 +93,16 @@ class ControlCenterViewController: UIViewController {
 		let globalTrackers = "Global Trackers"
 
 		let items = [overview, trackers, globalTrackers]
+		self.view.backgroundColor = UIColor.clear
+		let topView = UIView()
+		topView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideControlCenter)))
+		topView.backgroundColor = UIColor.clear
+		self.view.addSubview(topView)
+		topView.snp.makeConstraints { (make) in
+			make.top.left.right.equalToSuperview()
+			make.height.equalTo(70)
+		}
+
 		let bgView = UIView()
 		bgView.backgroundColor = UIColor.cliqzBluePrimary
 		
@@ -103,7 +114,7 @@ class ControlCenterViewController: UIViewController {
 		self.view.addSubview(bgView)
 		
 		bgView.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().offset(30)
+			make.top.equalTo(topView.snp.bottom)
 			make.left.right.equalToSuperview()
 			make.height.equalTo(40)
 		}
@@ -113,7 +124,6 @@ class ControlCenterViewController: UIViewController {
 			make.right.equalTo(bgView).offset(-10)
 			make.height.equalTo(30)
 		}
-		self.view.backgroundColor = UIColor.white
 	}
 
 	@objc private func switchPanel(_ sender: UISegmentedControl) {
@@ -135,6 +145,10 @@ class ControlCenterViewController: UIViewController {
 //			currentPanel = panelType
 //			self.switchToCurrentPanel()
 //		}
+	}
+
+	@objc private func hideControlCenter() {
+		NotificationCenter.default.post(name: HideControlCenterNotification, object: nil)
 	}
 
 	private func getCurrentPanel() -> UIViewController {

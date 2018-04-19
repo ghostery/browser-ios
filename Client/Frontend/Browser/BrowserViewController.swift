@@ -352,7 +352,9 @@ class BrowserViewController: UIViewController {
         // Cliqz: Add observers for Connection features
         NotificationCenter.default.addObserver(self, selector: #selector(openTabViaConnect), name: SendTabNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(downloadVideoViaConnect), name: DownloadVideoNotification, object: nil)
-        
+		NotificationCenter.default.addObserver(self, selector: #selector(showControlCenter), name: ShowControlCenterNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(hideControlCenter), name: HideControlCenterNotification, object: nil)
+
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self

@@ -322,6 +322,7 @@
 		4F0445E2203344E300E2C0C7 /* LogoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0445E1203344E300E2C0C7 /* LogoLoader.swift */; };
 		4F0445E720334D3400E2C0C7 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0445E620334D3400E2C0C7 /* UIDeviceExtension.swift */; };
 		4F0445E920334DC800E2C0C7 /* LocalDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0445E820334DC700E2C0C7 /* LocalDataStore.swift */; };
+		4F1860332088F3DC00A86D4C /* Privacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1860322088F3DC00A86D4C /* Privacy.swift */; };
 		4F304595204FEC5500C99162 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68F36971EA694000048CF44 /* PanelDataObservers.swift */; };
 		4F304598204FEE5500C99162 /* jsengine.bundle.js in Resources */ = {isa = PBXBuildFile; fileRef = 4F304597204FEE5500C99162 /* jsengine.bundle.js */; };
 		4F3045CB204FF0C500C99162 /* CliqzSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3045B2204FF0C500C99162 /* CliqzSearchViewController.swift */; };
@@ -1763,6 +1764,7 @@
 		4F0445E1203344E300E2C0C7 /* LogoLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoLoader.swift; sourceTree = "<group>"; };
 		4F0445E620334D3400E2C0C7 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		4F0445E820334DC700E2C0C7 /* LocalDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalDataStore.swift; sourceTree = "<group>"; };
+		4F1860322088F3DC00A86D4C /* Privacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Privacy.swift; sourceTree = "<group>"; };
 		4F304597204FEE5500C99162 /* jsengine.bundle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = jsengine.bundle.js; path = Cliqz/JSEngine/jsengine.bundle.js; sourceTree = SOURCE_ROOT; };
 		4F3045B2204FF0C500C99162 /* CliqzSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzSearchViewController.swift; sourceTree = "<group>"; };
 		4F3046AC204FF0EA00C99162 /* Cliqz.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Cliqz.xcassets; sourceTree = "<group>"; };
@@ -3268,6 +3270,7 @@
 				4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */,
 				1EEA36EC2067DD6F003B6AD5 /* VideoDownloader.swift */,
 				1E3FBF58207763FE00FAE3FD /* BrowserViewController+Connect.swift */,
+				4F1860322088F3DC00A86D4C /* Privacy.swift */,
 			);
 			path = BrowserViewController;
 			sourceTree = "<group>";
@@ -6445,6 +6448,7 @@
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
 				4F3046B7204FF65800C99162 /* SettingsPrefs.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
+				4F1860332088F3DC00A86D4C /* Privacy.swift in Sources */,
 				39AC591A1CC574AB0042C2F5 /* HomePageSettingsViewController.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,

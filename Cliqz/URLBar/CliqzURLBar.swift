@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 
+
 let URLBarDidPressPageOptionsNotification = Notification.Name(rawValue: "NotificationURLBarDidPressPageOptions")
 
 extension URLBarDelegate {
@@ -51,6 +52,8 @@ class CliqzURLBar: URLBarView {
     
     @objc func SELdidClickGhosty(button: UIButton) {
         debugPrint("pressed ghosty")
+		NotificationCenter.default.post(name: ShowControlCenterNotification, object: self.currentURL?.absoluteString)
+		/*
         if let appDel = UIApplication.shared.delegate as? AppDelegate {
             let controlCenter = ControlCenterViewController() //TrackersController()
             if let pageUrl = self.currentURL?.absoluteString {
@@ -58,7 +61,7 @@ class CliqzURLBar: URLBarView {
 				controlCenter.pageURL = pageUrl
             }
             appDel.presentContollerOnTop(controller: controlCenter)
-        }
+        }*/
     }
     
     override func commonInit() {
