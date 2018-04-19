@@ -33,6 +33,7 @@ target 'Client' do
 	pod 'AWSSNS', '~> 2.6'
 	pod 'RxSwift', '~> 4.0'
     pod 'RealmSwift'
+	pod 'Charts', '~> 3.0'
 
 end
 

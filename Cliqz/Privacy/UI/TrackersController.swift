@@ -19,11 +19,13 @@ class TrackersController: UIViewController {
     let toolBar = UIToolbar()
     
     var changes = false
-    
-    private var _trackers: [TrackerListApp] = []
-    var trackers: [TrackerListApp] {
+
+    private var _trackers = [String: [TrackerListApp]]()
+	fileprivate var categories = [String]()
+    var trackers: [String: [TrackerListApp]] {
         set {
             _trackers = newValue
+			categories = [String](_trackers.keys)
             self.tableView.reloadData()
         }
         get {
@@ -49,15 +51,14 @@ class TrackersController: UIViewController {
         toolBar.setItems([done, blockNone, blockAll], animated: false)
         
         view.addSubview(tableView)
-        view.addSubview(toolBar)
-        
-        toolBar.snp.makeConstraints { (make) in
-            make.bottom.left.right.equalToSuperview()
-        }
-        
+//        view.addSubview(toolBar)
+		
+//        toolBar.snp.makeConstraints { (make) in
+//            make.bottom.left.right.equalToSuperview()
+//        }
+//
         tableView.snp.makeConstraints { (make) in
-            make.top.left.right.equalToSuperview()
-            make.bottom.equalTo(self.toolBar.snp.top)
+            make.top.left.right.bottom.equalToSuperview()
         }
     }
     
@@ -90,12 +91,13 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return self.categories.count
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return trackers.count
+		let c = self.categories[section]
+		return trackers[c]?.count ?? 0
     }
     
     
@@ -103,15 +105,91 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) as! CustomCell
         
         // Configure the cell...
-        cell.textLabel?.text = trackers[indexPath.row].name
-        cell.toggle.isOn = trackers[indexPath.row].isBlocked
-        cell.appId = trackers[indexPath.row].appId
+		let c = self.categories[indexPath.section]
+        cell.textLabel?.text = trackers[c]?[indexPath.row].name
+        cell.toggle.isOn = trackers[c]?[indexPath.row].isBlocked ?? false
+        cell.appId = trackers[c]?[indexPath.row].appId ?? 0
         cell.delegate = self
+		print("AAAAAA - \(trackers[c]?[indexPath.row].category)")
         
         return cell
     }
-    
-    
+	
+	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+		return 80
+	}
+
+	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		let title = self.categories[section]
+		let header = UIView()
+		let titleLbl = UILabel()
+		titleLbl.text = title
+		header.addSubview(titleLbl)
+		let icon = UIImageView()
+		header.addSubview(icon)
+		icon.snp.makeConstraints { (make) in
+			make.left.top.equalToSuperview().offset(10)
+		}
+		titleLbl.snp.makeConstraints { (make) in
+			make.top.right.equalToSuperview().offset(10)
+			make.left.equalTo(icon).offset(5)
+			make.height.equalTo(25)
+		}
+		let descLbl = UILabel()
+		descLbl.text = "\(self.getTrackersCount(category: title)) TRACKERS \(self.getBlockedCount(category: title)) Blocked"
+		header.addSubview(descLbl)
+		descLbl.snp.makeConstraints { (make) in
+			make.right.equalToSuperview().offset(10)
+			make.top.equalTo(titleLbl.snp.bottom).offset(10)
+			make.left.equalTo(icon).offset(5)
+			make.height.equalTo(25)
+		}
+
+		let sep = UIView()
+		sep.backgroundColor = UIColor.gray
+		header.addSubview(sep)
+		sep.snp.makeConstraints { (make) in
+			make.left.right.bottom.equalToSuperview()
+			make.height.equalTo(1)
+		}
+		return header
+	}
+
+	func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+		let restrictAction = UIContextualAction(style: .destructive, title: "Restrict") { (action, view, complHandler) in
+			print("Restrict")
+		} //self.contextualDeleteAction(forRowAtIndexPath: indexPath)
+		let blockAction = UIContextualAction(style: .destructive, title: "Block") { (action, view, complHandler) in
+			print("Block")
+		}
+		let trustAction = UIContextualAction(style: .normal, title: "Trust") { (action, view, complHandler) in
+			print("Trust")
+		}
+		trustAction.backgroundColor = UIColor.green
+		let swipeConfig = UISwipeActionsConfiguration(actions: [blockAction,  restrictAction, trustAction])
+		return swipeConfig
+	}
+
+	private func getBlockedCount(category: String) -> Int {
+		var count = 0
+		if let t = self.trackers[category] {
+			for i in t {
+				if i.isBlocked {
+					count += 1
+				}
+			}
+		}
+		return count
+	}
+
+	private func getTrackersCount(category: String) -> Int {
+		var count = 0
+		if let t = self.trackers[category] {
+			count = t.count
+		}
+		return count
+	}
+
     /*
      // Override to support conditional editing of the table view.
      override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -160,11 +238,15 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 
 extension TrackersController: CellDelegate {
     func toggled(appId: Int) {
-        for tracker in trackers {
-            if tracker.appId == appId {
-                tracker.isBlocked = !tracker.isBlocked
-                break
-            }
+        for category in categories {
+			if let t = self.trackers[category] {
+				for tracker in t {
+					if tracker.appId == appId {
+						tracker.isBlocked = !tracker.isBlocked
+						break
+					}
+				}
+			}
         }
         changes = true
     }
@@ -182,11 +264,11 @@ class CustomCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.contentView.addSubview(toggle)
-        toggle.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(10)
-        }
+//        self.contentView.addSubview(toggle)
+//        toggle.snp.makeConstraints { (make) in
+//            make.centerY.equalToSuperview()
+//            make.trailing.equalToSuperview().inset(10)
+//        }
         toggle.isOn = false
         toggle.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
     }
