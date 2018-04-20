@@ -10,11 +10,14 @@ import WebKit
 
 final class BlockingCoordinator {
     
-    static var isAdblockerOn: Bool {
+    private var isUpdating = false
+    private var shouldReload = false
+    
+    var isAdblockerOn: Bool {
         return true
     }
     
-    static var isAntitrackingOn: Bool {
+    var isAntitrackingOn: Bool {
         return UserPreferences.instance.blockingMode != .none
     }
     
@@ -24,13 +27,13 @@ final class BlockingCoordinator {
     }
     
     //order in which to load the blocklists
-    static let order: [BlockListType] = [.antitracking, .adblocker]
+    let order: [BlockListType] = [.antitracking, .adblocker]
     
-    class func featureIsOn(forType: BlockListType) -> Bool {
+    func featureIsOn(forType: BlockListType) -> Bool {
         return forType == .antitracking ? isAntitrackingOn : isAdblockerOn
     }
     
-    class func identifiersForAntitracking() -> [String] {
+    func identifiersForAntitracking() -> [String] {
         if UserPreferences.instance.blockingMode == .all {
             return BlockListIdentifiers.antitrackingBlockAllIdentifiers()
         }
@@ -41,12 +44,21 @@ final class BlockingCoordinator {
         return []
     }
     
-    class func identifiersFor(type: BlockListType) -> [String] {
+    func identifiersFor(type: BlockListType) -> [String] {
         return type == .antitracking ? identifiersForAntitracking() : BlockListIdentifiers.adblockingIdentifiers()
     }
     
-    class func coordinatedUpdate(webView: WKWebView?) {
+    func coordinatedUpdate(webView: WKWebView?, reload: Bool) {
+        debugPrint("coordinatedUpdate")
+        
+        //this value should change no matter what
+        shouldReload = reload
+        
+        guard isUpdating == false else {return}
         guard let webView = webView else {return}
+        
+        isUpdating = true
+        
         var blockLists: [WKContentRuleList] = []
         let dispatchGroup = DispatchGroup()
         for type in order {
@@ -68,6 +80,10 @@ final class BlockingCoordinator {
         dispatchGroup.notify(queue: .main) {
             webView.configuration.userContentController.removeAllContentRuleLists()
             blockLists.forEach(webView.configuration.userContentController.add)
+            if self.shouldReload {
+                webView.reload()
+            }
+            self.isUpdating = false
         }
     }
 }

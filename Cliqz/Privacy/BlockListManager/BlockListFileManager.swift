@@ -14,11 +14,7 @@ final class BlockListFileManager {
     static let ghosteryBlockListSplit = "ghostery_content_blocker_split"
     static let ghosteryBlockListNotSplit = "ghostery_content_blocker"
     
-    private let ghosteryBlockDict: [BugID:BugJson]
-    
-    init() {
-        ghosteryBlockDict = BlockListFileManager.parseGhosteryBlockList()
-    }
+    private var ghosteryBlockDict: [BugID:BugJson]? = nil
     
     func json(forIdentifier: String) -> String? {
         
@@ -27,21 +23,21 @@ final class BlockListFileManager {
             return jsonFileContent
         }
         
-        //first look in the ghostery list
-        if let json = ghosteryBlockDict[forIdentifier] {
+        if forIdentifier.contains("adblocker_"), let path = Bundle.main.path(forResource: forIdentifier, ofType: "json", inDirectory: "AdBlocker/Chunks") {
+            return loadJson(path: path)
+        }
+        
+        if ghosteryBlockDict == nil {
+            ghosteryBlockDict = BlockListFileManager.parseGhosteryBlockList()
+        }
+        
+        //look in the ghostery list
+        if let json = ghosteryBlockDict?[forIdentifier] {
             return json
         }
         
         //then look in the bundle
-        if forIdentifier.contains("adblocker_") {
-            if forIdentifier.contains("exceptions"), let path = Bundle.main.path(forResource: forIdentifier, ofType: "json", inDirectory: "AdBlocker") {
-                return loadJson(path: path)
-            }
-            else if let path = Bundle.main.path(forResource: forIdentifier, ofType: "json", inDirectory: "AdBlocker/Chunks") {
-                return loadJson(path: path)
-            }
-        }
-        else if let path = Bundle.main.path(forResource: forIdentifier, ofType: "json") {
+        if let path = Bundle.main.path(forResource: forIdentifier, ofType: "json") {
             return loadJson(path: path)
         }
         

@@ -27,8 +27,8 @@ final class BlockListIdentifiers {
     }
     
     class func adblockingIdentifiers() -> [String] {
-        let exceptions = ["adblocker_exceptions"] //exceptions go at the end.
-        return adBlockerChunks() + exceptions
+        // exceptions are now part of the chunks
+        return adBlockerChunks()
     }
     
     class private func adBlockerChunks() -> [String] {
