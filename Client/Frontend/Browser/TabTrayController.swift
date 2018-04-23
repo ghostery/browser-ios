@@ -242,6 +242,7 @@ class TabTrayController: UIViewController {
     var collectionView: UICollectionView!
     var draggedCell: TabCell?
     var dragOffset: CGPoint = .zero
+    /* Cliqz: use CliqzTrayToolbar
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(didClickAddTab), for: .touchUpInside)
@@ -249,6 +250,16 @@ class TabTrayController: UIViewController {
         toolbar.deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
         return toolbar
     }()
+    */
+    lazy var toolbar: CliqzTrayToolbar = {
+        let toolbar = CliqzTrayToolbar()
+        toolbar.addTabButton.addTarget(self, action: #selector(didClickAddTab), for: .touchUpInside)
+        toolbar.forgetModeButton.addTarget(self, action: #selector(didTogglePrivateMode), for: .touchUpInside)
+        toolbar.doneButton.addTarget(self, action: #selector(didTapDone), for: .touchUpInside)
+        toolbar.doneButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(SELlongPressDoneButton)))
+        return toolbar
+    }()
+    
 
     fileprivate(set) internal var privateMode: Bool = false {
         didSet {
@@ -448,6 +459,10 @@ class TabTrayController: UIViewController {
         let exitingPrivateMode = !privateMode && tabManager.shouldClearPrivateTabs()
 
         toolbar.maskButton.setSelected(privateMode, animated: true)
+        
+        // Cliqz: togol forgetmode button
+        toolbar.forgetModeButton.setSelected(privateMode, animated: true)
+        
         collectionView.layoutSubviews()
 
         let toView: UIView
@@ -1060,5 +1075,59 @@ class TrayToolbar: UIView {
         deleteButton.tintColor = UIColor.Browser.Tint.colorFor(theme)
         backgroundColor = UIColor.TabTray.Background.colorFor(theme)
         maskButton.applyTheme(theme)
+    }
+}
+
+// Cliqz: customize TabTrayToolbar
+class CliqzTrayToolbar : TrayToolbar {
+    lazy var doneButton = TabTrayDoneButton()
+
+    lazy var forgetModeButton = CliqzForgetModeButton()
+    
+    override lazy var addTabButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.templateImageNamed("cliqz-nav-add"), for: .normal)
+        button.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+        button.accessibilityIdentifier = "TabTrayController.addTabButton"
+        return button
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        deleteButton.removeFromSuperview()
+        maskButton.removeFromSuperview()
+        
+        addSubview(doneButton)
+        addSubview(forgetModeButton)
+        
+        doneButton.snp.makeConstraints { make in
+            make.top.equalTo(self)
+            make.right.equalTo(self).offset(-sideOffset)
+            make.size.equalTo(toolbarButtonSize)
+        }
+        
+        addTabButton.snp.remakeConstraints { make in
+            make.centerX.equalTo(self)
+            make.top.equalTo(self)
+            make.size.equalTo(toolbarButtonSize)
+        }
+        
+        forgetModeButton.snp.remakeConstraints { make in
+            make.centerY.equalTo(self)
+            make.left.equalTo(self).offset(sideOffset)
+            make.size.equalTo(CGSize(width: 64, height: 34))
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override fileprivate func applyTheme(_ theme: Theme) {
+        super.applyTheme(theme)
+        doneButton.applyTheme(theme)
+        forgetModeButton.applyTheme(theme)
+        backgroundColor = UIColor.CliqzToolbar.Background.colorFor(theme)
+        addTabButton.tintColor = UIColor.CliqzToolbarButton.UnselectedTint.colorFor(theme)
     }
 }
