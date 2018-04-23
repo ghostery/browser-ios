@@ -286,9 +286,9 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
             trackerBug.timestamp = timestamp
             
             // see if this one should be blocked
-            if shouldBlockTracker(appId) {
-                trackerBug.isBlocked = true
-            }
+//            if shouldBlockTracker(appId) {
+//                trackerBug.isBlocked = true
+//            }
 
             pageTrackers?.addTracker(trackerBug)
             
@@ -519,5 +519,31 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         }
         
         return nil
+    }
+    
+    //Cliqz
+    func trackersByCategory(for domain: String? = nil) -> Dictionary<String, [TrackerListApp]> {
+        let list: [TrackerListApp]
+        
+        if let domain = domain {
+            list = self.detectedTrackersForPage(domain)
+        } else {
+            list = self.globalTrackerList()
+        }
+        
+        let dict = list.groupBy { (app) -> String in
+            return app.category
+        }
+        
+        return dict
+    }
+    
+    func countByCategory(domain: String) ->Dictionary<String, Int> {
+        let list = self.detectedTrackersForPage(domain)
+        return list.groupAndReduce(byKey: { (app) -> String in
+            return app.category
+        }, reduce: { (list) -> Int in
+            return list.count
+        })
     }
 }

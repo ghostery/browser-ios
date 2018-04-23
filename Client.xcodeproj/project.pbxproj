@@ -464,7 +464,6 @@
 		AF6FA97420652C6800D7F9F0 /* postload.js in Resources */ = {isa = PBXBuildFile; fileRef = AF6FA97020652C6800D7F9F0 /* postload.js */; };
 		AF6FA97520652C6800D7F9F0 /* ghostery_content_blocker_split.json in Resources */ = {isa = PBXBuildFile; fileRef = AF6FA97120652C6800D7F9F0 /* ghostery_content_blocker_split.json */; };
 		AF6FA97920652C8F00D7F9F0 /* BlockListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA97620652C8F00D7F9F0 /* BlockListManager.swift */; };
-		AF6FA97A20652C8F00D7F9F0 /* DomainBlacklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA97720652C8F00D7F9F0 /* DomainBlacklist.swift */; };
 		AF6FA97B20652C8F00D7F9F0 /* URLInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA97820652C8F00D7F9F0 /* URLInterceptor.swift */; };
 		AF6FA98820652D4600D7F9F0 /* TrackerListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA97D20652D4500D7F9F0 /* TrackerListApp.swift */; };
 		AF6FA98920652D4600D7F9F0 /* TrackerListRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA97E20652D4500D7F9F0 /* TrackerListRegex.swift */; };
@@ -486,6 +485,11 @@
 		AFA1DE0E2088BE5700B27B8A /* CompileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE0D2088BE5700B27B8A /* CompileOperation.swift */; };
 		AFA1DE102088D59400B27B8A /* BlockingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE0F2088D59400B27B8A /* BlockingCoordinator.swift */; };
 		AFA9FAA1208DD9C00028CA1B /* TrackerStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */; };
+		AFA9FAB9208DEF990028CA1B /* DomainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAB8208DEF990028CA1B /* DomainStore.swift */; };
+		AFA9FACA208DFA120028CA1B /* ControlCenterDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAC9208DFA120028CA1B /* ControlCenterDataSource.swift */; };
+		AFA9FACC208DFD790028CA1B /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FACB208DFD790028CA1B /* ArrayExtensions.swift */; };
+		AFA9FB0B208E04FA0028CA1B /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */; };
+		AFA9FB0D208E135E0028CA1B /* ControlCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */; };
 		AFE484D32056838500554B2E /* CliqzURLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE484D22056838500554B2E /* CliqzURLBar.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
@@ -1894,7 +1898,6 @@
 		AF6FA97020652C6800D7F9F0 /* postload.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = postload.js; sourceTree = "<group>"; };
 		AF6FA97120652C6800D7F9F0 /* ghostery_content_blocker_split.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ghostery_content_blocker_split.json; sourceTree = "<group>"; };
 		AF6FA97620652C8F00D7F9F0 /* BlockListManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockListManager.swift; sourceTree = "<group>"; };
-		AF6FA97720652C8F00D7F9F0 /* DomainBlacklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DomainBlacklist.swift; sourceTree = "<group>"; };
 		AF6FA97820652C8F00D7F9F0 /* URLInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLInterceptor.swift; sourceTree = "<group>"; };
 		AF6FA97D20652D4500D7F9F0 /* TrackerListApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerListApp.swift; sourceTree = "<group>"; };
 		AF6FA97E20652D4500D7F9F0 /* TrackerListRegex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackerListRegex.swift; sourceTree = "<group>"; };
@@ -1916,6 +1919,11 @@
 		AFA1DE0D2088BE5700B27B8A /* CompileOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompileOperation.swift; sourceTree = "<group>"; };
 		AFA1DE0F2088D59400B27B8A /* BlockingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockingCoordinator.swift; sourceTree = "<group>"; };
 		AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStateStore.swift; sourceTree = "<group>"; };
+		AFA9FAB8208DEF990028CA1B /* DomainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainStore.swift; sourceTree = "<group>"; };
+		AFA9FAC9208DFA120028CA1B /* ControlCenterDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCenterDataSource.swift; sourceTree = "<group>"; };
+		AFA9FACB208DFD790028CA1B /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
+		AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
+		AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCenterDelegate.swift; sourceTree = "<group>"; };
 		AFE484D22056838500554B2E /* CliqzURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzURLBar.swift; sourceTree = "<group>"; };
 		AFECF63AADEF4013C5D72D77 /* Pods-Client.firefox.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Client.firefox.xcconfig"; path = "Pods/Target Support Files/Pods-Client/Pods-Client.firefox.xcconfig"; sourceTree = "<group>"; };
 		C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
@@ -3192,6 +3200,8 @@
 				AF53D3BB206A346B0012A11F /* TabExtension.swift */,
 				1EEA36D42063E105003B6AD5 /* FileManagerExtension.swift */,
 				1EEA36D62063F87C003B6AD5 /* URLExtension.swift */,
+				AFA9FACB208DFD790028CA1B /* ArrayExtensions.swift */,
+				AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3431,14 +3441,15 @@
 		AF6FA95E20652C1100D7F9F0 /* Privacy */ = {
 			isa = PBXGroup;
 			children = (
-				AFA1DE0F2088D59400B27B8A /* BlockingCoordinator.swift */,
-				AFA1DE082088BDA600B27B8A /* BlockListManager */,
-				AF99C8B120693627009404FF /* UI */,
 				AF6FA99420652DF200D7F9F0 /* PersistentSet.swift */,
-				AF6FA97720652C8F00D7F9F0 /* DomainBlacklist.swift */,
-				AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */,
+				AFA1DE0F2088D59400B27B8A /* BlockingCoordinator.swift */,
 				AF6FA97820652C8F00D7F9F0 /* URLInterceptor.swift */,
+				AFA9FAC9208DFA120028CA1B /* ControlCenterDataSource.swift */,
+				AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */,
+				AFA9FAC8208DF9500028CA1B /* Store */,
+				AFA1DE082088BDA600B27B8A /* BlockListManager */,
 				AF6FA97C20652D1F00D7F9F0 /* Ghostery */,
+				AF99C8B120693627009404FF /* UI */,
 				AF6FA96D20652C3E00D7F9F0 /* Assets */,
 			);
 			path = Privacy;
@@ -3499,6 +3510,15 @@
 				AFA1DE0D2088BE5700B27B8A /* CompileOperation.swift */,
 			);
 			path = BlockListManager;
+			sourceTree = "<group>";
+		};
+		AFA9FAC8208DF9500028CA1B /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				AFA9FAB8208DEF990028CA1B /* DomainStore.swift */,
+				AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */,
+			);
+			path = Store;
 			sourceTree = "<group>";
 		};
 		AFE484C32056836400554B2E /* URLBar */ = {
@@ -6279,6 +6299,7 @@
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				AF6FA99520652DF200D7F9F0 /* PersistentSet.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
+				AFA9FACA208DFA120028CA1B /* ControlCenterDataSource.swift in Sources */,
 				4F0445D72033324500E2C0C7 /* NewsDataService.swift in Sources */,
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
@@ -6326,6 +6347,7 @@
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
 				4F30F50C2051670C0049E4F6 /* Crypto.swift in Sources */,
 				F35B8D2F1D638408008E3D61 /* SessionRestoreHandler.swift in Sources */,
+				AFA9FACC208DFD790028CA1B /* ArrayExtensions.swift in Sources */,
 				E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				4F0445E920334DC800E2C0C7 /* LocalDataStore.swift in Sources */,
@@ -6349,6 +6371,8 @@
 				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
 				39DD030D1CD53E1900BC09B3 /* HomePageHelper.swift in Sources */,
 				4F30F5102051670C0049E4F6 /* NativeDrawable.m in Sources */,
+				AFA9FB0D208E135E0028CA1B /* ControlCenterDelegate.swift in Sources */,
+				AFA9FB0B208E04FA0028CA1B /* DictionaryExtensions.swift in Sources */,
 				4F30F52120517A070049E4F6 /* FeedbackUI.swift in Sources */,
 				AF6FA98920652D4600D7F9F0 /* TrackerListRegex.swift in Sources */,
 				AF6FA98F20652D4600D7F9F0 /* UserPreferences.swift in Sources */,
@@ -6390,6 +6414,7 @@
 				AF28D3DF207E37A20065FF86 /* GeoLocation.swift in Sources */,
 				AFA1DE102088D59400B27B8A /* BlockingCoordinator.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
+				AFA9FAB9208DEF990028CA1B /* DomainStore.swift in Sources */,
 				AF6FA99020652D4600D7F9F0 /* TrackerListHosts.swift in Sources */,
 				392ED6B71D06E85E009D9B62 /* NewTabChoiceViewController.swift in Sources */,
 				E4B3348C1BC01D8F004E2BFF /* AdjustIntegration.swift in Sources */,
@@ -6466,7 +6491,6 @@
 				4F30F51A2051670C0049E4F6 /* UserAgentConstantsBridge.m in Sources */,
 				7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */,
 				1EAFE4A3205934C8006A36B4 /* CliqzAppSettingsOptions.swift in Sources */,
-				AF6FA97A20652C8F00D7F9F0 /* DomainBlacklist.swift in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
 				3BE7275D1CCFE8B60099189F /* CustomSearchHandler.swift in Sources */,
 				E692E3291C46E62D009D1240 /* AuthenticationSettingsViewController.swift in Sources */,
