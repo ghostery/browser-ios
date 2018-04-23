@@ -65,6 +65,8 @@ class Tab: NSObject {
         }
         return self.url
     }
+    //Cliqz: Privacy
+    let blockingCoordinator = BlockingCoordinator()
 
     var userActivity: NSUserActivity?
 

@@ -51,13 +51,13 @@ class CliqzURLBar: URLBarView {
     
     @objc func SELdidClickGhosty(button: UIButton) {
         debugPrint("pressed ghosty")
-        if let appDel = UIApplication.shared.delegate as? AppDelegate {
-            let trackersVC = TrackersController()
-            if let pageUrl = self.currentURL?.absoluteString {
-                trackersVC.trackers = TrackerList.instance.detectedTrackersForPage(pageUrl)
-            }
-            appDel.presentContollerOnTop(controller: trackersVC)
-        }
+//        if let appDel = UIApplication.shared.delegate as? AppDelegate {
+//            let trackersVC = TrackersController()
+//            if let pageUrl = self.currentURL?.absoluteString {
+//                trackersVC.trackers = TrackerList.instance.detectedTrackersForPage(pageUrl)
+//            }
+//            appDel.presentContollerOnTop(controller: trackersVC)
+//        }
     }
     
     override func commonInit() {

@@ -286,9 +286,9 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
             trackerBug.timestamp = timestamp
             
             // see if this one should be blocked
-            if shouldBlockTracker(appId) {
-                trackerBug.isBlocked = true
-            }
+//            if shouldBlockTracker(appId) {
+//                trackerBug.isBlocked = true
+//            }
 
             pageTrackers?.addTracker(trackerBug)
             
@@ -406,7 +406,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         // return the list of all trackers
         var appList = [TrackerListApp]()
         for (_, trackerApp) in apps {
-            trackerApp.isBlocked = self.shouldBlockTracker(trackerApp.appId)
+            //trackerApp.isBlocked = self.shouldBlockTracker(trackerApp.appId)
             appList.append(trackerApp)
         }
         
@@ -433,7 +433,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
             let appIdList = pageBugs.appIdList()
             for appId in appIdList {
                 if let trackerApp = apps[appId] {
-                    trackerApp.isBlocked = self.shouldBlockTracker(appId)
+                    //trackerApp.isBlocked = self.shouldBlockTracker(appId)
                     appList.append(trackerApp)
                 }
             }
@@ -457,19 +457,20 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     
     // MARK: - Database Access
 
-    func shouldBlockTracker(_ appId: Int) -> Bool {
-        if UserPreferences.instance.blockingMode == .all {
-            return true
-        }
-
-        return TrackerStore.shared.contains(member: appId)
-    }
+//    func shouldBlockTracker(_ appId: Int) -> Bool {
+//        if UserPreferences.instance.blockingMode == .all {
+//            return true
+//        }
+//
+//        return TrackerStore.shared.contains(member: appId)
+//    }
 
     func blockAllTrackers() {
         // get the list of tracker apps to block
         var appList = [TrackerListApp]()
         for (_, trackerApp) in apps {
-            trackerApp.isBlocked = true
+            //trackerApp.isBlocked = true
+            TrackerStateStore.change(trackerState: trackerApp.state, toState: .blocked)
             appList.append(trackerApp)
         }
 
@@ -518,5 +519,31 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         }
         
         return nil
+    }
+    
+    //Cliqz
+    func trackersByCategory(for domain: String? = nil) -> Dictionary<String, [TrackerListApp]> {
+        let list: [TrackerListApp]
+        
+        if let domain = domain {
+            list = self.detectedTrackersForPage(domain)
+        } else {
+            list = self.globalTrackerList()
+        }
+        
+        let dict = list.groupBy { (app) -> String in
+            return app.category
+        }
+        
+        return dict
+    }
+    
+    func countByCategory(domain: String) ->Dictionary<String, Int> {
+        let list = self.detectedTrackersForPage(domain)
+        return list.groupAndReduce(byKey: { (app) -> String in
+            return app.category
+        }, reduce: { (list) -> Int in
+            return list.count
+        })
     }
 }
