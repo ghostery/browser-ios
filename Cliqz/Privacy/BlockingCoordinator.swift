@@ -10,9 +10,6 @@ import WebKit
 
 final class BlockingCoordinator {
     
-    private var isUpdating = false
-    private var shouldReload = false
-    
     var isAdblockerOn: Bool {
         return true
     }
@@ -48,17 +45,8 @@ final class BlockingCoordinator {
         return type == .antitracking ? identifiersForAntitracking() : BlockListIdentifiers.adblockingIdentifiers()
     }
     
-    func coordinatedUpdate(webView: WKWebView?, reload: Bool) {
-        debugPrint("coordinatedUpdate")
-        
-        //this value should change no matter what
-        shouldReload = reload
-        
-        guard isUpdating == false else {return}
+    func coordinatedUpdate(webView: WKWebView?) {
         guard let webView = webView else {return}
-        
-        isUpdating = true
-        
         var blockLists: [WKContentRuleList] = []
         let dispatchGroup = DispatchGroup()
         for type in order {
@@ -80,10 +68,6 @@ final class BlockingCoordinator {
         dispatchGroup.notify(queue: .main) {
             webView.configuration.userContentController.removeAllContentRuleLists()
             blockLists.forEach(webView.configuration.userContentController.add)
-            if self.shouldReload {
-                webView.reload()
-            }
-            self.isUpdating = false
         }
     }
 }

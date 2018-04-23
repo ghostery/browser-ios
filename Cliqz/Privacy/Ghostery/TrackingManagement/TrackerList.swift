@@ -406,7 +406,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         // return the list of all trackers
         var appList = [TrackerListApp]()
         for (_, trackerApp) in apps {
-            trackerApp.isBlocked = self.shouldBlockTracker(trackerApp.appId)
+            //trackerApp.isBlocked = self.shouldBlockTracker(trackerApp.appId)
             appList.append(trackerApp)
         }
         
@@ -433,7 +433,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
             let appIdList = pageBugs.appIdList()
             for appId in appIdList {
                 if let trackerApp = apps[appId] {
-                    trackerApp.isBlocked = self.shouldBlockTracker(appId)
+                    //trackerApp.isBlocked = self.shouldBlockTracker(appId)
                     appList.append(trackerApp)
                 }
             }
@@ -457,19 +457,20 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     
     // MARK: - Database Access
 
-    func shouldBlockTracker(_ appId: Int) -> Bool {
-        if UserPreferences.instance.blockingMode == .all {
-            return true
-        }
-
-        return TrackerStore.shared.contains(member: appId)
-    }
+//    func shouldBlockTracker(_ appId: Int) -> Bool {
+//        if UserPreferences.instance.blockingMode == .all {
+//            return true
+//        }
+//
+//        return TrackerStore.shared.contains(member: appId)
+//    }
 
     func blockAllTrackers() {
         // get the list of tracker apps to block
         var appList = [TrackerListApp]()
         for (_, trackerApp) in apps {
-            trackerApp.isBlocked = true
+            //trackerApp.isBlocked = true
+            TrackerStateStore.change(trackerState: trackerApp.state, toState: .blocked)
             appList.append(trackerApp)
         }
 
