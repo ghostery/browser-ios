@@ -27,4 +27,19 @@ extension UIColor {
     static let cliqzGreenDarkFunctional = UIColor(colorString: "67A73A")
     static let cliqzPinkFunctional = UIColor(colorString: "FF7E74")
     static let cliqzGrayFunctional = UIColor(colorString: "97A4AE")
+    
+    
+    struct CliqzTabTray {
+        static let ButtonText = BrowserColor(normal: cliqzWhitePrimary, pbm: cliqzWhitePrimary)
+    }
+    
+    struct CliqzToolbarButton {
+        static let SelectedTint = BrowserColor(normal: UIColor.gray, pbm: UIColor.gray)
+        static let DisabledTint = BrowserColor(normal: UIColor.gray, pbm: UIColor.gray)
+        static let UnselectedTint = BrowserColor(normal: UIColor.white, pbm: UIColor.white)
+    }
+    
+    struct CliqzToolbar {
+        static let Background = BrowserColor(normal: UIColor.black, pbm: UIColor.black)
+    }
 }

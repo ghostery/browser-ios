@@ -43,6 +43,7 @@
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
+		1E3C5388209AFEDA00286CA4 /* TabTrayDoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */; };
 		1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */; };
 		1E3CBC1D205806F000898B05 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC1C205806F000898B05 /* DateExtension.swift */; };
 		1E3FBF59207763FE00FAE3FD /* BrowserViewController+Connect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FBF58207763FE00FAE3FD /* BrowserViewController+Connect.swift */; };
@@ -72,6 +73,8 @@
 		1EDF0B24207B86DA00856493 /* QuerySuggestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B23207B86DA00856493 /* QuerySuggestions.swift */; };
 		1EDF91742087446700200100 /* SettingsActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF91732087446700200100 /* SettingsActivity.swift */; };
 		1EDF917820874DAA00200100 /* ShareExtensionActivities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF917720874DAA00200100 /* ShareExtensionActivities.swift */; };
+		1EDF91C5208A33C500200100 /* TabTrayControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF91C4208A33C500200100 /* TabTrayControllerExtension.swift */; };
+		1EDF91C9208DDC5400200100 /* CliqzForgetModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF91C8208DDC5400200100 /* CliqzForgetModeButton.swift */; };
 		1EEA368120613C17003B6AD5 /* SendCrashReportsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */; };
 		1EEA369520615725003B6AD5 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA369420615725003B6AD5 /* DownloadManager.swift */; };
 		1EEA36D52063E105003B6AD5 /* FileManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA36D42063E105003B6AD5 /* FileManagerExtension.swift */; };
@@ -1511,6 +1514,7 @@
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
 		19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeanplumIntegration.swift; sourceTree = "<group>"; };
 		1E066FAB204D5B1C0017C800 /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Client.entitlements; sourceTree = "<group>"; };
+		1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayDoneButton.swift; sourceTree = "<group>"; };
 		1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsOptions.swift; sourceTree = "<group>"; };
 		1E3CBC1C205806F000898B05 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
@@ -1540,6 +1544,8 @@
 		1EDF0B23207B86DA00856493 /* QuerySuggestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuerySuggestions.swift; sourceTree = "<group>"; };
 		1EDF91732087446700200100 /* SettingsActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsActivity.swift; sourceTree = "<group>"; };
 		1EDF917720874DAA00200100 /* ShareExtensionActivities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionActivities.swift; sourceTree = "<group>"; };
+		1EDF91C4208A33C500200100 /* TabTrayControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayControllerExtension.swift; sourceTree = "<group>"; };
+		1EDF91C8208DDC5400200100 /* CliqzForgetModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzForgetModeButton.swift; sourceTree = "<group>"; };
 		1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCrashReportsTableViewController.swift; sourceTree = "<group>"; };
 		1EEA369420615725003B6AD5 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		1EEA36D42063E105003B6AD5 /* FileManagerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtension.swift; sourceTree = "<group>"; };
@@ -2662,6 +2668,16 @@
 			path = "Share Menu";
 			sourceTree = "<group>";
 		};
+		1EDF91B5208A339800200100 /* Tab Tray */ = {
+			isa = PBXGroup;
+			children = (
+				1EDF91C4208A33C500200100 /* TabTrayControllerExtension.swift */,
+				1EDF91C8208DDC5400200100 /* CliqzForgetModeButton.swift */,
+				1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */,
+			);
+			path = "Tab Tray";
+			sourceTree = "<group>";
+		};
 		282731601ABC9BE600AA1954 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -3303,6 +3319,7 @@
 		4F8F3C0D202CB39F001C1A0F /* Cliqz */ = {
 			isa = PBXGroup;
 			children = (
+				1EDF91B5208A339800200100 /* Tab Tray */,
 				1EDF91722087445600200100 /* Share Menu */,
 				1E7B769F206B9C4900FD0BA5 /* Connect */,
 				1EDF0B20207B868000856493 /* QuerySuggestions */,
@@ -6373,6 +6390,7 @@
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				4F30F5172051670C0049E4F6 /* Telemetry.swift in Sources */,
+				1EDF91C9208DDC5400200100 /* CliqzForgetModeButton.swift in Sources */,
 				AF99C8A2206935F0009404FF /* GhosteryButton.swift in Sources */,
 				4F30F50F2051670C0049E4F6 /* JSBridgeBridge.m in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
@@ -6415,6 +6433,7 @@
 				C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */,
 				AF7FDDBC205949AA00AA2280 /* ExpandableView.swift in Sources */,
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
+				1EDF91C5208A33C500200100 /* TabTrayControllerExtension.swift in Sources */,
 				A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */,
 				D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */,
 				E650754E1E37F6AE006961AC /* GeometryExtensions.swift in Sources */,
@@ -6510,6 +6529,7 @@
 				4F3FA4E32044194400A9E7F6 /* ColorExtension.swift in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
 				4F30F5182051670C0049E4F6 /* TelemetryBridge.m in Sources */,
+				1E3C5388209AFEDA00286CA4 /* TabTrayDoneButton.swift in Sources */,
 				4F30F5132051670C0049E4F6 /* ShareCardModule.swift in Sources */,
 				4F30F5162051670C0049E4F6 /* SubscriptionModuleBridge.m in Sources */,
 				4F30F51B2051670C0049E4F6 /* Engine.swift in Sources */,

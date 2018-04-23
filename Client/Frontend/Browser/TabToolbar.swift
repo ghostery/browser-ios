@@ -187,9 +187,15 @@ class ToolbarButton: UIButton {
 
 extension ToolbarButton: Themeable {
     func applyTheme(_ theme: Theme) {
+        /* Cliqz: Changed the tint colors for the toolbar button
         selectedTintColor = UIColor.ToolbarButton.SelectedTint.colorFor(theme)
         disabledTintColor = UIColor.ToolbarButton.DisabledTint.colorFor(theme)
         unselectedTintColor = UIColor.Browser.Tint.colorFor(theme)
+        */
+        selectedTintColor = UIColor.CliqzToolbarButton.SelectedTint.colorFor(theme)
+        disabledTintColor = UIColor.CliqzToolbarButton.DisabledTint.colorFor(theme)
+        unselectedTintColor = UIColor.CliqzToolbarButton.UnselectedTint.colorFor(theme)
+        
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }
@@ -288,7 +294,10 @@ extension TabToolbar: TabToolbarProtocol {
 
 extension TabToolbar: Themeable {
     func applyTheme(_ theme: Theme) {
+        /* Cliqz: Changed the background color of the tab toolbar
         backgroundColor = UIColor.Browser.Background.colorFor(theme)
+        */
+        backgroundColor = UIColor.CliqzToolbar.Background.colorFor(theme)
         helper?.setTheme(theme: theme, forButtons: actionButtons)
     }
 }
