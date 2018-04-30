@@ -47,9 +47,14 @@
 		1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */; };
 		1E3CBC1D205806F000898B05 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC1C205806F000898B05 /* DateExtension.swift */; };
 		1E3FBF59207763FE00FAE3FD /* BrowserViewController+Connect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FBF58207763FE00FAE3FD /* BrowserViewController+Connect.swift */; };
+		1E4C0DBC20A1A27E00D5941B /* BookmarkMirrorItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4C0DAA20A1A27D00D5941B /* BookmarkMirrorItemExtension.swift */; };
+		1E4C0DBD20A1A27E00D5941B /* GhosteryMigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4C0DAB20A1A27D00D5941B /* GhosteryMigrationManager.swift */; };
+		1E4C0DBE20A1A27E00D5941B /* GhosterySQLiteFactories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4C0DAC20A1A27D00D5941B /* GhosterySQLiteFactories.swift */; };
+		1E4C0DBF20A1A27E00D5941B /* GhosteryTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4C0DAD20A1A27D00D5941B /* GhosteryTab.swift */; };
 		1E4CFBE7207380AD00B26E85 /* ConnectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBE6207380AD00B26E85 /* ConnectTableViewController.swift */; };
 		1E4CFBF92073A5BD00B26E85 /* AddConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBF82073A5BD00B26E85 /* AddConnectionViewController.swift */; };
 		1E4CFBFB2073A5CC00B26E85 /* EditConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBFA2073A5CC00B26E85 /* EditConnectionViewController.swift */; };
+		1E650C9C2091E35D0070C670 /* BrowserViewController+GhosteryMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */; };
 		1E7A3DC22085FCCA00F53E90 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A3DC12085FCCA00F53E90 /* assets */; };
 		1E7B7688206A8AC000FD0BA5 /* CliqzTabToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */; };
 		1E7B76AF206B9CB500FD0BA5 /* ConnectDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */; };
@@ -1519,9 +1524,14 @@
 		1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsOptions.swift; sourceTree = "<group>"; };
 		1E3CBC1C205806F000898B05 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		1E3FBF58207763FE00FAE3FD /* BrowserViewController+Connect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+Connect.swift"; sourceTree = "<group>"; };
+		1E4C0DAA20A1A27D00D5941B /* BookmarkMirrorItemExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkMirrorItemExtension.swift; sourceTree = "<group>"; };
+		1E4C0DAB20A1A27D00D5941B /* GhosteryMigrationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GhosteryMigrationManager.swift; sourceTree = "<group>"; };
+		1E4C0DAC20A1A27D00D5941B /* GhosterySQLiteFactories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GhosterySQLiteFactories.swift; sourceTree = "<group>"; };
+		1E4C0DAD20A1A27D00D5941B /* GhosteryTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GhosteryTab.swift; sourceTree = "<group>"; };
 		1E4CFBE6207380AD00B26E85 /* ConnectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTableViewController.swift; sourceTree = "<group>"; };
 		1E4CFBF82073A5BD00B26E85 /* AddConnectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddConnectionViewController.swift; sourceTree = "<group>"; };
 		1E4CFBFA2073A5CC00B26E85 /* EditConnectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditConnectionViewController.swift; sourceTree = "<group>"; };
+		1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+GhosteryMigration.swift"; sourceTree = "<group>"; };
 		1E7A3DC12085FCCA00F53E90 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = Cliqz/JSEngine/assets; sourceTree = SOURCE_ROOT; };
 		1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTabToolbar.swift; sourceTree = "<group>"; };
 		1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectDataSource.swift; sourceTree = "<group>"; };
@@ -2613,6 +2623,25 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		1E4C0DA820A1A27D00D5941B /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				1E4C0DA920A1A27D00D5941B /* GhosteryMigration */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		1E4C0DA920A1A27D00D5941B /* GhosteryMigration */ = {
+			isa = PBXGroup;
+			children = (
+				1E4C0DAA20A1A27D00D5941B /* BookmarkMirrorItemExtension.swift */,
+				1E4C0DAB20A1A27D00D5941B /* GhosteryMigrationManager.swift */,
+				1E4C0DAC20A1A27D00D5941B /* GhosterySQLiteFactories.swift */,
+				1E4C0DAD20A1A27D00D5941B /* GhosteryTab.swift */,
+			);
+			path = GhosteryMigration;
+			sourceTree = "<group>";
+		};
 		1E7B769F206B9C4900FD0BA5 /* Connect */ = {
 			isa = PBXGroup;
 			children = (
@@ -3312,6 +3341,7 @@
 				4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */,
 				1EEA36EC2067DD6F003B6AD5 /* VideoDownloader.swift */,
 				1E3FBF58207763FE00FAE3FD /* BrowserViewController+Connect.swift */,
+				1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */,
 			);
 			path = BrowserViewController;
 			sourceTree = "<group>";
@@ -3321,6 +3351,7 @@
 			children = (
 				1EDF91B5208A339800200100 /* Tab Tray */,
 				1EDF91722087445600200100 /* Share Menu */,
+				1E4C0DA820A1A27D00D5941B /* Storage */,
 				1E7B769F206B9C4900FD0BA5 /* Connect */,
 				1EDF0B20207B868000856493 /* QuerySuggestions */,
 				4FF07D712063C754001385A8 /* MyOffrz */,
@@ -5988,12 +6019,15 @@
 				2829D3A01C2F0AD400DCF931 /* Sharing.swift in Sources */,
 				2FCAE2751ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift in Sources */,
 				285F2DC11AF80B4600211843 /* SQLiteBookmarksSyncing.swift in Sources */,
+				1E4C0DBC20A1A27E00D5941B /* BookmarkMirrorItemExtension.swift in Sources */,
 				28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */,
 				D0131B4D1F3CF7D8000CDE86 /* SQLiteFavicons.swift in Sources */,
 				28126F741C2F96F1006466CC /* SQLiteBookmarksResetting.swift in Sources */,
 				28B62ACE1BC745E7004A585A /* Syncable.swift in Sources */,
+				1E4C0DBD20A1A27E00D5941B /* GhosteryMigrationManager.swift in Sources */,
 				74B195441CF503FC007F36EF /* RecentlyClosedTabs.swift in Sources */,
 				E65075C21E37F956006961AC /* ExtensionUtils.swift in Sources */,
+				1E4C0DBE20A1A27E00D5941B /* GhosterySQLiteFactories.swift in Sources */,
 				7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */,
 				2852B8441C51996B00591EAC /* Trees.swift in Sources */,
 				E677F0541D94247300ECF1FB /* Metadata.swift in Sources */,
@@ -6015,6 +6049,7 @@
 				0B54BD191B698B7C004C822C /* SuggestedSites.swift in Sources */,
 				318FB6EB1DB5600D0004E40F /* SQLiteHistoryFactories.swift in Sources */,
 				285D3B681B4380B70035FD22 /* Queue.swift in Sources */,
+				1E4C0DBF20A1A27E00D5941B /* GhosteryTab.swift in Sources */,
 				28E08C9A1AF44F00009BA2FA /* BrowserSchema.swift in Sources */,
 				2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */,
 				283586FD1C73F18E00A55435 /* CachingItemSource.swift in Sources */,
@@ -6556,6 +6591,7 @@
 				C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */,
 				E69DB0BD1E97E301008A67E6 /* ActivityStreamTopics.swift in Sources */,
 				1EAFE56D205FFE82006A36B4 /* AboutSettingsTableViewController.swift in Sources */,
+				1E650C9C2091E35D0070C670 /* BrowserViewController+GhosteryMigration.swift in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */,
