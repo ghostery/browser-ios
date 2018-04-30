@@ -11,7 +11,8 @@ import Shared
 
 class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
 
-    override func generateSettings() -> [SettingSection] {
+//    override func generateSettings() -> [SettingSection] {
+    func generateSettings_() -> [SettingSection] {
         var settings = [SettingSection]()
         let prefs = profile.prefs
         

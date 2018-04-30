@@ -156,6 +156,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         //Cliqz: Cards Subscription
         SubscriptionsHandler.sharedInstance.delegate = browserViewController
+        
+        //Cliqz: start Ghostery Migration
+        if let profile = self.profile as? BrowserProfile {
+            GhosteryMigrationManager.shared.startMigration(profile.mirrorBookmarks, migrationDelegate: browserViewController)
+        }
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
