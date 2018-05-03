@@ -8,6 +8,17 @@
 
 import Foundation
 
+public enum DeviceType {
+    case iPhone
+    case iPhoneX
+    case iPad
+}
+
+public enum DeviceOrientation {
+    case portrait
+    case landscape
+}
+
 public extension UIDevice {
     
     var modelName: String {
@@ -92,5 +103,30 @@ public extension UIDevice {
         default: // unknown or faceUp or FaceDown
             return UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height
         }
+    }
+    
+    func getDeviceAndOrientation() -> (DeviceType, DeviceOrientation) {
+        
+        let device: DeviceType
+        
+        if self.isiPad() {
+            device = .iPad
+        }
+        else if self.isiPhoneXDevice() {
+            device = .iPhoneX
+        }
+        else {
+            device = .iPhone
+        }
+        
+        var orientation: DeviceOrientation = .portrait
+        
+        if let window = UIApplication.shared.delegate?.window as? UIWindow {
+            if window.frame.height < window.frame.width {
+                orientation = .landscape
+            }
+        }
+        
+        return (device, orientation)
     }
 }
