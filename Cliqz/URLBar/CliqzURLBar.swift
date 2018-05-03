@@ -110,20 +110,20 @@ class CliqzURLBar: URLBarView {
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
         
-        stopReloadButton.snp.makeConstraints { make in
+        stopReloadButton.snp.remakeConstraints { make in
             make.left.equalTo(self.forwardButton.snp.right)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
         
-        menuButton.snp.makeConstraints { make in
+        tabsButton.snp.remakeConstraints { make in
             make.trailing.equalTo(self.safeArea.trailing).offset(-URLBarViewUX.Padding)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
         
-        tabsButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.menuButton.snp.leading)
+        menuButton.snp.remakeConstraints { make in
+            make.trailing.equalTo(self.tabsButton.snp.leading)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
@@ -180,7 +180,7 @@ class CliqzURLBar: URLBarView {
         } else {
             self.ghosteryButton.snp.remakeConstraints { (make) in
                 if self.toolbarIsShowing {
-                    make.trailing.equalTo(self.tabsButton.snp.leading)
+                    make.trailing.equalTo(self.menuButton.snp.leading)
                 }
                 else {
                     make.trailing.equalTo(self.safeArea.trailing).offset(-URLBarViewUX.Padding)

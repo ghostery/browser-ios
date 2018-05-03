@@ -215,7 +215,10 @@ class TabToolbar: UIView {
     private let contentView = UIStackView()
 
     fileprivate override init(frame: CGRect) {
+        /* Cliqz: Switched the position of menuButton and tabsButton
         actionButtons = [backButton, forwardButton, stopReloadButton, tabsButton, menuButton]
+        */
+        actionButtons = [backButton, forwardButton, stopReloadButton, menuButton, tabsButton]
         super.init(frame: frame)
         setupAccessibility()
 
