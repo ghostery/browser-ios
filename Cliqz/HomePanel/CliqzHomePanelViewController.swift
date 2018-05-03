@@ -52,17 +52,6 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     fileprivate let segmentedControl: UISegmentedControl
     fileprivate let controllerContainerView: UIView = UIView()
     
-    enum DeviceType {
-        case iPhone
-        case iPhoneX
-        case iPad
-    }
-    
-    enum DeviceOrientation {
-        case portrait
-        case landscape
-    }
-    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         
         self.panels = CliqzHomePanels().enabledPanels
@@ -124,8 +113,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setBackgroundImage() {
-        let (device, orientation) = getDeviceAndOrientation()
-        backgroundView.image = image(device: device, orientation: orientation)
+        backgroundView.image = UIImage.cliqzBackgroundImage()
     }
     
 }
@@ -168,52 +156,6 @@ extension CliqzHomePanelViewController {
     
     @objc func orientationDidChange(_ notification: Notification) {
         setBackgroundImage()
-    }
-    
-    func getDeviceAndOrientation() -> (DeviceType, DeviceOrientation) {
-        
-        let device: DeviceType
-        
-        if UIDevice.current.isiPad() {
-            device = .iPad
-        }
-        else if UIDevice.current.isiPhoneXDevice() {
-            device = .iPhoneX
-        }
-        else {
-            device = .iPhone
-        }
-        
-        let orientation: DeviceOrientation
-        
-        if view.frame.height > view.frame.width {
-            orientation = .portrait
-        }
-        else {
-            orientation = .landscape
-        }
-        
-        return (device, orientation)
-    }
-    
-    func image(device: DeviceType, orientation: DeviceOrientation) -> UIImage? {
-        switch device {
-        case .iPhone:
-            if orientation == .portrait {
-                return UIImage(named: "iPhonePortrait")
-            }
-            return UIImage(named: "iPhoneLandscape")
-        case .iPhoneX:
-            if orientation == .portrait {
-                return UIImage(named: "iPhoneXPortrait")
-            }
-            return UIImage(named: "iPhoneXLandscape")
-        case .iPad:
-            if orientation == .portrait {
-                return UIImage(named: "iPadPortrait")
-            }
-            return UIImage(named: "iPadLandscape")
-        }
     }
 }
 
