@@ -1,30 +1,23 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+//
+//  CliqzHomePanels.swift
+//  Client
+//
+//  Created by Tim Palade on 5/3/18.
+//  Copyright © 2018 Cliqz. All rights reserved.
+//
 
 import UIKit
-import Shared
 
-/**
- * Data for identifying and constructing a HomePanel.
- */
-struct HomePanelDescriptor {
-    let makeViewController: (_ profile: Profile) -> UIViewController
-    let imageName: String
-    let accessibilityLabel: String
-    let accessibilityIdentifier: String
-}
-
-class HomePanels {
+class CliqzHomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                    return ActivityStreamPanel(profile: profile)
-            },
+                return FreshtabViewController(profile: profile)
+        },
             imageName: "TopSites",
             accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.TopSites"),
-
+        
         HomePanelDescriptor(
             makeViewController: { profile in
                 let bookmarks = BookmarksPanel()
@@ -37,11 +30,11 @@ class HomePanels {
                 // http://luugiathuy.com/2013/11/ios7-interactivepopgesturerecognizer-for-uinavigationcontroller-with-hidden-navigation-bar/
                 controller.interactivePopGestureRecognizer?.delegate = nil
                 return controller
-            },
-            imageName: "Bookmarks",
+        },
+            imageName: "Favorite",
             accessibilityLabel: NSLocalizedString("Bookmarks", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.Bookmarks"),
-
+        
         HomePanelDescriptor(
             makeViewController: { profile in
                 let history = HistoryPanel()
@@ -50,18 +43,18 @@ class HomePanels {
                 controller.setNavigationBarHidden(true, animated: false)
                 controller.interactivePopGestureRecognizer?.delegate = nil
                 return controller
-            },
-            imageName: "History",
+        },
+            imageName: "CliqzHistory",
             accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.History"),
-
+        
         HomePanelDescriptor(
             makeViewController: { profile in
-                let controller = ReadingListPanel()
-                controller.profile = profile
+                let controller = OffrzViewController(dataSource: OffrzDataSource.shared)
                 return controller
-            },
-            imageName: "ReadingList",
+        },
+            
+            imageName: "Offrz",
             accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.ReadingList"),
         ]

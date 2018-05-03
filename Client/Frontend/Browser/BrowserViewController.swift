@@ -40,7 +40,10 @@ private struct BrowserViewControllerUX {
 }
 
 class BrowserViewController: UIViewController {
+    /* Cliqz: Replace HomePanel
     var homePanelController: HomePanelViewController?
+    */
+    var homePanelController: CliqzHomePanelViewController?
     var webViewContainer: UIView!
     /* Cliqz: Replace URLBar
     var urlBar: URLBarView!
@@ -706,7 +709,10 @@ class BrowserViewController: UIViewController {
         homePanelIsInline = inline
 
         if homePanelController == nil {
+            /* Cliqz: Replace HomePanel
             let homePanelController = HomePanelViewController()
+            */
+            let homePanelController = CliqzHomePanelViewController()
             homePanelController.profile = profile
             homePanelController.delegate = self
             homePanelController.url = tabManager.selectedTab?.url?.displayURL
