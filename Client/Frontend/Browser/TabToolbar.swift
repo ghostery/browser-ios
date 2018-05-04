@@ -8,7 +8,10 @@ import Shared
 
 protocol TabToolbarProtocol: class {
     weak var tabToolbarDelegate: TabToolbarDelegate? { get set }
+    /* Cliqz: replaced TabsButton with CliqzTabsButton which has icon and no counter
     var tabsButton: TabsButton { get }
+    */
+    var tabsButton: CliqzTabsButton { get }
     var menuButton: ToolbarButton { get }
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
@@ -194,7 +197,7 @@ extension ToolbarButton: Themeable {
         */
         selectedTintColor = UIColor.CliqzToolbarButton.SelectedTint.colorFor(theme)
         disabledTintColor = UIColor.CliqzToolbarButton.DisabledTint.colorFor(theme)
-        unselectedTintColor = UIColor.CliqzToolbarButton.UnselectedTint.colorFor(theme)
+        unselectedTintColor = UIColor.CliqzToolbarButton.Tint.colorFor(theme)
         
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
@@ -204,7 +207,10 @@ extension ToolbarButton: Themeable {
 class TabToolbar: UIView {
     weak var tabToolbarDelegate: TabToolbarDelegate?
 
+    /* Cliqz: replaced TabsButton with CliqzTabsButton
     let tabsButton = TabsButton()
+    */
+    let tabsButton = CliqzTabsButton()
     let menuButton = ToolbarButton()
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()

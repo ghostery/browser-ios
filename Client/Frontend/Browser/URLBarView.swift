@@ -117,8 +117,12 @@ class URLBarView: UIView {
     
     let line = UIView()
 
+    /* Cliqz: replaced TabsButton with CliqzTabsButton which has icon and no counter
     lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
+    */
+    lazy var tabsButton: CliqzTabsButton = {
+        let tabsButton = CliqzTabsButton()
         tabsButton.accessibilityIdentifier = "URLBarView.tabsButton"
         return tabsButton
     }()

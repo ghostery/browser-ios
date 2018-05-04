@@ -34,9 +34,9 @@ extension UIColor {
     }
     
     struct CliqzToolbarButton {
+        static let Tint = BrowserColor(normal: UIColor.white, pbm: UIColor.white)
         static let SelectedTint = BrowserColor(normal: UIColor.gray, pbm: UIColor.gray)
         static let DisabledTint = BrowserColor(normal: UIColor.gray, pbm: UIColor.gray)
-        static let UnselectedTint = BrowserColor(normal: UIColor.white, pbm: UIColor.white)
     }
     
     struct CliqzToolbar {
