@@ -8,6 +8,13 @@
 
 import UIKit
 
+class CliqzTabsButton: ToolbarButton {
+    
+    func updateTabCount(_ count: Int, animated: Bool = true) {
+        // we don't show count in our tabs button
+    }
+}
+
 class CliqzTabToolbarHelper: TabToolbarHelper {
 
     override init(toolbar: TabToolbarProtocol) {
@@ -16,6 +23,8 @@ class CliqzTabToolbarHelper: TabToolbarHelper {
         toolbar.forwardButton.setImage(UIImage.templateImageNamed("cliqz-nav-forward"), for: .normal)
         toolbar.stopReloadButton.setImage(UIImage.templateImageNamed("cliqz-nav-refresh"), for: .normal)
         toolbar.menuButton.setImage(UIImage.templateImageNamed("cliqz-nav-menu"), for: .normal)
+        toolbar.tabsButton.setImage(UIImage.templateImageNamed("cliqz-nav-tabs"), for: .normal)
+        toolbar.tabsButton.accessibilityIdentifier = "TabToolbar.tabButton"
     }
 
 }

@@ -1128,6 +1128,6 @@ class CliqzTrayToolbar : TrayToolbar {
         doneButton.applyTheme(theme)
         forgetModeButton.applyTheme(theme)
         backgroundColor = UIColor.CliqzToolbar.Background.colorFor(theme)
-        addTabButton.tintColor = UIColor.CliqzToolbarButton.UnselectedTint.colorFor(theme)
+        addTabButton.tintColor = UIColor.CliqzToolbarButton.Tint.colorFor(theme)
     }
 }
