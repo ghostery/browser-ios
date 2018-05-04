@@ -174,6 +174,8 @@ extension CliqzHomePanelViewController: HomePanelDelegate {
     }
     
     func homePanel(_ homePanel: HomePanel, didSelectURL url: URL, visitType: VisitType) {
+        // HomePanelViewController does not override init. So initializing it is light.
+        // Also, it is not used in the delegate, so passing the "right" value is not important
         delegate?.homePanelViewController(HomePanelViewController(), didSelectURL: url, visitType: visitType)
         dismiss(animated: true, completion: nil)
     }
