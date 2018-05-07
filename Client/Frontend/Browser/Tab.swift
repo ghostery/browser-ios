@@ -65,6 +65,9 @@ class Tab: NSObject {
         }
         return self.url
     }
+    //Cliqz: Privacy
+    var blockingCoordinator: BlockingCoordinator? = nil
+    var lastDomain = ""
 
     var userActivity: NSUserActivity?
 
@@ -456,7 +459,7 @@ class Tab: NSObject {
 
         self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
         //Cliqz: Needed for Ghostery Count
-        self.sendURLChangedNotification()
+        self.urlChanged()
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {

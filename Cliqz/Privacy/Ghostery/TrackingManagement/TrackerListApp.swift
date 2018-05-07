@@ -13,8 +13,15 @@ import Foundation
     var name: String = ""
     var category: String = ""
     var tags = [Int]()
-    var isBlocked: Bool = false
-    
+    var state: TrackerState {
+        if let state = TrackerStateStore.getTrackerState(appId: appId) {
+            return state
+        }
+        else {
+            return TrackerStateStore.createTrackerState(appId: appId, state: .none)
+        }
+    }
+
     init(id: Int, jsonData: [String: AnyObject]) {
         self.appId = id
         

@@ -85,7 +85,7 @@ class CliqzTabLocationView: TabLocationView {
             separatorLine.isHidden = readerModeButton.isHidden
         }
     }
-    
+
     func SELtapVideoDownloadButton() {
         if let url = url {
             delegate?.tabLocationViewDidTapVideoDownload(self, for: url)
