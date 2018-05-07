@@ -7,10 +7,15 @@ import Shared
 import Storage
 import XCGLogger
 import Deferred
-
+/* Cliqz
 private typealias SectionNumber = Int
 private typealias CategoryNumber = Int
 private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
+*/
+
+typealias SectionNumber = Int
+typealias CategoryNumber = Int
+typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
 
 private struct HistoryPanelUX {
     static let WelcomeScreenItemTextColor = UIColor.gray
@@ -44,8 +49,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     private let Today = getDate(0)
     private let Yesterday = getDate(-1)
     private let ThisWeek = getDate(-7)
+    /* Cliqz
     private var categories: [CategorySpec] = [CategorySpec]() // Category number (index) -> (UI section, row count, cursor offset).
     private var sectionLookup = [SectionNumber: CategoryNumber]() // Reverse lookup from UI section to data category.
+    */
+    var categories: [CategorySpec] = [CategorySpec]() // Category number (index) -> (UI section, row count, cursor offset).
+    var sectionLookup = [SectionNumber: CategoryNumber]() // Reverse lookup from UI section to data category.
 
     var syncDetailText = ""
     var hasRecentlyClosed: Bool {
@@ -275,7 +284,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             }
         }
     }
-
+    
     fileprivate func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
         let offset = self.categories[sectionLookup[indexPath.section]!].offset
         return data[indexPath.row + offset]
@@ -300,7 +309,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     // UI sections disappear as categories empty. We need to translate back and forth.
+    /* Cliqz
     private func uiSectionToCategory(_ section: SectionNumber) -> CategoryNumber {
+    */
+    func uiSectionToCategory(_ section: SectionNumber) -> CategoryNumber {
         for i in 0..<self.categories.count {
             if let s = self.categories[i].section, s == section {
                 return i
