@@ -37,7 +37,7 @@ class CliqzHomePanels {
         
         HomePanelDescriptor(
             makeViewController: { profile in
-                let history = HistoryPanel()
+                let history = CliqzHistoryPanel()
                 history.profile = profile
                 let controller = UINavigationController(rootViewController: history)
                 controller.setNavigationBarHidden(true, animated: false)

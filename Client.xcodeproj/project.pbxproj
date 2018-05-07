@@ -499,6 +499,7 @@
 		AF77B8C5209B132700E7A0C4 /* CliqzHomePanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */; };
 		AF7FDDBC205949AA00AA2280 /* ExpandableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7FDDAD205949A900AA2280 /* ExpandableView.swift */; };
 		AF99C8A2206935F0009404FF /* GhosteryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99C8A1206935F0009404FF /* GhosteryButton.swift */; };
+		AF9C111220A051FB003253D3 /* CliqzHistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */; };
 		AFA1DE072088AF9600B27B8A /* AdBlocker in Resources */ = {isa = PBXBuildFile; fileRef = AFA1DDF82088AF9600B27B8A /* AdBlocker */; };
 		AFA1DE0A2088BDDB00B27B8A /* BlockListIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE092088BDDB00B27B8A /* BlockListIdentifiers.swift */; };
 		AFA1DE0C2088BE0500B27B8A /* BlockListFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE0B2088BE0500B27B8A /* BlockListFileManager.swift */; };
@@ -1964,6 +1965,7 @@
 		AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHomePanelViewController.swift; sourceTree = "<group>"; };
 		AF7FDDAD205949A900AA2280 /* ExpandableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandableView.swift; sourceTree = "<group>"; };
 		AF99C8A1206935F0009404FF /* GhosteryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosteryButton.swift; sourceTree = "<group>"; };
+		AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHistoryPanel.swift; sourceTree = "<group>"; };
 		AFA1DDF82088AF9600B27B8A /* AdBlocker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AdBlocker; sourceTree = "<group>"; };
 		AFA1DE092088BDDB00B27B8A /* BlockListIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListIdentifiers.swift; sourceTree = "<group>"; };
 		AFA1DE0B2088BE0500B27B8A /* BlockListFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListFileManager.swift; sourceTree = "<group>"; };
@@ -3623,6 +3625,7 @@
 			children = (
 				AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */,
 				AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */,
+				AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */,
 			);
 			path = HomePanel;
 			sourceTree = "<group>";
@@ -6453,6 +6456,7 @@
 				4F69309A2048185600FB0B2E /* TopSitesDataSource.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				1EEA368120613C17003B6AD5 /* SendCrashReportsTableViewController.swift in Sources */,
+				AF9C111220A051FB003253D3 /* CliqzHistoryPanel.swift in Sources */,
 				4F3046B8204FF65800C99162 /* LocationManager.swift in Sources */,
 				D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
