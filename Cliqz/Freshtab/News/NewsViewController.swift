@@ -233,9 +233,12 @@ extension NewsViewController {
 	
 	fileprivate func getExtraNewsIndexPaths() -> [IndexPath] {
 		var indexPaths = [IndexPath]()
-		for i in NewsViewUX.MinNewsCellsCount..<self.dataSource.newsCount() {
-			indexPaths.append(IndexPath(row: i, section: 0))
-		}
+        //self.dataSource.newsCount() < NewsViewUX.MinNewsCellsCount crashes the app
+        if self.dataSource.newsCount() > NewsViewUX.MinNewsCellsCount {
+            for i in NewsViewUX.MinNewsCellsCount..<self.dataSource.newsCount() {
+                indexPaths.append(IndexPath(row: i, section: 0))
+            }
+        }
 		return indexPaths
 	}
 

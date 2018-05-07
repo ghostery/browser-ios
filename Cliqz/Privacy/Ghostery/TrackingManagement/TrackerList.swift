@@ -274,28 +274,29 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     func addDiscoveredTracker(_ bugId: Int, bugUrl: URL, pageUrl: URL, timestamp: Double) -> TrackerListBug? {
         let appId = appIdFromBugId(bugId)
         if (appId >= 0) {
-            let pageUrlString = pageUrl.absoluteString
-            var pageTrackers = discoveredBugs[pageUrlString]
-            if pageTrackers == nil {
-                // add a tracker list for this page
-                pageTrackers = PageTrackersFound()
+            if let pageUrlString = pageUrl.normalizedHost {
+                var pageTrackers = discoveredBugs[pageUrlString]
+                if pageTrackers == nil {
+                    // add a tracker list for this page
+                    pageTrackers = PageTrackersFound()
+                }
+                
+                // add the tracker to the list for the page
+                let trackerBug = TrackerListBug(bugId: bugId, appId: appId, url: bugUrl.absoluteString)
+                trackerBug.timestamp = timestamp
+                
+                // see if this one should be blocked
+                //            if shouldBlockTracker(appId) {
+                //                trackerBug.isBlocked = true
+                //            }
+                
+                pageTrackers?.addTracker(trackerBug)
+                
+                // update the list
+                discoveredBugs[pageUrlString] = pageTrackers
+                
+                return trackerBug
             }
-            
-            // add the tracker to the list for the page
-            let trackerBug = TrackerListBug(bugId: bugId, appId: appId, url: bugUrl.absoluteString)
-            trackerBug.timestamp = timestamp
-            
-            // see if this one should be blocked
-            if shouldBlockTracker(appId) {
-                trackerBug.isBlocked = true
-            }
-
-            pageTrackers?.addTracker(trackerBug)
-            
-            // update the list
-            discoveredBugs[pageUrlString] = pageTrackers
-
-            return trackerBug
         }
         
         //print("Total trackers: \(pageTrackers.count)")
@@ -406,7 +407,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         // return the list of all trackers
         var appList = [TrackerListApp]()
         for (_, trackerApp) in apps {
-            trackerApp.isBlocked = self.shouldBlockTracker(trackerApp.appId)
+            //trackerApp.isBlocked = self.shouldBlockTracker(trackerApp.appId)
             appList.append(trackerApp)
         }
         
@@ -433,7 +434,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
             let appIdList = pageBugs.appIdList()
             for appId in appIdList {
                 if let trackerApp = apps[appId] {
-                    trackerApp.isBlocked = self.shouldBlockTracker(appId)
+                    //trackerApp.isBlocked = self.shouldBlockTracker(appId)
                     appList.append(trackerApp)
                 }
             }
@@ -457,32 +458,33 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     
     // MARK: - Database Access
 
-    func shouldBlockTracker(_ appId: Int) -> Bool {
-        if UserPreferences.instance.blockingMode == .all {
-            return true
-        }
-
-        return TrackerStore.shared.contains(member: appId)
-    }
+//    func shouldBlockTracker(_ appId: Int) -> Bool {
+//        if UserPreferences.instance.blockingMode == .all {
+//            return true
+//        }
+//
+//        return TrackerStore.shared.contains(member: appId)
+//    }
 
     func blockAllTrackers() {
         // get the list of tracker apps to block
         var appList = [TrackerListApp]()
         for (_, trackerApp) in apps {
-            trackerApp.isBlocked = true
+            //trackerApp.isBlocked = true
+            TrackerStateStore.change(trackerState: trackerApp.state, toState: .blocked)
             appList.append(trackerApp)
         }
 
         blockSpecificTrackers(appList)
 
-        UserPreferences.instance.blockingMode = .all
+        UserPreferences.instance.antitrackingMode = .blockAll
         UserPreferences.instance.writeToDisk()
     }
 
     func unblockAllTrackers() {
         TrackerStore.shared.removeAll()
 
-        UserPreferences.instance.blockingMode = .none
+        UserPreferences.instance.antitrackingMode = .blockSomeOrNone
         UserPreferences.instance.writeToDisk()
     }
 
@@ -493,7 +495,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
             TrackerStore.shared.add(member: tracker.appId)
         }
 
-        UserPreferences.instance.blockingMode = .selected
+        UserPreferences.instance.antitrackingMode = .blockSomeOrNone
         UserPreferences.instance.writeToDisk()
     }
     
@@ -518,5 +520,48 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         }
         
         return nil
+    }
+    
+    //Cliqz
+    
+    func trackersByCategory(domain: String) -> Dictionary<String, [TrackerListApp]> {
+        return self.trackersByCategory(for: domain)
+    }
+    
+    func globalTrackersByCategory() -> Dictionary<String, [TrackerListApp]> {
+        return self.trackersByCategory()
+    }
+    
+    //This can be optimized with a cache
+    func trackersByCategory(for domain: String? = nil) -> Dictionary<String, [TrackerListApp]> {
+        let list: [TrackerListApp]
+        
+        if let domain = domain {
+            list = self.detectedTrackersForPage(domain)
+        } else {
+            list = self.globalTrackerList()
+        }
+        
+        let dict = list.groupBy { (app) -> String in
+            return app.category
+        }
+        
+        return dict
+    }
+    
+    func countByCategory(domain: String? = nil ) ->Dictionary<String, Int> {
+        let list: [TrackerListApp]
+        
+        if let domain = domain {
+            list = self.detectedTrackersForPage(domain)
+        } else {
+            list = self.globalTrackerList()
+        }
+        
+        return list.groupAndReduce(byKey: { (app) -> String in
+            return app.category
+        }, reduce: { (list) -> Int in
+            return list.count
+        })
     }
 }

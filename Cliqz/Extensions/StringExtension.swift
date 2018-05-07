@@ -43,5 +43,19 @@ extension String {
                                                                attributes: attrs, context: nil)
         return boundingRect.height
     }
+    
+    func md5() -> String {
+        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+        if let data = self.data(using: String.Encoding.utf8) {
+            CC_MD5((data as NSData).bytes, CC_LONG(data.count), &digest)
+        }
+        
+        var digestHex = ""
+        for index in 0..<Int(CC_MD5_DIGEST_LENGTH) {
+            digestHex += String(format: "%02x", digest[index])
+        }
+        
+        return digestHex
+    }
 
 }

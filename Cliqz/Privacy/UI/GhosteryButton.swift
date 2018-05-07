@@ -121,15 +121,15 @@ class GhosteryCount {
     
     @objc func urlChanged(notification: Notification) {
         guard let del = UIApplication.shared.delegate as? AppDelegate, let currentTab = del.tabManager.selectedTab else {return}
-        if let tab = notification.object as? Tab, tab == currentTab, let currentUrl = self.dataSource?.currentUrl() {
-            let count = TrackerList.instance.detectedTrackerCountForPage(currentUrl.absoluteString)
+        if let tab = notification.object as? Tab, tab == currentTab, let currentUrl = self.dataSource?.currentUrl(), let host = currentUrl.normalizedHost {
+            let count = TrackerList.instance.detectedTrackerCountForPage(host)
             self.delegate?.updateCount(count: count)
         }
     }
     
     @objc func newTrackerDetected(notification: Notification) {
-        if let currentUrl = self.dataSource?.currentUrl() {
-            let count = TrackerList.instance.detectedTrackerCountForPage(currentUrl.absoluteString)
+        if let currentUrl = self.dataSource?.currentUrl(), let host = currentUrl.normalizedHost {
+            let count = TrackerList.instance.detectedTrackerCountForPage(host)
             self.delegate?.updateCount(count: count)
         }
     }
