@@ -28,6 +28,8 @@ extension UIColor {
     static let cliqzPinkFunctional = UIColor(colorString: "FF7E74")
     static let cliqzGrayFunctional = UIColor(colorString: "97A4AE")
     
+    //Other
+    static let cliqzURLBarColor = UIColor(colorString: "4EABEA")
     
     struct CliqzTabTray {
         static let ButtonText = BrowserColor(normal: cliqzWhitePrimary, pbm: cliqzWhitePrimary)

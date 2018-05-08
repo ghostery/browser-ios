@@ -687,7 +687,7 @@ extension URLBarView: Themeable {
         backgroundColor = UIColor.Browser.Background.colorFor(theme)
         */
         showQRButtonTintColor = UIColor.white
-        backgroundColor = UIColor.cliqzBluePrimary
+        backgroundColor = UIColor.cliqzURLBarColor
         line.backgroundColor = UIColor.Browser.URLBarDivider.colorFor(theme)
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
     }
