@@ -101,8 +101,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             syncDetailText = ""
         }
     }
-
+    
+    /*Cliqz
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    */
+    @objc func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
@@ -284,8 +287,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             }
         }
     }
-    
+    /* Cliqz
     fileprivate func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
+    */
+    func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
         let offset = self.categories[sectionLookup[indexPath.section]!].offset
         return data[indexPath.row + offset]
     }

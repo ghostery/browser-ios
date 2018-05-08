@@ -113,7 +113,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setBackgroundImage() {
-        backgroundView.image = UIImage.cliqzBackgroundImage()
+        backgroundView.image = UIImage.cliqzBackgroundImage()//?.applyBlur(withRadius: 5, blurType: BOXFILTER, tintColor: UIColor.black.withAlphaComponent(0.1), saturationDeltaFactor: 1.8, maskImage: nil)
     }
     
 }

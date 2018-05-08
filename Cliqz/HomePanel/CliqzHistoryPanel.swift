@@ -26,7 +26,11 @@ class CliqzHistoryPanel: HistoryPanel {
     }
     
     override func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
-        return 1
+        var count = 0
+        for category in self.categories where category.rows > 0 {
+            count += 1
+        }
+        return count
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -37,13 +41,14 @@ class CliqzHistoryPanel: HistoryPanel {
         
         //setup
         label.text = self.tableView(tableView, titleForHeaderInSection: section)
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = UIColor.darkText
         
         bubble.addSubview(label)
         container.addSubview(bubble)
         
         //styling
-        bubble.backgroundColor = UIColor.white
+        bubble.backgroundColor = UIColor.white.withAlphaComponent(0.9)
         bubble.layer.cornerRadius = 10
         
         
@@ -130,7 +135,7 @@ class CliqzHistoryPanel: HistoryPanel {
     }
     
     
-    fileprivate func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
+    override func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
         let section = trueSection(section: indexPath.section)
         let offset = self.categories[sectionLookup[section]!].offset
         return data[indexPath.row + offset]
@@ -138,6 +143,22 @@ class CliqzHistoryPanel: HistoryPanel {
     
     fileprivate func trueSection(section: Int) -> Int {
         return section + 1
+    }
+    
+    override func updateNumberOfSyncedDevices(_ count: Int?) {
+        return
+    }
+    
+    override func updateSyncedDevicesCount() -> Success {
+        return succeed()
+    }
+    
+    @objc override func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == .began else { return }
+        let touchPoint = longPressGestureRecognizer.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
+        
+        presentContextMenu(for: indexPath)
     }
 }
 
@@ -149,29 +170,16 @@ class CliqzSiteTableViewCell: SiteTableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        _textLabel.textColor = .white
-        _textLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        _textLabel.layer.shadowColor = UIColor.black.cgColor
-        _textLabel.layer.shadowOpacity = 0.5
-        _textLabel.layer.shadowRadius = 0.5
-        _textLabel.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        
-        _detailTextLabel.textColor = .white
-        _detailTextLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
-        _detailTextLabel.layer.shadowColor = UIColor.black.cgColor
-        _detailTextLabel.layer.shadowOpacity = 0.5
-        _detailTextLabel.layer.shadowRadius = 0.5
-        _detailTextLabel.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
         
         separatorInset = UIEdgeInsets(top: 0, left: CliqzHistoryPanelUX.separatorLeftInset, bottom: 0, right: 0)
         contentView.addSubview(customImageView)
-        contentView.addSubview(imageShadowView)
-        setupImageShadow()
-        
         customImageView.layer.cornerRadius = CliqzHistoryPanelUX.iconCornerRadius
         customImageView.clipsToBounds = true
+        
+        contentView.addSubview(imageShadowView)
+        setupImageShadow()
+        setUpLabels()
     }
-    
     
     override func updateConstraints() {
         
@@ -206,6 +214,7 @@ class CliqzSiteTableViewCell: SiteTableViewCell {
         super.prepareForReuse()
         separatorInset = UIEdgeInsets(top: 0, left: CliqzHistoryPanelUX.separatorLeftInset, bottom: 0, right: 0)
         setupImageShadow()
+        setUpLabels()
         fakeView = nil
     }
     
@@ -240,6 +249,23 @@ class CliqzSiteTableViewCell: SiteTableViewCell {
         imageShadowView.layer.shadowOpacity = 0.5
         imageShadowView.layer.shadowRadius = 0.5
         imageShadowView.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+    }
+    
+    private func setUpLabels() {
+        
+        _textLabel.textColor = .white
+        _textLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        _textLabel.layer.shadowColor = UIColor.black.cgColor
+        _textLabel.layer.shadowOpacity = 0.5
+        _textLabel.layer.shadowRadius = 0.5
+        _textLabel.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+        
+        _detailTextLabel.textColor = .white
+        _detailTextLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
+        _detailTextLabel.layer.shadowColor = UIColor.black.cgColor
+        _detailTextLabel.layer.shadowOpacity = 0.5
+        _detailTextLabel.layer.shadowRadius = 0.5
+        _detailTextLabel.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
     }
 }
 
