@@ -116,11 +116,15 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         backgroundView.image = UIImage.cliqzBackgroundImage()//?.applyBlur(withRadius: 5, blurType: BOXFILTER, tintColor: UIColor.black.withAlphaComponent(0.1), saturationDeltaFactor: 1.8, maskImage: nil)
     }
     
+    func dismissKeyboard(_ sender: Any? = nil) {
+        view.window?.rootViewController?.view.endEditing(true)
+    }
 }
 
 extension CliqzHomePanelViewController {
     
     @objc func segmentedControlValueChanged(control: UISegmentedControl) {
+        self.dismissKeyboard()
         selectedPanel = HomePanelType(rawValue: control.selectedSegmentIndex) //control.selectedSegmentIndex must be between 0 and 3
     }
     

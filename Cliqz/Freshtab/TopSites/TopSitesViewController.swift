@@ -183,6 +183,7 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
             
 			cell.tag = indexPath.row
 			let url = topSite.url
+            cell.logoContainerView.alpha = 0.0
 			LogoLoader.loadLogo(url, completionBlock: { (img, logoInfo, error) in
 				if cell.tag == indexPath.row {
 					if let img = img {
@@ -198,6 +199,9 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
 					}
 					cell.logoHostLabel.text = logoInfo?.hostName
 				}
+                UIView.animate(withDuration: 0.1, animations: {
+                    cell.logoContainerView.alpha = 1.0
+                })
 			})
 		}
 		if cell.gestureRecognizers == nil {
