@@ -118,7 +118,8 @@ class CliqzHistoryPanel: HistoryPanel {
         if let site = siteForIndexPath(indexPath), let cell = cell as? CliqzSiteTableViewCell {
             cell.setLines(site.title, detailText: site.url)
             cell.tag = indexPath.row
-            
+            cell.imageShadowView.alpha = 0.0
+            cell.imageShadowView.transform = CGAffineTransform.init(scaleX: 0.8, y: 0.8)
             LogoLoader.loadLogo(site.tileURL.absoluteString, completionBlock: { (img, logoInfo, error) in
                 if cell.tag == indexPath.row {
                     if let img = img {
@@ -129,6 +130,10 @@ class CliqzHistoryPanel: HistoryPanel {
                         cell.fakeIt(placeholder)
                     }
                 }
+                UIView.animate(withDuration: 0.15, animations: {
+                    cell.imageShadowView.alpha = 1.0
+                    cell.imageShadowView.transform = CGAffineTransform.identity
+                })
             })
         }
         return cell
@@ -172,24 +177,12 @@ class CliqzSiteTableViewCell: SiteTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         separatorInset = UIEdgeInsets(top: 0, left: CliqzHistoryPanelUX.separatorLeftInset, bottom: 0, right: 0)
-        contentView.addSubview(customImageView)
+        contentView.addSubview(imageShadowView)
+        imageShadowView.addSubview(customImageView)
         customImageView.layer.cornerRadius = CliqzHistoryPanelUX.iconCornerRadius
         customImageView.clipsToBounds = true
-        
-        contentView.addSubview(imageShadowView)
         setupImageShadow()
         setUpLabels()
-    }
-    
-    override func updateConstraints() {
-        
-        customImageView.snp.remakeConstraints { (make) in
-            make.size.equalTo(CliqzHistoryPanelUX.iconSize)
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(8)
-        }
-
-        super.updateConstraints()
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
@@ -216,6 +209,7 @@ class CliqzSiteTableViewCell: SiteTableViewCell {
         setupImageShadow()
         setUpLabels()
         fakeView = nil
+        customImageView.image = nil
     }
     
     func fakeIt(_ view: UIView) {
@@ -235,13 +229,18 @@ class CliqzSiteTableViewCell: SiteTableViewCell {
     private func setupImageShadow() {
         
         imageShadowView.clipsToBounds = false
-        imageShadowView.backgroundColor = .white
+        imageShadowView.backgroundColor = UIColor.cliqzURLBarColor
         contentView.sendSubview(toBack: imageShadowView)
         contentView.bringSubview(toFront: customImageView)
         
+        customImageView.snp.remakeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        
         imageShadowView.snp.remakeConstraints { (make) in
             make.size.equalTo(CliqzHistoryPanelUX.iconSize)
-            make.center.equalTo(customImageView.snp.center)
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(8)
         }
         
         imageShadowView.layer.cornerRadius = CliqzHistoryPanelUX.iconCornerRadius

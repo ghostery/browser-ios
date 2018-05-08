@@ -77,7 +77,7 @@ class FreshtabViewController: UIViewController, HomePanel {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.05, delay: 0.1, options: .allowAnimatedContent, animations: {
+        UIView.animate(withDuration: 0.1, delay: 0.1, options: .curveEaseIn, animations: {
             self.normalModeView?.alpha = 1.0
         }, completion: nil)
     }
@@ -210,6 +210,12 @@ class FreshtabViewController: UIViewController, HomePanel {
 			self.normalModeView = UIView()
 			self.normalModeView?.backgroundColor = UIColor.clear
 			self.scrollView.addSubview(self.normalModeView!)
+            
+            let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            normalModeView?.addGestureRecognizer(tap)
+            
+            let pan = UIPanGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            normalModeView?.addGestureRecognizer(pan)
 			
 			self.topSitesViewController = TopSitesViewController(dataSource: self.topSitesDataSource)
 			self.topSitesViewController?.homePanelDelegate = self.homePanelDelegate
@@ -227,6 +233,10 @@ class FreshtabViewController: UIViewController, HomePanel {
 			}
 		}
 	}
+    
+    func dismissKeyboard(_ sender: Any? = nil) {
+        view.window?.rootViewController?.view.endEditing(true)
+    }
 }
 
 extension FreshtabViewController: UIScrollViewDelegate {
