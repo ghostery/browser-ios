@@ -30,10 +30,13 @@ node('mac-mini-ios') {
                     sh '''#!/bin/bash -l
                         set -e
                         set -x
-                        chmod 0755 autobots/requirements.txt
-                        sudo -H pip install -vvvr autobots/requirements.txt
                         brew update
                         brew list carthage &>/dev/null || brew install carthage
+                        brew list python2 &>/dev/null || brew install python2
+                        sudo -H python2 -m ensurepip
+                        chmod 0755 autobots/requirements.txt
+                        sudo -H python2 -m pip install -vvvr autobots/requirements.txt
+                        
                     '''
                 }
                 stage('Setup Build Environment') {
