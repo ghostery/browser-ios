@@ -469,8 +469,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     func tableView(_ tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
-
+    /* Cliqz
     fileprivate func removeHistoryForURLAtIndexPath(indexPath: IndexPath) {
+    */
+    func removeHistoryForURLAtIndexPath(indexPath: IndexPath) {
         if let site = self.siteForIndexPath(indexPath) {
             // Why the dispatches? Because we call success and failure on the DB
             // queue, and so calling anything else that calls through to the DB will
