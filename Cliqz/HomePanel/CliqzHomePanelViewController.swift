@@ -52,6 +52,14 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     fileprivate let segmentedControl: UISegmentedControl
     fileprivate let controllerContainerView: UIView = UIView()
     
+    enum IndexType {
+        case blurred
+        case notBlurred
+        case notSet
+    }
+    
+    fileprivate var currentIndexType: IndexType = .notSet
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         
         self.panels = CliqzHomePanels().enabledPanels
@@ -113,7 +121,22 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setBackgroundImage() {
-        backgroundView.image = UIImage.cliqzBackgroundImage()//?.applyBlur(withRadius: 5, blurType: BOXFILTER, tintColor: UIColor.black.withAlphaComponent(0.1), saturationDeltaFactor: 1.8, maskImage: nil)
+        
+        func index2type(_ index: Int) -> IndexType {
+            return index < 1 ? .notBlurred : .blurred
+        }
+
+        let indexType = index2type(segmentedControl.selectedSegmentIndex)
+
+        guard currentIndexType != indexType else { return }
+        currentIndexType = indexType
+        
+        if segmentedControl.selectedSegmentIndex < 1 {
+            backgroundView.image = UIImage.cliqzBackgroundImage()
+        }
+        else {
+            backgroundView.image = UIImage.cliqzBackgroundImage(blurred: true)
+        }
     }
     
     func dismissKeyboard(_ sender: Any? = nil) {
@@ -125,6 +148,7 @@ extension CliqzHomePanelViewController {
     
     @objc func segmentedControlValueChanged(control: UISegmentedControl) {
         self.dismissKeyboard()
+        setBackgroundImage()
         selectedPanel = HomePanelType(rawValue: control.selectedSegmentIndex) //control.selectedSegmentIndex must be between 0 and 3
     }
     
