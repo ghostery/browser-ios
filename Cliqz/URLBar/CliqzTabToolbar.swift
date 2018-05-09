@@ -24,7 +24,7 @@ class CliqzTabToolbarHelper: TabToolbarHelper {
         toolbar.stopReloadButton.setImage(UIImage.templateImageNamed("cliqz-nav-refresh"), for: .normal)
         toolbar.menuButton.setImage(UIImage.templateImageNamed("cliqz-nav-menu"), for: .normal)
         toolbar.tabsButton.setImage(UIImage.templateImageNamed("cliqz-nav-tabs"), for: .normal)
-        toolbar.tabsButton.accessibilityIdentifier = "TabToolbar.tabButton"
+        toolbar.tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
     }
 
 }
