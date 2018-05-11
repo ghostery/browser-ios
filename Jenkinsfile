@@ -34,7 +34,7 @@ node('mac-mini-ios') {
     end
     '''
     
-    def jobStatus = ""
+    def jobStatus = 'FAIL'
 
     vagrant.inside(
         'Vagrantfile',
@@ -73,10 +73,8 @@ node('mac-mini-ios') {
                     sh '''#!/bin/bash -l
                         set -e
                         set -x
-                        if [ "$1" == "--force" ]; then
-                            rm -rf Carthage/*
-                            rm -rf ~/Library/Caches/org.carthage.CarthageKit
-                        fi
+                        rm -rf Carthage/*
+                        rm -rf ~/Library/Caches/org.carthage.CarthageKit
                         CARTHAGE_VERBOSE=""
                         if [ ! -z "$XCS_BOT_ID"  ]; then
                             CARTHAGE_VERBOSE="--verbose"
@@ -89,7 +87,7 @@ node('mac-mini-ios') {
                     '''
                 }
                 stage('Build') {
-                    timeout(20) {
+                    timeout(60) {
                         sh '''#!/bin/bash -l
                             set -e
                             xcodebuild \
@@ -123,6 +121,7 @@ node('mac-mini-ios') {
                         }
                     }
                 }
+                jobStatus = 'PASS'
             }
             catch(all) {
                 jobStatus = 'FAIL'
