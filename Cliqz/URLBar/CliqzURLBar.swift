@@ -52,7 +52,7 @@ class CliqzURLBar: URLBarView {
     
     @objc func SELdidClickGhosty(button: UIButton) {
         debugPrint("pressed ghosty")
-		NotificationCenter.default.post(name: Notification.Name.ShowControlCenterNotification, object: self.currentURL?.absoluteString)
+		NotificationCenter.default.post(name: Notification.Name.GhosteryButtonPressedNotification, object: self.currentURL?.absoluteString)
     }
     
     override func commonInit() {

@@ -357,8 +357,8 @@ class BrowserViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(openTabViaConnect), name: SendTabNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(downloadVideoViaConnect), name: DownloadVideoNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(openSettings), name: ShowSettingsNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(showControlCenter), name: Notification.Name.ShowControlCenterNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(hideControlCenter), name: Notification.Name.HideControlCenterNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(ghosteryButtonPressed), name: Notification.Name.GhosteryButtonPressedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
 
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
