@@ -59,6 +59,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     }
     
     fileprivate var currentIndexType: IndexType = .notSet
+    fileprivate var currentOrientation: DeviceOrientation? = nil
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         
@@ -127,9 +128,11 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         }
 
         let indexType = index2type(segmentedControl.selectedSegmentIndex)
+        let orientation = UIDevice.current.getDeviceAndOrientation().1
 
-        guard currentIndexType != indexType else { return }
+        guard currentIndexType != indexType || currentOrientation != orientation else { return }
         currentIndexType = indexType
+        currentOrientation = orientation
         
         if segmentedControl.selectedSegmentIndex < 1 {
             backgroundView.image = UIImage.cliqzBackgroundImage()
