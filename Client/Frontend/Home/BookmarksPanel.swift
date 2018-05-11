@@ -20,8 +20,10 @@ let deleteDeleteButtonLabel = NSLocalizedString("Delete", tableName: "BookmarkPa
 let emptyBookmarksText = NSLocalizedString("Bookmarks you save will show up here.", comment: "Status label for the empty Bookmarks state.")
 
 // MARK: - UX constants.
-
+/* Cliqz: removed private modifier
 private struct BookmarksPanelUX {
+ */
+struct BookmarksPanelUX {
     static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
     static let BookmarkFolderChevronSize: CGFloat = 20
     static let BookmarkFolderChevronLineWidth: CGFloat = 2.0
@@ -34,6 +36,8 @@ private struct BookmarksPanelUX {
     static let IconSize: CGFloat = 23
     static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
     static let IconBorderWidth: CGFloat = 0.5
+    // Cliqz: Added empty tab contect offset for empty view text
+    static let EmptyTabContentOffset = -180
 }
 
 class BookmarksPanel: SiteTableViewController, HomePanel {
@@ -46,7 +50,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
+    /* Cliqz: removed private modifier
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
+    */
+    lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
     fileprivate let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
     fileprivate let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorIdentifier"
@@ -129,7 +136,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
+    /* Cliqz: removed fileprivate modifier
     fileprivate func createEmptyStateOverlayView() -> UIView {
+    */
+    func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
         overlayView.backgroundColor = UIColor.white
 
@@ -163,7 +173,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return overlayView
     }
 
+    
+    /* Cliqz: removed fileprivate modifier
     fileprivate func updateEmptyPanelState() {
+    */
+    func updateEmptyPanelState() {
         if source?.current.count == 0 && source?.current.guid == BookmarkRoots.MobileFolderGUID {
             if self.emptyStateOverlayView.superview == nil {
                 self.view.addSubview(self.emptyStateOverlayView)
@@ -177,7 +191,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
+    /* Cliqz: removed fileprivate modifier
     fileprivate func onModelFetched(_ result: Maybe<BookmarksModel>) {
+    */
+    func onModelFetched(_ result: Maybe<BookmarksModel>) {
         guard let model = result.successValue else {
             self.onModelFailure(result.failureValue as Any)
             return
@@ -185,7 +202,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         self.onNewModel(model)
     }
 
+    /* Cliqz: Removed fileprivate modifier
     fileprivate func onNewModel(_ model: BookmarksModel) {
+    */
+    func onNewModel(_ model: BookmarksModel) {
         if Thread.current.isMainThread {
             self.source = model
             self.tableView.reloadData()
@@ -199,7 +219,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
+    /* Cliqz: removed private modifier
     fileprivate func onModelFailure(_ e: Any) {
+    */
+    func onModelFailure(_ e: Any) {
         log.error("Error: failed to get data: \(e)")
     }
 

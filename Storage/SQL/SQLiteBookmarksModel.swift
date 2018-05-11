@@ -55,7 +55,10 @@ public protocol KeywordSearchSource {
 }
 
 open class SQLiteBookmarksModelFactory: BookmarksModelFactory {
+    /* Cliqz: Remove fileprivate modifier so that it could be accessible in the extension
     fileprivate let bookmarks: SQLiteBookmarks
+    */
+    let bookmarks: SQLiteBookmarks
     fileprivate let direction: Direction
 
     public init(bookmarks: SQLiteBookmarks, direction: Direction) {
