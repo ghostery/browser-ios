@@ -65,19 +65,8 @@ class ControlCenterViewController: UIViewController {
     }
 
 	private func setupComponents() {
-		setupTopTransparentView()
 		setupPanelSwitchControl()
 		setupPanelContainer()
-	}
-
-	func setupTopTransparentView() {
-		topTranparentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideControlCenter)))
-		topTranparentView.backgroundColor = UIColor.clear
-		self.view.addSubview(topTranparentView)
-		topTranparentView.snp.makeConstraints { (make) in
-			make.top.left.right.equalToSuperview()
-			make.height.equalTo(70)
-		}
 	}
 
 	func setupPanelContainer() {
@@ -110,7 +99,7 @@ class ControlCenterViewController: UIViewController {
 		self.view.addSubview(bgView)
 		
 		bgView.snp.makeConstraints { (make) in
-			make.top.equalTo(topTranparentView.snp.bottom)
+			make.top.equalToSuperview()
 			make.left.right.equalToSuperview()
 			make.height.equalTo(40)
 		}
@@ -139,10 +128,6 @@ class ControlCenterViewController: UIViewController {
 			make.edges.equalToSuperview()
 		}
 		viewController.didMove(toParentViewController: self)
-	}
-
-	@objc private func hideControlCenter() {
-		NotificationCenter.default.post(name: Notification.Name.HideControlCenterNotification, object: nil)
 	}
 
 	private func selectedPanel() -> UIViewController {

@@ -225,53 +225,114 @@ class OverviewViewController: UIViewController {
 
 	private func setupComponents() {
 		self.setupPieChart()
-
-		self.view.addSubview(urlLabel)
-		self.urlLabel.snp.makeConstraints { (make) in
-			make.left.right.equalTo(self.view).inset(7)
-			make.top.equalTo(chart.snp.bottom).offset(10)
-			make.height.equalTo(30)
-		}
-
-		self.view.addSubview(blockedTrackers)
-		self.blockedTrackers.snp.makeConstraints { (make) in
-			make.centerX.equalTo(self.view)
-			make.top.equalTo(self.urlLabel.snp.bottom)
-			make.height.equalTo(30)
-		}
-
-		self.view.addSubview(trustSiteButton)
-		self.trustSiteButton.snp.makeConstraints { (make) in
-			make.centerX.equalTo(self.view)
-			make.top.equalTo(self.blockedTrackers.snp.bottom).offset(15)
-			make.height.equalTo(30)
-			make.width.equalTo(213)
-		}
-
-		self.view.addSubview(restrictSiteButton)
-		self.restrictSiteButton.snp.makeConstraints { (make) in
-			make.centerX.equalTo(self.view)
-			make.top.equalTo(self.trustSiteButton.snp.bottom).offset(10)
-			make.height.equalTo(30)
-			make.width.equalTo(213)
-		}
-
-		self.view.addSubview(pauseGhosteryButton)
-		self.pauseGhosteryButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-		self.pauseGhosteryButton.snp.makeConstraints { (make) in
-			make.centerX.equalTo(self.view)
-			make.top.equalTo(self.restrictSiteButton.snp.bottom).offset(10)
-			make.height.equalTo(30)
-			make.width.equalTo(213)
-		}
-
-		self.view.addSubview(adBlockingView)
-		self.adBlockingView.snp.makeConstraints { (make) in
-			make.left.right.equalTo(self.view)
-			make.top.equalTo(self.view.snp.bottom).offset(-75)
-			make.height.equalTo(150)
-		}
-
+        
+        self.view.addSubview(chart)
+        self.view.addSubview(urlLabel)
+        self.view.addSubview(blockedTrackers)
+        self.view.addSubview(trustSiteButton)
+        self.view.addSubview(restrictSiteButton)
+        self.view.addSubview(pauseGhosteryButton)
+        self.view.addSubview(adBlockingView)
+        
+        let (device,orientation) = UIDevice.current.getDeviceAndOrientation()
+        
+        if (orientation == .portrait && device != .iPad) || device == .iPad {
+            chart.snp.makeConstraints { (make) in
+                make.left.right.top.equalToSuperview()
+                make.height.equalTo(200)
+            }
+            
+            self.urlLabel.snp.makeConstraints { (make) in
+                make.left.right.equalTo(self.view).inset(7)
+                make.top.equalTo(chart.snp.bottom).offset(10)
+                make.height.equalTo(30)
+            }
+            
+            self.blockedTrackers.snp.makeConstraints { (make) in
+                make.centerX.equalTo(self.view)
+                make.top.equalTo(self.urlLabel.snp.bottom)
+                make.height.equalTo(30)
+            }
+            
+            self.trustSiteButton.snp.makeConstraints { (make) in
+                make.centerX.equalTo(self.view)
+                make.top.equalTo(self.blockedTrackers.snp.bottom).offset(15)
+                make.height.equalTo(30)
+                make.width.equalTo(213)
+            }
+            
+            self.restrictSiteButton.snp.makeConstraints { (make) in
+                make.centerX.equalTo(self.view)
+                make.top.equalTo(self.trustSiteButton.snp.bottom).offset(10)
+                make.height.equalTo(30)
+                make.width.equalTo(213)
+            }
+            
+            self.pauseGhosteryButton.snp.makeConstraints { (make) in
+                make.centerX.equalTo(self.view)
+                make.top.equalTo(self.restrictSiteButton.snp.bottom).offset(10)
+                make.height.equalTo(30)
+                make.width.equalTo(213)
+            }
+            
+            self.adBlockingView.snp.makeConstraints { (make) in
+                make.left.right.equalTo(self.view)
+                make.top.equalTo(self.view.snp.bottom).offset(-75)
+                make.height.equalTo(150)
+            }
+        }
+        else {
+            
+            let blockedTrackersOffset: CGFloat = 10.0
+            let adblockingViewOffset: CGFloat = 75.0
+            
+            chart.snp.makeConstraints { (make) in
+                let inset = self.blockedTrackers.intrinsicContentSize.height + self.urlLabel.intrinsicContentSize.height + blockedTrackersOffset + adblockingViewOffset
+                make.top.equalToSuperview()
+                make.height.equalToSuperview().offset(-inset)
+                make.left.equalToSuperview()
+                make.width.equalToSuperview().dividedBy(2)
+            }
+            
+            self.urlLabel.snp.makeConstraints { (make) in
+                make.left.equalTo(self.view).inset(7)
+                make.right.equalToSuperview().dividedBy(2)
+                make.top.equalTo(chart.snp.bottom).offset(2)
+            }
+            
+            self.blockedTrackers.snp.makeConstraints { (make) in
+                make.centerX.equalTo(self.urlLabel.snp.centerX)
+                make.top.equalTo(self.urlLabel.snp.bottom).offset(blockedTrackersOffset)
+            }
+            
+            self.trustSiteButton.snp.makeConstraints { (make) in
+                make.centerX.equalTo(self.view).multipliedBy(1.5)
+                make.top.equalToSuperview().offset(36)
+                make.height.equalTo(30)
+                make.width.equalTo(self.view.snp.width).dividedBy(2.3)
+            }
+            
+            self.restrictSiteButton.snp.makeConstraints { (make) in
+                make.centerX.equalTo(self.view).multipliedBy(1.5)
+                make.top.equalTo(self.trustSiteButton.snp.bottom).offset(10)
+                make.height.equalTo(30)
+                make.width.equalTo(self.view.snp.width).dividedBy(2.3)
+            }
+            
+            self.pauseGhosteryButton.snp.makeConstraints { (make) in
+                make.centerX.equalTo(self.view).multipliedBy(1.5)
+                make.top.equalTo(self.restrictSiteButton.snp.bottom).offset(10)
+                make.height.equalTo(30)
+                make.width.equalTo(self.view.snp.width).dividedBy(2.3)
+            }
+            
+            self.adBlockingView.snp.makeConstraints { (make) in
+                make.left.right.equalTo(self.view)
+                make.top.equalTo(self.view.snp.bottom).offset(-adblockingViewOffset)
+                make.height.equalTo(150)
+            }
+        }
+        
 		let trustTitle = NSLocalizedString("Trust Site", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Trust button title")
 		self.trustSiteButton.setTitle(trustTitle, for: .normal)
 		self.trustSiteButton.addTarget(self, action: #selector(trustSitePressed), for: .touchUpInside)
@@ -283,6 +344,7 @@ class OverviewViewController: UIViewController {
 		let pauseGhostery = NSLocalizedString("Pause Ghostery", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Pause Ghostery button title")
 		self.pauseGhosteryButton.setTitle(pauseGhostery, for: .normal)
         self.pauseGhosteryButton.addTarget(self, action: #selector(pauseGhosteryPressed), for: .touchUpInside)
+        self.pauseGhosteryButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
 
 		// TODO: Count should be from DataSource
         self.adBlockingView.delegate = self
@@ -449,11 +511,6 @@ class OverviewViewController: UIViewController {
 		chart.chartDescription?.text = ""
 		chart.legend.enabled = false
 		chart.holeRadiusPercent = 0.8
-		self.view.addSubview(chart)
-		chart.snp.makeConstraints { (make) in
-			make.left.right.top.equalToSuperview()
-			make.height.equalTo(200)
-		}
 	}
 }
 

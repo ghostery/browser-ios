@@ -9,38 +9,110 @@
 import Foundation
 
 extension NSNotification.Name {
-	
-	public static let ShowControlCenterNotification = NSNotification.Name(rawValue: "showControlCenter")
-
-	public static let HideControlCenterNotification = NSNotification.Name(rawValue: "hideControlCenter")
+    public static let GhosteryButtonPressedNotification = NSNotification.Name(rawValue: "GhosteryButtonPressedNotification")
 }
 
 extension BrowserViewController {
+    
+    func ghosteryButtonPressed(notification: Notification) {
+        
+        if let cc = self.childViewControllers.last,
+            let _ = cc as? ControlCenterViewController {
+            hideControlCenter()
+        }
+        else {
+            //show it
+            if let pageUrl = notification.object as? String {
+                showControlCenter(pageUrl: pageUrl)
+            }
+        }
+    }
 	
-	func showControlCenter(notification: Notification) {
+    func showControlCenter(pageUrl: String? = nil) {
+        
+        func topOffset(_ device: DeviceType, _ orientation: DeviceOrientation) -> CGFloat {
+            let (device,orientation) = UIDevice.current.getDeviceAndOrientation()
+            
+            let top: CGFloat
+            
+            if (device == .iPhone || device == .iPhoneX) {
+                if orientation == .portrait {
+                    top = 76.0
+                }
+                else {
+                    top = 56.0
+                }
+            }
+            else {
+                top = 120.0
+            }
+            
+            return top
+        }
+        
+        func applyShadow(view: UIView) {
+            view.layer.shadowColor = UIColor.black.cgColor
+            view.layer.shadowOpacity = 0.4
+            view.layer.shadowRadius = 4
+            view.layer.shadowOffset = CGSize(width: 0, height: 4)
+        }
+        
 		let controlCenter = ControlCenterViewController()
 		
-		if let pageUrl = notification.object as? String {
-			controlCenter.pageURL = pageUrl
-			// TODO: provide a DataSource Instead
-//			controlCenter.trackers = TrackerList.instance.detectedTrackersForPage(pageUrl)
-//			controlCenter.pageURL = host
-		}
+        if let pageUrl = pageUrl {
+            controlCenter.pageURL = pageUrl
+        }
+        
+        let (device,orientation) = UIDevice.current.getDeviceAndOrientation()
+        
 		self.addChildViewController(controlCenter)
-		self.view.addSubview(controlCenter.view)
-		controlCenter.view.snp.makeConstraints({ (make) in
-			make.left.right.bottom.equalToSuperview()
-			make.top.equalToSuperview().offset(0)
-		})
+        controlCenter.beginAppearanceTransition(true, animated: false)
+        self.view.addSubview(controlCenter.view)
+        controlCenter.endAppearanceTransition()
+        
+        if orientation == .portrait && device != .iPad {
+            controlCenter.view.snp.makeConstraints({ (make) in
+                make.top.equalToSuperview().offset(topOffset(device, orientation))
+                make.left.right.bottom.equalToSuperview()
+            })
+        }
+        else if device == .iPad {
+            controlCenter.view.snp.makeConstraints({ (make) in
+                make.width.equalToSuperview().dividedBy(2)
+                make.right.equalToSuperview()
+                make.bottom.equalToSuperview()
+                make.top.equalToSuperview().offset(topOffset(device, orientation))
+            })
+            
+            applyShadow(view: controlCenter.view)
+        }
+        else {
+            controlCenter.view.snp.makeConstraints({ (make) in
+                make.width.equalToSuperview().dividedBy(1.5)
+                make.right.equalToSuperview()
+                make.bottom.equalToSuperview()
+                make.top.equalToSuperview().offset(topOffset(device, orientation))
+            })
+            
+            applyShadow(view: controlCenter.view)
+        }
+        
 	}
 
 	func hideControlCenter() {
 		if let cc = self.childViewControllers.last,
 			let c = cc as? ControlCenterViewController {
-			c.removeFromParentViewController()
+			c.willMove(toParentViewController: nil)
+            c.beginAppearanceTransition(true, animated: false)
 			c.view.removeFromSuperview()
+            c.endAppearanceTransition()
+            c.removeFromParentViewController()
 		}
 	}
+    
+    @objc func orientationDidChange(notification: Notification) {
+        hideControlCenter()
+    }
     
     func showAntiPhishingAlert(_ domainName: String) {
         //let antiPhishingShowTime = Date.getCurrentMillis()
