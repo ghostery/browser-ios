@@ -147,6 +147,9 @@ public protocol BookmarksModelFactory {
 
     func modelForRoot() -> Deferred<Maybe<BookmarksModel>>
 
+    //Cliqz: Added new method to get bookmarks in a flat structure
+    func flatModelForRoot() -> Deferred<Maybe<BookmarksModel>>
+    
     // Whenever async construction is necessary, we fall into a pattern of needing
     // a placeholder that behaves correctly for the period between kickoff and set.
     var nullModel: BookmarksModel { get }

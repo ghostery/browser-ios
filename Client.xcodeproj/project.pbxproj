@@ -43,6 +43,9 @@
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
+		1E138D7F20A2E4F400B82C13 /* BookmarksModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */; };
+		1E138E1420A5983D00B82C13 /* CliqzBookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */; };
+		1E138E2420A5986600B82C13 /* BookmarksDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138E2320A5986600B82C13 /* BookmarksDataSource.swift */; };
 		1E3C5388209AFEDA00286CA4 /* TabTrayDoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */; };
 		1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */; };
 		1E3CBC1D205806F000898B05 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC1C205806F000898B05 /* DateExtension.swift */; };
@@ -1540,6 +1543,9 @@
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
 		19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeanplumIntegration.swift; sourceTree = "<group>"; };
 		1E066FAB204D5B1C0017C800 /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Client.entitlements; sourceTree = "<group>"; };
+		1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksModelExtensions.swift; sourceTree = "<group>"; };
+		1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzBookmarksPanel.swift; sourceTree = "<group>"; };
+		1E138E2320A5986600B82C13 /* BookmarksDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksDataSource.swift; sourceTree = "<group>"; };
 		1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayDoneButton.swift; sourceTree = "<group>"; };
 		1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsOptions.swift; sourceTree = "<group>"; };
@@ -2668,6 +2674,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1E138D6F20A2E4D800B82C13 /* Bookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */,
+			);
+			path = Bookmarks;
+			sourceTree = "<group>";
+		};
 		1E3CBC052057D81600898B05 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -2682,6 +2696,7 @@
 		1E4C0DA820A1A27D00D5941B /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				1E138D6F20A2E4D800B82C13 /* Bookmarks */,
 				1E4C0DA920A1A27D00D5941B /* GhosteryMigration */,
 			);
 			path = Storage;
@@ -3645,6 +3660,8 @@
 				AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */,
 				AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */,
 				AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */,
+				1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */,
+				1E138E2320A5986600B82C13 /* BookmarksDataSource.swift */,
 			);
 			path = HomePanel;
 			sourceTree = "<group>";
@@ -6178,6 +6195,7 @@
 				2FCAE25D1ABB531100877008 /* Bookmarks.swift in Sources */,
 				394CF6CF1BAA493C00906917 /* DefaultSuggestedSites.swift in Sources */,
 				2FCAE2781ABB531100877008 /* Visit.swift in Sources */,
+				1E138D7F20A2E4F400B82C13 /* BookmarksModelExtensions.swift in Sources */,
 				D3BF8CBB1B7425570007AFE6 /* DiskImageStore.swift in Sources */,
 				E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */,
 				2FCAE2611ABB531100877008 /* FileAccessor.swift in Sources */,
@@ -6561,6 +6579,7 @@
 				1E7B7688206A8AC000FD0BA5 /* CliqzTabToolbar.swift in Sources */,
 				1EAFE55F205FFE21006A36B4 /* LocalResourceSetting.swift in Sources */,
 				4F0445DD203333F200E2C0C7 /* NewsViewController.swift in Sources */,
+				1E138E2420A5986600B82C13 /* BookmarksDataSource.swift in Sources */,
 				4FF07D8B2063CA46001385A8 /* OffrzDataService.swift in Sources */,
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
@@ -6728,6 +6747,7 @@
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
 				1EAFE56C205FFE82006A36B4 /* LimitMobileDataUsageTableViewController.swift in Sources */,
 				1E7B76AF206B9CB500FD0BA5 /* ConnectDataSource.swift in Sources */,
+				1E138E1420A5983D00B82C13 /* CliqzBookmarksPanel.swift in Sources */,
 				19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */,
 				E65D89181C8647420006EA35 /* AppAuthenticator.swift in Sources */,
 				1EEA36D52063E105003B6AD5 /* FileManagerExtension.swift in Sources */,

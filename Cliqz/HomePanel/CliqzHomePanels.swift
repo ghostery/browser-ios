@@ -20,7 +20,7 @@ class CliqzHomePanels {
         
         HomePanelDescriptor(
             makeViewController: { profile in
-                let bookmarks = BookmarksPanel()
+                let bookmarks = CliqzBookmarksPanel()
                 bookmarks.profile = profile
                 let controller = UINavigationController(rootViewController: bookmarks)
                 controller.setNavigationBarHidden(true, animated: false)
