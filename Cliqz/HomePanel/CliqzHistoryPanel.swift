@@ -218,6 +218,36 @@ class CliqzHistoryPanel: HistoryPanel {
         }
         return 3
     }
+    
+    override func createEmptyStateOverlayView() -> UIView {
+        let overlayView = UIView()
+        overlayView.backgroundColor = UIColor.clear
+        
+        let welcomeLabel = UILabel()
+        overlayView.addSubview(welcomeLabel)
+        welcomeLabel.text = Strings.HistoryPanelEmptyStateTitle
+        welcomeLabel.textAlignment = .center
+        welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
+        welcomeLabel.textColor = UIColor.white
+        welcomeLabel.numberOfLines = 0
+        welcomeLabel.adjustsFontSizeToFitWidth = true
+        
+        welcomeLabel.layer.shadowColor = UIColor.black.cgColor
+        welcomeLabel.layer.shadowOpacity = 0.5
+        welcomeLabel.layer.shadowRadius = 0.5
+        welcomeLabel.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+        
+        
+        welcomeLabel.snp.makeConstraints { make in
+            make.centerX.equalTo(overlayView)
+            // Sets proper top constraint for iPhone 6 in portait and for iPad.
+            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
+            // Sets proper top constraint for iPhone 4, 5 in portrait.
+            make.top.greaterThanOrEqualTo(overlayView).offset(50)
+            make.width.equalTo(170)
+        }
+        return overlayView
+    }
 }
 
 class CliqzSiteTableViewCell: SiteTableViewCell {

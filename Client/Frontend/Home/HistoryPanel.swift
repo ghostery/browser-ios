@@ -232,8 +232,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             self.emptyStateOverlayView.removeFromSuperview()
         }
     }
-
+    /*Cliqz
     private func createEmptyStateOverlayView() -> UIView {
+    */
+    func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
         overlayView.backgroundColor = UIColor.white
 
