@@ -338,17 +338,11 @@ class CliqzSiteTableViewCell: SiteTableViewCell {
         
         _textLabel.textColor = .white
         _textLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        _textLabel.layer.shadowColor = UIColor.black.cgColor
-        _textLabel.layer.shadowOpacity = 0.5
-        _textLabel.layer.shadowRadius = 0.5
-        _textLabel.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+        _textLabel.applyShadow()
         
         _detailTextLabel.textColor = .white
         _detailTextLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
-        _detailTextLabel.layer.shadowColor = UIColor.black.cgColor
-        _detailTextLabel.layer.shadowOpacity = 0.5
-        _detailTextLabel.layer.shadowRadius = 0.5
-        _detailTextLabel.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+        _detailTextLabel.applyShadow()
     }
 }
 

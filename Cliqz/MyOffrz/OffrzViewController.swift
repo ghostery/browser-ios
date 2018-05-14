@@ -65,7 +65,7 @@ class OffrzViewController: UIViewController, HomePanel {
 	}
 
     private func setStyles() {
-        self.view.backgroundColor = UIConstants.AppBackgroundColor
+        self.view.backgroundColor = UIColor.clear
         containerView.backgroundColor = UIColor.clear
     }
     
@@ -81,8 +81,8 @@ class OffrzViewController: UIViewController, HomePanel {
 			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(expandOffr))
 			offrView?.addGestureRecognizer(tapGesture)
         } else {
-			self.emptyView = OffrzEmptyView()
-			self.containerView.addSubview(self.emptyView)
+            self.emptyView = OffrzEmptyView()
+            self.containerView.addSubview(self.emptyView)
         }
         
         setupOnboardingView()
@@ -92,14 +92,13 @@ class OffrzViewController: UIViewController, HomePanel {
     private func setupOnboardingView() {
         if offrzDataSource.hasOffrz() && offrzDataSource.shouldShowOnBoarding() {
 			self.onboardingView = OffrzOnboardingView()
+            self.onboardingView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
 			containerView.addSubview(onboardingView)
-			onboardingView.addActionHandler(.hide) {
-				weak var weakSelf = self
-				weakSelf?.hideOnboardingView()
+			onboardingView.addActionHandler(.hide) { [unowned self] in
+				self.hideOnboardingView()
 			}
-			onboardingView.addActionHandler(.learnMore) {
-				weak var weakSelf = self
-				weakSelf?.openLearnMore()
+			onboardingView.addActionHandler(.learnMore) { [unowned self] in
+				self.openLearnMore()
 			}
 			// TODO: Refactor after Telemetry integration
 //			TelemetryLogger.sharedInstance.logEvent(.Onboarding("show", "offrz", nil))
@@ -149,9 +148,9 @@ class OffrzViewController: UIViewController, HomePanel {
                 })
             }
         } else {
-			emptyView?.snp.remakeConstraints({ (make) in
-				make.edges.equalTo(self.containerView)
-			})
+            emptyView?.snp.remakeConstraints({ (make) in
+                make.edges.equalTo(self.containerView)
+            })
         }
     }
 
