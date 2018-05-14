@@ -19,7 +19,7 @@ class OffrzOnboardingView: UIView {
 	private let hideButton = UIButton(type: .custom)
 	private let descriptionLabel = UILabel()
 	private let moreButton = UIButton(type: .custom)
-	private let offrzPresentImageView = UIImageView(image: UIImage(named: "offrz_present"))
+	private let offrzPresentImageView = UIImageView(image: UIImage(named: "offrzPresent"))
 
 	private var actionHandlers = [OffrzOnboardingActions: OffrzOnboardingActionHandler]()
 
@@ -69,9 +69,10 @@ class OffrzOnboardingView: UIView {
 	}
 
 	private func setStyles() {
-		self.backgroundColor = UIColor(colorString: "ABD8EA")
+		//self.backgroundColor = UIColor(colorString: "ABD8EA")
 
-		descriptionLabel.textColor = UIColor.gray
+        descriptionLabel.textColor = .white
+        descriptionLabel.applyShadow()
 		descriptionLabel.textAlignment = .center
 		descriptionLabel.numberOfLines = 2
 

@@ -45,7 +45,8 @@ class OffrzEmptyView: UIView {
 	}
 
 	private func setStyles() {
-		emptyTextLabel.textColor = UIColor.gray
+		emptyTextLabel.textColor = UIColor.white
+        emptyTextLabel.applyShadow()
 	}
 
 	private func layoutComponents() {

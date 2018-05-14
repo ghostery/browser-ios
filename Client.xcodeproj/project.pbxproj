@@ -518,6 +518,7 @@
 		AFA9FB0B208E04FA0028CA1B /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */; };
 		AFA9FB0D208E135E0028CA1B /* ControlCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */; };
 		AFDF457220A9A8C40091CA27 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDF457120A9A8C40091CA27 /* UIHelper.swift */; };
+		AFDF458220A9C5F20091CA27 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */; };
 		AFE484D32056838500554B2E /* CliqzURLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE484D22056838500554B2E /* CliqzURLBar.swift */; };
 		AFF2874E209B54F6001E9B59 /* CliqzHomePanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */; };
 		AFF28766209B5F6E001E9B59 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF28765209B5F6E001E9B59 /* ImageExtension.swift */; };
@@ -1983,6 +1984,7 @@
 		AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCenterDelegate.swift; sourceTree = "<group>"; };
 		AFDF457120A9A8C40091CA27 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
+		AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
 		AFE484D22056838500554B2E /* CliqzURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzURLBar.swift; sourceTree = "<group>"; };
 		AFECF63AADEF4013C5D72D77 /* Pods-Client.firefox.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Client.firefox.xcconfig"; path = "Pods/Target Support Files/Pods-Client/Pods-Client.firefox.xcconfig"; sourceTree = "<group>"; };
 		AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHomePanels.swift; sourceTree = "<group>"; };
@@ -3320,6 +3322,7 @@
 				AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */,
 				AF77B88D209A022A00E7A0C4 /* NSData+GZIP.swift */,
 				AFF28765209B5F6E001E9B59 /* ImageExtension.swift */,
+				AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -6672,6 +6675,7 @@
 				C4E3984C1D21F2FD004E89BA /* TabTrayButtonExtensions.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
+				AFDF458220A9C5F20091CA27 /* UILabelExtension.swift in Sources */,
 				1EAFE56F205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift in Sources */,
 				4F0445E2203344E300E2C0C7 /* LogoLoader.swift in Sources */,
 				4F30F5082051670C0049E4F6 /* AutoCompletion.swift in Sources */,
