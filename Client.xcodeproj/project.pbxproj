@@ -517,6 +517,7 @@
 		AFA9FACC208DFD790028CA1B /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FACB208DFD790028CA1B /* ArrayExtensions.swift */; };
 		AFA9FB0B208E04FA0028CA1B /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */; };
 		AFA9FB0D208E135E0028CA1B /* ControlCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */; };
+		AFDF457220A9A8C40091CA27 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDF457120A9A8C40091CA27 /* UIHelper.swift */; };
 		AFE484D32056838500554B2E /* CliqzURLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE484D22056838500554B2E /* CliqzURLBar.swift */; };
 		AFF2874E209B54F6001E9B59 /* CliqzHomePanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */; };
 		AFF28766209B5F6E001E9B59 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF28765209B5F6E001E9B59 /* ImageExtension.swift */; };
@@ -1981,6 +1982,7 @@
 		AFA9FACB208DFD790028CA1B /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCenterDelegate.swift; sourceTree = "<group>"; };
+		AFDF457120A9A8C40091CA27 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		AFE484D22056838500554B2E /* CliqzURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzURLBar.swift; sourceTree = "<group>"; };
 		AFECF63AADEF4013C5D72D77 /* Pods-Client.firefox.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Client.firefox.xcconfig"; path = "Pods/Target Support Files/Pods-Client/Pods-Client.firefox.xcconfig"; sourceTree = "<group>"; };
 		AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHomePanels.swift; sourceTree = "<group>"; };
@@ -3305,6 +3307,7 @@
 		4F0445E520334D0E00E2C0C7 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				AFDF457120A9A8C40091CA27 /* UIHelper.swift */,
 				4F30F51F205174DA0049E4F6 /* BrowserViewController */,
 				4F0445E620334D3400E2C0C7 /* UIDeviceExtension.swift */,
 				4F3FA4E22044194400A9E7F6 /* ColorExtension.swift */,
@@ -6696,6 +6699,7 @@
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconFetcher.swift in Sources */,
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
+				AFDF457220A9A8C40091CA27 /* UIHelper.swift in Sources */,
 				1EDF91742087446700200100 /* SettingsActivity.swift in Sources */,
 				4F3046B7204FF65800C99162 /* SettingsPrefs.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
