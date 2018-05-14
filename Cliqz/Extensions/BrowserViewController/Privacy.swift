@@ -8,8 +8,33 @@
 
 import Foundation
 
+class OrientationManager {
+    
+    static let shared = OrientationManager()
+    
+    var lastOrientation: DeviceOrientation
+    
+    init() {
+        lastOrientation = UIDevice.current.getDeviceAndOrientation().1
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func orientationChanged(notification: Notification) {
+        let orientation = UIDevice.current.getDeviceAndOrientation().1
+        if orientation != lastOrientation {
+            lastOrientation = orientation
+            NotificationCenter.default.post(name: Notification.Name.DeviceOrientationChanged, object: self)
+        }
+    }
+}
+
 extension NSNotification.Name {
-    public static let GhosteryButtonPressedNotification = NSNotification.Name(rawValue: "GhosteryButtonPressedNotification")
+    public static let GhosteryButtonPressed = NSNotification.Name(rawValue: "GhosteryButtonPressedNotification")
+    public static let DeviceOrientationChanged = NSNotification.Name(rawValue: "DeviceOrientationChangedNotification")
 }
 
 extension BrowserViewController {
@@ -29,26 +54,6 @@ extension BrowserViewController {
     }
 	
     func showControlCenter(pageUrl: String? = nil) {
-        
-        func topOffset(_ device: DeviceType, _ orientation: DeviceOrientation) -> CGFloat {
-            let (device,orientation) = UIDevice.current.getDeviceAndOrientation()
-            
-            let top: CGFloat
-            
-            if (device == .iPhone || device == .iPhoneX) {
-                if orientation == .portrait {
-                    top = 76.0
-                }
-                else {
-                    top = 56.0
-                }
-            }
-            else {
-                top = 120.0
-            }
-            
-            return top
-        }
         
         func applyShadow(view: UIView) {
             view.layer.shadowColor = UIColor.black.cgColor
@@ -72,26 +77,27 @@ extension BrowserViewController {
         
         if orientation == .portrait && device != .iPad {
             controlCenter.view.snp.makeConstraints({ (make) in
-                make.top.equalToSuperview().offset(topOffset(device, orientation))
-                make.left.right.bottom.equalToSuperview()
+                make.top.equalToSuperview().offset(UIHelper.heightURLBar(device, orientation))
+                make.left.right.equalToSuperview()
+                make.height.equalToSuperview().offset(-UIHelper.heightURLBar(device, orientation))
             })
         }
         else if device == .iPad {
             controlCenter.view.snp.makeConstraints({ (make) in
-                make.width.equalToSuperview().dividedBy(2)
+                make.width.equalToSuperview().dividedBy(UIHelper.screenWidthDenominator(device, orientation))
                 make.right.equalToSuperview()
                 make.bottom.equalToSuperview()
-                make.top.equalToSuperview().offset(topOffset(device, orientation))
+                make.top.equalToSuperview().offset(UIHelper.heightURLBar(device, orientation))
             })
             
             applyShadow(view: controlCenter.view)
         }
         else {
             controlCenter.view.snp.makeConstraints({ (make) in
-                make.width.equalToSuperview().dividedBy(1.5)
+                make.width.equalToSuperview().dividedBy(UIHelper.screenWidthDenominator(device, orientation))
                 make.right.equalToSuperview()
                 make.bottom.equalToSuperview()
-                make.top.equalToSuperview().offset(topOffset(device, orientation))
+                make.top.equalToSuperview().offset(UIHelper.heightURLBar(device, orientation))
             })
             
             applyShadow(view: controlCenter.view)
