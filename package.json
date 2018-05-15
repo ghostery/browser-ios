@@ -16,11 +16,12 @@
   },
   "license": "MPL-2.0",
   "dependencies": {
+    "page-metadata-parser": "^1.1.2",
+    "readability": "mozilla/readability#3c76104adb00eb9897517e6be6c74c6c05918dfe",
     "@cliqz/indexeddbshim": "3.4.1",
     "appium": "1.8.0",
     "browser-core": "https://s3.amazonaws.com/cdncliqz/update/edge/react-native/v3.26/3.26.2.tgz",
     "buffer": "5.0.7",
-    "glob": "^7.1.2",
     "https-browserify": "1.0.0",
     "page-metadata-parser": "^1.1.0",
     "path-browserify": "0.0.0",
@@ -39,9 +40,16 @@
     "readability": "git+https://github.com/mozilla/readability.git",
     "stream-browserify": "2.0.1",
     "stream-http": "2.7.2",
-    "uglifyjs-webpack-plugin": "^1.1.6",
     "url": "^0.11.0",
-    "wd": "1.6.2",
+    "wd": "1.6.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "glob": "^7.1.2",
+    "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.10.0"
   },
   "resolutions": {

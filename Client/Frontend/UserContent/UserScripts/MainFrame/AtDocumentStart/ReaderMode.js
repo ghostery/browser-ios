@@ -3,7 +3,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-(function() {
 "use strict";
 
 const DEBUG = false;
@@ -11,9 +10,9 @@ const DEBUG = false;
 var readabilityResult = null;
 var currentStyle = null;
 
-var readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
+const readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
 
-var BLOCK_IMAGES_SELECTOR =
+const BLOCK_IMAGES_SELECTOR =
   ".content p > img:only-child, " +
   ".content p > a:only-child > img:only-child, " +
   ".content .wp-caption img, " +
@@ -27,46 +26,49 @@ function debug(s) {
 }
 
 function checkReadability() {
-  if (document.location.href.match(readerModeURL)) {
-    debug({Type: "ReaderModeStateChange", Value: "Active"});
-    webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Active"});
-    return;
-  }
-
-  if ((document.location.protocol === "http:" || document.location.protocol === "https:") && document.location.pathname !== "/") {
-    // Short circuit in case we already ran Readability. This mostly happens when going
-    // back/forward: the page will be cached and the result will still be there.
-    if (readabilityResult && readabilityResult.content) {
-      debug({Type: "ReaderModeStateChange", Value: "Available"});
-      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Available"});
+  setTimeout(function() {
+    if (document.location.href.match(readerModeURL)) {
+      debug({Type: "ReaderModeStateChange", Value: "Active"});
+      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Active"});
       return;
     }
 
-    var Readability = require("readability/Readability.js");
+    if ((document.location.protocol === "http:" || document.location.protocol === "https:") && document.location.pathname !== "/") {
+      // Short circuit in case we already ran Readability. This mostly happens when going
+      // back/forward: the page will be cached and the result will still be there.
+      if (readabilityResult && readabilityResult.content) {
+        debug({Type: "ReaderModeStateChange", Value: "Available"});
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Available"});
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderContentParsed", Value: readabilityResult});
+        return;
+      }
 
-    var uri = {
-      spec: document.location.href,
-      host: document.location.host,
-      prePath: document.location.protocol + "//" + document.location.host, // TODO This is incomplete, needs username/password and port
-      scheme: document.location.protocol.substr(0, document.location.protocol.indexOf(":")),
-      pathBase: document.location.protocol + "//" + document.location.host + location.pathname.substr(0, location.pathname.lastIndexOf("/") + 1)
+      var Readability = require("readability/Readability.js");
+
+      var uri = {
+        spec: document.location.href,
+        host: document.location.host,
+        prePath: document.location.protocol + "//" + document.location.host, // TODO This is incomplete, needs username/password and port
+        scheme: document.location.protocol.substr(0, document.location.protocol.indexOf(":")),
+        pathBase: document.location.protocol + "//" + document.location.host + location.pathname.substr(0, location.pathname.lastIndexOf("/") + 1)
+      }
+
+      // document.cloneNode() can cause the webview to break (bug 1128774).
+      // Serialize and then parse the document instead.
+      var docStr = new XMLSerializer().serializeToString(document);
+      var doc = new DOMParser().parseFromString(docStr, "text/html");
+      var readability = new Readability(uri, doc, { debug: DEBUG });
+      readabilityResult = readability.parse();
+
+      debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
+      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
+      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderContentParsed", Value: readabilityResult});
+      return;
     }
 
-    // document.cloneNode() can cause the webview to break (bug 1128774).
-    // Serialize and then parse the document instead.
-    var docStr = new XMLSerializer().serializeToString(document);
-    var doc = new DOMParser().parseFromString(docStr, "text/html");
-    var readability = new Readability(uri, doc);
-    readabilityResult = readability.parse();
-
-    debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
-    webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
-
-    return;
-  }
-
-  debug({Type: "ReaderModeStateChange", Value: "Unavailable"});
-  webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Unavailable"});
+    debug({Type: "ReaderModeStateChange", Value: "Unavailable"});
+    webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Unavailable"});
+  }, 100);
 }
 
 // Readerize the document. Since we did the actual readerization already in checkReadability, we
@@ -80,22 +82,28 @@ function readerize() {
 
 function setStyle(style) {
   // Configure the theme (light, dark)
-  if (currentStyle != null) {
+  if (currentStyle && currentStyle.theme) {
     document.body.classList.remove(currentStyle.theme);
   }
-  document.body.classList.add(style.theme);
+  if (style && style.theme) {
+    document.body.classList.add(style.theme);
+  }
 
   // Configure the font size (1-5)
-  if (currentStyle != null) {
+  if (currentStyle && currentStyle.fontSize) {
     document.body.classList.remove("font-size" + currentStyle.fontSize);
   }
-  document.body.classList.add("font-size" + style.fontSize);
+  if (style && style.fontSize) {
+    document.body.classList.add("font-size" + style.fontSize);
+  }
 
   // Configure the font type
-  if (currentStyle != null) {
+  if (currentStyle && currentStyle.fontType) {
     document.body.classList.remove(currentStyle.fontType);
   }
-  document.body.classList.add(style.fontType);
+  if (style && style.fontType) {
+    document.body.classList.add(style.fontType);
+  }
 
   // Remember the style
   currentStyle = style;
@@ -103,6 +111,9 @@ function setStyle(style) {
 
 function updateImageMargins() {
   var contentElement = document.getElementById("reader-content");
+  if (!contentElement) {
+    return;
+  }
 
   var windowWidth = window.innerWidth;
   var contentWidth = contentElement.offsetWidth;
@@ -151,11 +162,17 @@ function updateImageMargins() {
 function showContent() {
   // Make the reader visible
   var messageElement = document.getElementById("reader-message");
-  messageElement.style.display = "none";
+  if (messageElement) {
+    messageElement.style.display = "none";
+  }
   var headerElement = document.getElementById("reader-header");
-  headerElement.style.display = "block"
+  if (headerElement) {
+    headerElement.style.display = "block"
+  }
   var contentElement = document.getElementById("reader-content");
-  contentElement.style.display = "block";
+  if (contentElement) {
+    contentElement.style.display = "block";
+  }
 }
 
 function configureReader() {
@@ -194,5 +211,3 @@ window.addEventListener("pageshow", function(event) {
     webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderPageEvent", Value: "PageShow"});
   }
 });
-
-})();

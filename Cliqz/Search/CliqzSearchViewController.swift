@@ -250,6 +250,13 @@ extension CliqzSearchViewController {
     }
 }
 
+//MARK: - Handle Key Commands
+extension CliqzSearchViewController {
+    func handleKeyCommands(sender: UIKeyCommand) {
+        return //function not supported
+    }
+}
+
 //MARK: - Util
 extension CliqzSearchViewController {
     func showOpenSettingsAlert(_ notification: Notification) {

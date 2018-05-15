@@ -187,6 +187,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
             image?.accessibilityLabel = NSLocalizedString("mobile device", comment: "Accessibility label for Mobile Device image in remote tabs list")
         }
         view.imageView.image = image
+        view.imageView.contentMode = .center
 
         view.mergeAccessibilityLabels()
         return view
@@ -369,14 +370,14 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         contentView.addSubview(titleLabel)
 
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        instructionsLabel.text = Strings.EmptySyncedTabsPanelStateDescription
+        instructionsLabel.text = Strings.EmptySyncedTabsPanelNotSignedInStateDescription
         instructionsLabel.textAlignment = .center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
         contentView.addSubview(instructionsLabel)
 
         signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
-        signInButton.setTitle(NSLocalizedString("Sign in", comment: "See http://mzl.la/1Qtkf0j"), for: [])
+        signInButton.setTitle(Strings.FxASignInToSync, for: [])
         signInButton.setTitleColor(RemoteTabsPanelUX.EmptyStateSignInButtonTitleColor, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius

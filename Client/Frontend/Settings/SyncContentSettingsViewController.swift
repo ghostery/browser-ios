@@ -95,13 +95,20 @@ class DeviceNameSetting: StringSetting {
         set { super.Padding = newValue }
     }
 
+    /* Cliqz: upgrade to swift 4.1
     init(settings: SettingsTableViewController) {
         super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: self.settingIsValid)
+    }
+    */
+    
+    init(settings: SettingsTableViewController) {
+        let settingsIsValid: (String?) -> Bool = { !($0?.isEmpty ?? true) }
+        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: settingsIsValid)
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        textField.textAlignment = .left
+        textField.textAlignment = .natural
     }
 
     func settingIsValid(value: String?) -> Bool {
