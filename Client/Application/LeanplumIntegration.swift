@@ -105,10 +105,7 @@ class LeanPlumClient {
     private var useFxAPrePush: LPVar = LPVar.define("useFxAPrePush", with: false)
 <<<<<<< HEAD
     */
-||||||| merged common ancestors
-=======
     var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().flatMap({ $0.asDictonary() }))
->>>>>>> firefox-releases
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.

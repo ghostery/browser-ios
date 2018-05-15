@@ -55,16 +55,10 @@ class BrowserViewController: UIViewController {
     let webViewContainerToolbar = UIView()
     var statusBarOverlay: UIView!
     fileprivate(set) var toolbar: TabToolbar?
-<<<<<<< HEAD
     /* Cliqz: Replace Search Controller
-    fileprivate var searchController: SearchViewController?
-    */
-    fileprivate var searchController: CliqzSearchViewController?
-||||||| merged common ancestors
-    fileprivate var searchController: SearchViewController?
-=======
     var searchController: SearchViewController?
->>>>>>> firefox-releases
+    */
+    var searchController: CliqzSearchViewController?
     fileprivate var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
     fileprivate var searchLoader: SearchLoader?
@@ -1591,20 +1585,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         actions.append(getHomePanelActions())
         actions.append(getOtherPanelActions(vcDelegate: self))
         // force a modal if the menu is being displayed in compact split screen
-<<<<<<< HEAD
-        let shouldSupress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: actions, on: self, from: button, supressPopover: shouldSupress)
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
         */
         if let tab = tabManager.selectedTab, let url = tab.url {
             presentActivityViewController(url, tab: tab, sourceView: button.superview, sourceRect: button.frame, arrowDirection: .up)
         }
-||||||| merged common ancestors
-        let shouldSupress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: actions, on: self, from: button, supressPopover: shouldSupress)
-=======
-        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
->>>>>>> firefox-releases
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {

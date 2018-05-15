@@ -17,13 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
-<<<<<<< HEAD
 	<string>1.0.0</string>
-||||||| merged common ancestors
-	<string>10.4</string>
-=======
-	<string>11.1</string>
->>>>>>> firefox-releases
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>MozDevelopmentTeam</key>

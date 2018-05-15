@@ -184,16 +184,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
-<<<<<<< HEAD
-        setUpDeepLinks(application: application)
-        
+        // Cliqz: init react Engine
         _ = Engine.sharedInstance
 
-||||||| merged common ancestors
-        setUpDeepLinks(application: application)
-
-=======
->>>>>>> firefox-releases
         log.info("startApplication end")
         return true
     }
@@ -236,14 +229,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         /* Cliqz: Disabled UserNotifications
         UNUserNotificationCenter.current().delegate = self
-<<<<<<< HEAD
         self.registerNotificationCategories()
          */
-||||||| merged common ancestors
-        self.registerNotificationCategories()
-=======
+        
         SentTabAction.registerActions()
->>>>>>> firefox-releases
 
         /* Cliqz: Remove BuddyBuildSDK
         #if BUDDYBUILD
@@ -700,7 +689,6 @@ extension AppDelegate {
     }
 }
 
-<<<<<<< HEAD
 // Cliqz: Useful when presenting pop-ups
 extension AppDelegate {
     func presentContollerOnTop(controller: UIViewController) {
@@ -716,27 +704,6 @@ extension AppDelegate {
     }
 }
 
-struct FxALaunchParams {
-    var query: [String: String]
-}
-
-struct LaunchParams {
-    let url: URL?
-    let isPrivate: Bool?
-}
-
-||||||| merged common ancestors
-struct FxALaunchParams {
-    var query: [String: String]
-}
-
-struct LaunchParams {
-    let url: URL?
-    let isPrivate: Bool?
-}
-
-=======
->>>>>>> firefox-releases
 extension UIApplication {
     var syncDelegate: SyncDelegate {
         return AppSyncDelegate(app: self)

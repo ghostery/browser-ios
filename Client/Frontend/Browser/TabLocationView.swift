@@ -56,15 +56,13 @@ class TabLocationView: UIView, TabEventHandler {
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
-<<<<<<< HEAD
+
             // Cliqz: Update VideoDownloadButton visibility
             updateVideoDownloadButton()
-||||||| merged common ancestors
-=======
+
             if url == nil {
                 trackingProtectionButton.isHidden = true
             }
->>>>>>> firefox-releases
             setNeedsUpdateConstraints()
         }
     }
@@ -140,11 +138,7 @@ class TabLocationView: UIView, TabEventHandler {
         lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
         return lockImageView
     }()
-
-<<<<<<< HEAD
-    /* Cliqz: removed private modifier
-||||||| merged common ancestors
-=======
+    
     lazy var trackingProtectionButton: UIButton = {
         let trackingProtectionButton = UIButton()
         trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
@@ -154,8 +148,8 @@ class TabLocationView: UIView, TabEventHandler {
         trackingProtectionButton.isHidden = true
         return trackingProtectionButton
     }()
-
->>>>>>> firefox-releases
+    
+    /* Cliqz: removed private modifier
     fileprivate lazy var readerModeButton: ReaderModeButton = {
     */
     lazy var readerModeButton: ReaderModeButton = {
