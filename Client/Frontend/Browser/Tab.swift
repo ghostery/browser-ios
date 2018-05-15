@@ -146,11 +146,13 @@ class Tab: NSObject {
         super.init()
         self.isPrivate = isPrivate
 
+        /* Cliqz: disable firefox tracking protection
         if #available(iOS 11, *) {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
                 contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
             }
         }
+        */
     }
 
     class func toTab(_ tab: Tab) -> RemoteTab? {

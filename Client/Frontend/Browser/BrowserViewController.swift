@@ -1692,12 +1692,14 @@ extension BrowserViewController: TabDelegate {
         historyStateHelper.delegate = self
         tab.addContentScript(historyStateHelper, name: HistoryStateHelper.name())
 
+        /* Cliqz: disable firefox tracking protection
         if #available(iOS 11, *) {
             if let blocker = tab.contentBlocker as? ContentBlockerHelper {
                 blocker.setupTabTrackingProtection()
                 tab.addContentScript(blocker, name: ContentBlockerHelper.name())
             }
         }
+        */
 
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
     }
