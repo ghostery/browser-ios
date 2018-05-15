@@ -67,8 +67,9 @@ class RegionalSetting: Setting {
 
 class HumanWebSetting: CliqzOnOffSetting {
     
-    override func getTitle() -> String {
-        return NSLocalizedString("Human Web", tableName: "Cliqz", comment: "[Settings] Human Web")
+    init(settings: SettingsTableViewController) {
+        let title  = NSLocalizedString("Human Web", tableName: "Cliqz", comment: "[Settings] Human Web")
+        super.init(settings: settings, title: title)
     }
     
     override func isOn() -> Bool {
@@ -118,8 +119,9 @@ class CliqzSearchSetting: Setting, SearchEnginePickerDelegate {
 
 class AutoForgetTabSetting: CliqzOnOffSetting {
     
-    override func getTitle() -> String {
-        return NSLocalizedString("Automatic Forget Tab", tableName: "Cliqz", comment: " [Settings] Automatic Forget Tab")
+    init(settings: SettingsTableViewController) {
+        let title  = NSLocalizedString("Automatic Forget Tab", tableName: "Cliqz", comment: " [Settings] Automatic Forget Tab")
+        super.init(settings: settings, title: title)
     }
     
     override func isOn() -> Bool {
@@ -134,8 +136,9 @@ class AutoForgetTabSetting: CliqzOnOffSetting {
 
 
 class LimitMobileDataUsageSetting: CliqzOnOffSetting {
-    override func getTitle() -> String {
-        return NSLocalizedString("Limit Mobile Data Usage", tableName: "Cliqz", comment: "[Settings] Limit Mobile Data Usage")
+    init(settings: SettingsTableViewController) {
+        let title  = NSLocalizedString("Limit Mobile Data Usage", tableName: "Cliqz", comment: "[Settings] Limit Mobile Data Usage")
+        super.init(settings: settings, title: title)
     }
     
     override func isOn() -> Bool {
@@ -149,8 +152,9 @@ class LimitMobileDataUsageSetting: CliqzOnOffSetting {
 }
 
 class AdBlockerSetting: CliqzOnOffSetting {
-    override func getTitle() -> String {
-        return NSLocalizedString("Block Ads", tableName: "Cliqz", comment: "[Settings] Block Ads")
+    init(settings: SettingsTableViewController) {
+        let title  = NSLocalizedString("Block Ads", tableName: "Cliqz", comment: "[Settings] Block Ads")
+        super.init(settings: settings, title: title)
     }
     
     override func isOn() -> Bool {
@@ -210,8 +214,9 @@ class ReportWebsiteSetting: ShowCliqzPageSetting {
 }
 
 class SendCrashReportsSetting: CliqzOnOffSetting {
-    override func getTitle() -> String {
-        return NSLocalizedString("Send Crash Reports", tableName: "Cliqz", comment: "[Settings] Send Crash Reports")
+    init(settings: SettingsTableViewController) {
+        let title  = NSLocalizedString("Send Crash Reports", tableName: "Cliqz", comment: "[Settings] Send Crash Reports")
+        super.init(settings: settings, title: title)
     }
     
     override func isOn() -> Bool {

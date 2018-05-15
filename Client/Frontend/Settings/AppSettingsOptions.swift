@@ -677,10 +677,16 @@ class SendFeedbackSetting: Setting {
 
 class SendAnonymousUsageDataSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
+        // Cliqz: upgrade to swift 4.1
+        let statusText = NSMutableAttributedString()
+        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewHeaderTextColor]))
+        statusText.append(NSAttributedString(string: " "))
+        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]))
+        
         super.init(
             prefs: prefs, prefKey: AppConstants.PrefSendUsageData, defaultValue: true,
             attributedTitleText: NSAttributedString(string: Strings.SendUsageSettingTitle),
-            attributedStatusText: createStatusText(),
+            attributedStatusText: statusText,
             settingDidChange: {
                 AdjustIntegration.setEnabled($0)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.telemetryOptIn: $0])

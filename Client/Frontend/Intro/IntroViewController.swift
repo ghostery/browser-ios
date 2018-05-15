@@ -125,6 +125,7 @@ class IntroViewController: UIViewController {
     }
 
     func syncViaLP() {
+        /* Cliqz: comment references to LeanPlumClient
         let startTime = Date.now()
         LeanPlumClient.shared.introScreenVars?.onValueChanged({ [weak self] in
             guard let newIntro = LeanPlumClient.shared.introScreenVars?.object(forKey: nil) as? [[String: Any]] else {
@@ -161,6 +162,7 @@ class IntroViewController: UIViewController {
             self?.viewDidLayoutSubviews()
 
         })
+        */
     }
 
     override func viewDidLayoutSubviews() {

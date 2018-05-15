@@ -886,11 +886,9 @@
 		EB11A1052044A90E0018F749 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11A1022044A90D0018F749 /* TrackingProtectionPageStats.swift */; };
 		EB11A1062044A90E0018F749 /* ContentBlockerHelper+TabContentScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11A1032044A90E0018F749 /* ContentBlockerHelper+TabContentScript.swift */; };
 		EB2A63341F3B49A7004EF8B0 /* ContentBlockerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2A63251F3B49A7004EF8B0 /* ContentBlockerHelper.swift */; };
-		EB3A38A02032673E004C6E67 /* DatabaseFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */; };
 		EB54A8762028CE4000018880 /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8722028CE4000018880 /* disconnect-advertising.json */; };
 		EB54A8772028CE4000018880 /* disconnect-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8732028CE4000018880 /* disconnect-analytics.json */; };
 		EB54A8782028CE4000018880 /* disconnect-content.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8742028CE4000018880 /* disconnect-content.json */; };
-		EB54A8792028CE4000018880 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8752028CE4000018880 /* disconnect-social.json */; };
 		EBA31D791F7999030055463D /* SyncPingCentre.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D781F7999030055463D /* SyncPingCentre.swift */; };
 		EBA31D7B1F79990C0055463D /* SyncTelemetryEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7A1F79990C0055463D /* SyncTelemetryEvents.swift */; };
 		EBA31D7D1F79996E0055463D /* SyncTelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */; };
@@ -2341,7 +2339,6 @@
 		EB11A1022044A90D0018F749 /* TrackingProtectionPageStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionPageStats.swift; sourceTree = "<group>"; };
 		EB11A1032044A90E0018F749 /* ContentBlockerHelper+TabContentScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContentBlockerHelper+TabContentScript.swift"; sourceTree = "<group>"; };
 		EB2A63251F3B49A7004EF8B0 /* ContentBlockerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlockerHelper.swift; sourceTree = "<group>"; };
-		EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseFixtureTest.swift; sourceTree = "<group>"; };
 		EB54A8722028CE4000018880 /* disconnect-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-advertising.json"; sourceTree = "<group>"; };
 		EB54A8732028CE4000018880 /* disconnect-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-analytics.json"; sourceTree = "<group>"; };
 		EB54A8742028CE4000018880 /* disconnect-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-content.json"; sourceTree = "<group>"; };
@@ -3634,8 +3631,8 @@
 				AF77B88F209A05E200E7A0C4 /* ConnectionManager.swift */,
 			);
 			path = "Anti-Phishing";
-            sourceTree = "<group>";
-        };
+			sourceTree = "<group>";
+		};
 		AF77B8B5209B130400E7A0C4 /* HomePanel */ = {
 			isa = PBXGroup;
 			children = (
@@ -4911,7 +4908,6 @@
 				7BEB64431C7345600092C02E /* Sources */,
 				7BEB64461C7345600092C02E /* Frameworks */,
 				7BEB64471C7345600092C02E /* Resources */,
-				E4A69F612048AFEA00D9017B /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -5109,7 +5105,6 @@
 				E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */,
 				E6B09CD31C74EEDB00C63FA1 /* Copy Frameworks */,
 				D6D515078BA2F8059B3DB387 /* [CP] Embed Pods Frameworks */,
-				1A527F88887E49C5B18E6A66 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -5797,7 +5792,6 @@
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
 				1EBB08B92068FC9700C6DFFE /* Eula.html in Resources */,
-				EB2A633F1F3B514B004EF8B0 /* disconnect-social.json in Resources */,
 				AFA1DE072088AF9600B27B8A /* AdBlocker in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
 				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
@@ -5847,21 +5841,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1A527F88887E49C5B18E6A66 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Client/Pods-Client-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		7B604F8F1C494AAA006EEEC3 /* Copy Carthage Dependencies */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -5888,7 +5867,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
-        8D3BD4867AA1ACEA46E5F50B /* [CP] Check Pods Manifest.lock */ = {
+		8D3BD4867AA1ACEA46E5F50B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (

@@ -18,9 +18,9 @@ class CliqzOnOffSetting: Setting {
     override var style: UITableViewCellStyle { return .value1 }
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
     
-    init(settings: SettingsTableViewController) {
+    init(settings: SettingsTableViewController, title: String) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: getTitle(), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
     }
     
     override var status: NSAttributedString {
@@ -41,10 +41,6 @@ class CliqzOnOffSetting: Setting {
     }
     
     // MARK:- Abbstract methods
-    func getTitle() -> String {
-        return ""
-    }
-    
     func isOn() -> Bool {
         return false
     }

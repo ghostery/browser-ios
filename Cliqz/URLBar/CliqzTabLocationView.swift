@@ -34,10 +34,6 @@ class CliqzTabLocationView: TabLocationView {
         return videoDownloadButton
     }()
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(videoDownloadButton)
@@ -50,6 +46,9 @@ class CliqzTabLocationView: TabLocationView {
         lockImageView.tintColor = UIColor.black
     }
     
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }    
     
     override func updateConstraints() {
         super.updateConstraints()
@@ -57,7 +56,7 @@ class CliqzTabLocationView: TabLocationView {
             make.top.bottom.equalTo(self)
             
             if lockImageView.isHidden {
-                make.leading.equalTo(self).offset(TabLocationViewUX.LocationContentInset)
+                make.leading.equalTo(self).offset(TabLocationViewUX.Spacing)
             } else {
                 make.leading.equalTo(self.lockImageView.snp.trailing).offset(TabLocationViewUX.URLBarPadding)
             }

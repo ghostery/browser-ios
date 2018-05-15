@@ -103,9 +103,8 @@ class LeanPlumClient {
     // to prompting with native push permissions.
     /* Cliqz: Disable LeanPlum Integration
     private var useFxAPrePush: LPVar = LPVar.define("useFxAPrePush", with: false)
-<<<<<<< HEAD
-    */
     var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().flatMap({ $0.asDictonary() }))
+    */
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
@@ -132,6 +131,7 @@ class LeanPlumClient {
     }
 
     func recordSyncedClients(with profile: Profile?) {
+        /* Cliqz: Disable LeanPlum Integration
         guard let profile = profile as? BrowserProfile else {
             return
         }
@@ -143,6 +143,7 @@ class LeanPlumClient {
             self.prefs?.setInt(Int32(clients.count), forKey: FxaDevicesCountPrefKey)
             Leanplum.setUserAttributes([LPAttributeKey.fxaDeviceCount: clients.count])
         }
+        */
     }
 
     fileprivate func start() {
