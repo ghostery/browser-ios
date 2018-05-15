@@ -47,7 +47,7 @@ class BrowserViewController: UIViewController {
     let webViewContainerToolbar = UIView()
     var statusBarOverlay: UIView!
     fileprivate(set) var toolbar: TabToolbar?
-    fileprivate var searchController: SearchViewController?
+    var searchController: SearchViewController?
     fileprivate var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
     fileprivate var searchLoader: SearchLoader?
@@ -132,13 +132,7 @@ class BrowserViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
-        displayedPopoverController?.dismiss(animated: true) {
-            self.displayedPopoverController = nil
-        }
-        
-        if let _ = self.presentedViewController as? PhotonActionSheet {
-            self.presentedViewController?.dismiss(animated: true, completion: nil)
-        }
+        dismissVisibleMenus()
 
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.updateMinimumZoom()
@@ -261,6 +255,13 @@ class BrowserViewController: UIViewController {
             }, completion: nil)
     }
 
+    func dismissVisibleMenus() {
+        displayedPopoverController?.dismiss(animated: true)
+        if let _ = self.presentedViewController as? PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }
+    }
+
     func SELappDidEnterBackgroundNotification() {
         displayedPopoverController?.dismiss(animated: false) {
             self.displayedPopoverController = nil
@@ -345,14 +346,14 @@ class BrowserViewController: UIViewController {
         view.addSubview(header)
 
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
-        pasteGoAction = AccessibleAction(name: NSLocalizedString("Paste & Go", comment: "Paste the URL into the location bar and visit"), handler: { () -> Bool in
+        pasteGoAction = AccessibleAction(name: Strings.PasteAndGoTitle, handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.general.string {
                 self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
                 return true
             }
             return false
         })
-        pasteAction = AccessibleAction(name: NSLocalizedString("Paste", comment: "Paste the URL into the location bar"), handler: { () -> Bool in
+        pasteAction = AccessibleAction(name: Strings.PasteTitle, handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.general.string {
                 // Enter overlay mode and make the search controller appear.
                 self.urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
@@ -361,7 +362,7 @@ class BrowserViewController: UIViewController {
             }
             return false
         })
-        copyAddressAction = AccessibleAction(name: NSLocalizedString("Copy Address", comment: "Copy the URL from the location bar"), handler: { () -> Bool in
+        copyAddressAction = AccessibleAction(name: Strings.CopyAddressTitle, handler: { () -> Bool in
             if let url = self.urlBar.currentURL {
                 UIPasteboard.general.url = url as URL
             }
@@ -904,8 +905,6 @@ class BrowserViewController: UIViewController {
         guard let url = webView.url, url.isWebPage(), !url.isLocal else {
             return
         }
-        webView.evaluateJavaScript("__firefox__.metadata && __firefox__.metadata.extractMetadata()", completionHandler: nil)
-
         if #available(iOS 11, *) {
             if NoImageModeHelper.isActivated(profile.prefs) {
                 webView.evaluateJavaScript("__firefox__.NoImageMode.setEnabled(true)", completionHandler: nil)
@@ -981,11 +980,16 @@ class BrowserViewController: UIViewController {
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false) {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
+        let freshTab = tabManager.selectedTab
         
         if focusLocationField {
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
                 // Without a delay, the text field fails to become first responder
-                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+                // Check that the newly created tab is still selected.
+                // This let's the user spam the Cmd+T button without lots of responder changes.
+                if freshTab == self.tabManager.selectedTab {
+                    self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+                }
             }
         }
     }
@@ -1110,21 +1114,25 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        if let url = webView.url, !url.isErrorPageURL && !url.isAboutHomeURL {
-            tab.lastExecutedTime = Date.now()
+        if let url = webView.url {
+            if !url.isErrorPageURL, !url.isAboutHomeURL {
+                tab.lastExecutedTime = Date.now()
 
-            postLocationChangeNotificationForTab(tab, navigation: navigation)
-            
-            // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
-            // because that event wil not always fire due to unreliable page caching. This will either let us know that
-            // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
-            // ignore the result because we are being called back asynchronous when the readermode status changes.
-            webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
+                postLocationChangeNotificationForTab(tab, navigation: navigation)
 
-            // Re-run additional scripts in webView to extract updated favicons and metadata.
-            runScriptsOnWebView(webView)
+                // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
+                // because that event wil not always fire due to unreliable page caching. This will either let us know that
+                // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
+                // ignore the result because we are being called back asynchronous when the readermode status changes.
+                webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
+
+                // Re-run additional scripts in webView to extract updated favicons and metadata.
+                runScriptsOnWebView(webView)
+            }
+
+            TabEvent.post(.didChangeURL(url), for: tab)
         }
-        
+
         if tab === tabManager.selectedTab {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
@@ -1142,7 +1150,6 @@ class BrowserViewController: UIViewController {
                     webView.removeFromSuperview()
                 }
             }
-
         }
         
         // Remember whether or not a desktop site was requested
@@ -1238,7 +1245,6 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: URLBarDelegate {
-    
     func showTabTray() {
         webViewContainerToolbar.isHidden = true
         updateFindInPageVisibility(visible: false)
@@ -1265,7 +1271,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
-        
         let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
             self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
         }
@@ -1291,8 +1296,21 @@ extension BrowserViewController: URLBarDelegate {
     
     func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
         guard let tab = tabManager.selectedTab else { return }
-        guard let url = tab.canonicalURL?.displayURL else { return }
+        guard let url = tab.canonicalURL?.displayURL, self.presentedViewController == nil else {
+            return
+        }
+
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         presentActivityViewController(url, tab: tab, sourceView: button, sourceRect: button.bounds, arrowDirection: .up)
+    }
+
+    func urlBarDidTapShield(_ urlBar: URLBarView, from button: UIButton) {
+        if #available(iOS 11.0, *), let tab = self.tabManager.selectedTab {
+            let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
+            guard !trackingProtectionMenu.isEmpty else { return }
+            self.presentSheetWith(actions: trackingProtectionMenu, on: self, from: urlBar)
+        }
     }
     
     func urlBarDidPressStop(_ urlBar: URLBarView) {
@@ -1363,41 +1381,21 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
-        let longPressAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-        for action in locationActionsForURLBar(urlBar) {
-            longPressAlertController.addAction(action.alertAction(style: .default))
+        let urlActions = self.getLongPressLocationBarActions(with: urlBar)
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+        if #available(iOS 11.0, *), let tab = self.tabManager.selectedTab {
+            let trackingProtectionMenu = self.getTrackingMenu(for: tab, presentingOn: urlBar)
+            self.presentSheetWith(actions: [urlActions, trackingProtectionMenu], on: self, from: urlBar)
+        } else {
+            self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
         }
-
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: { (alert: UIAlertAction) -> Void in
-        })
-        longPressAlertController.addAction(cancelAction)
-
-        let setupPopover = { [unowned self] in
-            if let popoverPresentationController = longPressAlertController.popoverPresentationController {
-                popoverPresentationController.sourceView = urlBar
-                popoverPresentationController.sourceRect = urlBar.frame
-                popoverPresentationController.permittedArrowDirections = .any
-                popoverPresentationController.delegate = self
-            }
-        }
-
-        setupPopover()
-
-        if longPressAlertController.popoverPresentationController != nil {
-            displayedPopoverController = longPressAlertController
-            updateDisplayedPopoverProperties = setupPopover
-        }
-
-        self.present(longPressAlertController, animated: true, completion: nil)
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
-        if let selectedTab = tabManager.selectedTab {
+        if let selectedTab = tabManager.selectedTab, homePanelController == nil {
             // Only scroll to top if we are not showing the home view controller
-            if homePanelController == nil {
-                selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
-            }
+            selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
     }
 
@@ -1483,6 +1481,10 @@ extension BrowserViewController: URLBarDelegate {
         hideSearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
     }
+
+    func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
+        dismissVisibleMenus()
+    }
 }
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
@@ -1491,6 +1493,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         showBackForwardList()
     }
 
@@ -1499,34 +1503,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
+        guard let tab = tabManager.selectedTab else {
             return
         }
-
-        let toggleActionTitle: String
-        if tab.desktopSite {
-            toggleActionTitle = NSLocalizedString("Request Mobile Site", comment: "Action Sheet Button for Requesting the Mobile Site")
-        } else {
-            toggleActionTitle = NSLocalizedString("Request Desktop Site", comment: "Action Sheet Button for Requesting the Desktop Site")
+        let urlActions = self.getRefreshLongPressMenu(for: tab)
+        guard !urlActions.isEmpty else {
+            return
         }
-
-        let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: toggleActionTitle, style: .default, handler: { _ in tab.toggleDesktopSite() }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
-        if #available(iOS 11, *) {
-            if let helper = tab.contentBlocker as? ContentBlockerHelper {
-                let state = helper.userOverrideForTrackingProtection
-                if state != .disallowUserOverride {
-                    let title = state == .forceDisabled ? Strings.TrackingProtectionReloadWith : Strings.TrackingProtectionReloadWithout
-                    controller.addAction(UIAlertAction(title: title, style: .default, handler: {_ in
-                        helper.overridePrefsAndReloadTab(enableTrackingProtection: state == .forceDisabled)
-                    }))
-                }
-            }
-        }
-        controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
-        controller.popoverPresentationController?.sourceRect = button.frame
-        present(controller, animated: true, completion: nil)
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
     }
 
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1538,6 +1525,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         showBackForwardList()
     }
 
@@ -1549,8 +1538,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         actions.append(getHomePanelActions())
         actions.append(getOtherPanelActions(vcDelegate: self))
         // force a modal if the menu is being displayed in compact split screen
-        let shouldSupress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: actions, on: self, from: button, supressPopover: shouldSupress)
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1558,6 +1547,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
     
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        guard self.presentedViewController == nil else {
+            return
+        }
         let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
             self.tabManager.addTabAndSelect(isPrivate: false)
@@ -1573,6 +1565,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
         controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
         controller.popoverPresentationController?.sourceRect = button.frame
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         present(controller, animated: true, completion: nil)
     }
 
@@ -1646,13 +1640,15 @@ extension BrowserViewController: TabDelegate {
         let historyStateHelper = HistoryStateHelper(tab: tab)
         historyStateHelper.delegate = self
         tab.addContentScript(historyStateHelper, name: HistoryStateHelper.name())
-        
+
         if #available(iOS 11, *) {
-            (tab.contentBlocker as? ContentBlockerHelper)?.setupForWebView()
+            if let blocker = tab.contentBlocker as? ContentBlockerHelper {
+                blocker.setupTabTrackingProtection()
+                tab.addContentScript(blocker, name: ContentBlockerHelper.name())
+            }
         }
 
-        let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
-        tab.addContentScript(metadataHelper, name: MetadataParserHelper.name())
+        tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
@@ -1756,6 +1752,10 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let navController = ModalSettingsNavigationController(rootViewController: settingsNavigationController)
 
         self.present(navController, animated: true, completion: nil)
+    }
+
+    func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool) {
+        self.urlBar.setLocation(text, search: search)
     }
 }
 
@@ -1901,15 +1901,15 @@ extension BrowserViewController: TabManagerDelegate {
     }
 }
 
-/// List of schemes that are allowed to open a popup window
-private let SchemesAllowedToOpenPopups = ["http", "https", "javascript", "data"]
+/// List of schemes that are allowed to be opened in new tabs.
+private let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "data", "about"]
 
 extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard let parentTab = tabManager[webView] else { return nil }
 
-        if !navigationAction.isAllowed {
-            print("Denying unprivileged request: \(navigationAction.request)")
+        guard navigationAction.isAllowed, shouldRequestBeOpenedAsPopup(navigationAction.request) else {
+            print("Denying popup from request: \(navigationAction.request)")
             return nil
         }
 
@@ -1917,35 +1917,35 @@ extension BrowserViewController: WKUIDelegate {
             screenshotHelper.takeScreenshot(currentTab)
         }
 
-        let request: URLRequest
-        if let formPostHelper = parentTab.getContentScript(name: "FormPostHelper") as? FormPostHelper {
-            request = formPostHelper.urlRequestForNavigationAction(navigationAction)
-        } else {
-            request = navigationAction.request
-        }
-
-        // If the page uses window.open() or target="_blank", open the page in a new tab.
-        let newTab = tabManager.addTab(request, configuration: configuration, afterTab: parentTab, isPrivate: parentTab.isPrivate)
-        tabManager.selectTab(newTab)
-
-        // If the page we just opened has a bad scheme, we return nil here so that JavaScript does not
-        // get a reference to it which it can return from window.open() - this will end up as a
-        // CFErrorHTTPBadURL being presented.
-        guard let scheme = (navigationAction.request as NSURLRequest).url?.scheme?.lowercased(), SchemesAllowedToOpenPopups.contains(scheme) else {
-            return nil
-        }
+        // If the page uses `window.open()` or `[target="_blank"]`, open the page in a new tab.
+        // IMPORTANT!!: WebKit will perform the `URLRequest` automatically!! Attempting to do
+        // the request here manually leads to incorrect results!!
+        let newTab = tabManager.addPopupForParentTab(parentTab, configuration: configuration)
 
         return newTab.webView
     }
 
-    fileprivate func canDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+    fileprivate func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
+        // Treat `window.open("")` the same as `window.open("about:blank")`.
+        if request.url?.absoluteString.isEmpty ?? false {
+            return true
+        }
+
+        if let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) {
+            return true
+        }
+
+        return false
+    }
+
+    fileprivate func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
         return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)) && (self.presentedViewController == nil)
     }
 
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
-        if canDisplayJSAlertForWebView(webView) {
+        if shouldDisplayJSAlertForWebView(webView) {
             present(messageAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(messageAlert)
@@ -1958,7 +1958,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
         let confirmAlert = ConfirmPanelAlert(message: message, frame: frame, completionHandler: completionHandler)
-        if canDisplayJSAlertForWebView(webView) {
+        if shouldDisplayJSAlertForWebView(webView) {
             present(confirmAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(confirmAlert)
@@ -1969,7 +1969,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void) {
         let textInputAlert = TextInputAlert(message: prompt, frame: frame, completionHandler: completionHandler, defaultText: defaultText)
-        if canDisplayJSAlertForWebView(webView) {
+        if shouldDisplayJSAlertForWebView(webView) {
             present(textInputAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
@@ -2015,8 +2015,8 @@ extension BrowserViewController: WKUIDelegate {
 
     fileprivate func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
         if error.code == WKError.webContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
-            print("WebContent process has crashed. Trying to reloadFromOrigin to restart it.")
-            webView.reloadFromOrigin()
+            print("WebContent process has crashed. Trying to reload to restart it.")
+            webView.reload()
             return true
         }
 
@@ -2063,6 +2063,9 @@ extension BrowserViewController: ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
         self.showReaderModeBar(animated: true)
         tab.showContent(true)
+    }
+
+    func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
     }
 }
 
@@ -2335,7 +2338,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
     func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool) {
         self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        LeanPlumClient.shared.track(event: .dismissedOnboarding)
 
         introViewController.dismiss(animated: true) { finished in
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
@@ -2719,7 +2721,12 @@ extension BrowserViewController: TabTrayDelegate {
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
     func tabTrayDidDismiss(_ tabTray: TabTrayController) {
+        topTabsViewController?.reloadData()
         resetBrowserChrome()
+    }
+
+    func tabTrayDidAddTab(_ tabTray: TabTrayController, tab: Tab) {
+        topTabsViewController?.reloadData()
     }
 
     func tabTrayDidAddBookmark(_ tab: Tab) {

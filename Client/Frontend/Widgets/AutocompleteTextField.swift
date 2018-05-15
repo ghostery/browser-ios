@@ -14,6 +14,7 @@ protocol AutocompleteTextFieldDelegate: class {
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField)
+    func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField)
 }
 
 private struct AutocompleteTextFieldUX {
@@ -82,14 +83,16 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override var keyCommands: [UIKeyCommand]? {
         return [
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(self.handleKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(self.handleKeyCommand(sender:)))
+            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyInputEscape, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
         ]
     }
-    
+
     func handleKeyCommand(sender: UIKeyCommand) {
         switch sender.input {
         case UIKeyInputLeftArrow:
+            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-left-arrow"])
             if isSelectionActive {
                 applyCompletion()
                 
@@ -97,17 +100,17 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 selectedTextRange = textRange(from: beginningOfDocument, to: beginningOfDocument)
             } else if let range = selectedTextRange {
                 if range.start == beginningOfDocument {
-                    return
+                    break
                 }
                 
                 guard let cursorPosition = position(from: range.start, offset: -1) else {
-                    return
+                    break
                 }
                 
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
-            return
         case UIKeyInputRightArrow:
+            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-right-arrow"])
             if isSelectionActive {
                 applyCompletion()
                 
@@ -115,18 +118,20 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
             } else if let range = selectedTextRange {
                 if range.end == endOfDocument {
-                    return
+                    break
                 }
                 
                 guard let cursorPosition = position(from: range.end, offset: 1) else {
-                    return
+                    break
                 }
 
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
-            return
+        case UIKeyInputEscape:
+            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-cancel"])
+            autocompleteDelegate?.autocompleteTextFieldDidCancel(self)
         default:
-            return
+            break
         }
     }
     
@@ -205,6 +210,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         label.accessibilityIdentifier = "autocomplete"
         label.backgroundColor = self.backgroundColor
         label.textColor = self.textColor
+        label.textAlignment = .left
 
         let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
         frame.origin.x = (enteredTextSize?.width.rounded() ?? 0)
@@ -240,13 +246,19 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         super.setMarkedText(markedText, selectedRange: selectedRange)
     }
 
+    func setTextWithoutSearching(_ text: String) {
+        super.text = text
+        hideCursor = autocompleteTextLabel != nil
+        removeCompletion()
+    }
+
     func textDidChange(_ textField: UITextField) {
         hideCursor = autocompleteTextLabel != nil
         removeCompletion()
 
         let isAtEnd = selectedTextRange?.start == endOfDocument
-        let isEmpty = lastReplacement?.isEmpty ?? true
-        if !isEmpty, isAtEnd, markedTextRange == nil {
+        let isKeyboardReplacingText = lastReplacement != nil
+        if isKeyboardReplacingText, isAtEnd, markedTextRange == nil {
             notifyTextChanged?()
         } else {
             hideCursor = false
@@ -262,7 +274,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func deleteBackward() {
-        lastReplacement = nil
+        lastReplacement = ""
         hideCursor = false
         if isSelectionActive {
             removeCompletion()

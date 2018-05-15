@@ -215,6 +215,10 @@ class ReadingListPanel: UITableViewController, HomePanel {
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
 
+        if #available(iOS 11.0, *) {
+            tableView.dragDelegate = self
+        }
+
         view.backgroundColor = UIConstants.PanelBackgroundColor
 
         if let result = profile.readingList?.getAvailableRecords(), result.isSuccess {
@@ -452,5 +456,24 @@ extension ReadingListPanel: HomePanelContextMenu {
 
         actions.append(removeAction)
         return actions
+    }
+}
+
+@available(iOS 11.0, *)
+extension ReadingListPanel: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let site = getSiteDetails(for: indexPath), let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url) else {
+            return []
+        }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .url, value: .readingListPanel)
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = site
+        return [dragItem]
+    }
+
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
+        presentedViewController?.dismiss(animated: true)
     }
 }

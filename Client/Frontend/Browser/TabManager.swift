@@ -39,7 +39,7 @@ class WeakTabManagerDelegate {
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager: NSObject {
     fileprivate var delegates = [WeakTabManagerDelegate]()
-    fileprivate var tabEventHandlers = TabEventHandlers.default.handlers
+    fileprivate let tabEventHandlers: [TabEventHandler]
     weak var stateDelegate: TabManagerStateDelegate?
 
     func addDelegate(_ delegate: TabManagerDelegate) {
@@ -103,6 +103,7 @@ class TabManager: NSObject {
         self.prefs = prefs
         self.navDelegate = TabManagerNavDelegate()
         self.imageStore = imageStore
+        self.tabEventHandlers = TabEventHandlers.create(with: prefs)
         super.init()
 
         addNavigationDelegate(self)
@@ -208,8 +209,9 @@ class TabManager: NSObject {
 
     //Called by other classes to signal that they are entering/exiting private mode
     //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    func willSwitchTabMode() {
-        if shouldClearPrivateTabs() && (selectedTab?.isPrivate ?? false) {
+    //we only want to remove all private tabs when leaving PBM and not when entering.
+    func willSwitchTabMode(leavingPBM: Bool) {
+        if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()
         }
     }
@@ -222,6 +224,20 @@ class TabManager: NSObject {
         }
     }
 
+    func addPopupForParentTab(_ parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
+        let popup = Tab(configuration: configuration, isPrivate: parentTab.isPrivate)
+        configureTab(popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false, isPopup: true)
+
+        // Wait momentarily before selecting the new tab, otherwise the parent tab
+        // may be unable to set `window.location` on the popup immediately after
+        // calling `window.open("")`.
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+            self.selectTab(popup)
+        }
+
+        return popup
+    }
+    
     @discardableResult func addTab(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
         return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
@@ -285,23 +301,28 @@ class TabManager: NSObject {
     
     func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
         assert(Thread.isMainThread)
-        
+
         let currentTabs = privateMode ? privateTabs : normalTabs
+
+        guard visibleFromIndex < currentTabs.count, visibleToIndex < currentTabs.count else {
+            return
+        }
+
         let fromIndex = tabs.index(of: currentTabs[visibleFromIndex]) ?? tabs.count - 1
         let toIndex = tabs.index(of: currentTabs[visibleToIndex]) ?? tabs.count - 1
-        
+
         let previouslySelectedTab = selectedTab
-        
+
         tabs.insert(tabs.remove(at: fromIndex), at: toIndex)
-        
+
         if let previouslySelectedTab = previouslySelectedTab, let previousSelectedIndex = tabs.index(of: previouslySelectedTab) {
             _selectedIndex = previousSelectedIndex
         }
-        
+
         storeChanges()
     }
 
-    func configureTab(_ tab: Tab, request: URLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool) {
+    func configureTab(_ tab: Tab, request: URLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPopup: Bool = false) {
         assert(Thread.isMainThread)
 
         delegates.forEach { $0.get()?.tabManager(self, willAddTab: tab) }
@@ -326,7 +347,7 @@ class TabManager: NSObject {
 
         if let request = request {
             tab.loadRequest(request)
-        } else {
+        } else if !isPopup {
             let newTabChoice = NewTabAccessors.getNewTabPage(prefs)
             switch newTabChoice {
             case .homePage:
@@ -411,8 +432,9 @@ class TabManager: NSObject {
             if tabIndex == viableTabs.count {
                 tabIndex -= 1
             }
-            if tabIndex < viableTabs.count && !viableTabs.isEmpty {
-                _selectedIndex = tabs.index(of: viableTabs[tabIndex]) ?? -1
+
+            if let currentTab = viableTabs[safe: tabIndex] {
+                _selectedIndex = tabs.index(of: currentTab) ?? -1
             } else {
                 _selectedIndex = -1
             }
@@ -452,6 +474,7 @@ class TabManager: NSObject {
         }
         tabs.forEach { tab in
             if tab.isPrivate {
+                tab.webView?.removeFromSuperview()
                 removeAllBrowsingDataForTab(tab)
             }
         }
@@ -828,18 +851,30 @@ extension TabManager {
 }
 
 extension TabManager: WKNavigationDelegate {
+
+    // Note the main frame JSContext (i.e. document, window) is not available yet.
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+
+        if #available(iOS 11, *), let tab = self[webView], let blocker = tab.contentBlocker as? ContentBlockerHelper {
+            blocker.clearPageStats()
+        }
     }
 
+    // The main frame JSContext is available, and DOM parsing has begun.
+    // Do not excute JS at this point that requires running prior to DOM parsing.
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        let tab = self[webView]
+        guard let tab = self[webView] else { return }
         let isNightMode = NightModeAccessors.isNightMode(self.prefs)
-        tab?.setNightMode(isNightMode)
+        tab.setNightMode(isNightMode)
 
         if #available(iOS 11, *) {
             let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
-            tab?.noImageMode = isNoImageMode
+            tab.noImageMode = isNoImageMode
+
+            if let tpHelper = tab.contentBlocker as? ContentBlockerHelper, !tpHelper.isEnabled {
+                webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.securityToken))", completionHandler: nil)
+            }
         }
     }
 
