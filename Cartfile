@@ -5,17 +5,29 @@ github "SnapKit/SnapKit"                    "3.1.2"
 github "rs/SDWebImage"                      "4.1.0"
 github "swisspol/GCDWebServer"              "3.3.2"
 github "kif-framework/KIF"                  "v3.6.0"
+<<<<<<< HEAD
 # Cliqz: Disable Adjust Integration
 #github "adjust/ios_sdk"                     "v4.11.5"
+||||||| merged common ancestors
+github "adjust/ios_sdk"                     "v4.11.5"
+=======
+github "adjust/ios_sdk"                     "v4.12.1"
+>>>>>>> firefox-releases
 github "AgileBits/onepassword-app-extension"    "add-framework-support"
-github "mozilla/readability"                "master"
-github "jrendel/SwiftKeychainWrapper"       "3.0.1"
+github "jrendel/SwiftKeychainWrapper" "3.0.1"
 github "DaveWoodCom/XCGLogger"              "Version_4.0.0"
 github "cezheng/Fuzi"                       "1.0.1"
 github "SwiftyJSON/SwiftyJSON"              "3.1.4"
 github "farhanpatel/JSONSchema.swift"       "master"
 github "google/EarlGrey"                    "1.12.1"
+<<<<<<< HEAD
 github "jhugman/SwiftRouter"                "master"
 # Cliqz: Disable FireFox Telemetry
 #github "mozilla-mobile/telemetry-ios"       "v1.0.10"
+||||||| merged common ancestors
+github "jhugman/SwiftRouter"                "master"
+github "mozilla-mobile/telemetry-ios"       "v1.0.10"
+=======
+github "mozilla-mobile/telemetry-ios"       "v1.1.0"
+>>>>>>> firefox-releases
 github "mozilla-mobile/MappaMundi"          "master"

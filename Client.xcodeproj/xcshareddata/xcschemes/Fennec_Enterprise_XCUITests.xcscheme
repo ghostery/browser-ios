@@ -179,6 +179,9 @@
                   Identifier = "BaseTestCase">
                </Test>
                <Test
+                  Identifier = "DragAndDropTests">
+               </Test>
+               <Test
                   Identifier = "HomePageUITest">
                </Test>
                <Test
@@ -200,10 +203,28 @@
                   Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
+                  Identifier = "ReaderViewTest">
+               </Test>
+               <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">
                </Test>
                <Test
                   Identifier = "SiteLoadTest">
+               </Test>
+               <Test
+                  Identifier = "ThirdPartySearchTest/testCustomEngineFromCorrectTemplate()">
+               </Test>
+               <Test
+                  Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingLandscape()">
+               </Test>
+               <Test
+                  Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingPortrait()">
+               </Test>
+               <Test
+                  Identifier = "ToolbarTests/testShowToolbarWhenScrollingDefaultOption()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
                </Test>
             </SkippedTests>
          </TestableReference>

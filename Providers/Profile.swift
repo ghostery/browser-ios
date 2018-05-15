@@ -95,24 +95,6 @@ class CommandStoringSyncDelegate: SyncDelegate {
 }
 
 /**
- * This exists because the Sync code is extension-safe, and thus doesn't get
- * direct access to UIApplication.sharedApplication, which it would need to
- * display a notification.
- * This will also likely be the extension point for wipes, resets, and
- * getting access to data sources during a sync.
- */
-
-let TabSendURLKey = "TabSendURL"
-let TabSendTitleKey = "TabSendTitle"
-let TabSendCategory = "TabSendCategory"
-
-enum SentTabAction: String {
-    case view = "TabSendViewAction"
-    case bookmark = "TabSendBookmarkAction"
-    case readingList = "TabSendReadingListAction"
-}
-
-/**
  * A Profile manages access to the user's data.
  */
 protocol Profile: class {
@@ -159,6 +141,7 @@ protocol Profile: class {
     func flushAccount()
 
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
+    func getCachedClients()-> Deferred<Maybe<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
@@ -434,6 +417,10 @@ open class BrowserProfile: Profile {
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
         return self.syncManager.syncClients()
            >>> { self.remoteClientsAndTabs.getClients() }
+    }
+
+    public func getCachedClients()-> Deferred<Maybe<[RemoteClient]>> {
+        return self.remoteClientsAndTabs.getClients()
     }
 
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {

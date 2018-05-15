@@ -59,40 +59,50 @@ import Storage
 //    i) a case to map the event to the event label (var label)
 //   ii) a case to map the event to the event handler (func handle:with:)
 protocol TabEventHandler {
+    func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?)
     func tabDidGainFocus(_ tab: Tab)
     func tabDidLoseFocus(_ tab: Tab)
     func tabDidClose(_ tab: Tab)
+    func tabDidChangeContentBlockerStatus(_ tab: Tab)
 }
 
 // Provide default implmentations, because we don't want to litter the code with
 // empty methods, and `@objc optional` doesn't really work very well.
 extension TabEventHandler {
+    func tab(_ tab: Tab, didChangeURL url: URL) {}
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {}
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {}
     func tabDidGainFocus(_ tab: Tab) {}
     func tabDidLoseFocus(_ tab: Tab) {}
     func tabDidClose(_ tab: Tab) {}
+    func tabDidChangeContentBlockerStatus(_ tab: Tab) {}
 }
 
 enum TabEventLabel: String {
+    case didChangeURL
     case didLoadPageMetadata
     case didLoadFavicon
     case didGainFocus
     case didLoseFocus
     case didClose
+    case didChangeContentBlocking
 }
 
 enum TabEvent {
+    case didChangeURL(URL)
     case didLoadPageMetadata(PageMetadata)
     case didLoadFavicon(Favicon?, with: Data?)
     case didGainFocus
     case didLoseFocus
     case didClose
+    case didChangeContentBlocking
 
     var label: TabEventLabel {
         switch self {
+        case .didChangeURL:
+            return .didChangeURL
         case .didLoadPageMetadata:
             return .didLoadPageMetadata
         case .didLoadFavicon:
@@ -103,11 +113,15 @@ enum TabEvent {
             return .didLoseFocus
         case .didClose:
             return .didClose
+        case .didChangeContentBlocking:
+            return .didChangeContentBlocking
         }
     }
     
     func handle(_ tab: Tab, with handler: TabEventHandler) {
         switch self {
+        case .didChangeURL(let url):
+            handler.tab(tab, didChangeURL: url)
         case .didLoadPageMetadata(let metadata):
             handler.tab(tab, didLoadPageMetadata: metadata)
         case .didLoadFavicon(let favicon, let data):
@@ -118,6 +132,8 @@ enum TabEvent {
             handler.tabDidLoseFocus(tab)
         case .didClose:
             handler.tabDidClose(tab)
+        case .didChangeContentBlocking:
+            handler.tabDidChangeContentBlockerStatus(tab)
         }
     }
 }

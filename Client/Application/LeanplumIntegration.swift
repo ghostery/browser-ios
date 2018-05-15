@@ -13,6 +13,7 @@ private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
 private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
 private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+private let FxaDevicesCountPrefKey = "FxaDevicesCount"
 
 // FxA Custom Leanplum message template for A/B testing push notifications.
 private struct LPMessage {
@@ -26,11 +27,12 @@ private struct LPMessage {
     static let ArgAcceptButtonText = "Accept button.Text"
     static let ArgCancelButtonText = "Cancel button.Text"
     static let ArgCancelButtonTextColor = "Cancel button.Text color"
-    // These defaults are overridden though Leanplum webUI
-    static let DefaultAskToAskTitle = NSLocalizedString("Firefox Sync Requires Push", comment: "Default push to ask title")
-    static let DefaultAskToAskMessage = NSLocalizedString("Firefox will stay in sync faster with Push Notifications enabled.", comment: "Default push to ask message")
-    static let DefaultOkButtonText = NSLocalizedString("Enable Push", comment: "Default push alert ok button text")
-    static let DefaultLaterButtonText = NSLocalizedString("Don't Enable", comment: "Default push alert cancel button text")
+
+    // These defaults are not localized and will be overridden through Leanplum
+    static let DefaultAskToAskTitle = "Firefox Sync Requires Push"
+    static let DefaultAskToAskMessage = "Firefox will stay in sync faster with Push Notifications enabled."
+    static let DefaultOkButtonText = "Enable Push"
+    static let DefaultLaterButtonText = "Don’t Enable"
 }
 
 private let log = Logger.browserLogger
@@ -40,6 +42,7 @@ enum LPEvent: String {
     case secondRun = "E_Second_Run"
     case openedApp = "E_Opened_App"
     case dismissedOnboarding = "E_Dismissed_Onboarding"
+    case dismissedOnboardingShowLogin = "E_Dismissed_Onboarding_Showed_Login"
     case openedLogins = "Opened Login Manager"
     case openedBookmark = "E_Opened_Bookmark"
     case openedNewTab = "E_Opened_New_Tab"
@@ -57,6 +60,8 @@ enum LPEvent: String {
     case signsInFxa = "E_User_Signed_In_To_FxA"
     case useReaderView = "E_User_Used_Reader_View"
     case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
+    case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
+    case onboardingTestLoadedTooSlow = "E_Onboarding_Was_Swiped_Before_AB_Test_Could_Start"
 }
 
 struct LPAttributeKey {
@@ -66,6 +71,8 @@ struct LPAttributeKey {
     static let mailtoIsDefault = "Mailto Is Default"
     static let pocketInstalled = "Pocket Installed"
     static let telemetryOptIn = "Telemetry Opt In"
+    static let fxaAccountVerified = "FxA account is verified"
+    static let fxaDeviceCount = "Number of devices in FxA account"
 }
 
 struct MozillaAppSchemes {
@@ -96,7 +103,12 @@ class LeanPlumClient {
     // to prompting with native push permissions.
     /* Cliqz: Disable LeanPlum Integration
     private var useFxAPrePush: LPVar = LPVar.define("useFxAPrePush", with: false)
+<<<<<<< HEAD
     */
+||||||| merged common ancestors
+=======
+    var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().flatMap({ $0.asDictonary() }))
+>>>>>>> firefox-releases
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
@@ -120,6 +132,20 @@ class LeanPlumClient {
 
     func setup(profile: Profile) {
         self.profile = profile
+    }
+
+    func recordSyncedClients(with profile: Profile?) {
+        guard let profile = profile as? BrowserProfile else {
+            return
+        }
+        profile.remoteClientsAndTabs.getClients() >>== { clients in
+            let oldCount = self.prefs?.intForKey(FxaDevicesCountPrefKey) ?? 0
+            if clients.count > oldCount {
+                self.track(event: .fxaSyncedNewDevice)
+            }
+            self.prefs?.setInt(Int32(clients.count), forKey: FxaDevicesCountPrefKey)
+            Leanplum.setUserAttributes([LPAttributeKey.fxaDeviceCount: clients.count])
+        }
     }
 
     fileprivate func start() {
@@ -146,7 +172,8 @@ class LeanPlumClient {
             LPAttributeKey.focusInstalled: focusInstalled(),
             LPAttributeKey.klarInstalled: klarInstalled(),
             LPAttributeKey.pocketInstalled: pocketInstalled(),
-            LPAttributeKey.signedInSync: profile?.hasAccount() ?? false
+            LPAttributeKey.signedInSync: profile?.hasAccount() ?? false,
+            LPAttributeKey.fxaAccountVerified: profile?.hasSyncableAccount() ?? false
         ]
         
         self.setupCustomTemplates()
@@ -166,6 +193,7 @@ class LeanPlumClient {
 
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
+            self.recordSyncedClients(with: self.profile)
         })
         */
     }
