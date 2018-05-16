@@ -106,8 +106,6 @@ node('mac-mini-ios') {
                         'udid=185B34BB-DCB8-4A17-BDCA-843086B67193',
                         'deviceName=iPhone 6',
                         'platformVersion=11.2',
-                        'MODULE=testSmoke',
-                        'TEST=SmokeTest',
                         'bundleID=com.cliqz.ios.newCliqz'
                         ]) {
                         timeout(60) {
