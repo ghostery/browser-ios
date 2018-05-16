@@ -89,11 +89,11 @@ class ControlCenterViewController: UIViewController {
 		self.view.backgroundColor = UIColor.clear
 		
 		let bgView = UIView()
-		bgView.backgroundColor = UIColor.cliqzBluePrimary
+		bgView.backgroundColor = UIColor.cliqzURLBarColor
 		
 		panelSwitchControl = UISegmentedControl(items: items)
 		panelSwitchControl.tintColor = UIColor.white
-		panelSwitchControl.backgroundColor = UIColor.cliqzBluePrimary
+		panelSwitchControl.backgroundColor = UIColor.cliqzURLBarColor
 		panelSwitchControl.addTarget(self, action: #selector(switchPanel), for: .valueChanged)
 		bgView.addSubview(panelSwitchControl)
 		self.view.addSubview(bgView)
