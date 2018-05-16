@@ -27,9 +27,10 @@ class CliqzURLBar: URLBarView {
         static let LineHeight: CGFloat = 0.0
     }
     
-    let ghostySize = URLBarViewUX.ButtonHeight
+    let ghostyHeight = 54.0
+    let ghostyWidth = 54.0
     
-    override lazy var cancelButton: UIButton = {
+    private lazy var _cancelButton: UIButton = {
         let cancelButton = InsetButton()
         //cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.setTitle("Cancel", for: .normal)
@@ -41,7 +42,12 @@ class CliqzURLBar: URLBarView {
         return cancelButton
     }()
     
-    lazy var ghosteryButton: UIButton = {
+    override var cancelButton: UIButton {
+        get { return _cancelButton }
+        set { _cancelButton = newValue }
+    }
+    
+    lazy var ghosteryButton: GhosteryButton = {
         let button = GhosteryButton(dataSource: self)
         //button.setImage(UIImage.init(named: "ghosty"), for: .normal)
         button.accessibilityIdentifier = "ghosty"
@@ -124,9 +130,10 @@ class CliqzURLBar: URLBarView {
         }
         
         ghosteryButton.snp.makeConstraints { (make) in
-            make.size.equalTo(ghostySize)
+            make.width.equalTo(ghostyWidth)
+            make.height.equalTo(ghostyHeight)
             make.centerY.equalTo(self)
-            make.trailing.equalTo(self.safeArea.trailing).offset(-URLBarViewUX.Padding)
+            make.trailing.equalTo(self.safeArea.trailing)//.offset(-URLBarViewUX.Padding)
         }
         
         showQRScannerButton.snp.makeConstraints { make in
@@ -178,9 +185,10 @@ class CliqzURLBar: URLBarView {
                     make.trailing.equalTo(self.menuButton.snp.leading)
                 }
                 else {
-                    make.trailing.equalTo(self.safeArea.trailing).offset(-URLBarViewUX.Padding)
+                    make.trailing.equalTo(self.safeArea.trailing)//.offset(-URLBarViewUX.Padding)
                 }
-                make.size.equalTo(ghostySize)
+                make.width.equalTo(ghostyWidth)
+                make.height.equalTo(ghostyHeight)
                 make.centerY.equalTo(self)
             }
             
@@ -253,6 +261,10 @@ class CliqzURLBar: URLBarView {
     override func leaveOverlayMode(didCancel cancel: Bool = false) {
         super.leaveOverlayMode(didCancel: cancel)
         Engine.sharedInstance.sendUrlBarNotInFocusEvent()
+    }
+    
+    override func didApplyTheme(_ theme: Theme) {
+        ghosteryButton.applyTheme(theme)
     }
 }
 

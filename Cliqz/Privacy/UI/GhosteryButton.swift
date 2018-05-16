@@ -15,7 +15,9 @@ class GhosteryButton: InsetButton {
     
     private let ghosteryCount: GhosteryCount = GhosteryCount()
     
-    private let ghosty = UIImageView()
+    fileprivate var currentTheme: Theme = .Normal
+    
+    fileprivate let ghosty = UIImageView()
     private let circle = UIView()
     private let count = UILabel()
     
@@ -28,6 +30,7 @@ class GhosteryButton: InsetButton {
         
         setUpComponent()
         setUpConstaints()
+        configureGhosty(currentTheme)
     }
     
     func setUpComponent() {
@@ -36,7 +39,7 @@ class GhosteryButton: InsetButton {
         circle.addSubview(count)
         
         circle.layer.cornerRadius = circleSize/2
-        circle.backgroundColor = UIColor(colorString: "930194")
+        circle.backgroundColor = UIColor(colorString: "930194").withAlphaComponent(0.9)
         
         ghosty.backgroundColor = .clear
         count.backgroundColor = .clear
@@ -44,28 +47,39 @@ class GhosteryButton: InsetButton {
         count.text = "0"
         count.textColor = .white
         count.font = UIFont.systemFont(ofSize: 13, weight: UIFontWeightMedium)
-        
-        ghosty.image = UIImage.init(named: "ghosty")
     }
     
     func setUpConstaints() {
-        ghosty.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview()
-            make.centerX.equalToSuperview()
-            let size = circleSize / 3
-            let sideInset = (size * 1.09) / 2
-            make.size.equalToSuperview().inset(UIEdgeInsets(top: size, left: sideInset, bottom: 0, right: sideInset))
-        }
         
         circle.snp.makeConstraints { (make) in
-            make.top.right.equalToSuperview()
+            make.top.equalToSuperview().offset(1)
+            make.right.equalToSuperview().offset(-12)
             make.size.equalTo(circleSize)
         }
         
         count.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
+    }
+    
+    func configureGhosty(_ theme: Theme) {
         
+        if theme == .Normal {
+            ghosty.image = UIImage.init(named: "ghosty")
+        }
+        else {
+            ghosty.image = UIImage.init(named: "ghostyPrivate")
+        }
+        
+        let height: CGFloat = 40.0
+        let width = (ghosty.image?.widthOverHeight() ?? 1.0) * height
+        
+        ghosty.snp.remakeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.left.equalToSuperview()
+            make.height.equalTo(height)
+            make.width.equalTo(width)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -87,6 +101,13 @@ class GhosteryButton: InsetButton {
             self.count.text = "99"
         }
         
+    }
+}
+
+extension GhosteryButton: Themeable {
+    func applyTheme(_ theme: Theme) {
+        currentTheme = theme
+        configureGhosty(theme)
     }
 }
 
@@ -137,10 +158,20 @@ class GhosteryCount {
     @objc func newTabSelected(notification: Notification) {
         var count = 0
         
-        if let userInfo = notification.userInfo, let url = userInfo["url"] as? URL {
-            count = TrackerList.instance.detectedTrackerCountForPage(url.absoluteString)
+        if let userInfo = notification.userInfo, let url = userInfo["url"] as? URL, let host = url.normalizedHost {
+            count = TrackerList.instance.detectedTrackerCountForPage(host)
         }
         
         self.delegate?.updateCount(count: count)
+    }
+}
+
+extension UIImage {
+    func widthOverHeight() -> CGFloat {
+        return self.size.width / self.size.height
+    }
+    
+    func heightOverWidth() -> CGFloat {
+        return self.size.width / self.size.height
     }
 }

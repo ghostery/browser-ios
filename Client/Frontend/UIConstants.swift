@@ -64,7 +64,7 @@ extension UIColor {
         static let MobilePurpleB = UIColor(rgb: 0xAC39FF)
         static let MobilePrivatePurple = UIColor(rgb: 0xcf68ff)
     }
-
+    /* Cliqz: Moved to Color Extension
     struct Browser {
         static let Background = BrowserColor(normal: Defaults.Grey10, pbm: Defaults.Grey70)
         static let Text = BrowserColor(normal: .white, pbm: Defaults.MobileGreyD)
@@ -118,6 +118,7 @@ extension UIColor {
         static let ToolbarHighlight = BrowserColor(normal: Defaults.Blue50, pbm: Defaults.Blue50)
         static let ToolbarTint = BrowserColor(normal: Defaults.Grey50, pbm: Defaults.Grey50)
     }
+    */
 }
 
 public struct UIConstants {
