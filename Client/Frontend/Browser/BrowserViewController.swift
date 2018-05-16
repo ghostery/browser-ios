@@ -2909,6 +2909,10 @@ extension BrowserViewController: ClientPickerViewControllerDelegate, Instruction
 //Cliqz: Cards Subscription
 extension BrowserViewController: RemoteNotificationDelegate {
     func presentViewController(_ viewControllerToPresent: UIViewController, animated flag: Bool) {
+        if let alertController = viewControllerToPresent as? UIAlertController, UIDevice.current.isiPad() {
+            //TODO: this is not how it should be done. Refactor.
+            alertController.popoverPresentationController?.sourceView = self.urlBar.locationView.pageOptionsButton
+        }
         self.present(viewControllerToPresent, animated: flag, completion: nil)
     }
 }
