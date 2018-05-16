@@ -40,7 +40,10 @@ class TabLocationView: UIView, TabEventHandler {
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
+    /* Cliqz: removed private modifier
     private var contentView: UIStackView!
+    */
+    var contentView: UIStackView!
     private var tabObservers: TabObservers!
 
     dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
