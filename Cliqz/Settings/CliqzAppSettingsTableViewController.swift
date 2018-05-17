@@ -15,21 +15,32 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         var settings = [SettingSection]()
         let prefs = profile.prefs
         
+        #if GHOSTERY
+        // Connect is not available in Ghostery
+        #else
         // Connect
         let conenctSettings = [CliqzConnectSetting(settings: self)]
         let connectSettingsTitle = NSLocalizedString("Connect", tableName: "Cliqz", comment: "[Settings] Connect section title")
         let connectSettingsFooter = NSLocalizedString("Connect Cliqz on your computer with Cliqz on your iOS device. This will allow you to send tabs from your desktop to your mobile device. You can also directly download videos from your desktop browser to your mobile device.", tableName: "Cliqz", comment: "[Settings] Connect section footer")
         settings += [ SettingSection(title: NSAttributedString(string: connectSettingsTitle), footerTitle: NSAttributedString(string: connectSettingsFooter), children: conenctSettings)]
+        #endif
         
         // Search Settings
         let searchSettings = generateSearchSettings(prefs: prefs)
         let searchSettingsTitle = NSLocalizedString("Search", tableName: "Cliqz", comment: "[Settings] Search section title")
         settings += [ SettingSection(title: NSAttributedString(string: searchSettingsTitle), children: searchSettings)]
         
+        #if GHOSTERY
+        // Ghostery Tab Settings
+        let ghosteryTabSettings = generateCliqzTabSettings(prefs: prefs)
+        let ghosteryTabTitle = NSLocalizedString("Ghostery Tab", tableName: "Cliqz", comment: "[Settings] Ghostery Tab section header")
+        settings += [ SettingSection(title: NSAttributedString(string: ghosteryTabTitle), children: ghosteryTabSettings)]
+        #else
         // Cliqz Tab Settings
         let cliqzTabSettings = generateCliqzTabSettings(prefs: prefs)
         let cliqzTabTitle = NSLocalizedString("Cliqz Tab", tableName: "Cliqz", comment: "[Settings] Cliqz Tab section header")
         settings += [ SettingSection(title: NSAttributedString(string: cliqzTabTitle), children: cliqzTabSettings)]
+        #endif
         
         // Browsing & History Settings
         let browsingAndHistorySettings = generateBrowsingAndHistorySettings(prefs: prefs)
