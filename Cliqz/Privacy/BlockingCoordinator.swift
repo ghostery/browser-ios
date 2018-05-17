@@ -89,7 +89,7 @@ final class UpdateHelper {
 
 class UpdateOperation: Operation {
     
-    private unowned let webView: WKWebView
+    private weak var webView: WKWebView? = nil
     
     private var _executing: Bool = false
     override var isExecuting: Bool {
@@ -129,7 +129,7 @@ class UpdateOperation: Operation {
         
         var blockLists: [WKContentRuleList] = []
         let dispatchGroup = DispatchGroup()
-        let domain = webView.url?.normalizedHost
+        let domain = webView?.url?.normalizedHost
         for type in UpdateHelper.order {
             if UpdateHelper.featureIsOn(forType: type, domain: domain) {
                 //get the blocklists for that type
@@ -147,9 +147,11 @@ class UpdateOperation: Operation {
         }
         
         dispatchGroup.notify(queue: .main) {
-            self.webView.configuration.userContentController.removeAllContentRuleLists()
-            blockLists.forEach(self.webView.configuration.userContentController.add)
-            debugPrint("BlockLists Loaded")
+            self.webView?.configuration.userContentController.removeAllContentRuleLists()
+            if let webView = self.webView {
+                blockLists.forEach(webView.configuration.userContentController.add)
+                debugPrint("BlockLists Loaded")
+            }
             self.isFinished = true
         }
     }
