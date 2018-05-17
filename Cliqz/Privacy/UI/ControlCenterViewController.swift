@@ -58,11 +58,6 @@ class ControlCenterViewController: UIViewController {
 		self.panelSwitchControl.selectedSegmentIndex = 0
 		self.switchPanel(self.panelSwitchControl)
 	}
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.post(name: controlCenterDismissedNotification, object: nil)
-    }
 
 	private func setupComponents() {
 		setupPanelSwitchControl()

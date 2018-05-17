@@ -72,17 +72,17 @@ class TrackersController: UIViewController {
 		self.tableView.reloadData()
 	}
 
-	@objc private func showActionSheet() {
+    @objc private func showActionSheet(_ sender: Any) {
 		switch type {
 		case .page:
-			showPageActionSheet()
+			showPageActionSheet(sender)
 			break
 		case .global:
-			showGlobalActionSheet()
+			showGlobalActionSheet(sender)
 		}
 	}
 
-	private func showPageActionSheet() {
+    private func showPageActionSheet(_ sender: Any) {
 		let blockTrustAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 		
 		let restrictAll = UIAlertAction(title: NSLocalizedString("Restrict All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Restrict All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
@@ -101,10 +101,21 @@ class TrackersController: UIViewController {
 		
 		let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
 		blockTrustAlertController.addAction(cancelAction)
-		self.present(blockTrustAlertController, animated: true, completion: nil)
+        
+        if let presentation = blockTrustAlertController.popoverPresentationController, let v = sender as? UIView {
+            presentation.sourceView = v
+            presentation.sourceRect = CGRect(x: v.bounds.width/2, y: v.bounds.height/2 + 16, width: 0, height: 0)
+            presentation.canOverlapSourceViewRect = true
+            presentation.permittedArrowDirections = .up
+            self.present(blockTrustAlertController, animated: true, completion: nil)
+        }
+        else if UIDevice.current.isiPad() == false { //avoid crash
+            self.present(blockTrustAlertController, animated: true, completion: nil)
+        }
+        
 	}
 
-	private func showGlobalActionSheet() {
+	private func showGlobalActionSheet(_ sender: Any) {
 		let blockTrustAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 		
 		let blockAll = UIAlertAction(title: NSLocalizedString("Block All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Block All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
@@ -119,7 +130,18 @@ class TrackersController: UIViewController {
 		
 		let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
 		blockTrustAlertController.addAction(cancelAction)
-		self.present(blockTrustAlertController, animated: true, completion: nil)
+        
+        if let presentation = blockTrustAlertController.popoverPresentationController, let v = sender as? UIView {
+            presentation.sourceView = v
+            presentation.sourceRect = CGRect(x: v.bounds.width/2, y: v.bounds.height/2 + 16, width: 0, height: 0)
+            presentation.canOverlapSourceViewRect = true
+            presentation.permittedArrowDirections = .up
+            self.present(blockTrustAlertController, animated: true, completion: nil)
+        }
+        else if UIDevice.current.isiPad() == false { //avoid crash
+            self.present(blockTrustAlertController, animated: true, completion: nil)
+        }
+        
 	}
 
 	private func blockAllCategories() {
