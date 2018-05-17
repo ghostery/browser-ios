@@ -15,7 +15,7 @@ class AdBlockerSettingsTableViewController: ToggleSubSettingsTableViewController
     }
     
     override func getToggles() -> [Bool] {
-        return [SettingsPrefs.shared.getAdBlockerPref(), SettingsPrefs.shared.getFairBlockingPref()]
+        return [UserPreferences.instance.adblockingMode == .blockAll, SettingsPrefs.shared.getFairBlockingPref()]
     }
     
     override func getToggleTitles() -> [String] {
@@ -29,7 +29,13 @@ class AdBlockerSettingsTableViewController: ToggleSubSettingsTableViewController
     }
     
     override func saveToggles(isOn: Bool, atIndex index: Int) {
-        index == 0 ? SettingsPrefs.shared.updateAdBlockerPref(isOn) : SettingsPrefs.shared.updateFairBlockingPref(isOn)
+        if index == 0 {
+            isOn == true ? (UserPreferences.instance.adblockingMode = .blockAll) : (UserPreferences.instance.adblockingMode = .blockNone)
+            UserPreferences.instance.writeToDisk()
+        }
+        else {
+            SettingsPrefs.shared.updateFairBlockingPref(isOn)
+        }
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
