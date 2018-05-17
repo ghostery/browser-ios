@@ -77,8 +77,8 @@ extension UIColor {
     }
     
     struct LoadingBar {
-        static let Start = BrowserColor(normal: Defaults.MobileBlueB, pbm: Defaults.MobileBlueB)
-        static let End = BrowserColor(normal: Defaults.Blue50, pbm: Defaults.Blue50)
+        static let Start = BrowserColor(normal: Defaults.Purple50, pbm: Defaults.Purple50)
+        static let End = BrowserColor(normal: Defaults.Magenta50, pbm: Defaults.Magenta50)
     }
     
     struct TabTray {
