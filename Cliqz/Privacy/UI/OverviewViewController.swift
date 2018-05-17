@@ -79,8 +79,8 @@ class BlockedRequestsView: UIView {
 	func setStyles() {
 		countView.textColor = UIColor.cliqzBluePrimary
 		titleView.textColor = UIColor.cliqzBluePrimary
-		switchControl.onTintColor = UIColor.cliqzBluePrimary
-		switchControl.thumbTintColor = UIColor.white
+		switchControl.onTintColor = UIColor.cliqzGreenLightFunctional
+		switchControl.thumbTintColor = UIColor.cliqzURLBarColor
 		switchControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         switchControl.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
 		notchView.image = UIImage(named:"notch")
