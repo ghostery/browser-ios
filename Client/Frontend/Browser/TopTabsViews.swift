@@ -6,7 +6,10 @@ import Foundation
 
 struct TopTabsSeparatorUX {
     static let Identifier = "Separator"
+    /* Cliqz: change color
     static let Color = UIColor.Defaults.Grey70
+    */
+    static let Color = UIColor.white
     static let Width: CGFloat = 1
 }
 

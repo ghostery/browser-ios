@@ -483,6 +483,7 @@
 		AF28D3DB207E325F0065FF86 /* PermissionManagerModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AF28D3DA207E325F0065FF86 /* PermissionManagerModuleBridge.m */; };
 		AF28D3DD207E378E0065FF86 /* GeoLocationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AF28D3DC207E378E0065FF86 /* GeoLocationBridge.m */; };
 		AF28D3DF207E37A20065FF86 /* GeoLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28D3DE207E37A20065FF86 /* GeoLocation.swift */; };
+		AF4C19B920AC7AC400D3F740 /* TopTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4C19B820AC7AC400D3F740 /* TopTabs.swift */; };
 		AF53D3BC206A346B0012A11F /* TabExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF53D3BB206A346B0012A11F /* TabExtension.swift */; };
 		AF6FA97220652C6800D7F9F0 /* ghostery_content_blocker.json in Resources */ = {isa = PBXBuildFile; fileRef = AF6FA96E20652C6700D7F9F0 /* ghostery_content_blocker.json */; };
 		AF6FA97320652C6800D7F9F0 /* preload.js in Resources */ = {isa = PBXBuildFile; fileRef = AF6FA96F20652C6800D7F9F0 /* preload.js */; };
@@ -1952,6 +1953,7 @@
 		AF28D3DA207E325F0065FF86 /* PermissionManagerModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PermissionManagerModuleBridge.m; sourceTree = "<group>"; };
 		AF28D3DC207E378E0065FF86 /* GeoLocationBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeoLocationBridge.m; sourceTree = "<group>"; };
 		AF28D3DE207E37A20065FF86 /* GeoLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoLocation.swift; sourceTree = "<group>"; };
+		AF4C19B820AC7AC400D3F740 /* TopTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabs.swift; sourceTree = "<group>"; };
 		AF53D3BB206A346B0012A11F /* TabExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabExtension.swift; sourceTree = "<group>"; };
 		AF6FA96E20652C6700D7F9F0 /* ghostery_content_blocker.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ghostery_content_blocker.json; sourceTree = "<group>"; };
 		AF6FA96F20652C6800D7F9F0 /* preload.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = preload.js; sourceTree = "<group>"; };
@@ -3423,6 +3425,7 @@
 				1E3FBF58207763FE00FAE3FD /* BrowserViewController+Connect.swift */,
 				1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */,
 				4F1860322088F3DC00A86D4C /* Privacy.swift */,
+				AF4C19B820AC7AC400D3F740 /* TopTabs.swift */,
 			);
 			path = BrowserViewController;
 			sourceTree = "<group>";
@@ -6569,6 +6572,7 @@
 				D8D33A7D1FBD080300A20A28 /* SnapKitExtensions.swift in Sources */,
 				4FF07D862063C99E001385A8 /* OffrzViewController.swift in Sources */,
 				E650755C1E37F747006961AC /* Swizzling.m in Sources */,
+				AF4C19B920AC7AC400D3F740 /* TopTabs.swift in Sources */,
 				74821FC51DB56A2500EEEA72 /* OpenWithSettingsViewController.swift in Sources */,
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
