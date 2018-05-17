@@ -113,6 +113,7 @@ extension BrowserViewController {
 			c.view.removeFromSuperview()
             c.endAppearanceTransition()
             c.removeFromParentViewController()
+            NotificationCenter.default.post(name: controlCenterDismissedNotification, object: nil)
 		}
 	}
     

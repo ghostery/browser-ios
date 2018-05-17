@@ -2919,8 +2919,12 @@ extension BrowserViewController: ClientPickerViewControllerDelegate, Instruction
 extension BrowserViewController: RemoteNotificationDelegate {
     func presentViewController(_ viewControllerToPresent: UIViewController, animated flag: Bool) {
         if let alertController = viewControllerToPresent as? UIAlertController, UIDevice.current.isiPad() {
-            //TODO: this is not how it should be done. Refactor.
-            alertController.popoverPresentationController?.sourceView = self.urlBar.locationView.pageOptionsButton
+            //TODO: this is not how this should be presented. Refactor.
+            let v = self.urlBar.locationView.pageOptionsButton
+            alertController.popoverPresentationController?.sourceView = v
+            alertController.popoverPresentationController?.sourceRect = CGRect(x: v.bounds.width/2, y: v.bounds.height/2 + 14, width: 0, height: 0)
+            alertController.popoverPresentationController?.canOverlapSourceViewRect = true
+            alertController.popoverPresentationController?.permittedArrowDirections = .up
         }
         self.present(viewControllerToPresent, animated: flag, completion: nil)
     }
