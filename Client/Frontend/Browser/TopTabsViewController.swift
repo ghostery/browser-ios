@@ -17,8 +17,12 @@ struct TopTabsUX {
     static let TabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
     static let TabTitlePadding: CGFloat = 10
     static let AnimationSpeed: TimeInterval = 0.1
+    /* Cliqz: Change separator offset and height
     static let SeparatorYOffset: CGFloat = 7
     static let SeparatorHeight: CGFloat = 32
+    */
+    static let SeparatorYOffset: CGFloat = 0
+    static let SeparatorHeight: CGFloat = 44
 }
 
 protocol TopTabsDelegate: class {
@@ -41,7 +45,10 @@ class TopTabsViewController: UIViewController {
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
+        /* Cliqz - register CliqzTopTabCell
         collectionView.register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
+        */
+        collectionView.register(CliqzTopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
@@ -51,8 +58,14 @@ class TopTabsViewController: UIViewController {
         return collectionView
     }()
     
+    /* Cliqz: replace return type with CliqziPadTabsButton
     fileprivate lazy var tabsButton: TabsButton = {
+    */
+    fileprivate lazy var tabsButton: CliqziPadTabsButton = {
+        /* Cliqz: Replace with CliqzTabsButton
         let tabsButton = TabsButton.tabTrayButton()
+        */
+        let tabsButton = CliqziPadTabsButton()
         tabsButton.semanticContentAttribute = .forceLeftToRight
         tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
@@ -63,6 +76,8 @@ class TopTabsViewController: UIViewController {
         let newTab = UIButton.newTabButton()
         newTab.semanticContentAttribute = .forceLeftToRight
         newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
+        // Cliqz: Make button white
+        newTab.imageView?.tintColor = .white
         return newTab
     }()
     
