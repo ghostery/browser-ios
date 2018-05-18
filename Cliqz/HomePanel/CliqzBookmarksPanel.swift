@@ -70,7 +70,7 @@ class CliqzBookmarksPanel: BookmarksPanel {
         guard let bookmark = getCurrentBookmark(indexPath.row) else { return super.tableView(tableView, cellForRowAt: indexPath) }
         switch bookmark {
         case let item as BookmarkItem:
-            let cell = super.tableView(tableView, cellForRowAt: indexPath)
+            let cell = self.createBasicCell(indexPath)
             if item.title.isEmpty {
                 cell.textLabel?.text = item.url
             } else {
