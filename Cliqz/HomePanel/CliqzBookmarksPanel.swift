@@ -12,11 +12,14 @@ import Shared
 
 class CliqzBookmarksPanel: BookmarksPanel {
     var bookmarksDataSource: BookmarksDataSource?
+    private static let cellIdentifier = "CliqzCellIdentifier"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.4)
+        tableView.register(CliqzSiteTableViewCell.self, forCellReuseIdentifier: CliqzBookmarksPanel.cellIdentifier)
     }
     
     fileprivate func getCurrentBookmark(_ index: Int) -> BookmarkNode? {
@@ -66,33 +69,36 @@ class CliqzBookmarksPanel: BookmarksPanel {
         return bookmarksDataSource?.count() ?? 0
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 74
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let bookmark = getCurrentBookmark(indexPath.row) else { return super.tableView(tableView, cellForRowAt: indexPath) }
         switch bookmark {
         case let item as BookmarkItem:
-            let cell = self.createBasicCell(indexPath)
-            if item.title.isEmpty {
-                cell.textLabel?.text = item.url
-            } else {
-                cell.textLabel?.text = item.title
-            }
-            cell.textLabel?.textColor = .white
-            cell.textLabel?.applyShadow()
-            
-            if let url = bookmark.favicon?.url.asURL, url.scheme == "asset" {
-                cell.imageView?.image = UIImage(named: url.host!)
-            } else {
-                cell.imageView?.layer.borderColor = BookmarksPanelUX.IconBorderColor.cgColor
-                cell.imageView?.layer.borderWidth = BookmarksPanelUX.IconBorderWidth
-                let bookmarkURL = URL(string: item.url)
-                cell.imageView?.setIcon(bookmark.favicon, forURL: bookmarkURL, completed: { (color, url) in
-                    if bookmarkURL == url {
-                        cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: BookmarksPanelUX.IconSize, height: BookmarksPanelUX.IconSize))
-                        cell.imageView?.backgroundColor = color
-                        cell.imageView?.contentMode = .center
+            let cell = tableView.dequeueReusableCell(withIdentifier: CliqzBookmarksPanel.cellIdentifier, for: indexPath) as! CliqzSiteTableViewCell
+            cell.accessoryType = .none
+            let title  = item.title.isEmpty ? item.url : item.title
+            cell.setLines(title, detailText: item.url)
+            cell.tag = indexPath.row
+            cell.imageShadowView.alpha = 0.0
+            cell.imageShadowView.transform = CGAffineTransform.init(scaleX: 0.8, y: 0.8)
+            LogoLoader.loadLogo(item.url, completionBlock: { (img, logoInfo, error) in
+                if cell.tag == indexPath.row {
+                    if let img = img {
+                        cell.customImageView.image = img
                     }
+                    else if let info = logoInfo {
+                        let placeholder = LogoPlaceholder(logoInfo: info)
+                        cell.fakeIt(placeholder)
+                    }
+                }
+                UIView.animate(withDuration: 0.15, animations: {
+                    cell.imageShadowView.alpha = 1.0
+                    cell.imageShadowView.transform = CGAffineTransform.identity
                 })
-            }
+            })
             return cell
         default:
             // This should never happen.
