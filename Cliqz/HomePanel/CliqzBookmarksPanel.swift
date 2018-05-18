@@ -172,4 +172,19 @@ class CliqzBookmarksPanel: BookmarksPanel {
         }
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        let bookmark = getCurrentBookmark(indexPath.row)
+        
+        switch bookmark {
+        case let item as BookmarkItem:
+            homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.bookmark)
+            LeanPlumClient.shared.track(event: .openedBookmark)
+            UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
+            break
+        default:
+            // You can't do anything with separators.
+            break
+        }
+    }
 }
