@@ -26,7 +26,7 @@ final class BlockingCoordinator {
         self.webView = webView
         self.updateQueue = OperationQueue()
         updateQueue.maxConcurrentOperationCount = 1
-        updateQueue.underlyingQueue = DispatchQueue.main
+        updateQueue.qualityOfService = .background
     }
     
     //TODO: Make sure that at the time of the coordinatedUpdate, all necessary blocklists are in the cache
@@ -34,8 +34,10 @@ final class BlockingCoordinator {
         debugPrint("Coordinated Update")
         if self.updateQueue.operations.filter({ (op) -> Bool in return !(op.isExecuting  || op.isFinished || op.isCancelled) }).count == 0 {
             debugPrint("Add to Update Queue")
-            let updateOp = UpdateOperation(webView: self.webView)
-            self.updateQueue.addOperation(updateOp)
+            DispatchQueue.main.async {
+                let updateOp = UpdateOperation(webView: self.webView, domain: self.webView.url?.normalizedHost)
+                self.updateQueue.addOperation(updateOp)
+            }
         }
     }
 }
@@ -90,6 +92,7 @@ final class UpdateHelper {
 class UpdateOperation: Operation {
     
     private weak var webView: WKWebView? = nil
+    private let domain: String?
     
     private var _executing: Bool = false
     override var isExecuting: Bool {
@@ -119,8 +122,9 @@ class UpdateOperation: Operation {
         }
     }
     
-    init(webView: WKWebView) {
+    init(webView: WKWebView, domain: String?) {
         self.webView = webView
+        self.domain = domain
         super.init()
     }
     
@@ -129,7 +133,6 @@ class UpdateOperation: Operation {
         
         var blockLists: [WKContentRuleList] = []
         let dispatchGroup = DispatchGroup()
-        let domain = webView?.url?.normalizedHost
         for type in UpdateHelper.order {
             if UpdateHelper.featureIsOn(forType: type, domain: domain) {
                 //get the blocklists for that type
