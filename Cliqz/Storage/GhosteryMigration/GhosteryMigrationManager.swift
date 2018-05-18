@@ -66,7 +66,7 @@ public class GhosteryMigrationManager {
     }
     
     private func migrateOpenTabs() {
-        let sql = "SELECT * from  \(TableGhosteryTabs) order by ZORDER"
+        let sql = "SELECT * from  \(TableGhosteryTabs) where ZURL IS NOT NULL order by ZORDER"
         ghosteryDB!.runQuery(sql, args: [], factory: GhosterySQLiteFactories.tabFactory) >>== { [weak self] tabs in
             for tab in tabs.asArray() {
                 if let url = URL(string: tab.url) {
