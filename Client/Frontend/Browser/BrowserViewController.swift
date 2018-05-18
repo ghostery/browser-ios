@@ -575,9 +575,7 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        /* Cliqz: Disabled showing IntroView
         presentIntroViewController()
-        */
         self.webViewContainerToolbar.isHidden = false
 
         screenshotHelper.viewIsVisible = true
@@ -2369,7 +2367,10 @@ extension BrowserViewController: IntroViewControllerDelegate {
         }
         
         if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
+            /* Cliqz: Change to CliqzIntroViewController
             let introViewController = IntroViewController()
+            */
+            let introViewController = CliqzIntroViewController()
             introViewController.delegate = self
             // On iPad we present it modally in a controller
             if topTabsVisible {
@@ -2397,8 +2398,10 @@ extension BrowserViewController: IntroViewControllerDelegate {
         fxaParams = FxALaunchParams(query: query)
         self.presentSignInViewController(fxaParams)
     }
-
+    /* Cliqz: Change the type of introViewController to UIViewController
     func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool) {
+    */
+    func introViewControllerDidFinish(_ introViewController: UIViewController, requestToLogin: Bool) {
         self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
 
         introViewController.dismiss(animated: true) { finished in
