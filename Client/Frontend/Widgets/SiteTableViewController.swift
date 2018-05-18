@@ -180,3 +180,14 @@ extension SiteTableViewController: UITableViewDragDelegate {
         presentedViewController?.dismiss(animated: true)
     }
 }
+
+// Cliqz: Added `createBasicCell` which is exactly the same as `cellForRowAt` so that CliqzBookmarksPanel can call it without passing by BookmarksPanel from firefox
+extension SiteTableViewController {
+    func createBasicCell(_ indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath)
+        if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
+            cell.separatorInset = .zero
+        }
+        return cell
+    }
+}
