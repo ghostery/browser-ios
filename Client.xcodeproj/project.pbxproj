@@ -47,6 +47,7 @@
 		1E138E1420A5983D00B82C13 /* CliqzBookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */; };
 		1E138E2420A5986600B82C13 /* BookmarksDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138E2320A5986600B82C13 /* BookmarksDataSource.swift */; };
 		1E2C202020AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */; };
+		1E2C227C20B4149000AA00B5 /* SendUsageDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */; };
 		1E3C5388209AFEDA00286CA4 /* TabTrayDoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */; };
 		1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */; };
 		1E3CBC1D205806F000898B05 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC1C205806F000898B05 /* DateExtension.swift */; };
@@ -1550,6 +1551,7 @@
 		1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzBookmarksPanel.swift; sourceTree = "<group>"; };
 		1E138E2320A5986600B82C13 /* BookmarksDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksDataSource.swift; sourceTree = "<group>"; };
 		1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzSiteTableViewCell.swift; sourceTree = "<group>"; };
+		1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendUsageDataTableViewController.swift; sourceTree = "<group>"; };
 		1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayDoneButton.swift; sourceTree = "<group>"; };
 		1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsOptions.swift; sourceTree = "<group>"; };
@@ -2752,6 +2754,7 @@
 				1EAFE566205FFE82006A36B4 /* LimitMobileDataUsageTableViewController.swift */,
 				1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */,
 				1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */,
+				1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */,
 			);
 			path = "Custom Settings";
 			sourceTree = "<group>";
@@ -6639,6 +6642,7 @@
 				39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */,
 				4FBBC14020359D3100445AD1 /* ForgetModeView.swift in Sources */,
 				AF6FA98820652D4600D7F9F0 /* TrackerListApp.swift in Sources */,
+				1E2C227C20B4149000AA00B5 /* SendUsageDataTableViewController.swift in Sources */,
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
 				1EDF0B24207B86DA00856493 /* QuerySuggestions.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
