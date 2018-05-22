@@ -22,19 +22,19 @@ class Domain: Object {
     var translatedState: DomainState {
         switch state {
         case 0:
-            return .none
+            return .empty
         case 1:
             return .trusted
         case 2:
             return .restricted
         default:
-            return .none
+            return .empty
         }
     }
 }
 
 enum DomainState {
-    case none
+    case empty
     case trusted
     case restricted
 }
@@ -124,7 +124,7 @@ class DomainStore: NSObject {
     
     private class func intForState(state: DomainState) -> Int {
         switch state {
-        case .none:
+        case .empty:
             return 0
         case .trusted:
             return 1

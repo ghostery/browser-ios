@@ -67,7 +67,7 @@ class ControlCenterDelegate: ControlCenterDelegateProtocol {
             trackerState = .trusted
         }
         else {
-            trackerState = .none
+            trackerState = .empty
         }
         
         let apps = TrackerList.instance.detectedTrackersForPage(self.domainStr)
@@ -103,7 +103,7 @@ class ControlCenterDelegate: ControlCenterDelegateProtocol {
             let domainObj = getOrCreateDomain()
             if state == .trusted {
                 //disable domain restriction if applicable
-                DomainStore.changeState(domain: domainObj, state: .none)
+                DomainStore.changeState(domain: domainObj, state: .empty)
                 //add it to trusted sites
                 DomainStore.add(appId: appId, domain: domainObj, list: .trustedList)
                 //remove it from restricted if it is there
@@ -117,7 +117,7 @@ class ControlCenterDelegate: ControlCenterDelegateProtocol {
             }
             else {
                 //disable domain restriction if applicable
-                DomainStore.changeState(domain: domainObj, state: .none)
+                DomainStore.changeState(domain: domainObj, state: .empty)
                 //remove from trusted and restricted
                 DomainStore.remove(appId: appId, domain: domainObj, list: .trustedList)
                 DomainStore.remove(appId: appId, domain: domainObj, list: .restrictedList)

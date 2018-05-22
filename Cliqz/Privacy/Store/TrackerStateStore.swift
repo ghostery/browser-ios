@@ -20,7 +20,7 @@ class TrackerState: Object {
     var translatedState: TrackerStateEnum {
         switch state {
         case 0:
-            return .none
+            return .empty
         case 1:
             return .trusted
         case 2:
@@ -28,13 +28,13 @@ class TrackerState: Object {
         case 3:
             return .blocked
         default:
-            return .none
+            return .empty
         }
     }
 }
 
 enum TrackerStateEnum {
-    case none
+    case empty
     case trusted
     case restricted
     case blocked
@@ -50,7 +50,7 @@ class TrackerStateStore: NSObject {
         return nil
     }
     
-    class func createTrackerState(appId: Int, state: TrackerStateEnum = .none) -> TrackerState {
+    class func createTrackerState(appId: Int, state: TrackerStateEnum = .empty) -> TrackerState {
         
         let realm = try! Realm()
         let trackerState = TrackerState()
@@ -79,7 +79,7 @@ class TrackerStateStore: NSObject {
     
     private class func intForState(state: TrackerStateEnum) -> Int {
         switch state {
-        case .none:
+        case .empty:
             return 0
         case .trusted:
             return 1

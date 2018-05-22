@@ -18,7 +18,7 @@ import Foundation
             return state
         }
         else {
-            return TrackerStateStore.createTrackerState(appId: appId, state: .none)
+            return TrackerStateStore.createTrackerState(appId: appId, state: .empty)
         }
     }
 

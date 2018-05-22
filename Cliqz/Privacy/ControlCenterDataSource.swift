@@ -55,7 +55,7 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
         case blocked
         case restricted
         case trusted
-        case none
+        case empty
         case other
         
         static func from(trackerState: TrackerStateEnum) -> CategoryState {
@@ -66,8 +66,8 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
                 return .restricted
             case .trusted:
                 return .trusted
-            case .none:
-                return .none
+            case .empty:
+                return .empty
             }
         }
     }
@@ -113,7 +113,7 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
         if let domainObj = DomainStore.get(domain: self.domainStr) {
             return domainObj.translatedState
         }
-        return .none //placeholder
+        return .empty //placeholder
     }
 
     func countAndColorByCategory() -> Dictionary<String, (Int, UIColor)> {
@@ -230,7 +230,7 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
                 return iconForCategoryState(state: .trusted)
             }
             else {
-                return iconForTrackerState(state: .none)
+                return iconForTrackerState(state: TrackerStateEnum.empty)
             }
         }
         else {
@@ -251,7 +251,7 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
                 state = CategoryState.from(trackerState: set.first!)
             }
             else {
-                state = .none
+                state = .empty
             }
             
             return iconForCategoryState(state: state)
@@ -346,7 +346,7 @@ extension ControlCenterDataSource {
     fileprivate func iconForTrackerState(state: TrackerStateEnum?) -> UIImage? {
         if let state = state {
             switch state {
-            case .none:
+            case .empty:
                 return UIImage(named: "empty")
             case .blocked:
                 return UIImage(named: "blockTracker")
@@ -362,7 +362,7 @@ extension ControlCenterDataSource {
     fileprivate func iconForCategoryState(state: CategoryState?) -> UIImage? {
         if let state = state {
             switch state {
-            case .none:
+            case .empty:
                 return UIImage(named: "empty")
             case .blocked:
                 return UIImage(named: "blockTracker")

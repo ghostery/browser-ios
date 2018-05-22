@@ -275,7 +275,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(blockAction)
 				case .unblock:
 					let unblockAction = UIContextualAction(style: .destructive, title: "Unblock") { (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .none)
+						self.delegate?.changeState(appId: appId, state: .empty)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
 						self.tableView.endUpdates()
