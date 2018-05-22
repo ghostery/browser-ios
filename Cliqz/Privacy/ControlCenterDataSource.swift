@@ -82,21 +82,27 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
                                  "social_media": ("Social Media", UIColor(colorString: "388EE8")),
                                  "uncategorized": ("Uncategorized", UIColor(colorString: "8459A5"))]
     
-    let pageCategories: [String]
-    let globalCategories: [String]
+    var pageCategories: [String] = []
+    var globalCategories: [String] = []
     
     let domainStr: String
-    let pageTrackers: Dictionary<String, [TrackerListApp]>
-    let globalTrackers: Dictionary<String, [TrackerListApp]>
+    var pageTrackers: Dictionary<String, [TrackerListApp]> = [:]
+    var globalTrackers: Dictionary<String, [TrackerListApp]> = [:]
     
     
     //TODO: update mechanism
     init(url: URL) {
         self.domainStr = url.normalizedHost ?? url.absoluteString
-        self.pageTrackers = TrackerList.instance.trackersByCategory(for: self.domainStr)
-        self.pageCategories = TrackerList.instance.countByCategory(domain: self.domainStr).sortedKeysAscending(false)
-        self.globalTrackers = TrackerList.instance.trackersByCategory()
-        self.globalCategories = TrackerList.instance.countByCategory().sortedKeysAscending(false)
+        DispatchQueue.global(qos: .background).async {
+            self.pageTrackers = TrackerList.instance.trackersByCategory(for: self.domainStr)
+            self.pageCategories = self.pageTrackers.reduceValues(reduce: { (list) -> Int in
+                return list.count
+            }).sortedKeysAscending(false)
+            self.globalTrackers = TrackerList.instance.trackersByCategory()
+            self.globalCategories = self.globalTrackers.reduceValues(reduce: { (list) -> Int in
+                return list.count
+            }).sortedKeysAscending(false)
+        }
     }
     
     func domainString() -> String {
