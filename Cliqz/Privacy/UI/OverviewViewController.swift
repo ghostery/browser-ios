@@ -428,6 +428,13 @@ class OverviewViewController: UIViewController {
         
         let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
         pauseAlertController.addAction(cancelAction)
+        
+        if let popover = pauseAlertController.popoverPresentationController {
+            popover.sourceView = pauseGhosteryButton
+            popover.permittedArrowDirections = .down
+            popover.sourceRect = CGRect(x: pauseGhosteryButton.bounds.width/2, y: 0, width: 0, height: 0)
+        }
+        
         self.present(pauseAlertController, animated: true, completion: nil)
     }
     
