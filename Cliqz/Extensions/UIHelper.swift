@@ -13,9 +13,9 @@ class UIHelper {
         
         let top: CGFloat
         
-        if (device == .iPhone || device == .iPhoneX) {
+        if (device != .iPad) {
             if orientation == .portrait {
-                top = 76.0
+                device == .iPhone ? (top = 76.0) : (top = 100)
             }
             else {
                 top = 56.0
