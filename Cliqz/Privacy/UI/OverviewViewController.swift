@@ -79,7 +79,7 @@ class BlockedRequestsView: UIView {
 	func setStyles() {
 		countView.textColor = UIColor.cliqzBluePrimary
 		titleView.textColor = UIColor.cliqzBluePrimary
-		switchControl.onTintColor = UIColor.cliqzGreenLightFunctional
+		switchControl.onTintColor = UIColor.cliqzBlueTwoSecondary
 		switchControl.thumbTintColor = UIColor.cliqzURLBarColor
 		switchControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         switchControl.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
@@ -87,7 +87,7 @@ class BlockedRequestsView: UIView {
 		descriptionLabel.textColor = ControlCenterUI.textGray
 		descriptionLabel.font = UIFont.systemFont(ofSize: 12)
 		countView.isHidden = true
-		descriptionLabel.text = "Coming soon!!!!"
+		descriptionLabel.text = ""
 		descriptionLabel.textAlignment = .center
 	}
 
@@ -208,7 +208,7 @@ class OverviewViewController: UIViewController {
 		dataSet.drawValuesEnabled = false
 		dataSet.iconsOffset = CGPoint(x: 0, y: 20.0)
 		dataSet.colors = colors
-		blockedTrackers.text = String(format: NSLocalizedString("%d Trackers Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Blocked trackers count"), self.dataSource?.blockedTrackerCount() ?? 0)
+		updateBlockedTrackersCount()
 		chart?.data = PieChartData(dataSet: dataSet)
 		chart?.centerText = String(format: NSLocalizedString("%d Trackers found", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Detected trackers count"), self.dataSource?.detectedTrackerCount() ?? 0)
 		let domainState = datasource.domainState()
@@ -446,11 +446,13 @@ class OverviewViewController: UIViewController {
 	@objc private func trustSitePressed() {
 		setTrustSite(!self.trustSiteButton.isSelected)
         self.trustSiteButton.isSelected ? self.delegate?.chageSiteState(to: .trusted) : self.delegate?.chageSiteState(to: .none)
+        updateBlockedTrackersCount()
 	}
 
 	@objc private func restrictSitePressed() {
 		setRestrictSite(!self.restrictSiteButton.isSelected)
         self.restrictSiteButton.isSelected ? self.delegate?.chageSiteState(to: .restricted) : self.delegate?.chageSiteState(to: .none)
+        updateBlockedTrackersCount()
 	}
     
     private func setPauseGhostery(_ value: Bool) {
@@ -504,6 +506,10 @@ class OverviewViewController: UIViewController {
         } else {
             self.restrictSiteButton.backgroundColor = UIColor.white
         }
+    }
+    
+    private func updateBlockedTrackersCount() {
+        blockedTrackers.text = String(format: NSLocalizedString("%d Trackers Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Blocked trackers count"), self.dataSource?.blockedTrackerCount() ?? 0)
     }
 
 	private func setupPieChart() {
