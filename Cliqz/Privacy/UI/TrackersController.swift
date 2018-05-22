@@ -123,7 +123,7 @@ class TrackersController: UIViewController {
 		})
 		blockTrustAlertController.addAction(blockAll)
 		
-		let unblockAll = UIAlertAction(title: NSLocalizedString("Unblock All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Unblock All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
+		let unblockAll = UIAlertAction(title: NSLocalizedString("Revert", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Revert trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
 			self?.unblockAllCategories()
 		})
 		blockTrustAlertController.addAction(unblockAll)
