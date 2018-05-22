@@ -452,13 +452,13 @@ class OverviewViewController: UIViewController {
 
 	@objc private func trustSitePressed() {
 		setTrustSite(!self.trustSiteButton.isSelected)
-        self.trustSiteButton.isSelected ? self.delegate?.chageSiteState(to: .trusted) : self.delegate?.chageSiteState(to: .none)
+        self.trustSiteButton.isSelected ? self.delegate?.chageSiteState(to: .trusted) : self.delegate?.chageSiteState(to: .empty)
         updateBlockedTrackersCount()
 	}
 
 	@objc private func restrictSitePressed() {
 		setRestrictSite(!self.restrictSiteButton.isSelected)
-        self.restrictSiteButton.isSelected ? self.delegate?.chageSiteState(to: .restricted) : self.delegate?.chageSiteState(to: .none)
+        self.restrictSiteButton.isSelected ? self.delegate?.chageSiteState(to: .restricted) : self.delegate?.chageSiteState(to: .empty)
         updateBlockedTrackersCount()
 	}
     
