@@ -56,7 +56,7 @@ class OffrzOnboardingView: UIView {
 	private func setupComponents() {
 		self.addSubview(offrzPresentImageView)
 		
-		hideButton.setImage(UIImage(named: "closeTab"), for: .normal)
+        hideButton.setImage(UIImage.templateImageNamed("tab_close"), for: UIControlState())
 		hideButton.addTarget(self, action: #selector(hideOnboardingView) , for: .touchUpInside)
 		self.addSubview(hideButton)
 		
@@ -77,6 +77,7 @@ class OffrzOnboardingView: UIView {
 		descriptionLabel.numberOfLines = 2
 
 		moreButton.setTitleColor(UIColor.cliqzBluePrimary, for: .normal)
+        hideButton.tintColor = UIColor.cliqzBluePrimary
 	}
 
 	private func layoutComponents() {
