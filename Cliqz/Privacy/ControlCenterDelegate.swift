@@ -59,6 +59,21 @@ class ControlCenterDelegate: ControlCenterDelegateProtocol {
         let domainObj: Domain
         domainObj = getOrCreateDomain()
         DomainStore.changeState(domain: domainObj, state: to)
+        let trackerState: TrackerStateEnum
+        if to == .restricted {
+            trackerState = .restricted
+        }
+        else if to == .trusted {
+            trackerState = .trusted
+        }
+        else {
+            trackerState = .none
+        }
+        
+        let apps = TrackerList.instance.detectedTrackersForPage(self.domainStr)
+        for app in apps {
+            changeState(appId: app.appId, state: trackerState)
+        }
     }
     
     func pauseGhostery(paused: Bool, time: Date) {
