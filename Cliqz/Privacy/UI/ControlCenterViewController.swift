@@ -10,11 +10,17 @@ import Foundation
 
 let controlCenterDismissedNotification = Notification.Name(rawValue: "ControlCenterDismissed")
 
+protocol ControlCenterViewControllerDelegate: class {
+    func dismiss()
+}
+
 class ControlCenterViewController: UIViewController {
 	weak var homePanelDelegate: HomePanelDelegate?
 
 	var dataSource: ControlCenterDSProtocol?
 	var delegate: ControlCenterDelegateProtocol?
+    
+    weak var container: ControlCenterViewControllerDelegate? = nil
 
 	private var topTranparentView = UIView()
 	fileprivate var panelSwitchControl = UISegmentedControl(items: [])
@@ -47,16 +53,32 @@ class ControlCenterViewController: UIViewController {
 			}
 		}
 	}
+    
+    var lastOrientation: DeviceOrientation
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        lastOrientation = UIDevice.current.getDeviceAndOrientation().1
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setupComponents()
+        self.panelSwitchControl.selectedSegmentIndex = 0
+        self.switchPanel(self.panelSwitchControl)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		self.panelSwitchControl.selectedSegmentIndex = 0
-		self.switchPanel(self.panelSwitchControl)
 	}
 
 	private func setupComponents() {
@@ -143,4 +165,12 @@ class ControlCenterViewController: UIViewController {
 			return UIViewController()
 		}
 	}
+    
+    @objc func orientationChanged(notification: Notification) {
+        let orientation = UIDevice.current.getDeviceAndOrientation().1
+        if orientation != lastOrientation {
+            lastOrientation = orientation
+            container?.dismiss()
+        }
+    }
 }

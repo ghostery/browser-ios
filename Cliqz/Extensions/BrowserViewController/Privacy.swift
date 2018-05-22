@@ -8,30 +8,6 @@
 
 import Foundation
 
-class OrientationManager {
-    
-    static let shared = OrientationManager()
-    
-    var lastOrientation: DeviceOrientation
-    
-    init() {
-        lastOrientation = UIDevice.current.getDeviceAndOrientation().1
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc func orientationChanged(notification: Notification) {
-        let orientation = UIDevice.current.getDeviceAndOrientation().1
-        if orientation != lastOrientation {
-            lastOrientation = orientation
-            NotificationCenter.default.post(name: Notification.Name.DeviceOrientationChanged, object: self)
-        }
-    }
-}
-
 extension NSNotification.Name {
     public static let GhosteryButtonPressed = NSNotification.Name(rawValue: "GhosteryButtonPressedNotification")
     public static let DeviceOrientationChanged = NSNotification.Name(rawValue: "DeviceOrientationChangedNotification")
@@ -63,11 +39,13 @@ extension BrowserViewController {
         }
         
 		let controlCenter = ControlCenterViewController()
-		
+        
+        controlCenter.container = self
+        
         if let pageUrl = pageUrl {
             controlCenter.pageURL = pageUrl
         }
-        
+		
         let (device,orientation) = UIDevice.current.getDeviceAndOrientation()
         
 		self.addChildViewController(controlCenter)
@@ -102,7 +80,6 @@ extension BrowserViewController {
             
             applyShadow(view: controlCenter.view)
         }
-        
 	}
 
 	func hideControlCenter() {
@@ -151,5 +128,11 @@ extension BrowserViewController {
         self.present(alert, animated: true, completion: nil)
         //TelemetryLogger.sharedInstance.logEvent(.AntiPhishing("show", nil, nil))
         
+    }
+}
+
+extension BrowserViewController: ControlCenterViewControllerDelegate {
+    func dismiss() {
+        self.hideControlCenter()
     }
 }
