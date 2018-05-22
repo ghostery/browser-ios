@@ -146,8 +146,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         //Cliqz: Cards Subscription
         SubscriptionsHandler.sharedInstance.delegate = browserViewController
-        //Cliqz: Orientation Manager
-        _ = OrientationManager.shared
         
         //Cliqz: start Ghostery Migration
         if let profile = self.profile as? BrowserProfile {
