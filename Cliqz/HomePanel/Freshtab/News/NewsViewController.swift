@@ -129,38 +129,46 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-		let v = UIView()
-		v.backgroundColor = UIColor.black
-		let l = UILabel()
-		l.text = NSLocalizedString("NEWS", tableName: "Cliqz", comment: "Title to expand news stream")
-		l.textColor = UIColor.white
-		l.font = UIFont.systemFont(ofSize: 13)
-		v.addSubview(l)
-		l.snp.makeConstraints { (make) in
-			make.left.equalTo(v).offset(10)
-			make.top.equalTo(v)
-			make.height.equalTo(27)
-			make.right.equalTo(v)
-		}
-		expandNewsbutton = UIButton()
-		v.addSubview(expandNewsbutton)
-		expandNewsbutton.contentHorizontalAlignment = .right
-		expandNewsbutton.snp.makeConstraints { (make) in
-			make.top.equalTo(v).offset(-2)
-			make.right.equalTo(v).offset(-9)
-			make.height.equalTo(30)
-			make.width.equalTo(v).dividedBy(2)
-		}
-		if isNewsExpanded {
-			expandNewsbutton.setTitle(NSLocalizedString("LessNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
-		} else {
-			expandNewsbutton.setTitle(NSLocalizedString("MoreNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
-		}
-		expandNewsbutton.titleLabel?.font = UIFont.systemFont(ofSize: 13)
-		expandNewsbutton.titleLabel?.textAlignment = .right
-		expandNewsbutton.setTitleColor(UIColor.white, for: .normal)
-		expandNewsbutton.addTarget(self, action: #selector(toggleShowMoreNews), for: .touchUpInside)
-		return v
+        let headerAlpha: CGFloat = 0.6
+        let v = UIView()
+        v.backgroundColor = UIColor.white.withAlphaComponent(0.8)
+        let logo = UIImageView(image: UIImage(named: "defaultFavicon"))
+        v.addSubview(logo)
+        logo.snp.makeConstraints { (make) in
+            make.top.equalTo(v).offset(4)
+            make.left.equalTo(v).offset(7)
+            make.height.width.equalTo(20)
+        }
+        let l = UILabel()
+        l.text = NSLocalizedString("NEWS", tableName: "Cliqz", comment: "Title to expand news stream")
+        l.textColor = UIColor.black.withAlphaComponent(headerAlpha)
+        l.font = UIFont.systemFont(ofSize: 13)
+        v.addSubview(l)
+        l.snp.makeConstraints { (make) in
+            make.left.equalTo(logo.snp.right).offset(7)
+            make.top.equalTo(v)
+            make.height.equalTo(27)
+            make.right.equalTo(v)
+        }
+        expandNewsbutton = UIButton()
+        v.addSubview(expandNewsbutton)
+        expandNewsbutton.contentHorizontalAlignment = .right
+        expandNewsbutton.snp.makeConstraints { (make) in
+            make.top.equalTo(v).offset(-2)
+            make.right.equalTo(v).offset(-9)
+            make.height.equalTo(30)
+            make.width.equalTo(v).dividedBy(2)
+        }
+        if isNewsExpanded {
+            expandNewsbutton.setTitle(NSLocalizedString("LessNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
+        } else {
+            expandNewsbutton.setTitle(NSLocalizedString("MoreNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
+        }
+        expandNewsbutton.titleLabel?.font = UIFont.systemFont(ofSize: 13)
+        expandNewsbutton.titleLabel?.textAlignment = .right
+        expandNewsbutton.setTitleColor(UIColor.black.withAlphaComponent(headerAlpha), for: .normal)
+        expandNewsbutton.addTarget(self, action: #selector(toggleShowMoreNews), for: .touchUpInside)
+        return v
 	}
 	
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {

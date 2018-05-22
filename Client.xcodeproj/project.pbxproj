@@ -508,7 +508,6 @@
 		AF77B88E209A022A00E7A0C4 /* NSData+GZIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF77B88D209A022A00E7A0C4 /* NSData+GZIP.swift */; };
 		AF77B890209A05E200E7A0C4 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF77B88F209A05E200E7A0C4 /* ConnectionManager.swift */; };
 		AF77B8C5209B132700E7A0C4 /* CliqzHomePanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */; };
-		AF7FDDBC205949AA00AA2280 /* ExpandableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7FDDAD205949A900AA2280 /* ExpandableView.swift */; };
 		AF99C8A2206935F0009404FF /* GhosteryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99C8A1206935F0009404FF /* GhosteryButton.swift */; };
 		AF9C111220A051FB003253D3 /* CliqzHistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */; };
 		AFA1DE072088AF9600B27B8A /* AdBlocker in Resources */ = {isa = PBXBuildFile; fileRef = AFA1DDF82088AF9600B27B8A /* AdBlocker */; };
@@ -1980,7 +1979,6 @@
 		AF77B88D209A022A00E7A0C4 /* NSData+GZIP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSData+GZIP.swift"; sourceTree = "<group>"; };
 		AF77B88F209A05E200E7A0C4 /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHomePanelViewController.swift; sourceTree = "<group>"; };
-		AF7FDDAD205949A900AA2280 /* ExpandableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandableView.swift; sourceTree = "<group>"; };
 		AF99C8A1206935F0009404FF /* GhosteryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosteryButton.swift; sourceTree = "<group>"; };
 		AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHistoryPanel.swift; sourceTree = "<group>"; };
 		AFA1DDF82088AF9600B27B8A /* AdBlocker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AdBlocker; sourceTree = "<group>"; };
@@ -3455,7 +3453,6 @@
 				4F304596204FEE3B00C99162 /* Resources */,
 				4F0445E520334D0E00E2C0C7 /* Extensions */,
 				4F0445E0203344A000E2C0C7 /* Services */,
-				4F0445D52033321D00E2C0C7 /* Freshtab */,
 			);
 			path = Cliqz;
 			sourceTree = "<group>";
@@ -3463,7 +3460,6 @@
 		4FBBC1532035E5D000445AD1 /* News */ = {
 			isa = PBXGroup;
 			children = (
-				AF7FDDAD205949A900AA2280 /* ExpandableView.swift */,
 				4F0445D62033324500E2C0C7 /* NewsDataService.swift */,
 				4FBBC14F2035E02900445AD1 /* NewsViewCell.swift */,
 				4FBBC1512035E5C400445AD1 /* NewsDataSource.swift */,
@@ -3666,6 +3662,7 @@
 		AF77B8B5209B130400E7A0C4 /* HomePanel */ = {
 			isa = PBXGroup;
 			children = (
+				4F0445D52033321D00E2C0C7 /* Freshtab */,
 				AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */,
 				AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */,
 				AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */,
@@ -6661,7 +6658,6 @@
 				AF6FA98920652D4600D7F9F0 /* TrackerListRegex.swift in Sources */,
 				AF6FA98F20652D4600D7F9F0 /* UserPreferences.swift in Sources */,
 				C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */,
-				AF7FDDBC205949AA00AA2280 /* ExpandableView.swift in Sources */,
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				1EDF91C5208A33C500200100 /* TabTrayControllerExtension.swift in Sources */,
 				A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */,

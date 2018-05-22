@@ -79,7 +79,8 @@ class TopSiteViewCell: UICollectionViewCell {
 		}
 		self.logoHostLabel.textAlignment = .center
 		self.logoHostLabel.font = UIFont.systemFont(ofSize: 10)
-		self.logoHostLabel.textColor = UIColor.black
+		self.logoHostLabel.textColor = UIColor.white
+        self.logoHostLabel.applyShadow()
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
