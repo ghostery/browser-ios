@@ -207,6 +207,7 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
         if isGlobalAntitrackingOn() {
             return trackerCount(tableType:tableType, section: section)
         }
+        
         return trackers(tableType: tableType, category: category(tableType, section)).filter({ (app) -> Bool in
             let translatedState = app.state.translatedState
             return translatedState == .blocked || translatedState == .restricted
@@ -219,45 +220,50 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
             return iconForCategoryState(state: .blocked)
         }
         
-        let domainState = self.domainState()
-        
-        if domainState == .restricted {
-            return iconForCategoryState(state: .restricted)
-        }
-        else if domainState == .trusted {
-            return iconForCategoryState(state: .trusted)
-        }
-        
-        let t = trackers(tableType: tableType, category: category(tableType, section))
-        
-        var set: Set<TrackerStateEnum> = Set()
-        
-        for tracker in t {
-            set.insert(tracker.state.translatedState)
-        }
-        
-        let state: CategoryState
-        
-        if set.count > 1 {
-            state = .other
-        }
-        else if set.count == 1 {
-            state = CategoryState.from(trackerState: set.first!)
+        if tableType == .page {
+            let domainState = self.domainState()
+            
+            if domainState == .restricted {
+                return iconForCategoryState(state: .restricted)
+            }
+            else if domainState == .trusted {
+                return iconForCategoryState(state: .trusted)
+            }
+            else {
+                return iconForTrackerState(state: .none)
+            }
         }
         else {
-            state = .none
+            let t = trackers(tableType: tableType, category: category(tableType, section))
+            
+            var set: Set<TrackerStateEnum> = Set()
+            
+            for tracker in t {
+                set.insert(tracker.state.translatedState)
+            }
+            
+            let state: CategoryState
+            
+            if set.count > 1 {
+                state = .other
+            }
+            else if set.count == 1 {
+                state = CategoryState.from(trackerState: set.first!)
+            }
+            else {
+                state = .none
+            }
+            
+            return iconForCategoryState(state: state)
         }
-        
-        return iconForCategoryState(state: state)
     }
     
     //INDIVIDUAL TRACKERS
     func title(tableType: TableType, indexPath: IndexPath) -> (String?, NSMutableAttributedString?) {
         guard let t = tracker(tableType: tableType, indexPath: indexPath) else { return (nil, nil) }
         let state: TrackerStateEnum = t.state.translatedState
-        let domainState = self.domainState()
         
-        if ((state == .blocked || state == .restricted || domainState == .restricted) && domainState != .trusted) || isGlobalAntitrackingOn() {
+        if state == .blocked || state == .restricted || isGlobalAntitrackingOn() {
             let str = NSMutableAttributedString(string: t.name)
             str.addAttributes([NSStrikethroughStyleAttributeName : 1], range: NSMakeRange(0, t.name.count))
             return (nil, str)
@@ -273,13 +279,15 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
             return iconForTrackerState(state: .blocked)
         }
         
-        let domainState = self.domainState()
-        
-        if domainState == .restricted {
-            return iconForTrackerState(state: .restricted)
-        }
-        else if domainState == .trusted {
-            return iconForTrackerState(state: .trusted)
+        if tableType == .page {
+            let domainState = self.domainState()
+            
+            if domainState == .restricted {
+                return iconForTrackerState(state: .restricted)
+            }
+            else if domainState == .trusted {
+                return iconForTrackerState(state: .trusted)
+            }
         }
         
         return iconForTrackerState(state: t.state.translatedState)

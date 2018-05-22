@@ -72,16 +72,12 @@ final class UpdateHelper {
         if UserPreferences.instance.antitrackingMode == .blockAll {
             return BlockListIdentifiers.antitrackingBlockAllIdentifiers()
         }
-        else {
-            if let domainStr = domain, let domainObj = DomainStore.get(domain: domainStr) {
-                if domainObj.translatedState == .restricted {
-                    return BlockListIdentifiers.antitrackingBlockAllIdentifiers()
-                }
-            }
+        else if let domainStr = domain, let domainObj = DomainStore.get(domain: domainStr), domainObj.translatedState == .restricted {
+            //assemble list of appIds for which blocklists need to loaded
+            return BlockListIdentifiers.antitrackingBlockSelectedIdentifiers(domain: domain)
         }
         
-        //assemble list of appIds for which blocklists need to loaded
-        return BlockListIdentifiers.antitrackingBlockSelectedIdentifiers(domain: domain)
+        return []
     }
     
     class func identifiersFor(type: BlockListType, domain: String?) -> [String] {
