@@ -233,7 +233,7 @@ class CliqzIntroViewController: UIViewController {
     }
     
     func imageContainerSize() -> CGSize {
-        return CGSize(width: 375 * cards.count, height: 375)
+        return CGSize(width: self.view.frame.width * CGFloat(cards.count), height: 375)
     }
 }
 
