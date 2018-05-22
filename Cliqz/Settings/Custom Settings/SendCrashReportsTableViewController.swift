@@ -15,7 +15,7 @@ class SendCrashReportsTableViewController: ToggleSubSettingsTableViewController 
     }
     
     override func getToggles() -> [Bool] {
-        return [SettingsPrefs.shared.getAutoForgetTabPref()]
+        return [SettingsPrefs.shared.getSendCrashReportsPref()]
     }
     
     override func getToggleTitles() -> [String] {

@@ -228,6 +228,21 @@ class SendCrashReportsSetting: CliqzOnOffSetting {
     }
 }
 
+class SendUsageDataSetting: CliqzOnOffSetting {
+    init(settings: SettingsTableViewController) {
+        let title  = NSLocalizedString("Send usage data", tableName: "Cliqz", comment: "[Settings] Send usage data")
+        super.init(settings: settings, title: title)
+    }
+    
+    override func isOn() -> Bool {
+        return SettingsPrefs.shared.getSendUsageDataPref()
+    }
+    
+    override func getSubSettingViewController() -> SubSettingsTableViewController {
+        return SendUsageDataTableViewController()
+    }
+}
+
 class MyOffrzSetting: ShowCliqzPageSetting {
     
     override func getTitle() -> String {
