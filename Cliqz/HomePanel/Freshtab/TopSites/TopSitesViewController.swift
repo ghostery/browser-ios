@@ -118,7 +118,8 @@ extension TopSitesViewController {
 		self.emptyTopSitesHint = UILabel()
 		self.emptyTopSitesHint?.text = NSLocalizedString("Empty TopSites hint", tableName: "Cliqz", comment: "Hint on Freshtab when there is no topsites")
 		self.emptyTopSitesHint?.font = UIFont.systemFont(ofSize: 12)
-		self.emptyTopSitesHint?.textColor = UIColor.black
+		self.emptyTopSitesHint?.textColor = UIColor.white
+        self.emptyTopSitesHint?.applyShadow()
 		self.emptyTopSitesHint?.textAlignment = .center
 		self.view.addSubview(self.emptyTopSitesHint!)
 	}
