@@ -210,7 +210,9 @@ extension NewsViewController {
 	}
 
 	@objc fileprivate func toggleShowMoreNews() {
-		//		self.delegate?.dismissKeyboard()
+        //dismiss keyboard
+		view.window?.rootViewController?.view.endEditing(true)
+        
 		self.isNewsExpanded = !self.isNewsExpanded
 		
 		self.updateViewConstraints()
