@@ -10,4 +10,8 @@
 #import <React/RCTBridgeModule.h>
 @interface RCT_EXTERN_MODULE(BrowserActions, NSObject)
 RCT_EXTERN_METHOD(searchHistory:(nonnull NSString *)query callback:(RCTResponseSenderBlock))
+RCT_EXTERN_METHOD(openLink:(nonnull NSString *)url)
+RCT_EXTERN_METHOD(copyValue:(nonnull NSString *)result)
+RCT_EXTERN_METHOD(callNumber:(nonnull NSString *)number)
+RCT_EXTERN_METHOD(openMap:(nonnull NSString *)url)
 @end
