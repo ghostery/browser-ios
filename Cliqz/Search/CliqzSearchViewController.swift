@@ -212,9 +212,7 @@ extension CliqzSearchViewController {
     }
     
     @objc func openMap(_ notification: Notification) {
-        if let url = notification.object as? String {
-            self.openGoogleMaps(url)
-        }
+        self.didSelectUrl(notification)
     }
     
     @objc func shareLocation(_ notification: Notification) {
@@ -225,12 +223,6 @@ extension CliqzSearchViewController {
         let trimmedPhoneNumber = phoneNumber.removeWhitespaces()
         if let url = URL(string: "tel://\(trimmedPhoneNumber)") {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-    }
-    
-    fileprivate func openGoogleMaps(_ url: String) {
-        if let mapURL = URL(string:url) {
-            delegate?.didSelectURL(mapURL, searchQuery: nil)
         }
     }
 }

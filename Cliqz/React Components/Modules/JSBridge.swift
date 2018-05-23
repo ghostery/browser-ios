@@ -53,13 +53,7 @@ open class JSBridge : RCTEventEmitter {
                            "mobile-pairing:downloadVideo",
                            "mobile-pairing:pushPairingData",
                            "mobile-pairing:notifyPairingError",
-                           "mobile-pairing:notifyPairingSuccess",
-                           "mobile-search:openUrl",
-                           "mobile-search:copyValue",
-                           "mobile-search:hideKeyboard",
-                           "mobile-search:call",
-                           "mobile-search:map",
-                           "mobile-search:share-location"]
+                           "mobile-pairing:notifyPairingSuccess"]
         ]
     }
     
