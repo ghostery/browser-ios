@@ -117,6 +117,11 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
     }
 
     func countAndColorByCategory() -> Dictionary<String, (Int, UIColor)> {
+        
+        if UserPreferences.instance.pauseGhosteryMode == .paused {
+            return ["uncategorized": (1, UIColor.gray)]
+        }
+        
         let countDict = TrackerList.instance.countByCategory(domain: self.domainStr)
         var dict: Dictionary<String, (Int, UIColor)> = [:]
         for key in countDict.keys {
@@ -135,10 +140,10 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
     func blockedTrackerCount() -> Int {
         let domainS = domainState()
         
-        if domainS == .restricted || isGlobalAntitrackingOn() {
-            return detectedTrackerCount()
-        } else if domainS == .trusted {
+        if domainS == .trusted || UserPreferences.instance.pauseGhosteryMode == .paused {
             return 0
+        } else if domainS == .restricted || isGlobalAntitrackingOn() {
+            return detectedTrackerCount()
         }
         else {
             return TrackerList.instance.detectedTrackersForPage(self.domainStr).filter { (app) -> Bool in
