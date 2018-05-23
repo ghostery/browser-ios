@@ -96,7 +96,7 @@ class ControlCenterDelegate: ControlCenterDelegateProtocol {
         if let trakerListApp = TrackerList.instance.apps[appId] {
             TrackerStateStore.change(trackerState: trakerListApp.state, toState: state)
             
-            if state == .trusted || state == .none {
+            if state == .trusted || state == .empty {
                 UserPreferences.instance.antitrackingMode = .blockSomeOrNone
                 UserPreferences.instance.writeToDisk()
             }

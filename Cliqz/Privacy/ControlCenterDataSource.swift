@@ -306,7 +306,7 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
     
     func actions(tableType: TableType, indexPath: IndexPath) -> [ActionType] {
         
-        if domainState() != .none {
+        if domainState() != .empty {
             return []
         }
         
