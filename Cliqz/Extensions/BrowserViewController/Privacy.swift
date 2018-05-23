@@ -55,27 +55,27 @@ extension BrowserViewController {
         
         if orientation == .portrait && device != .iPad {
             controlCenter.view.snp.makeConstraints({ (make) in
-                make.top.equalToSuperview().offset(UIHelper.heightURLBar(device, orientation))
+                make.top.equalTo(self.urlBar.snp.bottom)
+                make.bottom.equalToSuperview()
                 make.left.right.equalToSuperview()
-                make.height.equalToSuperview().offset(-UIHelper.heightURLBar(device, orientation))
             })
         }
         else if device == .iPad {
             controlCenter.view.snp.makeConstraints({ (make) in
-                make.width.equalToSuperview().dividedBy(UIHelper.screenWidthDenominator(device, orientation))
+                make.width.equalToSuperview().dividedBy(2.0)
                 make.right.equalToSuperview()
                 make.bottom.equalToSuperview()
-                make.top.equalToSuperview().offset(UIHelper.heightURLBar(device, orientation))
+                make.top.equalTo(self.urlBar.snp.bottom)
             })
             
             applyShadow(view: controlCenter.view)
         }
         else {
             controlCenter.view.snp.makeConstraints({ (make) in
-                make.width.equalToSuperview().dividedBy(UIHelper.screenWidthDenominator(device, orientation))
+                make.width.equalToSuperview().dividedBy(1.5)
                 make.right.equalToSuperview()
                 make.bottom.equalToSuperview()
-                make.top.equalToSuperview().offset(UIHelper.heightURLBar(device, orientation))
+                make.top.equalTo(self.urlBar.snp.bottom)
             })
             
             applyShadow(view: controlCenter.view)
