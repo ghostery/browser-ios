@@ -1305,9 +1305,13 @@ extension BrowserViewController: URLBarDelegate {
         
         navigationController?.pushViewController(tabTrayController, animated: true)
         self.tabTrayController = tabTrayController
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {
+        // Cliqz: Close CC
+        self.hideControlCenter()
         tabManager.selectedTab?.reload()
     }
     
@@ -1316,6 +1320,8 @@ extension BrowserViewController: URLBarDelegate {
         qrCodeViewController.qrCodeDelegate = self
         let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
         self.present(controller, animated: true, completion: nil)
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
@@ -1340,6 +1346,8 @@ extension BrowserViewController: URLBarDelegate {
                                                  success: successCallback)
             self.presentSheetWith(actions: pageActions, on: self, from: button)
         }
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
     
     func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
@@ -1351,6 +1359,8 @@ extension BrowserViewController: URLBarDelegate {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         presentActivityViewController(url, tab: tab, sourceView: button, sourceRect: button.bounds, arrowDirection: .up)
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView, from button: UIButton) {
@@ -1363,10 +1373,14 @@ extension BrowserViewController: URLBarDelegate {
     
     func urlBarDidPressStop(_ urlBar: URLBarView) {
         tabManager.selectedTab?.stop()
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func urlBarDidPressTabs(_ urlBar: URLBarView) {
         showTabTray()
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
@@ -1385,9 +1399,13 @@ extension BrowserViewController: URLBarDelegate {
                 }
             }
         }
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool {
+        // Cliqz: Close CC
+        self.hideControlCenter()
         guard let tab = tabManager.selectedTab,
                let url = tab.url?.displayURL,
                let result = profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
@@ -1438,6 +1456,8 @@ extension BrowserViewController: URLBarDelegate {
         } else {
             self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
         }
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
@@ -1525,30 +1545,42 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         LeanPlumClient.shared.track(event: .interactWithURLBar)
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
         hideSearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
         dismissVisibleMenus()
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 }
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // Cliqz: Close CC
+        self.hideControlCenter()
         tabManager.selectedTab?.goBack()
     }
 
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // Cliqz: Close CC
+        self.hideControlCenter()
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         showBackForwardList()
     }
 
     func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // Cliqz: Close CC
+        self.hideControlCenter()
         tabManager.selectedTab?.reload()
     }
 
@@ -1564,17 +1596,25 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         generator.impactOccurred()
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
         presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // Cliqz: Close CC
+        self.hideControlCenter()
         tabManager.selectedTab?.stop()
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // Cliqz: Close CC
+        self.hideControlCenter()
         tabManager.selectedTab?.goForward()
     }
 
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        // Cliqz: Close CC
+        self.hideControlCenter()
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         showBackForwardList()
@@ -1595,10 +1635,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         if let tab = tabManager.selectedTab, let url = tab.url {
             presentActivityViewController(url, tab: tab, sourceView: button.superview, sourceRect: button.frame, arrowDirection: .up)
         }
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
     
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1623,6 +1667,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         present(controller, animated: true, completion: nil)
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func showBackForwardList() {

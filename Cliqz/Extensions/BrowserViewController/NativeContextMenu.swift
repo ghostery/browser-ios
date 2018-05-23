@@ -17,6 +17,7 @@ extension BrowserViewController {
 		if let button = notification.object as? UIButton {
 			self.showPageOptions(self.urlBar, from: button)
 		}
+        self.hideControlCenter()
 	}
 	
 	private func showPageOptions(_ urlBar: URLBarView, from button: UIButton) {
