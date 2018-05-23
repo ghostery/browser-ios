@@ -808,22 +808,32 @@ class BrowserViewController: UIViewController {
         searchLoader?.addListener(searchController!)
         */
         //Cliqz: Replace Search Controller
-        searchController = CliqzSearchViewController(profile: self.profile)
-        searchController?.delegate = self
-        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-        searchLoader!.addListener(HistoryListener.shared)
-        
-        addChildViewController(searchController!)
-        view.addSubview(searchController!.view)
-        searchController!.view.snp.makeConstraints { make in
-            make.top.equalTo(self.urlBar.snp.bottom)
-            make.left.right.bottom.equalTo(self.view)
-            return
+        if SettingsPrefs.shared.getCliqzSearchPref() {
+            searchController = CliqzSearchViewController(profile: self.profile)
+            searchController?.delegate = self
+            searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+            searchLoader!.addListener(HistoryListener.shared)
+            
+            addChildViewController(searchController!)
+            
+            view.addSubview(searchController!.view)
+            searchController!.view.snp.makeConstraints { make in
+                make.top.equalTo(self.urlBar.snp.bottom)
+                make.left.right.bottom.equalTo(self.view)
+                return
+            }
+            
+            homePanelController?.view?.isHidden = true
+            
+            searchController!.didMove(toParentViewController: self)
         }
-
-        homePanelController?.view?.isHidden = true
-
-        searchController!.didMove(toParentViewController: self)
+        else {
+            //Search controller is still needed for the autocomplete
+            searchController = CliqzSearchViewController(profile: self.profile)
+            searchController?.delegate = self
+            searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+            searchLoader!.addListener(HistoryListener.shared)
+        }
     }
 
     fileprivate func hideSearchController() {

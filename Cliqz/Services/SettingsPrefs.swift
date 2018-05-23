@@ -14,6 +14,7 @@ class SettingsPrefs {
 	static let FairBlockingPrefKey = "fairBlocking"
 	static let BlockExplicitContentPrefKey = "blockContent"
     static let HumanWebPrefKey = "humanweb.toggle"
+    static let CliqzSearchPrefKey = "cliqzSearch"
 	static let ShowAntitrackingHintKey = "showAntitrackingHint"
 	static let ShowCliqzSearchHintKey = "showCliqzSearchHint"
     static let ShowVideoDownloaderHintKey = "ShowVideoDownloaderHint"
@@ -77,6 +78,18 @@ class SettingsPrefs {
     
     func updateHumanWebPref(_ newValue: Bool) {
         self.updatePref(SettingsPrefs.HumanWebPrefKey, value: newValue as AnyObject)
+    }
+    
+    func getCliqzSearchPref() -> Bool {
+        let defaultValue = true
+        if let humanWebPref = self.getBoolPref(SettingsPrefs.CliqzSearchPrefKey) {
+            return humanWebPref
+        }
+        return defaultValue
+    }
+    
+    func updateCliqzSearchPref(_ newValue: Bool) {
+        self.updatePref(SettingsPrefs.CliqzSearchPrefKey, value: newValue as AnyObject)
     }
     
 	func updateShowAntitrackingHintPref(_ newValue: Bool) {

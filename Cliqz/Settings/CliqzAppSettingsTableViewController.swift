@@ -70,7 +70,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     // MARK:- Helper methods
     private func generateSearchSettings(prefs: Prefs) -> [Setting] {
         let regionalSetting                 = RegionalSetting(settings: self)
-        let cliqzSearchSetting              = CliqzSearchSetting(settings: self)
+        let complementarySearchSetting      = ComplementarySearchSetting(settings: self)
 
         let querySuggestionTitle = NSLocalizedString("Search Query Suggestions", tableName: "Cliqz", comment: "[Settings] Search Query Suggestions")
         let querySuggestionSettings = BoolSetting(prefs: prefs,
@@ -86,12 +86,15 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         
         let humanWebSetting = HumanWebSetting(settings: self)
         
+        let cliqzSearchTitle = NSLocalizedString("Cliqz Search", tableName: "Cliqz", comment: "[Settings] Cliqz Search")
+        let cliqzSearchSetting = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.CliqzSearchPrefKey, defaultValue: true, titleText: cliqzSearchTitle)
+        
         
         var searchSettings: [Setting]!
         if QuerySuggestions.querySuggestionEnabledForCurrentRegion() {
-            searchSettings = [regionalSetting, querySuggestionSettings, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting]
+            searchSettings = [regionalSetting, querySuggestionSettings, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
         } else {
-            searchSettings = [regionalSetting, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting]
+            searchSettings = [regionalSetting, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
         }
         return searchSettings
     }

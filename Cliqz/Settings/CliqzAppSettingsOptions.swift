@@ -80,7 +80,8 @@ class HumanWebSetting: CliqzOnOffSetting {
         return HumanWebSettingsTableViewController()
     }
 }
-class CliqzSearchSetting: Setting, SearchEnginePickerDelegate {
+
+class ComplementarySearchSetting: Setting, SearchEnginePickerDelegate {
     let profile: Profile
     var navigationController: UINavigationController?
     

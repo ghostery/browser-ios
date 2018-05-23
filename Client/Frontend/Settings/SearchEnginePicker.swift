@@ -12,7 +12,10 @@ class SearchEnginePicker: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        /* Cliqz: Change title from Default Search Engine to Complementary Search Engine
         navigationItem.title = NSLocalizedString("Default Search Engine", comment: "Title for default search engine picker.")
+        */
+        navigationItem.title = NSLocalizedString("Complementary Search Engine", comment: "Title for default search engine picker.")
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .plain, target: self, action: #selector(cancel))
     }
 
