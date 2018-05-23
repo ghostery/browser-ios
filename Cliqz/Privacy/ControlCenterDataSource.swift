@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Storage
 
 enum TableType {
     case page

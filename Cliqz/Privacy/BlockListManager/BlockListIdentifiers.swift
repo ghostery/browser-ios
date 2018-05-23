@@ -6,6 +6,8 @@
 //  Copyright © 2018 Cliqz. All rights reserved.
 //
 
+import Storage
+
 final class BlockListIdentifiers {
     
     class func antitrackingBlockSelectedIdentifiers(domain: String?) -> [String] {

@@ -50,6 +50,7 @@ public class GhosteryMigrationManager {
         
         DispatchQueue.global().async { [weak self] in
             self?.migrateOpenTabs()
+            self?.migrateBugs()
             self?.migrateFoldersAndBookmarks()
         }
     }
@@ -60,6 +61,7 @@ public class GhosteryMigrationManager {
             let bookmarks = self.fetchBookmarks()
             if bookmarks.value.isSuccess {
                 self.performBookmarkMigration()
+                //TODO: Ask why cleanup is over here...it should happen after migration is done.
                 self.cleanup()
             }
         }
@@ -72,6 +74,15 @@ public class GhosteryMigrationManager {
                 if let url = URL(string: tab.url) {
                     self?.delegate?.openMigratedGhosteryTab(url)
                 }
+            }
+        }
+    }
+    
+    private func migrateBugs() {
+        let sql = "SELECT * from  \(TableGhosteryBugs)"
+        ghosteryDB!.runQuery(sql, args: [], factory: GhosterySQLiteFactories.bugFactory) >>== { appIds in
+            for appId in appIds.asArray() {
+                TrackerStateStore.createTrackerState(appId: appId, state: .blocked)
             }
         }
     }

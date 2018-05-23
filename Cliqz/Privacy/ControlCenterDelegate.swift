@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Storage
 
 protocol ControlCenterDelegateProtocol: class {
     func chageSiteState(to: DomainState)

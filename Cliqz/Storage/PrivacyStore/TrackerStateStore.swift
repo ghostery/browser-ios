@@ -9,15 +9,15 @@
 import Foundation
 import RealmSwift
 
-class TrackerState: Object {
+public class TrackerState: Object {
     @objc dynamic var appId: Int = -1
     @objc dynamic var state: Int = 0 //0 none, 1 trusted, 2 restricted, 3 blocked
     
-    override static func primaryKey() -> String? {
+    override public static func primaryKey() -> String? {
         return "appId"
     }
     
-    var translatedState: TrackerStateEnum {
+    public var translatedState: TrackerStateEnum {
         switch state {
         case 0:
             return .empty
@@ -33,16 +33,16 @@ class TrackerState: Object {
     }
 }
 
-enum TrackerStateEnum {
+public enum TrackerStateEnum {
     case empty
     case trusted
     case restricted
     case blocked
 }
 
-class TrackerStateStore: NSObject {
+public class TrackerStateStore: NSObject {
     
-    class func getTrackerState(appId: Int) -> TrackerState? {
+    public class func getTrackerState(appId: Int) -> TrackerState? {
         let realm = try! Realm()
         if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
             return trackerState
@@ -50,7 +50,7 @@ class TrackerStateStore: NSObject {
         return nil
     }
     
-    class func createTrackerState(appId: Int, state: TrackerStateEnum = .empty) -> TrackerState {
+    @discardableResult public class func createTrackerState(appId: Int, state: TrackerStateEnum = .empty) -> TrackerState {
         
         let realm = try! Realm()
         let trackerState = TrackerState()
@@ -64,7 +64,7 @@ class TrackerStateStore: NSObject {
         return trackerState
     }
     
-    class func change(trackerState: TrackerState, toState: TrackerStateEnum) {
+    public class func change(trackerState: TrackerState, toState: TrackerStateEnum) {
         let realm = try! Realm()
         do {
             try realm.write {
