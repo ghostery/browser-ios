@@ -5,15 +5,15 @@
 node('mac-mini-ios') {
     writeFile file: 'Vagrantfile', text: '''
     Vagrant.configure("2") do |config|
-        config.vm.box = "ios-xcode9.2"
+        config.vm.box = "ios-xcode9.3"
     
-        config.vm.define "priosx92" do |priosx92|
-            priosx92.vm.hostname ="priosx92"
+        config.vm.define "priosx93" do |priosx93|
+            priosx93.vm.hostname = "priosx93"
             
-            priosx92.vm.network "public_network", :bridge => "en0", auto_config: false
-            priosx92.vm.boot_timeout = 900
-            priosx92.vm.provider "vmware_fusion" do |v|
-                v.name = "priosx92"
+            priosx93.vm.network "public_network", :bridge => "en0", auto_config: false
+            priosx93.vm.boot_timeout = 900
+            priosx93.vm.provider "vmware_fusion" do |v|
+                v.name = "priosx93"
                 v.whitelist_verified = true
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
@@ -23,7 +23,7 @@ node('mac-mini-ios') {
                 v.vmx["RemoteDisplay.vnc.port"] = ENV["NODE_VNC_PORT"]
                 v.vmx["ethernet0.pcislotnumber"] = "33"
             end
-            priosx92.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
+            priosx93.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                 set -e
                 set -x
                 rm -f agent.jar
@@ -39,8 +39,8 @@ node('mac-mini-ios') {
     vagrant.inside(
         'Vagrantfile',
         '/jenkins',
-        2, // CPU
-        4000, // MEMORY
+        4, // CPU
+        8000, // MEMORY
         12000, // VNC port
         false, // rebuild image
     ) { 
@@ -66,7 +66,6 @@ node('mac-mini-ios') {
                         sudo -H python2 -m ensurepip
                         chmod 0755 autobots/requirements.txt
                         sudo -H python2 -m pip install -vvvr autobots/requirements.txt
-                        
                     '''
                 }
                 stage('Setup Build Environment') {
@@ -94,7 +93,7 @@ node('mac-mini-ios') {
                                 -workspace Client.xcworkspace \
                                 -scheme "Fennec" \
                                 -sdk iphonesimulator \
-                                -destination "platform=iOS Simulator,OS=11.2,id=185B34BB-DCB8-4A17-BDCA-843086B67193" \
+                                -destination "platform=iOS Simulator,OS=11.3,id=8A112602-53F8-4996-A58A-FC65665635EB" \
                                 ONLY_ACTIVE_ARCH=NO \
                                 -derivedDataPath clean build test
                         '''
@@ -103,9 +102,9 @@ node('mac-mini-ios') {
                 stage('Run Tests') {
                     withEnv([
                         'platformName=ios',
-                        'udid=185B34BB-DCB8-4A17-BDCA-843086B67193',
-                        'deviceName=iPhone 6',
-                        'platformVersion=11.2',
+                        'udid=8A112602-53F8-4996-A58A-FC65665635EB',
+                        'deviceName=iPhone 6s',
+                        'platformVersion=11.3',
                         'bundleID=com.cliqz.ios.newCliqz'
                         ]) {
                         timeout(60) {
@@ -142,11 +141,11 @@ node('mac-mini-ios') {
                             screenshots \
                             screenshots.zip \
                             test-reports
-                        xcrun simctl boot 185B34BB-DCB8-4A17-BDCA-843086B67193 || true
+                        xcrun simctl boot 8A112602-53F8-4996-A58A-FC65665635EB || true
                         xcrun simctl uninstall booted com.cliqz.ios.newCliqz
                         xcrun simctl uninstall booted com.apple.test.WebDriverAgentRunner-Runner
                         xcrun simctl uninstall booted com.apple.test.AppiumTests-Runner
-                        xcrun simctl shutdown 185B34BB-DCB8-4A17-BDCA-843086B67193 || true
+                        xcrun simctl shutdown 8A112602-53F8-4996-A58A-FC65665635EB || true
                     '''
                 }
             }
