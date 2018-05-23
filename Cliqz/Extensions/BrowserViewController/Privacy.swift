@@ -83,15 +83,17 @@ extension BrowserViewController {
 	}
 
 	func hideControlCenter() {
-		if let cc = self.childViewControllers.last,
-			let c = cc as? ControlCenterViewController {
-			c.willMove(toParentViewController: nil)
-            c.beginAppearanceTransition(true, animated: false)
-			c.view.removeFromSuperview()
-            c.endAppearanceTransition()
-            c.removeFromParentViewController()
-            NotificationCenter.default.post(name: controlCenterDismissedNotification, object: nil)
-		}
+        for cc in self.childViewControllers {
+            if let c = cc as? ControlCenterViewController {
+                c.willMove(toParentViewController: nil)
+                c.beginAppearanceTransition(true, animated: false)
+                c.view.removeFromSuperview()
+                c.endAppearanceTransition()
+                c.removeFromParentViewController()
+                NotificationCenter.default.post(name: controlCenterDismissedNotification, object: nil)
+                break
+            }
+        }
 	}
     
     @objc func orientationDidChange(notification: Notification) {
