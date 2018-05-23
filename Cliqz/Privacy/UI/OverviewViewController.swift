@@ -388,28 +388,24 @@ class OverviewViewController: UIViewController {
 	}
     
     private func showPauseActionSheet() {
-        func pause(_ time: Date) {
-            self.delegate?.pauseGhostery(paused: true, time: time)
-            self.setPauseGhostery(!self.pauseGhosteryButton.isSelected)
-        }
         
         let pauseAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let thirty = UIAlertAction(title: NSLocalizedString("30 minutes", tableName: "Cliqz", comment: "[ControlCenter - Overview] Pause Ghostery for thirty minutes title"), style: .default, handler: { (alert: UIAlertAction) -> Void in
+        let thirty = UIAlertAction(title: NSLocalizedString("30 minutes", tableName: "Cliqz", comment: "[ControlCenter - Overview] Pause Ghostery for thirty minutes title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
             let time = Date(timeIntervalSinceNow: 30 * 60)
-            pause(time)
+            self?.pauseGhostery(time)
         })
         pauseAlertController.addAction(thirty)
         
-        let onehour = UIAlertAction(title: NSLocalizedString("1 hour", tableName: "Cliqz", comment: "[ControlCenter - Overview] Pause Ghostery for one hour title"), style: .default, handler: { (alert: UIAlertAction) -> Void in
+        let onehour = UIAlertAction(title: NSLocalizedString("1 hour", tableName: "Cliqz", comment: "[ControlCenter - Overview] Pause Ghostery for one hour title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
             let time = Date(timeIntervalSinceNow: 60 * 60)
-            pause(time)
+            self?.pauseGhostery(time)
         })
         pauseAlertController.addAction(onehour)
         
-        let twentyfour = UIAlertAction(title: NSLocalizedString("24 hours", tableName: "Cliqz", comment: "[ControlCenter - Overview] Pause Ghostery for twentyfour hours title"), style: .default, handler: { (alert: UIAlertAction) -> Void in
+        let twentyfour = UIAlertAction(title: NSLocalizedString("24 hours", tableName: "Cliqz", comment: "[ControlCenter - Overview] Pause Ghostery for twentyfour hours title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
             let time = Date(timeIntervalSinceNow: 24 * 60 * 60)
-            pause(time)
+            self?.pauseGhostery(time)
         })
         pauseAlertController.addAction(twentyfour)
         
@@ -436,16 +432,27 @@ class OverviewViewController: UIViewController {
             showPauseActionSheet()
         }
     }
+    
+    func pauseGhostery(_ time: Date) {
+        self.delegate?.pauseGhostery(paused: true, time: time)
+        self.setPauseGhostery(!self.pauseGhosteryButton.isSelected)
+        self.delegate?.chageSiteState(to: .empty)
+        setSiteToNone()
+    }
 
 	@objc private func trustSitePressed() {
 		setTrustSite(!self.trustSiteButton.isSelected)
         self.trustSiteButton.isSelected ? self.delegate?.chageSiteState(to: .trusted) : self.delegate?.chageSiteState(to: .empty)
+        self.delegate?.pauseGhostery(paused: false, time: Date())
+        self.setPauseGhostery(false)
         updateBlockedTrackersCount()
 	}
 
 	@objc private func restrictSitePressed() {
 		setRestrictSite(!self.restrictSiteButton.isSelected)
         self.restrictSiteButton.isSelected ? self.delegate?.chageSiteState(to: .restricted) : self.delegate?.chageSiteState(to: .empty)
+        self.delegate?.pauseGhostery(paused: false, time: Date())
+        self.setPauseGhostery(false)
         updateBlockedTrackersCount()
 	}
     
