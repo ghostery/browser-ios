@@ -12,6 +12,7 @@ import Shared
 let TableGhosteryBookmarkFolders = "zfolder"
 let TableGhosteryBookmarks = "zbookmark"
 let TableGhosteryTabs = "ztab"
+let TableGhosteryBugs = "zbug"
 
 class GhosterySQLiteFactories {
     
@@ -45,5 +46,11 @@ class GhosterySQLiteFactories {
         let url = row["ZURL"] as! String
         let tab = GhosteryTab(id, order: order, url: url)
         return tab
+    }
+    
+    class func bugFactory(_ row: SDRow) -> Int {
+        //let id = row["Z_PK"] as! Int
+        let appID = row["ZAID"] as! Int
+        return appID
     }
 }

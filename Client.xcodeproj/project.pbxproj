@@ -517,13 +517,13 @@
 		AFA1DE0C2088BE0500B27B8A /* BlockListFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE0B2088BE0500B27B8A /* BlockListFileManager.swift */; };
 		AFA1DE0E2088BE5700B27B8A /* CompileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE0D2088BE5700B27B8A /* CompileOperation.swift */; };
 		AFA1DE102088D59400B27B8A /* BlockingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE0F2088D59400B27B8A /* BlockingCoordinator.swift */; };
-		AFA9FAA1208DD9C00028CA1B /* TrackerStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */; };
-		AFA9FAB9208DEF990028CA1B /* DomainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAB8208DEF990028CA1B /* DomainStore.swift */; };
 		AFA9FACA208DFA120028CA1B /* ControlCenterDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAC9208DFA120028CA1B /* ControlCenterDataSource.swift */; };
 		AFA9FACC208DFD790028CA1B /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FACB208DFD790028CA1B /* ArrayExtensions.swift */; };
 		AFA9FB0B208E04FA0028CA1B /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */; };
 		AFA9FB0D208E135E0028CA1B /* ControlCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */; };
 		AFBAC1BF20AEBB78007F02CC /* CliqzIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */; };
+		AFBEDE8B20B56BAD00C3119A /* DomainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAB8208DEF990028CA1B /* DomainStore.swift */; };
+		AFBEDE9A20B56BB200C3119A /* TrackerStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */; };
 		AFDF457220A9A8C40091CA27 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDF457120A9A8C40091CA27 /* UIHelper.swift */; };
 		AFDF458220A9C5F20091CA27 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */; };
 		AFE484D32056838500554B2E /* CliqzURLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE484D22056838500554B2E /* CliqzURLBar.swift */; };
@@ -891,6 +891,7 @@
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
 		E6F965421B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F965411B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift */; };
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
+		E72881B3A820E72298AC8425 /* Pods_Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65050BFEE04C194EC9AC8676 /* Pods_Storage.framework */; };
 		EB11A1042044A90E0018F749 /* ContentBlockerHelper+Whitelist.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11A1012044A90D0018F749 /* ContentBlockerHelper+Whitelist.swift */; };
 		EB11A1052044A90E0018F749 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11A1022044A90D0018F749 /* TrackingProtectionPageStats.swift */; };
 		EB11A1062044A90E0018F749 /* ContentBlockerHelper+TabContentScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11A1032044A90E0018F749 /* ContentBlockerHelper+TabContentScript.swift */; };
@@ -1510,6 +1511,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02E8B3058B78D15A13524710 /* Pods-Storage.fennec.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Storage.fennec.xcconfig"; path = "Pods/Target Support Files/Pods-Storage/Pods-Storage.fennec.xcconfig"; sourceTree = "<group>"; };
 		03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelativeDatesTests.swift; sourceTree = "<group>"; };
 		0B1C05D51A798B1F004C78B0 /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
@@ -1670,6 +1672,7 @@
 		28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IndependentRecordSynchronizer.swift; path = Synchronizers/IndependentRecordSynchronizer.swift; sourceTree = "<group>"; };
 		28F596A01ACA13CA0071DDCC /* InfoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoTests.swift; path = SyncTests/InfoTests.swift; sourceTree = "<group>"; };
 		28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorTableCell.swift; sourceTree = "<group>"; };
+		2AA042F40EDFD6EB5CDCCB65 /* Pods-Storage.firefox.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Storage.firefox.xcconfig"; path = "Pods/Target Support Files/Pods-Storage/Pods-Storage.firefox.xcconfig"; sourceTree = "<group>"; };
 		2C28F96B201B2D4C00ABA8A5 /* MailAppSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailAppSettingsTests.swift; sourceTree = "<group>"; };
 		2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTest.swift; sourceTree = "<group>"; };
 		2C2A91281FA2410D002E36BD /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
@@ -1786,6 +1789,7 @@
 		39F99FDA1E3A6DE300F353B4 /* PushConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushConfiguration.swift; sourceTree = "<group>"; };
 		39F99FDB1E3A6DE300F353B4 /* PushRegistration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushRegistration.swift; sourceTree = "<group>"; };
 		39F99FED1E3A71F800F353B4 /* FxALoginHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxALoginHelper.swift; path = Helpers/FxALoginHelper.swift; sourceTree = "<group>"; };
+		3ADD4DD2E53631EBF7F61362 /* Pods-Storage.fennec_enterprise.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Storage.fennec_enterprise.xcconfig"; path = "Pods/Target Support Files/Pods-Storage/Pods-Storage.fennec_enterprise.xcconfig"; sourceTree = "<group>"; };
 		3B0943801D6CC4FC004F24E1 /* FilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilledPageControl.swift; path = ThirdParty/FilledPageControl.swift; sourceTree = "<group>"; };
 		3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchEnginesTest.swift; sourceTree = "<group>"; };
 		3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchViewController.swift; sourceTree = "<group>"; };
@@ -1892,6 +1896,7 @@
 		59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderPanel.swift; sourceTree = "<group>"; };
 		59A68B1F857A8638598A63A0 /* TwoLineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoLineCell.swift; sourceTree = "<group>"; };
 		59A68CCB63E2A565CB03F832 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		65050BFEE04C194EC9AC8676 /* Pods_Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheet.swift; sourceTree = "<group>"; };
 		744B0FFD1B4F172E00100422 /* ToolbarTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTests.swift; sourceTree = "<group>"; };
 		744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailtoLinkHandler.swift; sourceTree = "<group>"; };
@@ -2366,6 +2371,7 @@
 		EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncTelemetryUtils.swift; sourceTree = "<group>"; };
 		EBCEF15C3BB0FE05F97D11C6 /* Pods_Client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBF47E6F1F7979DF00899189 /* UnifiedTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedTelemetry.swift; sourceTree = "<group>"; };
+		F2C4CD130B529DE226C8439F /* Pods-Storage.firefoxbeta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Storage.firefoxbeta.xcconfig"; path = "Pods/Target Support Files/Pods-Storage/Pods-Storage.firefoxbeta.xcconfig"; sourceTree = "<group>"; };
 		F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
 		F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
 		F35B8D2E1D638408008E3D61 /* SessionRestoreHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHandler.swift; sourceTree = "<group>"; };
@@ -2484,6 +2490,7 @@
 				0B742CCF1B32493E00EE9264 /* libsqlcipher.a in Frameworks */,
 				D09A0CD81FAA23F6009A0273 /* Shared.framework in Frameworks */,
 				7B604FBD1C495E31006EEEC3 /* XCGLogger.framework in Frameworks */,
+				E72881B3A820E72298AC8425 /* Pods_Storage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2704,6 +2711,7 @@
 		1E4C0DA820A1A27D00D5941B /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				AFA9FAC8208DF9500028CA1B /* PrivacyStore */,
 				1E138D6F20A2E4D800B82C13 /* Bookmarks */,
 				1E4C0DA920A1A27D00D5941B /* GhosteryMigration */,
 			);
@@ -3555,6 +3563,7 @@
 				E4B334871BBF23F3004E2BFF /* iAd.framework */,
 				3905274B1C874D35007E0BB7 /* NotificationCenter.framework */,
 				EBCEF15C3BB0FE05F97D11C6 /* Pods_Client.framework */,
+				65050BFEE04C194EC9AC8676 /* Pods_Storage.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3609,7 +3618,6 @@
 				AFA9FAC9208DFA120028CA1B /* ControlCenterDataSource.swift */,
 				AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */,
 				AF77B87C2099FF9F00E7A0C4 /* Anti-Phishing */,
-				AFA9FAC8208DF9500028CA1B /* Store */,
 				AFA1DE082088BDA600B27B8A /* BlockListManager */,
 				AF6FA97C20652D1F00D7F9F0 /* Ghostery */,
 				AF99C8B120693627009404FF /* UI */,
@@ -3701,13 +3709,13 @@
 			path = BlockListManager;
 			sourceTree = "<group>";
 		};
-		AFA9FAC8208DF9500028CA1B /* Store */ = {
+		AFA9FAC8208DF9500028CA1B /* PrivacyStore */ = {
 			isa = PBXGroup;
 			children = (
 				AFA9FAB8208DEF990028CA1B /* DomainStore.swift */,
 				AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */,
 			);
-			path = Store;
+			path = PrivacyStore;
 			sourceTree = "<group>";
 		};
 		AFBAC1AF20AEBB26007F02CC /* Intro */ = {
@@ -3736,6 +3744,10 @@
 				4F5FE45DC6FEBE807CF32CC0 /* Pods-Client.fennec_enterprise.xcconfig */,
 				AFECF63AADEF4013C5D72D77 /* Pods-Client.firefox.xcconfig */,
 				3CC22A52A5F06A95042E8946 /* Pods-Client.firefoxbeta.xcconfig */,
+				02E8B3058B78D15A13524710 /* Pods-Storage.fennec.xcconfig */,
+				3ADD4DD2E53631EBF7F61362 /* Pods-Storage.fennec_enterprise.xcconfig */,
+				2AA042F40EDFD6EB5CDCCB65 /* Pods-Storage.firefox.xcconfig */,
+				F2C4CD130B529DE226C8439F /* Pods-Storage.firefoxbeta.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -4834,6 +4846,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2FCAE2331ABB51F900877008 /* Build configuration list for PBXNativeTarget "Storage" */;
 			buildPhases = (
+				5B880AC4F461543E7BD39865 /* [CP] Check Pods Manifest.lock */,
 				2FCAE2151ABB51F800877008 /* Sources */,
 				2FCAE2161ABB51F800877008 /* Frameworks */,
 				2FCAE2171ABB51F800877008 /* Headers */,
@@ -5884,6 +5897,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		5B880AC4F461543E7BD39865 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Storage-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		7B604F8F1C494AAA006EEEC3 /* Copy Carthage Dependencies */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -6203,6 +6234,7 @@
 				28126F741C2F96F1006466CC /* SQLiteBookmarksResetting.swift in Sources */,
 				28B62ACE1BC745E7004A585A /* Syncable.swift in Sources */,
 				1E4C0DBD20A1A27E00D5941B /* GhosteryMigrationManager.swift in Sources */,
+				AFBEDE9A20B56BB200C3119A /* TrackerStateStore.swift in Sources */,
 				74B195441CF503FC007F36EF /* RecentlyClosedTabs.swift in Sources */,
 				E65075C21E37F956006961AC /* ExtensionUtils.swift in Sources */,
 				1E4C0DBE20A1A27E00D5941B /* GhosterySQLiteFactories.swift in Sources */,
@@ -6233,6 +6265,7 @@
 				2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */,
 				283586FD1C73F18E00A55435 /* CachingItemSource.swift in Sources */,
 				D0B29EE01F460BDF00C7CEFC /* LoginsSchema.swift in Sources */,
+				AFBEDE8B20B56BAD00C3119A /* DomainStore.swift in Sources */,
 				2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */,
 				2FCAE2601ABB531100877008 /* Favicons.swift in Sources */,
 				28126F771C2F9833006466CC /* SQLiteBookmarksBase.swift in Sources */,
@@ -6708,7 +6741,6 @@
 				AF77B88E209A022A00E7A0C4 /* NSData+GZIP.swift in Sources */,
 				AFA1DE102088D59400B27B8A /* BlockingCoordinator.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
-				AFA9FAB9208DEF990028CA1B /* DomainStore.swift in Sources */,
 				AF6FA99020652D4600D7F9F0 /* TrackerListHosts.swift in Sources */,
 				392ED6B71D06E85E009D9B62 /* NewTabChoiceViewController.swift in Sources */,
 				E4B3348C1BC01D8F004E2BFF /* AdjustIntegration.swift in Sources */,
@@ -6733,7 +6765,6 @@
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
-				AFA9FAA1208DD9C00028CA1B /* TrackerStateStore.swift in Sources */,
 				E650755F1E37F756006961AC /* Try.m in Sources */,
 				3B6889C51D66950E002AC85E /* UIImageColors.swift in Sources */,
 				1EEA369520615725003B6AD5 /* DownloadManager.swift in Sources */,
@@ -7352,6 +7383,7 @@
 		};
 		2FCAE2341ABB51F900877008 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 02E8B3058B78D15A13524710 /* Pods-Storage.fennec.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -7362,6 +7394,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -8451,6 +8484,7 @@
 		};
 		E448FCA41AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2AA042F40EDFD6EB5CDCCB65 /* Pods-Storage.firefox.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -8461,6 +8495,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -9566,6 +9601,7 @@
 		};
 		E6DCC20C1DCBB6F100CEC4B7 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ADD4DD2E53631EBF7F61362 /* Pods-Storage.fennec_enterprise.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -9576,6 +9612,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -10214,6 +10251,7 @@
 		};
 		E6FCC4321C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2C4CD130B529DE226C8439F /* Pods-Storage.firefoxbeta.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -10224,6 +10262,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

@@ -34,7 +34,10 @@ target 'Client' do
 	pod 'RxSwift', '~> 4.0'
     pod 'RealmSwift'
 	pod 'Charts', '~> 3.0.1'
+end
 
+target 'Storage' do
+    pod 'RealmSwift'
 end
 
 post_install do |installer|

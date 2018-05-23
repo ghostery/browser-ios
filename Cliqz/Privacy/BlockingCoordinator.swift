@@ -7,6 +7,7 @@
 //
 
 import WebKit
+import Storage
 
 enum BlockListType {
     case antitracking

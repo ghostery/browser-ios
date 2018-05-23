@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Storage
 
 @objc class TrackerListApp : NSObject {
     var appId: Int

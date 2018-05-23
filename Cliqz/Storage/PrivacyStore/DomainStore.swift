@@ -9,17 +9,17 @@
 import Foundation
 import RealmSwift
 
-class Domain: Object {
+public class Domain: Object {
     @objc dynamic var name: String = ""
     @objc dynamic var state: Int = 0 //0 none, 1 trusted, 2 restricted
-    var trustedTrackers = List<Int>()
-    var restrictedTrackers = List<Int>()
+    public var trustedTrackers = List<Int>()
+    public var restrictedTrackers = List<Int>()
     
-    override static func primaryKey() -> String? {
+    override static public func primaryKey() -> String? {
         return "name"
     }
     
-    var translatedState: DomainState {
+    public var translatedState: DomainState {
         switch state {
         case 0:
             return .empty
@@ -33,20 +33,20 @@ class Domain: Object {
     }
 }
 
-enum DomainState {
+public enum DomainState {
     case empty
     case trusted
     case restricted
 }
 
-enum ListType {
+public enum ListType {
     case trustedList
     case restrictedList
 }
 
-class DomainStore: NSObject {
+public class DomainStore: NSObject {
     
-    class func get(domain: String) -> Domain? {
+    public class func get(domain: String) -> Domain? {
         let realm = try! Realm()
         if let domain = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
             return domain
@@ -54,7 +54,7 @@ class DomainStore: NSObject {
         return nil
     }
     
-    class func create(domain: String) -> Domain {
+    public class func create(domain: String) -> Domain {
         let realm = try! Realm()
         let domainObj = Domain()
         domainObj.name = domain
@@ -66,7 +66,7 @@ class DomainStore: NSObject {
         return domainObj
     }
     
-    class func changeState(domain: Domain, state: DomainState) {
+    public class func changeState(domain: Domain, state: DomainState) {
         
         let realm = try! Realm()
         do {
@@ -80,7 +80,7 @@ class DomainStore: NSObject {
         }
     }
     
-    class func add(appId: Int, domain: Domain, list: ListType) {
+    public class func add(appId: Int, domain: Domain, list: ListType) {
         
         let realm = try! Realm()
         do {
@@ -101,7 +101,7 @@ class DomainStore: NSObject {
         }
     }
     
-    class func remove(appId: Int, domain: Domain, list: ListType) {
+    public class func remove(appId: Int, domain: Domain, list: ListType) {
         
         let realm = try! Realm()
         do {
