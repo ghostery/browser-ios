@@ -17,11 +17,9 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 class TopSitesDataSource {
     
     static let instance = TopSitesDataSource()
-
 	let observable = BehaviorSubject(value: false)
 
 	private var profile: Profile!
-
 	private var topSites = [Site]()
 
 	init() {
@@ -87,4 +85,31 @@ class TopSitesDataSource {
 			return succeed()
 		}
 	}
+
+	func hideTopSite(at index: Int) {
+		guard index < self.topSites.count else {
+			return
+		}
+		let site = self.topSites[index]
+		if let _ =  site as? PinnedSite {
+			// If pinned site, then should be removed from pinned and then hided from topSites
+			profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
+				guard result.isSuccess else { return }
+				self.hideURLFromTopSite(site)
+			}
+		} else {
+			self.hideURLFromTopSite(site)
+		}
+	}
+
+	private func hideURLFromTopSite(_ site: Site) {
+		guard let host = site.tileURL.normalizedHost else {
+			return
+		}
+		profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
+			guard result.isSuccess else { return }
+			self.refresh()
+		}
+	}
+
 }

@@ -122,6 +122,10 @@ extension TopSitesViewController {
         self.emptyTopSitesHint?.applyShadow()
 		self.emptyTopSitesHint?.textAlignment = .center
 		self.view.addSubview(self.emptyTopSitesHint!)
+		
+		let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cancelActions))
+		tapGestureRecognizer.delegate = self
+		self.view.addGestureRecognizer(tapGestureRecognizer)
 	}
 
 	fileprivate func updateViews() {
@@ -145,23 +149,11 @@ extension TopSitesViewController {
 	}
 
 	fileprivate func removeDeletedTopSites() {
-		/*
 		if let cells = self.topSitesCollection?.visibleCells as? [TopSiteViewCell] {
-		for cell in cells {
-		cell.isDeleteMode = false
+			for cell in cells {
+				cell.isDeleteMode = false
+			}
 		}
-		
-		self.topSitesIndexesToRemove.sort{a,b in a > b} //order in descending order to avoid index mismatches
-		for index in self.topSitesIndexesToRemove {
-		self.topSites.remove(at: index)
-		}
-		
-		logTopsiteEditModeSignal()
-		self.topSitesIndexesToRemove.removeAll()
-		self.topSitesCollection?.reloadData()
-		self.updateViewConstraints()
-		}
-		*/
 	}
 
 }
@@ -272,30 +264,10 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
 		return 0.0
 	}
 }
-	
-extension TopSitesViewController: TopSiteCellDelegate {
-
-	func topSiteHided(_ index: Int) {
-		/*
-		let s = self.topSites[index]
-		if let url = s["url"] {
-			//TODO(Refactoring): Should be inluded back during integration
-//			let _ = self.profile.history.hideTopSite(url)
-		}
-
-		self.topSitesIndexesToRemove.append(index)
-		logDeleteTopsiteSignal(index)
-		
-		if self.topSites.count == self.topSitesIndexesToRemove.count {
-			self.removeDeletedTopSites()
-		}
-*/
-	}
-}
 
 extension TopSitesViewController: UIGestureRecognizerDelegate {
 
-	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+	@nonobjc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
 		if gestureRecognizer is UITapGestureRecognizer {
 			let location = touch.location(in: self.topSitesCollection)
 			if let index = self.topSitesCollection?.indexPathForItem(at: location),
@@ -305,6 +277,14 @@ extension TopSitesViewController: UIGestureRecognizerDelegate {
 			return true
 		}
 		return false
+	}
+}
+
+extension TopSitesViewController: TopSiteCellDelegate {
+
+	func hideTopSite(_ index: Int) {
+		// TODO: for now after hiding top site the view will be refreshed and wobbling is stopped. In future we should support hiding of multiple topsites
+		self.dataSource.hideTopSite(at: index)
 	}
 }
 
