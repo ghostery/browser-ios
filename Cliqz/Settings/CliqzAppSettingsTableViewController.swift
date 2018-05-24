@@ -86,15 +86,24 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         
         let humanWebSetting = HumanWebSetting(settings: self)
         
+        #if GHOSTERY
         let cliqzSearchTitle = NSLocalizedString("Cliqz Search", tableName: "Cliqz", comment: "[Settings] Cliqz Search")
         let cliqzSearchSetting = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.CliqzSearchPrefKey, defaultValue: true, titleText: cliqzSearchTitle)
-        
+        #endif
         
         var searchSettings: [Setting]!
         if QuerySuggestions.querySuggestionEnabledForCurrentRegion() {
+            #if GHOSTERY
             searchSettings = [regionalSetting, querySuggestionSettings, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
+            #else
+            searchSettings = [regionalSetting, querySuggestionSettings, blockExplicitContentSettings, humanWebSetting, complementarySearchSetting]
+            #endif
         } else {
+            #if GHOSTERY
             searchSettings = [regionalSetting, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
+            #else
+            searchSettings = [regionalSetting, blockExplicitContentSettings, humanWebSetting, complementarySearchSetting]
+            #endif
         }
         return searchSettings
     }
