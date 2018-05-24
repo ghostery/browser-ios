@@ -1217,9 +1217,8 @@ class CliqzTrayToolbar : TrayToolbar {
         addSubview(forgetModeButton)
         
         doneButton.snp.makeConstraints { make in
-            make.top.equalTo(self)
+            make.centerY.equalTo(self.addTabButton.snp.centerY)
             make.right.equalTo(self).offset(-sideOffset)
-            make.height.equalTo(toolbarButtonSize.height)
         }
         
         addTabButton.snp.remakeConstraints { make in
@@ -1229,9 +1228,9 @@ class CliqzTrayToolbar : TrayToolbar {
         }
         
         forgetModeButton.snp.remakeConstraints { make in
-            make.top.equalTo(self)
+            make.centerY.equalTo(self.addTabButton.snp.centerY)
             make.left.equalTo(self).offset(sideOffset)
-            make.height.equalTo(toolbarButtonSize.height)
+            make.width.equalTo(64)
         }
     }
     
