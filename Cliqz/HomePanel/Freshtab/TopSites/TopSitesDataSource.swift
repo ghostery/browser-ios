@@ -29,11 +29,12 @@ class TopSitesDataSource {
             self.profile = profile
         }
 		self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
-		let _ = self.loadTopSites()
+		self.loadTopSites()
 	}
 
 	func refresh() {
 		self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: true, forceTopSites: true)
+		self.loadTopSites()
 	}
 
 	func topSitesCount() -> Int {
