@@ -10,7 +10,7 @@ import Foundation
 
 protocol TopSiteCellDelegate: NSObjectProtocol {
 	
-	func topSiteHided(_ index: Int)
+	func hideTopSite(_ index: Int)
 }
 
 class TopSiteViewCell: UICollectionViewCell {
@@ -121,6 +121,6 @@ class TopSiteViewCell: UICollectionViewCell {
         self.fakeLogoView = nil
         self.isDeleteMode = false
 		self.logoHostLabel.text = ""
-		self.delegate?.topSiteHided(self.tag)
+		self.delegate?.hideTopSite(self.tag)
 	}
 }
