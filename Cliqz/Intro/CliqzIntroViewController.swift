@@ -241,6 +241,7 @@ extension CliqzIntroViewController: OptInViewDelegate {
     func toggled(value: Bool) {
         if pageControl.currentPage == 0 {
             SettingsPrefs.shared.updateSendUsageDataPref(value)
+            SettingsPrefs.shared.updateHumanWebPref(value)
         }
     }
 }
@@ -429,7 +430,7 @@ struct CliqzIntroCard: Codable {
     }
     
     static func defaultCards() -> [CliqzIntroCard] {
-        let welcome = CliqzIntroCard(title: CliqzStrings.Onboarding.introTitle, text: CliqzStrings.Onboarding.introText, imageName: "ghostery-Introduction", optInText: CliqzStrings.Onboarding.telemetryText, optInToggleValue: SettingsPrefs.shared.getSendUsageDataPref())
+        let welcome = CliqzIntroCard(title: CliqzStrings.Onboarding.introTitle, text: CliqzStrings.Onboarding.introText, imageName: "ghostery-Introduction", optInText: CliqzStrings.Onboarding.telemetryText, optInToggleValue: true)
         let adblock = CliqzIntroCard(title: CliqzStrings.Onboarding.adblockerTitle, text: CliqzStrings.Onboarding.adblockerText, imageName: "ghostery-Adblock")
         let quicksearch = CliqzIntroCard(title: CliqzStrings.Onboarding.quickSearchTitle, text: CliqzStrings.Onboarding.quickSearchText, imageName: "ghostery-QuickSearch")
         let freshtab = CliqzIntroCard(title: CliqzStrings.Onboarding.tabTitle, text: CliqzStrings.Onboarding.tabText, imageName: "ghostery-CliqzTab")
