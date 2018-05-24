@@ -1660,13 +1660,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             return
         }
         let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
+        controller.addAction(UIAlertAction(title: NSLocalizedString("New Tab", tableName:"Cliqz", comment: "Label for New Tab"), style: .default, handler: { _ in
             self.tabManager.addTabAndSelect(isPrivate: false)
         }))
-        controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
+        controller.addAction(UIAlertAction(title: NSLocalizedString("New Private Tab", tableName:"Cliqz", comment: "Label for New Private Tab"), style: .default, handler: { _ in
             self.tabManager.addTabAndSelect(isPrivate: true)
         }))
-        controller.addAction(UIAlertAction(title: Strings.CloseTabTitle, style: .destructive, handler: { _ in
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Close Tab", tableName:"Cliqz", comment: "Label for Close Tab"), style: .destructive, handler: { _ in
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
             }
