@@ -1020,9 +1020,17 @@ fileprivate class EmptyPrivateTabsView: UIView {
 
         titleLabel.text =  NSLocalizedString("Private Browsing",
             tableName: "PrivateBrowsing", comment: "Title displayed for when there are no open tabs while in private mode")
+        /* Cliqz: Change firefox to Ghostery
         descriptionLabel.text = NSLocalizedString("Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.",
             tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
-
+        */
+        #if GHOSTERY
+        descriptionLabel.text = NSLocalizedString("Ghostery won’t remember any of your history or cookies, but new bookmarks will be saved.",
+                                                  tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
+        #else
+        descriptionLabel.text = NSLocalizedString("Cliqz won’t remember any of your history or cookies, but new bookmarks will be saved.",
+                                                  tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
+        #endif
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         addSubview(iconImageView)
@@ -1047,6 +1055,9 @@ fileprivate class EmptyPrivateTabsView: UIView {
             make.bottom.lessThanOrEqualTo(self).offset(-EmptyPrivateTabsViewUX.MinBottomMargin).priority(1000)
             make.centerX.equalTo(self)
         }
+        // Cliqz: Hide Image and Learn More Button
+        iconImageView.isHidden = true
+        learnMoreButton.isHidden = true
     }
 
     required init?(coder aDecoder: NSCoder) {
