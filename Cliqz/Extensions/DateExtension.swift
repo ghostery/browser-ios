@@ -13,4 +13,8 @@ extension Date {
     static func getCurrentMillis()-> Double {
         return  Date().timeIntervalSince1970 * 1000.0
     }
+    
+    func daysSince1970() -> Int {
+        return Int(self.timeIntervalSince1970 / 86400.0)
+    }
 }
