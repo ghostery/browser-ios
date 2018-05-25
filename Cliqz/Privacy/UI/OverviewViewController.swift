@@ -426,6 +426,7 @@ class OverviewViewController: UIViewController {
             //resume
             self.delegate?.pauseGhostery(paused: false, time: Date())
             self.setPauseGhostery(!self.pauseGhosteryButton.isSelected)
+            TelemetryHelper.sendControlCenterResumeClick()
         }
         else {
             //pause
@@ -438,6 +439,7 @@ class OverviewViewController: UIViewController {
         self.setPauseGhostery(!self.pauseGhosteryButton.isSelected)
         self.delegate?.chageSiteState(to: .empty)
         setSiteToNone()
+        TelemetryHelper.sendControlCenterPauseClick()
     }
 
 	@objc private func trustSitePressed() {
@@ -446,6 +448,7 @@ class OverviewViewController: UIViewController {
         self.delegate?.pauseGhostery(paused: false, time: Date())
         self.setPauseGhostery(false)
         updateBlockedTrackersCount()
+        TelemetryHelper.sendControlCenterTrustClick()
 	}
 
 	@objc private func restrictSitePressed() {
@@ -454,6 +457,7 @@ class OverviewViewController: UIViewController {
         self.delegate?.pauseGhostery(paused: false, time: Date())
         self.setPauseGhostery(false)
         updateBlockedTrackersCount()
+        TelemetryHelper.sendControlCenterRestrictClick()
 	}
     
     private func setPauseGhostery(_ value: Bool) {

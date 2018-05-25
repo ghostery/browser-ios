@@ -525,7 +525,7 @@
 		AFA9FB0B208E04FA0028CA1B /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */; };
 		AFA9FB0D208E135E0028CA1B /* ControlCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */; };
 		AFAB304020B80EC200FE312E /* AppDelegateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAB303F20B80EC200FE312E /* AppDelegateExtension.swift */; };
-		AFAB306B20B83E2800FE312E /* TelemetryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAB306A20B83E2800FE312E /* TelemetryManager.swift */; };
+		AFAB306B20B83E2800FE312E /* TelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAB306A20B83E2800FE312E /* TelemetryHelper.swift */; };
 		AFBAC1BF20AEBB78007F02CC /* CliqzIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */; };
 		AFBEDE8B20B56BAD00C3119A /* DomainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAB8208DEF990028CA1B /* DomainStore.swift */; };
 		AFBEDE9A20B56BB200C3119A /* TrackerStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */; };
@@ -2009,7 +2009,7 @@
 		AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCenterDelegate.swift; sourceTree = "<group>"; };
 		AFAB303F20B80EC200FE312E /* AppDelegateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtension.swift; sourceTree = "<group>"; };
-		AFAB306A20B83E2800FE312E /* TelemetryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryManager.swift; sourceTree = "<group>"; };
+		AFAB306A20B83E2800FE312E /* TelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryHelper.swift; sourceTree = "<group>"; };
 		AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzIntroViewController.swift; sourceTree = "<group>"; };
 		AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
 		AFE484D22056838500554B2E /* CliqzURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzURLBar.swift; sourceTree = "<group>"; };
@@ -3741,7 +3741,7 @@
 		AFAB305B20B83DFA00FE312E /* Telemetry */ = {
 			isa = PBXGroup;
 			children = (
-				AFAB306A20B83E2800FE312E /* TelemetryManager.swift */,
+				AFAB306A20B83E2800FE312E /* TelemetryHelper.swift */,
 			);
 			path = Telemetry;
 			sourceTree = "<group>";
@@ -6667,7 +6667,7 @@
 				4FF07D8B2063CA46001385A8 /* OffrzDataService.swift in Sources */,
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
-				AFAB306B20B83E2800FE312E /* TelemetryManager.swift in Sources */,
+				AFAB306B20B83E2800FE312E /* TelemetryHelper.swift in Sources */,
 				1E4CFBE7207380AD00B26E85 /* ConnectTableViewController.swift in Sources */,
 				1E2C202020AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift in Sources */,
 				1EEA36D72063F87C003B6AD5 /* URLExtension.swift in Sources */,

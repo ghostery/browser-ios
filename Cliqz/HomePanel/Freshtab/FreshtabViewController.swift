@@ -281,7 +281,7 @@ extension FreshtabViewController {
 		customData["is_news_on"] = SettingsPrefs.shared.getShowNewsPref()
 		logFreshTabSignal("show", target: nil, customData: customData)
 */
-        TelemetryManager.sendFreshTabShown()
+        TelemetryHelper.sendFreshTabShow()
 	}
 	
 	fileprivate func logHideSignal() {
