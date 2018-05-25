@@ -524,6 +524,7 @@
 		AFA9FACC208DFD790028CA1B /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FACB208DFD790028CA1B /* ArrayExtensions.swift */; };
 		AFA9FB0B208E04FA0028CA1B /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */; };
 		AFA9FB0D208E135E0028CA1B /* ControlCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */; };
+		AFAB304020B80EC200FE312E /* AppDelegateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAB303F20B80EC200FE312E /* AppDelegateExtension.swift */; };
 		AFBAC1BF20AEBB78007F02CC /* CliqzIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */; };
 		AFBEDE8B20B56BAD00C3119A /* DomainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAB8208DEF990028CA1B /* DomainStore.swift */; };
 		AFBEDE9A20B56BB200C3119A /* TrackerStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */; };
@@ -2006,6 +2007,7 @@
 		AFA9FACB208DFD790028CA1B /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		AFA9FB0A208E04FA0028CA1B /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCenterDelegate.swift; sourceTree = "<group>"; };
+		AFAB303F20B80EC200FE312E /* AppDelegateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtension.swift; sourceTree = "<group>"; };
 		AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzIntroViewController.swift; sourceTree = "<group>"; };
 		AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
 		AFE484D22056838500554B2E /* CliqzURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzURLBar.swift; sourceTree = "<group>"; };
@@ -3360,6 +3362,7 @@
 				AFF28765209B5F6E001E9B59 /* ImageExtension.swift */,
 				AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */,
 				4FB2BBAE20B70680006FB03D /* DeviceInfoExtension.swift */,
+				AFAB303F20B80EC200FE312E /* AppDelegateExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -6740,6 +6743,7 @@
 				F84B22241A09122500AAB793 /* HomePanelViewController.swift in Sources */,
 				4FBBC1522035E5C400445AD1 /* NewsDataSource.swift in Sources */,
 				AF28D3D8207E32250065FF86 /* PermissionManagerModule.swift in Sources */,
+				AFAB304020B80EC200FE312E /* AppDelegateExtension.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
 				D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */,
