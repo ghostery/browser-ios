@@ -36,4 +36,8 @@ class TelemetryHelper: NSObject {
     class func sendControlCenterRestrictClick() {
         Engine.sharedInstance.getBridge().callAction("handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.click.restrictSite"])
     }
+    
+    class func sendFavoriteMigrationSignal(count: Int, rootFolderCount: Int, maxDepth: Int) {
+        Engine.sharedInstance.getBridge().callAction("handleTelemetrySignal", args: [["count": count, "rootFolderCount": rootFolderCount, "maxDepth": maxDepth], false, "metrics.favorites.migration.folders"])
+    }
 }

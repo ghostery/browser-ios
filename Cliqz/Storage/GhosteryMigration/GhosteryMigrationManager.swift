@@ -26,6 +26,8 @@ public class GhosteryMigrationManager {
     private var bookmarkBuffer: BookmarkBufferStorage?
     private var bookmarkFolders: [BookmarkMirrorItem]?
     private var bookmarks: [BookmarkMirrorItem]?
+    
+    public typealias BookmarksFolderCount = Int
 
     init() {
         guard UserDefaults.standard.object(forKey: GhosteryMigrationManager.migrationKey) == nil else {
@@ -40,7 +42,7 @@ public class GhosteryMigrationManager {
         }
     }
     
-    public func startMigration(_ bookmarkBuffer: BookmarkBufferStorage, migrationDelegate : GhosteryMigrationDelegate) {
+    public func startMigration(_ bookmarkBuffer: BookmarkBufferStorage, migrationDelegate : GhosteryMigrationDelegate, completionBlock: ((BookmarksFolderCount) -> ())? = nil) {
         self.bookmarkBuffer = bookmarkBuffer
         self.delegate = migrationDelegate
         
@@ -52,6 +54,7 @@ public class GhosteryMigrationManager {
             self?.migrateOpenTabs()
             self?.migrateBugs()
             self?.migrateFoldersAndBookmarks()
+            completionBlock?(self?.bookmarkFolders?.count ?? 0)
         }
     }
     

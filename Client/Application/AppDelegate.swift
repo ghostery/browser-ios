@@ -150,7 +150,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         //Cliqz: start Ghostery Migration
         if let profile = self.profile as? BrowserProfile {
-            GhosteryMigrationManager.shared.startMigration(profile.mirrorBookmarks, migrationDelegate: browserViewController)
+            GhosteryMigrationManager.shared.startMigration(profile.mirrorBookmarks, migrationDelegate: browserViewController, completionBlock: { (foldersCount) in
+                TelemetryHelper.sendFavoriteMigrationSignal(count: foldersCount, rootFolderCount: foldersCount, maxDepth: 1)
+            })
         }
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
