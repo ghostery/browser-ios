@@ -80,6 +80,7 @@ class FreshtabViewController: UIViewController, HomePanel {
         UIView.animate(withDuration: 0.1, delay: 0.1, options: .curveEaseIn, animations: {
             self.normalModeView?.alpha = 1.0
         }, completion: nil)
+        self.logShowSignal()
     }
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -280,6 +281,7 @@ extension FreshtabViewController {
 		customData["is_news_on"] = SettingsPrefs.shared.getShowNewsPref()
 		logFreshTabSignal("show", target: nil, customData: customData)
 */
+        TelemetryManager.sendFreshTabShown()
 	}
 	
 	fileprivate func logHideSignal() {
