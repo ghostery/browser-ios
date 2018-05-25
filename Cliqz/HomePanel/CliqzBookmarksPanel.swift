@@ -19,6 +19,8 @@ class CliqzBookmarksPanel: BookmarksPanel {
         self.tableView.backgroundColor = .clear
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.4)
         tableView.register(CliqzSiteTableViewCell.self, forCellReuseIdentifier: CliqzBookmarksPanel.cellIdentifier)
+        self.refreshControl?.removeFromSuperview()
+        self.refreshControl = nil
     }
     
     override func loadData() {
