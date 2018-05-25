@@ -113,8 +113,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let profile = getProfile(application)
         
-        // Cliqz: set SettingsPrefs profile
+        // Cliqz: set SettingsPrefs profile and record install date
         SettingsPrefs.shared.profile = profile
+        recordInstallDateIfNecessary()
 
         unifiedTelemetry = UnifiedTelemetry(profile: profile)
 
