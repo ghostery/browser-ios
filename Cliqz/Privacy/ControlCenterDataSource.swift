@@ -216,11 +216,23 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
         
         return trackers(tableType: tableType, category: category(tableType, section)).filter({ (app) -> Bool in
             let translatedState = app.state.translatedState
-            return translatedState == .blocked || translatedState == .restricted
+            return translatedState == .blocked || (translatedState == .restricted && tableType == .page)
         }).count
     }
     
     func stateIcon(tableType: TableType, section: Int) -> UIImage? {
+        
+        func trackerStates() -> Set<TrackerStateEnum> {
+            let t = trackers(tableType: tableType, category: category(tableType, section))
+            
+            var set: Set<TrackerStateEnum> = Set()
+            
+            for tracker in t {
+                set.insert(tracker.state.translatedState)
+            }
+            
+            return set
+        }
         
         if isGlobalAntitrackingOn() {
             return iconForCategoryState(state: .blocked)
@@ -236,24 +248,30 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
                 return iconForCategoryState(state: .trusted)
             }
             else {
-                return iconForTrackerState(state: TrackerStateEnum.empty)
+                let set = trackerStates()
+                
+                let state: TrackerStateEnum
+                
+                if set.count == 1 {
+                    state = set.first!
+                }
+                else {
+                    state = .empty
+                }
+                
+                return iconForTrackerState(state: state)
             }
         }
         else {
-            let t = trackers(tableType: tableType, category: category(tableType, section))
             
-            var set: Set<TrackerStateEnum> = Set()
-            
-            for tracker in t {
-                set.insert(tracker.state.translatedState)
-            }
+            let set = trackerStates()
             
             let state: CategoryState
             
-            if set.count > 1 {
+            if set.count > 1, set.contains(.blocked) {
                 state = .other
             }
-            else if set.count == 1 {
+            else if set.count == 1, set.contains(.blocked) {
                 state = CategoryState.from(trackerState: set.first!)
             }
             else {
@@ -269,7 +287,7 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
         guard let t = tracker(tableType: tableType, indexPath: indexPath) else { return (nil, nil) }
         let state: TrackerStateEnum = t.state.translatedState
         
-        if state == .blocked || state == .restricted || isGlobalAntitrackingOn() {
+        if state == .blocked || (state == .restricted && tableType == .page) || isGlobalAntitrackingOn() {
             let str = NSMutableAttributedString(string: t.name)
             str.addAttributes([NSStrikethroughStyleAttributeName : 1], range: NSMakeRange(0, t.name.count))
             return (nil, str)
@@ -295,7 +313,9 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
                 return iconForTrackerState(state: .trusted)
             }
         }
-        
+        else if t.state.translatedState == .trusted || t.state.translatedState == .restricted {
+            return iconForTrackerState(state: .empty)
+        }
         return iconForTrackerState(state: t.state.translatedState)
     }
     
