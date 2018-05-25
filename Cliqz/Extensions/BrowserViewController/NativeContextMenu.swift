@@ -181,4 +181,11 @@ extension BrowserViewController {
 		return mainActions
 	}
 	
+	@objc func showWifiProtection() {
+		assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
+		let board = UIStoryboard.init(name: "WifiProtection", bundle: nil)
+		if let vc = board.instantiateInitialViewController() {
+		self.present(vc, animated: false, completion: nil)
+		}
+	}
 }
