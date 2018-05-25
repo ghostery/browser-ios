@@ -77,7 +77,7 @@ open class JSBridge : RCTEventEmitter {
     ///  * "timeout": timeout occured waiting for the reply
     ///  * "exception when running action": javascript exception when running this action (see JS logs for details)
     ///  * "invalid action": action was not known on the Javascript side
-    open func callAction(_ functionName: String, args: Array<Any>) -> NSDictionary {
+    @discardableResult open func callAction(_ functionName: String, args: Array<Any>) -> NSDictionary {
         // check listener is registered on other end
         guard self.registeredActions.contains(functionName) else {
             debugPrint("ERROR: callAction - function not registered: \(functionName)")
