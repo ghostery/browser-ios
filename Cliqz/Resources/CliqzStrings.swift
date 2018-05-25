@@ -17,8 +17,8 @@ extension CliqzStrings {
         public static let introText = NSLocalizedString("Keep your browsing cleaner, faster, and safer. By using this app you agree to the Privacy Policy.", tableName: "Cliqz", comment: "[Onboarding] Intro Text")
         public static let introTitle = NSLocalizedString("Introducing Ghostery", tableName: "Cliqz", comment: "[Onboarding] Intro Title")
         
-        public static let adblockerText = NSLocalizedString("Browse faster and efficiently with Enhanced Ad Blocking. You can customize your settings in the Ghostery Control Center.", tableName: "Cliqz", comment: "[Onboarding] Adblocker Text")
-        public static let adblockerTitle = NSLocalizedString("Ad Blocking", tableName: "Cliqz", comment: "[Onboarding] Adblocker Title")
+        public static let adblockerText = NSLocalizedString("Browse faster, safer and efficiently with Ad & Tracker Blocking. You can customize your settings in the Ghostery Control Center.", tableName: "Cliqz", comment: "[Onboarding] Adblocker Text")
+        public static let adblockerTitle = NSLocalizedString("Ad & Tracker Blocking", tableName: "Cliqz", comment: "[Onboarding] Adblocker Title")
         
         public static let quickSearchText = NSLocalizedString("Save time and data volume: Quick Search instantly shows relevant results while typing.", tableName: "Cliqz", comment: "[Onboarding] QuickSearch Text")
         public static let quickSearchTitle = NSLocalizedString("Quick Search", tableName: "Cliqz", comment: "[Onboarding] QuickSearch Title")
