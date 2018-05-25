@@ -27,11 +27,17 @@ open class UserAgentConstants : RCTEventEmitter {
     fileprivate var appVersion: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     }
+
+    fileprivate var installDate: String {
+        // Original install date (not migration day from ghostery/old cliqz browser)
+        // Format: Days since Epoch
+        return "16917";
+    }
     
     open override static func moduleName() -> String! {
         return "UserAgentConstants"
     }
     
-    override open func constantsToExport() -> [AnyHashable : Any]! { return ["channel": self.source, "appVersion": self.appVersion] }
+    override open func constantsToExport() -> [AnyHashable : Any]! { return ["channel": self.source, "appVersion": self.appVersion, "installDate": self.installDate] }
     
 }
