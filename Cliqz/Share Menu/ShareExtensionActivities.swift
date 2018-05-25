@@ -10,7 +10,7 @@ import UIKit
 
 extension ShareExtensionHelper {
     func getApplicationActivities() -> [UIActivity] {
-        let applicationActivities = [SettingsActivity()]
+        let applicationActivities = [SettingsActivity(), WiFiProtectionActivity()]
         return applicationActivities
     }
 
