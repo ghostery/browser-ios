@@ -31,6 +31,25 @@ open class UserAgentConstants : RCTEventEmitter {
     fileprivate var installDate: String {
         // Original install date (not migration day from ghostery/old cliqz browser)
         // Format: Days since Epoch
+        #if GHOSTERY
+        if let _ = UserDefaults.standard.value(forKey: HasRunBeforeKey) as? String {
+            //this is an old ghostery user
+            return "16917";
+        }
+        else {
+            let installDate: Date
+            if let installDateTime = UserDefaults.standard.value(forKey: InstallDateKey) as? Double {
+                installDate = Date(timeIntervalSince1970: installDateTime)
+            }
+            else {
+                installDate = Date()
+                //register the install date
+                UserDefaults.standard.set(installDate.timeIntervalSince1970, forKey: InstallDateKey)
+                UserDefaults.standard.synchronize()
+            }
+            return String(installDate.daysSince1970())
+        }
+        #endif
         return "16917";
     }
     
