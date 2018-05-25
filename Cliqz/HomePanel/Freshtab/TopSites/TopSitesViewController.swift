@@ -294,7 +294,7 @@ extension TopSitesViewController {
 		//TODO(Refactoring): Should be inluded back during integration
 //		let customData: [String: Any] = ["topsite_count": topSites.count, "index": index]
 //		self.logFreshTabSignal(action, target: "topsite", customData: customData)
-        TelemetryManager.sendTopSiteClicked()
+        TelemetryHelper.sendTopSiteClick()
 	}
 	
 	fileprivate func logDeleteTopsiteSignal(_ index: Int) {
