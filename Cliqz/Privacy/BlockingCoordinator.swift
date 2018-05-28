@@ -101,7 +101,7 @@ final class UpdateHelper {
             return BlockListIdentifiers.antitrackingBlockSelectedIdentifiers(domain: domain)
         }
         
-        return []
+        return BlockListIdentifiers.antitrackingBlockSelectedIdentifiers()
     }
     
     class func identifiersFor(type: BlockListType, domain: String?) -> [String] {

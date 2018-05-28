@@ -10,9 +10,7 @@ import Storage
 
 final class BlockListIdentifiers {
     
-    class func antitrackingBlockSelectedIdentifiers(domain: String?) -> [String] {
-        
-        let appIds = getAppIds(domain: domain)
+    class func antitrackingBlockSelectedIdentifiers(domain: String? = nil) -> [String] {
         
         func getBugIds(appIds: Set<Int>) -> [Int] {
             return appIds.flatMap { (appId) -> [Int] in
@@ -20,6 +18,7 @@ final class BlockListIdentifiers {
             }
         }
         
+        let appIds = getAppIds(domain: domain)
         let bugIds = getBugIds(appIds: appIds).map { i in String(i) }
         
         return bugIds
