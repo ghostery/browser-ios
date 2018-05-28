@@ -12,14 +12,12 @@ final class BlockListManager {
     
     static let shared = BlockListManager()
     
-    var loadQueue: OperationQueue? = nil
+    fileprivate let loadQueue: OperationQueue = OperationQueue()
     
     init() {
-        if loadQueue == nil {
-            loadQueue = OperationQueue()
-            loadQueue?.maxConcurrentOperationCount = 1
-            loadQueue?.qualityOfService = .background
-        }
+        loadQueue.maxConcurrentOperationCount = 1
+        loadQueue.qualityOfService = .utility
+        
     }
     
     func getBlockLists(forIdentifiers: [String], callback: @escaping ([WKContentRuleList]) -> Void) {
@@ -52,7 +50,7 @@ final class BlockListManager {
                             dispatchGroup.leave()
                         }
                         
-                        self.loadQueue?.addOperation(operation)
+                        self.loadQueue.addOperation(operation)
                     }
                     else {
                         dispatchGroup.leave()

@@ -14,6 +14,26 @@ enum BlockListType {
     case adblocker
 }
 
+final class GlobalPrivacyQueue {
+    fileprivate let queue: OperationQueue
+    
+    static let shared = GlobalPrivacyQueue()
+    
+    init() {
+        self.queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        queue.qualityOfService = .utility
+    }
+    
+    func addOperation(_ operation: Operation) {
+        self.queue.addOperation(operation)
+    }
+    
+    var operations: [Operation] {
+        return self.queue.operations
+    }
+}
+
 final class BlockingCoordinator {
     
     private var isUpdating = false
@@ -21,23 +41,26 @@ final class BlockingCoordinator {
     
     private unowned let webView: WKWebView
     
-    private let updateQueue: OperationQueue //only for update calls
-    
     init(webView: WKWebView) {
         self.webView = webView
-        self.updateQueue = OperationQueue()
-        updateQueue.maxConcurrentOperationCount = 1
-        updateQueue.qualityOfService = .background
     }
     
     //TODO: Make sure that at the time of the coordinatedUpdate, all necessary blocklists are in the cache
     func coordinatedUpdate() {
+        
+        func opFilter(op: Operation) -> Bool {
+            if let operation = op as? UpdateOperation {
+                return !(operation.isExecuting  || operation.isFinished || operation.isCancelled)
+            }
+            return false
+        }
+        
         debugPrint("Coordinated Update")
-        if self.updateQueue.operations.filter({ (op) -> Bool in return !(op.isExecuting  || op.isFinished || op.isCancelled) }).count == 0 {
+        if GlobalPrivacyQueue.shared.operations.filter(opFilter).count == 0 {
             debugPrint("Add to Update Queue")
             DispatchQueue.main.async {
                 let updateOp = UpdateOperation(webView: self.webView, domain: self.webView.url?.normalizedHost)
-                self.updateQueue.addOperation(updateOp)
+                GlobalPrivacyQueue.shared.addOperation(updateOp)
             }
         }
     }
