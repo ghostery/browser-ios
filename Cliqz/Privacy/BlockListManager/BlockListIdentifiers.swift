@@ -65,12 +65,12 @@ final class BlockListIdentifiers {
         var specific2domainRestricted: Set<Int> = Set()
         var specific2domainTrusted: Set<Int> = Set()
         
-        //TODO: Solve this bottle neck
-        var global: Set<Int> = Set(TrackerList.instance.globalTrackerList().filter({ (app) -> Bool in
-            return app.state.translatedState == .blocked
-        }).map { (app) -> Int in
-            return app.appId
-        })
+        var global: Set<Int> = Set()
+        for app in TrackerList.instance.globalTrackerList() {
+            if app.state.translatedState == .blocked {
+                global.insert(app.appId)
+            }
+        }
         
         if let domainStr = domain, let domainObj = DomainStore.get(domain: domainStr) {
             specific2domainTrusted = Set(domainObj.trustedTrackers)
