@@ -11,7 +11,7 @@ import Charts
 
 protocol BlockedRequestViewDelegate: class {
     func switchValueChanged(value: Bool)
-	func viewIsDragging(value: Float)
+	func viewIsDragging(value: Float, velocity: Float)
 	func viewStopDragging(value: Float)
 }
 
@@ -67,8 +67,8 @@ class BlockedRequestsView: UIView {
 		self.addSubview(descriptionLabel)
 		self.addSubview(switchControl)
 		let gesture = UIPanGestureRecognizer(target: self, action: #selector(wasDragged))
-		notchView.addGestureRecognizer(gesture)
-		notchView.isUserInteractionEnabled = true
+		self.addGestureRecognizer(gesture)
+		self.isUserInteractionEnabled = true
 		setStyles()
 	}
 	
@@ -130,12 +130,11 @@ class BlockedRequestsView: UIView {
 	@objc func wasDragged(gestureRecognizer: UIPanGestureRecognizer) {
 		if gestureRecognizer.state == UIGestureRecognizerState.began || gestureRecognizer.state == UIGestureRecognizerState.changed {
 			let translation = gestureRecognizer.translation(in: self)
-			self.delegate?.viewIsDragging(value: Float(translation.y))
+			self.delegate?.viewIsDragging(value: Float(translation.y), velocity: Float(gestureRecognizer.velocity(in: self).y))
 		}
 		if gestureRecognizer.state == UIGestureRecognizerState.ended {
 			self.delegate?.viewStopDragging(value: Float(gestureRecognizer.velocity(in: self).y))
 		}
-		
 	}
 }
 
@@ -551,14 +550,19 @@ extension OverviewViewController: BlockedRequestViewDelegate {
 
     func switchValueChanged(value: Bool) {
         self.delegate?.turnGlobalAdblocking(on: value)
-    }
+	}
 
-	func viewIsDragging(value: Float) {
+	func viewIsDragging(value: Float, velocity: Float) {
 		self.adBlockingView.snp.updateConstraints { (make) in
-			if value + ControlCenterUX.adblockerViewInitialOffset < -ControlCenterUX.adblockerViewMaxHeight {
-				make.top.equalTo(self.view.snp.bottom).offset(-ControlCenterUX.adblockerViewMaxHeight)
+			// TODO: Some more improvements should be done when direction is changed quickly...
+			if velocity < 0 {
+				if value + ControlCenterUX.adblockerViewInitialOffset < -ControlCenterUX.adblockerViewMaxHeight {
+					make.top.equalTo(self.view.snp.bottom).offset(-ControlCenterUX.adblockerViewMaxHeight)
+				} else {
+					make.top.equalTo(self.view.snp.bottom).offset(value + ControlCenterUX.adblockerViewInitialOffset)
+				}
 			} else {
-				make.top.equalTo(self.view.snp.bottom).offset(value + ControlCenterUX.adblockerViewInitialOffset)
+				make.top.equalTo(self.view.snp.bottom).offset(value - ControlCenterUX.adblockerViewMaxHeight)
 			}
 		}
 	}
