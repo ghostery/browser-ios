@@ -50,6 +50,20 @@ protocol ControlCenterDSProtocol: class {
     func actions(tableType: TableType, indexPath: IndexPath) -> [ActionType]
 }
 
+final class CategoriesHelper {
+    static let categories = Set(arrayLiteral: "advertising", "audio_video_player", "comments", "customer_interaction", "essential", "pornvertising", "site_analytics", "social_media", "uncategorized")
+    static let categoriesBlockedByDefault = Set(arrayLiteral: "pornvertising", "site_analytics", "advertising")
+    static let category2NameAndColor = ["advertising": ("Advertising", UIColor(colorString: "CB55CD")),
+                                 "audio_video_player": ("Audio/Video Player", UIColor(colorString: "EF671E")),
+                                 "comments": ("Comments", UIColor(colorString: "43B7C5")),
+                                 "customer_interaction": ("Customer Interaction", UIColor(colorString: "FDC257")),
+                                 "essential": ("Essential", UIColor(colorString: "FC9734")),
+                                 "pornvertising": ("Adult Content", UIColor(colorString: "ECAFC2")),
+                                 "site_analytics": ("Site Analytics", UIColor(colorString: "87D7EF")),
+                                 "social_media": ("Social Media", UIColor(colorString: "388EE8")),
+                                 "uncategorized": ("Uncategorized", UIColor(colorString: "8459A5"))]
+}
+
 class ControlCenterDataSource: ControlCenterDSProtocol {
     
     enum CategoryState {
@@ -72,16 +86,6 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
             }
         }
     }
-    
-    let category2NameAndColor = ["advertising": ("Advertising", UIColor(colorString: "CB55CD")),
-                                 "audio_video_player": ("Audio/Video Player", UIColor(colorString: "EF671E")),
-                                 "comments": ("Comments", UIColor(colorString: "43B7C5")),
-                                 "customer_interaction": ("Customer Interaction", UIColor(colorString: "FDC257")),
-                                 "essential": ("Essential", UIColor(colorString: "FC9734")),
-                                 "pornvertising": ("Adult Content", UIColor(colorString: "ECAFC2")),
-                                 "site_analytics": ("Site Analytics", UIColor(colorString: "87D7EF")),
-                                 "social_media": ("Social Media", UIColor(colorString: "388EE8")),
-                                 "uncategorized": ("Uncategorized", UIColor(colorString: "8459A5"))]
     
     var pageCategories: [String] = []
     var globalCategories: [String] = []
@@ -126,7 +130,7 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
         let countDict = TrackerList.instance.countByCategory(domain: self.domainStr)
         var dict: Dictionary<String, (Int, UIColor)> = [:]
         for key in countDict.keys {
-            if let count = countDict[key], let color = category2NameAndColor[key]?.1 {
+            if let count = countDict[key], let color = CategoriesHelper.category2NameAndColor[key]?.1 {
                 dict[key] = (count, color)
             }
         }
@@ -182,7 +186,7 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
     }
     
     func title(tableType: TableType, section: Int) -> String {
-        if let touple = category2NameAndColor[category(tableType, section)] {
+        if let touple = CategoriesHelper.category2NameAndColor[category(tableType, section)] {
             return touple.0
         }
         return ""
