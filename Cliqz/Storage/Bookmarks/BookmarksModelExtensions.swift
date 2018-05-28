@@ -75,7 +75,7 @@ extension SQLiteBookmarks {
         
         let values =
             "SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (0) AS isEditable " +
-        "FROM \(valueView)"
+        "FROM \(valueView) where bmkUri is not null"
         
         let fleshed =
             "SELECT vals.id AS id, vals.guid AS guid, vals.type AS type, vals.date_added AS date_added, vals.is_deleted AS is_deleted, " +

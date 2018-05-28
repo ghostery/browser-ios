@@ -11,7 +11,6 @@ import Storage
 import Shared
 
 class CliqzBookmarksPanel: BookmarksPanel {
-    var bookmarksDataSource: BookmarksDataSource?
     private static let cellIdentifier = "CliqzCellIdentifier"
     
     override func viewDidLoad() {
@@ -20,13 +19,6 @@ class CliqzBookmarksPanel: BookmarksPanel {
         self.tableView.backgroundColor = .clear
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.4)
         tableView.register(CliqzSiteTableViewCell.self, forCellReuseIdentifier: CliqzBookmarksPanel.cellIdentifier)
-    }
-    
-    fileprivate func getCurrentBookmark(_ index: Int) -> BookmarkNode? {
-        guard let bookmarksDataSource = self.bookmarksDataSource else {
-            return nil
-        }
-        return bookmarksDataSource.getBookmarkAtIndex(index)
     }
     
     override func loadData() {
@@ -49,32 +41,12 @@ class CliqzBookmarksPanel: BookmarksPanel {
         }
     }
     
-    override func onNewModel(_ model: BookmarksModel) {
-        if Thread.current.isMainThread {
-            self.source = model
-            self.bookmarksDataSource = BookmarksDataSource(model)
-            self.tableView.reloadData()
-            return
-        }
-        
-        DispatchQueue.main.async {
-            self.source = model
-            self.bookmarksDataSource = BookmarksDataSource(model)
-            self.tableView.reloadData()
-            self.updateEmptyPanelState()
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return bookmarksDataSource?.count() ?? 0
-    }
-    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 74
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let bookmark = getCurrentBookmark(indexPath.row) else { return super.tableView(tableView, cellForRowAt: indexPath) }
+        guard let source = source, let bookmark = source.current[indexPath.row] else { return super.tableView(tableView, cellForRowAt: indexPath) }
         switch bookmark {
         case let item as BookmarkItem:
             let cell = tableView.dequeueReusableCell(withIdentifier: CliqzBookmarksPanel.cellIdentifier, for: indexPath) as! CliqzSiteTableViewCell
@@ -106,36 +78,17 @@ class CliqzBookmarksPanel: BookmarksPanel {
         }
     }
     
-    
-    override func deleteBookmark(indexPath: IndexPath, source: BookmarksModel) {
-        guard let bookmark = getCurrentBookmark(indexPath.row) else {
-            return
+    override func editingStyleforRow(atIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        guard let source = source else {
+            return .none
         }
         
-        assert(!(bookmark is BookmarkFolder))
-        if bookmark is BookmarkFolder {
-            // TODO: check whether the folder is empty (excluding separators). If it isn't
-            // then we must ask the user to confirm. Bug 1232810.
-            return
+        if source.current[indexPath.row] is BookmarkItem {
+            // Because the deletion block is too big.
+            return .delete
         }
         
-        // Block to do this -- this is UI code.
-        guard let factory = source.modelFactory.value.successValue else {
-            self.onModelFailure(DatabaseError(description: "Unable to get factory."))
-            return
-        }
-        
-        let specificFactory = factory.factoryForIndex(indexPath.row, inFolder: source.current)
-        if let err = specificFactory.removeByGUID(bookmark.guid).value.failureValue {
-            self.onModelFailure(err)
-            return
-        }
-        
-        self.tableView.beginUpdates()
-        self.bookmarksDataSource?.removeBookmark(bookmark)
-        self.tableView.deleteRows(at: [indexPath], with: .left)
-        self.tableView.endUpdates()
-        self.updateEmptyPanelState()
+        return super.editingStyleforRow(atIndexPath: indexPath)
     }
     
     override func createEmptyStateOverlayView() -> UIView {
@@ -162,35 +115,5 @@ class CliqzBookmarksPanel: BookmarksPanel {
         }
         
         return overlayView
-    }
-    
-    override func updateEmptyPanelState() {
-        if self.bookmarksDataSource?.count() == 0 && source?.current.guid == BookmarkRoots.MobileFolderGUID {
-            if self.emptyStateOverlayView.superview == nil {
-                self.view.addSubview(self.emptyStateOverlayView)
-                self.view.bringSubview(toFront: self.emptyStateOverlayView)
-                self.emptyStateOverlayView.snp.makeConstraints { make -> Void in
-                    make.edges.equalTo(self.tableView)
-                }
-            }
-        } else {
-            self.emptyStateOverlayView.removeFromSuperview()
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
-        let bookmark = getCurrentBookmark(indexPath.row)
-        
-        switch bookmark {
-        case let item as BookmarkItem:
-            homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.bookmark)
-            LeanPlumClient.shared.track(event: .openedBookmark)
-            UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
-            break
-        default:
-            // You can't do anything with separators.
-            break
-        }
     }
 }

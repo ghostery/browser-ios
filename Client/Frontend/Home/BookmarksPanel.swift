@@ -174,10 +174,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     
-    /* Cliqz: removed fileprivate modifier
     fileprivate func updateEmptyPanelState() {
-    */
-    func updateEmptyPanelState() {
         if source?.current.count == 0 && source?.current.guid == BookmarkRoots.MobileFolderGUID {
             if self.emptyStateOverlayView.superview == nil {
                 self.view.addSubview(self.emptyStateOverlayView)
@@ -191,7 +188,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    /* Cliqz: removed fileprivate modifier
+    /* Cliqz: removed private modifier
     fileprivate func onModelFetched(_ result: Maybe<BookmarksModel>) {
     */
     func onModelFetched(_ result: Maybe<BookmarksModel>) {
@@ -202,10 +199,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         self.onNewModel(model)
     }
 
-    /* Cliqz: Removed fileprivate modifier
     fileprivate func onNewModel(_ model: BookmarksModel) {
-    */
-    func onNewModel(_ model: BookmarksModel) {
         if Thread.current.isMainThread {
             self.source = model
             self.tableView.reloadData()
@@ -219,10 +213,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    /* Cliqz: removed private modifier
     fileprivate func onModelFailure(_ e: Any) {
-    */
-    func onModelFailure(_ e: Any) {
         log.error("Error: failed to get data: \(e)")
     }
 
@@ -386,7 +377,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
+    /* Cliqz: removed private modifier
     private func editingStyleforRow(atIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    */
+    func editingStyleforRow(atIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
         guard let source = source else {
             return .none
         }
