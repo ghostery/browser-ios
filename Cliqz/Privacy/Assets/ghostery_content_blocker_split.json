@@ -29359,7 +29359,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "ad\\.prismamediadigital\\.com"
+        "url-filter": "prismamediadigital\\.com"
       }
     }
   ], 
@@ -46809,7 +46809,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "\\.vcommission\\.com"
+        "url-filter": "tracking\\.vcommission\\.com"
       }
     }
   ], 
@@ -51989,28 +51989,6 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "domdex\\.net"
-      }
-    }, 
-    {
-      "action": {
-        "type": "block"
-      }, 
-      "trigger": {
-        "load-type": [
-          "third-party"
-        ], 
-        "url-filter": "domdex\\.com"
-      }
-    }, 
-    {
-      "action": {
-        "type": "block"
-      }, 
-      "trigger": {
-        "load-type": [
-          "third-party"
-        ], 
         "url-filter": "d3ezl4ajpp2zy8\\.cloudfront\\.net"
       }
     }
@@ -52220,19 +52198,6 @@
           "third-party"
         ], 
         "url-filter": "cdn\\.firstimpression\\.io/apd_client\\.js"
-      }
-    }
-  ], 
-  "3402": [
-    {
-      "action": {
-        "type": "block"
-      }, 
-      "trigger": {
-        "load-type": [
-          "third-party"
-        ], 
-        "url-filter": "ecdn\\.firstimpression\\.io/static/jquery\\.js"
       }
     }
   ], 
@@ -52835,7 +52800,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "js\\.honeybadger\\.io/v0\\.3/honeybadger\\.min\\.js"
+        "url-filter": "js\\.honeybadger\\.io/v[0-9\\.]+/honeybadger\\.min\\.js"
       }
     }
   ], 
@@ -53713,7 +53678,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "shopperapproved\\.com/widgets/group/15026\\.js"
+        "url-filter": "shopperapproved\\.com/widgets"
       }
     }
   ], 
@@ -54285,7 +54250,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "images\\.ads\\.supplyframe\\.com/3b6844d118a6e1977a4040aef6d736fa\\.gif"
+        "url-filter": "\\.ads\\.supplyframe\\.com"
       }
     }
   ], 
@@ -54389,7 +54354,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "fake-entry_images\\.ads\\.supplyframe\\.com/3b6844d118a6e1977a4040aef6d736fa\\.gif"
+        "url-filter": "fake-entry_images\\.ads\\.supplyframe\\.com"
       }
     }
   ], 
@@ -57353,7 +57318,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "getlytics\\.com/js/app\\.min\\.js"
+        "url-filter": "lytics\\.com/assets/js/app\\.min\\.js"
       }
     }
   ], 
@@ -58211,7 +58176,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "crossroadswow\\.com/wp-content/themes/"
+        "url-filter": "app\\.crossroadswow\\.com/chatjs"
       }
     }
   ], 
@@ -58237,7 +58202,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "torage\\.googleapis\\.com/crossroadswow/js/"
+        "url-filter": "storage\\.googleapis\\.com/crossroadswow/js/"
       }
     }
   ], 
@@ -58757,7 +58722,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "webmecanik\\.com/wp-content/plugins/sitepress-multilingual-cms/res/js/jquery\\.cookie\\.js"
+        "url-filter": "\\.automation\\.webmecanik\\.com"
       }
     }
   ], 
@@ -60343,7 +60308,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "yldr\\.v0\\.2\\.0\\.min\\.js"
+        "url-filter": "cdn\\.yldr\\.io/yldr\\.v[0-9\\.]+\\.min\\.js"
       }
     }
   ], 
@@ -60590,7 +60555,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "sadmin\\.brightcove\\.com/js/BrightcoveExperiences\\.js"
+        "url-filter": "sadmin\\.brightcove\\.com/js/brightcoveexperiences\\.js"
       }
     }
   ], 
@@ -61877,7 +61842,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "js\\.driftt\\.com/include/1476819300000/g45kafnhv2us\\.js"
+        "url-filter": "event\\.api\\.drift\\.com/track"
       }
     }
   ], 
@@ -63398,7 +63363,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "cdn\\.onesignal\\.com/sdks/OneSignalSDK\\.js"
+        "url-filter": "cdn\\.onesignal\\.com/sdks/onesignalsdk\\.js"
       }
     }
   ], 
@@ -63593,7 +63558,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "d21rhj7n383afu\\.cloudfront\\.net/JWPlayer/JWPlayerConfig\\.js"
+        "url-filter": "d21rhj7n383afu\\.cloudfront\\.net/jwplayer/jwplayerconfig\\.js"
       }
     }
   ], 
@@ -66232,7 +66197,7 @@
         "load-type": [
           "third-party"
         ], 
-        "url-filter": "a\\.company-target\\.com"
+        "url-filter": "\\.company-target\\.com"
       }
     }
   ], 
@@ -68758,19 +68723,6 @@
       }
     }
   ], 
-  "4813": [
-    {
-      "action": {
-        "type": "block"
-      }, 
-      "trigger": {
-        "load-type": [
-          "third-party"
-        ], 
-        "url-filter": "cdn\\.dynamicyield\\.com/api/[a-z0-9]+/images"
-      }
-    }
-  ], 
   "4814": [
     {
       "action": {
@@ -69418,6 +69370,2030 @@
           "third-party"
         ], 
         "url-filter": "y-track\\.com"
+      }
+    }
+  ], 
+  "4864": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "/matomo\\.js"
+      }
+    }, 
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "/matomo\\.php"
+      }
+    }
+  ], 
+  "4865": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "iptrack\\.io"
+      }
+    }
+  ], 
+  "4866": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "jsfile/tracking\\.js"
+      }
+    }
+  ], 
+  "4867": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "js/customtrackingscript\\.js"
+      }
+    }
+  ], 
+  "4868": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "widgets\\.spklw\\.com"
+      }
+    }
+  ], 
+  "4869": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "widgets\\.sprinklecontent\\.com/v2/sprinkle\\.js"
+      }
+    }
+  ], 
+  "4870": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "api\\.publishers\\.adlive\\.io/js/client_request\\.min\\.js"
+      }
+    }
+  ], 
+  "4871": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "test-adlive24\\.iageengineering\\.net/js/client_request\\.min\\.js"
+      }
+    }
+  ], 
+  "4872": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "api\\.sabavision\\.com/pox/app\\.5e9cc9244c9f0b97d5e8\\.bundle\\.js"
+      }
+    }
+  ], 
+  "4873": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "trackcmp\\.net/visit"
+      }
+    }
+  ], 
+  "4874": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "sc-static\\.net/scevent\\.min\\.js"
+      }
+    }
+  ], 
+  "4875": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "adnetwork\\.adasiaholdings\\.com"
+      }
+    }
+  ], 
+  "4876": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cloud\\.chatbeacon\\.io/chatbeacon/scripts/chatbeacon\\.js"
+      }
+    }
+  ], 
+  "4877": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "d1l7z5ofrj6ab8\\.cloudfront\\.net"
+      }
+    }
+  ], 
+  "4878": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.yektanet\\.com/js"
+      }
+    }
+  ], 
+  "4879": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "fetch\\.yektanet\\.com/api"
+      }
+    }
+  ], 
+  "4880": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "ck\\.yektanet\\.com"
+      }
+    }, 
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cg\\.yektanet\\.com"
+      }
+    }
+  ], 
+  "4881": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "t\\.adnegah\\.net/script/trck\\.js"
+      }
+    }
+  ], 
+  "4882": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "native\\.adnegah\\.net"
+      }
+    }
+  ], 
+  "4883": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "sitebooster-fjfmworld-production\\.azureedge\\.net/sitebooster\\.min\\.js"
+      }
+    }
+  ], 
+  "4884": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "gasurvey\\.gemius\\.com"
+      }
+    }
+  ], 
+  "4885": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "graphcomment\\.com/js/integration\\.js"
+      }
+    }
+  ], 
+  "4886": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "js\\.searchlinks\\.com"
+      }
+    }
+  ], 
+  "4887": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "static\\.h-bid\\.com/btc-echo\\.de/20171229/sws-hb-btc-echo\\.de\\.min\\.js"
+      }
+    }
+  ], 
+  "4888": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "validclick\\.com/api/census"
+      }
+    }
+  ], 
+  "4889": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "results\\.searchlinks\\.com"
+      }
+    }
+  ], 
+  "4890": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "api\\.searchlinks\\.com"
+      }
+    }
+  ], 
+  "4891": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "a\\.optmstr\\.com/app/js/legacy-api\\.min\\.js"
+      }
+    }
+  ], 
+  "4892": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "a\\.optmstr\\.com/app/js/api\\.min\\.js"
+      }
+    }
+  ], 
+  "4893": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "js\\.driftt\\.com"
+      }
+    }
+  ], 
+  "4894": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "duu8lzqdm8tsz\\.cloudfront\\.net/websites/sb\\.js"
+      }
+    }
+  ], 
+  "4895": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "adserver\\.adtech\\.advertising\\.com/addyn"
+      }
+    }
+  ], 
+  "4896": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "gntm\\.geeen\\.co\\.jp/onetag/"
+      }
+    }
+  ], 
+  "4897": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "lpomax\\.net/efocube/js/efocube\\.js"
+      }
+    }
+  ], 
+  "4898": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.izooto\\.com/scripts/sdk/izooto\\.js"
+      }
+    }
+  ], 
+  "4899": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.cohesionapps\\.com/cohesion/cohesion-latest\\.min\\.js"
+      }
+    }
+  ], 
+  "4900": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "yastatic\\.net/sovetnik/"
+      }
+    }
+  ], 
+  "4901": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "btc-echode\\.api\\.oneall\\.com/socialize/library\\.js"
+      }
+    }
+  ], 
+  "4902": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn-static\\.formisimo\\.com/tracking/js/tracking\\.js"
+      }
+    }
+  ], 
+  "4903": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "api\\.behavioralengine\\.com/scripts/be-init\\.js"
+      }
+    }
+  ], 
+  "4904": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.fresh8\\.co/assets/analytics/"
+      }
+    }
+  ], 
+  "4905": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "heimdall\\.fresh8\\.co"
+      }
+    }
+  ], 
+  "4906": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "static\\.audienceinsights\\.net/t\\.js"
+      }
+    }
+  ], 
+  "4907": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "freshservice\\.com/assets/js/freshworks-e23ea869\\.js"
+      }
+    }
+  ], 
+  "4908": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "static\\.zbcdn3\\.net/__ocjenfi/bundle\\.js"
+      }
+    }
+  ], 
+  "4909": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "linker\\.hr/w\\.js"
+      }
+    }
+  ], 
+  "4910": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "recorder-assets\\.getjaco\\.com/recorder_v2\\.js"
+      }
+    }
+  ], 
+  "4911": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "static\\.addtoany\\.com/menu/page\\.js"
+      }
+    }
+  ], 
+  "4912": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "dl\\.metabar\\.ru/static/api/v2/sovetnik\\.js"
+      }
+    }
+  ], 
+  "4913": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "d31j93rd8oukbv\\.cloudfront\\.net/metrika/watch\\.js"
+      }
+    }
+  ], 
+  "4914": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "tutti-ams\\.gravityrd-services\\.com/js/tutti/gr_reco4-min\\.js"
+      }
+    }
+  ], 
+  "4915": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "player\\.glomex\\.com"
+      }
+    }
+  ], 
+  "4916": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "component-vvs\\.glomex\\.com/glomex-loader"
+      }
+    }
+  ], 
+  "4917": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "vas-vod-mds\\.glomex\\.com/vod/3\\.0/getgeolocation"
+      }
+    }
+  ], 
+  "4918": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "\\.glomex\\.cloud"
+      }
+    }
+  ], 
+  "4919": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "userlike-cdn-widgets\\.s3-eu-west-1\\.amazonaws\\.com"
+      }
+    }
+  ], 
+  "4920": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "api\\.userlike\\.com"
+      }
+    }
+  ], 
+  "4921": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "gigaonclick\\.com"
+      }
+    }
+  ], 
+  "4922": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "webvisitor\\.melissadata\\.net/js"
+      }
+    }
+  ], 
+  "4923": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "narando\\.com/assets/narando\\.player\\.js"
+      }
+    }
+  ], 
+  "4924": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "datacoral\\.com/instrumentation/js/1\\.0\\.0/dc\\.js"
+      }
+    }
+  ], 
+  "4925": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.adless\\.io"
+      }
+    }
+  ], 
+  "4926": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "analytics\\.cohesionapps\\.com"
+      }
+    }
+  ], 
+  "4927": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.belco\\.io/widget\\.min\\.js"
+      }
+    }
+  ], 
+  "4928": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.merklesearch\\.com/merkle_track\\.js"
+      }
+    }
+  ], 
+  "4929": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "userreplay\\.net"
+      }
+    }
+  ], 
+  "4930": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "coin-have\\.com/c"
+      }
+    }
+  ], 
+  "4931": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "mtc\\.js"
+      }
+    }
+  ], 
+  "4932": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "coinhive\\.com/lib/coinhive\\.min\\.js"
+      }
+    }
+  ], 
+  "4933": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cryptoloot\\.pro/lib/crlt\\.js"
+      }
+    }
+  ], 
+  "4934": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "minero\\.pw/miner\\.min\\.js"
+      }
+    }
+  ], 
+  "4935": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "analytics\\.supplyframe\\.com"
+      }
+    }
+  ], 
+  "4936": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "client\\.crisp\\.chat"
+      }
+    }
+  ], 
+  "4937": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "settings\\.crisp\\.chat"
+      }
+    }
+  ], 
+  "4938": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "client\\.crisp\\.im"
+      }
+    }
+  ], 
+  "4939": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "\\.huk\\.de"
+      }
+    }
+  ], 
+  "4940": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "s\\.spoutable\\.com"
+      }
+    }
+  ], 
+  "4941": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "api\\.contentpass\\.net/stats"
+      }
+    }
+  ], 
+  "4942": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "api\\.permutive\\.com"
+      }
+    }
+  ], 
+  "4943": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "s\\.aolcdn\\.com/ads/"
+      }
+    }
+  ], 
+  "4944": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "widgets\\.bankrate\\.com"
+      }
+    }
+  ], 
+  "4945": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "tracking\\.bd4travel\\.com"
+      }
+    }
+  ], 
+  "4946": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "my\\.zadarma\\.com/callbackwidget/js/main\\.min\\.js"
+      }
+    }
+  ], 
+  "4947": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "api\\.zadarma\\.com"
+      }
+    }
+  ], 
+  "4948": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "ai\\.autoid\\.com/ai\\.js"
+      }
+    }
+  ], 
+  "4949": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "\\.sharpspring\\.com/koi"
+      }
+    }
+  ], 
+  "4950": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "\\.sharpspring\\.com/client/ss\\.js"
+      }
+    }
+  ], 
+  "4951": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "api\\.youcanbook\\.me"
+      }
+    }
+  ], 
+  "4952": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "\\.youcanbook\\.me/resources/scripts/"
+      }
+    }
+  ], 
+  "4953": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "js\\.genieessp\\.com/t/253/551/a1253551\\.js"
+      }
+    }
+  ], 
+  "4954": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "invitejs\\.trustpilot\\.com/tp\\.min\\.js"
+      }
+    }
+  ], 
+  "4955": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "c\\.leadlab\\.click"
+      }
+    }
+  ], 
+  "4956": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "ad-cdn\\.bilgin\\.pro/app/ad\\.min\\.js"
+      }
+    }
+  ], 
+  "4957": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "authedmine\\.com/lib/authedmine\\.min\\.js"
+      }
+    }
+  ], 
+  "4958": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "get\\.contentpass\\.net/now\\.js"
+      }
+    }
+  ], 
+  "4959": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "d31j93rd8oukbv\\.cloudfront\\.net/metrika/watch\\.js"
+      }
+    }
+  ], 
+  "4960": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "dl\\.metabar\\.ru/static/api/v2/sovetnik\\.js"
+      }
+    }
+  ], 
+  "4961": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn-widget\\.callpage\\.io/build/js/callpage\\.js"
+      }
+    }
+  ], 
+  "4962": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "customer\\.api\\.drift\\.com/location"
+      }
+    }
+  ], 
+  "4963": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "jsc\\.marketgid\\.com/z/f/zf\\.fm\\.651704\\.js"
+      }
+    }
+  ], 
+  "4964": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "adgebra\\.co\\.in/adserving/spot\\.js"
+      }
+    }
+  ], 
+  "4965": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "static\\.clmbtech\\.com/ad/commons/js/colombia_v2\\.js"
+      }
+    }
+  ], 
+  "4966": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.freshmarketer\\.com/12345/12345\\.js"
+      }
+    }
+  ], 
+  "4967": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "content\\.jwplatform\\.com/libraries/puack8zv\\.js"
+      }
+    }
+  ], 
+  "4968": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "adgebra\\.co\\.in/adserving/spot\\.js"
+      }
+    }
+  ], 
+  "4969": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "stetic\\.com/t\\.js"
+      }
+    }
+  ], 
+  "4970": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "tracking\\.smartselling\\.cz"
+      }
+    }
+  ], 
+  "4971": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "rns\\.matelso\\.de/webtracking\\.js"
+      }
+    }
+  ], 
+  "4972": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "public\\.wixab-cloud\\.com/static/js/wx-latest\\.js"
+      }
+    }
+  ], 
+  "4973": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "ethn\\.io/85330\\.js"
+      }
+    }
+  ], 
+  "4974": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "assu2000\\.admo\\.tv/config\\.js"
+      }
+    }
+  ], 
+  "4975": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "c\\.algovid\\.com/player/ad-units\\.2\\.0\\.js"
+      }
+    }
+  ], 
+  "4976": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "widget\\.raisenow\\.com/widgets/ela/moaz-q8tch/js/dds-init-widget-de\\.js"
+      }
+    }
+  ], 
+  "4977": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "lb\\.keytiles\\.com/statjs/sst-476-1980007388/stat\\.js"
+      }
+    }
+  ], 
+  "4978": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "widget\\.cloud\\.opta\\.net/v3/v3\\.opta-widgets\\.js"
+      }
+    }
+  ], 
+  "4979": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "widget\\.cloud\\.opta\\.net/data/tz/europe-zurich\\.js"
+      }
+    }
+  ], 
+  "4980": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "widget\\.cloud\\.opta\\.net/v3/bin/subscriptions_3\\.js"
+      }
+    }
+  ], 
+  "4981": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "widgets\\.opinary\\.com/a/bento\\.js"
+      }
+    }
+  ], 
+  "4982": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "api\\.vicomi\\.com"
+      }
+    }
+  ], 
+  "4983": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "js\\.mamydirect\\.com/js"
+      }
+    }
+  ], 
+  "4984": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "static\\.apester\\.com/js/sdk/v2\\.0/apester-javascript-sdk\\.min\\.js"
+      }
+    }
+  ], 
+  "4985": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "t\\.castle\\.io/v1"
+      }
+    }
+  ], 
+  "4986": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "backoffice\\.transmatico\\.com/get"
+      }
+    }
+  ], 
+  "4987": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "webcamo\\.com/js/accueil\\.js"
+      }
+    }
+  ], 
+  "4988": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "webcamo\\.com/js/chatloisir_commun\\.js"
+      }
+    }
+  ], 
+  "4989": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "webcamo\\.com/js/lang/webcamo\\.com/fr_accueil\\.js"
+      }
+    }
+  ], 
+  "4990": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "webcamo\\.com/js/cookies_consent\\.js"
+      }
+    }
+  ], 
+  "4991": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.astronomer\\.io/analytics\\.js"
+      }
+    }
+  ], 
+  "4992": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "sibautomation\\.com/sa\\.js"
+      }
+    }
+  ], 
+  "4993": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "collect\\.yldr\\.io"
+      }
+    }
+  ], 
+  "4994": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "ssp\\.rambler\\.ru/file\\.jsp"
+      }
+    }
+  ], 
+  "4995": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.augur\\.io/augur\\.min\\.js"
+      }
+    }
+  ], 
+  "4996": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "c\\.lytics\\.io/static/io\\.min\\.js"
+      }
+    }
+  ], 
+  "4997": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "p1\\.ntvk1\\.ru/nv\\.js"
+      }
+    }
+  ], 
+  "4998": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "st-a\\.props\\.id/ai\\.js"
+      }
+    }
+  ], 
+  "4999": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn4\\.forter\\.com/script\\.js"
+      }
+    }
+  ], 
+  "5000": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "ping\\.smyte\\.com/p\\.js"
+      }
+    }
+  ], 
+  "5001": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "uim\\.tifbs\\.net/js/2690\\.js"
+      }
+    }
+  ], 
+  "5002": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "uir\\.uimserv\\.net/id"
+      }
+    }
+  ], 
+  "5003": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "tracking\\.m6r\\.eu"
+      }
+    }
+  ], 
+  "5004": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cdn\\.m6r\\.eu/sync"
+      }
+    }
+  ], 
+  "5005": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "cookie-matching\\.mediarithmics\\.com"
+      }
+    }
+  ], 
+  "5006": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "static\\.mediarithmics\\.com/tag/1/tag\\.min\\.js"
+      }
+    }
+  ], 
+  "5007": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "events\\.mediarithmics\\.com/v1/visits/pixel"
+      }
+    }
+  ], 
+  "5008": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "recommender\\.scarabresearch\\.com/merchants/"
+      }
+    }
+  ], 
+  "5009": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "d\\.nativendo\\.de/d/"
+      }
+    }
+  ], 
+  "5010": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "c\\.nativendo\\.de/assets/js/loader\\.js"
+      }
+    }
+  ], 
+  "5011": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "t\\.nativendo\\.de/t/"
+      }
+    }
+  ], 
+  "5012": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "serve\\.albacross\\.com/track\\.js"
+      }
+    }
+  ], 
+  "5013": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "www\\.leadscoreapp\\.dk/js/ls\\.js"
+      }
+    }
+  ], 
+  "5014": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "aw\\.dw\\.impact-ad\\.jp/ut/rep"
+      }
+    }
+  ], 
+  "5015": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "ad-api-v01\\.uliza\\.jp/preview\\.php"
+      }
+    }
+  ], 
+  "5016": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "yastatic\\.net/pcode/adfox/loader\\.js"
+      }
+    }
+  ], 
+  "5017": [
+    {
+      "action": {
+        "type": "block"
+      }, 
+      "trigger": {
+        "load-type": [
+          "third-party"
+        ], 
+        "url-filter": "e\\.spoutable\\.com/e"
       }
     }
   ]
