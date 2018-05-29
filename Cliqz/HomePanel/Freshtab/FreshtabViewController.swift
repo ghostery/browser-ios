@@ -213,6 +213,7 @@ class FreshtabViewController: UIViewController, HomePanel {
 			self.scrollView.addSubview(self.normalModeView!)
             
             let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+			tap.cancelsTouchesInView = false
             normalModeView?.addGestureRecognizer(tap)
             
             let pan = UIPanGestureRecognizer(target: self, action: #selector(dismissKeyboard))
