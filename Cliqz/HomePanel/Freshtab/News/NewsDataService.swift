@@ -21,7 +21,7 @@ struct News {
 
 class NewsDataService {
 
-	private static let APIURL = "https://api.cliqz.com/api/v2/rich-header?path=/v2/map&q=&lang=N/A&locale=\(Locale.current.identifier)&adult=0&loc_pref=ask&platform=1&country=DE"
+	private static let APIURL = "https://api.cliqz.com/api/v2/rich-header?path=/v2/map&q=&lang=N/A&locale=\(Locale.current.identifier)&adult=0&loc_pref=ask&platform=1&sub_platform=11&country=DE"
 
 	static func loadLastNews(completionHandler: @escaping ([News], Error?) -> Void) {
 		NewsDataService.loadData(successHandler: { news in
