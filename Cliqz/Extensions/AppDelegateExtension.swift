@@ -19,8 +19,7 @@ extension AppDelegate {
             // Clean install, record install date
             if UserDefaults.standard.value(forKey: InstallDateKey) == nil {
                 //Avoid overrides
-                UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: InstallDateKey)
-                UserDefaults.standard.synchronize()
+                LocalDataStore.set(value: Date().timeIntervalSince1970, forKey: InstallDateKey)
             }
         }
     }

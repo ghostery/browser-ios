@@ -23,7 +23,7 @@ public extension UIDevice {
     
     var modelName: String {
         let identifierKey = "UIDevice.identifier"
-        let storedIdentified = LocalDataStore.objectForKey(identifierKey) as? String
+        let storedIdentified = LocalDataStore.value(forKey: identifierKey) as? String
         guard storedIdentified == nil  else {
             return storedIdentified!
         }
@@ -75,7 +75,7 @@ public extension UIDevice {
         default:                                        deviceIdentifier = identifier
         }
         
-        LocalDataStore.setObject(deviceIdentifier, forKey: identifierKey)
+        LocalDataStore.set(value: deviceIdentifier, forKey: identifierKey)
         return deviceIdentifier
     }
 

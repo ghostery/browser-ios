@@ -38,19 +38,18 @@ open class UserAgentConstants : RCTEventEmitter {
         }
         else {
             let installDate: Date
-            if let installDateTime = UserDefaults.standard.value(forKey: InstallDateKey) as? Double {
+            if let installDateTime = LocalDataStore.value(forKey: InstallDateKey) as? Double {
                 installDate = Date(timeIntervalSince1970: installDateTime)
             }
             else {
                 installDate = Date()
                 //register the install date
-                UserDefaults.standard.set(installDate.timeIntervalSince1970, forKey: InstallDateKey)
-                UserDefaults.standard.synchronize()
+                LocalDataStore.set(value: installDate.timeIntervalSince1970, forKey: InstallDateKey)
             }
             return String(installDate.daysSince1970())
         }
         #endif
-        return "16917";
+        //return "16917";
     }
     
     open override static func moduleName() -> String! {
