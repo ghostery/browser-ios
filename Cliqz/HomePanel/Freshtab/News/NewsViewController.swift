@@ -22,7 +22,7 @@ class NewsViewController: UIViewController, HomePanel {
 	weak var homePanelDelegate: HomePanelDelegate?
 
 	private var profile: Profile!
-	fileprivate var dataSource: NewsDataSource!
+	fileprivate weak var dataSource: NewsDataSource!
 	private let disposeBag = DisposeBag()
 
 	fileprivate var isNewsExpanded = false
@@ -41,8 +41,8 @@ class NewsViewController: UIViewController, HomePanel {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		self.dataSource.observable.asObserver().subscribe(onNext: { value in
-			self.newsTableView?.reloadData()
+		self.dataSource.observable.asObserver().subscribe(onNext: { [weak self] value in
+			self?.reloadData()
 		}).disposed(by: disposeBag)
 		self.setupComponents()
 	}
@@ -54,7 +54,7 @@ class NewsViewController: UIViewController, HomePanel {
 
 	func restoreToInitialState() {
 		isNewsExpanded = false
-		self.newsTableView?.reloadData()
+		self.reloadData()
 	}
 
     override func updateViewConstraints() {
@@ -85,6 +85,11 @@ class NewsViewController: UIViewController, HomePanel {
 		} else {
 			return NewsViewUX.NewsViewMinHeight
 		}
+	}
+
+	private func reloadData() {
+		self.newsTableView?.isHidden = self.dataSource?.isEmpty() ?? true
+		self.newsTableView?.reloadData()
 	}
 }
 
