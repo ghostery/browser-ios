@@ -44,7 +44,7 @@ class OffrzDataSource {
 
 	func markCurrentOffrSeen() {
 		self.currentOffr?.isSeen = true
-		LocalDataStore.setObject(self.currentOffr?.uid, forKey: OffrzDataSource.LastSeenOffrID)
+        LocalDataStore.set(value: self.currentOffr?.uid, forKey: OffrzDataSource.LastSeenOffrID)
 	}
 
     func hasOffrz() -> Bool {
@@ -52,7 +52,7 @@ class OffrzDataSource {
     }
 
     func shouldShowOnBoarding() -> Bool {
-		guard let _ = LocalDataStore.objectForKey(OffrzDataSource.OffrzOnboardingKey)
+        guard let _ = LocalDataStore.value(forKey: OffrzDataSource.OffrzOnboardingKey)
 			else {
 			return true
 		}
@@ -60,7 +60,7 @@ class OffrzDataSource {
     }
 
     func hideOnBoarding() {
-		LocalDataStore.setObject("closed", forKey: OffrzDataSource.OffrzOnboardingKey)
+        LocalDataStore.set(value: "closed", forKey: OffrzDataSource.OffrzOnboardingKey)
     }
 
 	private func updateMyOffrzList() {
@@ -71,7 +71,7 @@ class OffrzDataSource {
 					self.currentOffr = o
 					self.currentOffr?.isSeen = true
 				} else {
-				LocalDataStore.removeObjectForKey(OffrzDataSource.LastSeenOffrID)
+                    LocalDataStore.removeObject(forKey: OffrzDataSource.LastSeenOffrID)
 					self.currentOffr = self.getNotExpiredOffr()
 				}
 			}
@@ -100,7 +100,7 @@ class OffrzDataSource {
     }
 
 	private func getLastSeenOffrID() -> String? {
-		return LocalDataStore.objectForKey(OffrzDataSource.LastSeenOffrID) as? String
+        return LocalDataStore.value(forKey: OffrzDataSource.LastSeenOffrID) as? String
 	}
 
 	private func isExpiredOffr(_ offr: Offr) -> Bool {

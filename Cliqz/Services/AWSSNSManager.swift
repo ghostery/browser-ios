@@ -47,7 +47,7 @@ class AWSSNSManager {
 	}
 	
 	class func createPlatformEndpoint(withDeviceToken deviceToken: String, completionHandler: @escaping (Bool) -> Void) {
-		if let oldToken = (LocalDataStore.objectForKey(tokenKey) as? String), oldToken == deviceToken {
+        if let oldToken = (LocalDataStore.value(forKey: tokenKey) as? String), oldToken == deviceToken {
 			return
 		}
 
@@ -57,10 +57,10 @@ class AWSSNSManager {
 		request?.platformApplicationArn = SNSAplicationArn
 		sns.createPlatformEndpoint(request!).continueWith(executor: AWSExecutor.mainThread()) { (task: AWSTask!) -> Any? in
 			if task.error != nil {
-				LocalDataStore.removeObjectForKey(tokenKey)
+                LocalDataStore.removeObject(forKey: tokenKey)
 			} else if let createEndpointResponse = task.result,
 				let endpointArn = createEndpointResponse.endpointArn {
-				LocalDataStore.setObject(deviceToken, forKey: tokenKey)
+                LocalDataStore.set(value: deviceToken, forKey: tokenKey)
 				subscriptForNotification(endpointArn, completionHandler: completionHandler)
 				return nil
 			}

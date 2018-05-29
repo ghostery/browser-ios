@@ -115,9 +115,9 @@ class ConnectTableViewController: SubSettingsTableViewController {
     @objc private func connectionSucceeded() {
         
         let successfulConnectionKey = "SuccessfulConnection"
-        if LocalDataStore.objectForKey(successfulConnectionKey) == nil {
+        if LocalDataStore.value(forKey: successfulConnectionKey) == nil {
             showFirstSuccessfulConnectionAlert()
-            LocalDataStore.setObject(true, forKey: successfulConnectionKey)
+            LocalDataStore.set(value: true, forKey: successfulConnectionKey)
         }
     }
     

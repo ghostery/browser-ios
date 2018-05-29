@@ -238,7 +238,7 @@ class SubscriptionsHandler: NSObject {
     
     private func loadCurrentSubscriptions() -> [String: [String: [String]]] {
 
-        if let storedSubscriptions = LocalDataStore.objectForKey(subscriptionsKey) as? [String: [String: [String]]] {
+        if let storedSubscriptions = LocalDataStore.value(forKey: subscriptionsKey) as? [String: [String: [String]]] {
             return storedSubscriptions
         } else {
             return [String: [String: [String]]]()
@@ -246,7 +246,7 @@ class SubscriptionsHandler: NSObject {
     }
     
     private func saveCurrentSubscriptions() {
-        LocalDataStore.setObject(currentSubscription, forKey: subscriptionsKey)
+        LocalDataStore.set(value: currentSubscription, forKey: subscriptionsKey)
     }
     
     private func registerForUserNotifications() {

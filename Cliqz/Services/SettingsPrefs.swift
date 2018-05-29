@@ -212,28 +212,28 @@ class SettingsPrefs {
     func getSendCrashReportsPref() -> Bool {
         // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
         let defaultValue = true
-        if let sendCrashReportsPref = LocalDataStore.objectForKey(SettingsPrefs.SendCrashReports) as? Bool {
+        if let sendCrashReportsPref = LocalDataStore.value(forKey: SettingsPrefs.SendCrashReports) as? Bool {
             return sendCrashReportsPref
         }
         return defaultValue
     }
     
     func updateSendCrashReportsPref(_ newValue: Bool) {
-        LocalDataStore.setObject(newValue, forKey: SettingsPrefs.SendCrashReports)
+        LocalDataStore.set(value: newValue, forKey: SettingsPrefs.SendCrashReports)
         
     }
     
     func getSendUsageDataPref() -> Bool {
         // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
         let defaultValue = true
-        if let sendUsageDataPref = LocalDataStore.objectForKey(SettingsPrefs.SendUsageData) as? Bool {
+        if let sendUsageDataPref = LocalDataStore.value(forKey: SettingsPrefs.SendUsageData) as? Bool {
             return sendUsageDataPref
         }
         return defaultValue
     }
     
     func updateSendUsageDataPref(_ newValue: Bool) {
-        LocalDataStore.setObject(newValue, forKey: SettingsPrefs.SendUsageData)
+        LocalDataStore.set(value: newValue, forKey: SettingsPrefs.SendUsageData)
     }
 
     // MARK: - Private helper metods

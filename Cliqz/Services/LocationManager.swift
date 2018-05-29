@@ -98,10 +98,10 @@ open class LocationManager: NSObject, CLLocationManagerDelegate {
         //empty the array
         permissionCallbacks = []
         
-        let currentLocationStatus = LocalDataStore.objectForKey(locationStatusKey)
+        let currentLocationStatus = LocalDataStore.value(forKey: locationStatusKey)
         if currentLocationStatus == nil || currentLocationStatus as! String != status.stringValue() {
             //TelemetryLogger.sharedInstance.logEvent(.LocationServicesStatus("status_change", status.stringValue()))
-            LocalDataStore.setObject(status.stringValue(), forKey: locationStatusKey)
+            LocalDataStore.set(value: status.stringValue(), forKey: locationStatusKey)
         }
     }
     
