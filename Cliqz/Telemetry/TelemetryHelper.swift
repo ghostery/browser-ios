@@ -10,34 +10,34 @@ import UIKit
 
 class TelemetryHelper: NSObject {
     class func sendFreshTabShow() {
-        Engine.sharedInstance.getBridge().callAction("handleTelemetrySignal", args: [["type": "home", "action": "show"], false, "freshtab.home.show"])
+        Engine.sharedInstance.getBridge().callAction("anolysis:handleTelemetrySignal", args: [["type": "home", "action": "show"], false, "freshtab.home.show"])
     }
     
     class func sendTopSiteClick() {
-        Engine.sharedInstance.getBridge().callAction("handleTelemetrySignal", args: [["type": "home", "action": "click", "target": "topsite"], false, "freshtab.home.click.topsite"])
+        Engine.sharedInstance.getBridge().callAction("anolysis:handleTelemetrySignal", args: [["type": "home", "action": "click", "target": "topsite"], false, "freshtab.home.click.topsite"])
     }
     
     class func sendControlCenterShow() {
-        Engine.sharedInstance.getBridge().callAction("handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.show"])
+        Engine.sharedInstance.getBridge().callAction("anolysis:handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.show"])
     }
     
     class func sendControlCenterPauseClick() {
-        Engine.sharedInstance.getBridge().callAction("handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.click.pause"])
+        Engine.sharedInstance.getBridge().callAction("anolysis:handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.click.pause"])
     }
     
     class func sendControlCenterResumeClick() {
-        Engine.sharedInstance.getBridge().callAction("handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.click.resume"])
+        Engine.sharedInstance.getBridge().callAction("anolysis:handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.click.resume"])
     }
     
     class func sendControlCenterTrustClick() {
-        Engine.sharedInstance.getBridge().callAction("handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.click.trustSite"])
+        Engine.sharedInstance.getBridge().callAction("anolysis:handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.click.trustSite"])
     }
     
     class func sendControlCenterRestrictClick() {
-        Engine.sharedInstance.getBridge().callAction("handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.click.restrictSite"])
+        Engine.sharedInstance.getBridge().callAction("anolysis:handleTelemetrySignal", args: [[:], false, "metrics.controlcenter.click.restrictSite"])
     }
     
     class func sendFavoriteMigrationSignal(count: Int, rootFolderCount: Int, maxDepth: Int) {
-        Engine.sharedInstance.getBridge().callAction("handleTelemetrySignal", args: [["count": count, "rootFolderCount": rootFolderCount, "maxDepth": maxDepth], false, "metrics.favorites.migration.folders"])
+        Engine.sharedInstance.getBridge().callAction("anolysis:handleTelemetrySignal", args: [["count": count, "rootFolderCount": rootFolderCount, "maxDepth": maxDepth], false, "metrics.favorites.migration.folders"])
     }
 }
