@@ -234,6 +234,7 @@ class SettingsPrefs {
     
     func updateSendUsageDataPref(_ newValue: Bool) {
         LocalDataStore.set(value: newValue, forKey: SettingsPrefs.SendUsageData)
+        Engine.sharedInstance.setPref("extensions.cliqz.modules.anolysis.enabled", prefValue: newValue)
     }
 
     // MARK: - Private helper metods
