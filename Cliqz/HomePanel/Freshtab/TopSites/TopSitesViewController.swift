@@ -210,10 +210,6 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
 		for cell in cells as! [TopSiteViewCell] {
 			cell.isDeleteMode = true
 		}
-
-		if let index = gestureReconizer.view?.tag {
-			logTopsiteSignal(action: "longpress", index: index)
-		}
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -224,7 +220,6 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
 			} else if let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) {
 				self.homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: .link)
 			}
-			logTopsiteSignal(action: "click", index: indexPath.row)
 		}
 	}
 	
@@ -267,7 +262,7 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
 
 extension TopSitesViewController: UIGestureRecognizerDelegate {
 
-	@nonobjc func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
 		if gestureRecognizer is UITapGestureRecognizer {
 			let location = touch.location(in: self.topSitesCollection)
 			if let index = self.topSitesCollection?.indexPathForItem(at: location),
@@ -281,7 +276,7 @@ extension TopSitesViewController: UIGestureRecognizerDelegate {
 }
 
 extension TopSitesViewController: TopSiteCellDelegate {
-
+	
 	func hideTopSite(_ index: Int) {
 		// TODO: for now after hiding top site the view will be refreshed and wobbling is stopped. In future we should support hiding of multiple topsites
 		self.dataSource.hideTopSite(at: index)
