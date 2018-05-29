@@ -37,6 +37,10 @@ class NewsDataSource {
 		return nil
 	}
 
+	func isEmpty() -> Bool {
+		return lastNews.count == 0
+	}
+
 	func getNewsViewModel(at: Int) -> NewsCellViewModel? {
 		if let news = self.getNews(at: at) {
 			let newsViewModel = NewsCellViewModel(news)
