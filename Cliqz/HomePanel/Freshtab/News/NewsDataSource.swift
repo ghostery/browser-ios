@@ -12,8 +12,10 @@ import RxSwift
 class NewsDataSource {
     
     static let instance = NewsDataSource()
-	
+	private let expirationDuration: TimeInterval = 1800
+
 	private var lastNews = [News]()
+	private var lastFetchDate: Date?
 
 	let observable = BehaviorSubject(value: false)
 
@@ -58,14 +60,22 @@ class NewsDataSource {
 		return nil
 	}
 
-	private func loadNews() {
+	func loadNews() {
+		guard self.isEmpty() || self.isExpired() else {
+			return
+		}
 		NewsDataService.loadLastNews { (news, error) in
 			if error != nil {
 				self.lastNews = [News]()
 			} else {
 				self.lastNews = news
 			}
+			self.lastFetchDate = Date()
 			self.observable.on(.next(true))
 		}
+	}
+
+	private func isExpired() -> Bool {
+		return self.lastFetchDate == nil || Date().timeIntervalSince(self.lastFetchDate!) > self.expirationDuration
 	}
 }

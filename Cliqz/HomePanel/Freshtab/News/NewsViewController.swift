@@ -44,6 +44,7 @@ class NewsViewController: UIViewController, HomePanel {
 		self.dataSource.observable.asObserver().subscribe(onNext: { [weak self] value in
 			self?.reloadData()
 		}).disposed(by: disposeBag)
+		self.dataSource.loadNews()
 		self.setupComponents()
 	}
 
