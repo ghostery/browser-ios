@@ -442,6 +442,7 @@
 		4F69309A2048185600FB0B2E /* TopSitesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6930992048185600FB0B2E /* TopSitesDataSource.swift */; };
 		4F82FDC5208F2D3E002CED25 /* TrackersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F82FDB6208F2D3E002CED25 /* TrackersController.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
+		4F9DD64320BD562B00107976 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8752028CE4000018880 /* disconnect-social.json */; };
 		4FB2BBB120B70A21006FB03D /* DeviceInfoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB2BBAE20B70680006FB03D /* DeviceInfoExtension.swift */; };
 		4FB2BBB420B70BC8006FB03D /* WifiProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB2BBB220B70A72006FB03D /* WifiProtectionViewController.swift */; };
 		4FB2BBB820B70FB5006FB03D /* WiFiProtectionActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB2BBB720B70FB4006FB03D /* WiFiProtectionActivity.swift */; };
@@ -5597,7 +5598,7 @@
 					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -6103,6 +6104,7 @@
 				4F3046AD204FF0EA00C99162 /* Cliqz.xcassets in Resources */,
 				7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */,
 				1EAE3BEB20BD602500300C98 /* BookmarkPanelDeleteConfirm.strings in Resources */,
+				4F9DD64320BD562B00107976 /* disconnect-social.json in Resources */,
 				E49943F71AE69EDD00BF9DE4 /* Intro.xcassets in Resources */,
 				1EAE3BEE20BD602500300C98 /* LoginManager.strings in Resources */,
 				1EAE3BB120BD602500300C98 /* PrivateBrowsing.strings in Resources */,
