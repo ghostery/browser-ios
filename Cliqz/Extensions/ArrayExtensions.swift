@@ -37,5 +37,23 @@ extension Array {
         
         return reduceDict
     }
+    
+    public func batch(size: Int) -> [[Element]] {
+        var result: [[Element]] = []
+        var temp: [Element] = []
+        for i in 0..<count {
+            if i % size == 0 {
+                result.append(temp)
+                temp = []
+            }
+            else {
+                temp.append(self[i])
+            }
+        }
+        if temp.count > 0 {
+            result.append(temp)
+        }
+        return result
+    }
 }
 
