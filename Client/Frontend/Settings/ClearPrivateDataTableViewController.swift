@@ -34,9 +34,11 @@ class ClearPrivateDataTableViewController: UITableViewController {
             (CookiesClearable(tabManager: self.tabManager), true),
             (SiteDataClearable(tabManager: self.tabManager), true)
         ]
+        /* Cliqz: removed Tracking Protection option
         if #available(iOS 11, *) {
             items.append((TrackingProtectionClearable(), true))
         }
+        */
         return items
     }()
 
