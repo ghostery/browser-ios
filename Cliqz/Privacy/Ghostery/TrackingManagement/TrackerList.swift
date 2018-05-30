@@ -420,7 +420,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         var appList = [TrackerListApp]()
         for (_, trackerApp) in apps {
             //trackerApp.isBlocked = true
-            TrackerStateStore.change(trackerState: trackerApp.state, toState: .blocked)
+            TrackerStateStore.change(appId: trackerApp.appId, toState: .blocked)
             appList.append(trackerApp)
         }
 

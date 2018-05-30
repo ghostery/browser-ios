@@ -94,7 +94,7 @@ class ControlCenterDelegate: ControlCenterDelegateProtocol {
     
     func changeState(appId: Int, state: TrackerStateEnum) {
         if let trakerListApp = TrackerList.instance.apps[appId] {
-            TrackerStateStore.change(trackerState: trakerListApp.state, toState: state)
+            TrackerStateStore.change(appId: trakerListApp.appId, toState: state)
             
             if state == .trusted || state == .empty {
                 UserPreferences.instance.antitrackingMode = .blockSomeOrNone
