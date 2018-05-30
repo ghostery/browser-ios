@@ -366,6 +366,11 @@ class TabTrayController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
+
+        // Cliqz: set background image
+        self.setBackgroundImage()
+        // Cliqz: lsiten to view orientation
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {

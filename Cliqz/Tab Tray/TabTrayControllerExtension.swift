@@ -19,4 +19,12 @@ extension TabTrayController {
             self.didTapDelete(self.toolbar.doneButton)
         }
     }
+    
+    func setBackgroundImage() {
+        collectionView.backgroundView = UIImageView(image: UIImage.cliqzBackgroundImage(blurred: true))
+    }
+    
+    @objc func orientationDidChange(_ notification: Notification) {
+        setBackgroundImage()
+    }
 }
