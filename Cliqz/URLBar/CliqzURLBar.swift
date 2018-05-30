@@ -252,17 +252,7 @@ class CliqzURLBar: URLBarView {
         }
         return super.autocompleteTextFieldShouldClear(autocompleteTextField)
     }
-    
-    override func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
-        super.enterOverlayMode(locationText, pasted: pasted, search: search)
-        Engine.sharedInstance.sendUrlBarFocusEvent()
-    }
-    
-    override func leaveOverlayMode(didCancel cancel: Bool = false) {
-        super.leaveOverlayMode(didCancel: cancel)
-        Engine.sharedInstance.sendUrlBarNotInFocusEvent()
-    }
-    
+
     override func didApplyTheme(_ theme: Theme) {
         ghosteryButton.applyTheme(theme)
     }
