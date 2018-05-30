@@ -43,7 +43,7 @@ final class ApplyDefaultsOperation: Operation {
         self.isExecuting = true
         for app in TrackerList.instance.globalTrackerList() {
             if CategoriesHelper.categoriesBlockedByDefault.contains(app.category) {
-                TrackerStateStore.change(trackerState: app.state, toState: .blocked)
+                TrackerStateStore.change(appId: app.appId, toState: .blocked)
             }
         }
         self.isFinished = true

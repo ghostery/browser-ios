@@ -64,12 +64,20 @@ public class TrackerStateStore: NSObject {
         return trackerState
     }
     
-    public class func change(trackerState: TrackerState, toState: TrackerStateEnum) {
+    public class func change(appId: Int, toState: TrackerStateEnum) {
         let realm = try! Realm()
         do {
             try realm.write {
-                trackerState.state = intForState(state: toState)
-                realm.add(trackerState, update: true)
+                if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
+                    trackerState.state = intForState(state: toState)
+                    realm.add(trackerState, update: true)
+                }
+                else {
+                    let trackerState = TrackerState()
+                    trackerState.appId = appId
+                    trackerState.state = intForState(state: toState)
+                    realm.add(trackerState)
+                }
             }
         }
         catch {
