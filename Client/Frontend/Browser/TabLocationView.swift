@@ -394,7 +394,11 @@ class ReaderModeButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         adjustsImageWhenHighlighted = false
+        /* Cliqz: change the reader mode button icon
         setImage(UIImage.templateImageNamed("reader"), for: .normal)
+        */
+        setImage(UIImage.templateImageNamed("readerMode"), for: .normal)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
