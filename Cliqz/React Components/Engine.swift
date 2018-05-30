@@ -106,16 +106,6 @@ open class Engine {
     }
     
     // MARK :- Search
-    func sendUrlBarFocusEvent() {
-        debugPrint("urlbar in focus")
-        self.getBridge().publishEvent("urlbar:focus", args: [[:]])
-    }
-    
-    func sendUrlBarNotInFocusEvent() {
-        debugPrint("urlbar NOT in focus")
-        self.getBridge().publishEvent("urlbar:blur", args: [[:]])
-    }
-    
     func sendUrlBarInputEvent(newString: String?, lastString: String?) {
         debugPrint("newString = \(newString ?? "null") | lastString = \(lastString ?? "null")")
         
@@ -125,17 +115,10 @@ open class Engine {
         
         //Invariant: The newString and oldString must differ by one character at the end
         guard abs(newString.count - lastString.count) == 1 && (newString == lastString.dropLast() || newString.dropLast() == lastString) else {
-            if newString == "" {
-                let dict:[String: Any] = ["isTyped": true, "query": lastString, "keyCode":""]
-                self.getBridge().publishEvent("urlbar:input", args: [dict])
-            }
-            else {
-                let dict:[String: Any] = ["isTyped": true, "query": newString, "keyCode":""]
-                self.getBridge().publishEvent("urlbar:input", args: [dict])
-            }
             return
         }
         
+        let contextId = "mobile-cards"
         var keyCode = ""
         
         if newString.count < lastString.count {
@@ -144,9 +127,7 @@ open class Engine {
         else if newString.count > 0 {
             keyCode = "Key" + String(newString.last!).uppercased()
         }
-        
-        let dict: [String: Any] = ["isTyped": true, "query": newString, "keyCode": keyCode]
-        
-        self.getBridge().publishEvent("urlbar:input", args: [dict])
+
+        self.getBridge().callAction("search:startSearch", args: [newString, ["key": keyCode], ["contextId": contextId]])
     }
 }
