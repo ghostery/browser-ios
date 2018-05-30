@@ -41,33 +41,6 @@ final class BlockingCoordinator {
     
     private unowned let webView: WKWebView
     
-    init(webView: WKWebView) {
-        self.webView = webView
-    }
-    
-    //TODO: Make sure that at the time of the coordinatedUpdate, all necessary blocklists are in the cache
-    func coordinatedUpdate() {
-        
-        func opFilter(op: Operation) -> Bool {
-            if let operation = op as? UpdateOperation {
-                return !(operation.isExecuting  || operation.isFinished || operation.isCancelled)
-            }
-            return false
-        }
-        
-        debugPrint("Coordinated Update")
-        if GlobalPrivacyQueue.shared.operations.filter(opFilter).count == 0 {
-            debugPrint("Add to Update Queue")
-            DispatchQueue.main.async {
-                let updateOp = UpdateOperation(webView: self.webView, domain: self.webView.url?.normalizedHost)
-                GlobalPrivacyQueue.shared.addOperation(updateOp)
-            }
-        }
-    }
-}
-
-final class UpdateHelper {
-    
     class func isAdblockerOn() -> Bool {
         return UserPreferences.instance.adblockingMode == .blockAll
     }
@@ -106,6 +79,30 @@ final class UpdateHelper {
     
     class func identifiersFor(type: BlockListType, domain: String?) -> [String] {
         return type == .antitracking ? identifiersForAntitracking(domain: domain) : BlockListIdentifiers.adblockingIdentifiers()
+    }
+    
+    init(webView: WKWebView) {
+        self.webView = webView
+    }
+    
+    //TODO: Make sure that at the time of the coordinatedUpdate, all necessary blocklists are in the cache
+    func coordinatedUpdate() {
+        
+        func opFilter(op: Operation) -> Bool {
+            if let operation = op as? UpdateOperation {
+                return !(operation.isExecuting  || operation.isFinished || operation.isCancelled)
+            }
+            return false
+        }
+        
+        debugPrint("Coordinated Update")
+        if GlobalPrivacyQueue.shared.operations.filter(opFilter).count == 0 {
+            debugPrint("Add to Update Queue")
+            DispatchQueue.main.async {
+                let updateOp = UpdateOperation(webView: self.webView, domain: self.webView.url?.normalizedHost)
+                GlobalPrivacyQueue.shared.addOperation(updateOp)
+            }
+        }
     }
 }
 
@@ -153,11 +150,11 @@ class UpdateOperation: Operation {
         
         var blockLists: [WKContentRuleList] = []
         let dispatchGroup = DispatchGroup()
-        for type in UpdateHelper.order {
-            if UpdateHelper.featureIsOn(forType: type, domain: domain) {
+        for type in BlockingCoordinator.order {
+            if BlockingCoordinator.featureIsOn(forType: type, domain: domain) {
                 //get the blocklists for that type
                 dispatchGroup.enter()
-                let identifiers = UpdateHelper.identifiersFor(type: type, domain: domain)
+                let identifiers = BlockingCoordinator.identifiersFor(type: type, domain: domain)
                 BlockListManager.shared.getBlockLists(forIdentifiers: identifiers, callback: { (lists) in
                     blockLists.append(contentsOf: lists)
                     type == .antitracking ? debugPrint("Antitracking is ON") : debugPrint("Adblocking is ON")
