@@ -47,6 +47,7 @@
 		1E138E1420A5983D00B82C13 /* CliqzBookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */; };
 		1E2C202020AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */; };
 		1E2C227C20B4149000AA00B5 /* SendUsageDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */; };
+		1E3B3F2320C1590600C96736 /* Cliqz.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 1E3B3F2520C1590600C96736 /* Cliqz.stringsdict */; };
 		1E3C5388209AFEDA00286CA4 /* TabTrayDoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */; };
 		1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */; };
 		1E3CBC1D205806F000898B05 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC1C205806F000898B05 /* DateExtension.swift */; };
@@ -1614,6 +1615,9 @@
 		1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzBookmarksPanel.swift; sourceTree = "<group>"; };
 		1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzSiteTableViewCell.swift; sourceTree = "<group>"; };
 		1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendUsageDataTableViewController.swift; sourceTree = "<group>"; };
+		1E3B3F2420C1590600C96736 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
+		1E3B3F2820C15BA500C96736 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
+		1E3B3F2920C15BA700C96736 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fr; path = fr.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
 		1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayDoneButton.swift; sourceTree = "<group>"; };
 		1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzAppSettingsOptions.swift; sourceTree = "<group>"; };
@@ -3555,6 +3559,7 @@
 		4F304596204FEE3B00C99162 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1E3B3F2520C1590600C96736 /* Cliqz.stringsdict */,
 				AF6F247C20AF0749009C3D0D /* CliqzStrings.swift */,
 				1E7A3DC12085FCCA00F53E90 /* assets */,
 				1EAFE515205FBBBC006A36B4 /* CliqzLaunchScreen.xib */,
@@ -5713,6 +5718,7 @@
 				en,
 				Base,
 				de,
+				fr,
 			);
 			mainGroup = F84B21B51A090F8100AAB793;
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
@@ -6154,6 +6160,7 @@
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
 				1EBB08B92068FC9700C6DFFE /* Eula.html in Resources */,
 				AFA1DE072088AF9600B27B8A /* AdBlocker in Resources */,
+				1E3B3F2320C1590600C96736 /* Cliqz.stringsdict in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
 				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
 				1EAE3B8A20BD602400300C98 /* SendTo.strings in Resources */,
@@ -7543,6 +7550,16 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		1E3B3F2520C1590600C96736 /* Cliqz.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1E3B3F2420C1590600C96736 /* en */,
+				1E3B3F2820C15BA500C96736 /* de */,
+				1E3B3F2920C15BA700C96736 /* fr */,
+			);
+			name = Cliqz.stringsdict;
+			sourceTree = "<group>";
+		};
 		1EAE3B5E20BD602400300C98 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
