@@ -65,7 +65,7 @@ class OffrView: UIView {
         promoCodeButton.setTitle(offr.code, for: .normal)
 		promoCodeButton.addTarget(self, action: #selector(copyCode), for: .touchUpInside)
 		conditionsLabel.text = NSLocalizedString("MyOffrz Conditions", tableName: "Cliqz", comment: "[MyOffrz] Conditions title")
-		conditionsIcon.image = UIImage(named: "trackerInfo")
+		conditionsIcon.image = UIImage.templateImageNamed("trackerInfo")
         offrButton.setTitle(offr.actionTitle, for: .normal)
         self.addSubview(titleLabel)
         self.addSubview(descriptionLabel)
