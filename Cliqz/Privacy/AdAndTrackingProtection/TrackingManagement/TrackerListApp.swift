@@ -14,12 +14,29 @@ import Storage
     var name: String = ""
     var category: String = ""
     var tags = [Int]()
-    var state: TrackerState {
+    
+    func state(domain: String?) -> TrackerUIState {
+        if let domain = domain {
+            let domainObj = getOrCreateDomain(domain: domain)
+            if domainObj.trustedTrackers.contains(appId) {
+                return .trusted
+            }
+            else if domainObj.restrictedTrackers.contains(appId) {
+                return .restricted
+            }
+        }
+
         if let state = TrackerStateStore.getTrackerState(appId: appId) {
-            return state
+            if state.translatedState == .blocked {
+                return .blocked
+            }
+            else {
+                return .empty
+            }
         }
         else {
-            return TrackerStateStore.createTrackerState(appId: appId, state: .empty)
+            TrackerStateStore.createTrackerState(appId: appId, state: .empty)
+            return .empty
         }
     }
 
@@ -52,5 +69,15 @@ import Storage
         }
 
         return output
+    }
+    
+    fileprivate func getOrCreateDomain(domain: String) -> Domain {
+        //if we have done anything with this domain before we will have something in the DB
+        //otherwise we need to create it
+        if let domainO = DomainStore.get(domain: domain) {
+            return domainO
+        } else {
+            return DomainStore.create(domain: domain)
+        }
     }
 }

@@ -86,7 +86,7 @@ class AntitrackingJSONIdentifiers {
         
         var global: Set<Int> = Set()
         for app in TrackerList.instance.globalTrackerList() {
-            if app.state.translatedState == .blocked && app.category == forBlockListId {
+            if app.state(domain: domain) == .blocked && app.category == forBlockListId {
                 global.insert(app.appId)
             }
         }

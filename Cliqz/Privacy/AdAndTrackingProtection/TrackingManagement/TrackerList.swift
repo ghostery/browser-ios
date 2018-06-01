@@ -397,7 +397,8 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         return appList
     }
     
-    func detectedTrackerCountForPage(_ pageUrl: String) -> Int {
+    func detectedTrackerCountForPage(_ pageUrl: String?) -> Int {
+        guard let pageUrl = pageUrl else { return 0 }
         if let pageBugs = discoveredBugs[pageUrl] {
             return pageBugs.appIdList().count
         }
