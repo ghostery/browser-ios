@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 class OffrzViewController: UIViewController, HomePanel {
 
@@ -28,8 +29,7 @@ class OffrzViewController: UIViewController, HomePanel {
 	private weak var expandedOffrView: OffrView?
 
     weak var offrzDataSource : OffrzDataSource!
-
-	private var startDate = Date()
+    private let disposeBag = DisposeBag()
 
     init(dataSource: OffrzDataSource) {
         super.init(nibName: nil, bundle: nil)
@@ -42,18 +42,14 @@ class OffrzViewController: UIViewController, HomePanel {
     
     override func viewDidLoad() {
 		super.viewDidLoad()
-
         setStyles()
         setupComponents()
-        
-        if self.offrzDataSource.hasOffrz() {
-            self.offrzDataSource.markCurrentOffrSeen()
-        }
+        self.loadOffrz()
 	}
-
+    
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		self.startDate = Date()
+//        self.startDate = Date()
 		// TODO: Refactor after Telemetry integration
 //		TelemetryLogger.sharedInstance.logEvent(.Toolbar("show", nil, "offrz", nil, ["offer_count": self.offrzDataSource.hasOffrz() ? 1 : 0]))
 	}
@@ -72,7 +68,21 @@ class OffrzViewController: UIViewController, HomePanel {
     private func setupComponents() {
         self.view.addSubview(scrollView)
         scrollView.addSubview(containerView)
-
+    }
+    
+    private func loadOffrz() {
+        self.offrzDataSource.observable.asObserver().subscribe(onNext: {[weak self] value in
+            self?.refreshView()
+        }).disposed(by: disposeBag)
+        
+        self.offrzDataSource.loadOffrz()
+    }
+    
+    private func refreshView() {
+        // Clear all components from the screen
+        self.emptyView?.removeFromSuperview()
+        self.offrView?.removeFromSuperview()
+        
         if offrzDataSource.hasOffrz(), let currentOffr = offrzDataSource.getCurrentOffr() {
 			self.myOffr = currentOffr
             offrView = OffrView(offr: currentOffr)
@@ -80,6 +90,7 @@ class OffrzViewController: UIViewController, HomePanel {
 			offrView?.addTapAction(self, action: #selector(openOffr))
 			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(expandOffr))
 			offrView?.addGestureRecognizer(tapGesture)
+            self.offrzDataSource.markCurrentOffrSeen()
         } else {
             self.emptyView = OffrzEmptyView()
             self.containerView.addSubview(self.emptyView)
@@ -102,6 +113,8 @@ class OffrzViewController: UIViewController, HomePanel {
 			}
 			// TODO: Refactor after Telemetry integration
 //			TelemetryLogger.sharedInstance.logEvent(.Onboarding("show", "offrz", nil))
+        } else {
+            self.onboardingView?.removeFromSuperview()
         }
     }
     
