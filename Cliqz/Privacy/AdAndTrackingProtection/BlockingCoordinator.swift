@@ -9,6 +9,10 @@
 import WebKit
 import Storage
 
+// There are 2 types of Identifiers that I work with.
+typealias BlockListIdentifier = String
+typealias JSONIdentifier = String
+
 enum BlockListType {
     case antitracking
     case adblocker
@@ -64,21 +68,16 @@ final class BlockingCoordinator {
         return forType == .antitracking ? isAntitrackingOn(domain: domain) : isAdblockerOn()
     }
     
-    class func identifiersForAntitracking(domain: String?) -> [String] {
-        //logic what to load for antitracking
-        if UserPreferences.instance.antitrackingMode == .blockAll {
-            return BlockListIdentifiers.antitrackingBlockAllIdentifiers()
+    class func blockIdentifiers(forType: BlockListType) -> [BlockListIdentifier] {
+        if forType == .antitracking {
+            if UserPreferences.instance.antitrackingMode == .blockAll {
+                return AntitrackingJSONIdentifiers.antitrackingBlockAllIdentifiers()
+            }
+            return BlockListIdentifiers.antitrackingIdentifiers()
         }
-        else if let domainStr = domain, let domainObj = DomainStore.get(domain: domainStr), domainObj.translatedState == .restricted {
-            //assemble list of appIds for which blocklists need to loaded
-            return BlockListIdentifiers.antitrackingBlockSelectedIdentifiers(domain: domain)
+        else {
+            return BlockListIdentifiers.adblockingIdentifiers()
         }
-        
-        return BlockListIdentifiers.antitrackingBlockSelectedIdentifiers()
-    }
-    
-    class func identifiersFor(type: BlockListType, domain: String?) -> [String] {
-        return type == .antitracking ? identifiersForAntitracking(domain: domain) : BlockListIdentifiers.adblockingIdentifiers()
     }
     
     init(webView: WKWebView) {
@@ -154,8 +153,8 @@ class UpdateOperation: Operation {
             if BlockingCoordinator.featureIsOn(forType: type, domain: domain) {
                 //get the blocklists for that type
                 dispatchGroup.enter()
-                let identifiers = BlockingCoordinator.identifiersFor(type: type, domain: domain)
-                BlockListManager.shared.getBlockLists(forIdentifiers: identifiers, callback: { (lists) in
+                let identifiers = BlockingCoordinator.blockIdentifiers(forType: type)
+                BlockListManager.shared.getBlockLists(forIdentifiers: identifiers, type: type, domain: domain, callback: { (lists) in
                     blockLists.append(contentsOf: lists)
                     type == .antitracking ? debugPrint("Antitracking is ON") : debugPrint("Adblocking is ON")
                     dispatchGroup.leave()

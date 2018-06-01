@@ -10,30 +10,16 @@ import Storage
 
 final class BlockListIdentifiers {
     
-    class func antitrackingBlockSelectedIdentifiers(domain: String? = nil) -> [String] {
-        
-        func getBugIds(appIds: Set<Int>) -> [Int] {
-            return appIds.flatMap { (appId) -> [Int] in
-                return TrackerList.instance.app2bug[appId] ?? []
-            }
-        }
-        
-        let appIds = getAppIds(domain: domain)
-        let bugIds = getBugIds(appIds: appIds).map { i in String(i) }
-        
-        return bugIds
+    class func antitrackingIdentifiers() -> [BlockListIdentifier] {
+        return Array(CategoriesHelper.categories)
     }
     
-    class func antitrackingBlockAllIdentifiers() -> [String] {
-        return ["ghostery_content_blocker"]
-    }
-    
-    class func adblockingIdentifiers() -> [String] {
+    class func adblockingIdentifiers() -> [BlockListIdentifier] {
         // exceptions are now part of the chunks
         return adBlockerChunks()
     }
     
-    class private func adBlockerChunks() -> [String] {
+    class private func adBlockerChunks() -> [BlockListIdentifier] {
         guard var paths = try? FileManager.default.contentsOfDirectory(atPath: Bundle.main.bundlePath + "/AdBlocker/Chunks/") else { return [] }
         
         func adblockerFileNumber(path: String) -> Int {
@@ -56,9 +42,43 @@ final class BlockListIdentifiers {
             return adblockerFileNumber(path: p1) < adblockerFileNumber(path: p2)
         })
     }
+}
+
+class AntitrackingJSONIdentifiers {
     
-    class private func getAppIds(domain: String?) -> Set<Int> {
+    class func jsonIdentifiers(forBlockListId: BlockListIdentifier, domain: String?) -> Set<JSONIdentifier> {
+        return Set(antitrackingBlockSelectedIdentifiers(forBlockListId: forBlockListId, domain: domain))
+    }
+    
+    class func antitrackingBlockAllIdentifiers() -> [JSONIdentifier] {
+        return ["ghostery_content_blocker"]
+    }
+    
+    class private func antitrackingBlockSelectedIdentifiers(forBlockListId: BlockListIdentifier, domain: String? = nil) -> [JSONIdentifier] {
         
+        func getBugIds(appIds: Set<Int>) -> [Int] {
+            return appIds.flatMap { (appId) -> [Int] in
+                return TrackerList.instance.app2bug[appId] ?? []
+            }
+        }
+        
+        let appIds = getAppIds(forBlockListId: forBlockListId, domain: domain)
+        let bugIds = getBugIds(appIds: appIds).map { i in String(i) }
+        
+        return bugIds
+    }
+    
+    class private func getAppIds(forBlockListId: BlockListIdentifier, domain: String?) -> Set<Int> {
+        
+        //forBlockListId == app.category
+        
+        //filter out appIds that do not belong to this category
+        func filter(appId: Int) -> Bool {
+            if let app = TrackerList.instance.apps[appId] {
+                return app.category == forBlockListId
+            }
+            return false
+        }
         //load global trackers
         //load trackers specific to this page
         var specific2domainRestricted: Set<Int> = Set()
@@ -66,14 +86,14 @@ final class BlockListIdentifiers {
         
         var global: Set<Int> = Set()
         for app in TrackerList.instance.globalTrackerList() {
-            if app.state.translatedState == .blocked {
+            if app.state.translatedState == .blocked && app.category == forBlockListId {
                 global.insert(app.appId)
             }
         }
         
         if let domainStr = domain, let domainObj = DomainStore.get(domain: domainStr) {
-            specific2domainTrusted = Set(domainObj.trustedTrackers)
-            specific2domainRestricted = Set(domainObj.restrictedTrackers)
+            specific2domainTrusted = Set(domainObj.trustedTrackers.filter(filter))
+            specific2domainRestricted = Set(domainObj.restrictedTrackers.filter(filter))
         }
         
         global.formUnion(specific2domainRestricted)

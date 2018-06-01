@@ -574,7 +574,7 @@
 		AF99C8A2206935F0009404FF /* GhosteryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99C8A1206935F0009404FF /* GhosteryButton.swift */; };
 		AF9C111220A051FB003253D3 /* CliqzHistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */; };
 		AFA1DE072088AF9600B27B8A /* AdBlocker in Resources */ = {isa = PBXBuildFile; fileRef = AFA1DDF82088AF9600B27B8A /* AdBlocker */; };
-		AFA1DE0A2088BDDB00B27B8A /* BlockListIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE092088BDDB00B27B8A /* BlockListIdentifiers.swift */; };
+		AFA1DE0A2088BDDB00B27B8A /* Identifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE092088BDDB00B27B8A /* Identifiers.swift */; };
 		AFA1DE0C2088BE0500B27B8A /* BlockListFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE0B2088BE0500B27B8A /* BlockListFileManager.swift */; };
 		AFA1DE0E2088BE5700B27B8A /* CompileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE0D2088BE5700B27B8A /* CompileOperation.swift */; };
 		AFA1DE102088D59400B27B8A /* BlockingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE0F2088D59400B27B8A /* BlockingCoordinator.swift */; };
@@ -2173,7 +2173,7 @@
 		AF99C8A1206935F0009404FF /* GhosteryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosteryButton.swift; sourceTree = "<group>"; };
 		AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHistoryPanel.swift; sourceTree = "<group>"; };
 		AFA1DDF82088AF9600B27B8A /* AdBlocker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AdBlocker; sourceTree = "<group>"; };
-		AFA1DE092088BDDB00B27B8A /* BlockListIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListIdentifiers.swift; sourceTree = "<group>"; };
+		AFA1DE092088BDDB00B27B8A /* Identifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiers.swift; sourceTree = "<group>"; };
 		AFA1DE0B2088BE0500B27B8A /* BlockListFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListFileManager.swift; sourceTree = "<group>"; };
 		AFA1DE0D2088BE5700B27B8A /* CompileOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompileOperation.swift; sourceTree = "<group>"; };
 		AFA1DE0F2088D59400B27B8A /* BlockingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockingCoordinator.swift; sourceTree = "<group>"; };
@@ -3921,9 +3921,9 @@
 			isa = PBXGroup;
 			children = (
 				AF6FA97620652C8F00D7F9F0 /* BlockListManager.swift */,
-				AFA1DE092088BDDB00B27B8A /* BlockListIdentifiers.swift */,
 				AFA1DE0B2088BE0500B27B8A /* BlockListFileManager.swift */,
 				AFA1DE0D2088BE5700B27B8A /* CompileOperation.swift */,
+				AFA1DE092088BDDB00B27B8A /* Identifiers.swift */,
 			);
 			path = BlockListManager;
 			sourceTree = "<group>";
@@ -7101,7 +7101,7 @@
 				1EEA369520615725003B6AD5 /* DownloadManager.swift in Sources */,
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
-				AFA1DE0A2088BDDB00B27B8A /* BlockListIdentifiers.swift in Sources */,
+				AFA1DE0A2088BDDB00B27B8A /* Identifiers.swift in Sources */,
 				EB11A1042044A90E0018F749 /* ContentBlockerHelper+Whitelist.swift in Sources */,
 				A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */,
 				AF6FA98C20652D4600D7F9F0 /* TrackerListPath.swift in Sources */,
