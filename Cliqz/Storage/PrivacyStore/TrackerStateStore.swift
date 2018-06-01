@@ -11,7 +11,7 @@ import RealmSwift
 
 public class TrackerState: Object {
     @objc dynamic var appId: Int = -1
-    @objc dynamic var state: Int = 0 //0 none, 1 trusted, 2 restricted, 3 blocked
+    @objc dynamic var state: Int = 0 //0 none, 1 blocked
     
     override public static func primaryKey() -> String? {
         return "appId"
@@ -22,10 +22,6 @@ public class TrackerState: Object {
         case 0:
             return .empty
         case 1:
-            return .trusted
-        case 2:
-            return .restricted
-        case 3:
             return .blocked
         default:
             return .empty
@@ -35,8 +31,6 @@ public class TrackerState: Object {
 
 public enum TrackerStateEnum {
     case empty
-    case trusted
-    case restricted
     case blocked
 }
 
@@ -89,12 +83,8 @@ public class TrackerStateStore: NSObject {
         switch state {
         case .empty:
             return 0
-        case .trusted:
-            return 1
-        case .restricted:
-            return 2
         case .blocked:
-            return 3
+            return 1
         }
     }
 }

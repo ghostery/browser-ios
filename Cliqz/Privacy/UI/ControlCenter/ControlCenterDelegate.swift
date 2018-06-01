@@ -14,29 +14,37 @@ protocol ControlCenterDelegateProtocol: class {
     func pauseGhostery(paused: Bool, time: Date)
     func turnGlobalAntitracking(on: Bool)
     func turnGlobalAdblocking(on: Bool)
-    func changeState(appId: Int, state: TrackerStateEnum)
-    func changeState(category: String, tableType: TableType, state: TrackerStateEnum)
+    func changeState(appId: Int, state: TrackerUIState)
+    func changeState(category: String, tableType: TableType, state: TrackerUIState)
+}
+
+enum TrackerUIState {
+    case empty
+    case trusted
+    case restricted
+    case blocked
 }
 
 class ControlCenterDelegate: ControlCenterDelegateProtocol {
     
-    let domainStr: String
+    let domainStr: String?
     
-    init(url: URL) {
-        self.domainStr = url.normalizedHost ?? url.absoluteString
+    init(url: URL?) {
+        self.domainStr = url?.normalizedHost
     }
     
-    private func getOrCreateDomain() -> Domain {
+    private func getOrCreateDomain(domain: String) -> Domain {
         //if we have done anything with this domain before we will have something in the DB
         //otherwise we need to create it
-        if let domainO = DomainStore.get(domain: self.domainStr) {
+        if let domainO = DomainStore.get(domain: domain) {
             return domainO
         } else {
-            return DomainStore.create(domain: self.domainStr)
+            return DomainStore.create(domain: domain)
         }
     }
 
-    func changeState(category: String, tableType: TableType, state: TrackerStateEnum) {
+    func changeState(category: String, tableType: TableType, state: TrackerUIState) {
+        guard let domainStr = self.domainStr else { return }
         
         let trackers: [Int]
         if tableType == .page {
@@ -57,23 +65,24 @@ class ControlCenterDelegate: ControlCenterDelegateProtocol {
 	}
 
     func chageSiteState(to: DomainState) {
-        let domainObj: Domain
-        domainObj = getOrCreateDomain()
-        DomainStore.changeState(domain: domainObj, state: to)
-        let trackerState: TrackerStateEnum
-        if to == .restricted {
-            trackerState = .restricted
-        }
-        else if to == .trusted {
-            trackerState = .trusted
-        }
-        else {
-            trackerState = .empty
-        }
+        guard let domainStr = self.domainStr else { return }
         
-        let apps = TrackerList.instance.detectedTrackersForPage(self.domainStr)
+        let domainObj: Domain
+        domainObj = getOrCreateDomain(domain: domainStr)
+        DomainStore.changeState(domain: domainObj, state: to)
+        
+        let apps = TrackerList.instance.detectedTrackersForPage(domainStr)
         for app in apps {
-            changeState(appId: app.appId, state: trackerState)
+            if to == .empty {
+                DomainStore.remove(appId: app.appId, domain: domainObj, list: .restrictedList)
+                DomainStore.remove(appId: app.appId, domain: domainObj, list: .trustedList)
+            }
+            else if to == .trusted {
+                DomainStore.add(appId: app.appId, domain: domainObj, list: .trustedList)
+            }
+            else if to == .restricted {
+                DomainStore.add(appId: app.appId, domain: domainObj, list: .restrictedList)
+            }
         }
     }
     
@@ -92,36 +101,43 @@ class ControlCenterDelegate: ControlCenterDelegateProtocol {
         UserPreferences.instance.writeToDisk()
     }
     
-    func changeState(appId: Int, state: TrackerStateEnum) {
+    func changeState(appId: Int, state: TrackerUIState) {
         if let trakerListApp = TrackerList.instance.apps[appId] {
-            TrackerStateStore.change(appId: trakerListApp.appId, toState: state)
+            if state == .blocked {
+                TrackerStateStore.change(appId: trakerListApp.appId, toState: .blocked)
+            }
+            else if state == .empty {
+                TrackerStateStore.change(appId: trakerListApp.appId, toState: .empty)
+            }
             
-            if state == .trusted || state == .empty {
+            if state == TrackerUIState.trusted || state == TrackerUIState.empty {
                 UserPreferences.instance.antitrackingMode = .blockSomeOrNone
                 UserPreferences.instance.writeToDisk()
             }
             
-            let domainObj = getOrCreateDomain()
-            if state == .trusted {
-                //disable domain restriction if applicable
-                DomainStore.changeState(domain: domainObj, state: .empty)
-                //add it to trusted sites
-                DomainStore.add(appId: appId, domain: domainObj, list: .trustedList)
-                //remove it from restricted if it is there
-                DomainStore.remove(appId: appId, domain: domainObj, list: .restrictedList)
-            }
-            else if state == .restricted {
-                //add it to restricted
-                DomainStore.add(appId: appId, domain: domainObj, list: .restrictedList)
-                //remove from trusted if it is there
-                DomainStore.remove(appId: appId, domain: domainObj, list: .trustedList)
-            }
-            else {
-                //disable domain restriction if applicable
-                DomainStore.changeState(domain: domainObj, state: .empty)
-                //remove from trusted and restricted
-                DomainStore.remove(appId: appId, domain: domainObj, list: .trustedList)
-                DomainStore.remove(appId: appId, domain: domainObj, list: .restrictedList)
+            if let domainStr = self.domainStr {
+                let domainObj = getOrCreateDomain(domain: domainStr)
+                if state == .trusted {
+                    //disable domain restriction if applicable
+                    DomainStore.changeState(domain: domainObj, state: .empty)
+                    //add it to trusted sites
+                    DomainStore.add(appId: appId, domain: domainObj, list: .trustedList)
+                    //remove it from restricted if it is there
+                    DomainStore.remove(appId: appId, domain: domainObj, list: .restrictedList)
+                }
+                else if state == .restricted {
+                    //add it to restricted
+                    DomainStore.add(appId: appId, domain: domainObj, list: .restrictedList)
+                    //remove from trusted if it is there
+                    DomainStore.remove(appId: appId, domain: domainObj, list: .trustedList)
+                }
+                else {
+                    //disable domain restriction if applicable
+                    DomainStore.changeState(domain: domainObj, state: .empty)
+                    //remove from trusted and restricted
+                    DomainStore.remove(appId: appId, domain: domainObj, list: .trustedList)
+                    DomainStore.remove(appId: appId, domain: domainObj, list: .restrictedList)
+                }
             }
         }
         else {

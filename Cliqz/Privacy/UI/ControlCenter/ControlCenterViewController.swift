@@ -17,8 +17,11 @@ protocol ControlCenterViewControllerDelegate: class {
 class ControlCenterViewController: UIViewController {
 	weak var homePanelDelegate: HomePanelDelegate?
 
-	var dataSource: ControlCenterDSProtocol?
-	var delegate: ControlCenterDelegateProtocol?
+	var dataSourceWithURL: ControlCenterDSProtocol?
+	var delegateWithURL: ControlCenterDelegateProtocol?
+    
+    var dataSourceWithoutURL: ControlCenterDSProtocol?
+    var delegateWithoutURL: ControlCenterDelegateProtocol?
     
     weak var container: ControlCenterViewControllerDelegate? = nil
 
@@ -47,8 +50,8 @@ class ControlCenterViewController: UIViewController {
 		didSet {
 			if !pageURL.isEmpty,
 				let url = URL(string: pageURL) {
-				self.dataSource = ControlCenterDataSource(url: url)
-				self.delegate = ControlCenterDelegate(url: url)
+				self.dataSourceWithURL = ControlCenterDataSource(url: url)
+				self.delegateWithURL = ControlCenterDelegate(url: url)
 				self.overviewViewController.pageURL = url.host ?? ""
 			}
 		}
@@ -58,6 +61,8 @@ class ControlCenterViewController: UIViewController {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         lastOrientation = UIDevice.current.getDeviceAndOrientation().1
+        dataSourceWithoutURL = ControlCenterDataSource(url: nil)
+        delegateWithoutURL = ControlCenterDelegate(url: nil)
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
     }
@@ -155,16 +160,16 @@ class ControlCenterViewController: UIViewController {
 	private func selectedPanel() -> UIViewController {
 		switch panelSwitchControl.selectedSegmentIndex {
 		case 0:
-			self.overviewViewController.dataSource = self.dataSource
-			self.overviewViewController.delegate = self.delegate
+			self.overviewViewController.dataSource = self.dataSourceWithURL
+			self.overviewViewController.delegate = self.delegateWithURL
 			return self.overviewViewController
 		case 1:
-			self.trackersViewController.dataSource = self.dataSource
-			self.trackersViewController.delegate = self.delegate
+			self.trackersViewController.dataSource = self.dataSourceWithURL
+			self.trackersViewController.delegate = self.delegateWithURL
 			return self.trackersViewController
 		case 2:
-			self.globalTrackersViewController.dataSource = self.dataSource
-			self.globalTrackersViewController.delegate = self.delegate
+			self.globalTrackersViewController.dataSource = self.dataSourceWithoutURL
+			self.globalTrackersViewController.delegate = self.delegateWithoutURL
 			return self.globalTrackersViewController
 		default:
 			return UIViewController()
