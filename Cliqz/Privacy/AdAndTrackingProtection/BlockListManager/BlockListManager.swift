@@ -8,6 +8,26 @@
 
 import WebKit
 
+
+class ChangeCoordinator {
+    static let shared = ChangeCoordinator()
+    
+    var dict: [BlockListIdentifier: Set<JSONIdentifier>] = [:]
+    
+    func haveIdsChanged(forBlockId: BlockListIdentifier, domain: String?) -> Bool {
+        let ids = AntitrackingJSONIdentifiers.jsonIdentifiers(forBlockListId: forBlockId, domain: domain)
+        let result: Bool
+        if let jsonIds = dict[forBlockId] {
+            result = jsonIds != ids
+        }
+        else {
+            result = false
+        }
+        dict[forBlockId] = ids
+        return result
+    }
+}
+
 final class BlockListManager {
     
     static let shared = BlockListManager()
@@ -20,7 +40,7 @@ final class BlockListManager {
         
     }
     
-    func getBlockLists(forIdentifiers: [String], callback: @escaping ([WKContentRuleList]) -> Void) {
+    func getBlockLists(forIdentifiers: [BlockListIdentifier], type: BlockListType, domain: String?, callback: @escaping ([WKContentRuleList]) -> Void) {
         
         var returnList = [WKContentRuleList]()
         let dispatchGroup = DispatchGroup()
@@ -28,18 +48,20 @@ final class BlockListManager {
         var blfm: BlockListFileManager? = nil
         
         for id in forIdentifiers {
+            let idsChanged = ChangeCoordinator.shared.haveIdsChanged(forBlockId: id, domain: domain)
             dispatchGroup.enter()
             listStore?.lookUpContentRuleList(forIdentifier: id) { (ruleList, error) in
-                if let ruleList = ruleList {
+                if let ruleList = ruleList, !idsChanged {
+                    debugPrint("CACHE: did find list for identifier = \(id) AND ids haven't changed")
                     returnList.append(ruleList)
                     dispatchGroup.leave()
                 }
                 else {
-                    debugPrint("CACHE: did not find list for identifier = \(id)")
+                    debugPrint("CACHE: did NOT find list for identifier = \(id) OR ids changed")
                     if blfm == nil {
                         blfm = BlockListFileManager()
                     }
-                    if let json = blfm!.json(forIdentifier: id) {
+                    if let json = blfm!.json(forIdentifier: id, type: type, domain: domain) {
                         debugPrint("CACHE: will compile list for identifier = \(id)")
                         let operation = CompileOperation(identifier: id, json: json)
                         

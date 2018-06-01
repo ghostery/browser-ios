@@ -16,7 +16,11 @@ final class BlockListFileManager {
     
     private var ghosteryBlockDict: [BugID:BugJson]? = nil
     
-    func json(forIdentifier: String) -> String? {
+    func json(forIdentifier: BlockListIdentifier, type: BlockListType, domain: String?) -> String? {
+        
+        //In the case type == .adblocker, the jsonIdentifiers are the same as the blockListIdentifiers
+        //In the case type == .antitracking, the blockListIdentifiers need to be mapped to jsonIdentifiers
+        //Then merge all the small json block lists into a big one.
         
         func loadJson(path: String) -> String {
             guard let jsonFileContent = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) else { fatalError("Rule list for \(forIdentifier) doesn't exist!") }
@@ -32,13 +36,9 @@ final class BlockListFileManager {
             return loadJson(path: path)
         }
         
-        if ghosteryBlockDict == nil {
-            ghosteryBlockDict = BlockListFileManager.parseGhosteryBlockList()
-        }
-        
-        //look in the ghostery list
-        if let json = ghosteryBlockDict?[forIdentifier] {
-            return json
+        if type == .antitracking {
+            let jsonIdentifiers = AntitrackingJSONIdentifiers.jsonIdentifiers(forBlockListId: forIdentifier, domain: domain)
+            return BlockListFileManager.assembleJSON(jsonIds: jsonIdentifiers)
         }
         
         debugPrint("DISK: json not found for identifier = \(forIdentifier)")
@@ -67,4 +67,35 @@ final class BlockListFileManager {
         debugPrint("number of keys successfully parsed = \(dict.keys.count)")
         return dict
     }
+    
+    class private func assembleJSON(jsonIds: Set<JSONIdentifier>) -> String? {
+        guard jsonIds.count > 0 else { return nil }
+        let path = URL(fileURLWithPath: Bundle.main.path(forResource: ghosteryBlockListSplit, ofType: "json")!)
+        guard let jsonFileContent = try? Data.init(contentsOf: path) else { fatalError("Rule list for \(ghosteryBlockListSplit) doesn't exist!") }
+        
+        if var jsonObject = (try? JSONSerialization.jsonObject(with: jsonFileContent, options: [])) as? [String: Any] {
+            
+            var json_string = "["
+            
+            for key in jsonObject.keys where jsonIds.contains(key) {
+                if let value_dict = jsonObject[key] as? [[String: Any]],
+                    let json_data = try? JSONSerialization.data(withJSONObject: value_dict, options: []),
+                    let blocklist = String.init(data: json_data, encoding: String.Encoding.utf8), blocklist.count > 0
+                {
+                    //remove [ at the beginning and ] at the end
+                    json_string += (blocklist.substring(with: blocklist.index(after: blocklist.startIndex)..<blocklist.index(before: blocklist.endIndex)) + ",")
+                }
+            }
+            
+            if json_string.count > 1 {
+                json_string.removeLast()
+                json_string += "]"
+                return json_string
+            }
+        }
+        
+        return nil
+    }
+    
+    
 }
