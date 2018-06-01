@@ -41,7 +41,7 @@ class OffrzEmptyView: UIView {
 	private func setupComponents() {
 		self.addSubview(emptyTextLabel)
 		self.addSubview(offrzPresentImageView)
-		emptyTextLabel.text = NSLocalizedString("MyOffrz Empty Description", tableName: "Cliqz", comment: "[MyOffrz] No offers label")
+		emptyTextLabel.text = NSLocalizedString("Here you'll find a new offer every week", tableName: "Cliqz", comment: "[MyOffrz] No offers label")
 	}
 
 	private func setStyles() {

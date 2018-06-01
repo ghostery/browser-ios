@@ -60,7 +60,7 @@ class OffrzOnboardingView: UIView {
 		hideButton.addTarget(self, action: #selector(hideOnboardingView) , for: .touchUpInside)
 		self.addSubview(hideButton)
 		
-		descriptionLabel.text = NSLocalizedString("MyOffrz Onboarding", tableName: "Cliqz", comment: "[MyOffrz] MyOffrz description")
+		descriptionLabel.text = NSLocalizedString("Receive attractive discounts and bargains with MyOffrz.", tableName: "Cliqz", comment: "[MyOffrz] MyOffrz description")
 		self.addSubview(descriptionLabel)
 		
 		moreButton.setTitle(NSLocalizedString("LEARN MORE", tableName: "Cliqz", comment: "[MyOffrz] Learn more button title"), for: .normal)
