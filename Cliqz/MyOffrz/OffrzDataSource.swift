@@ -7,27 +7,30 @@
 //
 
 import Foundation
+import RxSwift
 
 class OffrzDataSource {
 	
 	private var currentOffr: Offr?
 	private static let LastSeenOffrID = "LastSeenOffrID"
 	private static let OffrzOnboardingKey = "OffrzOnboardingNeeded"
+    let observable = BehaviorSubject(value: false)
 
 	var myOffrz = [Offr]()
-
-	init() {
-		self.updateMyOffrzList()
-	}
-
+    private var lastFetchDate: Date?
+    private let expirationDuration = 3600.0 // refresh every hour
+    
 	static let shared = OffrzDataSource()
 
+    init() {
+        self.loadOffrz()
+    }
+    
 	func getCurrentOffr() -> Offr? {
 		if let o = self.currentOffr,
 			self.isExpiredOffr(o) {
 			self.currentOffr = nil
-			// TODO: Impl notify on currentOffr change....
-			self.updateMyOffrzList()
+			self.loadOffrz()
 		}
 		return self.currentOffr
 	}
@@ -63,9 +66,15 @@ class OffrzDataSource {
         LocalDataStore.set(value: "closed", forKey: OffrzDataSource.OffrzOnboardingKey)
     }
 
-	private func updateMyOffrzList() {
+	func loadOffrz() {
+        guard self.lastFetchDate == nil || Date().timeIntervalSince(self.lastFetchDate!) > self.expirationDuration  else {
+            return
+        }
+        
 		OffrzDataService.shared.getMyOffrz { (offrz, error) in
-			if error == nil && offrz.count > 0 {
+            guard error == nil else { return }
+            
+			if offrz.count > 0 {
 				self.myOffrz = offrz
 				if let o = self.getLastSeenOffr() {
 					self.currentOffr = o
@@ -75,6 +84,8 @@ class OffrzDataSource {
 					self.currentOffr = self.getNotExpiredOffr()
 				}
 			}
+            self.lastFetchDate = Date()
+            self.observable.on(.next(true))
 		}
 	}
 
