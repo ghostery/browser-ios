@@ -62,7 +62,16 @@ class CompileOperation: Operation {
             else {
                 self.result = Result.error(error)
             }
-            self.isFinished = true
+            
+            //Throttle load for devices with less than 2gb of memory
+            if ProcessInfo.processInfo.physicalMemory < 2000000000 {
+                DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.1, execute: {
+                    self.isFinished = true
+                })
+            }
+            else {
+                self.isFinished = true
+            }
         }
     }
 }
