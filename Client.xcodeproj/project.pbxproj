@@ -3821,15 +3821,9 @@
 		AF6FA95E20652C1100D7F9F0 /* Privacy */ = {
 			isa = PBXGroup;
 			children = (
-				AF6FA98420652D4600D7F9F0 /* UserPreferences.swift */,
 				AF6FA99420652DF200D7F9F0 /* PersistentSet.swift */,
-				AFA1DE0F2088D59400B27B8A /* BlockingCoordinator.swift */,
-				AF6FA97820652C8F00D7F9F0 /* URLInterceptor.swift */,
-				AFA9FAC9208DFA120028CA1B /* ControlCenterDataSource.swift */,
-				AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */,
+				AF7DFEDF20C139CA00FDC3A0 /* AdAndTrackingProtection */,
 				AF77B87C2099FF9F00E7A0C4 /* Anti-Phishing */,
-				AFA1DE082088BDA600B27B8A /* BlockListManager */,
-				AF6FA97C20652D1F00D7F9F0 /* Ghostery */,
 				AF99C8B120693627009404FF /* UI */,
 				AF6FA96D20652C3E00D7F9F0 /* Assets */,
 			);
@@ -3846,14 +3840,6 @@
 				AF6FA96F20652C6800D7F9F0 /* preload.js */,
 			);
 			path = Assets;
-			sourceTree = "<group>";
-		};
-		AF6FA97C20652D1F00D7F9F0 /* Ghostery */ = {
-			isa = PBXGroup;
-			children = (
-				AF6FA99320652DAB00D7F9F0 /* TrackingManagement */,
-			);
-			path = Ghostery;
 			sourceTree = "<group>";
 		};
 		AF6FA99320652DAB00D7F9F0 /* TrackingManagement */ = {
@@ -3897,14 +3883,36 @@
 			path = HomePanel;
 			sourceTree = "<group>";
 		};
-		AF99C8B120693627009404FF /* UI */ = {
+		AF7DFEDF20C139CA00FDC3A0 /* AdAndTrackingProtection */ = {
 			isa = PBXGroup;
 			children = (
+				AF6FA98420652D4600D7F9F0 /* UserPreferences.swift */,
+				AF6FA97820652C8F00D7F9F0 /* URLInterceptor.swift */,
+				AFA1DE0F2088D59400B27B8A /* BlockingCoordinator.swift */,
+				AFA1DE082088BDA600B27B8A /* BlockListManager */,
+				AF6FA99320652DAB00D7F9F0 /* TrackingManagement */,
+			);
+			path = AdAndTrackingProtection;
+			sourceTree = "<group>";
+		};
+		AF7DFEE020C13A2200FDC3A0 /* ControlCenter */ = {
+			isa = PBXGroup;
+			children = (
+				AFA9FAC9208DFA120028CA1B /* ControlCenterDataSource.swift */,
+				AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */,
 				4F82FDB6208F2D3E002CED25 /* TrackersController.swift */,
-				AF99C8A1206935F0009404FF /* GhosteryButton.swift */,
 				4F4033C32086358D00AD2A8D /* ControlCenterViewController.swift */,
 				4F4033D72086575500AD2A8D /* OverviewViewController.swift */,
 				4F4033D92086577D00AD2A8D /* GlobalTrackersViewController.swift */,
+			);
+			path = ControlCenter;
+			sourceTree = "<group>";
+		};
+		AF99C8B120693627009404FF /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				AF7DFEE020C13A2200FDC3A0 /* ControlCenter */,
+				AF99C8A1206935F0009404FF /* GhosteryButton.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
