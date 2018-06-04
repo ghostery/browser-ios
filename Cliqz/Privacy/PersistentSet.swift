@@ -44,6 +44,14 @@ class PersistentSet<A> where A: Hashable {
         return internalSet.contains(member)
     }
     
+    func symmetricDifference(_ set: Set<A>) -> Set<A> {
+        return internalSet.symmetricDifference(set)
+    }
+    
+    func replaceWith(set: Set<A>) {
+        internalSet = set
+    }
+    
     func all() -> [A] {
         return Array(internalSet)
     }
