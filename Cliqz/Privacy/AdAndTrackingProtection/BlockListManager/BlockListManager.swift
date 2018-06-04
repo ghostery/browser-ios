@@ -62,7 +62,7 @@ final class BlockListManager {
     }
     
     private func loadFromDisk(id: String, type: BlockListType, domain: String?, completion: @escaping (WKContentRuleList?) -> Void) {
-        if let json = BlockListFileManager.json(forIdentifier: id, type: type, domain: domain) {
+        if let json = BlockListFileManager.shared.json(forIdentifier: id, type: type, domain: domain) {
             debugPrint("Load from disk: will compile list for identifier = \(id)")
             let operation = CompileOperation(identifier: id, json: json)
             
