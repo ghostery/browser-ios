@@ -94,10 +94,10 @@ final class BlockingCoordinator {
             return false
         }
         
-        debugPrint("Coordinated Update")
-        if GlobalPrivacyQueue.shared.operations.filter(opFilter).count == 0 {
-            debugPrint("Add to Update Queue")
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            debugPrint("Coordinated Update")
+            if GlobalPrivacyQueue.shared.operations.filter(opFilter).count == 0 {
+                debugPrint("Add to Update Queue")
                 let updateOp = UpdateOperation(webView: self.webView, domain: self.webView.url?.normalizedHost)
                 GlobalPrivacyQueue.shared.addOperation(updateOp)
             }
