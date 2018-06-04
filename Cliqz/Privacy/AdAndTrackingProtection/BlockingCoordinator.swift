@@ -99,6 +99,9 @@ final class BlockingCoordinator {
             if GlobalPrivacyQueue.shared.operations.filter(opFilter).count == 0 {
                 debugPrint("Add to Update Queue")
                 let updateOp = UpdateOperation(webView: self.webView, domain: self.webView.url?.normalizedHost)
+                if let defaultsOp = TrackerList.instance.applyDefaultsOp {
+                    updateOp.addDependency(defaultsOp)
+                }
                 GlobalPrivacyQueue.shared.addOperation(updateOp)
             }
         }

@@ -41,11 +41,19 @@ final class ApplyDefaultsOperation: Operation {
     
     override func main() {
         self.isExecuting = true
+        let dispatchGroup = DispatchGroup()
+        
         for app in TrackerList.instance.globalTrackerList() {
             if CategoriesHelper.categoriesBlockedByDefault.contains(app.category) {
-                TrackerStateStore.change(appId: app.appId, toState: .blocked)
+                dispatchGroup.enter()
+                TrackerStateStore.change(appId: app.appId, toState: .blocked, completion: {
+                    dispatchGroup.leave()
+                })
             }
         }
-        self.isFinished = true
+        
+        dispatchGroup.notify(queue: .global(qos: .utility)) {
+            self.isFinished = true
+        }
     }
 }

@@ -49,6 +49,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     var regexes = [TrackerListRegex]()
     var paths = [TrackerListPath]()
     var discoveredBugs = [String: PageTrackersFound]() // Page URL is the key
+    var applyDefaultsOp: ApplyDefaultsOperation? = nil
 
     // MARK: - Tracker List Initialization
     
@@ -59,8 +60,9 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         let loadOperation = LoadTrackerListOperation()
         GlobalPrivacyQueue.shared.addOperation(loadOperation)
         if UserDefaults.standard.bool(forKey: trackersDefaultsAreAppliedKey) == false {
-            let applyDefaults = ApplyDefaultsOperation()
-            GlobalPrivacyQueue.shared.addOperation(applyDefaults)
+            applyDefaultsOp = ApplyDefaultsOperation()
+            applyDefaultsOp!.addDependency(loadOperation)
+            GlobalPrivacyQueue.shared.addOperation(applyDefaultsOp!)
             UserDefaults.standard.set(true, forKey: trackersDefaultsAreAppliedKey)
             UserDefaults.standard.synchronize()
         }
