@@ -40,6 +40,13 @@ open class BrowserActions: RCTEventEmitter {
             NotificationCenter.default.post(name: MapSearchNotification, object: url, userInfo: nil)
         }
     }
+    
+    @objc(hideKeyboard)
+    func hideKeyboard() {
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: HideKeyboardSearchNotification, object: nil, userInfo: nil)
+        }
+    }
 
     @objc(searchHistory:callback:)
     func searchHistory(query: NSString, callback: RCTResponseSenderBlock) {
