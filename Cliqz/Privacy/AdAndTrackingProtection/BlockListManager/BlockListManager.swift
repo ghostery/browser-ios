@@ -7,24 +7,47 @@
 //
 
 import WebKit
-
+import Storage
 
 class ChangeCoordinator {
     static let shared = ChangeCoordinator()
     
-    var dict: [BlockListIdentifier: Set<JSONIdentifier>] = [:]
+    var last_global: PersistentSet<Int> = PersistentSet(id: "ChangeCoordinatorLastGlobal")
     
-    func haveIdsChanged(forBlockId: BlockListIdentifier, domain: String?) -> Bool {
-        let ids = AntitrackingJSONIdentifiers.jsonIdentifiers(forBlockListId: forBlockId, domain: domain)
-        let result: Bool
-        if let jsonIds = dict[forBlockId] {
-            result = jsonIds != ids
+    class func generateGlobal(domain: String?) -> Set<Int> {
+        
+        var specific2domainRestricted: Set<Int> = Set()
+        var specific2domainTrusted: Set<Int> = Set()
+        
+        var global: Set<Int> = Set()
+        for app in TrackerList.instance.globalTrackerList() {
+            if app.state(domain: domain) == .blocked {
+                global.insert(app.appId)
+            }
         }
-        else {
-            result = false
+        
+        if let domainStr = domain, let domainObj = DomainStore.get(domain: domainStr) {
+            specific2domainTrusted = Set(domainObj.trustedTrackers)
+            specific2domainRestricted = Set(domainObj.restrictedTrackers)
         }
-        dict[forBlockId] = ids
-        return result
+        
+        global.formUnion(specific2domainRestricted)
+        global.subtract(specific2domainTrusted)
+        
+        return global
+    }
+    
+    func identifiersWithChanges(domain: String?) -> Set<BlockListIdentifier> {
+        let global = ChangeCoordinator.generateGlobal(domain: domain)
+        let appIdsChanged = last_global.symmetricDifference(global)
+        last_global.replaceWith(set: global)
+        var categories: Set<BlockListIdentifier> = Set()
+        for appId in appIdsChanged {
+            if let app = TrackerList.instance.apps[appId] {
+                categories.insert(app.category)
+            }
+        }
+        return categories
     }
 }
 
@@ -37,7 +60,6 @@ final class BlockListManager {
     init() {
         loadQueue.maxConcurrentOperationCount = 1
         loadQueue.qualityOfService = .utility
-        
     }
     
     func getBlockLists(forIdentifiers: [BlockListIdentifier], type: BlockListType, domain: String?, callback: @escaping ([WKContentRuleList]) -> Void) {
@@ -46,13 +68,13 @@ final class BlockListManager {
         let dispatchGroup = DispatchGroup()
         let listStore = WKContentRuleListStore.default()
         var blfm: BlockListFileManager? = nil
-        
+        //ask for categories changed here
+        let idsWithChanges = ChangeCoordinator.shared.identifiersWithChanges(domain: domain)
         for id in forIdentifiers {
-            let idsChanged = ChangeCoordinator.shared.haveIdsChanged(forBlockId: id, domain: domain)
             dispatchGroup.enter()
             listStore?.lookUpContentRuleList(forIdentifier: id) { (ruleList, error) in
-                if let ruleList = ruleList, !idsChanged {
-                    debugPrint("CACHE: did find list for identifier = \(id) AND ids haven't changed")
+                if let ruleList = ruleList, !idsWithChanges.contains(id) {
+                    debugPrint("CACHE: FOUND list for identifier = \(id) AND ids haven't changed")
                     returnList.append(ruleList)
                     dispatchGroup.leave()
                 }
@@ -89,13 +111,13 @@ final class BlockListManager {
     private func handleOperationResult(result: CompileOperation.Result, id: String) -> WKContentRuleList? {
         switch result {
         case .list(let list):
-            debugPrint("finished loading list for id = \(id)")
+            debugPrint("CompileOperation: finished loading list for id = \(id)")
             return list
         case .error(let error):
-            debugPrint("error for id = \(id) | ERROR = \(error.debugDescription)")
+            debugPrint("CompileOperation: error for id = \(id) | ERROR = \(error.debugDescription)")
             return nil
         case .noResult:
-            debugPrint("no result for id = \(id)")
+            debugPrint("CompileOperation: no result for id = \(id)")
             return nil
         }
     }
