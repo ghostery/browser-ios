@@ -58,7 +58,7 @@ public class TrackerStateStore: NSObject {
         return trackerState
     }
     
-    public class func change(appId: Int, toState: TrackerStateEnum) {
+    public class func change(appId: Int, toState: TrackerStateEnum, completion: (() -> Void)? = nil) {
         let realm = try! Realm()
         do {
             try realm.write {
@@ -72,10 +72,12 @@ public class TrackerStateStore: NSObject {
                     trackerState.state = intForState(state: toState)
                     realm.add(trackerState)
                 }
+                completion?()
             }
         }
         catch {
             debugPrint("could not change state of trackerState")
+            completion?()
         }
     }
     
