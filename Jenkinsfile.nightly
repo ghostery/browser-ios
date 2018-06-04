@@ -7,7 +7,6 @@ properties([
     [$class: 'JobRestrictionProperty']
 ])
 node('mac-vm-host') {
-    def branchName = "${BRANCH_NAME}"
 
     writeFile file: 'Vagrantfile', text: '''
     Vagrant.configure("2") do |config|
