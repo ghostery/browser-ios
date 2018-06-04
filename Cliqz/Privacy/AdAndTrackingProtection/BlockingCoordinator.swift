@@ -68,15 +68,15 @@ final class BlockingCoordinator {
         return forType == .antitracking ? isAntitrackingOn(domain: domain) : isAdblockerOn()
     }
     
-    class func blockIdentifiers(forType: BlockListType) -> [BlockListIdentifier] {
+    class func blockIdentifiers(forType: BlockListType, domain: String?, webView: WKWebView?) -> ([BlockListIdentifier], [String: Bool]?) {
         if forType == .antitracking {
             if UserPreferences.instance.antitrackingMode == .blockAll {
-                return AntitrackingJSONIdentifiers.antitrackingBlockAllIdentifiers()
+                return (AntitrackingJSONIdentifiers.antitrackingBlockAllIdentifiers(), nil)
             }
-            return BlockListIdentifiers.antitrackingIdentifiers()
+            return BlockListIdentifiers.antitrackingIdentifiers(domain: domain, webView: webView)
         }
         else {
-            return BlockListIdentifiers.adblockingIdentifiers()
+            return (BlockListIdentifiers.adblockingIdentifiers(), nil)
         }
     }
     
@@ -153,8 +153,9 @@ class UpdateOperation: Operation {
             if BlockingCoordinator.featureIsOn(forType: type, domain: domain) {
                 //get the blocklists for that type
                 dispatchGroup.enter()
-                let identifiers = BlockingCoordinator.blockIdentifiers(forType: type)
-                BlockListManager.shared.getBlockLists(forIdentifiers: identifiers, type: type, domain: domain, callback: { (lists) in
+                let (identifiers, info) = BlockingCoordinator.blockIdentifiers(forType: type, domain: domain, webView: webView)
+                let shouldHitCache: Bool = info?["hitCache"] ?? true
+                BlockListManager.shared.getBlockLists(forIdentifiers: identifiers, type: type, domain: domain, hitCache: shouldHitCache, callback: { (lists) in
                     blockLists.append(contentsOf: lists)
                     type == .antitracking ? debugPrint("Antitracking is ON") : debugPrint("Adblocking is ON")
                     dispatchGroup.leave()
