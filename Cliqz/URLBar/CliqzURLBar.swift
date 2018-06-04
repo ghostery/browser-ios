@@ -136,13 +136,6 @@ class CliqzURLBar: URLBarView {
             make.trailing.equalTo(self.safeArea.trailing)//.offset(-URLBarViewUX.Padding)
         }
         
-        showQRScannerButton.snp.makeConstraints { make in
-            make.leading.equalTo(self.locationContainer.snp.trailing)
-            make.trailing.equalTo(self.cancelButton.snp.leading)
-            make.centerY.equalTo(self.locationContainer)
-            make.size.equalTo(URLBarViewUX.ButtonHeight)
-        }
-        
         setStyle()
     }
     
@@ -169,7 +162,7 @@ class CliqzURLBar: URLBarView {
             self.locationContainer.snp.remakeConstraints { make in
                 let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
                 make.height.equalTo(height)
-                make.trailing.equalTo(self.showQRScannerButton.snp.leading)
+                make.trailing.equalTo(self.cancelButton.snp.leading).offset(-10)
                 make.leading.equalTo(self.safeArea.leading).offset(10)
                 make.centerY.equalTo(self)
             }
