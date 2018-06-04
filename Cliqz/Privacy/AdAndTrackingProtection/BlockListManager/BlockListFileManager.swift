@@ -45,29 +45,6 @@ final class BlockListFileManager {
         return nil
     }
     
-    class private func parseGhosteryBlockList() -> [BugID:BugJson] {
-        let path = URL(fileURLWithPath: Bundle.main.path(forResource: ghosteryBlockListSplit, ofType: "json")!)
-        guard let jsonFileContent = try? Data.init(contentsOf: path) else { fatalError("Rule list for \(ghosteryBlockListSplit) doesn't exist!") }
-        
-        let jsonObject = try? JSONSerialization.jsonObject(with: jsonFileContent, options: [])
-        
-        var dict: [BugID:BugJson] = [:]
-        
-        if let id_dict = jsonObject as? [String: Any] {
-            debugPrint("number of keys = \(id_dict.keys.count)")
-            for key in id_dict.keys {
-                if let value_dict = id_dict[key] as? [[String: Any]],
-                    let json_data = try? JSONSerialization.data(withJSONObject: value_dict, options: []),
-                    let json_string = String.init(data: json_data, encoding: String.Encoding.utf8)
-                {
-                    dict[key] = json_string
-                }
-            }
-        }
-        debugPrint("number of keys successfully parsed = \(dict.keys.count)")
-        return dict
-    }
-    
     class private func assembleJSON(jsonIds: Set<JSONIdentifier>) -> String? {
         guard jsonIds.count > 0 else { return nil }
         let path = URL(fileURLWithPath: Bundle.main.path(forResource: ghosteryBlockListSplit, ofType: "json")!)
@@ -97,5 +74,26 @@ final class BlockListFileManager {
         return nil
     }
     
-    
+    class private func parseGhosteryBlockList() -> [BugID:BugJson] {
+        let path = URL(fileURLWithPath: Bundle.main.path(forResource: ghosteryBlockListSplit, ofType: "json")!)
+        guard let jsonFileContent = try? Data.init(contentsOf: path) else { fatalError("Rule list for \(ghosteryBlockListSplit) doesn't exist!") }
+        
+        let jsonObject = try? JSONSerialization.jsonObject(with: jsonFileContent, options: [])
+        
+        var dict: [BugID:BugJson] = [:]
+        
+        if let id_dict = jsonObject as? [String: Any] {
+            debugPrint("number of keys = \(id_dict.keys.count)")
+            for key in id_dict.keys {
+                if let value_dict = id_dict[key] as? [[String: Any]],
+                    let json_data = try? JSONSerialization.data(withJSONObject: value_dict, options: []),
+                    let json_string = String.init(data: json_data, encoding: String.Encoding.utf8)
+                {
+                    dict[key] = json_string
+                }
+            }
+        }
+        debugPrint("number of keys successfully parsed = \(dict.keys.count)")
+        return dict
+    }
 }
