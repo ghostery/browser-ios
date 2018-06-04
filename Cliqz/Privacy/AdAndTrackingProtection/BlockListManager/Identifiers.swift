@@ -6,12 +6,77 @@
 //  Copyright © 2018 Cliqz. All rights reserved.
 //
 
+import WebKit
 import Storage
+
+class ChangeCoordinator {
+    static let shared = ChangeCoordinator()
+    
+    var last_global: PersistentSet<Int> = PersistentSet(id: "ChangeCoordinatorLastGlobal")
+    var webViewHashes: Set<Int> = Set()
+    
+    class func generateGlobal(domain: String?) -> Set<Int> {
+        
+        var specific2domainRestricted: Set<Int> = Set()
+        var specific2domainTrusted: Set<Int> = Set()
+        
+        var global: Set<Int> = Set()
+        for app in TrackerList.instance.globalTrackerList() {
+            if app.state(domain: domain) == .blocked {
+                global.insert(app.appId)
+            }
+        }
+        
+        if let domainStr = domain, let domainObj = DomainStore.get(domain: domainStr) {
+            specific2domainTrusted = Set(domainObj.trustedTrackers)
+            specific2domainRestricted = Set(domainObj.restrictedTrackers)
+        }
+        
+        global.formUnion(specific2domainRestricted)
+        global.subtract(specific2domainTrusted)
+        
+        return global
+    }
+    
+    func identifiersWithChanges(domain: String?) -> Set<BlockListIdentifier> {
+        let global = ChangeCoordinator.generateGlobal(domain: domain)
+        let appIdsChanged = last_global.symmetricDifference(global)
+        last_global.replaceWith(set: global)
+        var categories: Set<BlockListIdentifier> = Set()
+        for appId in appIdsChanged {
+            if let app = TrackerList.instance.apps[appId] {
+                categories.insert(app.category)
+            }
+        }
+        return categories
+    }
+    
+    private func doYouRecognizeWebView(webView: WKWebView?) -> Bool {
+        if let webView = webView {
+            let result = webViewHashes.contains(webView.hash)
+            webViewHashes.insert(webView.hash)
+            return result
+        }
+        return false
+    }
+    
+    func areBlocklistsLoadedFor(webView: WKWebView?) -> Bool {
+        //TODO: I need a better way to decide whether blocklists are loaded
+        //This works for now since I only remove blocklists at the end of a load, just before I load the new ones.
+        return doYouRecognizeWebView(webView: webView)
+    }
+        
+}
 
 final class BlockListIdentifiers {
     
-    class func antitrackingIdentifiers() -> [BlockListIdentifier] {
-        return Array(CategoriesHelper.categories)
+    class func antitrackingIdentifiers(domain: String?, webView: WKWebView?) -> ([BlockListIdentifier], [String: Bool]?) {
+        if ChangeCoordinator.shared.areBlocklistsLoadedFor(webView: webView) {
+            return (Array.init(ChangeCoordinator.shared.identifiersWithChanges(domain: domain)), ["hitCache": false])
+        }
+        else {
+            return (Array.init(CategoriesHelper.categories), ["hitCache": true])
+        }
     }
     
     class func adblockingIdentifiers() -> [BlockListIdentifier] {

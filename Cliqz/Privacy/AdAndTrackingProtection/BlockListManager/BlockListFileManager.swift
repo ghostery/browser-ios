@@ -14,9 +14,7 @@ final class BlockListFileManager {
     static let ghosteryBlockListSplit = "ghostery_content_blocker_split"
     static let ghosteryBlockListNotSplit = "ghostery_content_blocker"
     
-    private var ghosteryBlockDict: [BugID:BugJson]? = nil
-    
-    func json(forIdentifier: BlockListIdentifier, type: BlockListType, domain: String?) -> String? {
+    class func json(forIdentifier: BlockListIdentifier, type: BlockListType, domain: String?) -> String? {
         
         //In the case type == .adblocker, the jsonIdentifiers are the same as the blockListIdentifiers
         //In the case type == .antitracking, the blockListIdentifiers need to be mapped to jsonIdentifiers
