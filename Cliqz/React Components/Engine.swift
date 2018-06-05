@@ -113,18 +113,12 @@ open class Engine {
             return
         }
         
-        //Invariant: The newString and oldString must differ by one character at the end
-        guard abs(newString.count - lastString.count) == 1 && (newString == lastString.dropLast() || newString.dropLast() == lastString) else {
-            return
-        }
-        
         let contextId = "mobile-cards"
         var keyCode = ""
         
-        if newString.count < lastString.count {
+        if lastString.count - newString.count == 1 {
              keyCode = "Backspace"
-        }
-        else if newString.count > 0 {
+        } else if newString.count > lastString.count {
             keyCode = "Key" + String(newString.last!).uppercased()
         }
 
