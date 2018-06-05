@@ -41,6 +41,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     static let AppIdAttributeName = "aid"
     static let BlockedTrackerListChangedNotification = "BlockedTrackerListChangedNotification"
     
+    var appsList = [TrackerListApp]()
     var apps = [Int: TrackerListApp]()   // App ID is the key
     var bugs = [Int: Int]()              // Bug ID is the key, AppId is the value
     var app2bug = [Int: [Int]]()           // App ID is the key, Bug ID array is the value
@@ -50,6 +51,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     var paths = [TrackerListPath]()
     var discoveredBugs = [String: PageTrackersFound]() // Page URL is the key
     var applyDefaultsOp: ApplyDefaultsOperation? = nil
+    let populateOp = PopulateBlockedTrackersOperation()
 
     // MARK: - Tracker List Initialization
     
@@ -59,6 +61,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         // To ensure this, loadTrackerList should be called before any calls to a coordinatedUpdate.
         let loadOperation = LoadTrackerListOperation()
         GlobalPrivacyQueue.shared.addOperation(loadOperation)
+        
         if UserDefaults.standard.bool(forKey: trackersDefaultsAreAppliedKey) == false {
             applyDefaultsOp = ApplyDefaultsOperation()
             applyDefaultsOp!.addDependency(loadOperation)
@@ -66,6 +69,14 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
             UserDefaults.standard.set(true, forKey: trackersDefaultsAreAppliedKey)
             UserDefaults.standard.synchronize()
         }
+        
+        if let applyDefOp = applyDefaultsOp {
+            populateOp.addDependency(applyDefOp)
+        }
+        else {
+            populateOp.addDependency(loadOperation)
+        }
+        GlobalPrivacyQueue.shared.addOperation(populateOp)
     }
     
     func localTrackerFileURL() -> URL? {
@@ -123,7 +134,9 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         for (key, valueObject) in data {
             if let appId = Int(key) {
                 if let value = valueObject as? [String: AnyObject] {
-                    self.apps[appId] = TrackerListApp(id: appId, jsonData: value)
+                    let app = TrackerListApp(id: appId, jsonData: value)
+                    self.apps[appId] = app
+                    self.appsList.append(app)
                 }
             }
         }
@@ -356,18 +369,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     
     func globalTrackerList() -> [TrackerListApp] {
         // return the list of all trackers
-        var appList = [TrackerListApp]()
-        for (_, trackerApp) in apps {
-            //trackerApp.isBlocked = self.shouldBlockTracker(trackerApp.appId)
-            appList.append(trackerApp)
-        }
-        
-        // Sort list
-        appList.sort { (trackerApp1, trackerApp2) -> Bool in
-            return trackerApp1.name.localizedCaseInsensitiveCompare(trackerApp2.name) == ComparisonResult.orderedAscending
-        }
-        
-        return appList
+        return self.appsList
     }
     
     func trackerAppFromBug(_ trackerBug: TrackerListBug) -> TrackerListApp? {

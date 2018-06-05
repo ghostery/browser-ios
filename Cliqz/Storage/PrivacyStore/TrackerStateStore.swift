@@ -36,6 +36,20 @@ public enum TrackerStateEnum {
 
 public class TrackerStateStore: NSObject {
     
+    public static let shared = TrackerStateStore()
+    
+    public var blockedTrackers: Set<Int> = Set()
+    
+    public func populateBlockedTrackers() {
+        let realm = try! Realm()
+        let states = realm.objects(TrackerState.self)
+        for state in states {
+            if state.translatedState == .blocked {
+                blockedTrackers.insert(state.appId)
+            }
+        }
+    }
+    
     public class func getTrackerState(appId: Int) -> TrackerState? {
         let realm = try! Realm()
         if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
@@ -77,6 +91,12 @@ public class TrackerStateStore: NSObject {
                     trackerState.appId = appId
                     trackerState.state = intForState(state: toState)
                     realm.add(trackerState)
+                }
+                if toState == .empty {
+                    TrackerStateStore.shared.blockedTrackers.remove(appId)
+                }
+                else if toState == .blocked {
+                    TrackerStateStore.shared.blockedTrackers.insert(appId)
                 }
                 completion?()
             }

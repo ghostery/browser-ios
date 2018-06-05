@@ -587,6 +587,8 @@
 		AFBAC1BF20AEBB78007F02CC /* CliqzIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */; };
 		AFBEDE8B20B56BAD00C3119A /* DomainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAB8208DEF990028CA1B /* DomainStore.swift */; };
 		AFBEDE9A20B56BB200C3119A /* TrackerStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */; };
+		AFD165B620C6C03B00379381 /* UpdateOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD165B520C6C03B00379381 /* UpdateOperation.swift */; };
+		AFD165B920C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD165B820C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift */; };
 		AFDF458220A9C5F20091CA27 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */; };
 		AFE484D32056838500554B2E /* CliqzURLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE484D22056838500554B2E /* CliqzURLBar.swift */; };
 		AFF2874E209B54F6001E9B59 /* CliqzHomePanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */; };
@@ -2186,6 +2188,8 @@
 		AFAB303F20B80EC200FE312E /* AppDelegateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtension.swift; sourceTree = "<group>"; };
 		AFAB306A20B83E2800FE312E /* TelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryHelper.swift; sourceTree = "<group>"; };
 		AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzIntroViewController.swift; sourceTree = "<group>"; };
+		AFD165B520C6C03B00379381 /* UpdateOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateOperation.swift; sourceTree = "<group>"; };
+		AFD165B820C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopulateBlockedTrackersOperation.swift; sourceTree = "<group>"; };
 		AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
 		AFE484D22056838500554B2E /* CliqzURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzURLBar.swift; sourceTree = "<group>"; };
 		AFECF63AADEF4013C5D72D77 /* Pods-Client.firefox.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Client.firefox.xcconfig"; path = "Pods/Target Support Files/Pods-Client/Pods-Client.firefox.xcconfig"; sourceTree = "<group>"; };
@@ -3922,8 +3926,8 @@
 			children = (
 				AF6FA97620652C8F00D7F9F0 /* BlockListManager.swift */,
 				AFA1DE0B2088BE0500B27B8A /* BlockListFileManager.swift */,
-				AFA1DE0D2088BE5700B27B8A /* CompileOperation.swift */,
 				AFA1DE092088BDDB00B27B8A /* Identifiers.swift */,
+				AFD165B720C6C07200379381 /* Operations */,
 			);
 			path = BlockListManager;
 			sourceTree = "<group>";
@@ -3951,6 +3955,16 @@
 				AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */,
 			);
 			path = Intro;
+			sourceTree = "<group>";
+		};
+		AFD165B720C6C07200379381 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				AFD165B820C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift */,
+				AFA1DE0D2088BE5700B27B8A /* CompileOperation.swift */,
+				AFD165B520C6C03B00379381 /* UpdateOperation.swift */,
+			);
+			path = Operations;
 			sourceTree = "<group>";
 		};
 		AFE484C32056836400554B2E /* URLBar */ = {
@@ -6872,6 +6886,7 @@
 				4F0445D92033326F00E2C0C7 /* FreshtabViewController.swift in Sources */,
 				AF6FA98D20652D4600D7F9F0 /* PageTrackersFound.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
+				AFD165B920C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift in Sources */,
 				AFE484D32056838500554B2E /* CliqzURLBar.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				396E38F31EE0C90D00CC180F /* FxALoginHelper.swift in Sources */,
@@ -7020,6 +7035,7 @@
 				AF6FA97B20652C8F00D7F9F0 /* URLInterceptor.swift in Sources */,
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
 				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
+				AFD165B620C6C03B00379381 /* UpdateOperation.swift in Sources */,
 				39DD030D1CD53E1900BC09B3 /* HomePageHelper.swift in Sources */,
 				4F30F5102051670C0049E4F6 /* NativeDrawable.m in Sources */,
 				AFA9FB0D208E135E0028CA1B /* ControlCenterDelegate.swift in Sources */,
