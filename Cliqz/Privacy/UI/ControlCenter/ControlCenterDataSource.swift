@@ -306,10 +306,6 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
     
     func actions(tableType: TableType, indexPath: IndexPath) -> [ActionType] {
         
-        if domainState() != .empty {
-            return []
-        }
-        
         if tableType == .page {
             return [.block, .restrict, .trust]
         }
