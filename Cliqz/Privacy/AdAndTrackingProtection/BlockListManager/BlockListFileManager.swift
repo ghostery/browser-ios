@@ -71,11 +71,12 @@ final class BlockListFileManager {
             for id in jsonIds {
                 if let blocklist = self.ghosteryBlockDict?[id]
                 {
-                    json_string += blocklist
+                    json_string += blocklist + ","
                 }
             }
             
             if json_string.count > 1 {
+                //removes the last comma
                 json_string.removeLast()
                 json_string += "]"
                 completion(json_string)
