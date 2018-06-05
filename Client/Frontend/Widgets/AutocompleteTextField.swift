@@ -181,7 +181,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     func setAutocompleteSuggestion(_ suggestion: String?) {
         let text = self.text ?? ""
 
+        /* Cliqz: enable auto completion when swiping the cards (keyboard is down)
         guard let suggestion = suggestion, isEditing && markedTextRange == nil else {
+        */
+        guard let suggestion = suggestion, markedTextRange == nil else {
             hideCursor = false
             return
         }
@@ -189,6 +192,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let normalized = normalizeString(text)
         guard suggestion.hasPrefix(normalized) && normalized.count < suggestion.count else {
             hideCursor = false
+            // Cliqz: This is the case when swiping from a card that have auto completion to a card that has not auto completion (auto completion is called with the original query)
+            removeCompletion()
             return
         }
 
