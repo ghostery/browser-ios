@@ -33,77 +33,51 @@ final class BlockListFileManager {
             return jsonFileContent
         }
         
-        if forIdentifier.contains("adblocker_"), let path = Bundle.main.path(forResource: forIdentifier, ofType: "json", inDirectory: "AdBlocker/Chunks") {
-            completion(loadJson(path: path))
-            return
-        }
-        
-        //then look in the bundle
-        if let path = Bundle.main.path(forResource: forIdentifier, ofType: "json") {
-            completion(loadJson(path: path))
-            return
-        }
-        
         if type == .antitracking {
+            //let timer = ParkBenchTimer()
             let jsonIdentifiers = AntitrackingJSONIdentifiers.jsonIdentifiers(forBlockListId: forIdentifier, domain: domain)
+            //timer.stop()
+            //debugPrint("Time: AntitrackingJSONIdentifiers.jsonIdentifiers for \(forIdentifier) = \(String(describing: timer.duration))")
+            //let timer = ParkBenchTimer()
             self.assembleJSON(jsonIds: jsonIdentifiers, completion: { (json) in
+                //timer.stop()
+                //debugPrint("Time: assembleJSON for \(forIdentifier) = \(String(describing: timer.duration))")
                 completion(json)
             })
             return
+        }
+        else {
+            
+            if forIdentifier.contains("adblocker_"), let path = Bundle.main.path(forResource: forIdentifier, ofType: "json", inDirectory: "AdBlocker/Chunks") {
+                completion(loadJson(path: path))
+                return
+            }
+            
+            //then look in the bundle
+            if let path = Bundle.main.path(forResource: forIdentifier, ofType: "json") {
+                completion(loadJson(path: path))
+                return
+            }
         }
         
         debugPrint("DISK: json not found for identifier = \(forIdentifier)")
         completion(nil)
     }
     
-//    class private func assembleJSON(jsonIds: Set<JSONIdentifier>) -> String? {
-//        guard jsonIds.count > 0 else { return nil }
-//        let path = URL(fileURLWithPath: Bundle.main.path(forResource: ghosteryBlockListSplit, ofType: "json")!)
-//        guard let jsonFileContent = try? Data.init(contentsOf: path) else { fatalError("Rule list for \(ghosteryBlockListSplit) doesn't exist!") }
-//
-//        if var jsonObject = (try? JSONSerialization.jsonObject(with: jsonFileContent, options: [])) as? [String: Any] {
-//
-//            var json_string = "["
-//
-//            for key in jsonObject.keys where jsonIds.contains(key) {
-//                if let value_dict = jsonObject[key] as? [[String: Any]],
-//                    let json_data = try? JSONSerialization.data(withJSONObject: value_dict, options: []),
-//                    let blocklist = String.init(data: json_data, encoding: String.Encoding.utf8), blocklist.count > 0
-//                {
-//                    //remove [ at the beginning and ] at the end
-//                    json_string += (blocklist.substring(with: blocklist.index(after: blocklist.startIndex)..<blocklist.index(before: blocklist.endIndex)) + ",")
-//                }
-//            }
-//
-//            if json_string.count > 1 {
-//                json_string.removeLast()
-//                json_string += "]"
-//                return json_string
-//            }
-//        }
-//
-//        return nil
-//    }
-    
     private func assembleJSON(jsonIds: Set<JSONIdentifier>, completion: @escaping (String?) -> Void) {
+        
+        if jsonIds.count == 0 {
+            completion(nil)
+            return
+        }
+        
         DispatchQueue.global(qos: .utility).async {
-            
-            if jsonIds.count == 0 {
-                completion(nil)
-                return
-            }
-            
-            if self.ghosteryBlockDict == nil {
-                self.ghosteryBlockDict = BlockListFileManager.parseGhosteryBlockList()
-            }
-            
             var json_string = "["
             
             for id in jsonIds {
                 if let blocklist = self.ghosteryBlockDict?[id]
                 {
-                    //remove [ at the beginning and ] at the end
-                    json_string += (blocklist.substring(with: blocklist.index(after: blocklist.startIndex)..<blocklist.index(before: blocklist.endIndex)) + ",")
+                    json_string += blocklist
                 }
             }
             
@@ -128,17 +102,20 @@ final class BlockListFileManager {
         var dict: [BugID:BugJson] = [:]
         
         if let id_dict = jsonObject as? [String: Any] {
-            debugPrint("number of keys = \(id_dict.keys.count)")
+            //debugPrint("number of keys = \(id_dict.keys.count)")
             for key in id_dict.keys {
                 if let value_dict = id_dict[key] as? [[String: Any]],
                     let json_data = try? JSONSerialization.data(withJSONObject: value_dict, options: []),
-                    let json_string = String.init(data: json_data, encoding: String.Encoding.utf8)
+                    var json_string = String.init(data: json_data, encoding: String.Encoding.utf8)
                 {
+                    //remove [ at the beginning and ] at the end
+                    json_string.removeFirst()
+                    json_string.removeLast()
                     dict[key] = json_string
                 }
             }
         }
-        debugPrint("number of keys successfully parsed = \(dict.keys.count)")
+        //debugPrint("number of keys successfully parsed = \(dict.keys.count)")
         return dict
     }
 }
