@@ -60,21 +60,21 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         // Use a sequencial queue to make sure that the loadOperation is complete before loading the Antritracking/Adblocking (since these are dependent on the Trackers List).
         // To ensure this, loadTrackerList should be called before any calls to a coordinatedUpdate.
         let loadOperation = LoadTrackerListOperation()
-        GlobalPrivacyQueue.shared.addOperation(loadOperation)
         
         if UserDefaults.standard.bool(forKey: trackersDefaultsAreAppliedKey) == false {
             applyDefaultsOp = ApplyDefaultsOperation()
             applyDefaultsOp!.addDependency(loadOperation)
-            GlobalPrivacyQueue.shared.addOperation(applyDefaultsOp!)
+            populateOp.addDependency(applyDefaultsOp!)
             UserDefaults.standard.set(true, forKey: trackersDefaultsAreAppliedKey)
             UserDefaults.standard.synchronize()
         }
-        
-        if let applyDefOp = applyDefaultsOp {
-            populateOp.addDependency(applyDefOp)
-        }
         else {
             populateOp.addDependency(loadOperation)
+        }
+        
+        GlobalPrivacyQueue.shared.addOperation(loadOperation)
+        if let applyOp = applyDefaultsOp {
+            GlobalPrivacyQueue.shared.addOperation(applyOp)
         }
         GlobalPrivacyQueue.shared.addOperation(populateOp)
     }
