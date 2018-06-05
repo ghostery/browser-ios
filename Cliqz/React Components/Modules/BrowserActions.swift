@@ -51,7 +51,7 @@ open class BrowserActions: RCTEventEmitter {
     @objc(searchHistory:callback:)
     func searchHistory(query: NSString, callback: RCTResponseSenderBlock) {
         debugPrint("searchHistory")
-        callback(getHistory())
+        callback([getHistory()])
     }
 
     func getHistory() -> [[String: String]] {
