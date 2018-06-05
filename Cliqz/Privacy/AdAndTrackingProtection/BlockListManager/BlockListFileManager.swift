@@ -34,14 +34,8 @@ final class BlockListFileManager {
         }
         
         if type == .antitracking {
-            //let timer = ParkBenchTimer()
             let jsonIdentifiers = AntitrackingJSONIdentifiers.jsonIdentifiers(forBlockListId: forIdentifier, domain: domain)
-            //timer.stop()
-            //debugPrint("Time: AntitrackingJSONIdentifiers.jsonIdentifiers for \(forIdentifier) = \(String(describing: timer.duration))")
-            //let timer = ParkBenchTimer()
             self.assembleJSON(jsonIds: jsonIdentifiers, completion: { (json) in
-                //timer.stop()
-                //debugPrint("Time: assembleJSON for \(forIdentifier) = \(String(describing: timer.duration))")
                 completion(json)
             })
             return

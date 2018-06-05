@@ -20,12 +20,7 @@ class ChangeCoordinator {
         var specific2domainRestricted: Set<Int> = Set()
         var specific2domainTrusted: Set<Int> = Set()
         
-        var global: Set<Int> = Set()
-        for app in TrackerList.instance.globalTrackerList() {
-            if app.state(domain: domain) == .blocked {
-                global.insert(app.appId)
-            }
-        }
+        var global: Set<Int> = TrackerStateStore.shared.blockedTrackers
         
         if let domainStr = domain, let domainObj = DomainStore.get(domain: domainStr) {
             specific2domainTrusted = Set(domainObj.trustedTrackers)
@@ -112,23 +107,27 @@ final class BlockListIdentifiers {
 class AntitrackingJSONIdentifiers {
     
     class func jsonIdentifiers(forBlockListId: BlockListIdentifier, domain: String?) -> Set<JSONIdentifier> {
-        return Set(antitrackingBlockSelectedIdentifiers(forBlockListId: forBlockListId, domain: domain))
+        return antitrackingBlockSelectedIdentifiers(forBlockListId: forBlockListId, domain: domain)
     }
     
     class func antitrackingBlockAllIdentifiers() -> [JSONIdentifier] {
         return ["ghostery_content_blocker"]
     }
     
-    class private func antitrackingBlockSelectedIdentifiers(forBlockListId: BlockListIdentifier, domain: String? = nil) -> [JSONIdentifier] {
+    class private func antitrackingBlockSelectedIdentifiers(forBlockListId: BlockListIdentifier, domain: String? = nil) -> Set<JSONIdentifier> {
         
         func getBugIds(appIds: Set<Int>) -> [Int] {
             return appIds.flatMap { (appId) -> [Int] in
                 return TrackerList.instance.app2bug[appId] ?? []
             }
         }
-        
+                //get appIds is the bottle neck
         let appIds = getAppIds(forBlockListId: forBlockListId, domain: domain)
-        let bugIds = getBugIds(appIds: appIds).map { i in String(i) }
+        
+        var bugIds: Set<JSONIdentifier> = Set()
+        getBugIds(appIds: appIds).forEach({ (appId) in
+            bugIds.insert(String(appId))
+        })
         
         return bugIds
     }
@@ -150,20 +149,32 @@ class AntitrackingJSONIdentifiers {
         var specific2domainTrusted: Set<Int> = Set()
         
         var global: Set<Int> = Set()
-        for app in TrackerList.instance.globalTrackerList() {
-            if app.state(domain: domain) == .blocked && app.category == forBlockListId {
-                global.insert(app.appId)
+        for appId in TrackerStateStore.shared.blockedTrackers {
+            //app.state(domain: domain) == .blocked can take time if the domain or the tracker state are not in the DB already
+            //to avoid this bottleneck the tracker states are created in the ApplyDefaultsOperation.
+            if filter(appId: appId) {
+                global.insert(appId)
             }
         }
         
         if let domainStr = domain, let domainObj = DomainStore.get(domain: domainStr) {
-            specific2domainTrusted = Set(domainObj.trustedTrackers.filter(filter))
-            specific2domainRestricted = Set(domainObj.restrictedTrackers.filter(filter))
+            for appId in domainObj.trustedTrackers {
+                if filter(appId: appId) {
+                    specific2domainTrusted.insert(appId)
+                }
+            }
+            
+            for appId in domainObj.restrictedTrackers {
+                if filter(appId: appId) {
+                    specific2domainRestricted.insert(appId)
+                }
+            }
         }
+        
         
         global.formUnion(specific2domainRestricted)
         global.subtract(specific2domainTrusted)
-        
+
         return global
     }
 }

@@ -26,7 +26,6 @@ final class BlockListManager {
         var returnList = [WKContentRuleList]()
         let dispatchGroup = DispatchGroup()
         let listStore = WKContentRuleListStore.default()
-
         for id in forIdentifiers {
             dispatchGroup.enter()
             
@@ -34,12 +33,12 @@ final class BlockListManager {
                 listStore?.lookUpContentRuleList(forIdentifier: id) { (ruleList, error) in
                     //Thread: Main
                     if let ruleList = ruleList {
-                        debugPrint("CACHE: FOUND list for identifier = \(id)")
+                        //debugPrint("CACHE: FOUND list for identifier = \(id)")
                         returnList.append(ruleList)
                         dispatchGroup.leave()
                     }
                     else {
-                        debugPrint("CACHE: did NOT find list for identifier = \(id)")
+                        //debugPrint("CACHE: did NOT find list for identifier = \(id)")
                             self.loadFromDisk(id: id, type: type, domain: domain, completion: { (list) in
                                 if let list = list {
                                     returnList.append(list)
@@ -71,7 +70,7 @@ final class BlockListManager {
     }
     
     private func loadFromDisk(id: String, type: BlockListType, domain: String?, completion: @escaping (WKContentRuleList?) -> Void) {
-        debugPrint("Load from disk: will compile list for identifier = \(id)")
+        //debugPrint("Load from disk: will compile list for identifier = \(id)")
         BlockListFileManager.shared.json(forIdentifier: id, type: type, domain: domain, completion: { (json) in
             if let json = json {
                 let operation = CompileOperation(identifier: id, json: json)
@@ -99,13 +98,37 @@ final class BlockListManager {
     private func handleOperationResult(result: CompileOperation.Result, id: String) -> WKContentRuleList? {
         switch result {
         case .list(let list):
-            debugPrint("CompileOperation: finished loading list for id = \(id)")
+            //debugPrint("CompileOperation: finished loading list for id = \(id)")
             return list
         case .error(let error):
-            debugPrint("CompileOperation: error for id = \(id) | ERROR = \(error.debugDescription)")
+            //debugPrint("CompileOperation: error for id = \(id) | ERROR = \(error.debugDescription)")
             return nil
         case .noResult:
-            debugPrint("CompileOperation: no result for id = \(id)")
+            //debugPrint("CompileOperation: no result for id = \(id)")
+            return nil
+        }
+    }
+}
+
+import CoreFoundation
+
+class ParkBenchTimer {
+    
+    let startTime:Date
+    var endTime:Date?
+    
+    init() {
+        startTime = Date()
+    }
+    
+    func stop() {
+        endTime = Date()
+    }
+    
+    var duration: Double? {
+        if let endTime = endTime {
+            return endTime.timeIntervalSince(startTime)
+        } else {
             return nil
         }
     }
