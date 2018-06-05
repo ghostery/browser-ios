@@ -50,10 +50,16 @@ public class TrackerStateStore: NSObject {
         let trackerState = TrackerState()
         trackerState.appId = appId
         trackerState.state = intForState(state: state)
-
-        try! realm.write {
-            realm.add(trackerState)
+        
+        do {
+            try realm.write {
+                realm.add(trackerState)
+            }
         }
+        catch let error {
+            debugPrint(error)
+        }
+        
         
         return trackerState
     }

@@ -72,6 +72,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         SubscriptionsHandler.sharedInstance.configureRemoteNotifications()
         //Cliqz: load the tracker list
         TrackerList.instance.loadTrackerList()
+        //Cliqz: Load Ghostery Json
+        DispatchQueue.global(qos: .utility).async {
+            BlockListFileManager.shared.loadGhosteryJson()
+        }
 
         // Short circuit the app if we want to email logs from the debug menu
         if DebugSettingsBundleOptions.launchIntoEmailComposer {

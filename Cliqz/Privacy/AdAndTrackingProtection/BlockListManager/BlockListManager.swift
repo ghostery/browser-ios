@@ -40,25 +40,26 @@ final class BlockListManager {
                     }
                     else {
                         debugPrint("CACHE: did NOT find list for identifier = \(id)")
-                        //Get on a background thread
-                        DispatchQueue.global(qos: .utility).async {
                             self.loadFromDisk(id: id, type: type, domain: domain, completion: { (list) in
                                 if let list = list {
                                     returnList.append(list)
                                 }
                                 dispatchGroup.leave()
                             })
-                        }
                     }
                 }
             }
             else {
-                self.loadFromDisk(id: id, type: type, domain: domain, completion: { (list) in
-                    if let list = list {
-                        returnList.append(list)
-                    }
-                    dispatchGroup.leave()
-                })
+                //This needs to be on main due to problems when accessing DB
+                //TODO: Solve the problem
+                DispatchQueue.main.async {
+                    self.loadFromDisk(id: id, type: type, domain: domain, completion: { (list) in
+                        if let list = list {
+                            returnList.append(list)
+                        }
+                        dispatchGroup.leave()
+                    })
+                }
             }
         }
         
@@ -70,28 +71,29 @@ final class BlockListManager {
     }
     
     private func loadFromDisk(id: String, type: BlockListType, domain: String?, completion: @escaping (WKContentRuleList?) -> Void) {
-        if let json = BlockListFileManager.shared.json(forIdentifier: id, type: type, domain: domain) {
-            debugPrint("Load from disk: will compile list for identifier = \(id)")
-            
-            let operation = CompileOperation(identifier: id, json: json)
-            
-            if type == .adblocker {
-                if let prev = previousOp {
-                    operation.addDependency(prev)
+        debugPrint("Load from disk: will compile list for identifier = \(id)")
+        BlockListFileManager.shared.json(forIdentifier: id, type: type, domain: domain, completion: { (json) in
+            if let json = json {
+                let operation = CompileOperation(identifier: id, json: json)
+                
+                if type == .adblocker {
+                    if let prev = self.previousOp {
+                        operation.addDependency(prev)
+                    }
+                    
+                    self.previousOp = operation
                 }
                 
-                previousOp = operation
+                operation.completionBlock = {
+                    completion(self.handleOperationResult(result: operation.result, id: id))
+                }
+                
+                self.loadQueue.addOperation(operation)
             }
-            
-            operation.completionBlock = {
-                completion(self.handleOperationResult(result: operation.result, id: id))
+            else {
+                completion(nil)
             }
-            
-            self.loadQueue.addOperation(operation)
-        }
-        else {
-            completion(nil)
-        }
+        })
     }
     
     private func handleOperationResult(result: CompileOperation.Result, id: String) -> WKContentRuleList? {

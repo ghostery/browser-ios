@@ -18,7 +18,11 @@ final class BlockListFileManager {
     
     private var ghosteryBlockDict: [BugID:BugJson]? = nil
     
-    func json(forIdentifier: BlockListIdentifier, type: BlockListType, domain: String?) -> String? {
+    func loadGhosteryJson() {
+        self.ghosteryBlockDict = BlockListFileManager.parseGhosteryBlockList()
+    }
+    
+    func json(forIdentifier: BlockListIdentifier, type: BlockListType, domain: String?, completion: @escaping (String?) -> Void) {
         
         //In the case type == .adblocker, the jsonIdentifiers are the same as the blockListIdentifiers
         //In the case type == .antitracking, the blockListIdentifiers need to be mapped to jsonIdentifiers
@@ -30,21 +34,26 @@ final class BlockListFileManager {
         }
         
         if forIdentifier.contains("adblocker_"), let path = Bundle.main.path(forResource: forIdentifier, ofType: "json", inDirectory: "AdBlocker/Chunks") {
-            return loadJson(path: path)
+            completion(loadJson(path: path))
+            return
         }
         
         //then look in the bundle
         if let path = Bundle.main.path(forResource: forIdentifier, ofType: "json") {
-            return loadJson(path: path)
+            completion(loadJson(path: path))
+            return
         }
         
         if type == .antitracking {
             let jsonIdentifiers = AntitrackingJSONIdentifiers.jsonIdentifiers(forBlockListId: forIdentifier, domain: domain)
-            return self.assembleJSON(jsonIds: jsonIdentifiers)
+            self.assembleJSON(jsonIds: jsonIdentifiers, completion: { (json) in
+                completion(json)
+            })
+            return
         }
         
         debugPrint("DISK: json not found for identifier = \(forIdentifier)")
-        return nil
+        completion(nil)
     }
     
 //    class private func assembleJSON(jsonIds: Set<JSONIdentifier>) -> String? {
@@ -76,30 +85,37 @@ final class BlockListFileManager {
 //        return nil
 //    }
     
-    private func assembleJSON(jsonIds: Set<JSONIdentifier>) -> String? {
-        guard jsonIds.count > 0 else { return nil }
-        
-        if ghosteryBlockDict == nil {
-            ghosteryBlockDict = BlockListFileManager.parseGhosteryBlockList()
-        }
-        
-        var json_string = "["
-
-        for id in jsonIds {
-            if let blocklist = ghosteryBlockDict?[id]
-            {
-                //remove [ at the beginning and ] at the end
-                json_string += (blocklist.substring(with: blocklist.index(after: blocklist.startIndex)..<blocklist.index(before: blocklist.endIndex)) + ",")
+    private func assembleJSON(jsonIds: Set<JSONIdentifier>, completion: @escaping (String?) -> Void) {
+        DispatchQueue.global(qos: .utility).async {
+            
+            if jsonIds.count == 0 {
+                completion(nil)
+                return
             }
+            
+            if self.ghosteryBlockDict == nil {
+                self.ghosteryBlockDict = BlockListFileManager.parseGhosteryBlockList()
+            }
+            
+            var json_string = "["
+            
+            for id in jsonIds {
+                if let blocklist = self.ghosteryBlockDict?[id]
+                {
+                    //remove [ at the beginning and ] at the end
+                    json_string += (blocklist.substring(with: blocklist.index(after: blocklist.startIndex)..<blocklist.index(before: blocklist.endIndex)) + ",")
+                }
+            }
+            
+            if json_string.count > 1 {
+                json_string.removeLast()
+                json_string += "]"
+                completion(json_string)
+                return
+            }
+            
+            completion(nil)
         }
-
-        if json_string.count > 1 {
-            json_string.removeLast()
-            json_string += "]"
-            return json_string
-        }
-        
-        return nil
     }
 
     

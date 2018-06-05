@@ -59,8 +59,13 @@ public class DomainStore: NSObject {
         let domainObj = Domain()
         domainObj.name = domain
         
-        try! realm.write {
-            realm.add(domainObj)
+        do {
+            try realm.write {
+                realm.add(domainObj)
+            }
+        }
+        catch let error {
+            debugPrint(error)
         }
         
         return domainObj
