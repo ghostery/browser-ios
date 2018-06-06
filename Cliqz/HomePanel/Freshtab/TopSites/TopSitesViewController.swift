@@ -83,11 +83,9 @@ class TopSitesViewController: UIViewController, HomePanel {
     }
 
 	func getTopSitesHeight() -> CGFloat {
-		//TODO(Refactoring): Should be inluded back during integration
-		
-		//		guard SettingsPrefs.shared.getShowTopSitesPref() else {
-		//			return 0.0
-		//		}
+        guard SettingsPrefs.shared.getShowTopSitesPref() else {
+            return 0.0
+        }
 
 		if self.dataSource.topSitesCount() > TopSitesUX.TopSitesCountOnRow && !UIDevice.current.isSmallIphoneDevice() {
 			return TopSitesUX.TopSitesMaxHeight

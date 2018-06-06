@@ -11,7 +11,7 @@ import RxSwift
 
 struct NewsViewUX {
 	
-	static let NewsViewMinHeight: CGFloat = 162.0
+	static let NewsViewMinHeight: CGFloat = 26.0
 	static let NewsCellHeight: CGFloat = 68.0
 	static let MinNewsCellsCount = 2
 }
@@ -77,20 +77,22 @@ class NewsViewController: UIViewController, HomePanel {
     }
 
 	func getNewsHeight() -> CGFloat {
-//		guard SettingsPrefs.shared.getShowNewsPref() && self.news.count != 0 else {
-//			return 0.0
-//		}
+        guard SettingsPrefs.shared.getShowNewsPref() else {
+            return 0.0
+        }
 		
-		if self.isNewsExpanded {
-			return (NewsViewUX.NewsViewMinHeight + CGFloat((self.tableView(self.newsTableView!, numberOfRowsInSection: 0)) - NewsViewUX.MinNewsCellsCount) * NewsViewUX.NewsCellHeight)
-		} else {
-			return NewsViewUX.NewsViewMinHeight
-		}
+        var newsHeight = NewsViewUX.NewsViewMinHeight
+        if let newsTableView = self.newsTableView {
+            let rowsCount = CGFloat(self.tableView(newsTableView, numberOfRowsInSection: 0))
+            newsHeight += rowsCount * NewsViewUX.NewsCellHeight
+        }
+		return newsHeight
 	}
 
 	private func reloadData() {
-		self.newsTableView?.isHidden = self.dataSource?.isEmpty() ?? true
-		self.newsTableView?.reloadData()
+        self.newsTableView?.isHidden = self.dataSource.isEmpty() || !SettingsPrefs.shared.getShowNewsPref()
+        self.newsTableView?.reloadData()
+        updateViewConstraints()
 	}
 }
 
