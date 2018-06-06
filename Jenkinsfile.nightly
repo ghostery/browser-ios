@@ -53,49 +53,118 @@ node('mac-vm-host') {
             stage('Checkout') {
                 checkout scm
             }
-
-            stage('Prepare') {
-                sh '''#!/bin/bash -l
-                    set -e
-                    set -x
-                    java -version
-                    node -v
-                    npm -v
-                    yarn -v
-                    xcodebuild -version
-                    pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
-                    sudo xcodebuild -license accept
-                    brew -v
-                    npm -g install yarn
-                    rm -rf Cartfile.resolved
-                    ./bootstrap.sh --force
-                    yarn install
-                    pod install
-                '''                
+            try {
+                stage('Prepare') {
+                    sh '''#!/bin/bash -l
+                        set -e
+                        set -x
+                        java -version
+                        node -v
+                        npm -v
+                        yarn -v
+                        xcodebuild -version
+                        pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
+                        sudo xcodebuild -license accept
+                        brew -v
+                        npm -g install yarn
+                        rm -rf Cartfile.resolved Carthage node_modules Podfile.lock Pods
+                        ./bootstrap.sh --force
+                        yarn install
+                        pod install
+                    '''                
+                }
+                stage('Build & Upload') {
+                    withCredentials([
+                        [
+                            $class          : 'UsernamePasswordMultiBinding',
+                            credentialsId   : '85859bba-4927-4b14-bfdf-aca726009962',
+                            passwordVariable: 'GITHUB_PASSWORD',
+                            usernameVariable: 'GITHUB_USERNAME',
+                        ],
+                        string(credentialsId: 'c9d7aaae-25ee-4b74-b03f-d50312c53edd', variable: 'ITUNES_USER'),
+                        string(credentialsId: '59474dcc-f87e-41ac-803c-e32a0029f7e7', variable: 'SentryDSN'),
+                        string(credentialsId: '070139a0-b210-4692-ab5f-5444f4aadac1', variable: 'FASTLANE_PASSWORD'),
+                        string(credentialsId: 'a1904e28-d791-4118-b8ed-3ff064aee9a4', variable: 'MATCH_PASSWORD')]) 
+                    {
+                        sh '''#!/bin/bash -l
+                            set -x
+                            set -e
+                            rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
+                            export MATCH_KEYCHAIN_NAME=ios-build.keychain
+                            fastlane beta
+                        '''
+                    }
+                }   
             }
-
-            stage('Build & Upload') {
-                withCredentials([
-                    [
-                        $class          : 'UsernamePasswordMultiBinding',
-                        credentialsId   : '85859bba-4927-4b14-bfdf-aca726009962',
-                        passwordVariable: 'GITHUB_PASSWORD',
-                        usernameVariable: 'GITHUB_USERNAME',
-                    ],
-                    string(credentialsId: 'c9d7aaae-25ee-4b74-b03f-d50312c53edd', variable: 'ITUNES_USER'),
-                    string(credentialsId: '59474dcc-f87e-41ac-803c-e32a0029f7e7', variable: 'SentryDSN'),
-                    string(credentialsId: '070139a0-b210-4692-ab5f-5444f4aadac1', variable: 'FASTLANE_PASSWORD'),
-                    string(credentialsId: 'a1904e28-d791-4118-b8ed-3ff064aee9a4', variable: 'MATCH_PASSWORD')]) 
-                {
+            finally {
+                stage("Clean Up"){
                     sh '''#!/bin/bash -l
                         set -x
                         set -e
-                        rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
-                        export MATCH_KEYCHAIN_NAME=ios-build.keychain      
-                        fastlane beta    
+                        rm -rf Cartfile.resolved Carthage node_modules Podfile.lock Pods  
                     '''
+                }    
+            }   
+        }
+    }
+}
+stage('Update Jira') {
+    withEnv(['JIRA_SITE=cliqztix']) {
+        def issueIds = getIssueList()
+        def transitionInput = [
+            transition: [
+                id: '121',
+            ],
+        ]
+        if (issueIds.size() > 0) {
+            echo 'Detected JIRA tickets'
+            echo issueIds.toString()
+        } else {
+            echo 'No JIRA tickets detected'
+        }
+
+        for (id in issueIds) {
+            try {
+                def issue = jiraGetIssue idOrKey: id
+
+                if (issue.data.fields.status.name == "Resolved") {
+                    jiraTransitionIssue idOrKey: id, input: transitionInput
                 }
+            } catch (Error e) {
+                echo e
             }
         }
     }
+}
+@NonCPS
+def getChangeString() {
+    MAX_MSG_LEN = 100
+    def changeString = ""
+    echo "Gathering SCM changes"
+    def changeLogSets = currentBuild.changeSets
+    for (int i = 0; i < changeLogSets.size(); i++) {
+        def entries = changeLogSets[i].items
+        for (int j = 0; j < entries.length; j++) {
+            def entry = entries[j]
+            truncated_msg = entry.msg.take(MAX_MSG_LEN)
+            changeString += " - ${truncated_msg} [${entry.author}]\n"
+        }
+        echo changeString
+    }
+    if (!changeString) {
+        changeString = " - No new changes"
+    }
+    return changeString
+}
+
+@NonCPS
+def getIssueList(){
+    def list =[]
+    def changes = getChangeString()
+    def re = /IB2-([0-9])*/
+    def y = changes =~ re
+    while (y){
+        list.add(y.group().toString())
+    }
+    return list
 }
