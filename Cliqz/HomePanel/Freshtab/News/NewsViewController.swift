@@ -25,7 +25,7 @@ class NewsViewController: UIViewController, HomePanel {
 	fileprivate weak var dataSource: NewsDataSource!
 	private let disposeBag = DisposeBag()
 
-	fileprivate var isNewsExpanded = false
+	fileprivate static var isNewsExpanded = true
 
     var newsTableView: UITableView?
 	fileprivate var expandNewsbutton = UIButton()
@@ -54,7 +54,6 @@ class NewsViewController: UIViewController, HomePanel {
 	}
 
 	func restoreToInitialState() {
-		isNewsExpanded = false
 		self.reloadData()
 	}
 
@@ -99,7 +98,7 @@ class NewsViewController: UIViewController, HomePanel {
 extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.isNewsExpanded ? self.dataSource.newsCount() : min(NewsViewUX.MinNewsCellsCount, self.dataSource.newsCount())
+		return NewsViewController.isNewsExpanded ? self.dataSource.newsCount() : min(NewsViewUX.MinNewsCellsCount, self.dataSource.newsCount())
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -167,7 +166,7 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
             make.height.equalTo(30)
             make.width.equalTo(v).dividedBy(2)
         }
-        if isNewsExpanded {
+        if NewsViewController.isNewsExpanded {
             expandNewsbutton.setTitle(NSLocalizedString("LessNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
         } else {
             expandNewsbutton.setTitle(NSLocalizedString("MoreNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
@@ -221,18 +220,18 @@ extension NewsViewController {
         //dismiss keyboard
 		view.window?.rootViewController?.view.endEditing(true)
         
-		self.isNewsExpanded = !self.isNewsExpanded
+		NewsViewController.isNewsExpanded = !NewsViewController.isNewsExpanded
 		
 		self.updateViewConstraints()
 		self.parent?.updateViewConstraints()
-		isNewsExpanded ? showMoreNews() : showLessNews()
+		NewsViewController.isNewsExpanded ? showMoreNews() : showLessNews()
 		
-		if isNewsExpanded {
+		if NewsViewController.isNewsExpanded {
 			expandNewsbutton.setTitle(NSLocalizedString("LessNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
 		} else {
 			expandNewsbutton.setTitle(NSLocalizedString("MoreNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
 		}
-		self.logNewsViewModifiedSignal(isExpanded: self.isNewsExpanded)
+		self.logNewsViewModifiedSignal(isExpanded: NewsViewController.isNewsExpanded)
 	}
 	
 	fileprivate func showMoreNews() {
