@@ -65,12 +65,10 @@ class NewsDataSource {
 			return
 		}
 		NewsDataService.loadLastNews { (news, error) in
-			if error != nil {
-				self.lastNews = [News]()
-			} else {
+			if error == nil {
 				self.lastNews = news
+                self.lastFetchDate = Date()
 			}
-			self.lastFetchDate = Date()
 			self.observable.on(.next(true))
 		}
 	}
