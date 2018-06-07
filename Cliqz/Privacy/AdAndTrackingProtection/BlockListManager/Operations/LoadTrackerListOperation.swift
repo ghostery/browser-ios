@@ -44,8 +44,16 @@ final class LoadTrackerListOperation: Operation {
             let localVersion = UserPreferences.instance.trackerListVersion()
             if localVersion == 0 || publishedVersion > localVersion || !self.doesTrackerListFileExist() {
                 // List is out of date. Update it.
-                self.downloadTrackerList(onComplete: {
-                    self.isFinished = true
+                self.downloadTrackerList(onComplete: { (finished) in
+                    if finished {
+                        self.isFinished = true
+                    }
+                    else {
+                        //fallback
+                        self.moveBugsFromBundleToDisk()
+                        self.loadLocalTrackerList()
+                        self.isFinished = true
+                    }
                 })
             }
             else {
@@ -77,7 +85,7 @@ final class LoadTrackerListOperation: Operation {
         }
     }
     
-    func downloadTrackerList(onComplete: @escaping () -> ()) {
+    func downloadTrackerList(onComplete: @escaping (Bool) -> ()) {
         // Download tracker list from server.
         if let url = URL(string: "https://cdn.ghostery.com/update/v3/bugs") {
             let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
@@ -88,16 +96,19 @@ final class LoadTrackerListOperation: Operation {
                     }
                     
                     TrackerList.instance.loadTrackerList(data!)
+                    onComplete(true)
                 }
                 else {
                     NSLog("Tracker list download failed.")
+                    //fallback to file in the bundle.
+                    onComplete(false)
                 }
-                onComplete()
+                
             })
             task.resume()
         }
         else {
-            onComplete()
+            onComplete(false)
         }
     }
     
@@ -121,5 +132,16 @@ final class LoadTrackerListOperation: Operation {
             }
         }
         return false
+    }
+    
+    func moveBugsFromBundleToDisk() {
+        if let path = Bundle.main.path(forResource: "bugs", ofType: "json") {
+            let url = URL(fileURLWithPath: path)
+            if let data = try? Data.init(contentsOf: url) {
+                if let filePath = TrackerList.instance.localTrackerFileURL()?.path {
+                    FileManager.default.createFile(atPath: filePath, contents: data, attributes: nil)
+                }
+            }
+        }
     }
 }

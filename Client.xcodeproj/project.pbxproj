@@ -584,6 +584,7 @@
 		AFA9FB0D208E135E0028CA1B /* ControlCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */; };
 		AFAB304020B80EC200FE312E /* AppDelegateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAB303F20B80EC200FE312E /* AppDelegateExtension.swift */; };
 		AFAB306B20B83E2800FE312E /* TelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAB306A20B83E2800FE312E /* TelemetryHelper.swift */; };
+		AFAC2C7A20C9475900498538 /* bugs.json in Resources */ = {isa = PBXBuildFile; fileRef = AFAC2C7920C9475900498538 /* bugs.json */; };
 		AFBAC1BF20AEBB78007F02CC /* CliqzIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */; };
 		AFBEDE8B20B56BAD00C3119A /* DomainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAB8208DEF990028CA1B /* DomainStore.swift */; };
 		AFBEDE9A20B56BB200C3119A /* TrackerStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */; };
@@ -2187,6 +2188,7 @@
 		AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCenterDelegate.swift; sourceTree = "<group>"; };
 		AFAB303F20B80EC200FE312E /* AppDelegateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtension.swift; sourceTree = "<group>"; };
 		AFAB306A20B83E2800FE312E /* TelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryHelper.swift; sourceTree = "<group>"; };
+		AFAC2C7920C9475900498538 /* bugs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bugs.json; sourceTree = "<group>"; };
 		AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzIntroViewController.swift; sourceTree = "<group>"; };
 		AFD165B520C6C03B00379381 /* UpdateOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateOperation.swift; sourceTree = "<group>"; };
 		AFD165B820C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopulateBlockedTrackersOperation.swift; sourceTree = "<group>"; };
@@ -3837,6 +3839,7 @@
 		AF6FA96D20652C3E00D7F9F0 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				AFAC2C7920C9475900498538 /* bugs.json */,
 				AFA1DDF82088AF9600B27B8A /* AdBlocker */,
 				AF6FA97120652C6800D7F9F0 /* ghostery_content_blocker_split.json */,
 				AF6FA96E20652C6700D7F9F0 /* ghostery_content_blocker.json */,
@@ -6178,6 +6181,7 @@
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
 				E4B7B7781A793CF20022C5E0 /* FiraSans-Italic.ttf in Resources */,
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
+				AFAC2C7A20C9475900498538 /* bugs.json in Resources */,
 				1EAE3BFD20BD602600300C98 /* Localizable.strings in Resources */,
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
 				1EBB08B92068FC9700C6DFFE /* Eula.html in Resources */,
