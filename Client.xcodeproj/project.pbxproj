@@ -3859,8 +3859,6 @@
 				AF6FA98620652D4600D7F9F0 /* TrackerStore.swift */,
 				AF6FA98720652D4600D7F9F0 /* TrieNode.swift */,
 				AF6FA98220652D4500D7F9F0 /* PageTrackersFound.swift */,
-				AF03AA1920BC117600A9D097 /* LoadTrackerListOperation.swift */,
-				AF03AA2920BC129A00A9D097 /* ApplyDefaultsOperation.swift */,
 			);
 			path = TrackingManagement;
 			sourceTree = "<group>";
@@ -3963,6 +3961,8 @@
 				AFD165B820C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift */,
 				AFA1DE0D2088BE5700B27B8A /* CompileOperation.swift */,
 				AFD165B520C6C03B00379381 /* UpdateOperation.swift */,
+				AF03AA1920BC117600A9D097 /* LoadTrackerListOperation.swift */,
+				AF03AA2920BC129A00A9D097 /* ApplyDefaultsOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
