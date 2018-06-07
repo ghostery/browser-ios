@@ -120,6 +120,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Cliqz: set SettingsPrefs profile and record install date
         SettingsPrefs.shared.profile = profile
         recordInstallDateIfNecessary()
+        // Cliqz: changed the tint color of window (ActionSheets, AlertViews, NavigationBar)
+        self.window!.tintColor = .cliqzBluePrimary
 
         unifiedTelemetry = UnifiedTelemetry(profile: profile)
 
