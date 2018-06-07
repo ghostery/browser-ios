@@ -40,51 +40,40 @@ final class LoadTrackerListOperation: Operation {
     
     override func main() {
         self.isExecuting = true
-        if let url = URL(string: "https://cdn.ghostery.com/update/version") {
-            let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
-                if error == nil && data != nil {
-                    do {
-                        if let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: AnyObject] {
-                            if let publishedVersion = json["bugsVersion"] as? NSNumber {
-                                let localVersion = UserPreferences.instance.trackerListVersion()
-                                //let localVersion = UserDefaults.standard.integer(forKey: "TrackerListVersion")
-                                if publishedVersion.intValue > localVersion {
-                                    // List is out of date. Update it.
-                                    self.downloadTrackerList(onComplete: {
-                                        self.isFinished = true
-                                    })
-                                }
-                                else {
-                                    // load local copy
-                                    self.loadLocalTrackerList()
-                                    self.isFinished = true
-                                }
-                            }
-                            else {
-                                self.isFinished = true
-                            }
-                        }
-                        else {
-                            self.isFinished = true
-                        }
-                    }
-                    catch {
-                        NSLog("Couldn't download tracker list version number.")
-                        // load local copy
-                        self.loadLocalTrackerList()
-                        self.isFinished = true
-                    }
-                }
-                else {
-                    // load local copy
-                    self.loadLocalTrackerList()
+        self.getPublishedVersion { (publishedVersion) in
+            let localVersion = UserPreferences.instance.trackerListVersion()
+            if localVersion == 0 || publishedVersion > localVersion || !self.doesTrackerListFileExist() {
+                // List is out of date. Update it.
+                self.downloadTrackerList(onComplete: {
                     self.isFinished = true
+                })
+            }
+            else {
+                // load local copy
+                self.loadLocalTrackerList()
+                self.isFinished = true
+            }
+        }
+    }
+    
+    func getPublishedVersion(completion: @escaping (Int) -> Void) {
+        if let url = URL(string: "https://cdn.ghostery.com/update/version") {
+            URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+                if error == nil && data != nil {
+                    if let json = try? JSONSerialization.jsonObject(with: data!, options: []) as? [String: AnyObject] {
+                        if let publishedVersion = json?["bugsVersion"] as? NSNumber {
+                            completion(publishedVersion.intValue)
+                            return
+                        }
+                    }
+
                 }
-            })
-            task.resume()
+                //catch all the other cases. Keep in mind: There is return above.
+                completion(0)
+            }).resume()
         }
         else {
-            self.isFinished = true
+            completion(0)
         }
     }
     
@@ -123,5 +112,14 @@ final class LoadTrackerListOperation: Operation {
                 print("File does not exist.")
             }
         }
+    }
+    
+    func doesTrackerListFileExist() -> Bool {
+        if let filePath = TrackerList.instance.localTrackerFileURL()?.path {
+            if FileManager.default.fileExists(atPath: filePath) {
+                return true
+            }
+        }
+        return false
     }
 }

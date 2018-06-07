@@ -89,8 +89,6 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
             if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyObject] {
                 if let versionNum = json["version"] as? NSNumber {
                     // save version to preferences
-                    UserDefaults.standard.set(versionNum.intValue, forKey: "TrackerListVersion")
-                    UserDefaults.standard.synchronize()
                     UserPreferences.instance.setTrackerListVersion(versionNum)
                     UserPreferences.instance.writeToDisk()
                 }
