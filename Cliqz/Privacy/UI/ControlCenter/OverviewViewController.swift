@@ -515,7 +515,7 @@ class OverviewViewController: UIViewController {
     }
     
     private func updateBlockedTrackersCount() {
-        blockedTrackers.text = String(format: NSLocalizedString("%d Tracker(s) Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Blocked trackers count"), 1)
+        blockedTrackers.text = String(format: NSLocalizedString("%d Tracker(s) Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Blocked trackers count"), self.dataSource?.blockedTrackerCount() ?? 0)
     }
     
     private func updateChart() {
