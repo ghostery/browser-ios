@@ -101,6 +101,9 @@ class OffrzViewController: UIViewController, HomePanel {
     }
     
     private func setupOnboardingView() {
+        guard self.onboardingView == nil else {
+            return
+        }
         if offrzDataSource.hasOffrz() && offrzDataSource.shouldShowOnBoarding() {
 			self.onboardingView = OffrzOnboardingView()
             self.onboardingView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
