@@ -9,26 +9,29 @@
 import Foundation
 import Charts
 
-protocol BlockedRequestViewDelegate: class {
+protocol NotchViewDelegate: class {
     func switchValueChanged(value: Bool)
 	func viewIsDragging(value: Float, velocity: Float)
 	func viewStopDragging(value: Float)
 }
 
-class BlockedRequestsView: UIView {
+class NotchView: UIView {
 
 	private var notchView = UIImageView()
 	private var iconView = UIImageView()
-	private var countView = UILabel()
-	private var titleView = UILabel()
+	private var countLabel = UILabel()
+	private var titleLabel = UILabel()
 	private var switchControl = UISwitch()
 	private var descriptionLabel = UILabel()
 
-    weak var delegate: BlockedRequestViewDelegate? = nil
+    weak var delegate: NotchViewDelegate? = nil
 
 	var isSwitchOn: Bool? {
 		set {
-			switchControl.isOn = newValue ?? false
+			DispatchQueue.main.async {
+				self.switchControl.isOn = newValue ?? false
+				self.switchValueChanged(s: self.switchControl)
+			}
 		}
 		get {
 			return switchControl.isOn
@@ -37,13 +40,14 @@ class BlockedRequestsView: UIView {
 
 	var count: Int? {
 		didSet {
-			countView.text = "\(count ?? 0)"
+			// Disabled for now, fixed text will be shown till we have a solution for the count
+//			countLabel.text = "\(count ?? 0)"
 		}
 	}
 
 	var title: String? {
 		didSet {
-			titleView.text = title
+			titleLabel.text = title
 		}
 	}
 
@@ -62,8 +66,8 @@ class BlockedRequestsView: UIView {
 		super.init(frame: CGRect.zero)
 		self.addSubview(notchView)
 		self.addSubview(iconView)
-		self.addSubview(countView)
-		self.addSubview(titleView)
+		self.addSubview(countLabel)
+		self.addSubview(titleLabel)
 		self.addSubview(descriptionLabel)
 		self.addSubview(switchControl)
 		let gesture = UIPanGestureRecognizer(target: self, action: #selector(wasDragged))
@@ -77,18 +81,19 @@ class BlockedRequestsView: UIView {
 	}
 	
 	func setStyles() {
-		countView.textColor = UIColor.cliqzBluePrimary
-		titleView.textColor = UIColor.cliqzBluePrimary
-		switchControl.onTintColor = UIColor.cliqzBlueTwoSecondary
-		switchControl.thumbTintColor = UIColor.cliqzURLBarColor
+		titleLabel.textColor = UIColor.cliqzBluePrimary
+		titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
+		switchControl.onTintColor = UIColor.cliqzBluePrimary
 		switchControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         switchControl.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
 		notchView.image = UIImage(named:"notch")
-		descriptionLabel.textColor = ControlCenterUI.textGray
+		descriptionLabel.textColor = UIColor(colorString: "97A4AE")
 		descriptionLabel.font = UIFont.systemFont(ofSize: 12)
-		countView.isHidden = true
-		descriptionLabel.text = ""
-		descriptionLabel.textAlignment = .center
+		descriptionLabel.numberOfLines = 0
+		descriptionLabel.text = NSLocalizedString("Enhanced Ad Blocking anonymizes unblocked and unknown trackers for greater browsing protection.", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Ad Blocking description")
+		descriptionLabel.textAlignment = .left
+		countLabel.textColor = UIColor.cliqzBluePrimary
+		countLabel.text = NSLocalizedString("Ads Removed", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Removed Ads indicator")
 	}
 
 	override func layoutSubviews() {
@@ -97,20 +102,19 @@ class BlockedRequestsView: UIView {
 			make.top.left.right.equalToSuperview()
 			make.height.equalTo(30)
 		}
-		self.countView.snp.remakeConstraints { (make) in
-			make.left.equalTo(self).offset(4)
-			make.centerY.equalTo(self)
-			make.height.equalTo(25)
-		}
-		self.titleView.snp.remakeConstraints { (make) in
-			make.left.equalTo(self.countView.snp.right).offset(10)
+		self.titleLabel.snp.remakeConstraints { (make) in
+			make.left.equalToSuperview().offset(20)
 			make.top.equalTo(self.notchView.snp.bottom)
 			make.height.equalTo(25)
 		}
 		self.iconView.snp.remakeConstraints { (make) in
-			make.top.equalTo(titleView.snp.bottom).offset(20)
-			make.height.width.equalTo(30)
+			make.top.equalTo(titleLabel.snp.bottom).offset(30)
 			make.centerX.equalToSuperview()
+		}
+		self.countLabel.snp.remakeConstraints { (make) in
+			make.top.equalTo(self.iconView.snp.bottom).offset(10)
+			make.centerX.equalTo(self)
+			make.height.equalTo(25)
 		}
 		self.switchControl.snp.remakeConstraints { (make) in
 			make.top.equalTo(self.notchView.snp.bottom)
@@ -118,13 +122,14 @@ class BlockedRequestsView: UIView {
 			make.right.equalTo(self).inset(10)
 		}
 		self.descriptionLabel.snp.remakeConstraints { (make) in
-			make.top.equalTo(self.iconView.snp.bottom).offset(10)
-			make.left.right.equalToSuperview()
+			make.bottom.equalToSuperview().inset(25)
+			make.left.right.equalToSuperview().inset(20)
 		}
 	}
-    
+
     @objc func switchValueChanged(s: UISwitch) {
         s.isOn ? self.delegate?.switchValueChanged(value: true) : self.delegate?.switchValueChanged(value: false)
+		updateViewStyle(enabled: s.isOn)
     }
 
 	@objc func wasDragged(gestureRecognizer: UIPanGestureRecognizer) {
@@ -136,11 +141,22 @@ class BlockedRequestsView: UIView {
 			self.delegate?.viewStopDragging(value: Float(gestureRecognizer.velocity(in: self).y))
 		}
 	}
+
+	private func updateViewStyle(enabled isEnabled: Bool) {
+		if isEnabled {
+			iconView.tintColor = UIColor.cliqzBluePrimary
+			countLabel.textColor = UIColor.cliqzBluePrimary
+		} else {
+			iconView.tintColor = UIColor.gray
+			countLabel.textColor = UIColor.gray
+		}
+	}
+
 }
 
 struct ControlCenterUX {
-	static let adblockerViewMaxHeight: Float = 150
-	static let adblockerViewInitialOffset: Float = -75
+	static let adblockerViewMaxHeight: Float = 280
+	static let adblockerViewInitialOffset: Float = -85
 }
 
 class OverviewViewController: UIViewController {
@@ -153,7 +169,7 @@ class OverviewViewController: UIViewController {
 	private var restrictSiteButton = UIButton(type: .custom)
 	private var pauseGhosteryButton = UIButton(type: .custom)
 
-	fileprivate var adBlockingView = BlockedRequestsView()
+	fileprivate var adBlockingView = NotchView()
 
 	weak var dataSource: ControlCenterDSProtocol? {
 		didSet {
@@ -191,7 +207,7 @@ class OverviewViewController: UIViewController {
 
 	private func updateData() {
         guard let datasource = self.dataSource else { return }
-        
+	
 		self.urlLabel.text = datasource.domainString()
         
         updateChart()
@@ -224,8 +240,9 @@ class OverviewViewController: UIViewController {
         
         if (orientation == .portrait && device != .iPad) || device == .iPad {
             chart.snp.makeConstraints { (make) in
-                make.left.right.top.equalToSuperview()
-                make.height.equalTo(200)
+                make.left.right.equalToSuperview()
+				make.top.equalToSuperview().offset(60)
+                make.height.equalTo(250)
             }
             
             self.urlLabel.snp.makeConstraints { (make) in
@@ -242,33 +259,31 @@ class OverviewViewController: UIViewController {
             
             self.trustSiteButton.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.view)
-                make.top.equalTo(self.blockedTrackers.snp.bottom).offset(15)
-                make.height.equalTo(30)
+                make.top.equalTo(self.blockedTrackers.snp.bottom).offset(40)
+                make.height.equalTo(40)
                 make.width.equalTo(213)
             }
             
             self.restrictSiteButton.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.view)
-                make.top.equalTo(self.trustSiteButton.snp.bottom).offset(10)
-                make.height.equalTo(30)
+                make.top.equalTo(self.trustSiteButton.snp.bottom).offset(12)
+                make.height.equalTo(40)
                 make.width.equalTo(213)
             }
             
             self.pauseGhosteryButton.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.view)
-                make.top.equalTo(self.restrictSiteButton.snp.bottom).offset(10)
-                make.height.equalTo(30)
+                make.top.equalTo(self.restrictSiteButton.snp.bottom).offset(30)
+                make.height.equalTo(40)
                 make.width.equalTo(213)
             }
             
             self.adBlockingView.snp.makeConstraints { (make) in
                 make.left.right.equalTo(self.view)
-                make.top.equalTo(self.view.snp.bottom).offset(-75)
-                make.height.equalTo(150)
+				make.top.equalTo(self.view.snp.bottom).offset(ControlCenterUX.adblockerViewInitialOffset)
+                make.height.equalTo(ControlCenterUX.adblockerViewMaxHeight)
             }
-        }
-        else {
-            
+        } else {
             let blockedTrackersOffset: CGFloat = 10.0
             let adblockingViewOffset: CGFloat = 75.0
             
@@ -330,7 +345,7 @@ class OverviewViewController: UIViewController {
 		let pauseGhostery = NSLocalizedString("Pause Ghostery", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Pause Ghostery button title")
 		self.pauseGhosteryButton.setTitle(pauseGhostery, for: .normal)
         self.pauseGhosteryButton.addTarget(self, action: #selector(pauseGhosteryPressed), for: .touchUpInside)
-        self.pauseGhosteryButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        self.pauseGhosteryButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
 
 		// TODO: Count should be from DataSource
         self.adBlockingView.delegate = self
@@ -349,25 +364,24 @@ class OverviewViewController: UIViewController {
 
 		self.blockedTrackers.font = UIFont.systemFont(ofSize: 20)
 
-		self.trustSiteButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-		self.trustSiteButton.titleLabel?.textColor = UIColor(colorString: "4A4A4A")
+		self.trustSiteButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
 		self.trustSiteButton.backgroundColor = UIColor.white
-		self.trustSiteButton.layer.borderColor = UIColor.gray.cgColor
+		self.trustSiteButton.layer.borderColor = ControlCenterUI.buttonGray.cgColor
 		self.trustSiteButton.layer.borderWidth = 1
 		self.trustSiteButton.layer.cornerRadius = 3
 		self.trustSiteButton.setTitleColor(UIColor.white, for: .selected)
-		self.trustSiteButton.setTitleColor(UIColor.gray, for: .normal)
+		self.trustSiteButton.setTitleColor(ControlCenterUI.buttonGray, for: .normal)
 		self.trustSiteButton.setImage(UIImage(named: "trust"), for: .normal)
 		self.trustSiteButton.setImage(UIImage(named: "trustAction"), for: .selected)
 		self.trustSiteButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
 		self.trustSiteButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
 
-		self.restrictSiteButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+		self.restrictSiteButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
 		self.restrictSiteButton.backgroundColor = UIColor.white
-		self.restrictSiteButton.layer.borderColor = UIColor.gray.cgColor
+		self.restrictSiteButton.layer.borderColor = ControlCenterUI.buttonGray.cgColor
 		self.restrictSiteButton.layer.borderWidth = 1
 		self.restrictSiteButton.layer.cornerRadius = 3
-		self.restrictSiteButton.setTitleColor(UIColor.gray, for: .normal)
+		self.restrictSiteButton.setTitleColor(ControlCenterUI.buttonGray, for: .normal)
 		self.restrictSiteButton.setTitleColor(UIColor.white, for: .selected)
 		self.restrictSiteButton.setImage(UIImage(named: "restrict"), for: .normal)
 		self.restrictSiteButton.setImage(UIImage(named: "restrictAction"), for: .selected)
@@ -375,10 +389,10 @@ class OverviewViewController: UIViewController {
 		self.restrictSiteButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
 
 		self.pauseGhosteryButton.backgroundColor = UIColor.white
-		self.pauseGhosteryButton.layer.borderColor = UIColor.gray.cgColor
+		self.pauseGhosteryButton.layer.borderColor = ControlCenterUI.buttonGray.cgColor
 		self.pauseGhosteryButton.layer.borderWidth = 1
 		self.pauseGhosteryButton.layer.cornerRadius = 3
-		self.pauseGhosteryButton.setTitleColor(UIColor.gray, for: .normal)
+		self.pauseGhosteryButton.setTitleColor(ControlCenterUI.buttonGray, for: .normal)
 		self.pauseGhosteryButton.setTitleColor(UIColor.white, for: .selected)
 		self.pauseGhosteryButton.setImage(UIImage(named: "ghosteryPause"), for: .normal)
 		self.pauseGhosteryButton.setImage(UIImage(named: "ghosteryPlay"), for: .selected)
