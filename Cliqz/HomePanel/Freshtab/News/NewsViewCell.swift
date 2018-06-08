@@ -57,13 +57,14 @@ class NewsViewCell: ClickableUITableViewCell {
 				let placeholder = LogoPlaceholder(logoInfo: logoInfo)
 				self.fakeLogoView = placeholder
 			}
+            
             self.logoImageView.alpha = 0.0
+            self.logoImageView.transform = CGAffineTransform.init(scaleX: 0.8, y: 0.8)
 			viewModel?.logo.asObservable().subscribe(onNext: { (img) in
                 self.logoImageView.image = img
-                self.logoImageView.transform = CGAffineTransform.init(scaleX: 0.95, y: 0.95)
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.logoImageView.alpha = 1.0
-                    self.logoImageView.transform = CGAffineTransform.identity
+                UIView.animate(withDuration: 0.15, animations: {
+                     self.logoImageView.alpha = 1.0
+                     self.logoImageView.transform = CGAffineTransform.identity
                 })
 			}, onError: { (_) in
 				self.logoImageView.image = nil
