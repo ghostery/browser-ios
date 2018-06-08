@@ -90,6 +90,7 @@ final class BlockListManager {
                 self.loadQueue.addOperation(operation)
             }
             else {
+                debugPrint("DISK: json not found for identifier = \(id)")
                 completion(nil)
             }
         })

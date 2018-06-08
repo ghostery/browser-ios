@@ -34,27 +34,25 @@ final class BlockListFileManager {
         }
         
         if type == .antitracking {
-            let jsonIdentifiers = AntitrackingJSONIdentifiers.jsonIdentifiers(forBlockListId: forIdentifier, domain: domain)
-            self.assembleJSON(jsonIds: jsonIdentifiers, completion: { (json) in
-                completion(json)
-            })
+
+            if forIdentifier == AntitrackingJSONIdentifiers.antitrackingBlockAllIdentifiers().first, let path = Bundle.main.path(forResource: forIdentifier, ofType: "json") {
+                //then look in the bundle
+                completion(loadJson(path: path))
+                return
+            }
+            else {
+                let jsonIdentifiers = AntitrackingJSONIdentifiers.jsonIdentifiers(forBlockListId: forIdentifier, domain: domain)
+                self.assembleJSON(jsonIds: jsonIdentifiers, completion: { (json) in
+                    completion(json)
+                })
+                return
+            }
+        }
+        else if forIdentifier.contains("adblocker_"), let path = Bundle.main.path(forResource: forIdentifier, ofType: "json", inDirectory: "AdBlocker/Chunks") {
+            completion(loadJson(path: path))
             return
         }
-        else {
-            
-            if forIdentifier.contains("adblocker_"), let path = Bundle.main.path(forResource: forIdentifier, ofType: "json", inDirectory: "AdBlocker/Chunks") {
-                completion(loadJson(path: path))
-                return
-            }
-            
-            //then look in the bundle
-            if let path = Bundle.main.path(forResource: forIdentifier, ofType: "json") {
-                completion(loadJson(path: path))
-                return
-            }
-        }
         
-        debugPrint("DISK: json not found for identifier = \(forIdentifier)")
         completion(nil)
     }
     
