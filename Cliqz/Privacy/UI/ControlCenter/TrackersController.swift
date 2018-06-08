@@ -16,6 +16,7 @@ let trackerViewDismissedNotification = Notification.Name(rawValue: "TrackerViewD
 struct ControlCenterUI {
 	static let separatorGray = UIColor(colorString: "E0E0E0")
 	static let textGray = UIColor(colorString: "C7C7CD")
+	static let buttonGray = UIColor(colorString: "4A4A4A")
 }
 
 class TrackersController: UIViewController {
@@ -509,10 +510,6 @@ class CategoryHeaderView: UIView {
 			make.left.equalTo(categoryLabel)
 			make.height.equalTo(25)
 		}
-		statusView.snp.remakeConstraints { (make) in
-			make.centerY.equalToSuperview().offset(-7)
-			make.right.equalToSuperview().inset(10)
-		}
 		typeLabel.snp.remakeConstraints { (make) in
 			make.left.equalTo(categoryLabel)
 			make.top.equalTo(statisticsLabel.snp.bottom)
@@ -521,7 +518,11 @@ class CategoryHeaderView: UIView {
 		}
 		expandedIcon.snp.remakeConstraints { (make) in
 			make.top.equalTo(statusView.snp.bottom).offset(20)
-			make.centerX.equalTo(statusView.snp.centerX)
+			make.right.equalToSuperview().inset(15)
+		}
+		statusView.snp.remakeConstraints { (make) in
+			make.centerY.equalToSuperview().offset(-7)
+			make.centerX.equalTo(expandedIcon)
 		}
 	}
 
