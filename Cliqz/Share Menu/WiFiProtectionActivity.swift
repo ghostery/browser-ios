@@ -21,7 +21,7 @@ class WiFiProtectionActivity : UIActivity {
 	}
 	
 	override var activityType: UIActivityType? {
-		return UIActivityType("com.cliqz.settings")
+		return UIActivityType("com.cliqz.WifiProtection")
 	}
 	
 	override func perform() {
