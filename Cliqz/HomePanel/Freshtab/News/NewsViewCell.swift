@@ -132,7 +132,6 @@ class NewsViewCell: ClickableUITableViewCell {
 			make.bottom.equalTo(self.contentView).offset(cardViewBottomOffset)
 		}
 		
-		let contentOffset = 15
 		let logoSize = CGSize(width: 48, height: 48)
 		logoContainerView.snp.makeConstraints { make in
 			make.top.equalTo(self.cardView).offset(10)
@@ -142,7 +141,7 @@ class NewsViewCell: ClickableUITableViewCell {
 		self.logoImageView.snp.remakeConstraints { (make) in
 			make.top.left.right.bottom.equalTo(self.logoContainerView)
 		}
-		let URLLeftOffset = 15
+		let URLLeftOffset = 10
 		let URLHeight = 18
 		self.URLLabel.snp.remakeConstraints { (make) in
 			make.top.equalTo(self.cardView).offset(5)
@@ -154,7 +153,7 @@ class NewsViewCell: ClickableUITableViewCell {
 			make.top.equalTo(self.URLLabel.snp.bottom)
 			make.left.equalTo(self.logoImageView.snp.right).offset(URLLeftOffset)
 			make.height.equalTo(38)
-			make.right.equalTo(self.cardView).offset(-contentOffset)
+			make.right.equalTo(self.cardView)
 		}
 	}
 
