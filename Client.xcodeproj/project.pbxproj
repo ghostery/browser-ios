@@ -132,6 +132,7 @@
 		1EAFE56F205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE569205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift */; };
 		1EAFE570205FFE82006A36B4 /* RegionalSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */; };
 		1EBB08B92068FC9700C6DFFE /* Eula.html in Resources */ = {isa = PBXBuildFile; fileRef = 1EBB08AA2068FC9600C6DFFE /* Eula.html */; };
+		1EC9C75420CFF6F200082652 /* BrowserViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC9C74520CFF6F200082652 /* BrowserViewController+Keyboard.swift */; };
 		1EDF0B1F207B837F00856493 /* KeyboardAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */; };
 		1EDF0B22207B86A200856493 /* QuerySuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B21207B86A200856493 /* QuerySuggestionView.swift */; };
 		1EDF0B24207B86DA00856493 /* QuerySuggestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B23207B86DA00856493 /* QuerySuggestions.swift */; };
@@ -1763,6 +1764,7 @@
 		1EAFE569205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HumanWebSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionalSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1EBB08AA2068FC9600C6DFFE /* Eula.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Eula.html; sourceTree = "<group>"; };
+		1EC9C74520CFF6F200082652 /* BrowserViewController+Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+Keyboard.swift"; sourceTree = "<group>"; };
 		1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
 		1EDF0B21207B86A200856493 /* QuerySuggestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuerySuggestionView.swift; sourceTree = "<group>"; };
 		1EDF0B23207B86DA00856493 /* QuerySuggestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuerySuggestions.swift; sourceTree = "<group>"; };
@@ -3639,6 +3641,7 @@
 		4F30F51F205174DA0049E4F6 /* BrowserViewController */ = {
 			isa = PBXGroup;
 			children = (
+				1EC9C74520CFF6F200082652 /* BrowserViewController+Keyboard.swift */,
 				4F30F52620517C210049E4F6 /* SearchViewDelegate.swift */,
 				4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */,
 				1EEA36EC2067DD6F003B6AD5 /* VideoDownloader.swift */,
@@ -6895,6 +6898,7 @@
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				396E38F31EE0C90D00CC180F /* FxALoginHelper.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
+				1EC9C75420CFF6F200082652 /* BrowserViewController+Keyboard.swift in Sources */,
 				4F30F50E2051670C0049E4F6 /* JSBridge.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
