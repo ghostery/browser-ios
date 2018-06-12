@@ -601,6 +601,11 @@ class BrowserViewController: UIViewController {
             show(buttonToast: toast, afterWaiting: ButtonToastUX.ToastDelay)
         }
         showQueuedAlertIfAvailable()
+        
+        // Cliqz: Check if we should activate the keyboard or not
+        if shouldShowKeyboard() {
+            self.urlBar.enterOverlayMode("", pasted: false, search: true)
+        }
     }
 
     // THe logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in

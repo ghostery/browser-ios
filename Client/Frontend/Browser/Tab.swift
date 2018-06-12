@@ -86,6 +86,8 @@ class Tab: NSObject {
     var isEditing: Bool = false
 
     fileprivate var _noImageMode = false
+    // Cliqz: added to differentiate between restoring regular webpage and restoring Freshtab
+    var restoringFreshtab = true
 
     /// Returns true if this tab's URL is known, and it's longer than we want to store.
     var urlIsTooLong: Bool {
@@ -235,6 +237,11 @@ class Tab: NSObject {
                 urls.append(url.absoluteString)
             }
 
+            // Cliqz: if restoring more than one url then it is not Freshtab
+            if urls.count > 1 {
+                restoringFreshtab = false
+            }
+            
             let currentPage = sessionData.currentPage
             self.sessionData = nil
             var jsonDict = [String: AnyObject]()
