@@ -584,6 +584,7 @@ class BrowserViewController: UIViewController {
 
         super.viewDidAppear(animated)
 
+        /* Cliqz: disabled showing whats new from Firefox
         if shouldShowWhatsNewTab() {
             // Only display if the SUMO topic has been configured in the Info.plist (present and not empty)
             if let whatsNewTopic = AppInfo.whatsNewTopic, whatsNewTopic != "" {
@@ -593,6 +594,7 @@ class BrowserViewController: UIViewController {
                 }
             }
         }
+        */
 
         if let toast = self.pendingToast {
             self.pendingToast = nil
