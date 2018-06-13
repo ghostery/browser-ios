@@ -241,39 +241,51 @@ class OverviewViewController: UIViewController {
         if (orientation == .portrait && device != .iPad) || device == .iPad {
             chart.snp.makeConstraints { (make) in
                 make.left.right.equalToSuperview()
-				make.top.equalToSuperview().offset(60)
-                make.height.equalTo(250)
+				make.bottom.equalTo(self.urlLabel.snp.top)
+				if UIDevice.current.isSmallIphoneDevice() {
+					make.height.equalTo(160)
+				} else {
+					make.height.equalTo(220)
+				}
             }
             
             self.urlLabel.snp.makeConstraints { (make) in
-                make.left.right.equalTo(self.view).inset(7)
-                make.top.equalTo(chart.snp.bottom).offset(10)
-                make.height.equalTo(30)
+				make.left.right.equalTo(self.view).inset(7)
+				make.bottom.equalTo(blockedTrackers.snp.top)
+                make.height.equalTo(20)
             }
             
             self.blockedTrackers.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.view)
-                make.top.equalTo(self.urlLabel.snp.bottom)
+				if UIDevice.current.isSmallIphoneDevice() {
+					make.bottom.equalTo(self.trustSiteButton.snp.top)
+				} else {
+					make.bottom.equalTo(self.trustSiteButton.snp.top).offset(-40)
+				}
                 make.height.equalTo(30)
             }
             
             self.trustSiteButton.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.view)
-                make.top.equalTo(self.blockedTrackers.snp.bottom).offset(40)
+				make.bottom.equalTo(self.restrictSiteButton.snp.top).offset(-12)
                 make.height.equalTo(40)
                 make.width.equalTo(213)
             }
             
             self.restrictSiteButton.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.view)
-                make.top.equalTo(self.trustSiteButton.snp.bottom).offset(12)
+				if UIDevice.current.isSmallIphoneDevice() {
+					make.bottom.equalTo(self.pauseGhosteryButton.snp.top).offset(-20)
+				} else {
+					make.bottom.equalTo(self.pauseGhosteryButton.snp.top).offset(-30)
+				}
                 make.height.equalTo(40)
                 make.width.equalTo(213)
             }
             
             self.pauseGhosteryButton.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.view)
-                make.top.equalTo(self.restrictSiteButton.snp.bottom).offset(30)
+				make.bottom.equalToSuperview().offset(ControlCenterUX.adblockerViewInitialOffset)
                 make.height.equalTo(40)
                 make.width.equalTo(213)
             }
@@ -560,7 +572,7 @@ class OverviewViewController: UIViewController {
 	}
 }
 
-extension OverviewViewController: BlockedRequestViewDelegate {
+extension OverviewViewController: NotchViewDelegate {
 
     func switchValueChanged(value: Bool) {
         self.delegate?.turnGlobalAdblocking(on: value)
