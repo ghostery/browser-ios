@@ -36,6 +36,7 @@ platform :ios do
       keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
       keychain_password: ENV["MATCH_PASSWORD"],
       git_branch: "new-browser-ios-beta",
+      app_identifier: ["com.cliqz.ios.newCliqz", "*"],
       readonly: true,
       verbose: true
     )
@@ -49,20 +50,60 @@ platform :ios do
       workspace: "Client.xcworkspace",
       clean: "true",
       scheme: "Firefox",
+      xcconfig: "Client/Configuration/Firefox.xcconfig",      
+      skip_profile_detection: "true",
       export_options: {
         provisioningProfiles: { 
           "com.cliqz.ios.newCliqz" => "match AppStore com.cliqz.ios.newCliqz",
-          "com.cliqz.ios.newCliqz.NotificationService" => "match AppStore *",
-          "com.cliqz.ios.newCliqz.SendTo" => "match AppStore *", 
-          "com.cliqz.ios.newCliqz.ShareTo" => "match AppStore *", 
-          "com.cliqz.ios.newCliqz.Today" => "match AppStore *", 
-          "com.cliqz.ios.newCliqz.ViewLater" => "match AppStore *"
         }
       }
     )
 
     upload_to_testflight(
-      changelog: "Nightly build",
+      changelog: "New Cliqz Nightly build",
+      demo_account_required: "false",
+      skip_waiting_for_build_processing: "true"
+    )
+  end
+
+
+
+  lane :release do    
+
+    create_keychain(
+      name: ENV["MATCH_KEYCHAIN_NAME"],
+      password: ENV["MATCH_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
+
+    match(
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+      keychain_password: ENV["MATCH_PASSWORD"],
+      git_branch: "ghostery-ios",
+      team_id: ENV["DEVELOPER_TEAM_ID"],
+      app_identifier: ["com.evidon.Ghostery", "*"],
+      readonly: true,
+      verbose: true
+    )
+
+    build_app(
+      workspace: "Client.xcworkspace",
+      clean: "true",
+      scheme: "Ghostery",
+      xcconfig: "Client/Configuration/Ghostery.xcconfig",
+      skip_profile_detection: "true",
+      export_options: {
+        provisioningProfiles: { 
+          "com.evidon.Ghostery" => "match AppStore com.evidon.Ghostery"
+        }
+      }
+    )
+
+    upload_to_testflight(
+      changelog: "Ghostery Nightly build",
       demo_account_required: "false",
       skip_waiting_for_build_processing: "true"
     )

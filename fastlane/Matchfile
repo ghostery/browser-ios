@@ -6,7 +6,7 @@ git_url "https://#{login}github.com/cliqz/ios-certs"
 
 type "appstore" # The default type, can be: appstore, adhoc, enterprise or development
 
-app_identifier ["com.cliqz.ios.newCliqz", "*"]
+# app_identifier []
 
 # username "user@fastlane.tools" # Your Apple Developer Portal username
 
