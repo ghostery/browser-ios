@@ -5,8 +5,13 @@
 for_platform :ios do
   # for all iOS related things
   apple_id ENV["ITUNES_USER"]
+  team_id ENV["TEAM_ID"]
   for_lane :beta do
     app_identifier 'com.cliqz.ios.newCliqz'
+  end
+
+  for_lane :release do
+    app_identifier 'com.evidon.Ghostery'
   end
   
 end
