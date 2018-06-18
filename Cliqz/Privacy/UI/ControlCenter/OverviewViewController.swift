@@ -87,7 +87,7 @@ class NotchView: UIView {
 		switchControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         switchControl.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
 		notchView.image = UIImage(named:"notch")
-		descriptionLabel.textColor = UIColor(colorString: "97A4AE")
+		descriptionLabel.textColor = UIColor.cliqzGrayFunctional
 		descriptionLabel.font = UIFont.systemFont(ofSize: 12)
 		descriptionLabel.numberOfLines = 0
 		descriptionLabel.text = NSLocalizedString("Enhanced Ad Blocking anonymizes unblocked and unknown trackers for greater browsing protection.", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Ad Blocking description")
