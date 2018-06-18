@@ -92,7 +92,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(segmentedControl)
         
         view.addSubview(controllerContainerView)
-        
+		
         setStyling()
         setInitialConstraints()
         setBackgroundImage()
@@ -110,7 +110,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         }
         
         segmentedControl.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(10)
+            make.top.equalToSuperview()
             make.leading.equalToSuperview().offset(10)
             make.trailing.equalToSuperview().inset(10)
         }
