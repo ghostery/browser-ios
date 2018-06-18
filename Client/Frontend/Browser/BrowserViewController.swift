@@ -1671,7 +1671,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         controller.addAction(UIAlertAction(title: NSLocalizedString("New Tab", tableName:"Cliqz", comment: "Label for New Tab"), style: .default, handler: { _ in
             self.tabManager.addTabAndSelect(isPrivate: false)
         }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("New Private Tab", tableName:"Cliqz", comment: "Label for New Private Tab"), style: .default, handler: { _ in
+        controller.addAction(UIAlertAction(title: NSLocalizedString("New Forget Tab", tableName:"Cliqz", comment: "Label for New Forget Tab"), style: .default, handler: { _ in
             self.tabManager.addTabAndSelect(isPrivate: true)
         }))
         controller.addAction(UIAlertAction(title: NSLocalizedString("Close Tab", tableName:"Cliqz", comment: "Label for Close Tab"), style: .destructive, handler: { _ in
@@ -2558,7 +2558,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 actionSheetController.addAction(openNewTabAction)
             }
 
+            /* Cliqz: Moved Firefox Strings to Cliqz table
             let openNewPrivateTabTitle = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
+            */
+            let openNewPrivateTabTitle = NSLocalizedString("Open in New Forget Tab", tableName: "Cliqz", comment: "Context menu option for opening a link in a new forget tab")
             let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: .default) { (action: UIAlertAction) in
                 addTab(url, true)
             }
@@ -2599,7 +2602,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                         UIImageWriteToSavedPhotosAlbum($0, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
                     }
                 } else {
+                    /* Cliqz: Moved Firefox Strings to Cliqz table
                     let accessDenied = UIAlertController(title: NSLocalizedString("Firefox would like to access your Photos", comment: "See http://mzl.la/1G7uHo7"), message: NSLocalizedString("This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7"), preferredStyle: .alert)
+                     */
+                    let accessDenied = UIAlertController(title: NSLocalizedString("Cliqz would like to access your Photos", tableName: "Cliqz", comment: "See http://mzl.la/1G7uHo7"), message: NSLocalizedString("This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7"), preferredStyle: .alert)
                     let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
                     accessDenied.addAction(dismissAction)
                     let settingsAction = UIAlertAction(title: NSLocalizedString("Open Settings", comment: "See http://mzl.la/1G7uHo7"), style: .default ) { (action: UIAlertAction!) -> Void in

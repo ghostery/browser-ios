@@ -18,7 +18,10 @@ let ShareDestinationReadingList: String = "ReadingList"
 
 let ShareDestinations = [
     ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your reading list"), image: "AddToReadingList"),
+    /* Cliqz: Moved Firefox Strings to Cliqz table
     ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your bookmarks"), image: "AddToBookmarks")
+     */
+    ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks", tableName: "Cliqz", comment: "On/off toggle to select adding this url to your bookmarks"), image: "AddToBookmarks")
 ]
 
 protocol ShareControllerDelegate {
