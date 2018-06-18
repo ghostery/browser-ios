@@ -149,8 +149,8 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
                                 BoolSetting(prefs: prefs,
                                             prefKey: "settings.closePrivateTabs",
                                             defaultValue: false,
-                                            titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
-                                            statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'")),
+                                            titleText: NSLocalizedString("Close Forget Tabs", tableName: "Cliqz", comment: "Setting for closing forget tabs"),
+                                            statusText: NSLocalizedString("When Leaving Forget Browsing", tableName: "Cliqz", comment: "Will be displayed in Settings under 'Close Forget Tabs'")),
                                 ClearPrivateDataSetting(settings: self)]
         
         return privacySettings

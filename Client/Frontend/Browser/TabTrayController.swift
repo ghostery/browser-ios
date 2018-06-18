@@ -1029,13 +1029,8 @@ fileprivate class EmptyPrivateTabsView: UIView {
         descriptionLabel.text = NSLocalizedString("Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.",
             tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
         */
-        #if GHOSTERY
-        descriptionLabel.text = NSLocalizedString("Ghostery won’t remember any of your history or cookies, but new bookmarks will be saved.",
-                                                  tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
-        #else
         descriptionLabel.text = NSLocalizedString("Cliqz won’t remember any of your history or cookies, but new bookmarks will be saved.",
-                                                  tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
-        #endif
+                                                  tableName: "Cliqz", comment: "Description text displayed when there are no open tabs while in private mode")
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         addSubview(iconImageView)
