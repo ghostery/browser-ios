@@ -241,37 +241,34 @@ class OverviewViewController: UIViewController {
         if (orientation == .portrait && device != .iPad) || device == .iPad {
             chart.snp.makeConstraints { (make) in
                 make.left.right.equalToSuperview()
-				make.bottom.equalTo(self.urlLabel.snp.top)
 				if UIDevice.current.isSmallIphoneDevice() {
+					make.top.equalToSuperview()
 					make.height.equalTo(160)
 				} else {
+					make.top.equalToSuperview().offset(5)
 					make.height.equalTo(220)
 				}
             }
             
             self.urlLabel.snp.makeConstraints { (make) in
 				make.left.right.equalTo(self.view).inset(7)
-				make.bottom.equalTo(blockedTrackers.snp.top)
-                make.height.equalTo(20)
+				make.top.equalTo(chart.snp.bottom)
+                make.height.equalTo(17)
             }
             
             self.blockedTrackers.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.view)
-				if UIDevice.current.isSmallIphoneDevice() {
-					make.bottom.equalTo(self.trustSiteButton.snp.top)
-				} else {
-					make.bottom.equalTo(self.trustSiteButton.snp.top).offset(-40)
-				}
+				make.top.equalTo(self.urlLabel.snp.bottom)
                 make.height.equalTo(30)
             }
-            
+
             self.trustSiteButton.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.view)
 				make.bottom.equalTo(self.restrictSiteButton.snp.top).offset(-12)
                 make.height.equalTo(40)
                 make.width.equalTo(213)
             }
-            
+
             self.restrictSiteButton.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.view)
 				if UIDevice.current.isSmallIphoneDevice() {
