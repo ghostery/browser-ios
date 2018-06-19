@@ -63,6 +63,7 @@ class FreshtabViewController: UIViewController, HomePanel {
         self.setupConstraints()
         
         self.normalModeView?.alpha = 0.0
+        self.logShowSignal()
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -80,7 +81,6 @@ class FreshtabViewController: UIViewController, HomePanel {
         UIView.animate(withDuration: 0.1, delay: 0.1, options: .curveEaseIn, animations: {
             self.normalModeView?.alpha = 1.0
         }, completion: nil)
-        self.logShowSignal()
     }
 
 	override func viewWillDisappear(_ animated: Bool) {
