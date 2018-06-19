@@ -215,8 +215,10 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
 		if let urlString = s?.url {
 			if let url = URL(string: urlString) {
 				self.homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: .link)
+                logTopsiteClick(indexPath.row)
 			} else if let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) {
 				self.homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: .link)
+                logTopsiteClick(indexPath.row)
 			}
 		}
 	}
@@ -289,6 +291,10 @@ extension TopSitesViewController {
 //		self.logFreshTabSignal(action, target: "topsite", customData: customData)
         TelemetryHelper.sendTopSiteClick()
 	}
+    
+    fileprivate func logTopsiteClick(_ index: Int) {
+        TelemetryHelper.sendTopSiteClick()
+    }
 	
 	fileprivate func logDeleteTopsiteSignal(_ index: Int) {
 		//TODO(Refactoring): Should be inluded back during integration
