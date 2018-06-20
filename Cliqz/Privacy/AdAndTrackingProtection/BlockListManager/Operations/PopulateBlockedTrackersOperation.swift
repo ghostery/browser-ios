@@ -42,6 +42,10 @@ public class PopulateBlockedTrackersOperation: Operation {
     override public func main() {
         self.isExecuting = true
         TrackerStateStore.shared.populateBlockedTrackers()
+        if TrackerStateStore.shared.blockedTrackers.count == TrackerList.instance.apps.keys.count {
+            UserPreferences.instance.antitrackingMode = .blockAll
+            UserPreferences.instance.writeToDisk()
+        }
         self.isFinished = true
     }
 }
