@@ -217,6 +217,7 @@ class FreshtabViewController: UIViewController, HomePanel {
             normalModeView?.addGestureRecognizer(tap)
             
             let pan = UIPanGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+			pan.cancelsTouchesInView = false
             normalModeView?.addGestureRecognizer(pan)
 			
 			self.topSitesViewController = TopSitesViewController(dataSource: self.topSitesDataSource)
@@ -237,9 +238,6 @@ class FreshtabViewController: UIViewController, HomePanel {
 	}
     
     func dismissKeyboard(_ sender: Any? = nil) {
-        normalModeView?.gestureRecognizers?.forEach({ (gesture) in
-            normalModeView?.removeGestureRecognizer(gesture)
-        })
         view.window?.rootViewController?.view.endEditing(true)
     }
 }
