@@ -35,7 +35,7 @@ import Storage
             }
         }
         else {
-            TrackerStateStore.createTrackerState(appId: appId, state: .empty)
+            //TrackerStateStore.createTrackerState(appId: appId)
             return .empty
         }
     }

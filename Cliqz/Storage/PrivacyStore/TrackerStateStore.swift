@@ -50,7 +50,20 @@ public class TrackerStateStore: NSObject {
         }
     }
     
+    @discardableResult public class func createTrackerState(appId: Int) -> TrackerState? {
+        return write(appId: appId, state: nil)
+    }
+    
+    public class func change(appId: Int, toState: TrackerStateEnum, completion: (() -> Void)? = nil) {
+        write(appId: appId, state: toState)
+        completion?()
+    }
+    
     public class func getTrackerState(appId: Int) -> TrackerState? {
+        return read(appId: appId)
+    }
+    
+    @discardableResult private class func read(appId: Int) -> TrackerState? {
         let realm = try! Realm()
         if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
             return trackerState
@@ -58,53 +71,50 @@ public class TrackerStateStore: NSObject {
         return nil
     }
     
-    @discardableResult public class func createTrackerState(appId: Int, state: TrackerStateEnum = .empty) -> TrackerState {
+    @discardableResult private class func write(appId: Int, state: TrackerStateEnum?) -> TrackerState? {
         
         let realm = try! Realm()
-        let trackerState = TrackerState()
-        trackerState.appId = appId
-        trackerState.state = intForState(state: state)
         
-        do {
-            try realm.write {
-                realm.add(trackerState)
+        realm.beginWrite()
+        
+        var returnState: TrackerState? = nil
+        
+        if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
+            if let s = state {
+                trackerState.state = intForState(state: s)
+                realm.add(trackerState, update: true)
+                returnState = trackerState
+            }
+            else {
+                realm.cancelWrite()
+                return nil
             }
         }
-        catch let error {
-            debugPrint(error)
+        else {
+            let s = state == nil ? .empty : state!
+            let trackerState = TrackerState()
+            trackerState.appId = appId
+            trackerState.state = intForState(state: s)
+            realm.add(trackerState)
+            returnState = trackerState
         }
         
+        if state == .empty {
+            TrackerStateStore.shared.blockedTrackers.remove(appId)
+        }
+        else if state == .blocked {
+            TrackerStateStore.shared.blockedTrackers.insert(appId)
+        }
         
-        return trackerState
-    }
-    
-    public class func change(appId: Int, toState: TrackerStateEnum, completion: (() -> Void)? = nil) {
-        let realm = try! Realm()
         do {
-            try realm.write {
-                if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
-                    trackerState.state = intForState(state: toState)
-                    realm.add(trackerState, update: true)
-                }
-                else {
-                    let trackerState = TrackerState()
-                    trackerState.appId = appId
-                    trackerState.state = intForState(state: toState)
-                    realm.add(trackerState)
-                }
-                if toState == .empty {
-                    TrackerStateStore.shared.blockedTrackers.remove(appId)
-                }
-                else if toState == .blocked {
-                    TrackerStateStore.shared.blockedTrackers.insert(appId)
-                }
-                completion?()
-            }
+            try realm.commitWrite()
+            return returnState
         }
         catch {
             debugPrint("could not change state of trackerState")
-            completion?()
+            return nil
         }
+        
     }
     
     private class func intForState(state: TrackerStateEnum) -> Int {

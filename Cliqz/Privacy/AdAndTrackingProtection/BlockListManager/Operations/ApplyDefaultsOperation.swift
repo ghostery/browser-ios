@@ -44,14 +44,12 @@ final class ApplyDefaultsOperation: Operation {
         let dispatchGroup = DispatchGroup()
         
         for app in TrackerList.instance.globalTrackerList() {
-            dispatchGroup.enter()
-            var state: TrackerStateEnum = .empty
             if CategoriesHelper.categoriesBlockedByDefault.contains(app.category) {
-                state = .blocked
+                dispatchGroup.enter()
+                TrackerStateStore.change(appId: app.appId, toState: .blocked, completion: {
+                    dispatchGroup.leave()
+                })
             }
-            TrackerStateStore.change(appId: app.appId, toState: state, completion: {
-                dispatchGroup.leave()
-            })
         }
         
         dispatchGroup.notify(queue: .global(qos: .utility)) {
