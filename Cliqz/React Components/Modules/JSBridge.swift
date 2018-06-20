@@ -13,8 +13,16 @@ import React
 open class JSBridge : RCTEventEmitter {
 
     public typealias Callback = (NSDictionary) -> Void
+    private typealias ActionArgs = Array<Any>
     
-    var registeredActions: Set<String> = []
+    var registeredActions: Set<String> = [] {
+        didSet {
+            registeredActionsChanged()
+        }
+    }
+    
+    private var missedActions: Dictionary<String, [ActionArgs]> = [:]
+    
     var actionCounter: NSInteger = 0
     // cache for responses from js
     var replyCache = [NSInteger: NSDictionary]()
@@ -81,6 +89,15 @@ open class JSBridge : RCTEventEmitter {
         // check listener is registered on other end
         guard self.registeredActions.contains(functionName) else {
             debugPrint("ERROR: callAction - function not registered: \(functionName)")
+            
+            if var array = missedActions[functionName] {
+                array.append(args)
+                missedActions[functionName] = array
+            }
+            else {
+                missedActions[functionName] = [args]
+            }
+            
             return ["error": "function not registered"]
         }
         
@@ -197,4 +214,18 @@ open class JSBridge : RCTEventEmitter {
         }
     }
     
+    private func registeredActionsChanged() {
+        for key in missedActions.keys {
+            if registeredActions.contains(key), let arguments = missedActions[key] {
+                //make sure I remove the arguments before callAction
+                //if the function is not registered they will be added again.
+                //this avoids duplicates, and keeps memory clean
+                missedActions.removeValue(forKey: key)
+                for args in arguments {
+                    debugPrint("Calling action again: \(key)")
+                    callAction(key, args: args)
+                }
+            }
+        }
+    }
 }
