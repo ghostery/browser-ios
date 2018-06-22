@@ -26,5 +26,72 @@
 			<string>%d Tracker blockiert</string>
 		</dict>
 	</dict>
+	<key>%d Tracker(s) found</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@trackers@</string>
+		<key>trackers</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>%d Trackers found</string>
+			<key>one</key>
+			<string>%d Tracker found</string>
+			<key>two</key>
+			<string>%d Trackers found</string>
+			<key>few</key>
+			<string>%d Trackers found</string>
+			<key>many</key>
+			<string>%d Trackers found</string>
+			<key>other</key>
+			<string>%d Trackers found</string>
+		</dict>
+	</dict>
+	<key>%d Tracker(s) %d Blocked</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%1$#@trackers@ %2$#@blocked@</string>
+		<key>trackers</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>%d TRACKERS</string>
+			<key>one</key>
+			<string>%d TRACKER</string>
+			<key>two</key>
+			<string>%d TRACKERS</string>
+			<key>few</key>
+			<string>%d TRACKERS</string>
+			<key>many</key>
+			<string>%d TRACKERS</string>
+			<key>other</key>
+			<string>%d TRACKERS</string>
+		</dict>
+		<key>blocked</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>%d Blocked</string>
+			<key>one</key>
+			<string>%d Blocked</string>
+			<key>two</key>
+			<string>%d Blocked</string>
+			<key>few</key>
+			<string>%d Blocked</string>
+			<key>many</key>
+			<string>%d Blocked</string>
+			<key>other</key>
+			<string>%d Blocked</string>
+		</dict>
+	</dict>
 </dict>
 </plist>
