@@ -536,6 +536,6 @@ class CategoryHeaderView: UIView {
 	}
 
 	private func updateStatistics() {
-		statisticsLabel.text = String(format: NSLocalizedString("%d TRACKERS %d Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Trackers] Detected and Blocked trackers count"), self.trackersCount, self.blockedTrackersCount)
+		statisticsLabel.text = String(format: NSLocalizedString("%d Tracker(s) %d Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Trackers] Detected and Blocked trackers count"), self.trackersCount, self.blockedTrackersCount)
 	}
 }

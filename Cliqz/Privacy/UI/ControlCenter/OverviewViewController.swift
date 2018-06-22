@@ -558,7 +558,7 @@ class OverviewViewController: UIViewController {
         dataSet.iconsOffset = CGPoint(x: 0, y: 20.0)
         dataSet.colors = colors
         chart?.data = PieChartData(dataSet: dataSet)
-        chart?.centerText = String(format: NSLocalizedString("%d Trackers found", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Detected trackers count"), self.dataSource?.detectedTrackerCount() ?? 0)
+        chart?.centerText = String(format: NSLocalizedString("%d Tracker(s) found", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Detected trackers count"), self.dataSource?.detectedTrackerCount() ?? 0)
     }
 
 	private func setupPieChart() {
