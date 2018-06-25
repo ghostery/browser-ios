@@ -3912,10 +3912,10 @@
 			children = (
 				AFA9FAC9208DFA120028CA1B /* ControlCenterDataSource.swift */,
 				AFA9FB0C208E135E0028CA1B /* ControlCenterDelegate.swift */,
-				4F82FDB6208F2D3E002CED25 /* TrackersController.swift */,
 				4F4033C32086358D00AD2A8D /* ControlCenterViewController.swift */,
 				4F4033D72086575500AD2A8D /* OverviewViewController.swift */,
 				4F4033D92086577D00AD2A8D /* GlobalTrackersViewController.swift */,
+				4F82FDB6208F2D3E002CED25 /* TrackersController.swift */,
 			);
 			path = ControlCenter;
 			sourceTree = "<group>";

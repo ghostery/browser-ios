@@ -21,6 +21,22 @@ enum ActionType {
     case restrict
 }
 
+protocol ControlCenterDelegateProtocol: class {
+    func chageSiteState(to: DomainState)
+    func pauseGhostery(paused: Bool, time: Date)
+    func turnGlobalAntitracking(on: Bool)
+    func turnGlobalAdblocking(on: Bool)
+    func changeState(appId: Int, state: TrackerUIState, section: Int)
+    func changeState(category: String, tableType: TableType, state: TrackerUIState, section: Int)
+}
+
+enum TrackerUIState {
+    case empty
+    case trusted
+    case restricted
+    case blocked
+}
+
 protocol ControlCenterDSProtocol: class {
     
     func domainString() -> String?
@@ -64,7 +80,7 @@ final class CategoriesHelper {
                                  "uncategorized": ("Uncategorized", UIColor(colorString: "8459A5"))]
 }
 
-class ControlCenterDataSource: ControlCenterDSProtocol {
+class ControlCenterModel: ControlCenterDSProtocol {
     
     enum CategoryState {
         case blocked
@@ -87,31 +103,16 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
         }
     }
     
-    var pageCategories: [String] = []
-    var globalCategories: [String] = []
-    
     let domainStr: String?
-    var pageTrackers: Dictionary<String, [TrackerListApp]> = [:]
-    var globalTrackers: Dictionary<String, [TrackerListApp]> = [:]
+    
+    //Make sure to invalidate these on updates
+    var blockedTrackerCountCache = [Int: Int]() // section is the key
+    var stateImageCache = [Int: UIImage]() //section is the key
     
     
     //TODO: update mechanism
     init(url: URL? = nil) {
         self.domainStr = url?.normalizedHost
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            if self != nil {
-                if let domainStr = self?.domainStr {
-                    self?.pageTrackers = TrackerList.instance.trackersByCategory(for: domainStr)
-                    self?.pageCategories = self!.pageTrackers.reduceValues(reduce: { (list) -> Int in
-                        return list.count
-                    }).sortedKeysAscending(false)
-                }
-                self?.globalTrackers = TrackerList.instance.trackersByCategory()
-                self?.globalCategories = self!.globalTrackers.reduceValues(reduce: { (list) -> Int in
-                    return list.count
-                }).sortedKeysAscending(false)
-            }
-        }
     }
     
     func domainString() -> String? {
@@ -124,7 +125,13 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
             return ["uncategorized": (1, UIColor.gray)]
         }
         
-        let countDict = TrackerList.instance.countByCategory(domain: self.domainStr)
+        let countDict: [String: Int]
+        if let domain = self.domainStr {
+            countDict = TrackerList.instance.countByCategory(domain: domain)
+        }
+        else {
+            countDict = TrackerList.instance.countByCategory
+        }
         var dict: Dictionary<String, (Int, UIColor)> = [:]
         for key in countDict.keys {
             if let count = countDict[key], let color = CategoriesHelper.category2NameAndColor[key]?.1 {
@@ -201,10 +208,10 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
     func category(_ tableType: TableType, _ section: Int) -> String {
         let categories: [String]
         if tableType == .page {
-            categories = self.pageCategories
+            categories = TrackerList.instance.categories(domain: self.domainStr!)
         }
         else {
-            categories = self.globalCategories
+            categories = TrackerList.instance.categories
         }
         
         guard categories.isIndexValid(index: section) else { return "" }
@@ -216,40 +223,53 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
     }
     
     func blockedTrackerCount(tableType: TableType, section: Int) -> Int {
+        
+        if let count = blockedTrackerCountCache[section] {
+            return count
+        }
+        
         if isGlobalAntitrackingOn() {
             return trackerCount(tableType:tableType, section: section)
         }
         
-        return trackers(tableType: tableType, category: category(tableType, section)).filter({ (app) -> Bool in
+        let count = trackers(tableType: tableType, category: category(tableType, section)).filter({ (app) -> Bool in
             let appState = app.state(domain: self.domainStr)
             return appState == .blocked || appState == .restricted
         }).count
+        
+        blockedTrackerCountCache[section] = count
+        
+        return count
     }
     
     func stateIcon(tableType: TableType, section: Int) -> UIImage? {
         
-        let t = trackers(tableType: tableType, category: category(tableType, section))
+        if let image = stateImageCache[section] {
+            return image
+        }
         
+        let t = trackers(tableType: tableType, category: category(tableType, section))
+
         func trackerStates() -> Set<TrackerUIState> {
-            
+
             var set: Set<TrackerUIState> = Set()
-            
+
             let domain: String? = tableType == .page ? self.domainStr : nil
-            
+
             for tracker in t {
                 set.insert(tracker.state(domain: domain))
             }
-            
+
             return set
         }
-        
+
         if isGlobalAntitrackingOn() {
             return iconForCategoryState(state: .blocked)
         }
-        
+
         if tableType == .page {
             let domainState = self.domainState()
-            
+
             if domainState == .restricted {
                 return iconForCategoryState(state: .restricted)
             }
@@ -257,11 +277,11 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
                 return iconForCategoryState(state: .trusted)
             }
         }
-        
+
         let set = trackerStates()
-        
+
         let state: CategoryState
-        
+
         if set.count == 1 {
             state = CategoryState.from(trackerState: set.first!)
         }
@@ -271,8 +291,12 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
         else {
             state = .empty
         }
+
+        let image = iconForCategoryState(state: state)
         
-        return iconForCategoryState(state: state)
+        stateImageCache[section] = image
+        
+        return image
     }
     
     //INDIVIDUAL TRACKERS
@@ -320,7 +344,7 @@ class ControlCenterDataSource: ControlCenterDSProtocol {
 }
 
 // MARK: - Helpers
-extension ControlCenterDataSource {
+extension ControlCenterModel {
     
     fileprivate func getOrCreateDomain(domain: String) -> Domain {
         //if we have done anything with this domain before we will have something in the DB
@@ -334,10 +358,10 @@ extension ControlCenterDataSource {
     
     fileprivate func source(_ tableType: TableType) -> Dictionary<String, [TrackerListApp]> {
         if tableType == .page {
-            return self.pageTrackers
+            return TrackerList.instance.trackersByCategory(domain: self.domainStr!)
         }
         
-        return self.globalTrackers
+        return TrackerList.instance.appsByCategory
     }
     
     fileprivate func trackers(tableType: TableType, category: String) -> [TrackerListApp] {
@@ -389,10 +413,22 @@ extension ControlCenterDataSource {
         }
         return nil
     }
-}
-
-extension Array {
-    func isIndexValid(index: Int) -> Bool {
-        return index >= 0 && index < self.count
+    
+    func invalidateStateImageCache(section: Int? = nil) {
+        if let s = section {
+            stateImageCache.removeValue(forKey: s)
+        }
+        else {
+            stateImageCache.removeAll()
+        }
+    }
+    
+    func invalidateBlockedCountCache(section: Int? = nil) {
+        if let s = section {
+            blockedTrackerCountCache.removeValue(forKey: s)
+        }
+        else {
+            blockedTrackerCountCache.removeAll()
+        }
     }
 }

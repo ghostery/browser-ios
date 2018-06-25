@@ -151,7 +151,7 @@ class TrackersController: UIViewController {
 			let count = self.dataSource?.numberOfSections(tableType: type) ?? 0
 			for i in 0 ..< count {
 				if let x = self.dataSource?.category(type, i) {
-					self.delegate?.changeState(category: x, tableType: type, state: .blocked)
+                    self.delegate?.changeState(category: x, tableType: type, state: .blocked, section: i)
 				}
 			}
 		case .global:
@@ -254,7 +254,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 				switch action {
 				case .trust:
 					let trustAction = UIContextualAction(style: .normal, title: "Trust") { (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .trusted)
+                        self.delegate?.changeState(appId: appId, state: .trusted, section: indexPath.section)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
 						self.tableView.endUpdates()
@@ -265,7 +265,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(trustAction)
 				case .block:
 					let blockAction = UIContextualAction(style: .destructive, title: "Block") { (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .blocked)
+						self.delegate?.changeState(appId: appId, state: .blocked, section: indexPath.section)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
 						self.tableView.endUpdates()
@@ -276,7 +276,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(blockAction)
 				case .unblock:
 					let unblockAction = UIContextualAction(style: .destructive, title: "Unblock") { (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .empty)
+						self.delegate?.changeState(appId: appId, state: .empty, section: indexPath.section)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
 						self.tableView.endUpdates()
@@ -287,7 +287,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(unblockAction)
 				case .restrict:
 					let restrictAction = UIContextualAction(style: .destructive, title: "Restrict") { (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .restricted)
+						self.delegate?.changeState(appId: appId, state: .restricted, section: indexPath.section)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
 						self.tableView.endUpdates()
