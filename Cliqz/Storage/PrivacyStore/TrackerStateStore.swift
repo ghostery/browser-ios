@@ -75,6 +75,8 @@ public class TrackerStateStore: NSObject {
         
         let realm = try! Realm()
         
+        guard realm.isInWriteTransaction == false else { return nil } //avoid exceptions
+        
         realm.beginWrite()
         
         var returnState: TrackerState? = nil
