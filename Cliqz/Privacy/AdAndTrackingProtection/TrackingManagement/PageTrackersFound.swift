@@ -35,13 +35,12 @@ struct PageTrackersFound {
         return nil
     }
     
-    func appIdList() -> [Int] {
-        var appIds = [Int: Bool]()  // app ID is the key
-        for (_, trackerBug) in pageTrackers {
-            appIds[trackerBug.appId] = true
+    func appIdSet() -> Set<Int> {
+        var set = Set<Int>()
+        pageTrackers.forEach { (_, bug) in
+            set.insert(bug.appId)
         }
-        
-        return Array(appIds.keys)
+        return set
     }
     
     mutating func removeAll() {

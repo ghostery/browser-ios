@@ -43,6 +43,10 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     
     var appsList = [TrackerListApp]()
     var apps = [Int: TrackerListApp]()   // App ID is the key
+    var appsByCategory = Dictionary<String, [TrackerListApp]>()
+    var countByCategory = Dictionary<String, Int>()
+    var categoriesAndCountByDomain = [String: [String: Int]]()
+    var categories = [String]()
     var bugs = [Int: Int]()              // Bug ID is the key, AppId is the value
     var app2bug = [Int: [Int]]()           // App ID is the key, Bug ID array is the value
     var hosts = TrackerListHosts()
@@ -118,6 +122,14 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
                         loadRegexes(regexData)
                     }
                 }
+                
+                appsByCategory = globalTrackerList().groupBy(key: { (app) -> String in
+                    return app.category
+                })
+                countByCategory = appsByCategory.reduceValues(reduce: { (list) -> Int in
+                    return list.count
+                })
+                categories = countByCategory.sortedKeysAscending(false)
                 
                 debugPrint("Tracker data loaded.")
                 NotificationCenter.default.post(name: trackersLoadedNotification, object: nil)
@@ -257,6 +269,23 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
                 // update the list
                 discoveredBugs[pageUrlString] = pageTrackers
                 
+                if let category = apps[appId]?.category {
+                    var count = 0
+                    pageTrackers!.appIdSet().forEach { (appId) in
+                        if apps[appId]?.category == category {
+                            count += 1
+                        }
+                    }
+                    if var dict = categoriesAndCountByDomain[pageUrlString] {
+                        dict[category] = count
+                        categoriesAndCountByDomain[pageUrlString] = dict
+                    }
+                    else {
+                        categoriesAndCountByDomain[pageUrlString] = [category: count]
+                    }
+                    
+                }
+                
                 return trackerBug
             }
         }
@@ -382,18 +411,12 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         // convert the list of detected bugs into an array of tracker apps/vendors
         var appList = [TrackerListApp]()
         if let pageBugs = discoveredBugs[pageUrl] {
-            let appIdList = pageBugs.appIdList()
+            let appIdList = pageBugs.appIdSet()
             for appId in appIdList {
                 if let trackerApp = apps[appId] {
-                    //trackerApp.isBlocked = self.shouldBlockTracker(appId)
                     appList.append(trackerApp)
                 }
             }
-        }
-
-        // Sort list
-        appList.sort { (trackerApp1, trackerApp2) -> Bool in
-            return trackerApp1.name.localizedCaseInsensitiveCompare(trackerApp2.name) == ComparisonResult.orderedAscending
         }
         
         return appList
@@ -402,7 +425,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     func detectedTrackerCountForPage(_ pageUrl: String?) -> Int {
         guard let pageUrl = pageUrl else { return 0 }
         if let pageBugs = discoveredBugs[pageUrl] {
-            return pageBugs.appIdList().count
+            return pageBugs.appIdSet().count
         }
 
         return 0
@@ -475,25 +498,10 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     }
     
     //Cliqz
-    
     func trackersByCategory(domain: String) -> Dictionary<String, [TrackerListApp]> {
-        return self.trackersByCategory(for: domain)
-    }
-    
-    func globalTrackersByCategory() -> Dictionary<String, [TrackerListApp]> {
-        return self.trackersByCategory()
-    }
-    
-    //This can be optimized with a cache
-    func trackersByCategory(for domain: String? = nil) -> Dictionary<String, [TrackerListApp]> {
         let list: [TrackerListApp]
         
-        if let domain = domain {
-            list = self.detectedTrackersForPage(domain)
-        } else {
-            list = self.globalTrackerList()
-        }
-        
+        list = self.detectedTrackersForPage(domain)
         let dict = list.groupBy { (app) -> String in
             return app.category
         }
@@ -501,19 +509,12 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         return dict
     }
     
-    func countByCategory(domain: String? = nil ) ->Dictionary<String, Int> {
-        let list: [TrackerListApp]
-        
-        if let domain = domain {
-            list = self.detectedTrackersForPage(domain)
-        } else {
-            list = self.globalTrackerList()
-        }
-        
-        return list.groupAndReduce(byKey: { (app) -> String in
-            return app.category
-        }, reduce: { (list) -> Int in
-            return list.count
-        })
+    //categories for domain
+    func categories(domain: String) -> [String] {
+        return categoriesAndCountByDomain[domain]?.sortedKeysAscending(false) ?? []
+    }
+    
+    func countByCategory(domain: String) -> Dictionary<String, Int> {
+        return categoriesAndCountByDomain[domain] ?? [:]
     }
 }

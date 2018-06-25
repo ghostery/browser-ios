@@ -55,5 +55,9 @@ extension Array {
         }
         return result
     }
+    
+    func isIndexValid(index: Int) -> Bool {
+        return index >= 0 && index < self.count
+    }
 }
 

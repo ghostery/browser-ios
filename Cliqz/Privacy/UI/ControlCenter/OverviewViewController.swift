@@ -75,7 +75,7 @@ class NotchView: UIView {
 		self.isUserInteractionEnabled = true
 		setStyles()
 	}
-	
+    
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -193,11 +193,16 @@ class OverviewViewController: UIViewController {
 			self.urlLabel.text = pageURL
 		}
 	}
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.setupComponents()
 		self.setComponentsStyles()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateData), name: detectedTrackerNotification, object: nil)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -205,7 +210,7 @@ class OverviewViewController: UIViewController {
 		self.updateData()
 	}
 
-	private func updateData() {
+	@objc private func updateData() {
         guard let datasource = self.dataSource else { return }
 	
 		self.urlLabel.text = datasource.domainString()
@@ -537,11 +542,11 @@ class OverviewViewController: UIViewController {
         }
     }
     
-    private func updateBlockedTrackersCount() {
+    fileprivate func updateBlockedTrackersCount() {
         blockedTrackers.text = String(format: NSLocalizedString("%d Tracker(s) Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Blocked trackers count"), self.dataSource?.blockedTrackerCount() ?? 0)
     }
     
-    private func updateChart() {
+    fileprivate func updateChart() {
         guard let datasource = self.dataSource else { return }
         let countsAndColors = datasource.countAndColorByCategory()
         var values: [PieChartDataEntry] = []
