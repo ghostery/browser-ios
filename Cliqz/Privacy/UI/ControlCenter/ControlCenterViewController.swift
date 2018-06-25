@@ -83,7 +83,6 @@ class ControlCenterViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        TelemetryHelper.sendControlCenterShow()
     }
 
 	private func setupComponents() {
