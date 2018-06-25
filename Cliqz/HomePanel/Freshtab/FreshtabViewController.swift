@@ -42,7 +42,6 @@ class FreshtabViewController: UIViewController, HomePanel {
 	fileprivate var topSitesDataSource: TopSitesDataSource!
 	fileprivate var newsDataSource: NewsDataSource!
 
-	private var isScrollable = false
 	fileprivate var scrollCount = 0
 	fileprivate var startTime : Timestamp = Date.now()
 
@@ -164,7 +163,6 @@ class FreshtabViewController: UIViewController, HomePanel {
 		if topSitesHeight > 0 { freshTabHeight += FreshtabViewUX.topOffset }
 		if newsHeight > 0 { freshTabHeight += FreshtabViewUX.topOffset}
 		if freshTabHeight > viewHeight {
-			isScrollable = true
 			return freshTabHeight - viewHeight
 		} else {
 			return 0.0
@@ -210,15 +208,13 @@ class FreshtabViewController: UIViewController, HomePanel {
 			self.view.addSubview(self.scrollView)
 			self.normalModeView = UIView()
 			self.normalModeView?.backgroundColor = UIColor.clear
+            
+            self.scrollView.delegate = self
 			self.scrollView.addSubview(self.normalModeView!)
             
             let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-			tap.cancelsTouchesInView = false
+            tap.cancelsTouchesInView = false
             normalModeView?.addGestureRecognizer(tap)
-            
-            let pan = UIPanGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-			pan.cancelsTouchesInView = false
-            normalModeView?.addGestureRecognizer(pan)
 			
 			self.topSitesViewController = TopSitesViewController(dataSource: self.topSitesDataSource)
 			self.topSitesViewController?.homePanelDelegate = self.homePanelDelegate
@@ -243,12 +239,9 @@ class FreshtabViewController: UIViewController, HomePanel {
 }
 
 extension FreshtabViewController: UIScrollViewDelegate {
-
 	func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-//		self.delegate?.dismissKeyboard()
-		self.scrollCount += 1
+		self.dismissKeyboard()
 	}
-
 }
 
 // extension for telemetry signals
