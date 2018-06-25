@@ -49,9 +49,10 @@ extension BrowserViewController {
         let (device,orientation) = UIDevice.current.getDeviceAndOrientation()
         
 		self.addChildViewController(controlCenter)
-        controlCenter.beginAppearanceTransition(true, animated: false)
+        //controlCenter.beginAppearanceTransition(true, animated: false)
         self.view.addSubview(controlCenter.view)
-        controlCenter.endAppearanceTransition()
+        //controlCenter.endAppearanceTransition()
+        TelemetryHelper.sendControlCenterShow()
         
         if orientation == .portrait && device != .iPad {
             controlCenter.view.snp.makeConstraints({ (make) in
