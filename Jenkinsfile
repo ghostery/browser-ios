@@ -94,6 +94,7 @@ node('mac-mini-ios') {
                                 -scheme "Fennec" \
                                 -sdk iphonesimulator \
                                 -destination "platform=iOS Simulator,OS=11.3,id=8A112602-53F8-4996-A58A-FC65665635EB" \
+                                OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' \
                                 ONLY_ACTIVE_ARCH=NO \
                                 -derivedDataPath clean build test
                         '''
