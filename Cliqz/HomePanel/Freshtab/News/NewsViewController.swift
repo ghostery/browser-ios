@@ -91,8 +91,13 @@ class NewsViewController: UIViewController, HomePanel {
 	private func reloadData() {
         self.newsTableView?.isHidden = self.dataSource.isEmpty() || !SettingsPrefs.shared.getShowNewsPref()
         self.newsTableView?.reloadData()
-        updateViewConstraints()
+        updateLayout()
 	}
+    
+    fileprivate func updateLayout() {
+        updateViewConstraints()
+        self.parent?.updateViewConstraints()
+    }
 }
 
 extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
@@ -222,8 +227,7 @@ extension NewsViewController {
         
 		NewsViewController.isNewsExpanded = !NewsViewController.isNewsExpanded
 		
-		self.updateViewConstraints()
-		self.parent?.updateViewConstraints()
+		updateLayout()
 		NewsViewController.isNewsExpanded ? showMoreNews() : showLessNews()
 		
 		if NewsViewController.isNewsExpanded {
