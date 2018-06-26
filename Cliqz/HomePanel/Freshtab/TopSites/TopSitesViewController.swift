@@ -10,12 +10,12 @@ import Foundation
 import RxSwift
 
 struct TopSitesUX {
-	
 	static let TopSitesMinHeight: CGFloat = 95.0
 	static let TopSitesMaxHeight: CGFloat = 185.0
 	static let TopSitesCellSize = CGSize(width: 76, height: 86)
 	static let TopSitesCountOnRow = 4
 	static let TopSitesOffset = 5.0
+    static let TopSiteHintHeight: CGFloat = 14.0
 }
 
 class TopSitesViewController: UIViewController, HomePanel {
@@ -26,9 +26,9 @@ class TopSitesViewController: UIViewController, HomePanel {
 
 	private let disposeBag = DisposeBag()
 
-	fileprivate var topSitesCollection: UICollectionView?
+    var topSitesCollection: UICollectionView?
 
-	fileprivate var emptyTopSitesHint: UILabel?
+    var emptyTopSitesHint: UILabel?
 
 	init(dataSource: TopSitesDataSource) {
 		self.dataSource = dataSource
@@ -70,7 +70,7 @@ class TopSitesViewController: UIViewController, HomePanel {
             self.emptyTopSitesHint!.snp.makeConstraints({ (make) in
                 make.top.equalTo(self.view).offset(8)
                 make.left.right.equalTo(self.view)
-                make.height.equalTo(14)
+                make.height.equalTo(TopSitesUX.TopSiteHintHeight)
             })
         }
         let topSitesHeight = getTopSitesHeight()

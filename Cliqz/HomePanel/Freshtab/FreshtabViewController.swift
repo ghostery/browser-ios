@@ -105,7 +105,7 @@ class FreshtabViewController: UIViewController, HomePanel {
                 make.top.equalTo(self.normalModeView!).offset(FreshtabViewUX.topOffset)
                 make.left.equalTo(self.normalModeView!).offset(FreshtabViewUX.TopSitesOffset)
                 make.right.equalTo(self.normalModeView!).offset(-FreshtabViewUX.TopSitesOffset)
-                make.height.equalTo(topSitesHeight)
+                make.height.equalTo((self.topSitesViewController?.topSitesCollection?.snp.height)!).offset(TopSitesUX.TopSiteHintHeight)
             })
             
             // news table
@@ -113,7 +113,7 @@ class FreshtabViewController: UIViewController, HomePanel {
             self.newsViewController?.view.snp.makeConstraints { (make) in
                 make.left.equalTo(self.view).offset(21)
                 make.right.equalTo(self.view).offset(-21)
-                make.height.equalTo(newsHeight)
+                make.height.equalTo((self.newsViewController?.newsTableView?.snp.height)!)
                 make.top.equalTo((self.topSitesViewController?.view.snp.bottom)!).offset(FreshtabViewUX.topOffset)
             }
             
@@ -132,18 +132,8 @@ class FreshtabViewController: UIViewController, HomePanel {
 	override func updateViewConstraints() {
         
 		if !isForgetMode {
-
 			let topSitesHeight = self.topSitesViewController?.getTopSitesHeight() ?? 0
-			self.topSitesViewController?.view.snp.updateConstraints({ (make) in
-				make.height.equalTo(topSitesHeight)
-			})
-
-			// news table
             let newsHeight = self.newsViewController?.getNewsHeight() ?? 0
-            self.newsViewController?.view.snp.updateConstraints { (make) in
-                make.height.equalTo(newsHeight)
-            }
-
 			// normalModeView height
 			let invisibleFreshTabHeight = getInvisibleFreshTabHeight(topSitesHeight: topSitesHeight, newsHeight: newsHeight)
 			let normalModeViewHeight = self.view.bounds.height + invisibleFreshTabHeight
@@ -215,6 +205,10 @@ class FreshtabViewController: UIViewController, HomePanel {
             let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
             tap.cancelsTouchesInView = false
             normalModeView?.addGestureRecognizer(tap)
+            
+            let pan = UIPanGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            pan.cancelsTouchesInView = false
+            normalModeView?.addGestureRecognizer(pan)
 			
 			self.topSitesViewController = TopSitesViewController(dataSource: self.topSitesDataSource)
 			self.topSitesViewController?.homePanelDelegate = self.homePanelDelegate
