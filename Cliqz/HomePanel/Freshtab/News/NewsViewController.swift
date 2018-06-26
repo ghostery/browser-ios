@@ -27,7 +27,7 @@ class NewsViewController: UIViewController, HomePanel {
 
 	fileprivate static var isNewsExpanded = true
 
-    var newsTableView: UITableView?
+    var newsTableView = UITableView()
 	fileprivate var expandNewsbutton = UIButton()
 
 	init(dataSource: NewsDataSource) {
@@ -62,7 +62,7 @@ class NewsViewController: UIViewController, HomePanel {
         let newsHeight = getNewsHeight()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            self.newsTableView?.snp.updateConstraints({ (make) in
+            self.newsTableView.snp.updateConstraints({ (make) in
                 make.height.equalTo(newsHeight)
             })
             
@@ -81,16 +81,16 @@ class NewsViewController: UIViewController, HomePanel {
         }
 		
         var newsHeight = NewsViewUX.NewsViewMinHeight
-        if let newsTableView = self.newsTableView {
-            let rowsCount = CGFloat(self.tableView(newsTableView, numberOfRowsInSection: 0))
-            newsHeight += rowsCount * NewsViewUX.NewsCellHeight
-        }
+        
+        let rowsCount = CGFloat(self.tableView(self.newsTableView, numberOfRowsInSection: 0))
+        newsHeight += rowsCount * NewsViewUX.NewsCellHeight
+        
 		return newsHeight
 	}
 
 	private func reloadData() {
-        self.newsTableView?.isHidden = self.dataSource.isEmpty() || !SettingsPrefs.shared.getShowNewsPref()
-        self.newsTableView?.reloadData()
+        self.newsTableView.isHidden = self.dataSource.isEmpty() || !SettingsPrefs.shared.getShowNewsPref()
+        self.newsTableView.reloadData()
         updateLayout()
 	}
     
@@ -106,7 +106,7 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = self.newsTableView?.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! NewsViewCell
+		let cell = self.newsTableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! NewsViewCell
 		if indexPath.row < self.dataSource.newsCount() {
 			if let currentNewsViewModel = self.dataSource.getNewsViewModel(at: indexPath.row) {
 				cell.viewModel = currentNewsViewModel
@@ -200,24 +200,23 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
 extension NewsViewController {
 
 	fileprivate func setupComponents() {
-		self.newsTableView = UITableView(frame: CGRect.zero, style: .grouped)
-		self.newsTableView?.delegate = self
-		self.newsTableView?.dataSource = self
-		self.newsTableView?.backgroundColor = UIColor.clear
-		self.view.addSubview(self.newsTableView!)
-		//			self.newsTableView?.isHidden = true
-		self.newsTableView?.tableFooterView = UIView(frame: CGRect.zero)
-		self.newsTableView?.layer.cornerRadius = 9.0
-		self.newsTableView?.isScrollEnabled = false
-		self.newsTableView?.snp.makeConstraints { (make) in
-			make.left.equalTo(self.view).offset(9)
-			make.right.equalTo(self.view).offset(-9)
+        self.newsTableView = UITableView(frame: CGRect.zero, style: .grouped)
+		self.newsTableView.delegate = self
+		self.newsTableView.dataSource = self
+		self.newsTableView.backgroundColor = UIColor.clear
+		self.view.addSubview(self.newsTableView)
+		self.newsTableView.tableFooterView = UIView(frame: CGRect.zero)
+		self.newsTableView.layer.cornerRadius = 9.0
+		self.newsTableView.isScrollEnabled = false
+		self.newsTableView.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().offset(9)
+			make.right.equalToSuperview().offset(-9)
 			make.height.equalTo(FreshtabViewUX.NewsViewMinHeight)
-			make.top.equalTo(self.view).offset(FreshtabViewUX.topOffset)
+			make.top.equalToSuperview()
 		}	
-		newsTableView?.register(NewsViewCell.self, forCellReuseIdentifier: "NewsCell")
-		newsTableView?.separatorStyle = .singleLine
-		self.newsTableView?.accessibilityLabel = "topNews"
+		self.newsTableView.register(NewsViewCell.self, forCellReuseIdentifier: "NewsCell")
+		self.newsTableView.separatorStyle = .singleLine
+		self.newsTableView.accessibilityLabel = "topNews"
 	}
 
 	@objc fileprivate func toggleShowMoreNews() {
@@ -238,17 +237,17 @@ extension NewsViewController {
 	}
 	
 	fileprivate func showMoreNews() {
-        self.newsTableView?.beginUpdates()
+        self.newsTableView.beginUpdates()
 		let indexPaths = getExtraNewsIndexPaths()
-		self.newsTableView?.insertRows(at:indexPaths, with: .none)
-        self.newsTableView?.endUpdates()
+		self.newsTableView.insertRows(at:indexPaths, with: .none)
+        self.newsTableView.endUpdates()
 	}
 	
 	fileprivate func showLessNews() {
-        self.newsTableView?.beginUpdates()
+        self.newsTableView.beginUpdates()
 		let indexPaths = getExtraNewsIndexPaths()
-		self.newsTableView?.deleteRows(at:indexPaths, with: .none)
-        self.newsTableView?.endUpdates()
+		self.newsTableView.deleteRows(at:indexPaths, with: .none)
+        self.newsTableView.endUpdates()
 	}
 	
 	fileprivate func getExtraNewsIndexPaths() -> [IndexPath] {
