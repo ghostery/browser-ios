@@ -31,16 +31,13 @@ class FreshtabViewController: UIViewController, HomePanel {
 		}
 	}
 
-	fileprivate var scrollView: UIScrollView!
-	fileprivate var normalModeView: UIView?
+	fileprivate let scrollView: UIScrollView = UIScrollView()
+	fileprivate let normalModeView: UIView = UIView()
 	// TODO: Finialize need of forgetModeView and hopefully remove
 	fileprivate var forgetModeView: ForgetModeView?
 
-	fileprivate var topSitesViewController: TopSitesViewController?
-	fileprivate var newsViewController: NewsViewController?
-
-	fileprivate var topSitesDataSource: TopSitesDataSource!
-	fileprivate var newsDataSource: NewsDataSource!
+	fileprivate let topSitesViewController = TopSitesViewController(dataSource: TopSitesDataSource.instance)
+	fileprivate let newsViewController = NewsViewController(dataSource: NewsDataSource.instance)
     
     fileprivate let container = UIView()
 
@@ -50,8 +47,6 @@ class FreshtabViewController: UIViewController, HomePanel {
 	init(profile: Profile) {
 		super.init(nibName: nil, bundle: nil)
 		self.profile = profile
-		self.topSitesDataSource = TopSitesDataSource.instance
-		self.newsDataSource = NewsDataSource.instance
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -63,7 +58,7 @@ class FreshtabViewController: UIViewController, HomePanel {
 		self.setupViews()
         self.setupConstraints()
         
-        self.normalModeView?.alpha = 0.0
+        self.normalModeView.alpha = 0.0
         self.logShowSignal()
 	}
 
@@ -80,7 +75,7 @@ class FreshtabViewController: UIViewController, HomePanel {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.1, delay: 0.1, options: .curveEaseIn, animations: {
-            self.normalModeView?.alpha = 1.0
+            self.normalModeView.alpha = 1.0
         }, completion: nil)
     }
 
@@ -104,21 +99,21 @@ class FreshtabViewController: UIViewController, HomePanel {
                 make.top.left.bottom.right.equalTo(self.view)
             })
 
-            self.topSitesViewController?.view.snp.makeConstraints({ (make) in
+            self.topSitesViewController.view.snp.makeConstraints({ (make) in
                 make.top.equalToSuperview().offset(FreshtabViewUX.topOffset)
                 make.left.equalToSuperview().offset(FreshtabViewUX.TopSitesOffset)
                 make.right.equalToSuperview().offset(-FreshtabViewUX.TopSitesOffset)
-                make.height.equalTo((self.topSitesViewController?.topSitesCollection?.snp.height)!).offset(TopSitesUX.TopSiteHintHeight)
+                make.height.equalTo(self.topSitesViewController.topSitesCollection.snp.height).offset(TopSitesUX.TopSiteHintHeight)
             })
             
-            self.newsViewController?.view.snp.makeConstraints { (make) in
+            self.newsViewController.view.snp.makeConstraints { (make) in
                 make.left.equalToSuperview().offset(21)
                 make.right.equalToSuperview().offset(-21)
-                make.height.equalTo((self.newsViewController?.newsTableView?.snp.height)!)
-                make.top.equalTo((self.topSitesViewController?.view.snp.bottom)!).offset(FreshtabViewUX.topOffset)
+                make.height.equalTo(self.newsViewController.newsTableView.snp.height)
+                make.top.equalTo(self.topSitesViewController.view.snp.bottom).offset(FreshtabViewUX.topOffset)
             }
             
-            self.normalModeView?.snp.makeConstraints({ (make) in
+            self.normalModeView.snp.makeConstraints({ (make) in
                 make.top.left.bottom.right.equalTo(scrollView)
                 make.width.equalToSuperview()
                 make.height.equalTo(self.container.snp.height)
@@ -127,7 +122,7 @@ class FreshtabViewController: UIViewController, HomePanel {
             self.container.snp.makeConstraints { (make) in
                 make.top.equalToSuperview()
                 make.leading.trailing.equalToSuperview()
-                make.bottom.equalTo((self.newsViewController?.view.snp.bottom)!)
+                make.bottom.equalTo(self.newsViewController.view.snp.bottom)
             }
         }
     }
@@ -147,17 +142,17 @@ class FreshtabViewController: UIViewController, HomePanel {
 
 	private func restoreToInitialState() {
 		if !isForgetMode {
-			self.newsViewController?.restoreToInitialState()
+			self.newsViewController.restoreToInitialState()
 		}
 	}
 
 	fileprivate func updateViews() {
 		if isForgetMode {
 			self.forgetModeView?.isHidden = false
-			self.normalModeView?.isHidden = true
+			self.normalModeView.isHidden = true
 		} else {
-			self.topSitesDataSource.refresh()
-			self.normalModeView?.isHidden = false
+			TopSitesDataSource.instance.refresh()
+			self.normalModeView.isHidden = false
 			self.forgetModeView?.isHidden = true
 		}
 	}
@@ -171,49 +166,45 @@ class FreshtabViewController: UIViewController, HomePanel {
 	}
 
 	private func setupForgetModeView() {
-		if self.forgetModeView == nil {
-			self.forgetModeView = ForgetModeView()
-		}
+        if self.forgetModeView == nil {
+            self.forgetModeView = ForgetModeView()
+        }
 	}
 
 	private func setupNormalModeView() {
-		if self.normalModeView == nil {
-			self.scrollView = UIScrollView()
-			self.scrollView.delegate = self
-			self.view.addSubview(self.scrollView)
-			self.normalModeView = UIView()
-			self.normalModeView?.backgroundColor = UIColor.clear
-            
-            self.scrollView.delegate = self
-			self.scrollView.addSubview(self.normalModeView!)
-            
-            self.normalModeView?.addSubview(container)
-            
-            let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-            tap.cancelsTouchesInView = false
-            tap.delegate = self
-            normalModeView?.addGestureRecognizer(tap)
+        self.scrollView.delegate = self
+        self.view.addSubview(self.scrollView)
+        self.normalModeView.backgroundColor = UIColor.clear
+        
+        self.scrollView.delegate = self
+        self.scrollView.addSubview(self.normalModeView)
+        
+        self.normalModeView.addSubview(container)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        tap.delegate = self
+        normalModeView.addGestureRecognizer(tap)
 
-            let pan = UIPanGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-            pan.cancelsTouchesInView = false
-            pan.delegate = self
-            normalModeView?.addGestureRecognizer(pan)
-			
-			self.topSitesViewController = TopSitesViewController(dataSource: self.topSitesDataSource)
-			self.topSitesViewController?.homePanelDelegate = self.homePanelDelegate
-			self.addChildViewController(self.topSitesViewController!)
-			if let topSites = self.topSitesViewController?.view {
-				self.container.addSubview(topSites)
-				topSites.backgroundColor = UIColor.clear
-			}
-			self.newsViewController = NewsViewController(dataSource: self.newsDataSource)
-			self.newsViewController?.homePanelDelegate = self.homePanelDelegate
-			self.addChildViewController(self.newsViewController!)
-			if let newsView = self.newsViewController?.view {
-				self.container.addSubview(newsView)
-				newsView.backgroundColor = UIColor.clear
-			}
-		}
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        pan.cancelsTouchesInView = false
+        pan.delegate = self
+        normalModeView.addGestureRecognizer(pan)
+        
+        self.topSitesViewController.homePanelDelegate = self.homePanelDelegate
+        self.addChildViewController(self.topSitesViewController)
+        if let topSites = self.topSitesViewController.view {
+            self.container.addSubview(topSites)
+            topSites.backgroundColor = UIColor.clear
+        }
+
+        self.newsViewController.homePanelDelegate = self.homePanelDelegate
+        self.addChildViewController(self.newsViewController)
+        if let newsView = self.newsViewController.view {
+            self.container.addSubview(newsView)
+            newsView.backgroundColor = UIColor.clear
+        }
+		
 	}
     
     func dismissKeyboard(_ sender: Any? = nil) {
