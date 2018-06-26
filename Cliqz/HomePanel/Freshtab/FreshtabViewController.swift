@@ -41,6 +41,8 @@ class FreshtabViewController: UIViewController, HomePanel {
 
 	fileprivate var topSitesDataSource: TopSitesDataSource!
 	fileprivate var newsDataSource: NewsDataSource!
+    
+    fileprivate let container = UIView()
 
 	fileprivate var scrollCount = 0
 	fileprivate var startTime : Timestamp = Date.now()
@@ -97,55 +99,38 @@ class FreshtabViewController: UIViewController, HomePanel {
     
     func setupConstraints() {
         if !isForgetMode {
+            
             self.scrollView.snp.makeConstraints({ (make) in
                 make.top.left.bottom.right.equalTo(self.view)
             })
-            let topSitesHeight = self.topSitesViewController?.getTopSitesHeight() ?? 0
+
             self.topSitesViewController?.view.snp.makeConstraints({ (make) in
-                make.top.equalTo(self.normalModeView!).offset(FreshtabViewUX.topOffset)
-                make.left.equalTo(self.normalModeView!).offset(FreshtabViewUX.TopSitesOffset)
-                make.right.equalTo(self.normalModeView!).offset(-FreshtabViewUX.TopSitesOffset)
+                make.top.equalToSuperview().offset(FreshtabViewUX.topOffset)
+                make.left.equalToSuperview().offset(FreshtabViewUX.TopSitesOffset)
+                make.right.equalToSuperview().offset(-FreshtabViewUX.TopSitesOffset)
                 make.height.equalTo((self.topSitesViewController?.topSitesCollection?.snp.height)!).offset(TopSitesUX.TopSiteHintHeight)
             })
             
-            // news table
-            let newsHeight = self.newsViewController?.getNewsHeight() ?? 0
             self.newsViewController?.view.snp.makeConstraints { (make) in
-                make.left.equalTo(self.view).offset(21)
-                make.right.equalTo(self.view).offset(-21)
+                make.left.equalToSuperview().offset(21)
+                make.right.equalToSuperview().offset(-21)
                 make.height.equalTo((self.newsViewController?.newsTableView?.snp.height)!)
                 make.top.equalTo((self.topSitesViewController?.view.snp.bottom)!).offset(FreshtabViewUX.topOffset)
             }
             
-            // normalModeView height
-            let invisibleFreshTabHeight = getInvisibleFreshTabHeight(topSitesHeight: topSitesHeight, newsHeight: newsHeight)
-            let normalModeViewHeight = self.view.bounds.height + invisibleFreshTabHeight
-            
             self.normalModeView?.snp.makeConstraints({ (make) in
                 make.top.left.bottom.right.equalTo(scrollView)
-                make.width.equalTo(self.view)
-                make.height.equalTo(normalModeViewHeight)
+                make.width.equalToSuperview()
+                make.height.equalTo(self.container.snp.height)
             })
+            
+            self.container.snp.makeConstraints { (make) in
+                make.top.equalToSuperview()
+                make.leading.trailing.equalToSuperview()
+                make.bottom.equalTo((self.newsViewController?.view.snp.bottom)!)
+            }
         }
     }
-
-	override func updateViewConstraints() {
-        
-		if !isForgetMode {
-			let topSitesHeight = self.topSitesViewController?.getTopSitesHeight() ?? 0
-            let newsHeight = self.newsViewController?.getNewsHeight() ?? 0
-			// normalModeView height
-			let invisibleFreshTabHeight = getInvisibleFreshTabHeight(topSitesHeight: topSitesHeight, newsHeight: newsHeight)
-			let normalModeViewHeight = self.view.bounds.height + invisibleFreshTabHeight
-			
-			self.normalModeView?.snp.updateConstraints({ (make) in
-				make.height.equalTo(normalModeViewHeight)
-			})
-		}
-        
-        //Apple says this should be at the end
-        super.updateViewConstraints()
-	}
 
 	private func getInvisibleFreshTabHeight(topSitesHeight: CGFloat, newsHeight: CGFloat) -> CGFloat {
 		let viewHeight = self.view.bounds.height - FreshtabViewUX.bottomOffset
@@ -202,26 +187,30 @@ class FreshtabViewController: UIViewController, HomePanel {
             self.scrollView.delegate = self
 			self.scrollView.addSubview(self.normalModeView!)
             
+            self.normalModeView?.addSubview(container)
+            
             let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
             tap.cancelsTouchesInView = false
+            tap.delegate = self
             normalModeView?.addGestureRecognizer(tap)
-            
+
             let pan = UIPanGestureRecognizer(target: self, action: #selector(dismissKeyboard))
             pan.cancelsTouchesInView = false
+            pan.delegate = self
             normalModeView?.addGestureRecognizer(pan)
 			
 			self.topSitesViewController = TopSitesViewController(dataSource: self.topSitesDataSource)
 			self.topSitesViewController?.homePanelDelegate = self.homePanelDelegate
 			self.addChildViewController(self.topSitesViewController!)
 			if let topSites = self.topSitesViewController?.view {
-				self.normalModeView?.addSubview(topSites)
+				self.container.addSubview(topSites)
 				topSites.backgroundColor = UIColor.clear
 			}
 			self.newsViewController = NewsViewController(dataSource: self.newsDataSource)
 			self.newsViewController?.homePanelDelegate = self.homePanelDelegate
 			self.addChildViewController(self.newsViewController!)
 			if let newsView = self.newsViewController?.view {
-				self.normalModeView?.addSubview(newsView)
+				self.container.addSubview(newsView)
 				newsView.backgroundColor = UIColor.clear
 			}
 		}
@@ -236,6 +225,12 @@ extension FreshtabViewController: UIScrollViewDelegate {
 	func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
 		self.dismissKeyboard()
 	}
+}
+
+extension FreshtabViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
 }
 
 // extension for telemetry signals

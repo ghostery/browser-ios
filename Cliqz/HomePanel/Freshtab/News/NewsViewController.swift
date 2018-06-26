@@ -96,7 +96,6 @@ class NewsViewController: UIViewController, HomePanel {
     
     fileprivate func updateLayout() {
         updateViewConstraints()
-        self.parent?.updateViewConstraints()
     }
 }
 
