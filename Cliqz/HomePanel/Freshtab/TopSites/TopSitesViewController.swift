@@ -142,7 +142,6 @@ extension TopSitesViewController {
             
 			self.topSitesCollection?.reloadData()
 			self.updateViewConstraints()
-			self.parent?.updateViewConstraints()
 		}
 	}
 
