@@ -48,7 +48,7 @@ class NewsDataService {
 			if response.result.isSuccess {
 				if let data = response.result.value as? [String: Any],
 					let result = data["results"] as? [[String: Any]] {
-					if let snippet = result[0]["snippet"] as? [String: Any],
+					if let snippet = result.first?["snippet"] as? [String: Any],
 						let extra = snippet["extra"] as? [String: Any],
 						let articles = extra["articles"] as? [[String: Any]] {
 						successHandler(NewsDataService.parseNews(articles))
