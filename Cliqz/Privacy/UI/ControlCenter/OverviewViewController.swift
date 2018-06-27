@@ -11,8 +11,8 @@ import Charts
 
 protocol NotchViewDelegate: class {
     func switchValueChanged(value: Bool)
-	func viewIsDragging(value: Float, velocity: Float)
-	func viewStopDragging(value: Float)
+	func viewIsDragging(translation: Float, velocity: Float)
+	func viewStopDragging(velocity: Float)
 }
 
 class NotchView: UIView {
@@ -135,11 +135,12 @@ class NotchView: UIView {
 	@objc func wasDragged(gestureRecognizer: UIPanGestureRecognizer) {
 		if gestureRecognizer.state == UIGestureRecognizerState.began || gestureRecognizer.state == UIGestureRecognizerState.changed {
 			let translation = gestureRecognizer.translation(in: self)
-			self.delegate?.viewIsDragging(value: Float(translation.y), velocity: Float(gestureRecognizer.velocity(in: self).y))
+			self.delegate?.viewIsDragging(translation: Float(translation.y), velocity: Float(gestureRecognizer.velocity(in: self).y))
 		}
 		if gestureRecognizer.state == UIGestureRecognizerState.ended {
-			self.delegate?.viewStopDragging(value: Float(gestureRecognizer.velocity(in: self).y))
+			self.delegate?.viewStopDragging(velocity: Float(gestureRecognizer.velocity(in: self).y))
 		}
+        gestureRecognizer.setTranslation(CGPoint.zero, in: self)
 	}
 
 	private func updateViewStyle(enabled isEnabled: Bool) {
@@ -155,8 +156,24 @@ class NotchView: UIView {
 }
 
 struct ControlCenterUX {
-	static let adblockerViewMaxHeight: Float = 280
-	static let adblockerViewInitialOffset: Float = -85
+    static var adblockerViewMaxHeight: Float {
+        let (_, orientation) = UIDevice.current.getDeviceAndOrientation()
+        if orientation == .portrait {
+            return 280
+        }
+        else {
+            return 220
+        }
+    }
+    static var adblockerViewInitialOffset: Float {
+        let (_, orientation) = UIDevice.current.getDeviceAndOrientation()
+        if orientation == .portrait {
+            return -85
+        }
+        else {
+            return -75
+        }
+    }
 }
 
 class OverviewViewController: UIViewController {
@@ -209,6 +226,16 @@ class OverviewViewController: UIViewController {
 		super.viewWillAppear(animated)
 		self.updateData()
 	}
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.adBlockingView.snp.updateConstraints { [unowned self] (make) in
+            make.top.equalTo(self.view.frame.height + CGFloat(ControlCenterUX.adblockerViewInitialOffset))
+        }
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+    }
 
 	@objc private func updateData() {
         guard let datasource = self.dataSource else { return }
@@ -292,10 +319,13 @@ class OverviewViewController: UIViewController {
                 make.width.equalTo(213)
             }
             
-            self.adBlockingView.snp.makeConstraints { (make) in
-                make.left.right.equalTo(self.view)
-				make.top.equalTo(self.view.snp.bottom).offset(ControlCenterUX.adblockerViewInitialOffset)
+            self.adBlockingView.snp.makeConstraints { [unowned self] (make) in
+                //make.left.right.equalTo(self.view)
+				//make.top.equalTo(self.view.snp.bottom).offset(ControlCenterUX.adblockerViewInitialOffset)
+                make.width.equalToSuperview()
+                make.centerX.equalToSuperview()
                 make.height.equalTo(ControlCenterUX.adblockerViewMaxHeight)
+                make.top.equalTo(self.view.frame.height + CGFloat(ControlCenterUX.adblockerViewInitialOffset))
             }
         } else {
             let blockedTrackersOffset: CGFloat = 10.0
@@ -342,9 +372,10 @@ class OverviewViewController: UIViewController {
             }
             
             self.adBlockingView.snp.makeConstraints { (make) in
-                make.left.right.equalTo(self.view)
-                make.top.equalTo(self.view.snp.bottom).offset(-adblockingViewOffset)
-                make.height.equalTo(150)
+                make.width.equalToSuperview()
+                make.centerX.equalToSuperview()
+                make.height.equalTo(ControlCenterUX.adblockerViewMaxHeight)
+                make.top.equalTo(self.view.frame.height + CGFloat(ControlCenterUX.adblockerViewInitialOffset))
             }
         }
         
@@ -580,30 +611,58 @@ extension OverviewViewController: NotchViewDelegate {
         self.delegate?.turnGlobalAdblocking(on: value)
 	}
 
-	func viewIsDragging(value: Float, velocity: Float) {
-		self.adBlockingView.snp.updateConstraints { (make) in
-			// TODO: Some more improvements should be done when direction is changed quickly...
-			if velocity < 0 {
-				if value + ControlCenterUX.adblockerViewInitialOffset < -ControlCenterUX.adblockerViewMaxHeight {
-					make.top.equalTo(self.view.snp.bottom).offset(-ControlCenterUX.adblockerViewMaxHeight)
-				} else {
-					make.top.equalTo(self.view.snp.bottom).offset(value + ControlCenterUX.adblockerViewInitialOffset)
-				}
-			} else {
-				make.top.equalTo(self.view.snp.bottom).offset(value - ControlCenterUX.adblockerViewMaxHeight)
-			}
-		}
+	func viewIsDragging(translation: Float, velocity: Float) {
+        let newOffset = self.adBlockingView.frame.origin.y + CGFloat(translation)
+        let upperLimit = self.view.frame.height + CGFloat(ControlCenterUX.adblockerViewInitialOffset) //bottom
+        let lowerLimit = self.view.frame.height - CGFloat(ControlCenterUX.adblockerViewMaxHeight) // top
+        if newOffset <= upperLimit && newOffset >= lowerLimit {
+            self.adBlockingView.snp.updateConstraints { (make) in
+                make.top.equalTo(newOffset)
+            }
+        }
+		
+        self.view.layoutIfNeeded()
 	}
 
-	func viewStopDragging(value: Float) {
-		if value > 0 {
-			self.adBlockingView.snp.updateConstraints { (make) in
-				make.top.equalTo(self.view.snp.bottom).offset(ControlCenterUX.adblockerViewInitialOffset)
-			}
-		} else {
-			self.adBlockingView.snp.updateConstraints { (make) in
-				make.top.equalTo(self.view.snp.bottom).offset(-ControlCenterUX.adblockerViewMaxHeight)
-			}
-		}
+	func viewStopDragging(velocity: Float) {
+        let bottom = self.view.frame.height + CGFloat(ControlCenterUX.adblockerViewInitialOffset) //bottom
+        let top = self.view.frame.height - CGFloat(ControlCenterUX.adblockerViewMaxHeight) // top
+        
+        let delta: CGFloat
+        
+        if velocity > 0 {
+            delta = bottom - self.adBlockingView.frame.origin.y
+            self.adBlockingView.snp.updateConstraints { (make) in
+                make.top.equalTo(bottom)
+            }
+        } else {
+            delta = self.adBlockingView.frame.origin.y - top
+            self.adBlockingView.snp.updateConstraints { (make) in
+                make.top.equalTo(top)
+            }
+        }
+        
+        var time: TimeInterval
+        
+        let timeUpperLimit: TimeInterval = 0.4
+        let timeLowerLimit: TimeInterval = 0.2
+        
+        if delta > 0 {
+            time = Double(delta) / Double(velocity)
+        }
+        else {
+            time = timeUpperLimit
+        }
+        
+        if time < 0.2 {
+            time = timeLowerLimit
+        }
+        else if time > 0.4 {
+            time = timeUpperLimit
+        }
+        
+        UIView.animate(withDuration: time) {
+            self.view.layoutIfNeeded()
+        }
 	}
 }
