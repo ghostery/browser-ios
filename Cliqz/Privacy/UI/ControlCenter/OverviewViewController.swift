@@ -17,12 +17,13 @@ protocol NotchViewDelegate: class {
 
 class NotchView: UIView {
 
-	private var notchView = UIImageView()
-	private var iconView = UIImageView()
-	private var countLabel = UILabel()
-	private var titleLabel = UILabel()
-	private var switchControl = UISwitch()
-	private var descriptionLabel = UILabel()
+	private let notchView = UIImageView()
+	private let iconView = UIImageView()
+	private let countLabel = UILabel()
+	private let titleLabel = UILabel()
+	private let switchControl = UISwitch()
+	private let descriptionLabel = UILabel()
+    private let container = UIView()
 
     weak var delegate: NotchViewDelegate? = nil
 
@@ -65,11 +66,12 @@ class NotchView: UIView {
 	init() {
 		super.init(frame: CGRect.zero)
 		self.addSubview(notchView)
-		self.addSubview(iconView)
-		self.addSubview(countLabel)
-		self.addSubview(titleLabel)
-		self.addSubview(descriptionLabel)
-		self.addSubview(switchControl)
+        self.addSubview(container)
+		container.addSubview(iconView)
+		container.addSubview(countLabel)
+		container.addSubview(titleLabel)
+		container.addSubview(descriptionLabel)
+		container.addSubview(switchControl)
 		let gesture = UIPanGestureRecognizer(target: self, action: #selector(wasDragged))
 		self.addGestureRecognizer(gesture)
 		self.isUserInteractionEnabled = true
@@ -81,12 +83,15 @@ class NotchView: UIView {
 	}
 	
 	func setStyles() {
+        self.backgroundColor = .clear
+        container.backgroundColor = .white
 		titleLabel.textColor = UIColor.cliqzBluePrimary
 		titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
 		switchControl.onTintColor = UIColor.cliqzBluePrimary
 		switchControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         switchControl.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
 		notchView.image = UIImage(named:"notch")
+        notchView.backgroundColor = .clear
 		descriptionLabel.textColor = UIColor.cliqzGrayFunctional
 		descriptionLabel.font = UIFont.systemFont(ofSize: 12)
 		descriptionLabel.numberOfLines = 0
@@ -98,33 +103,75 @@ class NotchView: UIView {
 
 	override func layoutSubviews() {
 		super.layoutSubviews()
-		self.notchView.snp.remakeConstraints { (make) in
-			make.top.left.right.equalToSuperview()
-			make.height.equalTo(30)
-		}
-		self.titleLabel.snp.remakeConstraints { (make) in
-			make.left.equalToSuperview().offset(20)
-			make.top.equalTo(self.notchView.snp.bottom)
-			make.height.equalTo(25)
-		}
-		self.iconView.snp.remakeConstraints { (make) in
-			make.top.equalTo(titleLabel.snp.bottom).offset(30)
-			make.centerX.equalToSuperview()
-		}
-		self.countLabel.snp.remakeConstraints { (make) in
-			make.top.equalTo(self.iconView.snp.bottom).offset(10)
-			make.centerX.equalTo(self)
-			make.height.equalTo(25)
-		}
-		self.switchControl.snp.remakeConstraints { (make) in
-			make.top.equalTo(self.notchView.snp.bottom)
-			make.height.equalTo(25)
-			make.right.equalTo(self).inset(10)
-		}
-		self.descriptionLabel.snp.remakeConstraints { (make) in
-			make.bottom.equalToSuperview().inset(25)
-			make.left.right.equalToSuperview().inset(20)
-		}
+        let (_ , orientation) = UIDevice.current.getDeviceAndOrientation()
+        
+        if orientation == .portrait {
+            self.notchView.snp.remakeConstraints { (make) in
+                make.top.left.right.equalToSuperview()
+                make.height.equalTo(30)
+            }
+            self.container.snp.makeConstraints { (make) in
+                make.top.equalTo(self.notchView.snp.bottom)
+                make.trailing.leading.bottom.equalToSuperview()
+            }
+            self.titleLabel.snp.remakeConstraints { (make) in
+                make.left.equalToSuperview().offset(20)
+                make.top.equalToSuperview()
+                make.height.equalTo(25)
+            }
+            self.iconView.snp.remakeConstraints { (make) in
+                make.top.equalTo(titleLabel.snp.bottom).offset(30)
+                make.centerX.equalToSuperview()
+            }
+            self.countLabel.snp.remakeConstraints { (make) in
+                make.top.equalTo(self.iconView.snp.bottom).offset(10)
+                make.centerX.equalToSuperview()
+                make.height.equalTo(25)
+            }
+            self.switchControl.snp.remakeConstraints { (make) in
+                make.top.equalToSuperview()
+                make.height.equalTo(25)
+                make.right.equalToSuperview().inset(10)
+            }
+            self.descriptionLabel.snp.remakeConstraints { (make) in
+                make.bottom.equalToSuperview().inset(25)
+                make.left.right.equalToSuperview().inset(20)
+            }
+        }
+        else {
+            self.notchView.snp.remakeConstraints { (make) in
+                make.top.left.right.equalToSuperview()
+                make.height.equalTo(30)
+            }
+            self.container.snp.makeConstraints { (make) in
+                make.top.equalTo(self.notchView.snp.bottom)
+                make.trailing.leading.bottom.equalToSuperview()
+            }
+            self.titleLabel.snp.remakeConstraints { (make) in
+                make.left.equalToSuperview().offset(20)
+                make.top.equalToSuperview()
+                make.height.equalTo(25)
+            }
+            self.iconView.snp.remakeConstraints { (make) in
+                make.top.equalTo(titleLabel.snp.bottom).offset(30)
+                make.centerX.equalToSuperview()
+                make.size.equalTo(44.0)
+            }
+            self.countLabel.snp.remakeConstraints { (make) in
+                make.top.equalTo(self.iconView.snp.bottom).offset(10)
+                make.centerX.equalToSuperview()
+                make.height.equalTo(25)
+            }
+            self.switchControl.snp.remakeConstraints { (make) in
+                make.top.equalToSuperview()
+                make.height.equalTo(25)
+                make.right.equalToSuperview().inset(10)
+            }
+            self.descriptionLabel.snp.remakeConstraints { (make) in
+                make.bottom.equalToSuperview().inset(25)
+                make.left.right.equalToSuperview().inset(20)
+            }
+        }
 	}
 
     @objc func switchValueChanged(s: UISwitch) {
@@ -398,7 +445,6 @@ class OverviewViewController: UIViewController {
 		self.adBlockingView.title = NSLocalizedString("Enhanced Ad Blocking", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Ad blocking switch title")
 		self.adBlockingView.isSwitchOn = self.dataSource?.isGlobalAdblockerOn()
 		self.adBlockingView.iconName = "adblocking"
-		self.adBlockingView.backgroundColor = UIColor.white
 	}
 
 	private func setComponentsStyles() {
