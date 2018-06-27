@@ -1,3 +1,4 @@
+import 'process-nextick-args';
 import 'react-native/Libraries/Core/InitializeCore';
 import React from 'react';
 import { AppRegistry, StyleSheet, View } from 'react-native';
