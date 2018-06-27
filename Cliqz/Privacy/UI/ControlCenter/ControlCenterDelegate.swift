@@ -76,6 +76,9 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
     func turnGlobalAntitracking(on: Bool) {
         on ? UserPreferences.instance.antitrackingMode = .blockAll : (UserPreferences.instance.antitrackingMode = .blockSomeOrNone)
         UserPreferences.instance.writeToDisk()
+        
+        invalidateStateImageCache()
+        invalidateBlockedCountCache()
     }
     
     func turnGlobalAdblocking(on: Bool) {
