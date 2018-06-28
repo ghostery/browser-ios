@@ -709,6 +709,14 @@ extension AppDelegate {
         if let tabBarController = rootViewController as? UITabBarController {
             rootViewController = tabBarController.selectedViewController
         }
+        
+        if let pop = controller.popoverPresentationController {
+            if pop.sourceView == nil {
+                pop.sourceView = rootViewController?.view
+                pop.sourceRect = CGRect(x: (rootViewController?.view.frame.width ?? 1)/2, y: (rootViewController?.view.frame.height ?? 0), width: 0, height: 0)
+            }
+        }
+        
         rootViewController?.present(controller, animated: true, completion: nil)
     }
 }
