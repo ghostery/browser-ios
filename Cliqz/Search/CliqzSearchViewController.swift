@@ -86,7 +86,9 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
+        
+        self.view.backgroundColor = .clear
+        self.searchView.backgroundColor = .clear
         self.view.addSubview(searchView)
         self.searchView.snp.makeConstraints { (make) in
             make.left.right.top.bottom.equalToSuperview()

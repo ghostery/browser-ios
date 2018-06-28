@@ -145,6 +145,16 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     func dismissKeyboard(_ sender: Any? = nil) {
         view.window?.rootViewController?.view.endEditing(true)
     }
+    
+    func hideKeepingBG() {
+        segmentedControl.isHidden = true
+        controllerContainerView.isHidden = true
+    }
+    
+    func show() {
+        segmentedControl.isHidden = false
+        controllerContainerView.isHidden = false
+    }
 }
 
 extension CliqzHomePanelViewController {
