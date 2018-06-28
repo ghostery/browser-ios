@@ -831,7 +831,8 @@ class BrowserViewController: UIViewController {
                 return
             }
             
-            homePanelController?.view?.isHidden = true
+            //homePanelController?.view?.isHidden = true
+            homePanelController?.hideKeepingBG()
             
             searchController!.didMove(toParentViewController: self)
         }
@@ -850,7 +851,8 @@ class BrowserViewController: UIViewController {
             searchController.view.removeFromSuperview()
             searchController.removeFromParentViewController()
             self.searchController = nil
-            homePanelController?.view?.isHidden = false
+            //homePanelController?.view?.isHidden = false
+            homePanelController?.show()
             searchLoader = nil
         }
     }
