@@ -228,6 +228,16 @@ class ControlCenterModel: ControlCenterDSProtocol {
             return count
         }
         
+        if let domainString = self.domainStr {
+            let domainState = self.getOrCreateDomain(domain: domainString)
+            if domainState.translatedState == .trusted {
+                return 0
+            }
+            else if domainState.translatedState == .restricted {
+                return trackerCount(tableType: tableType, section: section)
+            }
+        }
+        
         if isGlobalAntitrackingOn() {
             return trackerCount(tableType:tableType, section: section)
         }
@@ -261,6 +271,20 @@ class ControlCenterModel: ControlCenterDSProtocol {
             }
 
             return set
+        }
+        
+        if let domainString = self.domainStr {
+            let domainState = self.getOrCreateDomain(domain: domainString)
+            if domainState.translatedState == .trusted {
+                let image = iconForTrackerState(state: .trusted)
+                stateImageCache[section] = image
+                return image
+            }
+            else if domainState.translatedState == .restricted {
+                let image = iconForTrackerState(state: .restricted)
+                stateImageCache[section] = image
+                return image
+            }
         }
 
         if isGlobalAntitrackingOn() {
@@ -304,6 +328,18 @@ class ControlCenterModel: ControlCenterDSProtocol {
         guard let t = tracker(tableType: tableType, indexPath: indexPath) else { return (nil, nil) }
         let state: TrackerUIState = t.state(domain: self.domainStr)
         
+        if let domainString = self.domainStr {
+            let domainState = self.getOrCreateDomain(domain: domainString)
+            if domainState.translatedState == .trusted {
+                return (t.name, nil)
+            }
+            else if domainState.translatedState == .restricted {
+                let str = NSMutableAttributedString(string: t.name)
+                str.addAttributes([NSStrikethroughStyleAttributeName : 1], range: NSMakeRange(0, t.name.count))
+                return (nil, str)
+            }
+        }
+        
         if isGlobalAntitrackingOn() || state == .blocked || (tableType == .page && state == .restricted) {
             let str = NSMutableAttributedString(string: t.name)
             str.addAttributes([NSStrikethroughStyleAttributeName : 1], range: NSMakeRange(0, t.name.count))
@@ -315,6 +351,16 @@ class ControlCenterModel: ControlCenterDSProtocol {
     
     func stateIcon(tableType: TableType, indexPath: IndexPath) -> UIImage? {
         guard let t = tracker(tableType: tableType, indexPath: indexPath) else { return nil }
+        
+        if let domainString = self.domainStr {
+            let domainState = self.getOrCreateDomain(domain: domainString)
+            if domainState.translatedState == .trusted {
+                return iconForTrackerState(state: .trusted)
+            }
+            else if domainState.translatedState == .restricted {
+                return iconForTrackerState(state: .restricted)
+            }
+        }
         
         if isGlobalAntitrackingOn() {
             return iconForTrackerState(state: .blocked)

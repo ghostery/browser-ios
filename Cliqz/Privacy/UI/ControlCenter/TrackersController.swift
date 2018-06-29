@@ -366,6 +366,14 @@ class TrackerViewCell: UITableViewCell {
 			make.width.height.equalTo(20)
 		}
 	}
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.trackerNameLabel.attributedText = nil
+        self.trackerNameLabel.text = ""
+        self.statusIcon.image = nil
+        self.appId = 0
+    }
 }
 
 class CategoriesHeaderView: UIControl {
