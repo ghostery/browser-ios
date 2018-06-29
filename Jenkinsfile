@@ -80,6 +80,7 @@ node('mac-mini-ios') {
                         fi
                         carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
                         npm install
+                        sed -i '' "s/\"channel\": \".*\",$/\"channel\": \"MI99\",/" node_modules/browser-core/build/modules/core/config.js
                         npm run build
                         pod install
                         npm run bundle
