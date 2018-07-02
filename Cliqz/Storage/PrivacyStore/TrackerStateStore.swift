@@ -110,6 +110,7 @@ public class TrackerStateStore: NSObject {
             let trackerState = TrackerState()
             trackerState.appId = appId
             trackerState.state = intForState(state: s)
+            trackerState.previousState = intForState(state: .empty)
             realm.add(trackerState)
             returnState = trackerState
         }
