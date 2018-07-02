@@ -28,10 +28,7 @@ extension URLInterceptor: WKScriptMessageHandler {
         if let siteURL = URL(string: pageUrl)?.domainURL {
             let isTracker = TrackerList.instance.isTracker(url, pageUrl: siteURL, timestamp: timestamp)
             if isTracker != nil {
-                //send an update notification for the count
-                //debugPrint("pageUrl = \(pageURL) | count = \(TrackerList.instance.detectedTrackerCountForPage(pageUrl))")
-                //update signal
-                NotificationCenter.default.post(name: detectedTrackerNotification, object: nil, userInfo: ["siteURL": siteURL])
+                NotificationCenter.default.post(name: detectedTrackerNotification, object: nil, userInfo: ["url": siteURL])
             }
         }
     }
