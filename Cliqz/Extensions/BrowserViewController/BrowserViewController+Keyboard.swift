@@ -11,6 +11,9 @@ import UIKit
 extension BrowserViewController {
     
     func shouldShowKeyboard() -> Bool {
+		if !(self.homePanelController?.shouldShowKeyboard ?? false) {
+			return false
+		}
         let selectedHomePanel = homePanelController?.selectedPanel ?? .topSites
         let selectedTab = self.tabManager.selectedTab
         

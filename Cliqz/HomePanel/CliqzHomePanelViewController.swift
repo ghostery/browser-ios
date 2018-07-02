@@ -17,6 +17,8 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     var notificationToken: NSObjectProtocol!
     var panels: [HomePanelDescriptor]!
     var url: URL?
+	var shouldShowKeyboard = true
+
     weak var delegate: HomePanelViewControllerDelegate?
     
     var selectedPanel: HomePanelType? = nil {
