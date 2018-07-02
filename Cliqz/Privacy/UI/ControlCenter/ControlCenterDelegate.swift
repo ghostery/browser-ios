@@ -74,21 +74,25 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
             invalidateStateImageCache(section: section)
             invalidateBlockedCountCache(section: section)
             
-            if state == .blocked {
-                TrackerStateStore.change(appId: trakerListApp.appId, toState: .blocked)
-            }
-            else if state == .empty {
-                TrackerStateStore.change(appId: trakerListApp.appId, toState: .empty)
-            }
-            
-            if state == TrackerUIState.trusted || state == TrackerUIState.empty {
-                UserPreferences.instance.antitrackingMode = .blockSomeOrNone
-                UserPreferences.instance.writeToDisk()
-            }
-            
             if let domainStr = self.domainStr {
+                
+                let currentState = trakerListApp.state(domain: domainStr)
                 let domainObj = getOrCreateDomain(domain: domainStr)
+                
                 DomainStore.changeState(domain: domainObj, state: .empty)
+                
+                if currentState == .trusted {
+                    DomainStore.add(appId: appId, domain: domainObj, list: .prevTrustedList)
+                    DomainStore.remove(appId: appId, domain: domainObj, list: .prevRestrictedList)
+                }
+                else if currentState == .restricted {
+                    DomainStore.add(appId: appId, domain: domainObj, list: .prevRestrictedList)
+                    DomainStore.remove(appId: appId, domain: domainObj, list: .prevTrustedList)
+                }
+                else {
+                    DomainStore.remove(appId: appId, domain: domainObj, list: .prevRestrictedList)
+                    DomainStore.remove(appId: appId, domain: domainObj, list: .prevTrustedList)
+                }
                 
                 if state == .trusted {
                     //add it to trusted sites
@@ -107,6 +111,18 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
                     DomainStore.remove(appId: appId, domain: domainObj, list: .trustedList)
                     DomainStore.remove(appId: appId, domain: domainObj, list: .restrictedList)
                 }
+            }
+            
+            if state == .blocked {
+                TrackerStateStore.change(appId: trakerListApp.appId, toState: .blocked)
+            }
+            else if state == .empty {
+                TrackerStateStore.change(appId: trakerListApp.appId, toState: .empty)
+            }
+            
+            if state == TrackerUIState.trusted || state == TrackerUIState.empty {
+                UserPreferences.instance.antitrackingMode = .blockSomeOrNone
+                UserPreferences.instance.writeToDisk()
             }
         }
         else {
