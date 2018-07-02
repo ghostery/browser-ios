@@ -26,8 +26,12 @@ protocol ControlCenterDelegateProtocol: class {
     func pauseGhostery(paused: Bool, time: Date)
     func turnGlobalAntitracking(on: Bool)
     func turnGlobalAdblocking(on: Bool)
-    func changeState(appId: Int, state: TrackerUIState, section: Int)
+    func changeState(appId: Int, state: TrackerUIState, section: Int?)
     func changeState(category: String, tableType: TableType, state: TrackerUIState, section: Int)
+    func undoAll()
+    func blockAll()
+    func unblockAll()
+    func restoreDefaultSettings()
 }
 
 enum TrackerUIState {
