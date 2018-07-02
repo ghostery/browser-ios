@@ -68,24 +68,6 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func pauseGhostery(paused: Bool, time: Date) {
-        paused ? UserPreferences.instance.pauseGhosteryDate = time : (UserPreferences.instance.pauseGhosteryDate = Date(timeIntervalSince1970: 0))
-        UserPreferences.instance.writeToDisk()
-    }
-    
-    func turnGlobalAntitracking(on: Bool) {
-        on ? UserPreferences.instance.antitrackingMode = .blockAll : (UserPreferences.instance.antitrackingMode = .blockSomeOrNone)
-        UserPreferences.instance.writeToDisk()
-        
-        invalidateStateImageCache()
-        invalidateBlockedCountCache()
-    }
-    
-    func turnGlobalAdblocking(on: Bool) {
-        on ? UserPreferences.instance.adblockingMode = .blockAll : (UserPreferences.instance.adblockingMode = .blockNone)
-        UserPreferences.instance.writeToDisk()
-    }
-    
     func changeState(appId: Int, state: TrackerUIState, section: Int) {
         if let trakerListApp = TrackerList.instance.apps[appId] {
             
@@ -106,9 +88,9 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
             
             if let domainStr = self.domainStr {
                 let domainObj = getOrCreateDomain(domain: domainStr)
+                DomainStore.changeState(domain: domainObj, state: .empty)
+                
                 if state == .trusted {
-                    //disable domain restriction if applicable
-                    DomainStore.changeState(domain: domainObj, state: .empty)
                     //add it to trusted sites
                     DomainStore.add(appId: appId, domain: domainObj, list: .trustedList)
                     //remove it from restricted if it is there
@@ -121,8 +103,6 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
                     DomainStore.remove(appId: appId, domain: domainObj, list: .trustedList)
                 }
                 else {
-                    //disable domain restriction if applicable
-                    DomainStore.changeState(domain: domainObj, state: .empty)
                     //remove from trusted and restricted
                     DomainStore.remove(appId: appId, domain: domainObj, list: .trustedList)
                     DomainStore.remove(appId: appId, domain: domainObj, list: .restrictedList)
@@ -132,5 +112,23 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         else {
             debugPrint("PROBLEM -- trackerState does not exist for appId = \(appId)!")
         }
+    }
+    
+    func pauseGhostery(paused: Bool, time: Date) {
+        paused ? UserPreferences.instance.pauseGhosteryDate = time : (UserPreferences.instance.pauseGhosteryDate = Date(timeIntervalSince1970: 0))
+        UserPreferences.instance.writeToDisk()
+    }
+    
+    func turnGlobalAntitracking(on: Bool) {
+        on ? UserPreferences.instance.antitrackingMode = .blockAll : (UserPreferences.instance.antitrackingMode = .blockSomeOrNone)
+        UserPreferences.instance.writeToDisk()
+        
+        invalidateStateImageCache()
+        invalidateBlockedCountCache()
+    }
+    
+    func turnGlobalAdblocking(on: Bool) {
+        on ? UserPreferences.instance.adblockingMode = .blockAll : (UserPreferences.instance.adblockingMode = .blockNone)
+        UserPreferences.instance.writeToDisk()
     }
 }
