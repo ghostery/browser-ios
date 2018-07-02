@@ -430,10 +430,11 @@ struct CliqzIntroCard: Codable {
     }
     
     static func defaultCards() -> [CliqzIntroCard] {
-        let welcome = CliqzIntroCard(title: CliqzStrings.Onboarding.introTitle, text: CliqzStrings.Onboarding.introText, imageName: "ghostery-Introduction", optInText: CliqzStrings.Onboarding.telemetryText, optInToggleValue: true)
-        let adblock = CliqzIntroCard(title: CliqzStrings.Onboarding.adblockerTitle, text: CliqzStrings.Onboarding.adblockerText, imageName: "ghostery-Adblock")
-        let quicksearch = CliqzIntroCard(title: CliqzStrings.Onboarding.quickSearchTitle, text: CliqzStrings.Onboarding.quickSearchText, imageName: "ghostery-QuickSearch")
-        let freshtab = CliqzIntroCard(title: CliqzStrings.Onboarding.tabTitle, text: CliqzStrings.Onboarding.tabText, imageName: "ghostery-CliqzTab")
+        let OnboardingStrings = CliqzStrings.Onboarding()
+        let welcome = CliqzIntroCard(title: OnboardingStrings.introTitle, text: OnboardingStrings.introText, imageName: "ghostery-Introduction", optInText: OnboardingStrings.telemetryText, optInToggleValue: true)
+        let adblock = CliqzIntroCard(title: OnboardingStrings.adblockerTitle, text: OnboardingStrings.adblockerText, imageName: "ghostery-Adblock")
+        let quicksearch = CliqzIntroCard(title: OnboardingStrings.quickSearchTitle, text: OnboardingStrings.quickSearchText, imageName: "ghostery-QuickSearch")
+        let freshtab = CliqzIntroCard(title: OnboardingStrings.tabTitle, text: OnboardingStrings.tabText, imageName: "ghostery-CliqzTab")
         return [welcome, adblock, quicksearch, freshtab]
     }
     
