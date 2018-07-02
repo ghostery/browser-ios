@@ -23,10 +23,9 @@ class GhosteryButton: InsetButton {
     
     let circleSize: CGFloat = 20
     
-    init(frame: CGRect = CGRect.zero, dataSource: GhosteryCountDataSource) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         ghosteryCount.delegate = self
-        ghosteryCount.dataSource = dataSource
         
         setUpComponent()
         setUpConstaints()
@@ -121,14 +120,9 @@ protocol GhosteryCountDelegate: class {
     func updateCount(count: Int)
 }
 
-protocol GhosteryCountDataSource: class {
-    func currentUrl() -> URL?
-}
-
 class GhosteryCount {
     
     weak var delegate: GhosteryCountDelegate? = nil
-    weak var dataSource: GhosteryCountDataSource? = nil
     
     init() {
         NotificationCenter.default.addObserver(self, selector: #selector(newTrackerDetected), name: detectedTrackerNotification, object: nil)
@@ -150,10 +144,9 @@ class GhosteryCount {
     }
     
     @objc func newTrackerDetected(notification: Notification) {
-        if let currentUrl = self.dataSource?.currentUrl(), let host = currentUrl.normalizedHost {
-            let count = TrackerList.instance.detectedTrackerCountForPage(host)
-            self.delegate?.updateCount(count: count)
-        }
+        guard let dict = notification.userInfo as? [String: Any], let currentUrl = dict["url"] as? URL, let host = currentUrl.normalizedHost else { return }
+        let count = TrackerList.instance.detectedTrackerCountForPage(host)
+        self.delegate?.updateCount(count: count)
     }
     
     @objc func newTabSelected(notification: Notification) {
