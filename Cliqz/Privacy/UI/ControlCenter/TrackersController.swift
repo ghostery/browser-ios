@@ -86,19 +86,19 @@ class TrackersController: UIViewController {
     private func showPageActionSheet(_ sender: Any) {
 		let blockTrustAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 		
-		let restrictAll = UIAlertAction(title: NSLocalizedString("Restrict All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Restrict All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-			self?.restrictAllCategories()
+		let unblockAll = UIAlertAction(title: NSLocalizedString("Unblock All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Unblock All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
+			self?.unblockAll()
 		})
-		blockTrustAlertController.addAction(restrictAll)
+		blockTrustAlertController.addAction(unblockAll)
 		let blockAll = UIAlertAction(title: NSLocalizedString("Block All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Block All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-			self?.blockAllCategories()
+			self?.blockAll()
 		})
 		blockTrustAlertController.addAction(blockAll)
 		
-		let trustAll = UIAlertAction(title: NSLocalizedString("Trust All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Trust All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-			self?.trustAllCategories()
+		let undo = UIAlertAction(title: NSLocalizedString("Undo", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Undo trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
+			self?.undo()
 		})
-		blockTrustAlertController.addAction(trustAll)
+		blockTrustAlertController.addAction(undo)
 		
 		let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
 		blockTrustAlertController.addAction(cancelAction)
@@ -120,14 +120,24 @@ class TrackersController: UIViewController {
 		let blockTrustAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 		
 		let blockAll = UIAlertAction(title: NSLocalizedString("Block All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Block All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-			self?.blockAllCategories()
+			self?.blockAll()
 		})
 		blockTrustAlertController.addAction(blockAll)
 		
-		let unblockAll = UIAlertAction(title: NSLocalizedString("Revert", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Revert trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-			self?.unblockAllCategories()
+		let unblockAll = UIAlertAction(title: NSLocalizedString("Unblock All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Unblock All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
+			self?.unblockAll()
 		})
 		blockTrustAlertController.addAction(unblockAll)
+        
+        let undo = UIAlertAction(title: NSLocalizedString("Undo", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Undo trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
+            self?.undo()
+        })
+        blockTrustAlertController.addAction(undo)
+        
+        let restore = UIAlertAction(title: NSLocalizedString("Restore Default Settings", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Restore Default Settings trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
+            self?.restoreDefaultSettings()
+        })
+        blockTrustAlertController.addAction(restore)
 		
 		let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
 		blockTrustAlertController.addAction(cancelAction)
@@ -145,20 +155,40 @@ class TrackersController: UIViewController {
         
 	}
 
-	private func blockAllCategories() {
+	private func blockAll() {
+        
 		switch type {
 		case .page:
-			let count = self.dataSource?.numberOfSections(tableType: type) ?? 0
-			for i in 0 ..< count {
-				if let x = self.dataSource?.category(type, i) {
-                    self.delegate?.changeState(category: x, tableType: type, state: .blocked, section: i)
-				}
-			}
+			self.delegate?.blockAll()
 		case .global:
+            self.delegate?.blockAll()
 			self.delegate?.turnGlobalAntitracking(on: true)
 		}
 		self.tableView.reloadData()
 	}
+    
+    private func unblockAll() {
+        
+        switch type {
+        case .page:
+            self.delegate?.chageSiteState(to: .empty)
+        case .global:
+            //change all trackers to empty
+            self.delegate?.unblockAll()
+            self.delegate?.turnGlobalAntitracking(on: false)
+        }
+        self.tableView.reloadData()
+    }
+    
+    private func undo() {
+        self.delegate?.undoAll()
+        self.tableView.reloadData()
+    }
+    
+    private func restoreDefaultSettings() {
+        self.delegate?.restoreDefaultSettings()
+        self.tableView.reloadData()
+    }
 
 	private func trustAllCategories() {
 		self.delegate?.chageSiteState(to: .trusted)
@@ -167,11 +197,6 @@ class TrackersController: UIViewController {
 
 	private func restrictAllCategories() {
 		self.delegate?.chageSiteState(to: .restricted)
-		self.tableView.reloadData()
-	}
-
-	private func unblockAllCategories() {
-		self.delegate?.turnGlobalAntitracking(on: false)
 		self.tableView.reloadData()
 	}
 
