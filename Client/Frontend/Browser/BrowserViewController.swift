@@ -602,10 +602,6 @@ class BrowserViewController: UIViewController {
         }
         showQueuedAlertIfAvailable()
         
-        // Cliqz: Check if we should activate the keyboard or not
-        if shouldShowKeyboard() {
-            self.urlBar.enterOverlayMode("", pasted: false, search: true)
-        }
     }
 
     // THe logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in
@@ -798,6 +794,12 @@ class BrowserViewController: UIViewController {
                 hideHomePanelController()
             }
         }
+		// Cliqz: Check if we should activate the keyboard or not
+		if shouldShowKeyboard() {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				self.urlBar.enterOverlayMode("", pasted: false, search: true)
+			}
+		}
     }
 
     fileprivate func showSearchController() {
@@ -1554,7 +1556,7 @@ extension BrowserViewController: URLBarDelegate {
         guard let profile = profile as? BrowserProfile else {
             return
         }
-        
+		
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         } else {
@@ -1570,10 +1572,13 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
+		// Cliqz: Close CC
+		self.hideControlCenter()
+		self.homePanelController?.shouldShowKeyboard = false
+		// Cliqz: end
+
         hideSearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
-        // Cliqz: Close CC
-        self.hideControlCenter()
     }
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
@@ -1663,6 +1668,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         showTabTray()
         // Cliqz: Close CC
         self.hideControlCenter()
+		self.homePanelController?.shouldShowKeyboard = true
+		// Cliqz: End
     }
     
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1671,9 +1678,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: NSLocalizedString("New Tab", tableName:"Cliqz", comment: "Label for New Tab"), style: .default, handler: { _ in
+			self.homePanelController?.shouldShowKeyboard = true
             self.tabManager.addTabAndSelect(isPrivate: false)
         }))
         controller.addAction(UIAlertAction(title: NSLocalizedString("New Forget Tab", tableName:"Cliqz", comment: "Label for New Forget Tab"), style: .default, handler: { _ in
+			self.homePanelController?.shouldShowKeyboard = true
             self.tabManager.addTabAndSelect(isPrivate: true)
         }))
         controller.addAction(UIAlertAction(title: NSLocalizedString("Close Tab", tableName:"Cliqz", comment: "Label for Close Tab"), style: .destructive, handler: { _ in
@@ -1704,7 +1713,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 }
 
 extension BrowserViewController: TabDelegate {
-
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.frame = webViewContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
