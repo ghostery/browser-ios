@@ -14,6 +14,8 @@ public class Domain: Object {
     @objc dynamic var state: Int = 0 //0 none, 1 trusted, 2 restricted
     public var trustedTrackers = List<Int>()
     public var restrictedTrackers = List<Int>()
+    public var previouslyTrustedTrackers = List<Int>()
+    public var previouslyRestrictedTrackers = List<Int>()
     
     override static public func primaryKey() -> String? {
         return "name"
@@ -42,6 +44,8 @@ public enum DomainState {
 public enum ListType {
     case trustedList
     case restrictedList
+    case prevTrustedList
+    case prevRestrictedList
 }
 
 public class DomainStore: NSObject {
@@ -97,6 +101,12 @@ public class DomainStore: NSObject {
                 else if list == .restrictedList {
                     domain.restrictedTrackers.append(appId)
                 }
+                else if list == .prevTrustedList {
+                    domain.previouslyTrustedTrackers.append(appId)
+                }
+                else if list == .prevRestrictedList {
+                    domain.previouslyRestrictedTrackers.append(appId)
+                }
                 
                 realm.add(domain, update: true)
             }
@@ -117,6 +127,12 @@ public class DomainStore: NSObject {
                 }
                 else if list == .restrictedList {
                     domain.restrictedTrackers.remove(element: appId)
+                }
+                else if list == .prevTrustedList {
+                    domain.previouslyTrustedTrackers.remove(element: appId)
+                }
+                else if list == .prevRestrictedList {
+                    domain.previouslyRestrictedTrackers.remove(element: appId)
                 }
                 
                 realm.add(domain, update: true)

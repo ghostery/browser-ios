@@ -35,7 +35,30 @@ import Storage
             }
         }
         else {
-            //TrackerStateStore.createTrackerState(appId: appId)
+            return .empty
+        }
+    }
+    
+    func prevState(domain: String?) -> TrackerUIState {
+        if let domain = domain {
+            let domainObj = getOrCreateDomain(domain: domain)
+            if domainObj.previouslyTrustedTrackers.contains(appId) {
+                return .trusted
+            }
+            else if domainObj.previouslyRestrictedTrackers.contains(appId) {
+                return .restricted
+            }
+        }
+        
+        if let state = TrackerStateStore.getTrackerState(appId: appId) {
+            if state.prevTranslatedState == .blocked {
+                return .blocked
+            }
+            else {
+                return .empty
+            }
+        }
+        else {
             return .empty
         }
     }

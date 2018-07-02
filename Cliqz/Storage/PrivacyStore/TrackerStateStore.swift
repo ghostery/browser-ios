@@ -12,6 +12,7 @@ import RealmSwift
 public class TrackerState: Object {
     @objc dynamic var appId: Int = -1
     @objc dynamic var state: Int = 0 //0 none, 1 blocked
+    @objc dynamic var previousState: Int = 0 //none, 1 blocked
     
     override public static func primaryKey() -> String? {
         return "appId"
@@ -19,6 +20,17 @@ public class TrackerState: Object {
     
     public var translatedState: TrackerStateEnum {
         switch state {
+        case 0:
+            return .empty
+        case 1:
+            return .blocked
+        default:
+            return .empty
+        }
+    }
+    
+    public var prevTranslatedState: TrackerStateEnum {
+        switch previousState {
         case 0:
             return .empty
         case 1:
@@ -83,6 +95,7 @@ public class TrackerStateStore: NSObject {
         
         if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
             if let s = state {
+                trackerState.previousState = trackerState.state
                 trackerState.state = intForState(state: s)
                 realm.add(trackerState, update: true)
                 returnState = trackerState
