@@ -483,11 +483,11 @@ extension ControlCenterModel {
                 stateImageCache[t]?.removeValue(forKey: s)
             }
             else {
-                stateImageCache[t]?.removeAll()
+                stateImageCache[t]? = [:]
             }
         }
         else {
-            stateImageCache.removeAll()
+            stateImageCache = [.page: [:], .global: [:]]
         }
     }
     
@@ -497,11 +497,11 @@ extension ControlCenterModel {
                 blockedTrackerCountCache[t]?.removeValue(forKey: s)
             }
             else {
-                blockedTrackerCountCache[t]?.removeAll()
+                blockedTrackerCountCache[t]? = [:]
             }
         }
         else {
-            blockedTrackerCountCache.removeAll()
+            blockedTrackerCountCache = [.page: [:], .global: [:]]
         }
     }
 }
