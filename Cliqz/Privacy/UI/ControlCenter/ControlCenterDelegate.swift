@@ -11,6 +11,7 @@ import Storage
 
 extension ControlCenterModel: ControlCenterDelegateProtocol {
     
+    
     private func getOrCreateDomain(domain: String) -> Domain {
         //if we have done anything with this domain before we will have something in the DB
         //otherwise we need to create it
@@ -38,22 +39,30 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         
     }
     
-    func chageSiteState(to: DomainState) {
+    func chageSiteState(to: DomainState, completion: @escaping () -> Void) {
         guard let domainStr = self.domainStr else { return }
         
-        let domainObj: Domain
-        domainObj = getOrCreateDomain(domain: domainStr)
-        DomainStore.changeState(domain: domainObj, state: to)
-        
-        invalidateStateImageCache(tableType: .page, section: nil)
-        invalidateBlockedCountCache(tableType: .page, section: nil)
-        
-        let nextState = domainState2TrackerUIState(domainState: to)
-        let apps = TrackerList.instance.detectedTrackersForPage(domainStr)
-        for app in apps {
-            let currentState = app.state(domain: domainStr)
-            changeTrackerStateFor(domainObj: domainObj, appId: app.appId, currentState: currentState, nextState: nextState)
-            changeGlobalTrackerState(to: nextState, appId: app.appId)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
+            if let domainObj = self?.getOrCreateDomain(domain: domainStr) {
+                DomainStore.changeState(domain: domainObj, state: to)
+                
+                self?.invalidateStateImageCache(tableType: .page, section: nil)
+                self?.invalidateBlockedCountCache(tableType: .page, section: nil)
+                
+                if let nextState = self?.domainState2TrackerUIState(domainState: to) {
+                    let apps = TrackerList.instance.detectedTrackersForPage(domainStr)
+                    for app in apps {
+                        let currentState = app.state(domain: domainStr)
+                        self?.changeTrackerStateFor(domainObj: domainObj, appId: app.appId, currentState: currentState, nextState: nextState)
+                        self?.changeGlobalTrackerState(to: nextState, appId: app.appId)
+                    }
+                }
+            }
+            
+            DispatchQueue.main.async {
+                completion()
+            }
         }
     }
     
@@ -86,53 +95,77 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func blockAll(tableType: TableType) {
-        changeAll(state: .blocked, tableType: tableType)
-    }
-    
-    func unblockAll(tableType: TableType) {
-        changeAll(state: .empty, tableType: tableType)
-    }
-    
-    func undoAll(tableType: TableType) {
-        
-        invalidateStateImageCache()
-        invalidateBlockedCountCache()
-        
-        var trackers: [TrackerListApp] = []
-        
-        var domain: String? = nil
-        
-        if let d = self.domainStr, tableType == .page {
-            domain = d
-            trackers.append(contentsOf: TrackerList.instance.detectedTrackersForPage(d))
-        }
-        else if tableType == .global {
-            trackers.append(contentsOf: TrackerList.instance.appsList)
-        }
-        
-        for tracker in trackers {
-            self.changeState(appId: tracker.appId, state: tracker.prevState(domain: domain), section: nil, tableType: tableType)
-        }
-    }
-    
-    func restoreDefaultSettings(tableType: TableType) {
-        guard tableType == .global else { return }
-        
-        invalidateStateImageCache()
-        invalidateBlockedCountCache()
-        
-        UserPreferences.instance.antitrackingMode = .blockSomeOrNone
-        UserPreferences.instance.writeToDisk()
-        
-        let trackers = TrackerList.instance.appsList
-        
-        for tracker in trackers {
-            if CategoriesHelper.categoriesBlockedByDefault.contains(tracker.category) {
-                changeGlobalTrackerState(to: .blocked, appId: tracker.appId)
+    func blockAll(tableType: TableType, completion: @escaping () -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.changeAll(state: .blocked, tableType: tableType)
+            DispatchQueue.main.async {
+                completion()
             }
-            else {
-                changeGlobalTrackerState(to: .empty, appId: tracker.appId)
+        }
+    }
+    
+    func unblockAll(tableType: TableType, completion: @escaping () -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.changeAll(state: .empty, tableType: tableType)
+            DispatchQueue.main.async {
+                completion()
+            }
+        }
+    }
+    
+    func undoAll(tableType: TableType, completion: @escaping () -> Void) {
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
+            self?.invalidateStateImageCache()
+            self?.invalidateBlockedCountCache()
+            
+            var trackers: [TrackerListApp] = []
+            
+            var domain: String? = nil
+            
+            if let d = self?.domainStr, tableType == .page {
+                domain = d
+                trackers.append(contentsOf: TrackerList.instance.detectedTrackersForPage(d))
+            }
+            else if tableType == .global {
+                trackers.append(contentsOf: TrackerList.instance.appsList)
+            }
+            
+            for tracker in trackers {
+                self?.changeState(appId: tracker.appId, state: tracker.prevState(domain: domain), section: nil, tableType: tableType)
+            }
+            
+            DispatchQueue.main.async {
+                completion()
+            }
+        }
+    }
+    
+    func restoreDefaultSettings(tableType: TableType, completion: @escaping () -> Void) {
+        guard tableType == .global else { completion(); return }
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
+            self?.invalidateStateImageCache()
+            self?.invalidateBlockedCountCache()
+            
+            UserPreferences.instance.antitrackingMode = .blockSomeOrNone
+            UserPreferences.instance.writeToDisk()
+            
+            let trackers = TrackerList.instance.appsList
+            
+            for tracker in trackers {
+                if CategoriesHelper.categoriesBlockedByDefault.contains(tracker.category) {
+                    self?.changeGlobalTrackerState(to: .blocked, appId: tracker.appId)
+                }
+                else {
+                    self?.changeGlobalTrackerState(to: .empty, appId: tracker.appId)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                completion()
             }
         }
     }

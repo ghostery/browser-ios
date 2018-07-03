@@ -20,6 +20,8 @@ struct ControlCenterUI {
 }
 
 class TrackersController: UIViewController {
+    
+    let headerView = CategoriesHeaderView()
 
 	var type: TableType = .page {
 		didSet {
@@ -50,7 +52,6 @@ class TrackersController: UIViewController {
     }
 
 	private func setupComponents() {
-		let headerView = CategoriesHeaderView()
 		headerView.addTarget(self, action: #selector(showActionSheet), for: .touchUpInside)
 		self.tableView.tableHeaderView = headerView
 		self.tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.size.width, height: 80)
@@ -156,48 +157,70 @@ class TrackersController: UIViewController {
 	}
 
 	private func blockAll() {
-        
+        headerView.showSpinner()
 		switch type {
 		case .page:
-			self.delegate?.blockAll(tableType: type)
+            self.delegate?.blockAll(tableType: type, completion: { [weak self] in
+                self?.tableView.reloadData()
+                self?.headerView.hideSpinner()
+            })
 		case .global:
-            self.delegate?.blockAll(tableType: type)
 			self.delegate?.turnGlobalAntitracking(on: true)
+            self.delegate?.blockAll(tableType: type, completion: { [weak self] in
+                self?.tableView.reloadData()
+                self?.headerView.hideSpinner()
+            })
 		}
-		self.tableView.reloadData()
 	}
     
     private func unblockAll() {
-        
+        headerView.showSpinner()
         switch type {
         case .page:
-            self.delegate?.chageSiteState(to: .empty)
+            self.delegate?.chageSiteState(to: .empty) { [weak self] in
+                self?.tableView.reloadData()
+                self?.headerView.hideSpinner()
+            }
         case .global:
             //change all trackers to empty
-            self.delegate?.unblockAll(tableType: type)
+            self.delegate?.unblockAll(tableType: type) { [weak self] in
+                self?.tableView.reloadData()
+                self?.headerView.hideSpinner()
+            }
             self.delegate?.turnGlobalAntitracking(on: false)
         }
-        self.tableView.reloadData()
     }
     
     private func undo() {
-        self.delegate?.undoAll(tableType: type)
-        self.tableView.reloadData()
+        headerView.showSpinner()
+        self.delegate?.undoAll(tableType: type) { [weak self] in
+            self?.tableView.reloadData()
+            self?.headerView.hideSpinner()
+        }
     }
     
     private func restoreDefaultSettings() {
-        self.delegate?.restoreDefaultSettings(tableType: type)
-        self.tableView.reloadData()
+        headerView.showSpinner()
+        self.delegate?.restoreDefaultSettings(tableType: type) { [weak self] in
+            self?.tableView.reloadData()
+            self?.headerView.hideSpinner()
+        }
     }
 
 	private func trustAllCategories() {
-		self.delegate?.chageSiteState(to: .trusted)
-		self.tableView.reloadData()
+        headerView.showSpinner()
+        self.delegate?.chageSiteState(to: .trusted) { [weak self] in
+            self?.tableView.reloadData()
+            self?.headerView.hideSpinner()
+        }
 	}
 
 	private func restrictAllCategories() {
-		self.delegate?.chageSiteState(to: .restricted)
-		self.tableView.reloadData()
+        headerView.showSpinner()
+        self.delegate?.chageSiteState(to: .restricted) { [weak self] in
+            self?.tableView.reloadData()
+            self?.headerView.hideSpinner()
+        }
 	}
 
 	@objc fileprivate func showTrackerInfo() {
@@ -406,6 +429,7 @@ class CategoriesHeaderView: UIControl {
 	let categoriesLabel = UILabel()
 	let actionButton = UIButton(type: .custom)
 	let separator = UIView()
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
 
 	init() {
 		super.init(frame: CGRect.zero)
@@ -414,6 +438,8 @@ class CategoriesHeaderView: UIControl {
 		self.addSubview(actionButton)
 		actionButton.setImage(UIImage(named: "more"), for: .normal)
 		self.addSubview(separator)
+        self.addSubview(spinner)
+        spinner.alpha = 0.0
 		setStyles()
 	}
 
@@ -444,11 +470,32 @@ class CategoriesHeaderView: UIControl {
 			make.left.right.bottom.equalToSuperview()
 			make.height.equalTo(1)
 		}
+        self.spinner.snp.makeConstraints { (make) in
+            make.center.equalTo(actionButton.snp.center)
+        }
 	}
 
 	override func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControlEvents) {
 		self.actionButton.addTarget(target, action: action, for: controlEvents)
 	}
+    
+    func showSpinner() {
+        UIView.animate(withDuration: 0.2) { [unowned self] in
+            self.actionButton.alpha = 0.0
+            self.spinner.alpha = 1.0
+            self.spinner.startAnimating()
+            self.setNeedsDisplay()
+        }
+    }
+    
+    func hideSpinner() {
+        UIView.animate(withDuration: 0.2) { [unowned self] in
+            self.spinner.alpha = 0.0
+            self.actionButton.alpha = 1.0
+            self.spinner.stopAnimating()
+            self.setNeedsDisplay()
+        }
+    }
 }
 
 class CategoryHeaderView: UIView {

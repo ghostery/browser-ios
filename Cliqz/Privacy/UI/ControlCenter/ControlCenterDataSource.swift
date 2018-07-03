@@ -22,16 +22,16 @@ enum ActionType {
 }
 
 protocol ControlCenterDelegateProtocol: class {
-    func chageSiteState(to: DomainState)
+    func chageSiteState(to: DomainState, completion: @escaping () -> Void)
     func pauseGhostery(paused: Bool, time: Date)
     func turnGlobalAntitracking(on: Bool)
     func turnGlobalAdblocking(on: Bool)
     func changeState(category: String, state: TrackerUIState, section: Int, tableType: TableType)
     func changeState(appId: Int, state: TrackerUIState, section: Int?, tableType: TableType)
-    func undoAll(tableType: TableType)
-    func blockAll(tableType: TableType)
-    func unblockAll(tableType: TableType)
-    func restoreDefaultSettings(tableType: TableType)
+    func undoAll(tableType: TableType, completion: @escaping () -> Void)
+    func blockAll(tableType: TableType, completion: @escaping () -> Void)
+    func unblockAll(tableType: TableType, completion: @escaping () -> Void)
+    func restoreDefaultSettings(tableType: TableType, completion: @escaping () -> Void)
 }
 
 enum TrackerUIState {
