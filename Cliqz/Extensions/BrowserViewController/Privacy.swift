@@ -13,6 +13,30 @@ extension NSNotification.Name {
     public static let DeviceOrientationChanged = NSNotification.Name(rawValue: "DeviceOrientationChangedNotification")
 }
 
+class OrientationManager {
+    
+    static let shared = OrientationManager()
+    
+    private var lastOrientation: DeviceOrientation
+    
+    init() {
+        lastOrientation = UIDevice.current.getDeviceAndOrientation().1
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func orientationChanged(_ notification: Notification) {
+        let orientation = UIDevice.current.getDeviceAndOrientation().1
+        if orientation != lastOrientation {
+            lastOrientation = orientation
+            NotificationCenter.default.post(name: NSNotification.Name.DeviceOrientationChanged, object: nil)
+        }
+    }
+}
+
 extension BrowserViewController {
     
     func ghosteryButtonPressed(notification: Notification) {

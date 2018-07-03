@@ -833,8 +833,7 @@ class BrowserViewController: UIViewController {
                 return
             }
             
-            //homePanelController?.view?.isHidden = true
-            homePanelController?.hideKeepingBG()
+            homePanelController?.view?.isHidden = true
             
             searchController!.didMove(toParentViewController: self)
         }
@@ -853,8 +852,7 @@ class BrowserViewController: UIViewController {
             searchController.view.removeFromSuperview()
             searchController.removeFromParentViewController()
             self.searchController = nil
-            //homePanelController?.view?.isHidden = false
-            homePanelController?.show()
+            homePanelController?.view?.isHidden = false
             searchLoader = nil
         }
     }
@@ -1575,6 +1573,7 @@ extension BrowserViewController: URLBarDelegate {
 		// Cliqz: Close CC
 		self.hideControlCenter()
 		self.homePanelController?.shouldShowKeyboard = false
+        BackgroundImageManager.shared.reset()
 		// Cliqz: end
 
         hideSearchController()

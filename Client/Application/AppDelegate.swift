@@ -263,6 +263,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.registerNotificationCategories()
          */
         
+        // Cliqz: Init Orientation Manager
+        _ = OrientationManager.shared
+        
         SentTabAction.registerActions()
 
         /* Cliqz: Remove BuddyBuildSDK
