@@ -74,7 +74,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
         //Notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.DeviceOrientationChanged, object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -137,25 +137,15 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         currentOrientation = orientation
         
         if segmentedControl.selectedSegmentIndex < 1 {
-            backgroundView.image = UIImage.cliqzBackgroundImage()
+            backgroundView.image = BackgroundImageManager.shared.getImage()
         }
         else {
-            backgroundView.image = UIImage.cliqzBackgroundImage(blurred: true)
+            backgroundView.image = BackgroundImageManager.shared.getBlurredImage()
         }
     }
     
     func dismissKeyboard(_ sender: Any? = nil) {
         view.window?.rootViewController?.view.endEditing(true)
-    }
-    
-    func hideKeepingBG() {
-        segmentedControl.isHidden = true
-        controllerContainerView.isHidden = true
-    }
-    
-    func show() {
-        segmentedControl.isHidden = false
-        controllerContainerView.isHidden = false
     }
 }
 

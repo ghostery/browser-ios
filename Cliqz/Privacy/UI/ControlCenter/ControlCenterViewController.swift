@@ -57,7 +57,7 @@ class ControlCenterViewController: UIViewController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         lastOrientation = UIDevice.current.getDeviceAndOrientation().1
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged(notification:)), name: Notification.Name.DeviceOrientationChanged, object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {

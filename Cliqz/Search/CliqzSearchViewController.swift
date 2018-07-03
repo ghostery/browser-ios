@@ -37,9 +37,52 @@ let ShareLocationSearchNotification = NSNotification.Name(rawValue: "mobile-sear
 
 let SearchEngineChangedNotification = Notification.Name(rawValue: "SearchEngineChangedNotification")
 
+class BackgroundImageManager {
+    
+    static let shared = BackgroundImageManager()
+    
+    private var orientationForImage: DeviceOrientation? = nil
+    private var orientationForBlurredImage: DeviceOrientation? = nil
+    
+    private var image: UIImage? = nil
+    private var blurredImage: UIImage? = nil
+    
+    func getImage() -> UIImage? {
+        
+        let (_, orientation) = UIDevice.current.getDeviceAndOrientation()
+        
+        if let img = image, orientation == orientationForImage {
+            return img
+        }
+        
+        orientationForImage = orientation
+        image = UIImage.cliqzBackgroundImage()
+        return image
+    }
+    
+    func getBlurredImage() -> UIImage? {
+        
+        let (_, orientation) = UIDevice.current.getDeviceAndOrientation()
+        
+        if let img = blurredImage, orientation == orientationForBlurredImage {
+            return img
+        }
+        
+        orientationForBlurredImage = orientation
+        blurredImage = UIImage.cliqzBackgroundImage(blurred: true)
+        return blurredImage
+    }
+    
+    func reset() {
+        image = nil
+        blurredImage = nil
+    }
+}
+
 class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAlertViewDelegate  {
     
     let searchView = Engine.sharedInstance.rootView
+    fileprivate let backgroundImage = UIImageView()
 
     private static let KVOLoading = "loading"
     
@@ -89,14 +132,21 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         
         self.view.backgroundColor = .clear
         self.searchView.backgroundColor = .clear
+        self.view.addSubview(backgroundImage)
+        self.backgroundImage.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
         self.view.addSubview(searchView)
         self.searchView.snp.makeConstraints { (make) in
-            make.left.right.top.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
 
 		KeyboardHelper.defaultHelper.addDelegate(self)
         
+        backgroundImage.image = BackgroundImageManager.shared.getBlurredImage()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(showOpenSettingsAlert(_:)), name: NSNotification.Name(rawValue: LocationManager.NotificationShowOpenLocationSettingsAlert), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.DeviceOrientationChanged, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -180,6 +230,10 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
     //MARK: - Search Engine
     func searchEngineChanged(_ notification: Notification) {
         self.updateExtensionSearchEngine()
+    }
+    
+    @objc func orientationDidChange(_ notification: Notification) {
+        backgroundImage.image = BackgroundImageManager.shared.getBlurredImage()
     }
 }
 
