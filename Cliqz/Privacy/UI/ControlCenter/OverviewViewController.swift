@@ -625,7 +625,7 @@ class OverviewViewController: UIViewController {
     
     fileprivate func updateChart() {
         guard let datasource = self.dataSource else { return }
-        let countsAndColors = datasource.countAndColorByCategory()
+        let countsAndColors = datasource.countAndColorByCategory(tableType: .page)
         var values: [PieChartDataEntry] = []
         var colors: [UIColor] = []
         for key in countsAndColors.keys {

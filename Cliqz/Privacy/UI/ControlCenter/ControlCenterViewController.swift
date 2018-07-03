@@ -17,8 +17,7 @@ protocol ControlCenterViewControllerDelegate: class {
 class ControlCenterViewController: UIViewController {
 	weak var homePanelDelegate: HomePanelDelegate?
 
-	var modelWithURL: ControlCenterModel?
-    var modelWithoutURL: ControlCenterModel?
+	var model: ControlCenterModel = ControlCenterModel()
     
     weak var container: ControlCenterViewControllerDelegate? = nil
 
@@ -47,7 +46,7 @@ class ControlCenterViewController: UIViewController {
 		didSet {
 			if !pageURL.isEmpty,
 				let url = URL(string: pageURL) {
-				self.modelWithURL = ControlCenterModel(url: url)
+				self.model.url = url
 				self.overviewViewController.pageURL = url.host ?? ""
 			}
 		}
@@ -57,7 +56,6 @@ class ControlCenterViewController: UIViewController {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         lastOrientation = UIDevice.current.getDeviceAndOrientation().1
-        modelWithoutURL = ControlCenterModel(url: nil)
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged(notification:)), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
     }
@@ -154,16 +152,16 @@ class ControlCenterViewController: UIViewController {
 	private func selectedPanel() -> UIViewController {
 		switch panelSwitchControl.selectedSegmentIndex {
 		case 0:
-			self.overviewViewController.dataSource = self.modelWithURL
-			self.overviewViewController.delegate = self.modelWithURL
+			self.overviewViewController.dataSource = self.model
+			self.overviewViewController.delegate = self.model
 			return self.overviewViewController
 		case 1:
-			self.trackersViewController.dataSource = self.modelWithURL
-			self.trackersViewController.delegate = self.modelWithURL
+			self.trackersViewController.dataSource = self.model
+			self.trackersViewController.delegate = self.model
 			return self.trackersViewController
 		case 2:
-			self.globalTrackersViewController.dataSource = self.modelWithoutURL
-			self.globalTrackersViewController.delegate = self.modelWithoutURL
+			self.globalTrackersViewController.dataSource = self.model
+			self.globalTrackersViewController.delegate = self.model
 			return self.globalTrackersViewController
 		default:
 			return UIViewController()
