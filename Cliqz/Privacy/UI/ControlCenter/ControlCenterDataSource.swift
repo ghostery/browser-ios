@@ -288,7 +288,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
             return set
         }
         
-        if let domainString = self.domainStr {
+        if let domainString = self.domainStr, tableType == .page {
             let domainState = self.getOrCreateDomain(domain: domainString)
             if domainState.translatedState == .trusted {
                 let image = iconForTrackerState(state: .trusted)

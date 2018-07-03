@@ -42,13 +42,18 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
     func chageSiteState(to: DomainState, completion: @escaping () -> Void) {
         guard let domainStr = self.domainStr else { return }
         
+        invalidateStateImageCache()
+        invalidateBlockedCountCache()
+        
+        if to == .trusted || to == .empty {
+            UserPreferences.instance.antitrackingMode = .blockSomeOrNone
+            UserPreferences.instance.writeToDisk()
+        }
+        
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
             if let domainObj = self?.getOrCreateDomain(domain: domainStr) {
                 DomainStore.changeState(domain: domainObj, state: to)
-                
-                self?.invalidateStateImageCache()
-                self?.invalidateBlockedCountCache()
                 
                 if let nextState = self?.domainState2TrackerUIState(domainState: to) {
                     let apps = TrackerList.instance.detectedTrackersForPage(domainStr)
@@ -192,6 +197,11 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
+        
+        if state == .trusted || state == .empty {
+            UserPreferences.instance.antitrackingMode = .blockSomeOrNone
+            UserPreferences.instance.writeToDisk()
+        }
         
         var trackers: [TrackerListApp] = []
         
