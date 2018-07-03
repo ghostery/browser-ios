@@ -47,8 +47,8 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
             if let domainObj = self?.getOrCreateDomain(domain: domainStr) {
                 DomainStore.changeState(domain: domainObj, state: to)
                 
-                self?.invalidateStateImageCache(tableType: .page, section: nil)
-                self?.invalidateBlockedCountCache(tableType: .page, section: nil)
+                self?.invalidateStateImageCache()
+                self?.invalidateBlockedCountCache()
                 
                 if let nextState = self?.domainState2TrackerUIState(domainState: to) {
                     let apps = TrackerList.instance.detectedTrackersForPage(domainStr)
