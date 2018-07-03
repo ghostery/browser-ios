@@ -21,18 +21,19 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func changeState(category: String, tableType: TableType, state: TrackerUIState, section: Int) {
+    func changeState(category: String, state: TrackerUIState, section: Int, tableType: TableType) {
         
-        let trackers: [TrackerListApp]
-        if let domainStr = self.domainStr {
-            trackers = (TrackerList.instance.trackersByCategory(domain: domainStr)[category] ?? [])
+        var trackers: [TrackerListApp] = []
+        
+        if let domainStr = self.domainStr, tableType == .page {
+            trackers.append(contentsOf:(TrackerList.instance.trackersByCategory(domain: domainStr)[category] ?? []))
         }
-        else {
-            trackers = (TrackerList.instance.appsByCategory[category] ?? [])
+        else if tableType == .global {
+            trackers.append(contentsOf:(TrackerList.instance.appsByCategory[category] ?? []))
         }
         
         trackers.forEach { (app) in
-            self.changeState(appId: app.appId, state: state, section: section)
+            self.changeState(appId: app.appId, state: state, section: section, tableType: tableType)
         }
         
     }
@@ -44,8 +45,8 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         domainObj = getOrCreateDomain(domain: domainStr)
         DomainStore.changeState(domain: domainObj, state: to)
         
-        invalidateStateImageCache()
-        invalidateBlockedCountCache()
+        invalidateStateImageCache(tableType: .page, section: nil)
+        invalidateBlockedCountCache(tableType: .page, section: nil)
         
         let nextState = domainState2TrackerUIState(domainState: to)
         let apps = TrackerList.instance.detectedTrackersForPage(domainStr)
@@ -56,15 +57,15 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func changeState(appId: Int, state: TrackerUIState, section: Int?) {
+    func changeState(appId: Int, state: TrackerUIState, section: Int?, tableType: TableType) {
         if let trackerListApp = TrackerList.instance.apps[appId] {
             
             if let s = section {
-                invalidateStateImageCache(section: s)
-                invalidateBlockedCountCache(section: s)
+                invalidateStateImageCache(tableType: tableType, section: s)
+                invalidateBlockedCountCache(tableType: tableType, section: s)
             }
             
-            if let domainStr = self.domainStr {
+            if let domainStr = self.domainStr, tableType == .page {
                 
                 let currentState = trackerListApp.state(domain: domainStr)
                 let domainObj = getOrCreateDomain(domain: domainStr)
@@ -85,38 +86,38 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func blockAll() {
-        changeAll(state: .blocked)
+    func blockAll(tableType: TableType) {
+        changeAll(state: .blocked, tableType: tableType)
     }
     
-    func unblockAll() {
-        changeAll(state: .empty)
+    func unblockAll(tableType: TableType) {
+        changeAll(state: .empty, tableType: tableType)
     }
     
-    func undoAll() {
+    func undoAll(tableType: TableType) {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
         
-        let trackers: [TrackerListApp]
+        var trackers: [TrackerListApp] = []
         
         var domain: String? = nil
         
-        if let d = self.domainStr {
+        if let d = self.domainStr, tableType == .page {
             domain = d
-            trackers = TrackerList.instance.detectedTrackersForPage(d)
+            trackers.append(contentsOf: TrackerList.instance.detectedTrackersForPage(d))
         }
-        else {
-            trackers = TrackerList.instance.appsList
+        else if tableType == .global {
+            trackers.append(contentsOf: TrackerList.instance.appsList)
         }
         
         for tracker in trackers {
-            self.changeState(appId: tracker.appId, state: tracker.prevState(domain: domain), section: nil)
+            self.changeState(appId: tracker.appId, state: tracker.prevState(domain: domain), section: nil, tableType: tableType)
         }
     }
     
-    func restoreDefaultSettings() {
-        guard self.domainStr == nil else { return }
+    func restoreDefaultSettings(tableType: TableType) {
+        guard tableType == .global else { return }
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
@@ -154,22 +155,22 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         UserPreferences.instance.writeToDisk()
     }
     
-    private func changeAll(state: TrackerUIState) {
+    private func changeAll(state: TrackerUIState, tableType: TableType) {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
         
-        let trackers: [TrackerListApp]
+        var trackers: [TrackerListApp] = []
         
-        if let d = self.domainStr {
-            trackers = TrackerList.instance.detectedTrackersForPage(d)
+        if let d = self.domainStr, tableType == .page {
+            trackers.append(contentsOf: TrackerList.instance.detectedTrackersForPage(d))
         }
-        else {
-            trackers = TrackerList.instance.appsList
+        else if tableType == .global {
+            trackers.append(contentsOf: TrackerList.instance.appsList)
         }
         
         for tracker in trackers {
-            self.changeState(appId: tracker.appId, state: state, section: nil)
+            self.changeState(appId: tracker.appId, state: state, section: nil, tableType: tableType)
         }
     }
 

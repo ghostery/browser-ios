@@ -159,9 +159,9 @@ class TrackersController: UIViewController {
         
 		switch type {
 		case .page:
-			self.delegate?.blockAll()
+			self.delegate?.blockAll(tableType: type)
 		case .global:
-            self.delegate?.blockAll()
+            self.delegate?.blockAll(tableType: type)
 			self.delegate?.turnGlobalAntitracking(on: true)
 		}
 		self.tableView.reloadData()
@@ -174,19 +174,19 @@ class TrackersController: UIViewController {
             self.delegate?.chageSiteState(to: .empty)
         case .global:
             //change all trackers to empty
-            self.delegate?.unblockAll()
+            self.delegate?.unblockAll(tableType: type)
             self.delegate?.turnGlobalAntitracking(on: false)
         }
         self.tableView.reloadData()
     }
     
     private func undo() {
-        self.delegate?.undoAll()
+        self.delegate?.undoAll(tableType: type)
         self.tableView.reloadData()
     }
     
     private func restoreDefaultSettings() {
-        self.delegate?.restoreDefaultSettings()
+        self.delegate?.restoreDefaultSettings(tableType: type)
         self.tableView.reloadData()
     }
 
@@ -278,8 +278,8 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 			for action in actions {
 				switch action {
 				case .trust:
-					let trustAction = UIContextualAction(style: .normal, title: "Trust") { (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .trusted, section: indexPath.section)
+					let trustAction = UIContextualAction(style: .normal, title: "Trust") { [unowned self] (action, view, complHandler) in
+                        self.delegate?.changeState(appId: appId, state: .trusted, section: indexPath.section, tableType: self.type)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
 						self.tableView.endUpdates()
@@ -289,8 +289,8 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					trustAction.image = UIImage(named: "trustAction")
 					swipeActions.append(trustAction)
 				case .block:
-					let blockAction = UIContextualAction(style: .destructive, title: "Block") { (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .blocked, section: indexPath.section)
+					let blockAction = UIContextualAction(style: .destructive, title: "Block") { [unowned self] (action, view, complHandler) in
+						self.delegate?.changeState(appId: appId, state: .blocked, section: indexPath.section, tableType: self.type)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
 						self.tableView.endUpdates()
@@ -300,8 +300,8 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					blockAction.image = UIImage(named: "blockAction")
 					swipeActions.append(blockAction)
 				case .unblock:
-					let unblockAction = UIContextualAction(style: .destructive, title: "Unblock") { (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .empty, section: indexPath.section)
+					let unblockAction = UIContextualAction(style: .destructive, title: "Unblock") { [unowned self] (action, view, complHandler) in
+						self.delegate?.changeState(appId: appId, state: .empty, section: indexPath.section, tableType: self.type)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
 						self.tableView.endUpdates()
@@ -311,8 +311,8 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					unblockAction.image = UIImage(named: "unblockAction")
 					swipeActions.append(unblockAction)
 				case .restrict:
-					let restrictAction = UIContextualAction(style: .destructive, title: "Restrict") { (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .restricted, section: indexPath.section)
+					let restrictAction = UIContextualAction(style: .destructive, title: "Restrict") { [unowned self] (action, view, complHandler) in
+						self.delegate?.changeState(appId: appId, state: .restricted, section: indexPath.section, tableType: self.type)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
 						self.tableView.endUpdates()
