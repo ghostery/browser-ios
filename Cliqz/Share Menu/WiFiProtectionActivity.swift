@@ -17,7 +17,7 @@ class WiFiProtectionActivity : UIActivity {
 	}
 	
 	override var activityImage : UIImage? {
-		return UIImage(named: "settings")
+		return UIImage(named: "wifiProtection")
 	}
 	
 	override var activityType: UIActivityType? {
