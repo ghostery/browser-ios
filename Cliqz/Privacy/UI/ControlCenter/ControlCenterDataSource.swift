@@ -14,11 +14,51 @@ enum TableType {
     case global
 }
 
-enum ActionType {
+enum ActionType: Int {
     case trust
+    case untrust
     case block
     case unblock
     case restrict
+    case unrestrict
+    
+    static func positives() -> [ActionType] {
+        return [.block, .restrict, .trust]
+    }
+    
+    static func negatives() -> [ActionType] {
+        return [.unblock, .unrestrict, .untrust]
+    }
+    
+    static func complement(_ action: ActionType) -> ActionType {
+        switch action {
+        case .trust:
+            return .untrust
+        case .untrust:
+            return .trust
+        case .block:
+            return .unblock
+        case .unblock:
+            return .block
+        case .restrict:
+            return .unrestrict
+        case .unrestrict:
+            return .restrict
+        }
+    }
+    
+    static func action(state: TrackerUIState) -> ActionType? {
+        switch state {
+        case .empty:
+            return nil
+        case .trusted:
+            return .trust
+        case .restricted:
+            return .restrict
+        case .blocked:
+            return .block
+        }
+    }
 }
 
 protocol ControlCenterDelegateProtocol: class {
@@ -404,12 +444,24 @@ class ControlCenterModel: ControlCenterDSProtocol {
     
     func actions(tableType: TableType, indexPath: IndexPath) -> [ActionType] {
         
+        guard let t = tracker(tableType: tableType, indexPath: indexPath) else { return [] }
+        
+        let state = tableType == .page ? t.state(domain: self.domainStr) : t.state(domain: nil)
+        
         if tableType == .page {
-            return [.block, .restrict, .trust]
+            var returnList: [ActionType] = []
+            for action in ActionType.positives() {
+                if action == ActionType.action(state: state) {
+                    returnList.append(ActionType.complement(action))
+                }
+                else {
+                    returnList.append(action)
+                }
+            }
+            return returnList
         }
         
-        guard let t = tracker(tableType: tableType, indexPath: indexPath) else { return [] }
-        if t.state(domain: tableType == .page ? self.domainStr : nil) == .blocked {
+        if state == .blocked {
             return [.unblock]
         }
         
