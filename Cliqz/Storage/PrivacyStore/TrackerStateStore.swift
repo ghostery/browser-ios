@@ -46,20 +46,31 @@ public enum TrackerStateEnum {
     case blocked
 }
 
+public extension Notification.Name {
+    public static let BlockedTrackerSetChanged = Notification.Name("BlockedTrackerSetChangedNotification")
+}
+
 public class TrackerStateStore: NSObject {
     
     public static let shared = TrackerStateStore()
     
-    public var blockedTrackers: Set<Int> = Set()
+    public var blockedTrackers: Set<Int> = Set() {
+        didSet {
+            NotificationCenter.default.post(name: Notification.Name.BlockedTrackerSetChanged, object: nil)
+        }
+    }
     
     public func populateBlockedTrackers() {
         let realm = try! Realm()
         let states = realm.objects(TrackerState.self)
+        var set: Set<Int> = Set()
         for state in states {
             if state.translatedState == .blocked {
-                blockedTrackers.insert(state.appId)
+                set.insert(state.appId)
             }
         }
+        //this makes sure the BlockedTrackerSetChanged notification is called only once.
+        blockedTrackers = set
     }
     
     @discardableResult public class func createTrackerState(appId: Int) -> TrackerState? {
@@ -115,15 +126,16 @@ public class TrackerStateStore: NSObject {
             returnState = trackerState
         }
         
-        if state == .empty {
-            TrackerStateStore.shared.blockedTrackers.remove(appId)
-        }
-        else if state == .blocked {
-            TrackerStateStore.shared.blockedTrackers.insert(appId)
-        }
-        
         do {
             try realm.commitWrite()
+            
+            if state == .empty {
+                TrackerStateStore.shared.blockedTrackers.remove(appId)
+            }
+            else if state == .blocked {
+                TrackerStateStore.shared.blockedTrackers.insert(appId)
+            }
+            
             return returnState
         }
         catch {

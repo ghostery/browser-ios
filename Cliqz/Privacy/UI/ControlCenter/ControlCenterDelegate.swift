@@ -9,8 +9,7 @@
 import UIKit
 import Storage
 
-extension ControlCenterModel: ControlCenterDelegateProtocol {
-    
+extension ControlCenterModel: ControlCenterDelegateProtocol { 
     
     private func getOrCreateDomain(domain: String) -> Domain {
         //if we have done anything with this domain before we will have something in the DB
@@ -44,11 +43,6 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
-        
-        if to == .trusted || to == .empty {
-            UserPreferences.instance.antitrackingMode = .blockSomeOrNone
-            UserPreferences.instance.writeToDisk()
-        }
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
@@ -89,11 +83,7 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
             }
             
             changeGlobalTrackerState(to: state, appId: trackerListApp.appId)
-            
-            if state == TrackerUIState.trusted || state == TrackerUIState.empty {
-                UserPreferences.instance.antitrackingMode = .blockSomeOrNone
-                UserPreferences.instance.writeToDisk()
-            }
+
         }
         else {
             debugPrint("PROBLEM -- trackerState does not exist for appId = \(appId)!")
@@ -137,8 +127,12 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
                 trackers.append(contentsOf: TrackerList.instance.appsList)
             }
             
+            var stateSet: Set<TrackerUIState> = Set()
+            
             for tracker in trackers {
-                self?.changeState(appId: tracker.appId, state: tracker.prevState(domain: domain), section: nil, tableType: tableType)
+                let prevState = tracker.prevState(domain: domain)
+                stateSet.insert(prevState)
+                self?.changeState(appId: tracker.appId, state: prevState, section: nil, tableType: tableType)
             }
             
             DispatchQueue.main.async {
@@ -154,9 +148,6 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
             
             self?.invalidateStateImageCache()
             self?.invalidateBlockedCountCache()
-            
-            UserPreferences.instance.antitrackingMode = .blockSomeOrNone
-            UserPreferences.instance.writeToDisk()
             
             let trackers = TrackerList.instance.appsList
             
@@ -180,14 +171,6 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         UserPreferences.instance.writeToDisk()
     }
     
-    func turnGlobalAntitracking(on: Bool) {
-        on ? UserPreferences.instance.antitrackingMode = .blockAll : (UserPreferences.instance.antitrackingMode = .blockSomeOrNone)
-        UserPreferences.instance.writeToDisk()
-        
-        invalidateStateImageCache()
-        invalidateBlockedCountCache()
-    }
-    
     func turnGlobalAdblocking(on: Bool) {
         on ? UserPreferences.instance.adblockingMode = .blockAll : (UserPreferences.instance.adblockingMode = .blockNone)
         UserPreferences.instance.writeToDisk()
@@ -197,11 +180,6 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
-        
-        if state == .trusted || state == .empty {
-            UserPreferences.instance.antitrackingMode = .blockSomeOrNone
-            UserPreferences.instance.writeToDisk()
-        }
         
         var trackers: [TrackerListApp] = []
         

@@ -441,38 +441,39 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
 //        return TrackerStore.shared.contains(member: appId)
 //    }
 
-    func blockAllTrackers() {
-        // get the list of tracker apps to block
-        var appList = [TrackerListApp]()
-        for (_, trackerApp) in apps {
-            //trackerApp.isBlocked = true
-            TrackerStateStore.change(appId: trackerApp.appId, toState: .blocked)
-            appList.append(trackerApp)
-        }
-
-        blockSpecificTrackers(appList)
-
-        UserPreferences.instance.antitrackingMode = .blockAll
-        UserPreferences.instance.writeToDisk()
-    }
-
-    func unblockAllTrackers() {
-        TrackerStore.shared.removeAll()
-
-        UserPreferences.instance.antitrackingMode = .blockSomeOrNone
-        UserPreferences.instance.writeToDisk()
-    }
-
-    func blockSpecificTrackers(_ trackers: [TrackerListApp]) {
-        // run this on a background thread and context
-        
-        for tracker in trackers {
-            TrackerStore.shared.add(member: tracker.appId)
-        }
-
-        UserPreferences.instance.antitrackingMode = .blockSomeOrNone
-        UserPreferences.instance.writeToDisk()
-    }
+//    Cliqz: See ControlCenterDelegate for blocking
+//    func blockAllTrackers() {
+//        // get the list of tracker apps to block
+//        var appList = [TrackerListApp]()
+//        for (_, trackerApp) in apps {
+//            //trackerApp.isBlocked = true
+//            TrackerStateStore.change(appId: trackerApp.appId, toState: .blocked)
+//            appList.append(trackerApp)
+//        }
+//
+//        blockSpecificTrackers(appList)
+//
+//        UserPreferences.instance.antitrackingMode = .blockAll
+//        UserPreferences.instance.writeToDisk()
+//    }
+//
+//    func unblockAllTrackers() {
+//        TrackerStore.shared.removeAll()
+//
+//        UserPreferences.instance.antitrackingMode = .blockSomeOrNone
+//        UserPreferences.instance.writeToDisk()
+//    }
+//
+//    func blockSpecificTrackers(_ trackers: [TrackerListApp]) {
+//        // run this on a background thread and context
+//
+//        for tracker in trackers {
+//            TrackerStore.shared.add(member: tracker.appId)
+//        }
+//
+//        UserPreferences.instance.antitrackingMode = .blockSomeOrNone
+//        UserPreferences.instance.writeToDisk()
+//    }
     
     // MARK: - Helper Methods
     

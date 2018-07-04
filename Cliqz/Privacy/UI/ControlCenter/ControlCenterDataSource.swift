@@ -24,7 +24,6 @@ enum ActionType {
 protocol ControlCenterDelegateProtocol: class {
     func chageSiteState(to: DomainState, completion: @escaping () -> Void)
     func pauseGhostery(paused: Bool, time: Date)
-    func turnGlobalAntitracking(on: Bool)
     func turnGlobalAdblocking(on: Bool)
     func changeState(category: String, state: TrackerUIState, section: Int, tableType: TableType)
     func changeState(appId: Int, state: TrackerUIState, section: Int?, tableType: TableType)
