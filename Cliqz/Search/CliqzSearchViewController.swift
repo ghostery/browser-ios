@@ -51,8 +51,11 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
     var lastSearchQuery: String? = nil
     
     var searchQuery: String? = nil {
-        willSet {
-            lastSearchQuery = searchQuery
+		willSet {
+			lastSearchQuery = searchQuery
+		}
+        didSet {
+			Engine.sharedInstance.sendUrlBarInputEvent(newString: searchQuery, lastString: self.lastSearchQuery)
         }
     }
     

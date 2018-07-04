@@ -51,8 +51,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             self.textDidChange(self)
         }
     }
-    //Cliqz: Cliqz Search
-    private var lastText: String?
 
     override var accessibilityValue: String? {
         get {
@@ -79,10 +77,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         notifyTextChanged = debounce(0.1, action: {
             if self.isEditing {
                 self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.normalizeString(self.text ?? ""))
-                
-                //Cliqz: Cliqz Search
-                Engine.sharedInstance.sendUrlBarInputEvent(newString: self.text, lastString: self.lastText)
-                self.lastText = self.text
             }
         })
     }

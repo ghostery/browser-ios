@@ -26,4 +26,8 @@ extension BrowserViewController {
         
         return false
     }
+
+	func shouldHideSearchView(newQuery: String, oldQuery: String?, urlBar: URLBarView) -> Bool {
+		return newQuery.isEmpty && (!(urlBar.locationTextField?.isSelectionActive ?? false) || (oldQuery?.isEmpty ?? true))
+	}
 }
