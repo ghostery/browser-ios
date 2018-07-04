@@ -108,17 +108,18 @@ open class Engine {
     // MARK :- Search
     func sendUrlBarInputEvent(newString: String?, lastString: String?) {
         debugPrint("newString = \(newString ?? "null") | lastString = \(lastString ?? "null")")
-        
-        guard let newString = newString, let lastString = lastString else {
+
+        guard let newString = newString else {
             return
         }
         
         let contextId = "mobile-cards"
         var keyCode = ""
-        
-        if lastString.count - newString.count == 1 {
+        let lastStringLength = lastString?.count ?? 0
+		
+        if lastStringLength - newString.count == 1 {
              keyCode = "Backspace"
-        } else if newString.count > lastString.count {
+        } else if newString.count > lastStringLength {
             keyCode = "Key" + String(newString.last!).uppercased()
         }
 

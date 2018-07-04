@@ -132,7 +132,7 @@
 		1EAFE56F205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE569205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift */; };
 		1EAFE570205FFE82006A36B4 /* RegionalSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */; };
 		1EBB08B92068FC9700C6DFFE /* Eula.html in Resources */ = {isa = PBXBuildFile; fileRef = 1EBB08AA2068FC9600C6DFFE /* Eula.html */; };
-		1EC9C75420CFF6F200082652 /* BrowserViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC9C74520CFF6F200082652 /* BrowserViewController+Keyboard.swift */; };
+		1EC9C75420CFF6F200082652 /* BrowserViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC9C74520CFF6F200082652 /* BrowserViewControllerHelper.swift */; };
 		1EC9C7AE20D1342D00082652 /* Ghostery.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1EC9C7AD20D1342C00082652 /* Ghostery.xcconfig */; };
 		1EDF0B1F207B837F00856493 /* KeyboardAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */; };
 		1EDF0B22207B86A200856493 /* QuerySuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B21207B86A200856493 /* QuerySuggestionView.swift */; };
@@ -1765,7 +1765,7 @@
 		1EAFE569205FFE82006A36B4 /* HumanWebSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HumanWebSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegionalSettingsTableViewController.swift; sourceTree = "<group>"; };
 		1EBB08AA2068FC9600C6DFFE /* Eula.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Eula.html; sourceTree = "<group>"; };
-		1EC9C74520CFF6F200082652 /* BrowserViewController+Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+Keyboard.swift"; sourceTree = "<group>"; };
+		1EC9C74520CFF6F200082652 /* BrowserViewControllerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerHelper.swift; sourceTree = "<group>"; };
 		1EC9C7AD20D1342C00082652 /* Ghostery.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Ghostery.xcconfig; path = Configuration/Ghostery.xcconfig; sourceTree = "<group>"; };
 		1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
 		1EDF0B21207B86A200856493 /* QuerySuggestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuerySuggestionView.swift; sourceTree = "<group>"; };
@@ -3645,7 +3645,7 @@
 		4F30F51F205174DA0049E4F6 /* BrowserViewController */ = {
 			isa = PBXGroup;
 			children = (
-				1EC9C74520CFF6F200082652 /* BrowserViewController+Keyboard.swift */,
+				1EC9C74520CFF6F200082652 /* BrowserViewControllerHelper.swift */,
 				4F30F52620517C210049E4F6 /* SearchViewDelegate.swift */,
 				4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */,
 				1EEA36EC2067DD6F003B6AD5 /* VideoDownloader.swift */,
@@ -5554,7 +5554,7 @@
 					};
 					282731671ABC9BE700AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5581,7 +5581,7 @@
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5611,14 +5611,14 @@
 					};
 					3B43E3CF1D95C48D00BBA9DB = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					3BFE4B061D342FB800DDF53F = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5660,7 +5660,7 @@
 					};
 					E4D567211ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5677,12 +5677,12 @@
 					};
 					E6F9650B1B2F1CF20034B023 = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 					};
 					F84B21BD1A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = HPY23A294X;
+						DevelopmentTeam = 2UYYSSHVUH;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
@@ -5705,7 +5705,7 @@
 					};
 					F84B21D21A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -6906,7 +6906,7 @@
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				396E38F31EE0C90D00CC180F /* FxALoginHelper.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
-				1EC9C75420CFF6F200082652 /* BrowserViewController+Keyboard.swift in Sources */,
+				1EC9C75420CFF6F200082652 /* BrowserViewControllerHelper.swift in Sources */,
 				4F30F50E2051670C0049E4F6 /* JSBridge.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,

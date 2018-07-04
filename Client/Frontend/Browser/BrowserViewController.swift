@@ -1492,12 +1492,22 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
+		/* Cliqz: repaced check for hiding SearchViewController to prevent hiding SearchController in the case when the user is in search mode but keyboard is dissmissed and moves to overlay mode. Accroding to initial behaviour the typed text becomes selected and homepanel is shown, now it keeps search view.
         if text.isEmpty {
+		*/
+		if shouldHideSearchView(newQuery: text, oldQuery: searchController?.searchQuery, urlBar: urlBar) {
             hideSearchController()
         } else {
             showSearchController()
+			/* Cliqz: As searchview stays after navigating from nonoverlay mode to overlay, no need to update the text. Also the problem is that the text is empty, though there is a typed text on URLBar, so no need to overwrite searchQuery.
             searchController?.searchQuery = text
             searchLoader?.query = text
+			*/
+			if !text.isEmpty {
+				searchController?.searchQuery = text
+				searchLoader?.query = text
+			}
+			// End Cliqz
         }
     }
 
