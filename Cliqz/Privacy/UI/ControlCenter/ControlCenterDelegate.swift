@@ -166,6 +166,11 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
+    func setLastAction(_ action: LastAction) {
+        LocalDataStore.defaults.set(action.rawValue, forKey: "LastActionControlCenter")
+        LocalDataStore.defaults.synchronize()
+    }
+    
     func pauseGhostery(paused: Bool, time: Date) {
         paused ? UserPreferences.instance.pauseGhosteryDate = time : (UserPreferences.instance.pauseGhosteryDate = Date(timeIntervalSince1970: 0))
         UserPreferences.instance.writeToDisk()

@@ -31,6 +31,7 @@ protocol ControlCenterDelegateProtocol: class {
     func blockAll(tableType: TableType, completion: @escaping () -> Void)
     func unblockAll(tableType: TableType, completion: @escaping () -> Void)
     func restoreDefaultSettings(tableType: TableType, completion: @escaping () -> Void)
+    func setLastAction(_ action: LastAction)
 }
 
 enum TrackerUIState {
@@ -38,6 +39,12 @@ enum TrackerUIState {
     case trusted
     case restricted
     case blocked
+}
+
+enum LastAction: Int {
+    case block
+    case unblock
+    case undo
 }
 
 protocol ControlCenterDSProtocol: class {
@@ -67,6 +74,11 @@ protocol ControlCenterDSProtocol: class {
     func stateIcon(tableType: TableType, indexPath: IndexPath) -> UIImage?
     func appId(tableType: TableType, indexPath: IndexPath) -> Int
     func actions(tableType: TableType, indexPath: IndexPath) -> [ActionType]
+    
+    //OTHER
+    func shouldShowBlockAll(tableType: TableType) -> Bool
+    func shouldShowUnblockAll(tableType: TableType) -> Bool
+    func shouldShowUndo() -> Bool
 }
 
 final class CategoriesHelper {
@@ -403,6 +415,72 @@ class ControlCenterModel: ControlCenterDSProtocol {
         
         return [.block]
     }
+    
+    func shouldShowBlockAll(tableType: TableType) -> Bool {
+        if let rawValue = LocalDataStore.defaults.object(forKey: "LastActionControlCenter") as? Int, let lastAction = LastAction.init(rawValue: rawValue) {
+            if lastAction == .block {
+                return false
+            }
+        }
+        
+        if areAllTrackersInState(.blocked, tableType: tableType) {
+            return false
+        }
+        
+        return true
+    }
+    
+    func shouldShowUnblockAll(tableType: TableType) -> Bool {
+        if let rawValue = LocalDataStore.defaults.object(forKey: "LastActionControlCenter") as? Int, let lastAction = LastAction.init(rawValue: rawValue) {
+            if lastAction == .unblock {
+                return false
+            }
+        }
+        
+        if areAllTrackersInState(.empty, tableType: tableType) {
+            return false
+        }
+        
+        return true
+    }
+    
+    func shouldShowUndo() -> Bool {
+        if let rawValue = LocalDataStore.defaults.object(forKey: "LastActionControlCenter") as? Int, let lastAction = LastAction.init(rawValue: rawValue) {
+            if lastAction == .undo {
+                return false
+            }
+            return true
+        }
+        return false
+    }
+    
+    func invalidateStateImageCache(tableType: TableType? = nil, section: Int? = nil) {
+        if let t = tableType {
+            if let s = section {
+                stateImageCache[t]?.removeValue(forKey: s)
+            }
+            else {
+                stateImageCache[t]? = [:]
+            }
+        }
+        else {
+            stateImageCache = [.page: [:], .global: [:]]
+        }
+    }
+    
+    func invalidateBlockedCountCache(tableType: TableType? = nil, section: Int? = nil) {
+        if let t = tableType {
+            if let s = section {
+                blockedTrackerCountCache[t]?.removeValue(forKey: s)
+            }
+            else {
+                blockedTrackerCountCache[t]? = [:]
+            }
+        }
+        else {
+            blockedTrackerCountCache = [.page: [:], .global: [:]]
+        }
+    }
 }
 
 // MARK: - Helpers
@@ -476,31 +554,22 @@ extension ControlCenterModel {
         return nil
     }
     
-    func invalidateStateImageCache(tableType: TableType? = nil, section: Int? = nil) {
-        if let t = tableType {
-            if let s = section {
-                stateImageCache[t]?.removeValue(forKey: s)
-            }
-            else {
-                stateImageCache[t]? = [:]
-            }
-        }
-        else {
-            stateImageCache = [.page: [:], .global: [:]]
-        }
-    }
-    
-    func invalidateBlockedCountCache(tableType: TableType? = nil, section: Int? = nil) {
-        if let t = tableType {
-            if let s = section {
-                blockedTrackerCountCache[t]?.removeValue(forKey: s)
-            }
-            else {
-                blockedTrackerCountCache[t]? = [:]
+    fileprivate func areAllTrackersInState(_ state: TrackerUIState, tableType: TableType) -> Bool {
+        
+        let trackers = source(tableType)
+        let domain =  tableType == .page ? self.domainStr : nil
+        
+        var returnValue = true
+        
+        for key in trackers.keys {
+            for app in trackers[key]! {
+                if app.state(domain: domain) != state {
+                    returnValue = false
+                    break
+                }
             }
         }
-        else {
-            blockedTrackerCountCache = [.page: [:], .global: [:]]
-        }
+        
+        return returnValue
     }
 }
