@@ -6,6 +6,7 @@
 //  Copyright © 2016 Ghostery. All rights reserved.
 //
 import Foundation
+import Storage
 
 @objc open class UserPreferences : NSObject {
     
@@ -26,6 +27,26 @@ import Foundation
     
     static let instance = UserPreferences()
     
+    public override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateAntitrackingPref), name: Notification.Name.BlockedTrackerSetChanged, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func updateAntitrackingPref(_ notificaion: Notification) {
+        if TrackerStateStore.shared.blockedTrackers.count == TrackerList.instance.appsList.count, self._antitrackingMode != .blockAll {
+            self._antitrackingMode = .blockAll
+            self.writeToDisk()
+        }
+        else if TrackerStateStore.shared.blockedTrackers.count != TrackerList.instance.appsList.count, self.antitrackingMode != .blockSomeOrNone {
+            self._antitrackingMode = .blockSomeOrNone
+            self.writeToDisk()
+        }
+    }
+    
     let TrackerListVersionKey = "TrackerListVersion"
     let AntitrackingModeKey = "AntitrackingMode"
     let AdblockingModeKey = "AdblockingMode"
@@ -33,7 +54,18 @@ import Foundation
     let BlockNewTrackersKey = "block_new_trackers_by_default"
     let HasRunBeforeKey = "NotFirstRun"
     
+    // antitracking mode is supposed to be set only in updateAntitrackingPref. It depends on the number of trackers blocked.
     var antitrackingMode: AntitrackingMode {
+        get {
+            return _antitrackingMode
+        }
+        
+        set {
+            //don't set
+        }
+    }
+    
+    private var _antitrackingMode: AntitrackingMode {
         get {
             if let mode = AntitrackingMode(rawValue: userDefaults().integer(forKey: AntitrackingModeKey)) {
                 return mode

@@ -158,19 +158,10 @@ class TrackersController: UIViewController {
 
 	private func blockAll() {
         headerView.showSpinner()
-		switch type {
-		case .page:
-            self.delegate?.blockAll(tableType: type, completion: { [weak self] in
-                self?.tableView.reloadData()
-                self?.headerView.hideSpinner()
-            })
-		case .global:
-			self.delegate?.turnGlobalAntitracking(on: true)
-            self.delegate?.blockAll(tableType: type, completion: { [weak self] in
-                self?.tableView.reloadData()
-                self?.headerView.hideSpinner()
-            })
-		}
+        self.delegate?.blockAll(tableType: type, completion: { [weak self] in
+            self?.tableView.reloadData()
+            self?.headerView.hideSpinner()
+        })
 	}
     
     private func unblockAll() {
@@ -187,7 +178,6 @@ class TrackersController: UIViewController {
                 self?.tableView.reloadData()
                 self?.headerView.hideSpinner()
             }
-            self.delegate?.turnGlobalAntitracking(on: false)
         }
     }
     
