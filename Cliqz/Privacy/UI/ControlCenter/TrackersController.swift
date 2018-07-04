@@ -310,7 +310,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 			for action in actions {
 				switch action {
 				case .trust:
-					let trustAction = UIContextualAction(style: .normal, title: "Trust") { [unowned self] (action, view, complHandler) in
+					let trustAction = UIContextualAction(style: .normal, title: NSLocalizedString("Trust", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Trust Action Title")) { [unowned self] (action, view, complHandler) in
                         self.delegate?.changeState(appId: appId, state: .trusted, section: indexPath.section, tableType: self.type)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
@@ -318,10 +318,19 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 						complHandler(false)
 					}
 					trustAction.backgroundColor = UIColor.cliqzGreenLightFunctional
-					trustAction.image = UIImage(named: "trustAction")
 					swipeActions.append(trustAction)
+                case .untrust:
+                    let untrustAction = UIContextualAction(style: .normal, title: NSLocalizedString("Untrust", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Untrust Action Title")) { [unowned self] (action, view, complHandler) in
+                        self.delegate?.changeState(appId: appId, state: .empty, section: indexPath.section, tableType: self.type)
+                        self.tableView.beginUpdates()
+                        self.tableView.reloadSections([indexPath.section], with: .none)
+                        self.tableView.endUpdates()
+                        complHandler(false)
+                    }
+                    untrustAction.backgroundColor = UIColor.cliqzGreenLightFunctional
+                    swipeActions.append(untrustAction)
 				case .block:
-					let blockAction = UIContextualAction(style: .destructive, title: "Block") { [unowned self] (action, view, complHandler) in
+					let blockAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Block", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Block Action Title")) { [unowned self] (action, view, complHandler) in
 						self.delegate?.changeState(appId: appId, state: .blocked, section: indexPath.section, tableType: self.type)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
@@ -329,21 +338,19 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 						complHandler(false)
 					}
 					blockAction.backgroundColor = UIColor(colorString: "E74055")
-					blockAction.image = UIImage(named: "blockAction")
 					swipeActions.append(blockAction)
 				case .unblock:
-					let unblockAction = UIContextualAction(style: .destructive, title: "Unblock") { [unowned self] (action, view, complHandler) in
+					let unblockAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unblock", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unblock Action Title")) { [unowned self] (action, view, complHandler) in
 						self.delegate?.changeState(appId: appId, state: .empty, section: indexPath.section, tableType: self.type)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
 						self.tableView.endUpdates()
 						complHandler(false)
 					}
-					unblockAction.backgroundColor = ControlCenterUI.textGray
-					unblockAction.image = UIImage(named: "unblockAction")
+					unblockAction.backgroundColor = UIColor(colorString: "E74055")
 					swipeActions.append(unblockAction)
 				case .restrict:
-					let restrictAction = UIContextualAction(style: .destructive, title: "Restrict") { [unowned self] (action, view, complHandler) in
+					let restrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Restrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Restrict Action Title")) { [unowned self] (action, view, complHandler) in
 						self.delegate?.changeState(appId: appId, state: .restricted, section: indexPath.section, tableType: self.type)
 						self.tableView.beginUpdates()
 						self.tableView.reloadSections([indexPath.section], with: .none)
@@ -351,8 +358,17 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 						complHandler(false)
 					}
 					restrictAction.backgroundColor = UIColor(colorString: "BE4948")
-					restrictAction.image = UIImage(named: "restrictAction")
 					swipeActions.append(restrictAction)
+                case .unrestrict:
+                    let unrestrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unrestrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unrestrict Action Title")) { [unowned self] (action, view, complHandler) in
+                        self.delegate?.changeState(appId: appId, state: .restricted, section: indexPath.section, tableType: self.type)
+                        self.tableView.beginUpdates()
+                        self.tableView.reloadSections([indexPath.section], with: .none)
+                        self.tableView.endUpdates()
+                        complHandler(false)
+                    }
+                    unrestrictAction.backgroundColor = UIColor(colorString: "BE4948")
+                    swipeActions.append(unrestrictAction)
 				}
 			}
 		}
