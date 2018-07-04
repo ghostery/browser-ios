@@ -83,6 +83,11 @@ class ReaderModeBarView: UIView {
             make.height.centerY.equalTo(self)
             make.width.equalTo(80)
         }
+        
+        //Cliqz: Hide read status and read later buttons from reader mode toolbar
+        readStatusButton.isHidden = true
+        listStatusButton.isHidden = true
+
     }
 
     required init?(coder aDecoder: NSCoder) {
