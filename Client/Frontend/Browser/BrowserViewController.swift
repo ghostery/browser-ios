@@ -760,6 +760,9 @@ class BrowserViewController: UIViewController {
             }
         })
         view.setNeedsUpdateConstraints()
+        
+        // Cliqz: Send Notification
+        NotificationCenter.default.post(name: didShowFreshTabNotification, object: nil)
     }
 
     fileprivate func hideHomePanelController() {
@@ -1575,8 +1578,9 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         LeanPlumClient.shared.track(event: .interactWithURLBar)
-        // Cliqz: Close CC
+        // Cliqz: Close CC and send notification
         self.hideControlCenter()
+        // Cliqz: end
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
@@ -1584,6 +1588,9 @@ extension BrowserViewController: URLBarDelegate {
 		self.hideControlCenter()
 		self.homePanelController?.shouldShowKeyboard = false
         BackgroundImageManager.shared.reset()
+        if let url = tabManager.selectedTab?.webView?.url {
+            NotificationCenter.default.post(name: didLeaveOverlayNotification, object: nil, userInfo: ["url": url])
+        }
 		// Cliqz: end
 
         hideSearchController()
