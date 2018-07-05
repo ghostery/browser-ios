@@ -794,12 +794,8 @@ class BrowserViewController: UIViewController {
                 hideHomePanelController()
             }
         }
-		// Cliqz: Check if we should activate the keyboard or not
-		if shouldShowKeyboard() {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				self.urlBar.enterOverlayMode("", pasted: false, search: true)
-			}
-		}
+		// Cliqz: Activate the keyboard if necessary
+        showKeyboardIfNeeded()
     }
 
     fileprivate func showSearchController() {
@@ -2496,6 +2492,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 self.presentSignInViewController()
             }
         }
+        // Cliqz: Activate the keyboard if necessary
+        showKeyboardIfNeeded()
     }
 
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil) {
