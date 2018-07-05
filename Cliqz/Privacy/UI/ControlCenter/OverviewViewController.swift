@@ -293,9 +293,9 @@ class OverviewViewController: UIViewController {
         updateBlockedTrackersCount()
         
 		let domainState = datasource.domainState()
-		if domainState == .trusted {
+		if domainState == .trusted, datasource.isGhosteryPaused() == false {
 			setTrustSite(true)
-		} else if domainState == .restricted {
+		} else if domainState == .restricted, datasource.isGhosteryPaused() == false {
 			setRestrictSite(true)
 		}
         else {
@@ -491,6 +491,50 @@ class OverviewViewController: UIViewController {
 		self.pauseGhosteryButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
 	}
     
+    @objc private func pauseGhosteryPressed(_ button: UIButton) {
+        if self.pauseGhosteryButton.isSelected { //already paused
+            //resume
+            self.delegate?.pauseGhostery(paused: false, time: Date())
+            self.updateData()
+            TelemetryHelper.sendControlCenterResumeClick()
+        }
+        else {
+            //pause
+            showPauseActionSheet()
+        }
+    }
+
+	@objc private func trustSitePressed() {
+        if !self.trustSiteButton.isSelected {
+            self.delegate?.chageSiteState(to: .trusted) {
+                //do nothing
+            }
+        }
+        else {
+            self.delegate?.chageSiteState(to: .empty) {
+                //do nothing
+            }
+        }
+        self.delegate?.pauseGhostery(paused: false, time: Date())
+        self.updateData()
+        TelemetryHelper.sendControlCenterTrustClick()
+	}
+
+	@objc private func restrictSitePressed() {
+        if !self.restrictSiteButton.isSelected {
+            self.delegate?.chageSiteState(to: .restricted) {
+                //do nothing
+            }
+        } else {
+            self.delegate?.chageSiteState(to: .empty) {
+                //do nothing
+            }
+        }
+        self.delegate?.pauseGhostery(paused: false, time: Date())
+        self.updateData()
+        TelemetryHelper.sendControlCenterRestrictClick()
+	}
+    
     private func showPauseActionSheet() {
         
         let pauseAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -525,62 +569,11 @@ class OverviewViewController: UIViewController {
         self.present(pauseAlertController, animated: true, completion: nil)
     }
     
-    @objc private func pauseGhosteryPressed() {
-        if self.pauseGhosteryButton.isSelected { //already paused
-            //resume
-            self.delegate?.pauseGhostery(paused: false, time: Date())
-            self.setPauseGhostery(!self.pauseGhosteryButton.isSelected)
-            TelemetryHelper.sendControlCenterResumeClick()
-        }
-        else {
-            //pause
-            showPauseActionSheet()
-        }
-    }
-    
-    func pauseGhostery(_ time: Date) {
+    private func pauseGhostery(_ time: Date) {
         self.delegate?.pauseGhostery(paused: true, time: time)
-        self.setPauseGhostery(!self.pauseGhosteryButton.isSelected)
-        self.delegate?.chageSiteState(to: .empty) { [weak self] in
-            self?.setSiteToNone()
-        }
+        self.updateData()
         TelemetryHelper.sendControlCenterPauseClick()
     }
-
-	@objc private func trustSitePressed() {
-		setTrustSite(!self.trustSiteButton.isSelected)
-        if self.trustSiteButton.isSelected {
-            self.delegate?.chageSiteState(to: .trusted) {
-                //do nothing
-            }
-        }
-        else {
-            self.delegate?.chageSiteState(to: .empty) {
-                //do nothing
-            }
-        }
-        self.delegate?.pauseGhostery(paused: false, time: Date())
-        self.setPauseGhostery(false)
-        updateBlockedTrackersCount()
-        TelemetryHelper.sendControlCenterTrustClick()
-	}
-
-	@objc private func restrictSitePressed() {
-		setRestrictSite(!self.restrictSiteButton.isSelected)
-        if self.restrictSiteButton.isSelected {
-            self.delegate?.chageSiteState(to: .restricted) {
-                //do nothing
-            }
-        } else {
-            self.delegate?.chageSiteState(to: .empty) {
-                //do nothing
-            }
-        }
-        self.delegate?.pauseGhostery(paused: false, time: Date())
-        self.setPauseGhostery(false)
-        updateBlockedTrackersCount()
-        TelemetryHelper.sendControlCenterRestrictClick()
-	}
     
     private func setPauseGhostery(_ value: Bool) {
         self.pauseGhosteryButton.isSelected = value
