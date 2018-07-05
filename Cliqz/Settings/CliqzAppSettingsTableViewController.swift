@@ -87,7 +87,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let humanWebSetting = HumanWebSetting(settings: self)
         
         #if GHOSTERY
-        let cliqzSearchTitle = NSLocalizedString("Cliqz Search", tableName: "Cliqz", comment: "[Settings] Cliqz Search")
+        let cliqzSearchTitle = NSLocalizedString("Quick Search", tableName: "Cliqz", comment: "[Settings] Quick Search")
         let cliqzSearchSetting = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.CliqzSearchPrefKey, defaultValue: true, titleText: cliqzSearchTitle)
         #endif
         
