@@ -102,30 +102,21 @@ class TrackersController: UIViewController {
 		
         if self.dataSource?.shouldShowBlockAll(tableType: type) == true {
             let blockAll = UIAlertAction(title: NSLocalizedString("Block All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Block All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-                if let type = self?.type {
-                    self?.delegate?.setLastAction(.block, tableType: type)
-                    self?.blockAll()
-                }
+                 self?.blockAll()
             })
             blockTrustAlertController.addAction(blockAll)
         }
         
         if self.dataSource?.shouldShowUnblockAll(tableType: type) == true {
             let unblockAll = UIAlertAction(title: NSLocalizedString("Unblock All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Unblock All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-                if let type = self?.type {
-                    self?.delegate?.setLastAction(.unblock, tableType: type)
-                    self?.unblockAll()
-                }
+                self?.unblockAll()
             })
             blockTrustAlertController.addAction(unblockAll)
         }
 		
         if self.dataSource?.shouldShowUndo(tableType: type) == true {
             let undo = UIAlertAction(title: NSLocalizedString("Undo", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Undo trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-                if let type = self?.type {
-                    self?.delegate?.setLastAction(.undo, tableType: type)
-                    self?.undo()
-                }
+                self?.undo()
             })
             blockTrustAlertController.addAction(undo)
         }
@@ -151,30 +142,21 @@ class TrackersController: UIViewController {
         
         if self.dataSource?.shouldShowBlockAll(tableType: type) == true {
             let blockAll = UIAlertAction(title: NSLocalizedString("Block All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Block All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-                if let type = self?.type {
-                    self?.delegate?.setLastAction(.block, tableType: type)
-                    self?.blockAll()
-                }
+                self?.blockAll()
             })
             blockTrustAlertController.addAction(blockAll)
         }
 		
         if self.dataSource?.shouldShowUnblockAll(tableType: type) == true {
             let unblockAll = UIAlertAction(title: NSLocalizedString("Unblock All", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Unblock All trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-                if let type = self?.type {
-                    self?.delegate?.setLastAction(.unblock, tableType: type)
-                    self?.unblockAll()
-                }
+                self?.unblockAll()
             })
             blockTrustAlertController.addAction(unblockAll)
         }
         
         if self.dataSource?.shouldShowUndo(tableType: type) == true {
             let undo = UIAlertAction(title: NSLocalizedString("Undo", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Undo trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-                if let type = self?.type {
-                    self?.delegate?.setLastAction(.undo, tableType: type)
-                    self?.undo()
-                }
+                self?.undo()
             })
             blockTrustAlertController.addAction(undo)
         }
