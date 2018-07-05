@@ -71,7 +71,7 @@ protocol ControlCenterDelegateProtocol: class {
     func blockAll(tableType: TableType, completion: @escaping () -> Void)
     func unblockAll(tableType: TableType, completion: @escaping () -> Void)
     func restoreDefaultSettings(tableType: TableType, completion: @escaping () -> Void)
-    func setLastAction(_ action: LastAction)
+    func setLastAction(_ action: LastAction, tableType: TableType)
 }
 
 enum TrackerUIState {
@@ -118,7 +118,7 @@ protocol ControlCenterDSProtocol: class {
     //OTHER
     func shouldShowBlockAll(tableType: TableType) -> Bool
     func shouldShowUnblockAll(tableType: TableType) -> Bool
-    func shouldShowUndo() -> Bool
+    func shouldShowUndo(tableType: TableType) -> Bool
 }
 
 final class CategoriesHelper {
@@ -474,7 +474,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
     }
     
     func shouldShowBlockAll(tableType: TableType) -> Bool {
-        if let rawValue = LocalDataStore.defaults.object(forKey: "LastActionControlCenter") as? Int, let lastAction = LastAction.init(rawValue: rawValue) {
+        if let rawValue = LocalDataStore.defaults.object(forKey: actionKey(tableType: tableType)) as? Int, let lastAction = LastAction.init(rawValue: rawValue) {
             if lastAction == .block {
                 return false
             }
@@ -488,7 +488,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
     }
     
     func shouldShowUnblockAll(tableType: TableType) -> Bool {
-        if let rawValue = LocalDataStore.defaults.object(forKey: "LastActionControlCenter") as? Int, let lastAction = LastAction.init(rawValue: rawValue) {
+        if let rawValue = LocalDataStore.defaults.object(forKey: actionKey(tableType: tableType)) as? Int, let lastAction = LastAction.init(rawValue: rawValue) {
             if lastAction == .unblock {
                 return false
             }
@@ -501,8 +501,8 @@ class ControlCenterModel: ControlCenterDSProtocol {
         return true
     }
     
-    func shouldShowUndo() -> Bool {
-        if let rawValue = LocalDataStore.defaults.object(forKey: "LastActionControlCenter") as? Int, let lastAction = LastAction.init(rawValue: rawValue) {
+    func shouldShowUndo(tableType: TableType) -> Bool {
+        if let rawValue = LocalDataStore.defaults.object(forKey: actionKey(tableType: tableType)) as? Int, let lastAction = LastAction.init(rawValue: rawValue) {
             if lastAction == .undo {
                 return false
             }
@@ -542,6 +542,10 @@ class ControlCenterModel: ControlCenterDSProtocol {
 
 // MARK: - Helpers
 extension ControlCenterModel {
+    
+    func actionKey(tableType: TableType) -> String {
+        return tableType == .page ? "LastActionControlCenterPage" : "LastActionControlCenterGlobal"
+    }
     
     fileprivate func getOrCreateDomain(domain: String) -> Domain {
         //if we have done anything with this domain before we will have something in the DB
