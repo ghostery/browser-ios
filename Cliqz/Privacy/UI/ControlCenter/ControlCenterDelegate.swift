@@ -166,8 +166,8 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func setLastAction(_ action: LastAction) {
-        LocalDataStore.defaults.set(action.rawValue, forKey: "LastActionControlCenter")
+    func setLastAction(_ action: LastAction, tableType: TableType) {
+        LocalDataStore.defaults.set(action.rawValue, forKey: actionKey(tableType: tableType))
         LocalDataStore.defaults.synchronize()
     }
     
