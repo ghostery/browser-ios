@@ -45,6 +45,19 @@ class TrackersController: UIViewController {
         super.viewDidLoad()
 		setupComponents()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if type == .page {
+            if self.dataSource?.isGhosteryPaused() == true {
+                headerView.actionButton.isEnabled = false
+            }
+            else {
+                headerView.actionButton.isEnabled = true
+            }
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -270,9 +283,20 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
         } else {
             cell.trackerNameLabel.text = ""
         }
+        
 		cell.selectionStyle = .none
         cell.appId = self.dataSource?.appId(tableType: type, indexPath: indexPath) ?? -1
         cell.statusIcon.image = self.dataSource?.stateIcon(tableType: type, indexPath: indexPath)
+        
+        if type == .page {
+            if dataSource?.isGhosteryPaused() == true {
+                cell.statusIcon.alpha = 0.5
+            }
+            else {
+                cell.statusIcon.alpha = 1.0
+            }
+        }
+        
         return cell
     }
 
@@ -286,7 +310,11 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 		header.blockedTrackersCount = self.dataSource?.blockedTrackerCount(tableType: type, section: section) ?? 0
 		header.statusIcon = self.dataSource?.stateIcon(tableType: type, section: section)
 		header.isExpanded = section == expandedSectionIndex
-		
+        
+        if type == .page {
+            self.dataSource?.isGhosteryPaused() == true ? header.lookDeactivated() : header.lookActivated()
+        }
+        
 		let headerTapGesture = UITapGestureRecognizer()
 		headerTapGesture.addTarget(self, action: #selector(sectionHeaderTapped(_:)))
 		header.addGestureRecognizer(headerTapGesture)
@@ -639,6 +667,23 @@ class CategoryHeaderView: UIView {
 		typeLabel.textColor = UIColor.black
 		typeLabel.font = UIFont.systemFont(ofSize: 10)
 	}
+    
+    func lookDeactivated() {
+        let color = UIColor.lightGray
+        statisticsLabel.textColor = color
+        typeLabel.textColor = color
+        categoryLabel.textColor = color
+        iconView.alpha = 0.5
+        statusView.alpha = 0.5
+    }
+    
+    func lookActivated() {
+        statisticsLabel.textColor = ControlCenterUI.separatorGray
+        typeLabel.textColor = UIColor.black
+        categoryLabel.textColor = UIColor.black
+        iconView.alpha = 1.0
+        statusView.alpha = 1.0
+    }
 
 	private func updateStatistics() {
 		statisticsLabel.text = String(format: NSLocalizedString("%d Tracker(s) %d Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Trackers] Detected and Blocked trackers count"), self.trackersCount, self.blockedTrackersCount)
