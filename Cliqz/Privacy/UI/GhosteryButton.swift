@@ -10,6 +10,8 @@ import UIKit
 import SnapKit
 
 let didChangeTabNotification = Notification.Name(rawValue: "didChangeTab")
+let didShowFreshTabNotification = Notification.Name(rawValue: "didShowFreshTabNotification")
+let didLeaveOverlayNotification = Notification.Name(rawValue: "didLeaveOverlayNotification")
 
 class GhosteryButton: InsetButton {
     
@@ -128,6 +130,8 @@ class GhosteryCount {
         NotificationCenter.default.addObserver(self, selector: #selector(newTrackerDetected), name: detectedTrackerNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(newTabSelected), name: didChangeTabNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(urlChanged), name: urlChangedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didShowFreshtab), name: didShowFreshTabNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didLeaveOverlay), name: didLeaveOverlayNotification, object: nil)
     }
     
     deinit {
@@ -150,6 +154,18 @@ class GhosteryCount {
     }
     
     @objc func newTabSelected(notification: Notification) {
+        update(notification)
+    }
+    
+    @objc func didShowFreshtab(_ notification: Notification) {
+        self.delegate?.updateCount(count: 0)
+    }
+    
+    @objc func didLeaveOverlay(_ notification: Notification) {
+        update(notification)
+    }
+    
+    private func update(_ notification: Notification) {
         var count = 0
         
         if let userInfo = notification.userInfo, let url = userInfo["url"] as? URL, let host = url.normalizedHost {
