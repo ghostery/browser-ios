@@ -638,7 +638,18 @@ class OverviewViewController: UIViewController {
     }
     
     fileprivate func updateBlockedTrackersCount() {
-        blockedTrackers.text = String(format: NSLocalizedString("%d Tracker(s) Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Blocked trackers count"), self.dataSource?.blockedTrackerCount() ?? 0)
+		blockedTrackers.text = String(format: NSLocalizedString("%d Tracker(s) Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Blocked trackers count"), self.dataSource?.blockedTrackerCount() ?? 0)
+
+		if let domainState = self.dataSource?.domainState() {
+			switch (domainState) {
+			case .trusted:
+				 blockedTrackers.text = NSLocalizedString("You have trusted this site", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Blocked trackers count")
+			case .restricted:
+				blockedTrackers.text = NSLocalizedString("You have restricted this site", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Blocked trackers count")
+			default:
+				break
+			}
+		}
     }
     
     fileprivate func updateChart() {
