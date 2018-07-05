@@ -430,8 +430,21 @@ struct CliqzIntroCard: Codable {
     }
     
     static func defaultCards() -> [CliqzIntroCard] {
+        
+        var oldUser: Bool = false
+        if let _ = UserDefaults.standard.value(forKey: HasRunBeforeKey) as? String {
+            oldUser = true
+        }
+        
         let OnboardingStrings = CliqzStrings.Onboarding()
-        let welcome = CliqzIntroCard(title: OnboardingStrings.introTitle, text: OnboardingStrings.introText, imageName: "ghostery-Introduction", optInText: OnboardingStrings.telemetryText, optInToggleValue: true)
+        
+        let welcome: CliqzIntroCard
+        if oldUser {
+            welcome = CliqzIntroCard(title: OnboardingStrings.introTitleOldUsers, text: OnboardingStrings.introTextOldUsers, imageName: "ghostery-Introduction", optInText: OnboardingStrings.telemetryText, optInToggleValue: true)
+        }
+        else {
+            welcome = CliqzIntroCard(title: OnboardingStrings.introTitle, text: OnboardingStrings.introText, imageName: "ghostery-Introduction", optInText: OnboardingStrings.telemetryText, optInToggleValue: true)
+        }
         let adblock = CliqzIntroCard(title: OnboardingStrings.adblockerTitle, text: OnboardingStrings.adblockerText, imageName: "ghostery-Adblock")
         let quicksearch = CliqzIntroCard(title: OnboardingStrings.quickSearchTitle, text: OnboardingStrings.quickSearchText, imageName: "ghostery-QuickSearch")
         let freshtab = CliqzIntroCard(title: OnboardingStrings.tabTitle, text: OnboardingStrings.tabText, imageName: "ghostery-CliqzTab")
