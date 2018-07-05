@@ -449,6 +449,11 @@ class ControlCenterModel: ControlCenterDSProtocol {
         let state = tableType == .page ? t.state(domain: self.domainStr) : t.state(domain: nil)
         
         if tableType == .page {
+            
+            if isGhosteryPaused() == true {
+                return []
+            }
+            
             var returnList: [ActionType] = []
             for action in ActionType.positives() {
                 if action == ActionType.action(state: state) {
