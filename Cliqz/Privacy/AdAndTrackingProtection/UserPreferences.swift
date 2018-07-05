@@ -51,8 +51,6 @@ import Storage
     let AntitrackingModeKey = "AntitrackingMode"
     let AdblockingModeKey = "AdblockingMode"
     let PauseGhosteryDateKey = "PauseGhosteryDate"
-    let BlockNewTrackersKey = "block_new_trackers_by_default"
-    let HasRunBeforeKey = "NotFirstRun"
     
     // antitracking mode is supposed to be set only in updateAntitrackingPref. It depends on the number of trackers blocked.
     var antitrackingMode: AntitrackingMode {
@@ -149,21 +147,5 @@ import Storage
     
     func setTrackerListVersion(_ value: NSNumber) {
         userDefaults().set(value.intValue, forKey: TrackerListVersionKey)
-    }
-    
-    func setAreNewTrackersBlocked(_ value: Bool) {
-        userDefaults().set(value, forKey: BlockNewTrackersKey)
-    }
-    
-    func areNewTrackersBlocked() -> Bool {
-        return userDefaults().bool(forKey: BlockNewTrackersKey)
-    }
-    
-    func setHasAppRunBefore(_ value: Bool) {
-        userDefaults().set(value, forKey: HasRunBeforeKey)
-    }
-    
-    func hasAppRunBefore() -> Bool {
-        return userDefaults().bool(forKey: HasRunBeforeKey)
     }
 }
