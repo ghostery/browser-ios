@@ -16,11 +16,18 @@ extension CliqzStrings {
         public var telemetryText: String {
             return NSLocalizedString("Support Ghostery by sharing anonymous analytics and Human Web data to improve Ghostery's performance.", tableName: "Cliqz", comment: "[Onboarding] Telemetry")
         }
+        
         public var introText: String {
-            return NSLocalizedString("Keep your browsing cleaner, faster, and safer. By using this app you agree to the Privacy Policy.", tableName: "Cliqz", comment: "[Onboarding] Intro Text")
+            return NSLocalizedString("Keep your browsing cleaner, faster, and safer.", tableName: "Cliqz", comment: "[Onboarding] Intro Text")
+        }
+        public var introTextOldUsers: String {
+            return NSLocalizedString("Keep your browsing cleaner, faster and safer. Don't worry, all your data will be imported.", tableName: "Cliqz", comment: "[Onboarding] Intro Text Old Users")
         }
         public var introTitle: String {
             return NSLocalizedString("Introducing Ghostery", tableName: "Cliqz", comment: "[Onboarding] Intro Title")
+        }
+        public var introTitleOldUsers: String {
+            return NSLocalizedString("Introducing New Ghostery", tableName: "Cliqz", comment: "[Onboarding] Intro Title Old Users")
         }
         
         public var adblockerText: String {
