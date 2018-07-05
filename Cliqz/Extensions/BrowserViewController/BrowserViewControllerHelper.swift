@@ -7,10 +7,22 @@
 //
 
 import UIKit
+import Shared
 
 extension BrowserViewController {
     
+    func showKeyboardIfNeeded() {
+        guard shouldShowKeyboard() else { return }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.urlBar?.enterOverlayMode("", pasted: false, search: true)
+        }
+    }
+    
     func shouldShowKeyboard() -> Bool {
+        if profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
+            return false
+        }
 		if !(self.homePanelController?.shouldShowKeyboard ?? false) {
 			return false
 		}
