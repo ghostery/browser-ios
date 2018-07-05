@@ -83,8 +83,8 @@ class NewsViewCell: ClickableUITableViewCell {
     
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		self.contentView.backgroundColor = UIColor.white.withAlphaComponent(0.6)
-		self.backgroundColor = UIColor.white.withAlphaComponent(0.6)
+		self.contentView.backgroundColor = UIColor.black.withAlphaComponent(0.35)
+		self.backgroundColor = UIColor.clear
 		cardView.backgroundColor = UIColor.clear
 		cardView.layer.cornerRadius = 4
 		contentView.addSubview(cardView)
@@ -94,7 +94,7 @@ class NewsViewCell: ClickableUITableViewCell {
 		titleLabel.backgroundColor = UIColor.clear
 		cardView.addSubview(URLLabel)
 		URLLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
-		URLLabel.textColor = UIColor.darkGray
+		URLLabel.textColor = UIColor.white
 		URLLabel.backgroundColor = UIColor.clear
 		titleLabel.numberOfLines = 2
 		self.cardView.addSubview(self.logoContainerView)
@@ -168,7 +168,7 @@ class NewsViewCell: ClickableUITableViewCell {
 	}
 
 	fileprivate func textColor() -> UIColor {
-		return UIColor.black
+		return UIColor.white
 		// TODO: fix
 //		return UIConstants.NormalModeTextColor
 	}
