@@ -361,7 +361,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(restrictAction)
                 case .unrestrict:
                     let unrestrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unrestrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unrestrict Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .restricted, section: indexPath.section, tableType: self.type)
+                        self.delegate?.changeState(appId: appId, state: .empty, section: indexPath.section, tableType: self.type)
                         self.tableView.beginUpdates()
                         self.tableView.reloadSections([indexPath.section], with: .none)
                         self.tableView.endUpdates()
