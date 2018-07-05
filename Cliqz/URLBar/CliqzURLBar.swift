@@ -49,9 +49,8 @@ class CliqzURLBar: URLBarView {
     
     lazy var ghosteryButton: GhosteryButton = {
         let button = GhosteryButton()
-        //button.setImage(UIImage.init(named: "ghosty"), for: .normal)
         button.accessibilityIdentifier = "ghosty"
-        button.addTarget(self, action: #selector(SELdidClickGhosty), for: .touchUpInside)
+        button.addTarget(self, action: #selector(SELdidClickGhosty), for: .touchDown)
         button.alpha = 1
         return button
     }()
