@@ -99,7 +99,7 @@ class CliqzBookmarksPanel: BookmarksPanel {
         
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = emptyBookmarksText
+        welcomeLabel.text = NSLocalizedString("Favorites you save will show up here.", tableName: "Cliqz", comment: "Status label for the empty Favorites state.")
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
         welcomeLabel.textColor = .white
