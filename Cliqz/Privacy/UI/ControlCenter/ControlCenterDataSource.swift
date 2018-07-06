@@ -301,12 +301,6 @@ class ControlCenterModel: ControlCenterDSProtocol {
             }
         }
         
-        if isGlobalAntitrackingOn() {
-            let count = trackerCount(tableType:tableType, section: section)
-            blockedTrackerCountCache[tableType]?[section] = count
-            return count
-        }
-        
         let count = trackers(tableType: tableType, category: category(tableType, section)).filter({ (app) -> Bool in
             let appState = tableType == .page ? app.state(domain: self.domainStr) : app.state(domain: nil)
             return appState == .blocked || appState == .restricted
@@ -350,12 +344,6 @@ class ControlCenterModel: ControlCenterDSProtocol {
                 stateImageCache[tableType]?[section] = image
                 return image
             }
-        }
-
-        if isGlobalAntitrackingOn() {
-            let image = iconForCategoryState(state: .blocked)
-            stateImageCache[tableType]?[section] = image
-            return image
         }
 
         if tableType == .page {
@@ -407,7 +395,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
             }
         }
         
-        if isGlobalAntitrackingOn() || state == .blocked || (tableType == .page && state == .restricted) {
+        if state == .blocked || (tableType == .page && state == .restricted) {
             let str = NSMutableAttributedString(string: t.name)
             str.addAttributes([NSStrikethroughStyleAttributeName : 1], range: NSMakeRange(0, t.name.count))
             return (nil, str)
@@ -427,10 +415,6 @@ class ControlCenterModel: ControlCenterDSProtocol {
             else if domainState.translatedState == .restricted {
                 return iconForTrackerState(state: .restricted)
             }
-        }
-        
-        if isGlobalAntitrackingOn() {
-            return iconForTrackerState(state: .blocked)
         }
         
         return tableType == .page ? iconForTrackerState(state: t.state(domain: self.domainStr)) : iconForTrackerState(state: t.state(domain: nil))
