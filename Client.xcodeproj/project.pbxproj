@@ -63,6 +63,7 @@
 		1E7A3DC22085FCCA00F53E90 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A3DC12085FCCA00F53E90 /* assets */; };
 		1E7B7688206A8AC000FD0BA5 /* CliqzTabToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */; };
 		1E7B76AF206B9CB500FD0BA5 /* ConnectDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */; };
+		1EA949EA20EF6B6D008D32A6 /* UIAlertControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA949E920EF6B6C008D32A6 /* UIAlertControllerExtension.swift */; };
 		1EAE3B6020BD602400300C98 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1EAE3B5E20BD602400300C98 /* InfoPlist.strings */; };
 		1EAE3B6320BD602400300C98 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1EAE3B6120BD602400300C98 /* InfoPlist.strings */; };
 		1EAE3B6620BD602400300C98 /* 3DTouchActions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1EAE3B6420BD602400300C98 /* 3DTouchActions.strings */; };
@@ -1639,6 +1640,7 @@
 		1E7A3DC12085FCCA00F53E90 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = Cliqz/JSEngine/assets; sourceTree = SOURCE_ROOT; };
 		1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTabToolbar.swift; sourceTree = "<group>"; };
 		1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectDataSource.swift; sourceTree = "<group>"; };
+		1EA949E920EF6B6C008D32A6 /* UIAlertControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtension.swift; sourceTree = "<group>"; };
 		1EAE3B5F20BD602400300C98 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1EAE3B6220BD602400300C98 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1EAE3B6520BD602400300C98 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -3564,6 +3566,7 @@
 				AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */,
 				4FB2BBAE20B70680006FB03D /* DeviceInfoExtension.swift */,
 				AFAB303F20B80EC200FE312E /* AppDelegateExtension.swift */,
+				1EA949E920EF6B6C008D32A6 /* UIAlertControllerExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -7072,6 +7075,7 @@
 				4F4033C42086358D00AD2A8D /* ControlCenterViewController.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
+				1EA949EA20EF6B6D008D32A6 /* UIAlertControllerExtension.swift in Sources */,
 				AF6FA97920652C8F00D7F9F0 /* BlockListManager.swift in Sources */,
 				E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */,
 				DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,

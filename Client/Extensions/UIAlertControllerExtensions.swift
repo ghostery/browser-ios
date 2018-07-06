@@ -64,11 +64,14 @@ extension UIAlertController {
     - returns: UIAlertController for asking the user to restore tabs after a crash
     */
     class func restoreTabsAlert(okayCallback: @escaping UIAlertActionCallback, noCallback: @escaping UIAlertActionCallback) -> UIAlertController {
+        /* Cliqz: Change the strings of restore tabs alert
         let alert = UIAlertController(
             title: NSLocalizedString("Well, this is embarrassing.", comment: "Restore Tabs Prompt Title"),
             message: NSLocalizedString("Looks like Firefox crashed previously. Would you like to restore your tabs?", comment: "Restore Tabs Prompt Description"),
             preferredStyle: .alert
         )
+        */
+        let alert = UIAlertController.getRestoreTabsAlert()
 
         let noOption = UIAlertAction(
             title: NSLocalizedString("No", comment: "Restore Tabs Negative Action"),
