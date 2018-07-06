@@ -13,7 +13,7 @@ let ShowWifiProtectionNotification = NSNotification.Name(rawValue: "ShareMenu.Sh
 class WiFiProtectionActivity : UIActivity {
 	
 	override var activityTitle : String? {
-		return NSLocalizedString("Wifi Protection", tableName: "Cliqz", comment: "Sharing activity for opening Settings")
+		return NSLocalizedString("WiFi Protection", tableName: "Cliqz", comment: "Sharing activity for opening Settings")
 	}
 	
 	override var activityImage : UIImage? {
