@@ -69,8 +69,10 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         if let trackerListApp = TrackerList.instance.apps[appId] {
             
             if let s = section {
-                invalidateStateImageCache(tableType: tableType, section: s)
-                invalidateBlockedCountCache(tableType: tableType, section: s)
+                invalidateStateImageCache(tableType: .page, section: s)
+                invalidateBlockedCountCache(tableType: .page, section: s)
+                invalidateStateImageCache(tableType: .global, section: s)
+                invalidateBlockedCountCache(tableType: .global, section: s)
             }
             
             if let domainStr = self.domainStr, tableType == .page {
