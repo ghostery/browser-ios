@@ -341,7 +341,10 @@ extension TopTabsViewController: UICollectionViewDataSource {
         
         if tab.displayTitle.isEmpty {
             if tab.webView?.url?.isLocalUtility ?? true {
+                /* Cliqz: Changed the tile of the tobTab
                 tabCell.titleText.text = Strings.AppMenuNewTabTitleString
+                */
+                tabCell.titleText.text = getTobTabEmptyTitle(tab)
             } else {
                 tabCell.titleText.text = tab.webView?.url?.absoluteDisplayString
             }
