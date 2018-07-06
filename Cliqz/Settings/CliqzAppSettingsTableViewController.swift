@@ -129,10 +129,12 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
             ]
         
         if AppConstants.MOZ_CLIPBOARD_BAR {
+            let statusText = NSLocalizedString("When Opening Cliqz", tableName: "Cliqz", comment: "Description displayed under the ”Offer to Open Copied Link” option.")
+            
             browsingAndHistorySettings += [
                 BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
                             titleText: Strings.SettingsOfferClipboardBarTitle,
-                            statusText: Strings.SettingsOfferClipboardBarStatus)
+                            statusText: statusText)
             ]
         }
         
