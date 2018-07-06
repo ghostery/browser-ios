@@ -169,18 +169,14 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
             make.height.equalTo(30)
             make.width.equalTo(v).dividedBy(2)
         }
-        if NewsViewController.isNewsExpanded {
-            expandNewsbutton.setTitle(NSLocalizedString("LessNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
-        } else {
-            expandNewsbutton.setTitle(NSLocalizedString("MoreNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
-        }
+        setExpandButtonTitle()
         expandNewsbutton.titleLabel?.font = UIFont.systemFont(ofSize: 13)
         expandNewsbutton.titleLabel?.textAlignment = .right
         expandNewsbutton.setTitleColor(UIColor.white, for: .normal)
         expandNewsbutton.addTarget(self, action: #selector(toggleShowMoreNews), for: .touchUpInside)
         return v
 	}
-	
+    
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		return 1.0
 	}
@@ -228,14 +224,19 @@ extension NewsViewController {
 		updateLayout()
 		NewsViewController.isNewsExpanded ? showMoreNews() : showLessNews()
 		
-		if NewsViewController.isNewsExpanded {
-			expandNewsbutton.setTitle(NSLocalizedString("LessNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
-		} else {
-			expandNewsbutton.setTitle(NSLocalizedString("MoreNews", tableName: "Cliqz", comment: "Title to expand news stream"), for: .normal)
-		}
+		setExpandButtonTitle()
+        
 		self.logNewsViewModifiedSignal(isExpanded: NewsViewController.isNewsExpanded)
 	}
 	
+    fileprivate func setExpandButtonTitle() {
+        if NewsViewController.isNewsExpanded {
+            expandNewsbutton.setTitle(NSLocalizedString("LessNews", tableName: "Cliqz", value: "Show less", comment: "Title to expand news stream"), for: .normal)
+        } else {
+            expandNewsbutton.setTitle(NSLocalizedString("MoreNews", tableName: "Cliqz", value: "Show more", comment: "Title to expand news stream"), for: .normal)
+        }
+    }
+    
 	fileprivate func showMoreNews() {
         self.newsTableView.beginUpdates()
 		let indexPaths = getExtraNewsIndexPaths()
