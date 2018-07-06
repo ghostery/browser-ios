@@ -145,7 +145,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let privacySettings = [ LoginsSetting(settings: self, delegate: settingsDelegate),
                                 TouchIDPasscodeSetting(settings: self),
                                 // Hide AutoForgetTab Settings as it is not implemented yet
-                                AutoForgetTabSetting(settings: self),
+                                // AutoForgetTabSetting(settings: self),
                                 BoolSetting(prefs: prefs,
                                             prefKey: "settings.closePrivateTabs",
                                             defaultValue: false,
