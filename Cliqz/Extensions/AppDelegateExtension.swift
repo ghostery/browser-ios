@@ -23,4 +23,13 @@ extension AppDelegate {
             }
         }
     }
+    
+    func customizeNnavigationBarAppearace() {
+        let navigationBarAppearace = UINavigationBar.appearance()
+        navigationBarAppearace.barTintColor = UIColor.cliqzBluePrimary
+        navigationBarAppearace.isTranslucent = false
+        navigationBarAppearace.tintColor = UIColor.white
+        navigationBarAppearace.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
+    }
+
 }

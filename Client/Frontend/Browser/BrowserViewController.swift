@@ -168,9 +168,12 @@ class BrowserViewController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
+        /* Cliqz: Change statusbar style to be always lightContent
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         let isIpad = shouldShowTopTabsForTraitCollection(traitCollection)
         return (isPrivate || isIpad) ? .lightContent : .default
+        */
+        return .lightContent
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
