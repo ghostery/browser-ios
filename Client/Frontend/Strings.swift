@@ -126,7 +126,10 @@ extension Strings {
     public static let HistoryPanelEmptyStateTitle = NSLocalizedString("HistoryPanel.EmptyState.Title", value: "Websites you’ve visited recently will show up here.", comment: "Title for the History Panel empty state.")
     public static let RecentlyClosedTabsButtonTitle = NSLocalizedString("HistoryPanel.RecentlyClosedTabsButton.Title", value: "Recently Closed", comment: "Title for the Recently Closed button in the History Panel")
     public static let RecentlyClosedTabsPanelTitle = NSLocalizedString("RecentlyClosedTabsPanel.Title", value: "Recently Closed", comment: "Title for the Recently Closed Tabs Panel")
+    /* Cliqz: Changed FirefoxHomePage string to Freshtab
     public static let FirefoxHomePage = NSLocalizedString("Firefox.HomePage.Title", value: "Firefox Home Page", comment: "Title for firefox about:home page in tab history list")
+    */
+    public static let FirefoxHomePage = NSLocalizedString("Fresh Tab", tableName: "Cliqz", comment: "Title for Freshtab in tab history list")
 }
 
 // Syncing
@@ -207,7 +210,7 @@ extension Strings {
     /* Cliqz: Moved Firefox Strings to Cliqz table
     public static let NewPrivateTabTitle = NSLocalizedString("Hotkeys.NewPrivateTab.DiscoveryTitle", value: "New Private Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     */
-    public static let NewPrivateTabTitle = NSLocalizedString("Hotkeys.NewForgetTab.DiscoveryTitle", value: "New Forget Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
+    public static let NewPrivateTabTitle = NSLocalizedString("Hotkeys.NewForgetTab.DiscoveryTitle", tableName: "cliqz", value: "New Ghost Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     public static let CloseTabTitle = NSLocalizedString("Hotkeys.CloseTab.DiscoveryTitle", value: "Close Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     public static let ShowNextTabTitle = NSLocalizedString("Hotkeys.ShowNextTab.DiscoveryTitle", value: "Show Next Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     public static let ShowPreviousTabTitle = NSLocalizedString("Hotkeys.ShowPreviousTab.DiscoveryTitle", value: "Show Previous Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
@@ -441,7 +444,7 @@ extension Strings {
     public static let AppMenuAddBookmarkTitleString = NSLocalizedString("Menu.AddBookmarkAction.Title", tableName: "Menu", value: "Bookmark This Page", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.")
     public static let AppMenuRemoveBookmarkTitleString = NSLocalizedString("Menu.RemoveBookmarkAction.Title", tableName: "Menu", value: "Remove Bookmark", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.")
     */
-    public static let AppMenuNewPrivateTabTitleString = NSLocalizedString("Menu.NewForgetTabAction.Title", tableName: "Cliqz", value: "Open New Forget Tab", comment: "Label for the button, displayed in the menu, used to open a new forget tab.")
+    public static let AppMenuNewPrivateTabTitleString = NSLocalizedString("Menu.NewForgetTabAction.Title", tableName: "Cliqz", value: "Open New Ghost Tab", comment: "Label for the button, displayed in the menu, used to open a new forget tab.")
     public static let AppMenuAddBookmarkTitleString = NSLocalizedString("Menu.AddBookmarkAction.Title", tableName: "Cliqz", value: "Add to Favorites", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.")
     public static let AppMenuRemoveBookmarkTitleString = NSLocalizedString("Menu.RemoveBookmarkAction.Title", tableName: "Cliqz", value: "Remove Favorite", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.")
     public static let AppMenuFindInPageTitleString = NSLocalizedString("Menu.FindInPageAction.Title", tableName: "Menu", value: "Find in Page", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.")

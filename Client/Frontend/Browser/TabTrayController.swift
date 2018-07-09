@@ -1023,13 +1023,15 @@ fileprivate class EmptyPrivateTabsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        /* Cliqz: Change `private` to `forget`
         titleLabel.text =  NSLocalizedString("Private Browsing",
             tableName: "PrivateBrowsing", comment: "Title displayed for when there are no open tabs while in private mode")
-        /* Cliqz: Change firefox to Ghostery
         descriptionLabel.text = NSLocalizedString("Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.",
             tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
         */
-        descriptionLabel.text = NSLocalizedString("Cliqz won’t remember any of your history or cookies, but new bookmarks will be saved.",
+        titleLabel.text =  NSLocalizedString("Forget Mode",
+                                             tableName: "Cliqz", comment: "Title displayed for when there are no open tabs while in forget mode")
+        descriptionLabel.text = NSLocalizedString("You are browsing in Forget Mode: Websites you visit in the mode will not be saved in your history, and local data, including cookies, will not be stored.",
                                                   tableName: "Cliqz", comment: "Description text displayed when there are no open tabs while in private mode")
         addSubview(titleLabel)
         addSubview(descriptionLabel)

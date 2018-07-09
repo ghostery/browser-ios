@@ -48,7 +48,7 @@ extension CliqzStrings {
             return NSLocalizedString("Every new Tab comes with top sites, news and background image. Customize it to your needs.", tableName: "Cliqz", comment: "[Onboarding] Tab Text")
         }
         public var tabTitle: String {
-            return NSLocalizedString("Ghostery Tab", tableName: "Cliqz", comment: "[Onboarding] Tab Title")
+            return NSLocalizedString("Fresh Tab", tableName: "Cliqz", comment: "[Onboarding] Freshtab Title")
         }
     }
 }
