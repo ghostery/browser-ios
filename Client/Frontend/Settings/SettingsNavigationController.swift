@@ -16,7 +16,10 @@ class SettingsNavigationController: UINavigationController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
+        /* Cliqz: prevent changing the statusbar style to default
         return .default
+        */
+        return .lightContent
     }
 }
 
@@ -26,6 +29,9 @@ protocol PresentingModalViewControllerDelegate {
 
 class ModalSettingsNavigationController: UINavigationController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
+        /* Cliqz: prevent changing the statusbar style to default
         return .default
+        */
+        return .lightContent
     }
 }

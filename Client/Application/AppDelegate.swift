@@ -236,6 +236,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
+        // Cliqz: customize Navigationbar Appearace
+        customizeNnavigationBarAppearace()
+        
         adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
         
         // Cliqz: Handle Realm Migration
