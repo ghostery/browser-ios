@@ -9,94 +9,58 @@
 import UIKit
 import Storage
 
-extension ControlCenterModel: ControlCenterDelegateProtocol { 
-    
-    private func getOrCreateDomain(domain: String) -> Domain {
-        //if we have done anything with this domain before we will have something in the DB
-        //otherwise we need to create it
-        if let domainO = DomainStore.get(domain: domain) {
-            return domainO
-        } else {
-            return DomainStore.create(domain: domain)
-        }
-    }
+extension ControlCenterModel: ControlCenterDelegateProtocol {
     
     func changeState(category: String, state: TrackerUIState, section: Int, tableType: TableType) {
         
-        var trackers: [TrackerListApp] = []
-        
         if let domainStr = self.domainStr, tableType == .page {
-            trackers.append(contentsOf:(TrackerList.instance.trackersByCategory(domain: domainStr)[category] ?? []))
+            if let appIds = TrackerList.instance.trackersByCategory(domain: domainStr)[category]?.map({ (app) -> Int in return app.appId }) {
+                self.changeState(appIds: appIds, state: state, tableType: tableType)
+            }
         }
         else if tableType == .global {
-            trackers.append(contentsOf:(TrackerList.instance.appsByCategory[category] ?? []))
+            if let appIds = TrackerList.instance.appsByCategory[category]?.map({ (app) -> Int in return app.appId }) {
+                self.changeState(appIds: appIds, state: state, tableType: tableType)
+            }
         }
-        
-        trackers.forEach { (app) in
-            self.changeState(appId: app.appId, state: state, section: section, tableType: tableType)
-        }
-        
     }
     
     func chageSiteState(to: DomainState, completion: @escaping () -> Void) {
-        guard let domainStr = self.domainStr else { return }
         
-        invalidateStateImageCache()
-        invalidateBlockedCountCache()
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            
-            if let domainObj = self?.getOrCreateDomain(domain: domainStr) {
-                DomainStore.changeState(domain: domainObj, state: to)
-                
-                if let nextState = self?.domainState2TrackerUIState(domainState: to) {
-                    let apps = TrackerList.instance.detectedTrackersForPage(domainStr)
-                    for app in apps {
-                        let currentState = app.state(domain: domainStr)
-                        self?.changeTrackerStateFor(domainObj: domainObj, appId: app.appId, currentState: currentState, nextState: nextState)
-                        self?.changeGlobalTrackerState(to: nextState, appId: app.appId)
-                    }
-                }
-            }
-            
-            DispatchQueue.main.async {
-                completion()
-            }
-        }
     }
     
     func changeState(appId: Int, state: TrackerUIState, section: Int?, tableType: TableType) {
-        if let trackerListApp = TrackerList.instance.apps[appId] {
-            
-            if let s = section {
-                invalidateStateImageCache(tableType: .page, section: s)
-                invalidateBlockedCountCache(tableType: .page, section: s)
-                invalidateStateImageCache(tableType: .global, section: s)
-                invalidateBlockedCountCache(tableType: .global, section: s)
-            }
-            
-            if let domainStr = self.domainStr, tableType == .page {
-                
-                let currentState = trackerListApp.state(domain: domainStr)
-                let domainObj = getOrCreateDomain(domain: domainStr)
-                
-                DomainStore.changeState(domain: domainObj, state: .empty)
-                changeTrackerStateFor(domainObj: domainObj, appId: appId, currentState: currentState, nextState: state)
-            }
-            
-            changeGlobalTrackerState(to: state, appId: trackerListApp.appId)
-
+        invalidateStateImageCache()
+        invalidateBlockedCountCache()
+        
+        if let domainStr = self.domainStr, tableType == .page {
+            TrackerStateStore.change(appIds: [appId], domain: domainStr, toState: state)
         }
         else {
-            debugPrint("PROBLEM -- trackerState does not exist for appId = \(appId)!")
+            TrackerStateStore.change(appIds: [appId], toState: state)
+        }
+    }
+    
+    func changeState(appIds: [Int], state: TrackerUIState, tableType: TableType) {
+        invalidateStateImageCache()
+        invalidateBlockedCountCache()
+        
+        if let domainStr = self.domainStr, tableType == .page {
+            TrackerStateStore.change(appIds: appIds, domain: domainStr, toState: state)
+        }
+        else {
+            TrackerStateStore.change(appIds: appIds, toState: state)
         }
     }
     
     func blockAll(tableType: TableType, completion: @escaping () -> Void) {
+        let timer = ParkBenchTimer()
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             self?.changeAll(state: .blocked, tableType: tableType)
             DispatchQueue.main.async {
                 completion()
+                timer.stop()
+                debugPrint("Block All Time: \(String(describing: timer.duration))")
             }
         }
     }
@@ -153,14 +117,20 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
             
             let trackers = TrackerList.instance.appsList
             
+            var toBlock: [Int] = []
+            var toEmpty: [Int] = []
+            
             for tracker in trackers {
                 if CategoriesHelper.categoriesBlockedByDefault.contains(tracker.category) {
-                    self?.changeGlobalTrackerState(to: .blocked, appId: tracker.appId)
+                    toBlock.append(tracker.appId)
                 }
                 else {
-                    self?.changeGlobalTrackerState(to: .empty, appId: tracker.appId)
+                    toEmpty.append(tracker.appId)
                 }
             }
+            
+            TrackerStateStore.change(appIds: toBlock, toState: .blocked)
+            TrackerStateStore.change(appIds: toEmpty, toState: .empty)
             
             DispatchQueue.main.async {
                 completion()
@@ -192,52 +162,10 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
             trackers.append(contentsOf: TrackerList.instance.appsList)
         }
         
-        for tracker in trackers {
-            self.changeState(appId: tracker.appId, state: state, section: nil, tableType: tableType)
-        }
-    }
-
-    private func changeTrackerStateFor(domainObj: Domain, appId: Int, currentState: TrackerUIState, nextState: TrackerUIState) {
-        
-        if currentState == .trusted {
-            DomainStore.add(appId: appId, domain: domainObj, list: .prevTrustedList)
-            DomainStore.remove(appId: appId, domain: domainObj, list: .prevRestrictedList)
-        }
-        else if currentState == .restricted {
-            DomainStore.add(appId: appId, domain: domainObj, list: .prevRestrictedList)
-            DomainStore.remove(appId: appId, domain: domainObj, list: .prevTrustedList)
-        }
-        else {
-            DomainStore.remove(appId: appId, domain: domainObj, list: .prevRestrictedList)
-            DomainStore.remove(appId: appId, domain: domainObj, list: .prevTrustedList)
-        }
-        
-        if nextState == .trusted {
-            //add it to trusted sites
-            DomainStore.add(appId: appId, domain: domainObj, list: .trustedList)
-            //remove it from restricted if it is there
-            DomainStore.remove(appId: appId, domain: domainObj, list: .restrictedList)
-        }
-        else if nextState == .restricted {
-            //add it to restricted
-            DomainStore.add(appId: appId, domain: domainObj, list: .restrictedList)
-            //remove from trusted if it is there
-            DomainStore.remove(appId: appId, domain: domainObj, list: .trustedList)
-        }
-        else {
-            //remove from trusted and restricted
-            DomainStore.remove(appId: appId, domain: domainObj, list: .trustedList)
-            DomainStore.remove(appId: appId, domain: domainObj, list: .restrictedList)
-        }
-    }
-    
-    private func changeGlobalTrackerState(to: TrackerUIState, appId: Int) {
-        if to == .blocked {
-            TrackerStateStore.change(appId: appId, toState: .blocked)
-        }
-        else if to == .empty {
-            TrackerStateStore.change(appId: appId, toState: .empty)
-        }
+        let timer = ParkBenchTimer()
+        self.changeState(appIds: trackers.map{app in return app.appId}, state: state, tableType: tableType)
+        timer.stop()
+        debugPrint("Cahnge State Time: \(String(describing: timer.duration))")
     }
     
     private func domainState2TrackerUIState(domainState: DomainState) -> TrackerUIState {
