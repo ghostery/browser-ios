@@ -58,6 +58,16 @@ public class DomainStore: NSObject {
         return nil
     }
     
+    public class func getOrCreateDomain(domain: String) -> Domain {
+        //if we have done anything with this domain before we will have something in the DB
+        //otherwise we need to create it
+        if let domainO = DomainStore.get(domain: domain) {
+            return domainO
+        } else {
+            return DomainStore.create(domain: domain)
+        }
+    }
+    
     public class func create(domain: String) -> Domain {
         let realm = try! Realm()
         let domainObj = Domain()
@@ -86,60 +96,6 @@ public class DomainStore: NSObject {
         }
         catch {
             debugPrint("could not change state of domain")
-        }
-    }
-    
-    public class func add(appId: Int, domain: Domain, list: ListType) {
-        
-        let realm = try! Realm()
-        do {
-            try realm.write {
-                
-                if list == .trustedList {
-                    domain.trustedTrackers.append(appId)
-                }
-                else if list == .restrictedList {
-                    domain.restrictedTrackers.append(appId)
-                }
-                else if list == .prevTrustedList {
-                    domain.previouslyTrustedTrackers.append(appId)
-                }
-                else if list == .prevRestrictedList {
-                    domain.previouslyRestrictedTrackers.append(appId)
-                }
-                
-                realm.add(domain, update: true)
-            }
-        }
-        catch {
-            debugPrint("could not add appId = \(appId) to list = \(list) of domain = \(domain.name)")
-        }
-    }
-    
-    public class func remove(appId: Int, domain: Domain, list: ListType) {
-        
-        let realm = try! Realm()
-        do {
-            try realm.write {
-                
-                if list == .trustedList {
-                    domain.trustedTrackers.remove(element: appId)
-                }
-                else if list == .restrictedList {
-                    domain.restrictedTrackers.remove(element: appId)
-                }
-                else if list == .prevTrustedList {
-                    domain.previouslyTrustedTrackers.remove(element: appId)
-                }
-                else if list == .prevRestrictedList {
-                    domain.previouslyRestrictedTrackers.remove(element: appId)
-                }
-                
-                realm.add(domain, update: true)
-            }
-        }
-        catch {
-            debugPrint("could not add appId = \(appId) to list = \(list) of domain = \(domain.name)")
         }
     }
     

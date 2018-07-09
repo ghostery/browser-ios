@@ -73,13 +73,6 @@ protocol ControlCenterDelegateProtocol: class {
     func restoreDefaultSettings(tableType: TableType, completion: @escaping () -> Void)
 }
 
-enum TrackerUIState {
-    case empty
-    case trusted
-    case restricted
-    case blocked
-}
-
 enum LastAction: Int {
     case block
     case unblock
