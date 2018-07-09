@@ -30,17 +30,11 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let searchSettingsTitle = NSLocalizedString("Search", tableName: "Cliqz", comment: "[Settings] Search section title")
         settings += [ SettingSection(title: NSAttributedString(string: searchSettingsTitle), children: searchSettings)]
         
-        #if GHOSTERY
-        // Ghostery Tab Settings
-        let ghosteryTabSettings = generateCliqzTabSettings(prefs: prefs)
-        let ghosteryTabTitle = NSLocalizedString("Ghostery Tab", tableName: "Cliqz", comment: "[Settings] Ghostery Tab section header")
-        settings += [ SettingSection(title: NSAttributedString(string: ghosteryTabTitle), children: ghosteryTabSettings)]
-        #else
         // Cliqz Tab Settings
         let cliqzTabSettings = generateCliqzTabSettings(prefs: prefs)
-        let cliqzTabTitle = NSLocalizedString("Cliqz Tab", tableName: "Cliqz", comment: "[Settings] Cliqz Tab section header")
+        let cliqzTabTitle = NSLocalizedString("Fresh Tab", tableName: "Cliqz", comment: "[Settings] Freshtab section header")
         settings += [ SettingSection(title: NSAttributedString(string: cliqzTabTitle), children: cliqzTabSettings)]
-        #endif
+        
         
         // Browsing & History Settings
         let browsingAndHistorySettings = generateBrowsingAndHistorySettings(prefs: prefs)

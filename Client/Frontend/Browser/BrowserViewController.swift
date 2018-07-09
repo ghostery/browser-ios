@@ -1693,7 +1693,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 			self.homePanelController?.shouldShowKeyboard = true
             self.tabManager.addTabAndSelect(isPrivate: false)
         }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("New Forget Tab", tableName:"Cliqz", comment: "Label for New Forget Tab"), style: .default, handler: { _ in
+        controller.addAction(UIAlertAction(title: NSLocalizedString("New Forget Tab", tableName:"Cliqz", value: "New Ghost Tab", comment: "Label for New Forget Tab"), style: .default, handler: { _ in
 			self.homePanelController?.shouldShowKeyboard = true
             self.tabManager.addTabAndSelect(isPrivate: true)
         }))
