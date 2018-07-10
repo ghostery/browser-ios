@@ -1147,7 +1147,10 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    /* Cliqz: removed the fileprivate modifier
     @objc fileprivate func openSettings() {
+    */
+    @objc func openSettings() {
         assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
 
         /* Cliqz: Change Settings

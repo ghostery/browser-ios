@@ -15,7 +15,6 @@ enum DownloadError {
     case invaildUrl
     case notAuthorized
     case noInternetConnection
-    case mobileDataUsageLimited
     case downloadFailed
 }
 
@@ -24,11 +23,6 @@ class DownloadManager: NSObject {
     
     // MARK:- Public APIs
     class func downloadVideo(_ url: String, completionHandler: @escaping (_ error: DownloadError?) -> Void) {
-        if SettingsPrefs.shared.getLimitMobileDataUsagePref() && DeviceInfo.hasWwanConnectivity() {
-            completionHandler(.mobileDataUsageLimited)
-            return
-        }
-        
         PHPhotoLibrary.requestAuthorization({ (authorizationStatus: PHAuthorizationStatus) -> Void in
             guard authorizationStatus == .authorized  else {
                 completionHandler(.notAuthorized)
