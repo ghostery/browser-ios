@@ -62,7 +62,7 @@ enum ActionType: Int {
 }
 
 protocol ControlCenterDelegateProtocol: class {
-    func chageSiteState(to: DomainState, completion: @escaping () -> Void)
+    func changeSiteState(to: DomainState)
     func pauseGhostery(paused: Bool, time: Date)
     func turnGlobalAdblocking(on: Bool)
     func changeState(category: String, state: TrackerUIState, section: Int, tableType: TableType)
@@ -70,6 +70,7 @@ protocol ControlCenterDelegateProtocol: class {
     func undoAll(tableType: TableType, completion: @escaping () -> Void)
     func blockAll(tableType: TableType, completion: @escaping () -> Void)
     func unblockAll(tableType: TableType, completion: @escaping () -> Void)
+    func changeAll(state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void)
     func restoreDefaultSettings(tableType: TableType, completion: @escaping () -> Void)
 }
 

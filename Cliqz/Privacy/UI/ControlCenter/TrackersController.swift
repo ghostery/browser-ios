@@ -184,6 +184,9 @@ class TrackersController: UIViewController {
 
 	private func blockAll() {
         headerView.showSpinner()
+        if type == .page {
+            self.delegate?.changeSiteState(to: .empty)
+        }
         self.delegate?.blockAll(tableType: type, completion: { [weak self] in
             self?.tableView.reloadData()
             self?.headerView.hideSpinner()
@@ -192,18 +195,12 @@ class TrackersController: UIViewController {
     
     private func unblockAll() {
         headerView.showSpinner()
-        switch type {
-        case .page:
-            self.delegate?.chageSiteState(to: .empty) { [weak self] in
-                self?.tableView.reloadData()
-                self?.headerView.hideSpinner()
-            }
-        case .global:
-            //change all trackers to empty
-            self.delegate?.unblockAll(tableType: type) { [weak self] in
-                self?.tableView.reloadData()
-                self?.headerView.hideSpinner()
-            }
+        if type == .page {
+            self.delegate?.changeSiteState(to: .empty)
+        }
+        self.delegate?.unblockAll(tableType: type) { [weak self] in
+            self?.tableView.reloadData()
+            self?.headerView.hideSpinner()
         }
     }
     
@@ -225,18 +222,20 @@ class TrackersController: UIViewController {
 
 	private func trustAllCategories() {
         headerView.showSpinner()
-        self.delegate?.chageSiteState(to: .trusted) { [weak self] in
+        self.delegate?.changeSiteState(to: .trusted)
+        self.delegate?.changeAll(state: .trusted, tableType: type, completion: { [weak self] in
             self?.tableView.reloadData()
             self?.headerView.hideSpinner()
-        }
+        })
 	}
 
 	private func restrictAllCategories() {
         headerView.showSpinner()
-        self.delegate?.chageSiteState(to: .restricted) { [weak self] in
+        self.delegate?.changeSiteState(to: .restricted)
+        self.delegate?.changeAll(state: .restricted, tableType: type, completion: { [weak self] in
             self?.tableView.reloadData()
             self?.headerView.hideSpinner()
-        }
+        })
 	}
 
 	@objc fileprivate func showTrackerInfo() {
