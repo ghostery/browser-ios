@@ -212,7 +212,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
         
         if domainS == .trusted || UserPreferences.instance.pauseGhosteryMode == .paused {
             return 0
-        } else if domainS == .restricted || isGlobalAntitrackingOn() {
+        } else if domainS == .restricted {
             return detectedTrackerCount()
         }
         else {
