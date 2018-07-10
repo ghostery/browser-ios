@@ -61,3 +61,15 @@ extension Array {
     }
 }
 
+extension Array where Element: Comparable {
+    mutating func remove(element: Element) {
+        for i in 0..<self.count {
+            //go backwards
+            let index = count - 1 - i
+            let item = self[index]
+            if item == element {
+                self.remove(at: index)
+            }
+        }
+    }
+}
