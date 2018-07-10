@@ -502,15 +502,13 @@ class CategoriesHeaderView: UIControl {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		self.categoriesLabel.snp.remakeConstraints { (make) in
-			make.top.equalToSuperview()
-			make.bottom.equalToSuperview()
 			make.left.equalTo(self).offset(12)
-			make.right.equalTo(actionButton.snp.left).offset(12)
+            make.centerY.equalToSuperview()
 		}
 		self.actionButton.snp.remakeConstraints { (make) in
-			make.left.equalTo(categoriesLabel.snp.right).offset(10)
-			make.top.bottom.equalToSuperview()
-			make.right.equalToSuperview().inset(15)
+			make.right.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.size.equalTo(50)
 		}
 		self.separator.snp.remakeConstraints { (make) in
 			make.left.right.bottom.equalToSuperview()
