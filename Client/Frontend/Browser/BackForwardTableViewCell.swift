@@ -54,7 +54,10 @@ class BackForwardTableViewCell: UITableViewCell {
             if let s = site {
                 faviconView.setFavicon(forSite: s, onCompletion: { [weak self] (color, url) in
                     if s.tileURL.isLocal {
+                        /* Cliqz: Changed used the default favicon instead of Firefox one
                         self?.faviconView.image = UIImage(named: "faviconFox")
+                        */
+                        self?.faviconView.image = UIImage(named: "defaultFavicon")
                         self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: BackForwardViewCellUX.IconSize, height: BackForwardViewCellUX.IconSize))
                         self?.faviconView.backgroundColor = UIColor.white
                         return
