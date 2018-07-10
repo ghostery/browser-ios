@@ -155,117 +155,92 @@ public class TrackerStateStore: NSObject {
     }
     
     private class func writePrevious(appIds: [Int], domain: String?) {
+        
+        func commute(appId: Int, listType: ListType, index: Int, domainObj: Domain?) {
+            guard let domainObj = domainObj else { return }
+            if listType == .prevTrustedList {
+                domainObj.previouslyTrustedTrackers.remove(at: index)
+                domainObj.trustedTrackers.append(appId)
+            }
+            else if listType == .prevRestrictedList {
+                domainObj.previouslyRestrictedTrackers.remove(at: index)
+                domainObj.restrictedTrackers.append(appId)
+            }
+            else if listType == .trustedList {
+                domainObj.trustedTrackers.remove(at: index)
+                domainObj.previouslyTrustedTrackers.append(appId)
+            }
+            else if listType == .restrictedList {
+                domainObj.restrictedTrackers.remove(at: index)
+                domainObj.previouslyRestrictedTrackers.append(appId)
+            }
+        }
+        
         let realm = try! Realm()
         
         guard realm.isInWriteTransaction == false else { return } //avoid exceptions
         
         realm.beginWrite()
         
+        var domainObj: Domain? = nil
+        
         if let domain = domain {
-            //work on the domains
-            
-            //extract this into its own thing
-            let domainObj: Domain
             
             if let d = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
                 domainObj = d
             }
             else {
                 domainObj = Domain()
-                domainObj.name = domain
-                domainObj.state = 0
-                realm.add(domainObj)
+                domainObj!.name = domain
+                domainObj!.state = 0
+                realm.add(domainObj!)
             }
-            
-            var trackerStatesToUpdate: [TrackerState] = []
-            
-            for appId in appIds {
-                let (state, currentListInfo)  = currentState(appId: appId, domainObj: domainObj, realm: realm)
-                let (prevState, prevListInfo) = previousState(appId: appId, domainObj: domainObj, realm: realm)
-                
-                //set prevState to state
-                //and state to prevState
-                if state == .empty || state == .blocked {
-                    
-                    //take care of page state change
-                    if let (listType, index) = prevListInfo {
-                        // a state of empty or blocked, translated to an empty or blocked prevState means that the prev lists of the domain don't contain the appId
-                        // maybe I should abstract this into some rules...
-                        if listType == .prevTrustedList {
-                            domainObj.previouslyTrustedTrackers.remove(at: index)
-                            domainObj.trustedTrackers.append(appId)
-                        }
-                        else if listType == .prevRestrictedList {
-                            domainObj.previouslyRestrictedTrackers.remove(at: index)
-                            domainObj.restrictedTrackers.append(appId)
-                        }
-                    }
-                    
-                    //take care of global state change
-                    if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
-                        let ps = trackerState.previousState
-                        trackerState.previousState = trackerState.state
-                        trackerState.state = ps
-                        trackerStatesToUpdate.append(trackerState)
-                    }
-                }
-                else if prevState == .empty || prevState == .blocked {
-                    // a prevState of empty or blocked, translated to an empty or blocked current state means that the current lists of the domain don't contain the appId
-                    
-                    //take care of page state change
-                    if let (listType, index) = currentListInfo {
-                        if listType == .trustedList {
-                            domainObj.trustedTrackers.remove(at: index)
-                            domainObj.previouslyTrustedTrackers.append(appId)
-                        }
-                        else if listType == .restrictedList {
-                            domainObj.restrictedTrackers.remove(at: index)
-                            domainObj.previouslyRestrictedTrackers.append(appId)
-                        }
-                    }
-                    
-                    //take care of global state change
-                    if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
-                        let ps = trackerState.previousState
-                        trackerState.previousState = trackerState.state
-                        trackerState.state = ps
-                        trackerStatesToUpdate.append(trackerState)
-                    }
-                }
-                
-                if prevState == .empty {
-                    TrackerStateStore.shared.blockedTrackers.remove(appId)
-                }
-                else if prevState == .blocked {
-                    TrackerStateStore.shared.blockedTrackers.insert(appId)
-                }
-            }
-            
-            realm.add(trackerStatesToUpdate, update: true)
-            realm.add(domainObj, update: true)
         }
-        else {
-            //work on global
-            var trackerStatesToUpdate: [TrackerState] = []
+        
+        var trackerStatesToUpdate: [TrackerState] = []
+        
+        for appId in appIds {
+            let (_, currentListInfo)  = currentState(appId: appId, domainObj: domainObj, realm: realm)
+            let (prevState, prevListInfo) = previousState(appId: appId, domainObj: domainObj, realm: realm)
             
-            for appId in appIds {
-                //take care of global state change
-                if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
-                    let ps = trackerState.previousState
-                    trackerState.previousState = trackerState.state
-                    trackerState.state = ps
-                    trackerStatesToUpdate.append(trackerState)
-                    
-                    if trackerState.translatedState == .blocked {
-                        TrackerStateStore.shared.blockedTrackers.insert(appId)
-                    }
-                    else if trackerState.translatedState == .empty {
-                        TrackerStateStore.shared.blockedTrackers.remove(appId)
-                    }
+            //take care of page state change
+            if let (prevListType, prevIndex) = prevListInfo, let (currentListType, currentIndex) = currentListInfo {
+                if !(prevListType == .prevTrustedList && currentListType == .trustedList) && !(prevListType == .prevRestrictedList && currentListType == .restrictedList){
+                    // makes sure we don't work on the same lists twice. Example: .trustedList and .prevTrustedList.
+                    // working on the same lists could mess up things. We could be removing at the wrong index.
+                    commute(appId: appId, listType: prevListType, index: prevIndex, domainObj: domainObj)
+                    commute(appId: appId, listType: currentListType, index: currentIndex, domainObj: domainObj)
+                }
+                else {
+                    // I don't need to make changes. Example: prevState = trusted && currentState = trusted. No need to commute them
                 }
             }
+            else if let (prevListType, prevIndex) = prevListInfo {
+                commute(appId: appId, listType: prevListType, index: prevIndex, domainObj: domainObj)
+            }
+            else if let (listType, index) = currentListInfo {
+                commute(appId: appId, listType: listType, index: index, domainObj: domainObj)
+            }
             
-            realm.add(trackerStatesToUpdate, update: true)
+            //take care of global state change
+            if let trackerState = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
+                let ps = trackerState.previousState
+                trackerState.previousState = trackerState.state
+                trackerState.state = ps
+                trackerStatesToUpdate.append(trackerState)
+            }
+            
+            if prevState == .empty {
+                TrackerStateStore.shared.blockedTrackers.remove(appId)
+            }
+            else if prevState == .blocked {
+                TrackerStateStore.shared.blockedTrackers.insert(appId)
+            }
+        }
+        
+        realm.add(trackerStatesToUpdate, update: true)
+        if let d = domainObj {
+            realm.add(d, update: true)
         }
         
         do {
