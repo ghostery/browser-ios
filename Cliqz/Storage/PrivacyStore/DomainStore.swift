@@ -85,13 +85,14 @@ public class DomainStore: NSObject {
         return domainObj
     }
     
-    public class func changeState(domain: Domain, state: DomainState) {
+    public class func changeState(domain: String, state: DomainState) {
         
         let realm = try! Realm()
         do {
             try realm.write {
+                let domain = getOrCreateDomain(domain: domain)
                 domain.state = intForState(state: state)
-                realm.add(domain, update: true)
+                realm.add(domain)
             }
         }
         catch {
@@ -107,20 +108,6 @@ public class DomainStore: NSObject {
             return 1
         case .restricted:
             return 2
-        }
-    }
-}
-
-extension List where Element: Comparable {
-    func remove(element: Element) {
-        let count = self.elements.count
-        for i in 0..<count {
-            //go backwards
-            let index = count - 1 - i
-            let item = self[index]
-            if item == element {
-                self.remove(at: index)
-            }
         }
     }
 }

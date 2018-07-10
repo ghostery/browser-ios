@@ -506,14 +506,16 @@ class OverviewViewController: UIViewController {
 
 	@objc private func trustSitePressed() {
         if !self.trustSiteButton.isSelected {
-            self.delegate?.chageSiteState(to: .trusted) {
-                //do nothing
-            }
+            self.delegate?.changeSiteState(to: .trusted)
+            self.delegate?.changeAll(state: .trusted, tableType: .page, completion: {
+                
+            })
         }
         else {
-            self.delegate?.chageSiteState(to: .empty) {
-                //do nothing
-            }
+            self.delegate?.changeSiteState(to: .empty)
+            self.delegate?.undoAll(tableType: .page, completion: {
+                
+            })
         }
         self.delegate?.pauseGhostery(paused: false, time: Date())
         self.updateData()
@@ -522,13 +524,15 @@ class OverviewViewController: UIViewController {
 
 	@objc private func restrictSitePressed() {
         if !self.restrictSiteButton.isSelected {
-            self.delegate?.chageSiteState(to: .restricted) {
-                //do nothing
-            }
+            self.delegate?.changeSiteState(to: .restricted)
+            self.delegate?.changeAll(state: .restricted, tableType: .page, completion: {
+                
+            })
         } else {
-            self.delegate?.chageSiteState(to: .empty) {
-                //do nothing
-            }
+            self.delegate?.changeSiteState(to: .empty)
+            self.delegate?.undoAll(tableType: .page, completion: {
+                
+            })
         }
         self.delegate?.pauseGhostery(paused: false, time: Date())
         self.updateData()

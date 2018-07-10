@@ -25,8 +25,10 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func chageSiteState(to: DomainState, completion: @escaping () -> Void) {
-        
+    func changeSiteState(to: DomainState) {
+        if let domain = domainStr {
+            DomainStore.changeState(domain: domain, state: to)
+        }
     }
     
     func changeState(appId: Int, state: TrackerUIState, section: Int?, tableType: TableType) {
@@ -54,51 +56,25 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
     }
     
     func blockAll(tableType: TableType, completion: @escaping () -> Void) {
-        let timer = ParkBenchTimer()
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.changeAll(state: .blocked, tableType: tableType)
-            DispatchQueue.main.async {
-                completion()
-                timer.stop()
-                debugPrint("Block All Time: \(String(describing: timer.duration))")
-            }
-        }
+        changeAll(state: .blocked, tableType: tableType, completion: completion)
     }
     
     func unblockAll(tableType: TableType, completion: @escaping () -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.changeAll(state: .empty, tableType: tableType)
-            DispatchQueue.main.async {
-                completion()
-            }
-        }
+        changeAll(state: .empty, tableType: tableType, completion: completion)
     }
     
     func undoAll(tableType: TableType, completion: @escaping () -> Void) {
         
+        invalidateStateImageCache()
+        invalidateBlockedCountCache()
+        
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
-            self?.invalidateStateImageCache()
-            self?.invalidateBlockedCountCache()
-            
-            var trackers: [TrackerListApp] = []
-            
-            var domain: String? = nil
-            
             if let d = self?.domainStr, tableType == .page {
-                domain = d
-                trackers.append(contentsOf: TrackerList.instance.detectedTrackersForPage(d))
+                TrackerStateStore.undo(appIds: TrackerList.instance.detectedTrackersForPage(d).map {app in return app.appId}, domain: d)
             }
             else if tableType == .global {
-                trackers.append(contentsOf: TrackerList.instance.appsList)
-            }
-            
-            var stateSet: Set<TrackerUIState> = Set()
-            
-            for tracker in trackers {
-                let prevState = tracker.prevState(domain: domain)
-                stateSet.insert(prevState)
-                self?.changeState(appId: tracker.appId, state: prevState, section: nil, tableType: tableType)
+                TrackerStateStore.undo(appIds: TrackerList.instance.appsList.map {app in return app.appId})
             }
             
             DispatchQueue.main.async {
@@ -110,10 +86,10 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
     func restoreDefaultSettings(tableType: TableType, completion: @escaping () -> Void) {
         guard tableType == .global else { completion(); return }
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            
-            self?.invalidateStateImageCache()
-            self?.invalidateBlockedCountCache()
+        invalidateStateImageCache()
+        invalidateBlockedCountCache()
+        
+        DispatchQueue.global(qos: .userInitiated).async {
             
             let trackers = TrackerList.instance.appsList
             
@@ -148,24 +124,28 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         UserPreferences.instance.writeToDisk()
     }
     
-    private func changeAll(state: TrackerUIState, tableType: TableType) {
+    func changeAll(state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void) {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
         
-        var trackers: [TrackerListApp] = []
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
         
-        if let d = self.domainStr, tableType == .page {
-            trackers.append(contentsOf: TrackerList.instance.detectedTrackersForPage(d))
+            var trackers: [TrackerListApp] = []
+            
+            if let d = self?.domainStr, tableType == .page {
+                trackers.append(contentsOf: TrackerList.instance.detectedTrackersForPage(d))
+            }
+            else if tableType == .global {
+                trackers.append(contentsOf: TrackerList.instance.appsList)
+            }
+
+            self?.changeState(appIds: trackers.map{app in return app.appId}, state: state, tableType: tableType)
+            
+            DispatchQueue.main.async {
+                completion()
+            }
         }
-        else if tableType == .global {
-            trackers.append(contentsOf: TrackerList.instance.appsList)
-        }
-        
-        let timer = ParkBenchTimer()
-        self.changeState(appIds: trackers.map{app in return app.appId}, state: state, tableType: tableType)
-        timer.stop()
-        debugPrint("Cahnge State Time: \(String(describing: timer.duration))")
     }
     
     private func domainState2TrackerUIState(domainState: DomainState) -> TrackerUIState {
