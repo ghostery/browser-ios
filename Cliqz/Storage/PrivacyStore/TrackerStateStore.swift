@@ -192,7 +192,6 @@ public class TrackerStateStore: NSObject {
             else {
                 domainObj = Domain()
                 domainObj!.name = domain
-                domainObj!.state = 0
                 realm.add(domainObj!)
             }
         }
@@ -293,25 +292,20 @@ public class TrackerStateStore: NSObject {
         else {
             domainObj = Domain()
             domainObj.name = domain
-            domainObj.state = 0
             realm.add(domainObj)
         }
         
         //moves the current state to the previous state
         for appId in appIds {
             if let trustedIndex = domainObj.trustedTrackers.index(of: appId) {
-                if state != .trusted {
-                    domainObj.trustedTrackers.remove(at: trustedIndex)
-                }
+                domainObj.trustedTrackers.remove(at: trustedIndex)
                 domainObj.previouslyTrustedTrackers.append(appId)
                 if let prevRestrictedIndex = domainObj.previouslyRestrictedTrackers.index(of: appId) {
                     domainObj.previouslyRestrictedTrackers.remove(at: prevRestrictedIndex)
                 }
             }
             else if let restrictedIndex = domainObj.restrictedTrackers.index(of: appId) {
-                if state != .restricted {
-                    domainObj.restrictedTrackers.remove(at: restrictedIndex)
-                }
+                domainObj.restrictedTrackers.remove(at: restrictedIndex)
                 domainObj.previouslyRestrictedTrackers.append(appId)
                 if let prevTrustedIndex = domainObj.previouslyTrustedTrackers.index(of: appId) {
                     domainObj.previouslyTrustedTrackers.remove(at: prevTrustedIndex)

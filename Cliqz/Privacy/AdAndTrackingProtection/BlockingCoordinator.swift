@@ -54,10 +54,7 @@ final class BlockingCoordinator {
         if UserPreferences.instance.pauseGhosteryMode == .paused {
             return false
         }
-        
-        if let domainStr = domain, let domainObj = DomainStore.get(domain: domainStr) {
-            return !(domainObj.translatedState == .trusted)
-        }
+
         return true
     }
     

@@ -184,9 +184,6 @@ class TrackersController: UIViewController {
 
 	private func blockAll() {
         headerView.showSpinner()
-        if type == .page {
-            self.delegate?.changeSiteState(to: .empty)
-        }
         self.delegate?.blockAll(tableType: type, completion: { [weak self] in
             self?.tableView.reloadData()
             self?.headerView.hideSpinner()
@@ -195,9 +192,6 @@ class TrackersController: UIViewController {
     
     private func unblockAll() {
         headerView.showSpinner()
-        if type == .page {
-            self.delegate?.changeSiteState(to: .empty)
-        }
         self.delegate?.unblockAll(tableType: type) { [weak self] in
             self?.tableView.reloadData()
             self?.headerView.hideSpinner()
@@ -222,7 +216,6 @@ class TrackersController: UIViewController {
 
 	private func trustAllCategories() {
         headerView.showSpinner()
-        self.delegate?.changeSiteState(to: .trusted)
         self.delegate?.changeAll(state: .trusted, tableType: type, completion: { [weak self] in
             self?.tableView.reloadData()
             self?.headerView.hideSpinner()
@@ -231,7 +224,6 @@ class TrackersController: UIViewController {
 
 	private func restrictAllCategories() {
         headerView.showSpinner()
-        self.delegate?.changeSiteState(to: .restricted)
         self.delegate?.changeAll(state: .restricted, tableType: type, completion: { [weak self] in
             self?.tableView.reloadData()
             self?.headerView.hideSpinner()

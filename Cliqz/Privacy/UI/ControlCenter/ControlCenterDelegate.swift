@@ -25,12 +25,6 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func changeSiteState(to: DomainState) {
-        if let domain = domainStr {
-            DomainStore.changeState(domain: domain, state: to)
-        }
-    }
-    
     func changeState(appId: Int, state: TrackerUIState, section: Int?, tableType: TableType) {
         invalidateStateImageCache()
         invalidateBlockedCountCache()
