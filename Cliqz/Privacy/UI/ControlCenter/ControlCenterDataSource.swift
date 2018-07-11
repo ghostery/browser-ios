@@ -202,7 +202,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
     
     func domainState() -> DomainState? {
         guard let domain = self.domainStr else { return nil }
-        return self.getOrCreateDomain(domain: domain).translatedState
+        return DomainStore.getOrCreateDomain(domain: domain).translatedState
     }
     
     func blockedTrackerCount() -> Int {
@@ -283,7 +283,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
         }
         
         if let domainString = self.domainStr, tableType == .page {
-            let domainState = self.getOrCreateDomain(domain: domainString)
+            let domainState = DomainStore.getOrCreateDomain(domain: domainString)
             if domainState.translatedState == .trusted {
                 blockedTrackerCountCache[tableType]?[section] = 0
                 return 0
@@ -327,7 +327,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
         }
         
         if let domainString = self.domainStr, tableType == .page {
-            let domainState = self.getOrCreateDomain(domain: domainString)
+            let domainState = DomainStore.getOrCreateDomain(domain: domainString)
             if domainState.translatedState == .trusted {
                 let image = iconForTrackerState(state: .trusted)
                 stateImageCache[tableType]?[section] = image
@@ -378,7 +378,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
         let state: TrackerUIState = tableType == .page ? t.state(domain: self.domainStr) : t.state(domain: nil)
         
         if let domainString = self.domainStr, tableType == .page {
-            let domainState = self.getOrCreateDomain(domain: domainString)
+            let domainState = DomainStore.getOrCreateDomain(domain: domainString)
             if domainState.translatedState == .trusted {
                 return (t.name, nil)
             }
@@ -402,7 +402,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
         guard let t = tracker(tableType: tableType, indexPath: indexPath) else { return nil }
         
         if let domainString = self.domainStr, tableType == .page {
-            let domainState = self.getOrCreateDomain(domain: domainString)
+            let domainState = DomainStore.getOrCreateDomain(domain: domainString)
             if domainState.translatedState == .trusted {
                 return iconForTrackerState(state: .trusted)
             }
@@ -511,16 +511,6 @@ class ControlCenterModel: ControlCenterDSProtocol {
 
 // MARK: - Helpers
 extension ControlCenterModel {
-    
-    fileprivate func getOrCreateDomain(domain: String) -> Domain {
-        //if we have done anything with this domain before we will have something in the DB
-        //otherwise we need to create it
-        if let domainO = DomainStore.get(domain: domain) {
-            return domainO
-        } else {
-            return DomainStore.create(domain: domain)
-        }
-    }
     
     fileprivate func source(_ tableType: TableType) -> Dictionary<String, [TrackerListApp]> {
         if tableType == .page {
