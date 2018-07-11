@@ -305,14 +305,18 @@ public class TrackerStateStore: NSObject {
         for appId in appIds {
             if let trustedIndex = domainObj.trustedTrackers.index(of: appId) {
                 domainObj.trustedTrackers.remove(at: trustedIndex)
-                domainObj.previouslyTrustedTrackers.append(appId)
+                if !domainObj.previouslyTrustedTrackers.contains(appId) {
+                    domainObj.previouslyTrustedTrackers.append(appId)
+                }
                 if let prevRestrictedIndex = domainObj.previouslyRestrictedTrackers.index(of: appId) {
                     domainObj.previouslyRestrictedTrackers.remove(at: prevRestrictedIndex)
                 }
             }
             else if let restrictedIndex = domainObj.restrictedTrackers.index(of: appId) {
                 domainObj.restrictedTrackers.remove(at: restrictedIndex)
-                domainObj.previouslyRestrictedTrackers.append(appId)
+                if !domainObj.previouslyRestrictedTrackers.contains(appId) {
+                    domainObj.previouslyRestrictedTrackers.append(appId)
+                }
                 if let prevTrustedIndex = domainObj.previouslyTrustedTrackers.index(of: appId) {
                     domainObj.previouslyTrustedTrackers.remove(at: prevTrustedIndex)
                 }
