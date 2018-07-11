@@ -38,27 +38,11 @@ public enum ListType {
 public class DomainStore: NSObject {
     
     public class func get(domain: String) -> Domain? {
-        let realm = try! Realm()
-        if let domain = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
-            return domain
-        }
-        return nil
-    }
-    
-    public class func create(domain: String) -> Domain {
-        let realm = try! Realm()
-        let domainObj = Domain()
-        domainObj.name = domain
-        
-        do {
-            try realm.write {
-                realm.add(domainObj)
+        if let realm = try? Realm() {
+            if let domain = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
+                return domain
             }
         }
-        catch let error {
-            debugPrint(error)
-        }
-        
-        return domainObj
+        return nil
     }
 }
