@@ -506,13 +506,11 @@ class OverviewViewController: UIViewController {
 
 	@objc private func trustSitePressed() {
         if !self.trustSiteButton.isSelected {
-            self.delegate?.changeSiteState(to: .trusted)
             self.delegate?.changeAll(state: .trusted, tableType: .page, completion: {
                 
             })
         }
         else {
-            self.delegate?.changeSiteState(to: .empty)
             self.delegate?.undoAll(tableType: .page, completion: {
                 
             })
@@ -524,12 +522,10 @@ class OverviewViewController: UIViewController {
 
 	@objc private func restrictSitePressed() {
         if !self.restrictSiteButton.isSelected {
-            self.delegate?.changeSiteState(to: .restricted)
             self.delegate?.changeAll(state: .restricted, tableType: .page, completion: {
                 
             })
         } else {
-            self.delegate?.changeSiteState(to: .empty)
             self.delegate?.undoAll(tableType: .page, completion: {
                 
             })

@@ -16,8 +16,7 @@ import Storage
     var tags = [Int]()
     
     func state(domain: String?) -> TrackerUIState {
-        if let domain = domain {
-            let domainObj = DomainStore.getOrCreateDomain(domain: domain)
+        if let domain = domain, let domainObj = DomainStore.get(domain: domain) {
             if domainObj.trustedTrackers.contains(appId) {
                 return .trusted
             }
@@ -40,8 +39,7 @@ import Storage
     }
     
     func prevState(domain: String?) -> TrackerUIState {
-        if let domain = domain {
-            let domainObj = DomainStore.getOrCreateDomain(domain: domain)
+        if let domain = domain, let domainObj = DomainStore.get(domain: domain) {
             if domainObj.previouslyTrustedTrackers.contains(appId) {
                 return .trusted
             }

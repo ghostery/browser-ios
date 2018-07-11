@@ -62,7 +62,6 @@ enum ActionType: Int {
 }
 
 protocol ControlCenterDelegateProtocol: class {
-    func changeSiteState(to: DomainState)
     func pauseGhostery(paused: Bool, time: Date)
     func turnGlobalAdblocking(on: Bool)
     func changeState(category: String, state: TrackerUIState, section: Int, tableType: TableType)
@@ -202,7 +201,23 @@ class ControlCenterModel: ControlCenterDSProtocol {
     
     func domainState() -> DomainState? {
         guard let domain = self.domainStr else { return nil }
-        return DomainStore.getOrCreateDomain(domain: domain).translatedState
+        
+        let trackers = TrackerList.instance.detectedTrackersForPage(domain)
+        var set: Set<TrackerUIState> = Set()
+        for tracker in trackers {
+            set.insert(tracker.state(domain: domain))
+        }
+        
+        if set.count == 1 {
+            if set.first == .trusted {
+                return .trusted
+            }
+            else if set.first == .restricted {
+                return .restricted
+            }
+        }
+        
+        return .empty
     }
     
     func blockedTrackerCount() -> Int {
@@ -282,19 +297,6 @@ class ControlCenterModel: ControlCenterDSProtocol {
             return count
         }
         
-        if let domainString = self.domainStr, tableType == .page {
-            let domainState = DomainStore.getOrCreateDomain(domain: domainString)
-            if domainState.translatedState == .trusted {
-                blockedTrackerCountCache[tableType]?[section] = 0
-                return 0
-            }
-            else if domainState.translatedState == .restricted {
-                let count = trackerCount(tableType: tableType, section: section)
-                blockedTrackerCountCache[tableType]?[section] = count
-                return count
-            }
-        }
-        
         let count = trackers(tableType: tableType, category: category(tableType, section)).filter({ (app) -> Bool in
             let appState = tableType == .page ? app.state(domain: self.domainStr) : app.state(domain: nil)
             return appState == .blocked || appState == .restricted
@@ -325,31 +327,6 @@ class ControlCenterModel: ControlCenterDSProtocol {
 
             return set
         }
-        
-        if let domainString = self.domainStr, tableType == .page {
-            let domainState = DomainStore.getOrCreateDomain(domain: domainString)
-            if domainState.translatedState == .trusted {
-                let image = iconForTrackerState(state: .trusted)
-                stateImageCache[tableType]?[section] = image
-                return image
-            }
-            else if domainState.translatedState == .restricted {
-                let image = iconForTrackerState(state: .restricted)
-                stateImageCache[tableType]?[section] = image
-                return image
-            }
-        }
-
-        if tableType == .page {
-            let domainState = self.domainState()
-
-            if domainState == .restricted {
-                return iconForCategoryState(state: .restricted)
-            }
-            else if domainState == .trusted {
-                return iconForCategoryState(state: .trusted)
-            }
-        }
 
         let set = trackerStates()
 
@@ -377,18 +354,6 @@ class ControlCenterModel: ControlCenterDSProtocol {
         guard let t = tracker(tableType: tableType, indexPath: indexPath) else { return (nil, nil) }
         let state: TrackerUIState = tableType == .page ? t.state(domain: self.domainStr) : t.state(domain: nil)
         
-        if let domainString = self.domainStr, tableType == .page {
-            let domainState = DomainStore.getOrCreateDomain(domain: domainString)
-            if domainState.translatedState == .trusted {
-                return (t.name, nil)
-            }
-            else if domainState.translatedState == .restricted {
-                let str = NSMutableAttributedString(string: t.name)
-                str.addAttributes([NSStrikethroughStyleAttributeName : 1], range: NSMakeRange(0, t.name.count))
-                return (nil, str)
-            }
-        }
-        
         if state == .blocked || (tableType == .page && state == .restricted) {
             let str = NSMutableAttributedString(string: t.name)
             str.addAttributes([NSStrikethroughStyleAttributeName : 1], range: NSMakeRange(0, t.name.count))
@@ -400,17 +365,6 @@ class ControlCenterModel: ControlCenterDSProtocol {
     
     func stateIcon(tableType: TableType, indexPath: IndexPath) -> UIImage? {
         guard let t = tracker(tableType: tableType, indexPath: indexPath) else { return nil }
-        
-        if let domainString = self.domainStr, tableType == .page {
-            let domainState = DomainStore.getOrCreateDomain(domain: domainString)
-            if domainState.translatedState == .trusted {
-                return iconForTrackerState(state: .trusted)
-            }
-            else if domainState.translatedState == .restricted {
-                return iconForTrackerState(state: .restricted)
-            }
-        }
-        
         return tableType == .page ? iconForTrackerState(state: t.state(domain: self.domainStr)) : iconForTrackerState(state: t.state(domain: nil))
     }
     
