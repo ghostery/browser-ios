@@ -507,32 +507,34 @@ class OverviewViewController: UIViewController {
 	@objc private func trustSitePressed() {
         if !self.trustSiteButton.isSelected {
             self.delegate?.changeAll(state: .trusted, tableType: .page, completion: {
-                
+                self.delegate?.pauseGhostery(paused: false, time: Date())
+                self.updateData()
+                TelemetryHelper.sendControlCenterTrustClick()
             })
         }
         else {
             self.delegate?.undoAll(tableType: .page, completion: {
-                
+                self.delegate?.pauseGhostery(paused: false, time: Date())
+                self.updateData()
+                TelemetryHelper.sendControlCenterTrustClick()
             })
         }
-        self.delegate?.pauseGhostery(paused: false, time: Date())
-        self.updateData()
-        TelemetryHelper.sendControlCenterTrustClick()
 	}
 
 	@objc private func restrictSitePressed() {
         if !self.restrictSiteButton.isSelected {
             self.delegate?.changeAll(state: .restricted, tableType: .page, completion: {
-                
+                self.delegate?.pauseGhostery(paused: false, time: Date())
+                self.updateData()
+                TelemetryHelper.sendControlCenterRestrictClick()
             })
         } else {
             self.delegate?.undoAll(tableType: .page, completion: {
-                
+                self.delegate?.pauseGhostery(paused: false, time: Date())
+                self.updateData()
+                TelemetryHelper.sendControlCenterRestrictClick()
             })
         }
-        self.delegate?.pauseGhostery(paused: false, time: Date())
-        self.updateData()
-        TelemetryHelper.sendControlCenterRestrictClick()
 	}
     
     private func showPauseActionSheet() {
