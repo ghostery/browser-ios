@@ -21,7 +21,7 @@
     "readability": "mozilla/readability#3c76104adb00eb9897517e6be6c74c6c05918dfe",
     "@cliqz/indexeddbshim": "3.4.1",
     "appium": "1.8.0",
-    "browser-core": "http://cdn2.cliqz.com/update/edge/react-native/v3.28/3.28.1.b45e7e5.tgz",
+    "browser-core": "http://cdn2.cliqz.com/update/edge/react-native/v3.28/3.28.2.8a17678.tgz",
     "buffer": "5.0.7",
     "https-browserify": "1.0.0",
     "path-browserify": "0.0.0",
