@@ -107,7 +107,10 @@ node('mac-mini-ios') {
                         'udid=8A112602-53F8-4996-A58A-FC65665635EB',
                         'deviceName=iPhone 6s',
                         'platformVersion=11.3',
-                        'bundleID=com.cliqz.ios.newCliqz'
+                        'bundleID=com.cliqz.ios.newCliqz',
+                        "MODULE=testCompleteSuite",
+                        "TEST=CompleteSuite",
+                        "TEST_TYPE=smoke"
                         ]) {
                         timeout(60) {
                             sh '''#!/bin/bash -l
