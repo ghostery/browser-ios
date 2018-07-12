@@ -27,11 +27,13 @@ class NewsCellViewModel {
 			url = ""
 		}
 		let fullTitle = NSMutableAttributedString()
+        let customAttributes = NewsCellViewModel.getCustomLabelAttributes()
+        
 		if news.isBreaking ?? false,
 			let t = news.breakingLabel {
-			fullTitle.append(NSAttributedString(string: t.uppercased() + ": ", attributes: [NSForegroundColorAttributeName: UIColor(rgb: 0xE64C66)]))
+			fullTitle.append(NSAttributedString(string: t.uppercased() + ": ", attributes: customAttributes))
 		} else if let locallbl = news.localLabel {
-			fullTitle.append(NSAttributedString(string: locallbl.uppercased() + ": ", attributes: [NSForegroundColorAttributeName: UIColor.cliqzBluePrimary]))
+			fullTitle.append(NSAttributedString(string: locallbl.uppercased() + ": ", attributes: customAttributes))
 		}
 		if let shortTitle = news.shortTitle {
 			fullTitle.append(NSAttributedString(string: shortTitle))
@@ -42,6 +44,19 @@ class NewsCellViewModel {
 		logo = Variable(nil)
 		logoInfo = Variable(nil)
 	}
+    
+    private class func getCustomLabelAttributes() -> [String : Any] {
+        let shadow = NSShadow.init()
+        shadow.shadowColor = UIColor.black
+        shadow.shadowOffset = CGSize.init(width: 0.3, height: 0.3)
+        shadow.shadowBlurRadius = 4.0
+        
+        let customAttributes = [NSForegroundColorAttributeName: UIColor.cliqzBluePrimary,
+                                NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16),
+                                NSShadowAttributeName : shadow]
+        
+        return customAttributes
+    }
 }
 
 class NewsViewCell: ClickableUITableViewCell {
@@ -83,7 +98,7 @@ class NewsViewCell: ClickableUITableViewCell {
     
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-		self.contentView.backgroundColor = UIColor.black.withAlphaComponent(0.35)
+		self.contentView.backgroundColor = UIColor.black.withAlphaComponent(0.40)
 		self.backgroundColor = UIColor.clear
 		cardView.backgroundColor = UIColor.clear
 		cardView.layer.cornerRadius = 4
