@@ -200,7 +200,7 @@ class CliqzURLBar: URLBarView {
                     make.leading/*.trailing*/.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
                 }
                 
-                make.trailing.equalTo(self.ghosteryButton.snp.leading).offset(-URLBarViewUX.Padding)
+                make.trailing.equalTo(self.ghosteryButton.snp.leading)//.offset(-URLBarViewUX.Padding)
                 
                 make.height.equalTo(URLBarViewUX.LocationHeight+2)
                 make.centerY.equalTo(self)
