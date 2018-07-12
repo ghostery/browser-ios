@@ -67,7 +67,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         
         self.panels = CliqzHomePanels().enabledPanels
         
-        let imageNames = ["panelIconTopSites", "panelIconFavorite", "panelIconCliqzHistory", "panelIconOffrz"]
+        let imageNames = ["panelIconFreshtab", "panelIconCliqzHistory", "panelIconOffrz", "panelIconFavorite"]
         let images = imageNames.map { (name) -> UIImage in return UIImage.templateImageNamed(name)! }
         segmentedControl =  UISegmentedControl(items: images)
         
