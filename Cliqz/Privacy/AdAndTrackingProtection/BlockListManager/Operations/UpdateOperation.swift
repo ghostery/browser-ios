@@ -49,7 +49,7 @@ class UpdateOperation: Operation {
     
     override func main() {
         self.isExecuting = true
-        let timer = ParkBenchTimer()
+        //let timer = ParkBenchTimer()
         var blockLists: [WKContentRuleList] = []
         let dispatchGroup = DispatchGroup()
         for type in BlockingCoordinator.order {
@@ -75,9 +75,10 @@ class UpdateOperation: Operation {
                 blockLists.forEach(webView.configuration.userContentController.add)
                 debugPrint("BlockLists Loaded")
             }
-            timer.stop()
-            debugPrint("Load time: \(String(describing: timer.duration))")
+            //timer.stop()
+            //debugPrint("Load time: \(String(describing: timer.duration))")
             self.isFinished = true
+            LoadingNotificationManager.shared.loadingFinished()
         }
     }
 }

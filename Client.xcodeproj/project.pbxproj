@@ -520,6 +520,8 @@
 		AF77B88E209A022A00E7A0C4 /* NSData+GZIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF77B88D209A022A00E7A0C4 /* NSData+GZIP.swift */; };
 		AF77B890209A05E200E7A0C4 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF77B88F209A05E200E7A0C4 /* ConnectionManager.swift */; };
 		AF77B8C5209B132700E7A0C4 /* CliqzHomePanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */; };
+		AF7DD43020F77B790090956F /* LoadingNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7DD42F20F77B790090956F /* LoadingNotificationManager.swift */; };
+		AF7DD44020F785D30090956F /* CustomSimpleToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7DD43F20F785D30090956F /* CustomSimpleToast.swift */; };
 		AF99C8A2206935F0009404FF /* GhosteryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99C8A1206935F0009404FF /* GhosteryButton.swift */; };
 		AF9C111220A051FB003253D3 /* CliqzHistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */; };
 		AFA1DE072088AF9600B27B8A /* AdBlocker in Resources */ = {isa = PBXBuildFile; fileRef = AFA1DDF82088AF9600B27B8A /* AdBlocker */; };
@@ -2019,6 +2021,8 @@
 		AF77B88D209A022A00E7A0C4 /* NSData+GZIP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSData+GZIP.swift"; sourceTree = "<group>"; };
 		AF77B88F209A05E200E7A0C4 /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHomePanelViewController.swift; sourceTree = "<group>"; };
+		AF7DD42F20F77B790090956F /* LoadingNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingNotificationManager.swift; sourceTree = "<group>"; };
+		AF7DD43F20F785D30090956F /* CustomSimpleToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSimpleToast.swift; sourceTree = "<group>"; };
 		AF99C8A1206935F0009404FF /* GhosteryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosteryButton.swift; sourceTree = "<group>"; };
 		AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHistoryPanel.swift; sourceTree = "<group>"; };
 		AFA1DDF82088AF9600B27B8A /* AdBlocker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AdBlocker; sourceTree = "<group>"; };
@@ -3371,6 +3375,7 @@
 				4F0445E820334DC700E2C0C7 /* LocalDataStore.swift */,
 				4F0445E1203344E300E2C0C7 /* LogoLoader.swift */,
 				1EEA369420615725003B6AD5 /* DownloadManager.swift */,
+				AF7DD43F20F785D30090956F /* CustomSimpleToast.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -3664,6 +3669,7 @@
 		AF6FA95E20652C1100D7F9F0 /* Privacy */ = {
 			isa = PBXGroup;
 			children = (
+				AF7DD42F20F77B790090956F /* LoadingNotificationManager.swift */,
 				AF6FA99420652DF200D7F9F0 /* PersistentSet.swift */,
 				AF7DFEDF20C139CA00FDC3A0 /* AdAndTrackingProtection */,
 				AF77B87C2099FF9F00E7A0C4 /* Anti-Phishing */,
@@ -6668,6 +6674,7 @@
 				4F30F5092051670C0049E4F6 /* AutoCompletionBridge.m in Sources */,
 				D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */,
 				4F30F50D2051670C0049E4F6 /* CryptoBridge.m in Sources */,
+				AF7DD44020F785D30090956F /* CustomSimpleToast.swift in Sources */,
 				0B3E7D951B27A7CE00E2E84D /* AboutHomeHandler.swift in Sources */,
 				D331DFCA1CB6E9EE009B5DA2 /* OldStrings.swift in Sources */,
 				1EDF0B22207B86A200856493 /* QuerySuggestionView.swift in Sources */,
@@ -6711,6 +6718,7 @@
 				4F0445D72033324500E2C0C7 /* NewsDataService.swift in Sources */,
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
+				AF7DD43020F77B790090956F /* LoadingNotificationManager.swift in Sources */,
 				D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */,
 				D31CF65C1CC1959A001D0BD0 /* PrivilegedRequest.swift in Sources */,
 				1E3FBF59207763FE00FAE3FD /* BrowserViewController+Connect.swift in Sources */,
