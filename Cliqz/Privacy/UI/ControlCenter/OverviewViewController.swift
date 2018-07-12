@@ -505,36 +505,34 @@ class OverviewViewController: UIViewController {
 
 	@objc private func trustSitePressed() {
         if !self.trustSiteButton.isSelected {
-            self.delegate?.changeAll(state: .trusted, tableType: .page, completion: {
-                self.delegate?.pauseGhostery(paused: false, time: Date())
-                self.updateData()
-                TelemetryHelper.sendControlCenterTrustClick()
+            self.delegate?.changeAll(state: .trusted, tableType: .page, completion: { [weak self] in
+                self?.pauseGhosteryAndRefresh(paused: false)
             })
         }
         else {
-            self.delegate?.undoAll(tableType: .page, completion: {
-                self.delegate?.pauseGhostery(paused: false, time: Date())
-                self.updateData()
-                TelemetryHelper.sendControlCenterTrustClick()
+            self.delegate?.undoAll(tableType: .page, completion: { [weak self] in
+                self?.pauseGhosteryAndRefresh(paused: false)
             })
         }
 	}
 
 	@objc private func restrictSitePressed() {
         if !self.restrictSiteButton.isSelected {
-            self.delegate?.changeAll(state: .restricted, tableType: .page, completion: {
-                self.delegate?.pauseGhostery(paused: false, time: Date())
-                self.updateData()
-                TelemetryHelper.sendControlCenterRestrictClick()
+            self.delegate?.changeAll(state: .restricted, tableType: .page, completion: { [weak self] in
+                self?.pauseGhosteryAndRefresh(paused: false)
             })
         } else {
-            self.delegate?.undoAll(tableType: .page, completion: {
-                self.delegate?.pauseGhostery(paused: false, time: Date())
-                self.updateData()
-                TelemetryHelper.sendControlCenterRestrictClick()
+            self.delegate?.undoAll(tableType: .page, completion: { [weak self] in
+                self?.pauseGhosteryAndRefresh(paused: false)
             })
         }
 	}
+    
+    private func pauseGhosteryAndRefresh(paused: Bool) {
+        self.delegate?.pauseGhostery(paused: paused, time: Date())
+        self.updateData()
+        TelemetryHelper.sendControlCenterRestrictClick()
+    }
     
     private func showPauseActionSheet() {
         
