@@ -105,6 +105,8 @@ extension BrowserViewController {
             
             applyShadow(view: controlCenter.view)
         }
+        
+        LoadingNotificationManager.shared.controlCenterShown()
 	}
 
 	func hideControlCenter() {
@@ -116,10 +118,34 @@ extension BrowserViewController {
                 c.endAppearanceTransition()
                 c.removeFromParentViewController()
                 NotificationCenter.default.post(name: controlCenterDismissedNotification, object: nil)
+                LoadingNotificationManager.shared.controlCenterClosed()
                 break
             }
         }
 	}
+    
+    func showBlocklistLoadToast() {
+        let text = NSLocalizedString("Applying Changes...", tableName: "Cliqz", comment: "Applying Changes Toast")
+        CustomSimpleToast().showAlertWithText(text, bottomContainer: self.webViewContainer)
+    }
+    
+    func showBlocklistLoadDoneToast() {
+    
+        let text = NSLocalizedString("Changes applied. Refresh page to see them.", tableName: "Cliqz", comment: "Changes applied Toast")
+        let buttonText = NSLocalizedString("Refresh", tableName: "Cliqz", comment: "Refresh Toast Button Text")
+        let toast = ButtonToast(labelText: text, buttonText: buttonText) { [weak self] (pressed) in
+            if pressed {
+                self?.tabManager.selectedTab?.reload()
+            }
+        }
+        self.show(buttonToast: toast)
+        
+        if let toast = self.webViewContainer.subviews.first(where: { (view) -> Bool in
+            return view.tag == 101
+        }) {
+            toast.removeFromSuperview()
+        }
+    }
     
     @objc func orientationDidChange(notification: Notification) {
         hideControlCenter()

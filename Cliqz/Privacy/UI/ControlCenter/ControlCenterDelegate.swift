@@ -15,17 +15,20 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         
         if let domainStr = self.domainStr, tableType == .page {
             if let appIds = TrackerList.instance.trackersByCategory(domain: domainStr)[category]?.map({ (app) -> Int in return app.appId }) {
+                LoadingNotificationManager.shared.changeInControlCenter()
                 self.changeState(appIds: appIds, state: state, tableType: tableType)
             }
         }
         else if tableType == .global {
             if let appIds = TrackerList.instance.appsByCategory[category]?.map({ (app) -> Int in return app.appId }) {
+                LoadingNotificationManager.shared.changeInControlCenter()
                 self.changeState(appIds: appIds, state: state, tableType: tableType)
             }
         }
     }
     
     func changeState(appId: Int, state: TrackerUIState, section: Int?, tableType: TableType) {
+        
         invalidateStateImageCache()
         invalidateBlockedCountCache()
         
@@ -35,6 +38,8 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         else {
             TrackerStateStore.change(appIds: [appId], toState: state)
         }
+        
+        LoadingNotificationManager.shared.changeInControlCenter()
     }
     
     func changeState(appIds: [Int], state: TrackerUIState, tableType: TableType) {
@@ -47,6 +52,8 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         else {
             TrackerStateStore.change(appIds: appIds, toState: state)
         }
+        
+        LoadingNotificationManager.shared.changeInControlCenter()
     }
     
     func blockAll(tableType: TableType, completion: @escaping () -> Void) {
@@ -61,6 +68,8 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
+        
+        LoadingNotificationManager.shared.changeInControlCenter()
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
@@ -82,6 +91,8 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
+        
+        LoadingNotificationManager.shared.changeInControlCenter()
         
         DispatchQueue.global(qos: .userInitiated).async {
             
@@ -111,17 +122,21 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
     func pauseGhostery(paused: Bool, time: Date) {
         paused ? UserPreferences.instance.pauseGhosteryDate = time : (UserPreferences.instance.pauseGhosteryDate = Date(timeIntervalSince1970: 0))
         UserPreferences.instance.writeToDisk()
+        LoadingNotificationManager.shared.changeInControlCenter()
     }
     
     func turnGlobalAdblocking(on: Bool) {
         on ? UserPreferences.instance.adblockingMode = .blockAll : (UserPreferences.instance.adblockingMode = .blockNone)
         UserPreferences.instance.writeToDisk()
+        LoadingNotificationManager.shared.changeInControlCenter()
     }
     
     func changeAll(state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void) {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
+        
+        LoadingNotificationManager.shared.changeInControlCenter()
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
         

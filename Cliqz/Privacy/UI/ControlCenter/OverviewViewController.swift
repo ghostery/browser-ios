@@ -31,7 +31,6 @@ class NotchView: UIView {
 		set {
 			DispatchQueue.main.async {
 				self.switchControl.isOn = newValue ?? false
-				self.switchValueChanged(s: self.switchControl)
 			}
 		}
 		get {
