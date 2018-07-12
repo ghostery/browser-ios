@@ -389,6 +389,9 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 	}
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? TrackerViewCell {
+            cell.showSwipeLabel()
+        }
         self.tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -420,15 +423,22 @@ class TrackerViewCell: UITableViewCell {
 	let infoButton = UIButton(type: .custom)
 	let trackerNameLabel = UILabel()
 	let statusIcon = UIImageView()
+    private let swipeLabel = UILabel()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 		self.contentView.addSubview(infoButton)
 		self.contentView.addSubview(trackerNameLabel)
 		self.contentView.addSubview(statusIcon)
+        self.contentView.addSubview(swipeLabel)
 		infoButton.setImage(UIImage(named: "info"), for: .normal)
 		trackerNameLabel.font = UIFont.systemFont(ofSize: 16)
 		trackerNameLabel.textColor = ControlCenterUI.textGray
+        
+        swipeLabel.font = UIFont.systemFont(ofSize: 16)
+        swipeLabel.textColor = UIColor.cliqzBluePrimary
+        swipeLabel.text = NSLocalizedString("Swipe", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Swipe Cell Title")
+        swipeLabel.alpha = 0.0
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -451,6 +461,10 @@ class TrackerViewCell: UITableViewCell {
 			make.centerY.equalToSuperview()
 			make.width.height.equalTo(20)
 		}
+        swipeLabel.snp.remakeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().offset(-10)
+        }
 	}
     
     override func prepareForReuse() {
@@ -459,6 +473,22 @@ class TrackerViewCell: UITableViewCell {
         self.trackerNameLabel.text = ""
         self.statusIcon.image = nil
         self.appId = 0
+    }
+    
+    func showSwipeLabel() {
+        self.statusIcon.alpha = 0.0
+        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            self?.swipeLabel.alpha = 1.0
+        }) { (finished) in
+            if finished {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: { [weak self] in
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self?.swipeLabel.alpha = 0.0
+                        self?.statusIcon.alpha = 1.0
+                    })
+                })
+            }
+        }
     }
 }
 
