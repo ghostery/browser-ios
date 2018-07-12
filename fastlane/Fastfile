@@ -7,7 +7,7 @@
 #
 
 # Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+update_fastlane
 
 default_platform(:ios)
 
@@ -64,6 +64,12 @@ platform :ios do
       demo_account_required: "false",
       skip_waiting_for_build_processing: "true"
     )
+
+    sentry_upload_dsym(
+      auth_token: ENV["SENTRY_AUTH_TOKEN"],
+      org_slug: 'cliqz',
+      project_slug: 'new-cliqz',
+    )
   end
 
 
@@ -106,6 +112,12 @@ platform :ios do
       changelog: "Ghostery Nightly build",
       demo_account_required: "false",
       skip_waiting_for_build_processing: "true"
+    )
+
+    upload_symbols_to_sentry(
+      auth_token: ENV["SENTRY_AUTH_TOKEN"],
+      org_slug: 'cliqz',
+      project_slug: 'ghostery',
     )
   end
 
