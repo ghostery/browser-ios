@@ -20,50 +20,29 @@ class GhosteryButton: InsetButton {
     fileprivate var currentTheme: Theme = .Normal
     
     fileprivate let ghosty = UIImageView()
-    private let circle = UIView()
     private let count = UILabel()
-    
-    let circleSize: CGFloat = 20
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         ghosteryCount.delegate = self
         
         setUpComponent()
-        setUpConstaints()
-        configureGhosty(currentTheme)
+        setUpConstaints(currentTheme)
     }
     
     func setUpComponent() {
         addSubview(ghosty)
-        addSubview(circle)
-        circle.addSubview(count)
-        
-        circle.layer.cornerRadius = circleSize/2
-        circle.backgroundColor = UIColor(colorString: "930194").withAlphaComponent(0.9)
+        addSubview(count)
         
         ghosty.backgroundColor = .clear
         count.backgroundColor = .clear
         
         count.text = "0"
         count.textColor = .white
-        count.font = UIFont.systemFont(ofSize: 13, weight: UIFontWeightMedium)
+        count.font = UIFont.systemFont(ofSize: 14)
     }
     
-    func setUpConstaints() {
-        
-        circle.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(1)
-            make.right.equalToSuperview().offset(-12)
-            make.size.equalTo(circleSize)
-        }
-        
-        count.snp.makeConstraints { (make) in
-            make.center.equalToSuperview()
-        }
-    }
-    
-    func configureGhosty(_ theme: Theme) {
+    func setUpConstaints(_ theme: Theme) {
         
         if theme == .Normal {
             ghosty.image = UIImage.init(named: "ghosty")
@@ -72,14 +51,27 @@ class GhosteryButton: InsetButton {
             ghosty.image = UIImage.init(named: "ghostyPrivate")
         }
         
-        let height: CGFloat = 40.0
+        let height: CGFloat = 25.0
         let width = (ghosty.image?.widthOverHeight() ?? 1.0) * height
         
+        var centerDifference: CGFloat = 0.0
+        if theme == .Private, let normalImage = UIImage.init(named: "ghosty"), let privImage = ghosty.image {
+            let ratioNormal = normalImage.widthOverHeight()
+            let ratioPrivate = privImage.widthOverHeight()
+            let widthNormal = ratioNormal * height
+            centerDifference = 1/2 * widthNormal * (ratioPrivate / ratioNormal - 1)
+        }
+        
         ghosty.snp.remakeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.left.equalToSuperview()
+            make.top.equalToSuperview().offset(6)
+            make.centerX.equalToSuperview()
             make.height.equalTo(height)
             make.width.equalTo(width)
+        }
+        
+        count.snp.remakeConstraints { (make) in
+            make.centerX.equalToSuperview().offset(-centerDifference)
+            make.bottom.equalToSuperview().offset(-4)
         }
     }
     
@@ -90,10 +82,6 @@ class GhosteryButton: InsetButton {
     func setCount(count: Int) {
         
         let count_str = String(count)
-        
-        if count_str.count > 1 {
-            self.count.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
-        }
         
         if count <= 99 {
             self.count.text = count_str
@@ -108,7 +96,7 @@ class GhosteryButton: InsetButton {
 extension GhosteryButton: Themeable {
     func applyTheme(_ theme: Theme) {
         currentTheme = theme
-        configureGhosty(theme)
+        setUpConstaints(theme)
     }
 }
 
