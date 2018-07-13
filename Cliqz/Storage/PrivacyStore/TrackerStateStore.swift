@@ -188,78 +188,79 @@ public class TrackerStateStore: NSObject {
     }
     
     private class func write(state: TrackerUIState?, appIds: [Int], domain: String?) {
-        
-        if let realm = try? Realm() {
-            guard realm.isInWriteTransaction == false else { return } //avoid exceptions
-            
-            realm.beginWrite()
-            
-            var domainObj: Domain? = nil
-            
-            if let domain = domain {
+        autoreleasepool {
+            if let realm = try? Realm() {
+                guard realm.isInWriteTransaction == false else { return } //avoid exceptions
                 
-                if let d = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
-                    domainObj = d
-                }
-                else {
-                    domainObj = Domain()
-                    domainObj!.name = domain
-                    realm.add(domainObj!)
-                }
-            }
-            
-            var trackerStatesToUpdate: [TrackerState] = []
-            var trackerStatesToAdd: [TrackerState] = []
-            
-            for appId in appIds {
+                realm.beginWrite()
                 
-                let toState: TrackerUIState
+                var domainObj: Domain? = nil
                 
-                if let s = state {
-                    toState = s
-                }
-                else {
-                    let (prevState, _) = previousState(appId: appId, domainObj: domainObj, realm: realm)
-                    toState = prevState
+                if let domain = domain {
+                    
+                    if let d = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
+                        domainObj = d
+                    }
+                    else {
+                        domainObj = Domain()
+                        domainObj!.name = domain
+                        realm.add(domainObj!)
+                    }
                 }
                 
-                let trackerState: TrackerState
+                var trackerStatesToUpdate: [TrackerState] = []
+                var trackerStatesToAdd: [TrackerState] = []
                 
-                if let ts = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
-                    trackerState = ts
-                    trackerStatesToUpdate.append(ts)
-                }
-                else {
-                    trackerState = TrackerState()
-                    trackerState.appId = appId
-                    trackerState.state = intForState(state: .empty)
-                    trackerState.previousState = intForState(state: .empty)
-                    trackerStatesToAdd.append(trackerState)
+                for appId in appIds {
+                    
+                    let toState: TrackerUIState
+                    
+                    if let s = state {
+                        toState = s
+                    }
+                    else {
+                        let (prevState, _) = previousState(appId: appId, domainObj: domainObj, realm: realm)
+                        toState = prevState
+                    }
+                    
+                    let trackerState: TrackerState
+                    
+                    if let ts = realm.object(ofType: TrackerState.self, forPrimaryKey: appId) {
+                        trackerState = ts
+                        trackerStatesToUpdate.append(ts)
+                    }
+                    else {
+                        trackerState = TrackerState()
+                        trackerState.appId = appId
+                        trackerState.state = intForState(state: .empty)
+                        trackerState.previousState = intForState(state: .empty)
+                        trackerStatesToAdd.append(trackerState)
+                    }
+                    
+                    insert(state: toState, appId: appId, domainObj: domainObj, trackerState: trackerState, realm: realm)
+                    
+                    if toState == .empty {
+                        TrackerStateStore.shared.blockedTrackers.remove(appId)
+                    }
+                    else if toState == .blocked {
+                        TrackerStateStore.shared.blockedTrackers.insert(appId)
+                    }
                 }
                 
-                insert(state: toState, appId: appId, domainObj: domainObj, trackerState: trackerState, realm: realm)
+                realm.add(trackerStatesToUpdate, update: true)
+                realm.add(trackerStatesToAdd)
                 
-                if toState == .empty {
-                    TrackerStateStore.shared.blockedTrackers.remove(appId)
+                if let d = domainObj {
+                    realm.add(d, update: true)
                 }
-                else if toState == .blocked {
-                    TrackerStateStore.shared.blockedTrackers.insert(appId)
+                
+                do {
+                    try realm.commitWrite()
                 }
-            }
-            
-            realm.add(trackerStatesToUpdate, update: true)
-            realm.add(trackerStatesToAdd)
-            
-            if let d = domainObj {
-                realm.add(d, update: true)
-            }
-            
-            do {
-                try realm.commitWrite()
-            }
-            catch {
-                debugPrint("could not change state of trackerState")
-                //do I need to cancel the write?
+                catch {
+                    debugPrint("could not change state of trackerState")
+                    //do I need to cancel the write?
+                }
             }
         }
     }
