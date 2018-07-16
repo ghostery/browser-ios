@@ -9,7 +9,11 @@
 import Foundation
 
 class AppStatus {
+    #if GHOSTERY
+    static let AppId = "472789016"
+    #else
     static let AppId = "1065837334"
+    #endif
     
     class func isRelease() -> Bool {
 //        #if BETA
