@@ -6,6 +6,9 @@ properties([
     disableConcurrentBuilds(), 
     [$class: 'JobRestrictionProperty']
 ])
+
+def jobStatus = 'FAIL'
+
 node('mac-vm-host') {
 
     writeFile file: 'Vagrantfile', text: '''
@@ -50,10 +53,10 @@ node('mac-vm-host') {
         false, // rebuild image
     ) { nodeId ->
         node(nodeId) {
-            stage('Checkout') {
-                checkout scm
-            }
             try {
+                stage('Checkout') {
+                    checkout scm
+                }
                 stage('Prepare') {
                     sh '''#!/bin/bash -l
                         set -e
@@ -96,7 +99,15 @@ node('mac-vm-host') {
                             fastlane beta
                         '''
                     }
-                }   
+                }
+                jobStatus = 'PASS'
+            }
+            catch(all) {
+                jobStatus = 'FAIL'
+                if (jobStatus == 'FAIL') {
+                    currentBuild.result = 'FAILURE'
+                    return
+                }
             }
             finally {
                 stage("Clean Up"){
@@ -110,63 +121,93 @@ node('mac-vm-host') {
         }
     }
 }
-stage('Update Jira') {
-    withEnv(['JIRA_SITE=cliqztix']) {
-        def issueIds = getIssueList()
-        def transitionInput = [
-            transition: [
-                id: '121',
-            ],
-        ]
-        if (issueIds.size() > 0) {
-            echo 'Detected JIRA tickets'
-            echo issueIds.toString()
-        } else {
-            echo 'No JIRA tickets detected'
-        }
-
-        for (id in issueIds) {
-            try {
-                def issue = jiraGetIssue idOrKey: id
-
-                if (issue.data.fields.status.name == "Resolved") {
-                    jiraTransitionIssue idOrKey: id, input: transitionInput
+if (jobStatus == 'PASS') {
+    stage('Update Jira') {
+        withEnv(['JIRA_SITE=cliqztix']) {
+            passedBuilds = listOfFailedBuilds(currentBuild)
+            def issueIds = getIssueList()
+            def transitionInput = [
+                transition: [
+                    id: '121',
+                ],
+            ]
+            for (id in issueIds) {
+                try {
+                    def issue = jiraGetIssue idOrKey: id
+                    if (issue.data.fields.status.name == "Resolved") {
+                        jiraTransitionIssue idOrKey: id, input: transitionInput
+                     echo "Transistioned ${id}"
+                    } else{
+                        echo """Element with id ${id} was not transitioned\nIts status is: """+issue.data.fields.status.name
+                    }
+                } catch (Error e) {
+                    echo e
                 }
-            } catch (Error e) {
-                echo e
             }
         }
     }
 }
+
+/**
+ * Return the list of failed builds up to the latest successfull one or the 
+ * first build if there is not such build
+ *
+ * @param build the current build
+ */
+def listOfFailedBuilds(build) {
+    def results = []
+    while (build != null && build.result != 'SUCCESS') {
+        println("Found unsuccessfull build ${build.number}")
+        results.add(build)
+        build = build.getPreviousBuild()
+    }
+    if (build != null) {
+        println("Found successfull build ${build.number}")
+        results.add(build)
+    } else {
+        println("Found EOL")
+    }
+    results
+}
+
 @NonCPS
-def getChangeString() {
-    MAX_MSG_LEN = 100
+def getChangeString(passedBuilds) {
     def changeString = ""
-    echo "Gathering SCM changes"
-    def changeLogSets = currentBuild.changeSets
-    for (int i = 0; i < changeLogSets.size(); i++) {
-        def entries = changeLogSets[i].items
-        for (int j = 0; j < entries.length; j++) {
-            def entry = entries[j]
-            truncated_msg = entry.msg.take(MAX_MSG_LEN)
-            changeString += " - ${truncated_msg} [${entry.author}]\n"
+    echo "Gathering Changes Since Last Successful Build"
+    for (int x = 0; x < passedBuilds.size(); x++) {
+        def currentBuild = passedBuilds[x];
+        def buildNumber = currentBuild.number
+        echo "Changes for Build ${buildNumber}"
+        def changeLogSets = currentBuild.rawBuild.changeSets
+        for (int i = 0; i < changeLogSets.size(); i++) {
+            def entries = changeLogSets[i].items
+            for (int j = 0; j < entries.length; j++) {
+                def entry = entries[j]
+                changeString += "* ${entry.msg} by ${entry.author} \n"
+            }
         }
-        echo changeString
     }
     if (!changeString) {
         changeString = " - No new changes"
     }
-    return changeString
+    echo changeString
+    return changeString;
 }
 
 @NonCPS
 def getIssueList(){
-    def list =[]
-    def changes = getChangeString()
+    def list = []
+    def changes = getChangeString(passedBuilds)
     def re = /IB2-([0-9])*/
     def y = changes =~ re
     while (y){
         list.add(y.group().toString())
+    }
+    if (list.size() > 0) {
+        echo 'Detected JIRA tickets'
+        echo list.toString()
+    } else {
+       echo 'No JIRA tickets detected'
     }
     return list
 }
