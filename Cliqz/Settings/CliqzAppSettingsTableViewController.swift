@@ -154,6 +154,14 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     
     private func generateHelpSettings(prefs: Prefs) -> [Setting] {
         
+        #if GHOSTERY
+        let helpSettings = [
+            SupportSetting(delegate: settingsDelegate),
+            SendCrashReportsSetting(settings: self),
+            SendUsageDataSetting(settings: self),
+            MyOffrzSetting()
+        ]
+        #else
         let helpSettings = [
             SupportSetting(delegate: settingsDelegate),
             CliqzTipsAndTricksSetting(),
@@ -162,6 +170,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
             SendUsageDataSetting(settings: self),
             MyOffrzSetting()
         ]
+        #endif
         
         return helpSettings
     }

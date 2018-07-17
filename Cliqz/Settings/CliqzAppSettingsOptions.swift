@@ -175,7 +175,11 @@ class SupportSetting: Setting {
     }
     
     override var url: URL? {
+    #if GHOSTERY
+        return URL(string: "https://ghostery.zendesk.com/hc")
+    #else
         return URL(string: "https://cliqz.com/support")
+    #endif
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
@@ -212,6 +216,11 @@ class ReportWebsiteSetting: ShowCliqzPageSetting {
     override func getPageName() -> String {
         return "report-url"
     }
+    #if GHOSTERY
+    override var url: URL? {
+        return URL(string: "https://ghostery.zendesk.com/hc")
+    }
+    #endif
 }
 
 class SendCrashReportsSetting: CliqzOnOffSetting {
@@ -253,6 +262,11 @@ class MyOffrzSetting: ShowCliqzPageSetting {
     override func getPageName() -> String {
         return "myoffrz"
     }
+    #if GHOSTERY
+    override var url: URL? {
+        return URL(string: "https://www.ghostery.com/faqs/what-is-ghostery-rewards/")
+    }
+    #endif
 }
 
 
@@ -298,6 +312,41 @@ class AboutSetting: Setting {
     }
 }
 
+#if GHOSTERY
+class EulaSetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("EULA", tableName: "Cliqz", comment: "[Settings -> About] EULA")
+    }
+    
+    override var url: URL? {
+        return URL(string: "https://www.ghostery.com/about-ghostery/mobile-browser-end-user-license-agreement/")
+    }
+}
+
+class CliqzLicenseAndAcknowledgementsSetting: ShowCliqzPageSetting {
+    override func getTitle() -> String {
+        return NSLocalizedString("Licenses", tableName: "Cliqz", comment: "[Settings -> About] Licenses")
+    }
+    
+    override var url: URL? {
+        return URL(string: "https://www.ghostery.com/about-ghostery/")
+    }
+}
+
+class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("Privacy Policy", tableName: "Cliqz", comment: "[Settings -> About] Privacy Policy")
+    }
+    
+    override var url: URL? {
+        return URL(string: "https://www.ghostery.com/about-ghostery/mobile-browser-privacy-policy/")
+    }
+}
+
+#else
+
 class EulaSetting: LocalResourceSetting {
     
     override func getTitle() -> String {
@@ -329,3 +378,7 @@ class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
         return "mobile/privacy-cliqz-for-ios"
     }
 }
+
+#endif
+
+
