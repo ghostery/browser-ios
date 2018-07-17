@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Storage
 
 extension NSNotification.Name {
     public static let GhosteryButtonPressed = NSNotification.Name(rawValue: "GhosteryButtonPressedNotification")
@@ -63,9 +64,8 @@ extension BrowserViewController {
         }
         
 		let controlCenter = ControlCenterViewController()
-        
-        controlCenter.container = self
-        
+		controlCenter.delegate = self
+
         if let pageUrl = pageUrl {
             controlCenter.pageURL = pageUrl
         }
@@ -185,7 +185,15 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: ControlCenterViewControllerDelegate {
+
+	func controlCenter(didSelectURLString url: String) {
+		if let u = URL(string: url) {
+			self.finishEditingAndSubmit(u, visitType: VisitType.link)
+		}
+	}
+	
     func dismiss() {
         self.hideControlCenter()
     }
+
 }

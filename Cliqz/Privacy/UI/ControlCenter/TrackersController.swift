@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 //This is a temporary solution until we build the Ghostery Control Center
 
@@ -35,6 +36,8 @@ class TrackersController: UIViewController {
 		}
 	}
 	weak var delegate: ControlCenterDelegateProtocol?
+	
+	let observable = BehaviorSubject(value: "")
 
     let tableView = UITableView()
 	var expandedSectionIndex = -1
@@ -179,7 +182,6 @@ class TrackersController: UIViewController {
         else if UIDevice.current.isiPad() == false { //avoid crash
             self.present(blockTrustAlertController, animated: true, completion: nil)
         }
-        
 	}
 
 	private func blockAll() {
@@ -189,7 +191,7 @@ class TrackersController: UIViewController {
             self?.headerView.hideSpinner()
         })
 	}
-    
+
     private func unblockAll() {
         headerView.showSpinner()
         self.delegate?.unblockAll(tableType: type) { [weak self] in
@@ -197,7 +199,7 @@ class TrackersController: UIViewController {
             self?.headerView.hideSpinner()
         }
     }
-    
+
     private func undo() {
         headerView.showSpinner()
         self.delegate?.undoAll(tableType: type) { [weak self] in
@@ -205,7 +207,7 @@ class TrackersController: UIViewController {
             self?.headerView.hideSpinner()
         }
     }
-    
+
     private func restoreDefaultSettings() {
         headerView.showSpinner()
         self.delegate?.restoreDefaultSettings(tableType: type) { [weak self] in
@@ -230,9 +232,6 @@ class TrackersController: UIViewController {
         })
 	}
 
-	@objc fileprivate func showTrackerInfo() {
-		
-	}
 }
 
 extension TrackersController: UITableViewDataSource, UITableViewDelegate {
@@ -282,8 +281,19 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
+		cell.infoButtonAction = { [weak self] (button, trackerName) in
+			var url = "https://whotracks.me/tracker-not-found.html"
+			if let t = trackerName {
+				if let d = Engine.sharedInstance.getBridge().callAction("mobile-cards:getTrackerDetails", args: [t.lowercased()]) as? [String: Any],
+					let result = d["result"] as? [String: String],
+					let wtm = result["wtm"] {
+					url = "https://whotracks.me/trackers/\(wtm).html"
+				}
+			}
+			self?.observable.on(.next(url))
+		}
         return cell
-    }
+	}
 
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		let header = CategoryHeaderView()
@@ -425,6 +435,8 @@ class TrackerViewCell: UITableViewCell {
 	let statusIcon = UIImageView()
     private let swipeLabel = UILabel()
 
+	typealias InfoButtonActionType = (UIButton, String?) -> ()
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 		self.contentView.addSubview(infoButton)
@@ -490,6 +502,23 @@ class TrackerViewCell: UITableViewCell {
             }
         }
     }
+
+	var infoButtonAction: InfoButtonActionType? {
+		didSet {
+			if infoButtonAction != nil {
+				infoButton.addTarget(self, action: #selector(infoButtonTapped(_:)), for: .touchUpInside)
+			} else {
+				infoButton.removeTarget(self, action: #selector(infoButtonTapped(_:)), for: .touchUpInside)
+			}
+		}
+	}
+	
+	@objc private func infoButtonTapped(_ sender: UIButton) {
+		if let handler = infoButtonAction {
+			handler(self.infoButton, trackerNameLabel.text)
+		}
+	}
+
 }
 
 class CategoriesHeaderView: UIControl {
