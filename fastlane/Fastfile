@@ -14,14 +14,31 @@ default_platform(:ios)
 platform :ios do
   desc "Description of what the lane does"
 
-  # Configuring Sentry DSN
-  sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
-    
-  # Building ReactNative Entension
-  sh("cd .. && npm run bundle")
+  lane :importLocalizations do
+    import_repository(
+    url: 'git@github.com:mozilla-l10n/firefoxios-l10n.git',
+    clone_folder: "../build-tools/firefoxios-l10n",
+    )
+
+    import_repository(
+    url: 'git@github.com:cliqz-oss/browser-ios-l10n.git',
+    clone_folder: "../build-tools/cliqzios-l10n",
+    )
+
+    import_localizations(
+      firefox_folder: '../build-tools/firefoxios-l10n',
+      cliqz_folder: "../build-tools/cliqzios-l10n",
+    )
+  end
   
   
   lane :beta do    
+
+    # Configuring Sentry DSN
+    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
+    
+    # Building ReactNative Entension
+    sh("cd .. && npm run bundle")
 
     create_keychain(
       name: ENV["MATCH_KEYCHAIN_NAME"],
@@ -75,6 +92,12 @@ platform :ios do
 
 
   lane :release do    
+
+    # Configuring Sentry DSN
+    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
+    
+    # Building ReactNative Entension
+    sh("cd .. && npm run bundle")
 
     create_keychain(
       name: ENV["MATCH_KEYCHAIN_NAME"],
