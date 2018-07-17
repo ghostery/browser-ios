@@ -7,23 +7,26 @@
 //
 
 import Foundation
+import RxSwift
 
 let controlCenterDismissedNotification = Notification.Name(rawValue: "ControlCenterDismissed")
 
 protocol ControlCenterViewControllerDelegate: class {
     func dismiss()
+	func controlCenter(didSelectURLString url: String)
 }
 
 class ControlCenterViewController: UIViewController {
-	weak var homePanelDelegate: HomePanelDelegate?
 
 	var model: ControlCenterModel = ControlCenterModel()
     
-    weak var container: ControlCenterViewControllerDelegate? = nil
+	weak var delegate: ControlCenterViewControllerDelegate? = nil
 
 	private var topTranparentView = UIView()
 	fileprivate var panelSwitchControl = UISegmentedControl(items: [])
 	fileprivate var panelContainerView = UIView()
+
+	private let disposeBag = DisposeBag()
 
 	fileprivate lazy var overviewViewController: OverviewViewController = {
 		let overview = OverviewViewController()
@@ -33,11 +36,17 @@ class ControlCenterViewController: UIViewController {
 	fileprivate lazy var trackersViewController: TrackersController = {
 		let trackers = TrackersController()
 		trackers.type = .page
+		trackers.observable.asObserver().subscribe(onNext: { [weak self] value in
+			self?.delegate?.controlCenter(didSelectURLString: value)
+		}).disposed(by: self.disposeBag)
 		return trackers
 	}()
 
 	fileprivate lazy var globalTrackersViewController: TrackersController = {
 		let global = TrackersController()
+		global.observable.asObserver().subscribe(onNext: { [weak self] value in
+			self?.delegate?.controlCenter(didSelectURLString: value)
+		}).disposed(by: self.disposeBag)
 		global.type = .global
 		return global
 	}()
@@ -172,7 +181,7 @@ class ControlCenterViewController: UIViewController {
         let orientation = UIDevice.current.getDeviceAndOrientation().1
         if orientation != lastOrientation {
             lastOrientation = orientation
-            container?.dismiss()
+            delegate?.dismiss()
         }
     }
 }
