@@ -39,4 +39,8 @@ extension UIImage {
         
         return blurred ? image?.applyBlur(withRadius: 5, blurType: BOXFILTER, tintColor: UIColor.clear, saturationDeltaFactor: 1.0, maskImage: nil) : image
     }
+
+	static func defaultFavicon() -> UIImage? {
+		return UIImage(named: "ghosteryFavicon")
+	}
 }

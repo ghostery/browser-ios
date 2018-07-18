@@ -142,7 +142,7 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let v = UIView()
         v.backgroundColor = UIColor.black.withAlphaComponent(0.7)
-        let logo = UIImageView(image: UIImage(named: "defaultFavicon"))
+        let logo = UIImageView(image: UIImage.defaultFavicon())
         v.addSubview(logo)
         logo.snp.makeConstraints { (make) in
             make.top.equalTo(v).offset(4)

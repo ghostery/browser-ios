@@ -818,7 +818,10 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         if let favIcon = tab.displayFavicon {
             tabCell.favicon.sd_setImage(with: URL(string: favIcon.url)!)
         } else {
+			/* Cliqz: Changed favicon to Cliqz/Ghostery image
             let defaultFavicon = UIImage(named: "defaultFavicon")
+			*/
+			let defaultFavicon = UIImage.defaultFavicon()
             if tab.isPrivate {
                 tabCell.favicon.image = defaultFavicon
                 tabCell.favicon.tintColor = UIColor.white
