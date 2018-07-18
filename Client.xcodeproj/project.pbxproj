@@ -350,6 +350,7 @@
 		4F0445E720334D3400E2C0C7 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0445E620334D3400E2C0C7 /* UIDeviceExtension.swift */; };
 		4F0445E920334DC800E2C0C7 /* LocalDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0445E820334DC700E2C0C7 /* LocalDataStore.swift */; };
 		4F1860332088F3DC00A86D4C /* Privacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1860322088F3DC00A86D4C /* Privacy.swift */; };
+		4F19FBD420FE2DE500BF0643 /* GhosteryLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F19FBC520FE2DE300BF0643 /* GhosteryLaunchScreen.xib */; };
 		4F304595204FEC5500C99162 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68F36971EA694000048CF44 /* PanelDataObservers.swift */; };
 		4F304598204FEE5500C99162 /* jsengine.bundle.js in Resources */ = {isa = PBXBuildFile; fileRef = 4F304597204FEE5500C99162 /* jsengine.bundle.js */; };
 		4F3045CB204FF0C500C99162 /* CliqzSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3045B2204FF0C500C99162 /* CliqzSearchViewController.swift */; };
@@ -1864,6 +1865,7 @@
 		4F0445E620334D3400E2C0C7 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		4F0445E820334DC700E2C0C7 /* LocalDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalDataStore.swift; sourceTree = "<group>"; };
 		4F1860322088F3DC00A86D4C /* Privacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Privacy.swift; sourceTree = "<group>"; };
+		4F19FBC520FE2DE300BF0643 /* GhosteryLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GhosteryLaunchScreen.xib; sourceTree = "<group>"; };
 		4F304597204FEE5500C99162 /* jsengine.bundle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = jsengine.bundle.js; path = Cliqz/JSEngine/jsengine.bundle.js; sourceTree = SOURCE_ROOT; };
 		4F3045B2204FF0C500C99162 /* CliqzSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzSearchViewController.swift; sourceTree = "<group>"; };
 		4F3046AC204FF0EA00C99162 /* Cliqz.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Cliqz.xcassets; sourceTree = "<group>"; };
@@ -3407,6 +3409,7 @@
 		4F304596204FEE3B00C99162 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4F19FBC520FE2DE300BF0643 /* GhosteryLaunchScreen.xib */,
 				1E3B3F2520C1590600C96736 /* Cliqz.stringsdict */,
 				AF6F247C20AF0749009C3D0D /* CliqzStrings.swift */,
 				1E7A3DC12085FCCA00F53E90 /* assets */,
@@ -5349,7 +5352,7 @@
 					};
 					282731671ABC9BE700AA1954 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5376,7 +5379,7 @@
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5455,7 +5458,7 @@
 					};
 					E4D567211ADECE2700F1EFE7 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5472,7 +5475,7 @@
 					};
 					E6F9650B1B2F1CF20034B023 = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 					};
 					F84B21BD1A090F8100AAB793 = {
@@ -5500,7 +5503,7 @@
 					};
 					F84B21D21A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 43AQ936H96;
+						DevelopmentTeam = 9G8J6YA743;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5899,6 +5902,7 @@
 				EB54A8772028CE4000018880 /* disconnect-analytics.json in Resources */,
 				E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */,
 				F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */,
+				4F19FBD420FE2DE500BF0643 /* GhosteryLaunchScreen.xib in Resources */,
 				AF6FA97320652C6800D7F9F0 /* preload.js in Resources */,
 				F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */,
 				4F3046BB204FF69200C99162 /* logo-database.json in Resources */,
