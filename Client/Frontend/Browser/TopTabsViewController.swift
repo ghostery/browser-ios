@@ -365,7 +365,10 @@ extension TopTabsViewController: UICollectionViewDataSource {
                 }
             })
         } else {
+			/* Cliqz: Changed favicon to Cliqz/Ghostery image
             tabCell.favicon.image = UIImage(named: "defaultFavicon")
+			*/
+			tabCell.favicon.image = UIImage.defaultFavicon()
             tabCell.favicon.contentMode = .scaleAspectFit
             tabCell.favicon.backgroundColor = .clear
         }
