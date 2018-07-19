@@ -18,8 +18,8 @@ class CliqzIntroViewController: UIViewController {
     
     lazy fileprivate var startBrowsingButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor.cliqzBlueOneSecondary
-        button.layer.cornerRadius = 27.0
+        button.backgroundColor = UIColor.cliqzBluePrimary
+        button.layer.cornerRadius = 23.0
         button.setTitle(Strings.StartBrowsingButtonTitle, for: UIControlState())
         button.setTitleColor(.white, for: UIControlState())
         button.addTarget(self, action: #selector(IntroViewController.startBrowsing), for: UIControlEvents.touchUpInside)
@@ -31,7 +31,7 @@ class CliqzIntroViewController: UIViewController {
     lazy var pageControl: UIPageControl = {
         let pc = UIPageControl()
         pc.pageIndicatorTintColor = UIColor.cliqzBlueOneSecondary.withAlphaComponent(0.3)
-        pc.currentPageIndicatorTintColor = UIColor.cliqzBlueOneSecondary
+        pc.currentPageIndicatorTintColor = UIColor.cliqzBluePrimary
         pc.accessibilityIdentifier = "IntroViewController.pageControl"
         pc.addTarget(self, action: #selector(IntroViewController.changePage), for: UIControlEvents.valueChanged)
         return pc
@@ -71,17 +71,17 @@ class CliqzIntroViewController: UIViewController {
         if AppConstants.MOZ_LP_INTRO {
             syncViaLP()
         }
-        
+
         assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
-        view.backgroundColor = UIColor.black
-        
+        view.backgroundColor = UIColor.white
+
         // Add Views
         view.addSubview(pageControl)
         view.addSubview(scrollView)
         view.addSubview(startBrowsingButton)
         scrollView.addSubview(imagesBackgroundView)
         scrollView.addSubview(imageViewContainer)
-        
+
         // Setup constraints
         imagesBackgroundView.snp.makeConstraints { make in
             make.edges.equalTo(imageViewContainer)
@@ -94,18 +94,18 @@ class CliqzIntroViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().dividedBy(2.2)
             make.bottom.equalTo(self.view.safeArea.bottom).offset(-2)
-            make.height.equalTo(IntroUX.StartBrowsingButtonHeight)
+            make.height.equalTo(45)
         }
         scrollView.snp.makeConstraints { make in
             make.left.right.top.equalTo(self.view)
             make.bottom.equalTo(startBrowsingButton.snp.top)
         }
-        
+
         pageControl.snp.makeConstraints { make in
             make.centerX.equalTo(self.scrollView)
             make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroUX.PagerCenterOffsetFromScrollViewBottom)
         }
-        
+
         createSlides()
         pageControl.addTarget(self, action: #selector(changePage), for: .valueChanged)
     }
@@ -284,8 +284,8 @@ extension CliqzIntroViewController {
         startBrowsingButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
         cardViews.forEach { cardView in
             cardView.titleLabel.font = UIFont(name: "FiraSans-Medium", size: 25)
-            cardView.textLabel.font = UIFont(name: "FiraSans-UltraLight", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
-            cardView.optInView.textLabel.font = UIFont(name: "FiraSans-UltraLight", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
+            cardView.textLabel.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
+            cardView.optInView.textLabel.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
         }
     }
 }
@@ -344,7 +344,7 @@ class CliqzCardView: UIView {
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         titleLabel.textAlignment = .center
-        titleLabel.textColor = .white
+        titleLabel.textColor = UIColor.cliqzBluePrimary
         titleLabel.setContentHuggingPriority(1000, for: .vertical)
         return titleLabel
     }()
@@ -355,7 +355,7 @@ class CliqzCardView: UIView {
         textLabel.adjustsFontSizeToFitWidth = true
         textLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         textLabel.textAlignment = .center
-        textLabel.textColor = .white
+        textLabel.textColor = UIColor.cliqzBluePrimary
         textLabel.lineBreakMode = .byTruncatingTail
         textLabel.setContentHuggingPriority(1000, for: .vertical)
         return textLabel
@@ -368,7 +368,7 @@ class CliqzCardView: UIView {
         optInView.textLabel.adjustsFontSizeToFitWidth = true
         optInView.textLabel.minimumScaleFactor = 0.2
         optInView.textLabel.textAlignment = .left
-        optInView.textLabel.textColor = .white
+        optInView.textLabel.textColor = UIColor.cliqzBluePrimary
         return optInView
     }()
     
@@ -477,6 +477,7 @@ class OptInView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         toggle.addTarget(self, action: #selector(toggled), for: .valueChanged)
+		toggle.onTintColor = UIColor.cliqzBluePrimary
         addSubview(toggle)
         addSubview(textLabel)
         setConstraints()
@@ -494,7 +495,7 @@ class OptInView: UIView {
         
         textLabel.snp.makeConstraints { (make) in
             make.top.bottom.leading.equalToSuperview()
-            make.width.equalToSuperview().offset(-toggle.intrinsicContentSize.width)
+            make.width.equalToSuperview().offset(-toggle.intrinsicContentSize.width - 7)
         }
     }
     
@@ -502,6 +503,3 @@ class OptInView: UIView {
         self.delegate?.toggled(value: sender.isOn)
     }
 }
-
-
-
