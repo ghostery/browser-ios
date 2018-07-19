@@ -16,6 +16,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 *.xcscmblueprint
+IDEWorkspaceChecks.plist
 
 /fastlane/scripts/upload.sh
 /fastlane/README.md
