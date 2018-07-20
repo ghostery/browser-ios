@@ -395,7 +395,7 @@ class CliqzCardView: UIView {
         if let optInText = card.optInText, let optInToggleValue = card.optInToggleValue {
             stackView.addArrangedSubview(optInView)
             optInView.textLabel.text = optInText
-            optInView.toggle.isOn = optInToggleValue
+            optInView.toggle.isSelected = optInToggleValue
             // When there is a button reduce the spacing to make more room for text
             stackView.spacing = stackView.spacing / 2
         }
@@ -469,15 +469,16 @@ protocol OptInViewDelegate: class {
 }
 
 class OptInView: UIView {
-    let toggle = UISwitch()
+    let toggle = UIButton()
     let textLabel = UILabel()
     
     weak var delegate: OptInViewDelegate? = nil
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        toggle.addTarget(self, action: #selector(toggled), for: .valueChanged)
-		toggle.onTintColor = UIColor.cliqzBluePrimary
+        toggle.addTarget(self, action: #selector(toggled), for: .touchUpInside)
+		toggle.setImage(UIImage(named: "blank"), for: .normal)
+		toggle.setImage(UIImage(named: "selected"), for: .selected)
         addSubview(toggle)
         addSubview(textLabel)
         setConstraints()
@@ -490,16 +491,19 @@ class OptInView: UIView {
     func setConstraints() {
         toggle.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.leading.equalToSuperview().offset(5)
+			make.width.height.equalTo(40)
         }
         
         textLabel.snp.makeConstraints { (make) in
-            make.top.bottom.leading.equalToSuperview()
-            make.width.equalToSuperview().offset(-toggle.intrinsicContentSize.width - 7)
+            make.top.bottom.equalToSuperview()
+			make.leading.equalTo(toggle.snp.trailing).offset(7)
+            make.trailing.equalToSuperview().offset(-7)
         }
     }
     
-    @objc func toggled(_ sender: UISwitch) {
-        self.delegate?.toggled(value: sender.isOn)
+    @objc func toggled(_ sender: UIButton) {
+		sender.isSelected = !sender.isSelected
+        self.delegate?.toggled(value: sender.isSelected)
     }
 }
