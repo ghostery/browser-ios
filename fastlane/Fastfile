@@ -16,12 +16,12 @@ platform :ios do
 
   lane :importLocalizations do
     import_repository(
-    url: 'git@github.com:mozilla-l10n/firefoxios-l10n.git',
+    url: 'https://github.com/mozilla-l10n/firefoxios-l10n.git',
     clone_folder: "../build-tools/firefoxios-l10n",
     )
 
     import_repository(
-    url: 'git@github.com:cliqz-oss/browser-ios-l10n.git',
+    url: 'https://github.com/cliqz-oss/browser-ios-l10n.git',
     clone_folder: "../build-tools/cliqzios-l10n",
     )
 
