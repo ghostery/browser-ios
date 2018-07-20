@@ -204,8 +204,8 @@ extension NewsViewController {
 		self.newsTableView.layer.cornerRadius = 9.0
 		self.newsTableView.isScrollEnabled = false
 		self.newsTableView.snp.makeConstraints { (make) in
-			make.left.equalToSuperview().offset(9)
-			make.right.equalToSuperview().offset(-9)
+			make.left.equalToSuperview().offset(22)
+			make.right.equalToSuperview().offset(-22)
 			make.height.equalTo(FreshtabViewUX.NewsViewMinHeight)
 			make.top.equalToSuperview()
 		}	

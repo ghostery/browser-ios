@@ -11,7 +11,7 @@ import Shared
 
 struct FreshtabViewUX {
 	static let TopSitesMinHeight: CGFloat = 95.0
-	static let TopSitesOffset = 5.0
+	static let TopSitesOffset = 0.0
 	
 	static let NewsViewMinHeight: CGFloat = 162.0
 
@@ -107,8 +107,8 @@ class FreshtabViewController: UIViewController, HomePanel {
             })
             
             self.newsViewController.view.snp.makeConstraints { (make) in
-                make.left.equalToSuperview().offset(21)
-                make.right.equalToSuperview().offset(-21)
+                make.left.equalToSuperview().offset(0)
+                make.right.equalToSuperview().offset(0)
                 make.height.equalTo(self.newsViewController.newsTableView.snp.height)
                 make.top.equalTo(self.topSitesViewController.view.snp.bottom).offset(FreshtabViewUX.topOffset)
             }
