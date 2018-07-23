@@ -103,6 +103,7 @@ extension GhosteryButton: Themeable {
 extension GhosteryButton: GhosteryCountDelegate {
     func updateCount(count: Int) {
         self.setCount(count: count)
+        self.accessibilityValue = "\(count)"
     }
 }
 
