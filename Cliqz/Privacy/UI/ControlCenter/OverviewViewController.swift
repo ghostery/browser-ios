@@ -662,6 +662,7 @@ class OverviewViewController: UIViewController {
         dataSet.colors = colors
         chart?.data = PieChartData(dataSet: dataSet)
         chart?.centerText = String(format: NSLocalizedString("%d Tracker(s) found", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Detected trackers count"), self.dataSource?.detectedTrackerCount() ?? 0)
+        chart?.accessibilityValue = "\(self.dataSource?.detectedTrackerCount() ?? 0)"
     }
 
 	private func setupPieChart() {
@@ -669,6 +670,7 @@ class OverviewViewController: UIViewController {
 		chart.chartDescription?.text = ""
 		chart.legend.enabled = false
 		chart.holeRadiusPercent = 0.8
+        chart.accessibilityIdentifier = "donut"
 	}
 }
 
