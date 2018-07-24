@@ -16,7 +16,7 @@ class OffrzViewController: UIViewController, HomePanel {
     private var scrollView = UIScrollView()
     private var containerView = UIView()
 
-	private static let learnMoreURL = "https://cliqz.com/myoffrz"
+	private static let learnMoreURL = "https://www.ghostery.com/faqs/what-is-ghostery-rewards/"
 	private var onboardingView: OffrzOnboardingView!
 
 	private var emptyView: OffrzEmptyView!
