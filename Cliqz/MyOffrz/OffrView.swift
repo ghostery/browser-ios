@@ -104,8 +104,9 @@ class OffrView: UIView {
 		conditionsDesc.font = UIFont.boldSystemFont(ofSize: 10)
 		conditionsDesc.numberOfLines = 0
 
-		myOffrzLogo.image = UIImage(named: "offrzLogo")
-		offrButton.backgroundColor = UIColor(rgb: 0xF67057)
+        // removed myOffrz logo
+		// myOffrzLogo.image = UIImage(named: "offrzLogo")
+		offrButton.backgroundColor = UIColor.cliqzBluePrimary
 		offrButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
 	}
 
