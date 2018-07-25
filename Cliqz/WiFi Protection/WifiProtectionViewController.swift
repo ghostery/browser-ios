@@ -68,6 +68,7 @@ class WifiProtectionViewController: UIViewController {
 		controls.setTitle(NSLocalizedString("Ads", tableName: "Cliqz", comment:"[WiFi Protection] Option 2 for blocking trackers"), forSegmentAt: 1)
 		controls.setTitle(NSLocalizedString("Analytics", tableName: "Cliqz", comment:"[WiFi Protection] Option 3 for blocking trackers"), forSegmentAt: 2)
 		controls.setTitle(NSLocalizedString("Beacons", tableName: "Cliqz", comment:"[WiFi Protection] Option 4 for blocking trackers"), forSegmentAt: 3)
+        self.navigationItem.leftBarButtonItem?.title = NSLocalizedString("Done", comment: "Done button on left side of the Wifi Protection view controller title bar")
 		self.switchTrackerType()
 	}
 

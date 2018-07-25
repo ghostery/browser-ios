@@ -12,7 +12,7 @@ class TabTrayDoneButton: UIButton, Themeable {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        let title = NSLocalizedString("Done", tableName: "Cliqz", comment: "Done button in the tabTray Toolbar")
+        let title = NSLocalizedString("Done", comment: "Done button in the tabTray Toolbar")
         setTitle(title, for: .normal)
         accessibilityIdentifier = "TabTrayController.doneButton"
     }

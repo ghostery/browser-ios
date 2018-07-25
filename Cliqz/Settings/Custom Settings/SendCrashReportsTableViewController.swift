@@ -23,7 +23,7 @@ class SendCrashReportsTableViewController: ToggleSubSettingsTableViewController 
     }
     
     override func getSectionFooters() -> [String] {
-        return [NSLocalizedString("We use opensource software Sentry (http://sentry.io) for our crash reports. these reports do not contain any personal data.", tableName: "Cliqz", comment: "[Settings -> Send Crash Reports] Footer text")]
+        return [NSLocalizedString("We use opensource software Sentry (http://sentry.io) for our crash reports. These reports do not contain any personal data.", tableName: "Cliqz", comment: "[Settings -> Send Crash Reports] Footer text")]
     }
     
     override func saveToggles(isOn: Bool, atIndex: Int) {
