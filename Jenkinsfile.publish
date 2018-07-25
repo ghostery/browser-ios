@@ -96,6 +96,7 @@ node('mac-vm-host') {
                             set -e
                             rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                             export MATCH_KEYCHAIN_NAME=ios-build.keychain      
+                            fastlane importLocalizations   
                             fastlane beta    
                         '''
                     }
@@ -122,6 +123,7 @@ node('mac-vm-host') {
                             set -e
                             rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                             export MATCH_KEYCHAIN_NAME=ios-build.keychain      
+                            fastlane importLocalizations   
                             fastlane release    
                         '''
                     }
