@@ -68,7 +68,7 @@ class TopSitesViewController: UIViewController, HomePanel {
     fileprivate func setConstraints() {
         if self.emptyTopSitesHint.superview != nil {
             self.emptyTopSitesHint.snp.makeConstraints({ (make) in
-                make.top.equalTo(self.view).offset(8)
+                make.top.equalTo(self.view)
                 make.left.right.equalTo(self.view)
                 make.height.equalTo(TopSitesUX.TopSiteHintHeight)
             })
