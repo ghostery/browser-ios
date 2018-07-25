@@ -510,9 +510,15 @@ class OverviewViewController: UIViewController {
             })
         }
         else {
-            self.delegate?.undoAll(tableType: .page, completion: { [weak self] in
-                self?.pauseGhosteryAndRefresh(paused: false)
-            })
+			if (self.dataSource?.domainPrevState() ?? .empty) == .restricted {
+				self.delegate?.changeAll(state: .empty, tableType: .page, completion: { [weak self] in
+					self?.pauseGhosteryAndRefresh(paused: false)
+				})
+			} else {
+				self.delegate?.undoAll(tableType: .page, completion: { [weak self] in
+					self?.pauseGhosteryAndRefresh(paused: false)
+				})
+			}
         }
 	}
 
@@ -522,9 +528,15 @@ class OverviewViewController: UIViewController {
                 self?.pauseGhosteryAndRefresh(paused: false)
             })
         } else {
-            self.delegate?.undoAll(tableType: .page, completion: { [weak self] in
-                self?.pauseGhosteryAndRefresh(paused: false)
-            })
+			if (self.dataSource?.domainPrevState() ?? .empty) == .trusted {
+				self.delegate?.changeAll(state: .empty, tableType: .page, completion: { [weak self] in
+					self?.pauseGhosteryAndRefresh(paused: false)
+				})
+			} else {
+				self.delegate?.undoAll(tableType: .page, completion: { [weak self] in
+					self?.pauseGhosteryAndRefresh(paused: false)
+				})
+			}
         }
 	}
     
@@ -628,7 +640,7 @@ class OverviewViewController: UIViewController {
             self.restrictSiteButton.backgroundColor = UIColor.white
         }
     }
-    
+
     fileprivate func updateBlockedTrackersCount() {
 		blockedTrackers.text = String(format: NSLocalizedString("%d Tracker(s) Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Blocked trackers count"), self.dataSource?.blockedTrackerCount() ?? 0)
 
@@ -643,7 +655,7 @@ class OverviewViewController: UIViewController {
 			}
 		}
     }
-    
+
     fileprivate func updateChart() {
         guard let datasource = self.dataSource else { return }
         let countsAndColors = datasource.countAndColorByCategory(tableType: .page)
