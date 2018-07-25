@@ -93,7 +93,7 @@ class CliqzIntroViewController: UIViewController {
         startBrowsingButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().dividedBy(2.2)
-            make.bottom.equalTo(self.view.safeArea.bottom).offset(-2)
+            make.bottom.equalTo(self.view.safeArea.bottom).offset(-IntroUX.PagerCenterOffsetFromScrollViewBottom)
             make.height.equalTo(45)
         }
         scrollView.snp.makeConstraints { make in
