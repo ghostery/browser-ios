@@ -15,20 +15,27 @@ platform :ios do
   desc "Description of what the lane does"
 
   lane :importLocalizations do
+    # Import Firefox localizations
     import_repository(
-    url: 'https://github.com/mozilla-l10n/firefoxios-l10n.git',
-    clone_folder: "../build-tools/firefoxios-l10n",
+      url: 'https://github.com/cliqz-oss/ios-l10n-scripts.git',
+      clone_folder: "../build-tools",
+    )
+    
+    sh("cd .. && sh ../build-tools/import-locales-firefox.sh --release")
+
+    # revert changes that Firefox did to InfoPlist.strings
+    sh("cd .. && git checkout Client/en.lproj/InfoPlist.strings")
+
+    # Import Cliqz localizations
+    import_repository(
+      url: 'https://github.com/cliqz-oss/browser-ios-l10n.git',
+      clone_folder: "../build-tools/cliqzios-l10n",
     )
 
-    import_repository(
-    url: 'https://github.com/cliqz-oss/browser-ios-l10n.git',
-    clone_folder: "../build-tools/cliqzios-l10n",
+    import_cliqz_localizations(
+      l10n_folder: "../build-tools/cliqzios-l10n",
     )
 
-    import_localizations(
-      firefox_folder: '../build-tools/firefoxios-l10n',
-      cliqz_folder: "../build-tools/cliqzios-l10n",
-    )
   end
   
   
