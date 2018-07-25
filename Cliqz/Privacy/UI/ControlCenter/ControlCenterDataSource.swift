@@ -175,10 +175,6 @@ class ControlCenterModel: ControlCenterDSProtocol {
 
     func countAndColorByCategory(tableType: TableType) -> Dictionary<String, (Int, UIColor)> {
         
-        if UserPreferences.instance.pauseGhosteryMode == .paused {
-            return ["uncategorized": (1, UIColor.gray)]
-        }
-        
         var countDict: [String: Int] = [:]
         if let domain = self.domainStr, tableType == .page {
             countDict = TrackerList.instance.countByCategory(domain: domain)
@@ -188,15 +184,14 @@ class ControlCenterModel: ControlCenterDSProtocol {
         }
         
         var dict: Dictionary<String, (Int, UIColor)> = [:]
-        for key in countDict.keys {
-            if let count = countDict[key], let color = CategoriesHelper.category2NameAndColor[key]?.1 {
+        for (index, key) in countDict.keys.enumerated() {
+			if let count = countDict[key], let color = getColor((index, key)) {
                 dict[key] = (count, color)
             }
         }
-        
         return dict
     }
-    
+
     func detectedTrackerCount() -> Int {
         return TrackerList.instance.detectedTrackerCountForPage(self.domainStr)
     }
@@ -565,4 +560,14 @@ extension ControlCenterModel {
         
         return returnValue
     }
+
+	fileprivate func getColor(_ pair: (index: Int, key: String)) -> UIColor? {
+		if UserPreferences.instance.pauseGhosteryMode == .paused {
+			return UIColor.ControlCenter.pausedColorSet[pair.index]
+		} else if self.domainState() == .restricted {
+			return UIColor.ControlCenter.restrictedColorSet[pair.index]
+		}
+		return CategoriesHelper.category2NameAndColor[pair.key]?.1
+	}
+
 }

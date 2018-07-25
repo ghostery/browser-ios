@@ -98,4 +98,31 @@ extension UIColor {
         static let ToolbarHighlight = BrowserColor(normal: Defaults.Blue50, pbm: Defaults.Blue50)
         static let ToolbarTint = BrowserColor(normal: Defaults.Grey50, pbm: Defaults.Grey50)
     }
+
+	struct ControlCenter {
+		static let restrictedColorSet = [
+			UIColor(colorString: "E74055"),
+			UIColor(colorString: "E95366"),
+			UIColor(colorString: "EC6677"),
+			UIColor(colorString: "EE7988"),
+			UIColor(colorString: "F18C99"),
+			UIColor(colorString: "F39FAA"),
+			UIColor(colorString: "F5B3BB"),
+			UIColor(colorString: "F7C5CC"),
+			UIColor(colorString: "FAD9DD")
+		]
+
+		static let pausedColorSet = [
+			UIColor(colorString: "97A4AE"),
+			UIColor(colorString: "A1ADB6"),
+			UIColor(colorString: "ACB6BE"),
+			UIColor(colorString: "B6BFC6"),
+			UIColor(colorString: "C1C8CE"),
+			UIColor(colorString: "CBD1D6"),
+			UIColor(colorString: "D5DBDF"),
+			UIColor(colorString: "DFE3E6"),
+			UIColor(colorString: "EAEDEF")
+		]
+
+	}
 }
