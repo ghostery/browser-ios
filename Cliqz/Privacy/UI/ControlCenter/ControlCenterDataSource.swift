@@ -83,6 +83,8 @@ protocol ControlCenterDSProtocol: class {
     
     func domainString() -> String?
     func domainState() -> DomainState?
+	// TODO: Temporary workaround to fix a bug in trust/restrict actions. Undo logic should be changed soon
+	func domainPrevState() -> DomainState?
     func countAndColorByCategory(tableType: TableType) -> Dictionary<String, (Int, UIColor)>
     func detectedTrackerCount() -> Int
     func blockedTrackerCount() -> Int
@@ -219,7 +221,28 @@ class ControlCenterModel: ControlCenterDSProtocol {
         
         return .empty
     }
-    
+
+	func domainPrevState() -> DomainState? {
+		guard let domain = self.domainStr else { return nil }
+		
+		let trackers = TrackerList.instance.detectedTrackersForPage(domain)
+		var set: Set<TrackerUIState> = Set()
+		for tracker in trackers {
+			set.insert(tracker.prevState(domain: domain))
+		}
+		
+		if set.count == 1 {
+			if set.first == .trusted {
+				return .trusted
+			}
+			else if set.first == .restricted {
+				return .restricted
+			}
+		}
+		
+		return .empty
+	}
+
     func blockedTrackerCount() -> Int {
         guard let domain = self.domainStr else { return 0 }
         
