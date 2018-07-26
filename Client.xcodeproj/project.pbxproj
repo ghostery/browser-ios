@@ -1628,6 +1628,8 @@
 		1EC92DAA2109EF5A00D49C7D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Cliqz.strings; sourceTree = "<group>"; };
 		1EC92DAB2109EF5B00D49C7D /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Cliqz.strings"; sourceTree = "<group>"; };
 		1EC92DAC2109EF5C00D49C7D /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/Cliqz.strings"; sourceTree = "<group>"; };
+		1EC92DAD2109EFB600D49C7D /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Cliqz.strings; sourceTree = "<group>"; };
+		1EC92DAE2109EFB600D49C7D /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = it; path = it.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
 		1EC9C74520CFF6F200082652 /* BrowserViewControllerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerHelper.swift; sourceTree = "<group>"; };
 		1EC9C7AD20D1342C00082652 /* Ghostery.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Ghostery.xcconfig; path = Configuration/Ghostery.xcconfig; sourceTree = "<group>"; };
 		1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
@@ -5577,6 +5579,7 @@
 				ru,
 				"zh-CN",
 				"zh-TW",
+				it,
 			);
 			mainGroup = F84B21B51A090F8100AAB793;
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
@@ -7379,6 +7382,7 @@
 				1E640510210095A100B02901 /* ru */,
 				1E640517210095B800B02901 /* zh-CN */,
 				1E64051E210095CE00B02901 /* zh-TW */,
+				1EC92DAE2109EFB600D49C7D /* it */,
 			);
 			name = Cliqz.stringsdict;
 			sourceTree = "<group>";
@@ -7399,6 +7403,7 @@
 				1EC92DAA2109EF5A00D49C7D /* ru */,
 				1EC92DAB2109EF5B00D49C7D /* zh-CN */,
 				1EC92DAC2109EF5C00D49C7D /* zh-TW */,
+				1EC92DAD2109EFB600D49C7D /* it */,
 			);
 			name = Cliqz.strings;
 			sourceTree = "<group>";
