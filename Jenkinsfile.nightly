@@ -74,6 +74,8 @@ node('mac-vm-host') {
                         ./bootstrap.sh --force
                         yarn install
                         pod install
+                        pip install virtualenv
+                        sudo /usr/bin/easy_install virtualenv
                     '''                
                 }
                 stage('Build & Upload') {
@@ -96,6 +98,7 @@ node('mac-vm-host') {
                             set -e
                             rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                             export MATCH_KEYCHAIN_NAME=ios-build.keychain
+                            rm -rf ../build-tools
                             fastlane importLocalizations
                             fastlane beta
                         '''
