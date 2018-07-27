@@ -144,7 +144,7 @@ platform :ios do
       skip_waiting_for_build_processing: "true"
     )
 
-    upload_symbols_to_sentry(
+    sentry_upload_dsym(
       auth_token: ENV["SENTRY_AUTH_TOKEN"],
       org_slug: 'cliqz',
       project_slug: 'ghostery',
