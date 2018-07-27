@@ -242,6 +242,7 @@ extension CliqzIntroViewController: OptInViewDelegate {
         if pageControl.currentPage == 0 {
             SettingsPrefs.shared.updateSendUsageDataPref(value)
             SettingsPrefs.shared.updateHumanWebPref(value)
+            SettingsPrefs.shared.updateSendCrashReportsPref(value)
         }
     }
 }
