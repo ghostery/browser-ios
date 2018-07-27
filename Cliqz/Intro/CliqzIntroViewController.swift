@@ -54,7 +54,7 @@ class CliqzIntroViewController: UIViewController {
     }
     
     var verticalPadding: CGFloat {
-        return self.view.frame.width <= 320 ? 10 : 38
+        return self.view.frame.width <= 320 ? 10 : 20
     }
     
     lazy fileprivate var imageViewContainer: UIStackView = {
@@ -284,7 +284,7 @@ extension CliqzIntroViewController {
     fileprivate func setupDynamicFonts() {
         startBrowsingButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
         cardViews.forEach { cardView in
-            cardView.titleLabel.font = UIFont(name: "FiraSans-Medium", size: 25)
+            cardView.titleLabel.font = UIFont(name: "FiraSans-Medium", size: 22)
             cardView.textLabel.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
             cardView.optInView.textLabel.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
         }
