@@ -116,7 +116,7 @@
 	<array>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
-			<string>quick_action_new_tab</string>
+			<string>quick_action_new_cliqz_tab</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>ShortcutItemTitleNewTab</string>
 			<key>UIApplicationShortcutItemType</key>
@@ -124,7 +124,7 @@
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
-			<string>quick_action_new_private_tab</string>
+			<string>quick_action_new_ghost_tab</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>ShortcutItemTitleNewPrivateTab</string>
 			<key>UIApplicationShortcutItemType</key>
