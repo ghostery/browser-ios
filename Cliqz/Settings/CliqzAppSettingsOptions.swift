@@ -176,7 +176,7 @@ class SupportSetting: Setting {
     
     override var url: URL? {
     #if GHOSTERY
-        return URL(string: "https://ghostery.zendesk.com/hc")
+        return URL(string: "https://ghostery.zendesk.com/hc/en-us/requests/new")
     #else
         return URL(string: "https://cliqz.com/support")
     #endif
@@ -196,17 +196,6 @@ class SupportSetting: Setting {
     
 }
 
-class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
-    
-    override func getTitle() -> String {
-        return NSLocalizedString("Get the best out of CLIQZ", tableName: "Cliqz", comment: "[Settings] Get the best out of CLIQZ")
-    }
-    
-    override func getPageName() -> String {
-        return "tips-ios"
-    }
-}
-
 class ReportWebsiteSetting: ShowCliqzPageSetting {
     
     override func getTitle() -> String {
@@ -216,11 +205,6 @@ class ReportWebsiteSetting: ShowCliqzPageSetting {
     override func getPageName() -> String {
         return "report-url"
     }
-    #if GHOSTERY
-    override var url: URL? {
-        return URL(string: "https://ghostery.zendesk.com/hc")
-    }
-    #endif
 }
 
 class SendCrashReportsSetting: CliqzOnOffSetting {
@@ -313,6 +297,17 @@ class AboutSetting: Setting {
 }
 
 #if GHOSTERY
+class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("Get the best out of CLIQZ", tableName: "Cliqz", comment: "[Settings] Get the best out of CLIQZ")
+    }
+    
+    override var url: URL? {
+        return URL(string: "https://www.ghostery.com")
+    }
+}
+
 class EulaSetting: ShowCliqzPageSetting {
     
     override func getTitle() -> String {
@@ -346,6 +341,17 @@ class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
 }
 
 #else
+
+class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("Get the best out of CLIQZ", tableName: "Cliqz", comment: "[Settings] Get the best out of CLIQZ")
+    }
+    
+    override func getPageName() -> String {
+        return "tips-ios"
+    }
+}
 
 class EulaSetting: LocalResourceSetting {
     
