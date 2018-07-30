@@ -59,6 +59,7 @@
 		1E4CFBE7207380AD00B26E85 /* ConnectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBE6207380AD00B26E85 /* ConnectTableViewController.swift */; };
 		1E4CFBF92073A5BD00B26E85 /* AddConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBF82073A5BD00B26E85 /* AddConnectionViewController.swift */; };
 		1E4CFBFB2073A5CC00B26E85 /* EditConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBFA2073A5CC00B26E85 /* EditConnectionViewController.swift */; };
+		1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */; };
 		1E650C9C2091E35D0070C670 /* BrowserViewController+GhosteryMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */; };
 		1E7A3DC22085FCCA00F53E90 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A3DC12085FCCA00F53E90 /* assets */; };
 		1E7B7688206A8AC000FD0BA5 /* CliqzTabToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */; };
@@ -1595,6 +1596,7 @@
 		1E640510210095A100B02901 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
 		1E640517210095B800B02901 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-CN"; path = "zh-CN.lproj/Cliqz.stringsdict"; sourceTree = "<group>"; };
 		1E64051E210095CE00B02901 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-TW"; path = "zh-TW.lproj/Cliqz.stringsdict"; sourceTree = "<group>"; };
+		1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "Ghostery-Licenses.html"; sourceTree = "<group>"; };
 		1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+GhosteryMigration.swift"; sourceTree = "<group>"; };
 		1E7A3DC12085FCCA00F53E90 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = Cliqz/JSEngine/assets; sourceTree = SOURCE_ROOT; };
 		1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTabToolbar.swift; sourceTree = "<group>"; };
@@ -4387,6 +4389,7 @@
 			isa = PBXGroup;
 			children = (
 				E69922121B94E3EF007C480D /* Licenses.html */,
+				1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */,
 			);
 			path = About;
 			sourceTree = "<group>";
@@ -5981,6 +5984,7 @@
 				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,
+				1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */,
 				D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */,
 				1EAFE524205FBBBC006A36B4 /* CliqzLaunchScreen.xib in Resources */,
 				AF6FA97420652C6800D7F9F0 /* postload.js in Resources */,
