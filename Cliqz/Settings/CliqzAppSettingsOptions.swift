@@ -296,6 +296,32 @@ class AboutSetting: Setting {
     }
 }
 
+class imprintSetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("Imprint", tableName: "Cliqz", comment: "[Settings -> About] Imprint")
+    }
+    
+    override var url: URL? {
+        #if GHOSTERY
+        return URL(string: "https://www.ghostery.com/about-ghostery/")
+        #else
+        return URL(string: "https://cliqz.com/legal")
+        #endif
+        
+    }
+}
+
+class CliqzLicenseAndAcknowledgementsSetting: LocalResourceSetting {
+    override func getTitle() -> String {
+        return NSLocalizedString("Licenses", tableName: "Cliqz", comment: "[Settings -> About] Licenses")
+    }
+    
+    override func getResource() -> (String, String) {
+        return ("license", "about")
+    }
+}
+
 #if GHOSTERY
 class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
     
@@ -316,16 +342,6 @@ class EulaSetting: ShowCliqzPageSetting {
     
     override var url: URL? {
         return URL(string: "https://www.ghostery.com/about-ghostery/mobile-browser-end-user-license-agreement/")
-    }
-}
-
-class CliqzLicenseAndAcknowledgementsSetting: ShowCliqzPageSetting {
-    override func getTitle() -> String {
-        return NSLocalizedString("Licenses", tableName: "Cliqz", comment: "[Settings -> About] Licenses")
-    }
-    
-    override var url: URL? {
-        return URL(string: "https://www.ghostery.com/about-ghostery/")
     }
 }
 
@@ -361,16 +377,6 @@ class EulaSetting: LocalResourceSetting {
     
     override func getResource() -> (String, String) {
         return ("eula", "about")
-    }
-}
-
-class CliqzLicenseAndAcknowledgementsSetting: LocalResourceSetting {
-    override func getTitle() -> String {
-        return NSLocalizedString("Licenses", tableName: "Cliqz", comment: "[Settings -> About] Licenses")
-    }
-    
-    override func getResource() -> (String, String) {
-        return ("license", "about")
     }
 }
 

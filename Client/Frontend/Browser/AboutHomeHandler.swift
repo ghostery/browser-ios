@@ -16,9 +16,18 @@ struct AboutHomeHandler {
 }
 
 struct AboutLicenseHandler {
+    
     static func register(_ webServer: WebServer) {
         webServer.registerHandlerForMethod("GET", module: "about", resource: "license") { (request: GCDWebServerRequest?) -> GCDWebServerResponse! in
+            /* Cliqz Changed Modied the path method for Licenses resource
             let path = Bundle.main.path(forResource: "Licenses", ofType: "html")
+            */
+            #if GHOSTERY
+            let path = Bundle.main.path(forResource: "Ghostery-Licenses", ofType: "html")
+            #else
+            let path = Bundle.main.path(forResource: "Licenses", ofType: "html")
+            #endif
+            
             do {
                 let html = try String(contentsOfFile: path!, encoding: .utf8)
                 return GCDWebServerDataResponse(html: html)

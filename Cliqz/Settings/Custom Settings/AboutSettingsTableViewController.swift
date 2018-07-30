@@ -10,7 +10,7 @@ import UIKit
 
 class AboutSettingsTableViewController: SubSettingsTableViewController {
     
-    private let settings = [CliqzPrivacyPolicySetting(), EulaSetting(), CliqzLicenseAndAcknowledgementsSetting()]
+    private let settings = [CliqzPrivacyPolicySetting(), EulaSetting(), CliqzLicenseAndAcknowledgementsSetting(), imprintSetting()]
     private let info = [(NSLocalizedString("Version", tableName: "Cliqz", comment: "Application Version number"), AppStatus.distVersion()),
                         (NSLocalizedString("Extension", tableName: "Cliqz", comment: "Extension version number"), AppStatus.extensionVersion())]
     
