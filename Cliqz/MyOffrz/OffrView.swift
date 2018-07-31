@@ -106,7 +106,7 @@ class OffrView: UIView {
 
         // removed myOffrz logo
 		// myOffrzLogo.image = UIImage(named: "offrzLogo")
-		offrButton.backgroundColor = UIColor.cliqzBluePrimary
+		offrButton.backgroundColor = UIColor(rgb: 0x920094)
 		offrButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
 	}
 
