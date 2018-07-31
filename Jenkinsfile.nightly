@@ -15,13 +15,13 @@ node('mac-vm-host') {
     Vagrant.configure("2") do |config|
         config.vm.box = "browser-ios-v300"
         
-        config.vm.define "publishios" do |publishios|
-            publishios.vm.hostname ="publishios"
+        config.vm.define "nightlyios" do |nightlyios|
+            nightlyios.vm.hostname ="nightlyios"
             
-            publishios.vm.network "public_network", :bridge => "en0", auto_config: false
-            publishios.vm.boot_timeout = 900
-            publishios.vm.provider "vmware_fusion" do |v|
-                v.name = "publishios"
+            nightlyios.vm.network "public_network", :bridge => "en0", auto_config: false
+            nightlyios.vm.boot_timeout = 900
+            nightlyios.vm.provider "vmware_fusion" do |v|
+                v.name = "nightlyios"
                 v.whitelist_verified = true
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
@@ -31,7 +31,7 @@ node('mac-vm-host') {
                 v.vmx["RemoteDisplay.vnc.port"] = ENV["NODE_VNC_PORT"]
                 v.vmx["ethernet0.pcislotnumber"] = "33"
             end
-            publishios.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
+            nightlyios.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                 set -e
                 set -x
                 rm -f agent.jar

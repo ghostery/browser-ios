@@ -69,7 +69,7 @@ node('mac-vm-host') {
                     brew -v
                     brew install getsentry/tools/sentry-cli
                     npm -g install yarn
-                    rm -rf Cartfile.resolved
+                    rm -rf Cartfile.resolved Carthage node_modules Podfile.lock Pods
                     ./bootstrap.sh --force
                     yarn install
                     pod install
