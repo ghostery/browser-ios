@@ -79,11 +79,12 @@ import Storage
     
     var adblockingMode: AdblockingMode {
         get {
-            if let mode = AdblockingMode(rawValue: userDefaults().integer(forKey: AdblockingModeKey)) {
-                return mode
+            if let mode = userDefaults().object(forKey: AdblockingModeKey) as? Int,
+                let blockingMode = AdblockingMode(rawValue: mode) {
+                return blockingMode
             }
             else {
-                return .blockNone
+                return .blockAll
             }
         }
         set {
