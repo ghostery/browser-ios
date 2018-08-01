@@ -67,6 +67,8 @@ class OffrzDataSource {
     }
 
 	func loadOffrz() {
+        guard SettingsPrefs.shared.getRegionPref() == "DE" else { return }
+        
         guard self.lastFetchDate == nil || Date().timeIntervalSince(self.lastFetchDate!) > self.expirationDuration  else {
             return
         }
