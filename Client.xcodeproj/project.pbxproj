@@ -87,7 +87,6 @@
 		1EDF0B1F207B837F00856493 /* KeyboardAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */; };
 		1EDF0B22207B86A200856493 /* QuerySuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B21207B86A200856493 /* QuerySuggestionView.swift */; };
 		1EDF0B24207B86DA00856493 /* QuerySuggestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B23207B86DA00856493 /* QuerySuggestions.swift */; };
-		1EDF91742087446700200100 /* SettingsActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF91732087446700200100 /* SettingsActivity.swift */; };
 		1EDF917820874DAA00200100 /* ShareExtensionActivities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF917720874DAA00200100 /* ShareExtensionActivities.swift */; };
 		1EDF91C5208A33C500200100 /* TabTrayControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF91C4208A33C500200100 /* TabTrayControllerExtension.swift */; };
 		1EDF91C9208DDC5400200100 /* CliqzForgetModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF91C8208DDC5400200100 /* CliqzForgetModeButton.swift */; };
@@ -1637,7 +1636,6 @@
 		1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
 		1EDF0B21207B86A200856493 /* QuerySuggestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuerySuggestionView.swift; sourceTree = "<group>"; };
 		1EDF0B23207B86DA00856493 /* QuerySuggestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuerySuggestions.swift; sourceTree = "<group>"; };
-		1EDF91732087446700200100 /* SettingsActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsActivity.swift; sourceTree = "<group>"; };
 		1EDF917720874DAA00200100 /* ShareExtensionActivities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionActivities.swift; sourceTree = "<group>"; };
 		1EDF91C4208A33C500200100 /* TabTrayControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayControllerExtension.swift; sourceTree = "<group>"; };
 		1EDF91C8208DDC5400200100 /* CliqzForgetModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzForgetModeButton.swift; sourceTree = "<group>"; };
@@ -2840,7 +2838,6 @@
 		1EDF91722087445600200100 /* Share Menu */ = {
 			isa = PBXGroup;
 			children = (
-				1EDF91732087446700200100 /* SettingsActivity.swift */,
 				1EDF917720874DAA00200100 /* ShareExtensionActivities.swift */,
 				4FB2BBB720B70FB4006FB03D /* WiFiProtectionActivity.swift */,
 			);
@@ -5429,14 +5426,14 @@
 					};
 					3B43E3CF1D95C48D00BBA9DB = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
 					3BFE4B061D342FB800DDF53F = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -5456,7 +5453,7 @@
 					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 9G8J6YA743;
+						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 0820;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
@@ -6920,7 +6917,6 @@
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconFetcher.swift in Sources */,
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
-				1EDF91742087446700200100 /* SettingsActivity.swift in Sources */,
 				4F3046B7204FF65800C99162 /* SettingsPrefs.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				4F1860332088F3DC00A86D4C /* Privacy.swift in Sources */,

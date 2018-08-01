@@ -12,7 +12,7 @@ extension ShareExtensionHelper {
     static let cliqzdownloadURL = URL(string:"https://cliqz.com/download")
     
     func getApplicationActivities() -> [UIActivity] {
-        let applicationActivities = [SettingsActivity(), WiFiProtectionActivity()]
+        let applicationActivities = [WiFiProtectionActivity()]
         return applicationActivities
     }
     
