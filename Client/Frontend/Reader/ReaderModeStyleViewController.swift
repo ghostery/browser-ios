@@ -6,31 +6,32 @@ import UIKit
 import Shared
 
 private struct ReaderModeStyleViewControllerUX {
+    // TODO Erica can't find this to visually test
     static let RowHeight = 50
 
     static let Width = 270
     static let Height = 4 * RowHeight
 
-    static let FontTypeRowBackground = UIColor(rgb: 0xfbfbfb)
+    static let FontTypeRowBackground = UIColor.Photon.Grey10
 
-    static let FontTypeTitleSelectedColor = UIColor(rgb: 0x333333)
-    static let FontTypeTitleNormalColor = UIColor.lightGray // TODO THis needs to be 44% of 0x333333
+    static let FontTypeTitleSelectedColor = UIColor.Photon.Grey70
+    static let FontTypeTitleNormalColor = UIColor.Photon.Grey40
 
-    static let FontSizeRowBackground = UIColor(rgb: 0xf4f4f4)
-    static let FontSizeLabelColor = UIColor(rgb: 0x333333)
-    static let FontSizeButtonTextColorEnabled = UIColor(rgb: 0x333333)
-    static let FontSizeButtonTextColorDisabled = UIColor.lightGray // TODO THis needs to be 44% of 0x333333
+    static let FontSizeRowBackground = UIColor.Photon.Grey20
+    static let FontSizeLabelColor = UIColor.Photon.Grey70
+    static let FontSizeButtonTextColorEnabled = UIColor.Photon.Grey70
+    static let FontSizeButtonTextColorDisabled = UIColor.Photon.Grey40
 
-    static let ThemeRowBackgroundColor = UIColor.white
-    static let ThemeTitleColorLight = UIColor(rgb: 0x333333)
-    static let ThemeTitleColorDark = UIColor.white
-    static let ThemeTitleColorSepia = UIColor(rgb: 0x333333)
-    static let ThemeBackgroundColorLight = UIColor.white
-    static let ThemeBackgroundColorDark = UIColor(rgb: 0x333333)
-    static let ThemeBackgroundColorSepia = UIColor(rgb: 0xF0E6DC)
+    static let ThemeRowBackgroundColor = UIColor.Photon.White100
+    static let ThemeTitleColorLight = UIColor.Photon.Grey70
+    static let ThemeTitleColorDark = UIColor.Photon.White100
+    static let ThemeTitleColorSepia = UIColor.Photon.Grey70
+    static let ThemeBackgroundColorLight = UIColor.Photon.White100
+    static let ThemeBackgroundColorDark = UIColor.Photon.Grey70
+    static let ThemeBackgroundColorSepia = UIColor.Defaults.LightBeige
 
-    static let BrightnessRowBackground = UIColor(rgb: 0xf4f4f4)
-    static let BrightnessSliderTintColor = UIColor(rgb: 0xe66000)
+    static let BrightnessRowBackground = UIColor.Photon.Grey20
+    static let BrightnessSliderTintColor = UIColor.Photon.Orange60
     static let BrightnessSliderWidth = 140
     static let BrightnessIconOffset = 10
 }
@@ -76,7 +77,7 @@ class ReaderModeStyleViewController: UIViewController {
             FontTypeButton(fontType: ReaderModeFontType.serif)
         ]
 
-        setupButtons(fontTypeButtons, inRow: fontTypeRow, action: #selector(SELchangeFontType))
+        setupButtons(fontTypeButtons, inRow: fontTypeRow, action: #selector(changeFontType))
 
         // Font size row
 
@@ -104,7 +105,7 @@ class ReaderModeStyleViewController: UIViewController {
             FontSizeButton(fontSizeAction: FontSizeAction.bigger)
         ]
 
-        setupButtons(fontSizeButtons, inRow: fontSizeRow, action: #selector(SELchangeFontSize))
+        setupButtons(fontSizeButtons, inRow: fontSizeRow, action: #selector(changeFontSize))
 
         // Theme row
 
@@ -123,7 +124,7 @@ class ReaderModeStyleViewController: UIViewController {
             ThemeButton(theme: ReaderModeTheme.sepia)
         ]
 
-        setupButtons(themeButtons, inRow: themeRow, action: #selector(SELchangeTheme))
+        setupButtons(themeButtons, inRow: themeRow, action: #selector(changeTheme))
 
         // Brightness row
 
@@ -141,7 +142,7 @@ class ReaderModeStyleViewController: UIViewController {
         brightnessRow.addSubview(slider)
         slider.accessibilityLabel = NSLocalizedString("Brightness", comment: "Accessibility label for brightness adjustment slider in Reader Mode display settings")
         slider.tintColor = ReaderModeStyleViewControllerUX.BrightnessSliderTintColor
-        slider.addTarget(self, action: #selector(SELchangeBrightness), for: .valueChanged)
+        slider.addTarget(self, action: #selector(changeBrightness), for: .valueChanged)
 
         slider.snp.makeConstraints { make in
             make.center.equalTo(brightnessRow)
@@ -188,7 +189,7 @@ class ReaderModeStyleViewController: UIViewController {
         }
     }
 
-    func SELchangeFontType(_ button: FontTypeButton) {
+    @objc func changeFontType(_ button: FontTypeButton) {
         selectFontType(button.fontType)
         delegate?.readerModeStyleViewController(self, didConfigureStyle: readerModeStyle)
     }
@@ -204,7 +205,7 @@ class ReaderModeStyleViewController: UIViewController {
         fontSizeLabel.fontType = fontType
     }
 
-    func SELchangeFontSize(_ button: FontSizeButton) {
+    @objc func changeFontSize(_ button: FontSizeButton) {
         switch button.fontSizeAction {
         case .smaller:
             readerModeStyle.fontSize = readerModeStyle.fontSize.smaller()
@@ -232,7 +233,7 @@ class ReaderModeStyleViewController: UIViewController {
         }
     }
 
-    func SELchangeTheme(_ button: ThemeButton) {
+    @objc func changeTheme(_ button: ThemeButton) {
         selectTheme(button.theme)
         delegate?.readerModeStyleViewController(self, didConfigureStyle: readerModeStyle)
     }
@@ -241,7 +242,7 @@ class ReaderModeStyleViewController: UIViewController {
         readerModeStyle.theme = theme
     }
 
-    func SELchangeBrightness(_ slider: UISlider) {
+    @objc func changeBrightness(_ slider: UISlider) {
         UIScreen.main.brightness = CGFloat(slider.value)
     }
 }

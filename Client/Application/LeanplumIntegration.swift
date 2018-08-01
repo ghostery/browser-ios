@@ -100,7 +100,9 @@ class LeanPlumClient {
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.
     private var useFxAPrePush: LPVar = LPVar.define("useFxAPrePush", with: false)
-    var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().flatMap({ $0.asDictonary() }))
+    var enablePocketVideo: LPVar = LPVar.define("pocketVideo", with: false)
+
+    var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
@@ -183,7 +185,7 @@ class LeanPlumClient {
     }
 
     // Events
-    func track(event: LPEvent, withParameters parameters: [String: AnyObject]? = nil) {
+    func track(event: LPEvent, withParameters parameters: [String: String]? = nil) {
         guard isLPEnabled() else {
             return
         }
@@ -280,7 +282,7 @@ class LeanPlumClient {
             LPActionArg(named: LPMessage.ArgAcceptButtonText, with: LPMessage.DefaultOkButtonText),
             LPActionArg(named: LPMessage.ArgCancelAction, withAction: nil),
             LPActionArg(named: LPMessage.ArgCancelButtonText, with: LPMessage.DefaultLaterButtonText),
-            LPActionArg(named: LPMessage.ArgCancelButtonTextColor, with: UIColor.gray)
+            LPActionArg(named: LPMessage.ArgCancelButtonTextColor, with: UIColor.Photon.Grey50)
         ]
         
         let responder: LeanplumActionBlock = { (context) -> Bool in

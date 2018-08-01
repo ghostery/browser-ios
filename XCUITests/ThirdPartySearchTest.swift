@@ -107,6 +107,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.typeText("\r")
 
         // Go to settings and set MDN as the default
+        waitUntilPageLoad()
         navigator.goto(SearchSettings)
 
         app.navigationBars["Search"].buttons["Edit"].tap()
@@ -123,7 +124,6 @@ class ThirdPartySearchTest: BaseTestCase {
         app.typeText("window")
         waitforNoExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
-
     }
 
     func testCustomEngineFromCorrectTemplate() {
@@ -131,28 +131,21 @@ class ThirdPartySearchTest: BaseTestCase {
         app.tables.cells["customEngineViewButton"].tap()
 
         app.textViews["customEngineTitle"].tap()
-        app.typeText("Feeling Lucky")
+        app.typeText("Ask")
         app.textViews["customEngineUrl"].tap()
-        app.typeText("http://www.google.com/search?q=%s&btnI")
-
+        app.typeText("http://www.ask.com/web?q=%s")
         app.navigationBars.buttons["customEngineSaveButton"].tap()
 
         // Perform a search using a custom search engine
+        waitforExistence(app.tables.staticTexts["Ask"])
         navigator.goto(HomePanelsScreen)
         app.textFields["url"].tap()
         app.typeText("strange charm")
-        app.scrollViews.otherElements.buttons["Feeling Lucky search"].tap()
+        app.scrollViews.otherElements.buttons["Ask search"].tap()
 
         // Ensure that correct search is done
         let url = app.textFields["url"].value as! String
-        if (!url.hasSuffix("&btnI")) {
-            app.buttons["Back"].tap()
-            app.textFields["url"].tap()
-            app.typeText("strange charm")
-            app.scrollViews.otherElements.buttons["Feeling Lucky search"].tap()
-            XCTAssert(url.hasSuffix("&btnI"), "The URL should indicate that the search was performed using IFL")
-        }
-        XCTAssert(url.hasSuffix("&btnI"), "The URL should indicate that the search was performed using IFL")
+        XCTAssert(url.hasPrefix("www.ask.com"), "The URL should indicate that the search was performed using ask")
     }
 
     func testCustomEngineFromIncorrectTemplate() {

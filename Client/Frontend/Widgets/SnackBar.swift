@@ -9,8 +9,8 @@ import Shared
 class SnackBarUX {
     static var MaxWidth: CGFloat = 400
     static let BorderWidth: CGFloat = 0.5
-    static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)
-    static let HighlightText = UIColor(red: 42/255, green: 121/255, blue: 213/255, alpha: 1.0)
+    static let HighlightColor = UIColor.Defaults.iOSHighlightBlue.withAlphaComponent(0.9)
+    static let HighlightText = UIColor.Photon.Blue60
 }
 
 /**
@@ -46,7 +46,7 @@ class SnackButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func onClick() {
+    @objc func onClick() {
         callback?(bar)
     }
 
@@ -70,10 +70,10 @@ class SnackBar: UIView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         // These are requried to make sure that the image is _never_ smaller or larger than its actual size
-        imageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .vertical)
+        imageView.setContentHuggingPriority(.required, for: .horizontal)
+        imageView.setContentHuggingPriority(.required, for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
         return imageView
     }()
 
@@ -81,7 +81,7 @@ class SnackBar: UIView {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         label.lineBreakMode = .byWordWrapping
-        label.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .horizontal)
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.backgroundColor = nil
         label.numberOfLines = 0
         label.textColor = SettingsUX.TableViewRowTextColor

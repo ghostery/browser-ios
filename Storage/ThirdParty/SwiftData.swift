@@ -412,6 +412,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return pragma("user_version", factory: IntFactory) ?? 0
     }
 
+    open var cipherVersion: String? {
+        return pragma("cipher_version", factory: StringFactory)
+    }
+
     fileprivate var sqliteDB: OpaquePointer?
     fileprivate let filename: String
     fileprivate let schema: Schema
@@ -768,7 +772,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 if connection.version == 0 {
                     // Query for the existence of the `tableList` table to determine if we are
                     // migrating from an older DB version.
-                    let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+                    let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
                     
                     let tableListTableExists = sqliteMasterCursor[0] == 1
                     sqliteMasterCursor.close()
@@ -932,6 +936,9 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         let status = sqlite3_open_v2(filename.cString(using: .utf8)!, &sqliteDB, flags, nil)
         if status != SQLITE_OK {
             return createErr("During: Opening Database with Flags", status: Int(status))
+        }
+        guard let _ = self.cipherVersion else {
+            return createErr("Expected SQLCipher, got SQLite", status: Int(-1))
         }
         return nil
     }
@@ -1226,7 +1233,7 @@ open class SDRow: Sequence {
             return nil
         case SQLITE_INTEGER:
             //Everyone expects this to be an Int. On Ints larger than 2^31 this will lose information.
-            ret = Int(truncatingBitPattern: sqlite3_column_int64(statement.pointer, i))
+            ret = Int(truncatingIfNeeded: sqlite3_column_int64(statement.pointer, i))
         case SQLITE_TEXT:
             if let text = sqlite3_column_text(statement.pointer, i) {
                 return String(cString: text)
@@ -1246,13 +1253,13 @@ open class SDRow: Sequence {
     }
 
     // Accessor getting column 'key' in the row
-    subscript(key: Int) -> Any? {
+    public subscript(key: Int) -> Any? {
         return getValue(key)
     }
 
     // Accessor getting a named column in the row. This (currently) depends on
     // the columns array passed into this Row to find the correct index.
-    subscript(key: String) -> Any? {
+    public subscript(key: String) -> Any? {
         get {
             if let index = columnNames.index(of: key) {
                 return getValue(index)

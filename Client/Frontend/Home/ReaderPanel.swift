@@ -5,7 +5,6 @@
 import UIKit
 import SnapKit
 import Storage
-import ReadingList
 import Shared
 import XCGLogger
 
@@ -14,8 +13,8 @@ private let log = Logger.browserLogger
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
-    static let ActiveTextColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
-    static let DimmedTextColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.44)
+    static let ActiveTextColor = UIColor.Photon.Grey70
+    static let DimmedTextColor = UIColor.Photon.Grey40
 
     static let ReadIndicatorWidth: CGFloat =  12  // image width
     static let ReadIndicatorHeight: CGFloat = 12 // image height
@@ -28,12 +27,12 @@ private struct ReadingListTableViewCellUX {
 
     static let HostnameLabelBottomOffset: CGFloat = 11
 
-    static let DeleteButtonBackgroundColor = UIColor(rgb: 0xef4035)
-    static let DeleteButtonTitleColor = UIColor.white
+//    static let DeleteButtonBackgroundColor = UIColor.Photon.Red60
+    static let DeleteButtonTitleColor = UIColor.Photon.White100
     static let DeleteButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
-    static let MarkAsReadButtonBackgroundColor = UIColor(rgb: 0x2193d1)
-    static let MarkAsReadButtonTitleColor = UIColor.white
+    static let MarkAsReadButtonBackgroundColor = UIColor.Photon.Blue50
+    static let MarkAsReadButtonTitleColor = UIColor.Photon.White100
     static let MarkAsReadButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
     // Localizable strings
@@ -46,9 +45,9 @@ private struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenTopPadding: CGFloat = 16
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenHeaderTextColor = UIColor.darkGray
+    static let WelcomeScreenHeaderTextColor = UIColor.Photon.Grey60
 
-    static let WelcomeScreenItemTextColor = UIColor.gray
+    static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 220
     static let WelcomeScreenItemOffset = -20
 
@@ -164,7 +163,7 @@ class ReadingListTableViewCell: UITableViewCell {
             if !unread {
                 // mimic light gray visual dimming by "dimming" the speech by reducing pitch
                 let lowerPitchString = NSMutableAttributedString(string: string as String)
-                lowerPitchString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(value: ReadingListTableViewCellUX.ReadAccessibilitySpeechPitch as Float), range: NSRange(location: 0, length: lowerPitchString.length))
+                lowerPitchString.addAttribute(NSAttributedStringKey(rawValue: UIAccessibilitySpeechAttributePitch), value: NSNumber(value: ReadingListTableViewCellUX.ReadAccessibilitySpeechPitch as Float), range: NSRange(location: 0, length: lowerPitchString.length))
                 label = NSAttributedString(attributedString: lowerPitchString)
             } else {
                 label = string as AnyObject
@@ -187,7 +186,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
 
-    fileprivate var records: [ReadingListClientRecord]?
+    fileprivate var records: [ReadingListItem]?
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -221,19 +220,18 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
         view.backgroundColor = UIConstants.PanelBackgroundColor
 
-        if let result = profile.readingList?.getAvailableRecords(), result.isSuccess {
-            records = result.successValue
+        if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
+            records = newRecords
 
             // If no records have been added yet, we display the empty state
             if records?.count == 0 {
                 tableView.isScrollEnabled = false
                 view.addSubview(emptyStateOverlayView)
-
             }
         }
     }
 
-    func notificationReceived(_ notification: Notification) {
+    @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged:
             refreshReadingList()
@@ -254,8 +252,9 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     func refreshReadingList() {
         let prevNumberOfRecords = records?.count
-        if let result = profile.readingList?.getAvailableRecords(), result.isSuccess {
-            records = result.successValue
+
+        if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
+            records = newRecords
 
             if records?.count == 0 {
                 tableView.isScrollEnabled = false
@@ -274,7 +273,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     fileprivate func createEmptyStateOverview() -> UIView {
         let overlayView = UIScrollView(frame: tableView.bounds)
-        overlayView.backgroundColor = UIColor.white
+        overlayView.backgroundColor = UIColor.Photon.White100
         // Unknown why this does not work with autolayout
         overlayView.autoresizingMask = [UIViewAutoresizing.flexibleHeight, UIViewAutoresizing.flexibleWidth]
 
@@ -377,10 +376,10 @@ class ReadingListPanel: UITableViewController, HomePanel {
             return []
         }
 
-        let delete = UITableViewRowAction(style: .normal, title: ReadingListTableViewCellUX.DeleteButtonTitleText) { [weak self] action, index in
+        let delete = UITableViewRowAction(style: .default, title: ReadingListTableViewCellUX.DeleteButtonTitleText) { [weak self] action, index in
             self?.deleteItem(atIndex: index)
         }
-        delete.backgroundColor = ReadingListTableViewCellUX.DeleteButtonBackgroundColor
+//        delete.backgroundColor = ReadingListTableViewCellUX.DeleteButtonBackgroundColor
 
         let toggleText = record.unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText
         let unreadToggle = UITableViewRowAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (action, index) in
@@ -400,7 +399,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
         tableView.deselectRow(at: indexPath, animated: false)
         if let record = records?[indexPath.row], let url = URL(string: record.url), let encodedURL = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
             // Mark the item as read
-            profile.readingList?.updateRecord(record, unread: false)
+            profile.readingList.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.bookmark
             homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType)
@@ -411,7 +410,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
             UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
-            if let result = profile.readingList?.deleteRecord(record), result.isSuccess {
+            if profile.readingList.deleteRecord(record).value.isSuccess {
                 records?.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
                 // reshow empty state if no records left
@@ -425,12 +424,9 @@ class ReadingListPanel: UITableViewController, HomePanel {
     fileprivate func toggleItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
             UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readingListItem, value: !record.unread ? .markAsUnread : .markAsRead, extras: [ "from": "reading-list-panel" ])
-            if let result = profile.readingList?.updateRecord(record, unread: !record.unread), result.isSuccess {
-                // TODO This is a bit odd because the success value of the update is an optional optional Record
-                if let successValue = result.successValue, let updatedRecord = successValue {
-                    records?[indexPath.row] = updatedRecord
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
-                }
+            if let updatedRecord = profile.readingList.updateRecord(record, unread: !record.unread).value.successValue {
+                records?[indexPath.row] = updatedRecord
+                tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         }
     }

@@ -67,7 +67,8 @@ class HistoryTests: BaseTestCase {
         // Now go back to default website close it and check whether the option is enabled
         navigator.goto(BrowserTab)
         navigator.goto(TabTray)
-        navigator.closeAllTabs()
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
 
         // The Closed Tabs list should contain the info of the website just closed
@@ -84,8 +85,8 @@ class HistoryTests: BaseTestCase {
         // Open the default website
         navigator.goto(BrowserTab)
         navigator.goto(TabTray)
-        navigator.closeAllTabs()
-        navigator.goto(HomePanel_History)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
         // Once the website is visited and closed it will appear in Recently Closed Tabs list
         waitforExistence(app.tables["Recently Closed Tabs List"])
@@ -103,7 +104,7 @@ class HistoryTests: BaseTestCase {
         // Open the default website
         navigator.goto(BrowserTab)
         navigator.goto(TabTray)
-        navigator.closeAllTabs()
+        navigator.performAction(Action.AcceptRemovingAllTabs)
 
         navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
@@ -119,7 +120,7 @@ class HistoryTests: BaseTestCase {
         // Open the default website
         navigator.goto(BrowserTab)
         navigator.goto(TabTray)
-        navigator.closeAllTabs()
+        navigator.performAction(Action.AcceptRemovingAllTabs)
 
         navigator.goto(HistoryRecentlyClosed)
         waitforExistence(app.tables["Recently Closed Tabs List"])
@@ -138,7 +139,7 @@ class HistoryTests: BaseTestCase {
         // Open the default website
         navigator.goto(BrowserTab)
         navigator.goto(TabTray)
-        navigator.closeAllTabs()
+        navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.goto(HistoryRecentlyClosed)
         waitforExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)

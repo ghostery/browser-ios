@@ -197,14 +197,14 @@ open class KeyBundle: Hashable {
                     let iv = iv.base64EncodedString
 
                     // The payload is stringified JSON. Yes, I know.
-                    let payload: Any = JSON(object: ["ciphertext": ciphertext, "IV": iv, "hmac": hmac]).stringValue()! as Any
+                    let payload: Any = JSON(["ciphertext": ciphertext, "IV": iv, "hmac": hmac]).stringValue()! as Any
                     let obj = ["id": record.id,
                                "sortindex": record.sortindex,
                                // This is how SwiftyJSON wants us to express a null that we want to
                                // serialize. Yes, this is gross.
                                "ttl": record.ttl ?? NSNull(),
                                "payload": payload]
-                    return JSON(object: obj)
+                    return JSON(obj)
                 }
             }
             return nil
@@ -223,7 +223,6 @@ open class KeyBundle: Hashable {
         return lhs.encKey == rhs.encKey && lhs.hmacKey == rhs.hmacKey
     }
 }
-
 
 open class Keys: Equatable {
     let valid: Bool
@@ -307,5 +306,4 @@ public struct RecordEncrypter<T: CleartextPayloadJSON> {
         self.factory = factory
     }
 }
-
 

@@ -19,7 +19,7 @@ private struct TopSiteCellUX {
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
     static let PinIconSize: CGFloat = 12
-    static let PinColor = UIColor.Defaults.Grey60
+    static let PinColor = UIColor.Photon.Grey60
 }
 
 /*
@@ -195,7 +195,7 @@ private struct ASHorizontalScrollCellUX {
     static let TopSiteEmptyCellIdentifier = "TopSiteItemEmptyCell"
 
     static let TopSiteItemSize = CGSize(width: 75, height: 75)
-    static let BackgroundColor = UIColor.white
+    static let BackgroundColor = UIColor.Photon.White100
     static let PageControlRadius: CGFloat = 3
     static let PageControlSize = CGSize(width: 30, height: 15)
     static let PageControlOffset: CGFloat = 12
@@ -220,7 +220,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
 
     lazy fileprivate var pageControl: FilledPageControl = {
         let pageControl = FilledPageControl()
-        pageControl.tintColor = UIColor.gray
+        pageControl.tintColor = UIColor.Photon.Grey50
         pageControl.indicatorRadius = ASHorizontalScrollCellUX.PageControlRadius
         pageControl.isUserInteractionEnabled = true
         pageControl.isAccessibilityElement = true
@@ -283,7 +283,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
         }
     }
 
-    func handlePageTap(_ gesture: UITapGestureRecognizer) {
+    @objc func handlePageTap(_ gesture: UITapGestureRecognizer) {
         guard pageControl.pageCount > 1 else {
             return
         }
@@ -298,7 +298,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
     }
 
     func moveToPage(_ pageNumber: Int, animated: Bool = false) {
-        if (pageNumber < 0 || pageNumber >= pageControl.pageCount) {
+        if pageNumber < 0 || pageNumber >= pageControl.pageCount {
             return
         }
         pageControl.progress = CGFloat(pageNumber)
@@ -502,7 +502,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     Defines the number of items to show in topsites for different size classes.
 */
 private struct ASTopSiteSourceUX {
-    static let verticalItemsForTraitSizes: [UIUserInterfaceSizeClass : Int] = [.compact: 1, .regular: 2, .unspecified: 0]
+    static let verticalItemsForTraitSizes: [UIUserInterfaceSizeClass: Int] = [.compact: 1, .regular: 2, .unspecified: 0]
     static let maxNumberOfPages = 2
     static let CellIdentifier = "TopSiteItemCell"
 }

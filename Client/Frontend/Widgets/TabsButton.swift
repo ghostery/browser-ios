@@ -7,8 +7,8 @@ import SnapKit
 import Shared
 
 private struct TabsButtonUX {
-    static let TitleColor: UIColor = UIColor.Defaults.Grey80
-    static let TitleBackgroundColor: UIColor = UIColor.white
+    static let TitleColor: UIColor = UIColor.Photon.Grey80
+    static let TitleBackgroundColor: UIColor = UIColor.Photon.White100
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 3
@@ -16,13 +16,13 @@ private struct TabsButtonUX {
 
 class TabsButton: UIButton {
 
-    var textColor = UIColor.white {
+    var textColor = UIColor.Photon.White100 {
         didSet {
             countLabel.textColor = textColor
             borderView.color = textColor
         }
     }
-    var titleBackgroundColor  = UIColor.white {
+    var titleBackgroundColor  = UIColor.Photon.White100 {
         didSet {
             labelBackground.backgroundColor = titleBackgroundColor
         }
@@ -115,7 +115,7 @@ class TabsButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func clone() -> UIView {
+    @objc override func clone() -> UIView {
         let button = TabsButton()
 
         button.accessibilityLabel = accessibilityLabel
@@ -205,7 +205,7 @@ class TabsButton: UIButton {
             }
         }
     }
-    func cloneDidClickTabs() {
+    @objc func cloneDidClickTabs() {
         sendActions(for: .touchUpInside)
     }
 }

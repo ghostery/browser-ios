@@ -173,7 +173,7 @@ class TopTabsViewController: UIViewController {
             make.edges.equalTo(topTabFader)
         }
 
-        view.backgroundColor = UIColor.Defaults.Grey80
+        view.backgroundColor = UIColor.Photon.Grey80
         tabsButton.applyTheme(.Normal)
         if let currentTab = tabManager.selectedTab {
             applyTheme(currentTab.isPrivate ? .Private : .Normal)
@@ -196,19 +196,19 @@ class TopTabsViewController: UIViewController {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
     
-    func tabsTrayTapped() {
+    @objc func tabsTrayTapped() {
         delegate?.topTabsDidPressTabs()
     }
     
-    func newTabTapped() {
+    @objc func newTabTapped() {
         if pendingReloadData {
             return
         }
         self.delegate?.topTabsDidPressNewTab(self.isPrivate)
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Add tab button in the URL Bar on iPad" as AnyObject])
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Add tab button in the URL Bar on iPad"])
     }
 
-    func togglePrivateModeTapped() {
+    @objc func togglePrivateModeTapped() {
         if isUpdating || pendingReloadData {
             return
         }
@@ -289,14 +289,14 @@ extension TopTabsViewController: UIDropInteractionDelegate {
 extension TopTabsViewController: Themeable {
     func applyTheme(_ theme: Theme) {
         tabsButton.applyTheme(theme)
-        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Defaults.Grey80
-        tabsButton.textColor = UIColor.Defaults.Grey40
+        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Photon.Grey80
+        tabsButton.textColor = UIColor.Photon.Grey40
 
         isPrivate = (theme == Theme.Private)
         privateModeButton.applyTheme(theme)
         privateModeButton.tintColor = UIColor.TopTabs.PrivateModeTint.colorFor(theme)
         privateModeButton.imageView?.tintColor = privateModeButton.tintColor
-        newTab.tintColor = UIColor.Defaults.Grey40
+        newTab.tintColor = UIColor.Photon.Grey40
         collectionView.backgroundColor = view.backgroundColor
     }
 }
@@ -399,7 +399,7 @@ extension TopTabsViewController: UICollectionViewDragDelegate {
         var itemProvider: NSItemProvider
         if url != nil, !(url?.isLocal ?? true) {
             itemProvider = NSItemProvider(contentsOf: url) ?? NSItemProvider()
-        }  else {
+        } else {
             itemProvider = NSItemProvider()
         }
 
@@ -510,21 +510,21 @@ extension TopTabsViewController {
 
     // create a TopTabChangeSet which is a snapshot of updates to perfrom on a collectionView
     func calculateDiffWith(_ oldTabs: [Tab], to newTabs: [Tab], and reloadTabs: [Tab?]) -> TopTabChangeSet {
-        let inserts: [IndexPath] = newTabs.enumerated().flatMap { index, tab in
+        let inserts: [IndexPath] = newTabs.enumerated().compactMap { index, tab in
             if oldTabs.index(of: tab) == nil {
                 return IndexPath(row: index, section: 0)
             }
             return nil
         }
 
-        let deletes: [IndexPath] = oldTabs.enumerated().flatMap { index, tab in
+        let deletes: [IndexPath] = oldTabs.enumerated().compactMap { index, tab in
             if newTabs.index(of: tab) == nil {
                 return IndexPath(row: index, section: 0)
             }
             return nil
         }
 
-        let moves: [TopTabMoveChange] = newTabs.enumerated().flatMap { newIndex, tab in
+        let moves: [TopTabMoveChange] = newTabs.enumerated().compactMap { newIndex, tab in
             if let oldIndex = oldTabs.index(of: tab), oldIndex != newIndex {
                 return TopTabMoveChange(from: IndexPath(row: oldIndex, section: 0), to: IndexPath(row: newIndex, section: 0))
             }
@@ -532,7 +532,7 @@ extension TopTabsViewController {
         }
 
         // Create based on what is visibile but filter out tabs we are about to insert/delete.
-        let reloads: [IndexPath] = reloadTabs.flatMap { tab in
+        let reloads: [IndexPath] = reloadTabs.compactMap { tab in
             guard let tab = tab, newTabs.index(of: tab) != nil else {
                 return nil
             }

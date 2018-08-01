@@ -50,7 +50,7 @@ class ReaderModeBarView: UIView {
     var settingsButton: UIButton!
     var listStatusButton: UIButton!
 
-    dynamic var buttonTintColor: UIColor = UIColor.clear {
+    @objc dynamic var buttonTintColor: UIColor = UIColor.clear {
         didSet {
             readStatusButton.tintColor = self.buttonTintColor
             settingsButton.tintColor = self.buttonTintColor
@@ -61,25 +61,25 @@ class ReaderModeBarView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        readStatusButton = createButton(.markAsRead, action: #selector(SELtappedReadStatusButton))
+        readStatusButton = createButton(.markAsRead, action: #selector(tappedReadStatusButton))
         readStatusButton.accessibilityIdentifier = "ReaderModeBarView.readStatusButton"
         readStatusButton.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(self)
+            make.left.equalTo(self.safeArea.left)
             make.height.centerY.equalTo(self)
             make.width.equalTo(80)
         }
 
-        settingsButton = createButton(.settings, action: #selector(SELtappedSettingsButton))
+        settingsButton = createButton(.settings, action: #selector(tappedSettingsButton))
         settingsButton.accessibilityIdentifier = "ReaderModeBarView.settingsButton"
         settingsButton.snp.makeConstraints { (make) -> Void in
             make.height.centerX.centerY.equalTo(self)
             make.width.equalTo(80)
         }
 
-        listStatusButton = createButton(.addToReadingList, action: #selector(SELtappedListStatusButton))
+        listStatusButton = createButton(.addToReadingList, action: #selector(tappedListStatusButton))
         listStatusButton.accessibilityIdentifier = "ReaderModeBarView.listStatusButton"
         listStatusButton.snp.makeConstraints { (make) -> Void in
-            make.right.equalTo(self)
+            make.right.equalTo(self.safeArea.right)
             make.height.centerY.equalTo(self)
             make.width.equalTo(80)
         }
@@ -94,7 +94,7 @@ class ReaderModeBarView: UIView {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         context.setLineWidth(0.5)
         context.setStrokeColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1.0)
-        context.setStrokeColor(UIColor.gray.cgColor)
+        context.setStrokeColor(UIColor.Photon.Grey50.cgColor)
         context.beginPath()
         context.move(to: CGPoint(x: 0, y: frame.height))
         context.addLine(to: CGPoint(x: frame.width, y: frame.height))
@@ -109,16 +109,20 @@ class ReaderModeBarView: UIView {
         return button
     }
 
-    func SELtappedReadStatusButton(_ sender: UIButton!) {
+    func updateAlphaForSubviews(_ alpha: CGFloat) {
+        self.alpha = alpha
+    }
+
+    @objc func tappedReadStatusButton(_ sender: UIButton!) {
         UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readingListItem, value: unread ? .markAsRead : .markAsUnread, extras: [ "from": "reader-mode-toolbar" ])
         delegate?.readerModeBar(self, didSelectButton: unread ? .markAsRead : .markAsUnread)
     }
 
-    func SELtappedSettingsButton(_ sender: UIButton!) {
+    @objc func tappedSettingsButton(_ sender: UIButton!) {
         delegate?.readerModeBar(self, didSelectButton: .settings)
     }
 
-    func SELtappedListStatusButton(_ sender: UIButton!) {
+    @objc func tappedListStatusButton(_ sender: UIButton!) {
         UnifiedTelemetry.recordEvent(category: .action, method: added ? .delete : .add, object: .readingListItem, value: .readerModeToolbar)
         delegate?.readerModeBar(self, didSelectButton: added ? .removeFromReadingList : .addToReadingList)
     }

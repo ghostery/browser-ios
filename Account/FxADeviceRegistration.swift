@@ -67,7 +67,7 @@ open class FxADeviceRegistration: NSObject, NSCoding {
     }
 
     open func toJSON() -> JSON {
-        return JSON(object: [
+        return JSON([
             "id": id,
             "version": version,
             "lastRegistered": lastRegistered,
@@ -85,7 +85,7 @@ open class FxADeviceRegistrator {
         }
 
         let pushParams: FxADevicePushParams?
-        if AppConstants.MOZ_FXA_PUSH, let pushRegistration = account.pushRegistration {
+        if let pushRegistration = account.pushRegistration {
             let subscription = pushRegistration.defaultSubscription
             pushParams = FxADevicePushParams(callback: subscription.endpoint.absoluteString, publicKey: subscription.p256dhPublicKey, authKey: subscription.authKey)
         } else {
@@ -131,7 +131,7 @@ open class FxADeviceRegistrator {
         return registration.bind { result in
             switch result {
             case .success(let registration):
-                account.deviceRegistration = registration.value
+                account.deviceRegistration = registration
                 return deferMaybe(registrationResult)
             case .failure(let error):
                 log.error("Device registration failed: \(error.description)")

@@ -8,7 +8,7 @@ import Storage
 class BackForwardTableViewCell: UITableViewCell {
     
     private struct BackForwardViewCellUX {
-        static let bgColor = UIColor.gray
+        static let bgColor = UIColor.Photon.Grey50
         static let faviconWidth = 29
         static let faviconPadding: CGFloat = 20
         static let labelPadding = 20
@@ -16,12 +16,12 @@ class BackForwardTableViewCell: UITableViewCell {
         static let borderBold = 5
         static let IconSize = 23
         static let fontSize: CGFloat = 12.0
-        static let textColor = UIColor.Defaults.Grey80
+        static let textColor = UIColor.Photon.Grey80
     }
     
     lazy var faviconView: UIImageView = {
         let faviconView = UIImageView(image: FaviconFetcher.defaultFavicon)
-        faviconView.backgroundColor = UIColor.white
+        faviconView.backgroundColor = UIColor.Photon.White100
         faviconView.layer.cornerRadius = 6
         faviconView.layer.borderWidth = 0.5
         faviconView.layer.borderColor = UIColor(white: 0, alpha: 0.1).cgColor
@@ -56,7 +56,7 @@ class BackForwardTableViewCell: UITableViewCell {
                     if s.tileURL.isLocal {
                         self?.faviconView.image = UIImage(named: "faviconFox")
                         self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: BackForwardViewCellUX.IconSize, height: BackForwardViewCellUX.IconSize))
-                        self?.faviconView.backgroundColor = UIColor.white
+                        self?.faviconView.backgroundColor = UIColor.Photon.White100
                         return
                     }
                     

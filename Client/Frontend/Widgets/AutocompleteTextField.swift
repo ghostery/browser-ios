@@ -18,7 +18,7 @@ protocol AutocompleteTextFieldDelegate: class {
 }
 
 private struct AutocompleteTextFieldUX {
-       static let HighlightColor = UIColor(rgb: 0xccdded)
+       static let HighlightColor = UIColor.Defaults.iOSHighlightBlue
 }
 
 class AutocompleteTextField: UITextField, UITextFieldDelegate {
@@ -89,8 +89,11 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         ]
     }
 
-    func handleKeyCommand(sender: UIKeyCommand) {
-        switch sender.input {
+    @objc func handleKeyCommand(sender: UIKeyCommand) {
+        guard let input = sender.input else {
+            return
+        }
+        switch input {
         case UIKeyInputLeftArrow:
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-left-arrow"])
             if isSelectionActive {
@@ -188,7 +191,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
         let suggestionText = suggestion.substring(from: suggestion.index(suggestion.startIndex, offsetBy: normalized.count))
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
-        autocompleteText.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSRange(location: 0, length: suggestionText.count))
+        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: highlightColor, range: NSRange(location: 0, length: suggestionText.count))
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
         autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
         if let l = autocompleteTextLabel {
@@ -252,7 +255,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         removeCompletion()
     }
 
-    func textDidChange(_ textField: UITextField) {
+   @objc func textDidChange(_ textField: UITextField) {
         hideCursor = autocompleteTextLabel != nil
         removeCompletion()
 

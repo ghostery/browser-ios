@@ -16,7 +16,7 @@ class ManageSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: Strings.FxAManageAccount, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: Strings.FxAManageAccount, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -34,14 +34,16 @@ class ManageSetting: Setting {
 }
 
 class DisconnectSetting: Setting {
+    let settingsVC: SettingsTableViewController
     let profile: Profile
     override var accessoryType: UITableViewCellAccessoryType { return .none }
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.SettingsDisconnectSyncButton, attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
+        return NSAttributedString(string: Strings.SettingsDisconnectSyncButton, attributes: [NSAttributedStringKey.foregroundColor: UIConstants.DestructiveRed])
     }
     init(settings: SettingsTableViewController) {
+        self.settingsVC = settings
         self.profile = settings.profile
     }
 
@@ -60,7 +62,14 @@ class DisconnectSetting: Setting {
             UIAlertAction(title: Strings.SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
                 FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
-                _ = navigationController?.popViewController(animated: true)
+
+                // If there is more than one view controller in the navigation controller, we can pop.
+                // Otherwise, assume that we got here directly from the App Menu and dismiss the VC.
+                if let navigationController = navigationController, navigationController.viewControllers.count > 1 {
+                    _ = navigationController.popViewController(animated: true)
+                } else {
+                    self.settingsVC.dismiss(animated: true, completion: nil)
+                }
         })
         navigationController?.present(alertController, animated: true, completion: nil)
     }
@@ -96,7 +105,9 @@ class DeviceNameSetting: StringSetting {
     }
 
     init(settings: SettingsTableViewController) {
-        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: self.settingIsValid)
+        let settingsIsValid: (String?) -> Bool = { !($0?.isEmpty ?? true) }
+        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: settingsIsValid)
+
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -104,9 +115,6 @@ class DeviceNameSetting: StringSetting {
         textField.textAlignment = .natural
     }
 
-    func settingIsValid(value: String?) -> Bool {
-        return !(value?.isEmpty ?? true)
-    }
 }
 
 class SyncContentSettingsViewController: SettingsTableViewController {

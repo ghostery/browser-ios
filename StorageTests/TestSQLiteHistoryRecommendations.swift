@@ -36,9 +36,9 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
     override func tearDown() {
         // Clear out anything we might have changed on disk
         history.clearHistory().succeeded()
-        db.run("DELETE FROM \(TablePageMetadata)").succeeded()
-        db.run("DELETE FROM \(TableHighlights)").succeeded()
-        db.run("DELETE FROM \(TableActivityStreamBlocklist)").succeeded()
+        db.run("DELETE FROM page_metadata").succeeded()
+        db.run("DELETE FROM highlights").succeeded()
+        db.run("DELETE FROM activity_stream_blocklist").succeeded()
 
         SDWebImageManager.shared().imageCache?.clearDisk()
         SDWebImageManager.shared().imageCache?.clearMemory()
@@ -292,7 +292,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
 
         history.clearHistory().succeeded()
         populateForRecommendationCalculations(history, bookmarks: bookmarks, metadata: metadata, historyCount: count, bookmarkCount: count)
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
                 history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
             }

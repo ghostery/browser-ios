@@ -11,8 +11,8 @@ struct TwoLineCellUX {
     static let BadgeSize: CGFloat = 16
     static let BadgeMargin: CGFloat = 16
     static let BorderFrameSize: CGFloat = 32
-    static let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Defaults.Grey80
-    static let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGray : UIColor.gray
+    static let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey80
+    static let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.Photon.Grey60 : UIColor.Photon.Grey50
     static let DetailTextTopMargin: CGFloat = 0
 }
 

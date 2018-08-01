@@ -11,9 +11,9 @@ struct IntroUX {
     static let Height = 667
     static let MinimumFontScale: CGFloat = 0.5
     static let PagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 20 : 30
-    static let StartBrowsingButtonColor = UIColor.Defaults.Blue40
+    static let StartBrowsingButtonColor = UIColor.Photon.Blue40
     static let StartBrowsingButtonHeight = 56
-    static let SignInButtonColor = UIColor.Defaults.Blue40
+    static let SignInButtonColor = UIColor.Photon.Blue40
     static let SignInButtonHeight = 60
     static let PageControlHeight = 40
     static let SignInButtonWidth = 290
@@ -83,12 +83,10 @@ class IntroViewController: UIViewController {
     fileprivate var imagesBackgroundView = UIView()
 
     override func viewDidLoad() {
-        if AppConstants.MOZ_LP_INTRO {
-            syncViaLP()
-        }
+        syncViaLP()
 
         assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.Photon.White100
 
         // Add Views
         view.addSubview(pageControl)
@@ -131,7 +129,7 @@ class IntroViewController: UIViewController {
                 return
             }
             let decoder = JSONDecoder()
-            let newCards = newIntro.flatMap { (obj) -> IntroCard? in
+            let newCards = newIntro.compactMap { (obj) -> IntroCard? in
                 guard let object = try? JSONSerialization.data(withJSONObject: obj, options: []) else {
                     return nil
                 }
@@ -152,7 +150,7 @@ class IntroViewController: UIViewController {
             // We also need to let LP know this happened so we can track when a A/B test was not run
             guard self?.pageControl.currentPage == 0 else {
                 let totalTime = Date.now() - startTime
-                LeanPlumClient.shared.track(event: .onboardingTestLoadedTooSlow, withParameters: ["Total time": "\(totalTime) ms" as AnyObject])
+                LeanPlumClient.shared.track(event: .onboardingTestLoadedTooSlow, withParameters: ["Total time": "\(totalTime) ms"])
                 return
             }
 
@@ -176,7 +174,7 @@ class IntroViewController: UIViewController {
         // Wipe any existing slides
         imageViewContainer.subviews.forEach { $0.removeFromSuperview() }
         cardViews.forEach { $0.removeFromSuperview() }
-        cardViews = cards.flatMap { addIntro(card: $0) }
+        cardViews = cards.compactMap { addIntro(card: $0) }
         pageControl.numberOfPages = cardViews.count
         setupDynamicFonts()
         if let firstCard = cardViews.first {
@@ -219,17 +217,17 @@ class IntroViewController: UIViewController {
         return cardView
     }
 
-    func startBrowsing() {
+    @objc func startBrowsing() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
-        LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
+        LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": String(pageControl.currentPage)])
     }
 
-    func login() {
+    @objc func login() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: true)
-        LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
+        LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": String(pageControl.currentPage)])
     }
 
-    func changePage() {
+    @objc func changePage() {
         let swipeCoordinate = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
         scrollView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: true)
     }
@@ -239,7 +237,7 @@ class IntroViewController: UIViewController {
             return
         }
 
-        UIView.animate(withDuration: IntroUX.FadeDuration, animations: { _ in
+        UIView.animate(withDuration: IntroUX.FadeDuration, animations: {
             self.cardViews.forEach { $0.alpha = 0.0 }
             introView.alpha = 1.0
             self.pageControl.currentPage = page
@@ -276,7 +274,7 @@ extension IntroViewController {
         NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
     }
 
-    func dynamicFontChanged(_ notification: Notification) {
+    @objc func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
         setupDynamicFonts()
     }
@@ -321,8 +319,8 @@ extension IntroViewController: UIScrollViewDelegate {
 
         var percentageOfScroll = currentHorizontalOffset / maximumHorizontalOffset
         percentageOfScroll = percentageOfScroll > 1.0 ? 1.0 : percentageOfScroll
-        let whiteComponent = UIColor.white.components
-        let grayComponent = UIColor(rgb: 0xF2F2F2).components
+        let whiteComponent = UIColor.Photon.White100.components
+        let grayComponent = UIColor.Photon.Grey20.components
         let newRed   = (1.0 - percentageOfScroll) * whiteComponent.red   + percentageOfScroll * grayComponent.red
         let newGreen = (1.0 - percentageOfScroll) * whiteComponent.green + percentageOfScroll * grayComponent.green
         let newBlue  = (1.0 - percentageOfScroll) * whiteComponent.blue  + percentageOfScroll * grayComponent.blue
@@ -346,7 +344,7 @@ class CardView: UIView {
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         titleLabel.textAlignment = .center
-        titleLabel.setContentHuggingPriority(1000, for: .vertical)
+        titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return titleLabel
     }()
 
@@ -357,7 +355,7 @@ class CardView: UIView {
         textLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         textLabel.textAlignment = .center
         textLabel.lineBreakMode = .byTruncatingTail
-        textLabel.setContentHuggingPriority(1000, for: .vertical)
+        textLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return textLabel
     }()
 
@@ -366,7 +364,7 @@ class CardView: UIView {
         button.backgroundColor = IntroUX.SignInButtonColor
         button.setTitle(Strings.SignInButtonTitle, for: [])
         button.setTitleColor(.white, for: [])
-        button.setContentHuggingPriority(1000, for: .vertical)
+        button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         button.clipsToBounds = true
         return button
     }()
