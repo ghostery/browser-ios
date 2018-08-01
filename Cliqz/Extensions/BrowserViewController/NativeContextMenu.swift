@@ -59,10 +59,50 @@ extension BrowserViewController {
 					  presentableVC: PresentableVC,
 					  isBookmarked: Bool,
 					  success: @escaping (String) -> Void) {
-		let actions = getTabAlertActions(tab: tab, buttonView: buttonView, presentShareMenu: presentShareMenu, findInPage: findInPage, presentableVC: presentableVC, isBookmarked: isBookmarked, success: success)
-		self.showActionSheet(title: tab.url?.absoluteString, message: nil, actions: actions)
+        
+		let actions = getAllactions(tab: tab, buttonView: buttonView, presentShareMenu: presentShareMenu, findInPage: findInPage, presentableVC: presentableVC, isBookmarked: isBookmarked, success: success)
+        let title = (tab.url?.isAboutURL ?? true) ? nil : tab.url?.absoluteString
+		self.showActionSheet(title: title, message: nil, actions: actions)
 	}
-
+    
+    private func getAllactions(tab: Tab, buttonView: UIView,
+                               presentShareMenu: @escaping () -> Void,
+                               findInPage:  @escaping () -> Void,
+                               presentableVC: PresentableVC,
+                               isBookmarked: Bool,
+                               success: @escaping (String) -> Void) -> [UIAlertAction] {
+       
+        var actions = [UIAlertAction]()
+        
+        if !(tab.url?.isAboutURL ?? true) {
+            let tabActions = getTabAlertActions(tab: tab, buttonView: buttonView, presentShareMenu: presentShareMenu, findInPage: findInPage, presentableVC: presentableVC, isBookmarked: isBookmarked, success: success)
+            actions.append(contentsOf: tabActions)
+        }
+        
+        let cancelAction = UIAlertAction(
+            title: NSLocalizedString("Cancel", comment: "The cancel button."),
+            style: .cancel,
+            handler: nil
+        )
+        
+        actions.append(contentsOf: getDefaultActions())
+        
+        actions.append(cancelAction)
+        
+        return actions
+    }
+    
+    private func getDefaultActions() -> [UIAlertAction] {
+        var defaultActions = [UIAlertAction]()
+        let settingsAction = UIAlertAction(title: NSLocalizedString("Settings", tableName: "Cliqz", comment: "Settings"), style: .default) { (action) in
+            self.openSettings()
+        }
+        
+        defaultActions.append(settingsAction)
+        
+        return defaultActions
+    }
+    
 	private func getTabAlertActions(tab: Tab, buttonView: UIView,
 					   presentShareMenu: @escaping () -> Void,
 					   findInPage:  @escaping () -> Void,
@@ -170,13 +210,7 @@ extension BrowserViewController {
 			*/
 		}
 
-		let cancelAction = UIAlertAction(
-			title: NSLocalizedString("Cancel", comment: "The cancel button."),
-			style: .cancel,
-			handler: nil
-		)
-
-		mainActions.append(contentsOf: [findInPageAction, toggleDesktopSite, pinToTopSites, share, cancelAction])
+		mainActions.append(contentsOf: [findInPageAction, toggleDesktopSite, pinToTopSites, share])
 
 		return mainActions
 	}

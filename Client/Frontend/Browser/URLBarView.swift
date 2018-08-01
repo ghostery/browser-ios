@@ -186,6 +186,7 @@ class URLBarView: UIView {
 
     lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton]
 
+    // Cliqz: Note that this attribute has been overriden in the CliqzUrlBar
     var currentURL: URL? {
         get {
             return locationView.url as URL?
