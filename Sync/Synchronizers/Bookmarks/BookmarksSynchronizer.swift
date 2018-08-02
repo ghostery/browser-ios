@@ -46,11 +46,11 @@ class TrivialBookmarkStorer: BookmarkStorer {
                 records.append(record)
             }
         }
-
+        // $0.keys.map({$0}) is required to work around https://bugs.swift.org/browse/SR-6003. TODO: Remove in swift 4.1
         do {
-            try accumulateFromAmendMap(op.amendChildrenFromBuffer, fetch: { itemSources.buffer.getBufferItemsWithGUIDs($0.keys).value })
-            try accumulateFromAmendMap(op.amendChildrenFromMirror, fetch: { itemSources.mirror.getMirrorItemsWithGUIDs($0.keys).value })
-            try accumulateFromAmendMap(op.amendChildrenFromLocal, fetch: { itemSources.local.getLocalItemsWithGUIDs($0.keys).value })
+            try accumulateFromAmendMap(op.amendChildrenFromBuffer, fetch: { itemSources.buffer.getBufferItemsWithGUIDs($0.keys.map({$0})).value })
+            try accumulateFromAmendMap(op.amendChildrenFromMirror, fetch: { itemSources.mirror.getMirrorItemsWithGUIDs($0.keys.map({$0})).value })
+            try accumulateFromAmendMap(op.amendChildrenFromLocal, fetch: { itemSources.local.getLocalItemsWithGUIDs($0.keys.map({$0})).value })
         } catch {
             return deferMaybe(error as MaybeErrorType)
         }
@@ -214,9 +214,6 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                 }
                 return deferMaybe(result)
             } >>== { result in
-                guard AppConstants.MOZ_SIMPLE_BOOKMARKS_SYNCING else {
-                    return deferMaybe(result)
-                }
                 guard case .completed = result else {
                     return deferMaybe(result)
                 }

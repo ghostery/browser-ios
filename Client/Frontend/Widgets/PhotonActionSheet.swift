@@ -7,13 +7,18 @@ import Storage
 import SnapKit
 import Shared
 
+private func isSmallScreen() -> Bool {
+    let size = UIScreen.main.bounds.size
+    return min(size.width, size.height) < 700
+}
+
 private struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
     static let Padding: CGFloat = 10
     static let HeaderFooterHeight: CGFloat = 20
     static let RowHeight: CGFloat = 50
     static let BorderWidth: CGFloat = 0.5
-    static let BorderColor = UIColor(white: 0, alpha: 0.1)
+    static let BorderColor = UIColor.Photon.Grey30
     static let CornerRadius: CGFloat = 10
     static let SiteImageViewSize = 52
     static let IconSize = CGSize(width: 24, height: 24)
@@ -25,18 +30,28 @@ private struct PhotonActionSheetUX {
 }
 
 public struct PhotonActionSheetItem {
+    public enum IconAlignment {
+        case left
+        case right
+    }
+
     public fileprivate(set) var title: String
     public fileprivate(set) var text: String?
     public fileprivate(set) var iconString: String?
+    public fileprivate(set) var iconURL: URL?
+    public fileprivate(set) var iconAlignment: IconAlignment
+
     public var isEnabled: Bool // Used by toggles like nightmode to switch tint color
     public fileprivate(set) var accessory: PhotonActionSheetCellAccessoryType
     public fileprivate(set) var accessoryText: String?
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
     
-    init(title: String, text: String? = nil, iconString: String? = nil, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
+        self.iconURL = iconURL
+        self.iconAlignment = iconAlignment
         self.isEnabled = isEnabled
         self.accessory = accessory
         self.handler = handler
@@ -54,10 +69,12 @@ private enum PresentationStyle {
 
 class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     fileprivate(set) var actions: [[PhotonActionSheetItem]]
+
+    var syncManager: SyncManager? // used to display the sync button
     
     private var site: Site?
     private let style: PresentationStyle
-    private var tintColor = UIColor.Defaults.Grey80
+    private var tintColor = UIColor.Photon.Grey80
     private var heightConstraint: Constraint?
     var tableView = UITableView(frame: .zero, style: .grouped)
 
@@ -88,18 +105,20 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    init(site: Site, actions: [PhotonActionSheetItem]) {
+    init(site: Site, actions: [PhotonActionSheetItem], closeButtonTitle: String = Strings.CloseButtonTitle) {
         self.site = site
         self.actions = [actions]
         self.style = .centered
         super.init(nibName: nil, bundle: nil)
+        self.closeButton.setTitle(closeButtonTitle, for: .normal)
     }
 
-    init(title: String? = nil, actions: [[PhotonActionSheetItem]], style presentationStyle: UIModalPresentationStyle) {
+    init(title: String? = nil, actions: [[PhotonActionSheetItem]], closeButtonTitle: String = Strings.CloseButtonTitle, style presentationStyle: UIModalPresentationStyle) {
         self.actions = actions
         self.style = presentationStyle == .popover ? .popover : .bottom
         super.init(nibName: nil, bundle: nil)
         self.title = title
+        self.closeButton.setTitle(closeButtonTitle, for: .normal)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -158,6 +177,15 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
                 make.width.equalTo(width)
             }
         }
+
+        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidStartSyncing, object: nil)
+    }
+
+    @objc func stopRotateSyncIcon() {
+        ensureMainThread {
+            self.tableView.reloadData()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -192,8 +220,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let maxHeight = self.view.frame.height - (style == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0)
         tableView.snp.makeConstraints { make in
             heightConstraint?.deactivate()
-            // The height of the menu should be no more than 80 percent of the screen
-            heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.8)).constraint
+            // The height of the menu should be no more than 85 percent of the screen
+            heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.90)).constraint
         }
         if style == .popover {
             self.preferredContentSize = self.tableView.contentSize
@@ -213,7 +241,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
+    @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -276,7 +304,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
         let action = actions[indexPath.section][indexPath.row]
         cell.tintColor = self.tintColor
-        cell.configure(with: action)
+        let syncManager = action.accessory == .Sync ? self.syncManager : nil
+        cell.configure(with: action, syncManager: syncManager)
         return cell
     }
     
@@ -323,13 +352,13 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         titleLabel.numberOfLines = 1
-        titleLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.gray
+        titleLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey50
         return titleLabel
     }()
 
     lazy var separatorView: UIView = {
         let separatorLine = UIView()
-        separatorLine.backgroundColor = UIColor.lightGray
+        separatorLine.backgroundColor = UIColor.Photon.Grey40
         return separatorLine
     }()
 
@@ -465,7 +494,7 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
         self.backgroundView?.backgroundColor = .clear
-        separatorLineView.backgroundColor = UIColor.lightGray
+        separatorLineView.backgroundColor = UIColor.Photon.Grey40
         self.contentView.addSubview(separatorLineView)
         separatorLineView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
@@ -483,6 +512,7 @@ public enum PhotonActionSheetCellAccessoryType {
     case Disclosure
     case Switch
     case Text
+    case Sync // Sync is a special case.
     case None
 }
 
@@ -492,35 +522,43 @@ private class PhotonActionSheetCell: UITableViewCell {
     static let VerticalPadding: CGFloat = 2
     static let IconSize = 16
 
+    var syncButton: SyncMenuButton?
+
+    private func createLabel() -> UILabel {
+        let label = UILabel()
+        label.minimumScaleFactor = 0.75 // Scale the font if we run out of space
+        label.textColor = PhotonActionSheetCellUX.LabelColor
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }
+
+    private func createIconImageView() -> UIImageView {
+        let icon = UIImageView()
+        icon.contentMode = .scaleAspectFit
+        icon.clipsToBounds = true
+        icon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
+        icon.setContentHuggingPriority(.required, for: .horizontal)
+        icon.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return icon
+    }
+
     lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
-        titleLabel.minimumScaleFactor = 0.8 // Scale the font if we run out of space
-        titleLabel.textColor = PhotonActionSheetCellUX.LabelColor
-        titleLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
-        titleLabel.numberOfLines = 4
-        titleLabel.adjustsFontSizeToFitWidth = true
-        return titleLabel
+        let label = createLabel()
+        label.numberOfLines = 4
+        label.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
+        return label
     }()
 
     lazy var subtitleLabel: UILabel = {
-        let textLabel = UILabel()
-        textLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        textLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
-        textLabel.minimumScaleFactor = 0.75 // Scale the font if we run out of space
-        textLabel.textColor = PhotonActionSheetCellUX.LabelColor
-        textLabel.numberOfLines = 3
-        textLabel.adjustsFontSizeToFitWidth = true
-        return textLabel
+        let label = createLabel()
+        label.numberOfLines = 0
+        label.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
+        return label
     }()
     
     lazy var statusIcon: UIImageView = {
-        let statusIcon = UIImageView()
-        statusIcon.contentMode = .scaleAspectFit
-        statusIcon.clipsToBounds = true
-        statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
-        statusIcon.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
-        return statusIcon
+        return createIconImageView()
     }()
 
     lazy var disclosureLabel: UILabel = {
@@ -542,10 +580,8 @@ private class PhotonActionSheetCell: UITableViewCell {
     }()
 
     lazy var disclosureIndicator: UIImageView = {
-        let disclosureIndicator = UIImageView(image: UIImage(named: "menu-Disclosure"))
-        disclosureIndicator.contentMode = .scaleAspectFit
-        disclosureIndicator.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
-        disclosureIndicator.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
+        let disclosureIndicator = createIconImageView()
+        disclosureIndicator.image = UIImage(named: "menu-Disclosure")
         return disclosureIndicator
     }()
 
@@ -568,6 +604,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         disclosureIndicator.removeFromSuperview()
         disclosureLabel.removeFromSuperview()
         toggleSwitch.removeFromSuperview()
+        statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -584,7 +621,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         // Setup our StackViews
         let textStackView = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
         textStackView.spacing = PhotonActionSheetCell.VerticalPadding
-        textStackView.setContentHuggingPriority(UILayoutPriorityDefaultLow, for: .horizontal)
+        textStackView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         textStackView.alignment = .leading
         textStackView.axis = .vertical
 
@@ -593,7 +630,8 @@ private class PhotonActionSheetCell: UITableViewCell {
         contentView.addSubview(stackView)
 
         let padding = PhotonActionSheetCell.Padding
-        let topPadding = PhotonActionSheetCell.HorizontalPadding
+        let shrinkage: CGFloat = isSmallScreen() ? 3 : 0
+        let topPadding = PhotonActionSheetCell.HorizontalPadding - shrinkage
         stackView.snp.makeConstraints { make in
             make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding, left: padding, bottom: topPadding, right: padding))
         }
@@ -603,10 +641,14 @@ private class PhotonActionSheetCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with action: PhotonActionSheetItem) {
+    func configure(with action: PhotonActionSheetItem, syncManager: SyncManager? = nil) {
         titleLabel.text = action.title
         titleLabel.textColor = self.tintColor
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
+        titleLabel.numberOfLines = 1
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0.5
+
         subtitleLabel.text = action.text
         subtitleLabel.textColor = self.tintColor
         subtitleLabel.isHidden = action.text == nil
@@ -614,14 +656,39 @@ private class PhotonActionSheetCell: UITableViewCell {
         accessibilityIdentifier = action.iconString
         accessibilityLabel = action.title
         selectionStyle = action.handler != nil ? .default : .none
+
         if let iconName = action.iconString, let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate) {
-            statusIcon.image = image
-            statusIcon.tintColor = self.tintColor
+            statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: []) { (img, err, _, _) in
+                if let img = img {
+                    self.statusIcon.image = img.createScaled(PhotonActionSheetUX.IconSize)
+                    self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
+                }
+            }
+            // When the iconURL is not nil we are most likely showing a profile picture.
+            // In that case we do not need a tint color. And make sure the image is sized correctly
+            // This is for the sync profile button in the menu
+            if action.iconURL == nil {
+                statusIcon.tintColor = self.tintColor
+            } else {
+                self.statusIcon.image = self.statusIcon.image?.createScaled(PhotonActionSheetUX.IconSize)
+            }
             if statusIcon.superview == nil {
-                stackView.insertArrangedSubview(statusIcon, at: 0)
+                if action.iconAlignment == .right {
+                    stackView.addArrangedSubview(statusIcon)
+                } else {
+                    stackView.insertArrangedSubview(statusIcon, at: 0)
+                }
+            } else {
+                if action.iconAlignment == .right {
+                    statusIcon.removeFromSuperview()
+                    stackView.addArrangedSubview(statusIcon)
+                }
             }
         } else {
             statusIcon.removeFromSuperview()
+        }
+        if action.accessory != .Sync {
+            syncButton?.removeFromSuperview()
         }
 
         switch action.accessory {
@@ -638,8 +705,87 @@ private class PhotonActionSheetCell: UITableViewCell {
             toggleSwitch.accessibilityIdentifier = action.isEnabled ? "enabled" : "disabled"
             toggleSwitch.image = image
             stackView.addArrangedSubview(toggleSwitch)
+        case .Sync:
+            if let manager = syncManager {
+                if syncButton == nil {
+                    let button = SyncMenuButton(with: manager)
+                    stackView.addArrangedSubview(button)
+                    syncButton = button
+                    syncButton?.contentHorizontalAlignment = .right
+                    syncButton?.snp.makeConstraints { make in
+                        make.size.equalTo(40)
+                    }
+                }
+                syncButton?.updateAnimations()
+                let padding = PhotonActionSheetCell.Padding
+                stackView.snp.remakeConstraints { make in
+                    make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding))
+                }
+            }
         default:
             break // Do nothing. The rest are not supported yet.
         }
     }
 }
+
+private class SyncMenuButton: UIButton {
+
+    let syncManager: SyncManager
+    let iconSize = CGSize(width: 24, height: 24)
+
+    init(with syncManager: SyncManager) {
+        self.syncManager = syncManager
+        super.init(frame: .zero)
+
+        self.addTarget(self, action: #selector(startSync), for: .touchUpInside)
+
+        let line = UIView()
+        line.backgroundColor = UIColor.Photon.Grey40
+        self.addSubview(line)
+        line.snp.makeConstraints { make in
+            make.width.equalTo(1)
+            make.leading.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+        }
+
+        guard let syncStatus = syncManager.syncDisplayState else {
+            self.setImage(UIImage(named: "FxA-Sync")?.createScaled(iconSize), for: .normal)
+            return
+        }
+
+        let imageName = (syncStatus == .inProgress) ? "FxA-Sync-Blue" : "FxA-Sync"
+        setImage(UIImage(named: imageName)?.createScaled(iconSize), for: .normal)
+
+        if syncStatus == .inProgress {
+            animate()
+        }
+    }
+
+    private func animate() {
+        let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        continuousRotateAnimation.fromValue = 0.0
+        continuousRotateAnimation.toValue = CGFloat(Double.pi)
+        continuousRotateAnimation.isRemovedOnCompletion = true
+        continuousRotateAnimation.duration = 0.5
+        continuousRotateAnimation.repeatCount = .infinity
+        self.imageView?.layer.add(continuousRotateAnimation, forKey: "rotateKey")
+    }
+
+    func updateAnimations() {
+        self.imageView?.layer.removeAllAnimations()
+        setImage(UIImage(named: "FxA-Sync")?.createScaled(iconSize), for: .normal)
+        if let syncStatus = syncManager.syncDisplayState, syncStatus == .inProgress {
+            setImage(UIImage(named: "FxA-Sync-Blue")?.createScaled(iconSize), for: .normal)
+            animate()
+        }
+    }
+
+    @objc func startSync() {
+        self.syncManager.syncEverything(why: .syncNow)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+

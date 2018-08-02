@@ -85,6 +85,10 @@ class Tab: NSObject {
     var mimeType: String?
     var isEditing: Bool = false
 
+    // When viewing a non-HTML content type in the webview (like a PDF document), this URL will
+    // point to a tempfile containing the content so it can be shared to external applications.
+    var temporaryDocument: TemporaryDocument?
+
     fileprivate var _noImageMode = false
     // Cliqz: added to differentiate between restoring regular webpage and restoring Freshtab
     var restoringFreshtab = true
@@ -266,8 +270,13 @@ class Tab: NSObject {
             webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
+<<<<<<< HEAD
         //Cliqz: Remove notification observer
         NotificationCenter.default.removeObserver(self)
+||||||| merged common ancestors
+=======
+        contentScriptManager.helpers.removeAll()
+>>>>>>> firefox-releases
     }
 
     var loading: Bool {
@@ -346,6 +355,10 @@ class Tab: NSObject {
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
         if let webView = webView {
             lastRequest = request
+            if let url = request.url, url.isFileURL, request.isPrivileged {
+                return webView.loadFileURL(url, allowingReadAccessTo: url)
+            }
+
             return webView.load(request)
         }
         return nil

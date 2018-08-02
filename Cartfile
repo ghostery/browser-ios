@@ -1,19 +1,41 @@
-github "getsentry/sentry-cocoa"             "3.11.1"
+github "getsentry/sentry-cocoa"             "3.12.4"
 github "Alamofire/Alamofire"                ~> 4.0
 github "sleroux/Deferred"                   "Swift3.0"
 github "SnapKit/SnapKit"                    "3.1.2"
 github "rs/SDWebImage"                      "4.1.0"
 github "swisspol/GCDWebServer"              "3.3.2"
+<<<<<<< HEAD
 github "kif-framework/KIF"                  "v3.7.3"
 # Cliqz: Disable Adjust Integration
 #github "adjust/ios_sdk"                     "v4.12.1"
+||||||| merged common ancestors
+github "kif-framework/KIF"                  "v3.6.0"
+github "adjust/ios_sdk"                     "v4.12.1"
+=======
+github "kif-framework/KIF"                  "v3.7.3"
+github "adjust/ios_sdk"                     "v4.12.1"
+>>>>>>> firefox-releases
 github "AgileBits/onepassword-app-extension"    "add-framework-support"
+<<<<<<< HEAD
 github "jrendel/SwiftKeychainWrapper" "master"
+||||||| merged common ancestors
+github "jrendel/SwiftKeychainWrapper" "3.0.1"
+=======
+github "mozilla-mobile/SwiftKeychainWrapper"       "master"
+>>>>>>> firefox-releases
 github "DaveWoodCom/XCGLogger"              "Version_4.0.0"
 github "cezheng/Fuzi"                       "2.0.2"
 github "SwiftyJSON/SwiftyJSON"              "3.1.4"
 github "farhanpatel/JSONSchema.swift"       "master"
+<<<<<<< HEAD
 github "google/EarlGrey"                    "1.13.0"
 # Cliqz: Disable FireFox Telemetry
 #github "mozilla-mobile/telemetry-ios"       "v1.0.10"
+||||||| merged common ancestors
+github "google/EarlGrey"                    "1.12.1"
+github "mozilla-mobile/telemetry-ios"       "v1.1.0"
+=======
+github "google/EarlGrey"                    "1.13.0"
+github "mozilla-mobile/telemetry-ios"       "v1.1.0"
+>>>>>>> firefox-releases
 github "mozilla-mobile/MappaMundi"          "master"

@@ -21,11 +21,6 @@ import Deferred
     import SyncTelemetry
 #endif
 
-// Import these dependencies for ALL targets *EXCEPT* `NotificationService`.
-#if !MOZ_TARGET_NOTIFICATIONSERVICE
-    import ReadingList
-#endif
-
 private let log = Logger.syncLogger
 
 public let ProfileRemoteTabsSyncDelay: TimeInterval = 0.1
@@ -114,7 +109,7 @@ protocol Profile: class {
     var panelDataObservers: PanelDataObservers { get }
 
     #if !MOZ_TARGET_NOTIFICATIONSERVICE
-        var readingList: ReadingListService? { get }
+        var readingList: ReadingList { get }
     #endif
 
     var isShutdown: Bool { get }
@@ -176,6 +171,7 @@ open class BrowserProfile: Profile {
 
     let db: BrowserDB
     let loginsDB: BrowserDB
+    let readingListDB: BrowserDB
     var syncManager: SyncManager!
 
     private static var loginsKey: String? {
@@ -232,6 +228,7 @@ open class BrowserProfile: Profile {
         // Set up our database handles.
         self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, schema: LoginsSchema(), files: files)
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        self.readingListDB = BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
 
         // This has to happen prior to the databases being opened, because opening them can trigger
         // events to which the SyncManager listens.
@@ -266,6 +263,18 @@ open class BrowserProfile: Profile {
             // Remove the default homepage. This does not change the user's preference,
             // just the behaviour when there is no homepage.
             prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
+        }
+
+        // Create the "Downloads" folder in the documents directory.
+        if let downloadsPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads").path {
+            try? FileManager.default.createDirectory(atPath: downloadsPath, withIntermediateDirectories: true, attributes: nil)
+
+            // Hide the "__leanplum.sqlite" file in the documents directory.
+            if var leanplumFile = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("__leanplum.sqlite"), FileManager.default.fileExists(atPath: leanplumFile.path) {
+                var resourceValues = URLResourceValues()
+                resourceValues.isHidden = true
+                try? leanplumFile.setResourceValues(resourceValues)
+            }
         }
     }
 
@@ -392,11 +401,9 @@ open class BrowserProfile: Profile {
         return self.makePrefs()
     }()
 
-    #if !MOZ_TARGET_NOTIFICATIONSERVICE
-        lazy var readingList: ReadingListService? = {
-            return ReadingListService(profileStoragePath: self.files.rootPath as String)
-        }()
-    #endif
+    lazy var readingList: ReadingList = {
+        return SQLiteReadingList(db: self.readingListDB)
+    }()
 
     lazy var remoteClientsAndTabs: RemoteClientsAndTabs & ResettableSyncStorage & AccountRemovalDelegate & RemoteDevices = {
         return SQLiteRemoteClientsAndTabs(db: self.db)
@@ -437,13 +444,14 @@ open class BrowserProfile: Profile {
     }
 
     public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
-        let id = DeviceInfo.clientIdentifier(self.prefs)
+        let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
+        let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
         let commands = items.map { item in
             SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
         
         func notifyClients() {
-            let deviceIDs = clients.flatMap { $0.fxaDeviceId }
+            let deviceIDs = clients.compactMap { $0.fxaDeviceId }
             guard let account = self.getAccount() else {
                 return
             }
@@ -490,6 +498,7 @@ open class BrowserProfile: Profile {
             if let configuration = account?.configuration as? CustomFirefoxAccountConfiguration {
                 account?.configuration = CustomFirefoxAccountConfiguration(prefs: self.prefs)
             }
+            account?.updateProfile()
             
             return account
         }
@@ -675,7 +684,7 @@ open class BrowserProfile: Profile {
             center.addObserver(self, selector: #selector(onBookmarkBufferValidated), name: .BookmarkBufferValidated, object: nil)
         }
 
-        func onBookmarkBufferValidated(notification: NSNotification) {
+        @objc func onBookmarkBufferValidated(notification: NSNotification) {
             #if MOZ_TARGET_CLIENT
                 // We don't send this ad hoc telemetry on the release channel.
                 guard AppConstants.BuildChannel != AppBuildChannel.release else {
@@ -687,7 +696,7 @@ open class BrowserProfile: Profile {
                     return
                 }
 
-                guard let validations = (notification.object as? Box<[String: Bool]>)?.value else {
+                guard let validations = notification.object as? [String: Bool] else {
                     log.warning("Notification didn't have validations.")
                     return
                 }
@@ -1113,8 +1122,8 @@ open class BrowserProfile: Profile {
             if let enginesEnablements = self.engineEnablementChangesForAccount(account: account, profile: profile),
                !enginesEnablements.isEmpty {
                 authState?.enginesEnablements = enginesEnablements
-                log.debug("engines to enable: \(enginesEnablements.flatMap { $0.value ? $0.key : nil })")
-                log.debug("engines to disable: \(enginesEnablements.flatMap { !$0.value ? $0.key : nil })")
+                log.debug("engines to enable: \(enginesEnablements.compactMap { $0.value ? $0.key : nil })")
+                log.debug("engines to disable: \(enginesEnablements.compactMap { !$0.value ? $0.key : nil })")
             }
 
             authState?.clientName = account.deviceName
@@ -1182,7 +1191,7 @@ open class BrowserProfile: Profile {
             // By this time, `engineIdentifiers` may have duplicates in. We won't try and dedupe here
             // because `syncSeveral` will do that for us.
 
-            let synchronizers: [(EngineIdentifier, SyncFunction)] = engineIdentifiers.flatMap {
+            let synchronizers: [(EngineIdentifier, SyncFunction)] = engineIdentifiers.compactMap {
                 switch $0 {
                 case "clients": return ("clients", self.syncClientsWithDelegate)
                 case "tabs": return ("tabs", self.syncTabsWithDelegate)

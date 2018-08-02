@@ -8,6 +8,18 @@
 	<string>$(ADJUST_ENVIRONMENT)</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
+<<<<<<< HEAD
+||||||| merged common ancestors
+	<key>PocketEnvironmentAPIKey</key>
+	<string>$(POCKET_API_KEY)</string>
+	<key>MozWhatsNewTopic</key>
+	<string>whats-new-ios-11</string>
+=======
+	<key>PocketEnvironmentAPIKey</key>
+	<string>$(POCKET_API_KEY)</string>
+	<key>MozWhatsNewTopic</key>
+	<string>whats-new-ios-12</string>
+>>>>>>> firefox-releases
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -23,7 +35,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
+<<<<<<< HEAD
 	<string>1.0.0</string>
+||||||| merged common ancestors
+	<string>11.1</string>
+=======
+	<string>12.2</string>
+>>>>>>> firefox-releases
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -175,5 +193,9 @@
 			<string></string>
 		</dict>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 </dict>
 </plist>

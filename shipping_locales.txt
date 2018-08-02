@@ -1,4 +1,15 @@
 de
+<<<<<<< HEAD
+||||||| merged common ancestors
+dsb
+el
+en-GB
+=======
+dsb
+el
+en-CA
+en-GB
+>>>>>>> firefox-releases
 en-US
 es
 fr

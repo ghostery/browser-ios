@@ -45,7 +45,7 @@ public extension Array {
     // Returns unique values in an array using the result of f()
     func unique<T: Hashable>(_ f: ((Element) -> T)) -> [Element] {
         var map: [T: Element] = [T: Element]()
-        return self.flatMap { a in
+        return self.compactMap { a in
             let t = f(a)
             if map[t] == nil {
                 map[t] = a
@@ -68,7 +68,6 @@ public extension Sequence {
         return true
     }
 }
-
 
 public extension Collection {
     /// Returns the element at the specified index iff it is within bounds, otherwise nil.

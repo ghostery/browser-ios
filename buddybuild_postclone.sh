@@ -12,7 +12,7 @@ function setup_virtualenv {
 # Install Node.js dependencies and build user scripts
 #
 
-npm install
+npm install --silent
 npm run build
 
 #
@@ -32,7 +32,7 @@ fi
 # requests.
 #
 
-git clone -b v11.x-l10n https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
+git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
 
 if [ "$BUDDYBUILD_SCHEME" = "Firefox" ]; then
   setup_virtualenv

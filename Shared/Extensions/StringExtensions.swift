@@ -33,7 +33,7 @@ public extension String {
             let index1 = self.index(self.startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
             let index2 = self.index(self.endIndex, offsetBy: maxLength / -2)
 
-            return self.substring(to: index1) + "…\u{2060}" + self.substring(from: index2)
+            return String(self[..<index1]) + "…\u{2060}" + String(self[index2...])
         }
         return self
     }
@@ -66,7 +66,7 @@ public extension String {
     public func stringSplitWithNewline() -> String {
         let mid = self.count / 2
 
-        let arr: [Int] = self.indices.flatMap {
+        let arr: [Int] = self.indices.compactMap {
             if self[$0] == " " {
                 return self.distance(from: startIndex, to: $0)
             }
@@ -79,5 +79,11 @@ public extension String {
         var newString = self
         newString.insert("\n", at: newString.index(newString.startIndex, offsetBy: closest.element))
         return newString
+    }
+
+    public static func contentsOfFileWithResourceName(_ name: String, ofType type: String, fromBundle bundle: Bundle, encoding: String.Encoding, error: NSErrorPointer) -> String? {
+        return bundle.path(forResource: name, ofType: type).flatMap {
+            try? String(contentsOfFile: $0, encoding: encoding)
+        }
     }
 }

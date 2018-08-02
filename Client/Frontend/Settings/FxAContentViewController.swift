@@ -37,13 +37,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     init(profile: Profile, fxaOptions: FxALaunchParams? = nil) {
         self.profile = profile
         
-        super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
-        
-        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
-            self.url = self.createFxAURLWith(fxaOptions, profile: profile)
-        } else {
-            self.url = profile.accountConfiguration.signInURL
-        }
+        super.init(backgroundColor: UIColor.Photon.Grey20, title: NSAttributedString(string: "Firefox Accounts"))
+
+        self.url = self.createFxAURLWith(fxaOptions, profile: profile)
 
         NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
     }
@@ -59,9 +55,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            profile.getAccount()?.updateProfile()
-        }
+        profile.getAccount()?.updateProfile()
         
         // If the FxAContentViewController was launched from a FxA deferred link
         // onboarding might not have been shown. Check to see if it needs to be

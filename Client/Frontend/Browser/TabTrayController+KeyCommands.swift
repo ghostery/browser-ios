@@ -24,37 +24,38 @@ extension TabTrayController {
         ]
     }
 
-    func didTogglePrivateModeKeyCommand() {
+    @objc func didTogglePrivateModeKeyCommand() {
         // NOTE: We cannot and should not capture telemetry here.
         didTogglePrivateMode()
     }
 
-    func didCloseTabKeyCommand() {
+    @objc func didCloseTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-tab"])
         if let tab = tabManager.selectedTab {
             tabManager.removeTab(tab)
         }
     }
 
-    func didCloseAllTabsKeyCommand() {
+    @objc func didCloseAllTabsKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-all-tabs"])
         closeTabsForCurrentTray()
     }
 
-    func didEnterTabKeyCommand() {
+    @objc func didEnterTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "enter-tab"])
         _ = self.navigationController?.popViewController(animated: true)
     }
 
-    func didOpenNewTabKeyCommand() {
+    @objc func didOpenNewTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
         openNewTab()
     }
 
-    func didChangeSelectedTabKeyCommand(sender: UIKeyCommand) {
+    @objc func didChangeSelectedTabKeyCommand(sender: UIKeyCommand) {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "select-tab"])
         let step: Int
-        switch sender.input {
+        guard let input = sender.input else { return }
+        switch input {
         case UIKeyInputLeftArrow:
             step = -1
         case UIKeyInputRightArrow:

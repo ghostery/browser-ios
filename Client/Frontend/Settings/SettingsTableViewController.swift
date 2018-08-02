@@ -8,15 +8,15 @@ import UIKit
 
 struct SettingsUX {
     static let TableViewHeaderBackgroundColor = UIConstants.AppBackgroundColor
-    static let TableViewHeaderTextColor = UIColor.Defaults.Grey50
-    static let TableViewRowTextColor = UIColor.Defaults.Grey90
-    static let TableViewDisabledRowTextColor = UIColor.lightGray
-    static let TableViewSeparatorColor = UIColor(rgb: 0xD1D1D4)
+    static let TableViewHeaderTextColor = UIColor.Photon.Grey50
+    static let TableViewRowTextColor = UIColor.Photon.Grey90
+    static let TableViewDisabledRowTextColor = UIColor.Photon.Grey40
+    static let TableViewSeparatorColor = UIColor.Photon.Grey30
     static let TableViewHeaderFooterHeight = CGFloat(44)
-    static let TableViewRowErrorTextColor = UIColor(red: 255/255, green: 0/255, blue: 26/255, alpha: 1.0)
-    static let TableViewRowWarningTextColor = UIColor(red: 245/255, green: 166/255, blue: 35/255, alpha: 1.0)
-    static let TableViewRowActionAccessoryColor = UIColor(red: 0.29, green: 0.56, blue: 0.89, alpha: 1.0)
-    static let TableViewRowSyncTextColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+    static let TableViewRowErrorTextColor = UIColor.Photon.Red50
+    static let TableViewRowWarningTextColor = UIColor.Photon.Orange50
+    static let TableViewRowActionAccessoryColor = UIColor.Photon.Blue50
+    static let TableViewRowSyncTextColor = UIColor.Photon.Grey80
 }
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
@@ -172,9 +172,9 @@ class BoolSetting: Setting {
     convenience init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
-            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewHeaderTextColor])
+            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor])
         }
-        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
+        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
@@ -362,8 +362,8 @@ class CheckmarkSetting: Setting {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        cell.accessoryType = isEnabled() ? .checkmark : .none
-        cell.selectionStyle = .none
+        cell.accessoryType = .checkmark
+        cell.tintColor = isEnabled() ? SettingsUX.TableViewRowActionAccessoryColor : UIColor.white
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -452,7 +452,7 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
             // Reload the data to reflect the new Account immediately.
             settings.tableView.reloadData()
             // And start advancing the Account state in the background as well.
-            settings.SELrefresh()
+            settings.refresh()
         }
     }
 
@@ -514,18 +514,16 @@ class SettingsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
 
         settings = generateSettings()
-
-        // Because these are added in viewWillAppear, unhook in viewDidDisappear for symmetry.
-        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELfirefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(firefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
 
         tableView.reloadData()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        SELrefresh()
+        refresh()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -541,13 +539,13 @@ class SettingsTableViewController: UITableViewController {
         return []
     }
 
-    @objc fileprivate func SELsyncDidChangeState() {
+    @objc fileprivate func syncDidChangeState() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
 
-    @objc fileprivate func SELrefresh() {
+    @objc fileprivate func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
         if let account = self.profile.getAccount() {
             account.advance().upon { state in
@@ -560,7 +558,7 @@ class SettingsTableViewController: UITableViewController {
         }
     }
 
-    @objc func SELfirefoxAccountDidChange() {
+    @objc func firefoxAccountDidChange() {
         self.tableView.reloadData()
     }
 
@@ -668,7 +666,7 @@ class SettingsTableViewController: UITableViewController {
         guard let text = text else { return 0 }
 
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs = [NSFontAttributeName: label.font as Any]
+        let attrs = [NSAttributedStringKey.font: label.font as Any]
         let boundingRect = NSString(string: text).boundingRect(with: size,
             options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
@@ -709,7 +707,7 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
     lazy var titleLabel: UILabel = {
         var headerLabel = UILabel()
         headerLabel.textColor = SettingsUX.TableViewHeaderTextColor
-        headerLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightRegular)
+        headerLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
         headerLabel.numberOfLines = 0
         return headerLabel
     }()
