@@ -147,9 +147,10 @@ node('mac-mini-ios') {
                             screenshots.zip \
                             test-reports
                         xcrun simctl boot 8A112602-53F8-4996-A58A-FC65665635EB || true
-                        xcrun simctl uninstall booted com.cliqz.ios.newCliqz
-                        xcrun simctl uninstall booted com.apple.test.WebDriverAgentRunner-Runner
-                        xcrun simctl uninstall booted com.apple.test.AppiumTests-Runner
+                        xcrun simctl uninstall 8A112602-53F8-4996-A58A-FC65665635EB com.cliqz.ios.newCliqz
+                        xcrun simctl uninstall 8A112602-53F8-4996-A58A-FC65665635EB com.apple.test.WebDriverAgentRunner-Runner
+                        xcrun simctl uninstall 8A112602-53F8-4996-A58A-FC65665635EB com.apple.test.AppiumTests-Runner
+                        sleep 15
                         xcrun simctl shutdown 8A112602-53F8-4996-A58A-FC65665635EB || true
                     '''
                 }
