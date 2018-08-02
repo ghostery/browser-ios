@@ -213,6 +213,8 @@ class TabManager: NSObject {
     func willSwitchTabMode(leavingPBM: Bool) {
         if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()
+            // Cliqz: [IB2-340] Fixed the App hanging when pressing done button after switching to/from Forget mode
+            selectTab(self.tabs.first)
         }
     }
 
