@@ -247,7 +247,7 @@ private func headerTransform(_ frame: CGRect, toFrame finalFrame: CGRect, contai
 
 //MARK: Private Helper Methods
 private func calculateCollapsedCellFrameUsingCollectionView(_ collectionView: UICollectionView, atIndex index: Int) -> CGRect {
-    // Cliqz: added check to prevent charing the app when clicking does after swtiching forget mode state
+    // Cliqz: added check to prevent crashing the app when clicking done button after swtiching forget mode state
     guard collectionView.numberOfItems(inSection: 0) > index else { return .zero}
     
     if let attr = collectionView.collectionViewLayout.layoutAttributesForItem(at: IndexPath(item: index, section: 0)) {
