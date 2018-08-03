@@ -667,21 +667,12 @@ class SendFeedbackSetting: Setting {
 
 class SendAnonymousUsageDataSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
-<<<<<<< HEAD
-        // Cliqz: upgrade to swift 4.1
-        let statusText = NSMutableAttributedString()
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewHeaderTextColor]))
-        statusText.append(NSAttributedString(string: " "))
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]))
-        
-||||||| merged common ancestors
-=======
         let statusText = NSMutableAttributedString()
         statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor]))
         statusText.append(NSAttributedString(string: " "))
         statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]))
 
->>>>>>> firefox-releases
+
         super.init(
             prefs: prefs, prefKey: AppConstants.PrefSendUsageData, defaultValue: true,
             attributedTitleText: NSAttributedString(string: Strings.SendUsageSettingTitle),

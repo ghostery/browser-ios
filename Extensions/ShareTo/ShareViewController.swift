@@ -31,20 +31,6 @@ extension UILabel {
     }
 }
 
-<<<<<<< HEAD
-let ShareDestinations = [
-    ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your reading list"), image: "AddToReadingList"),
-    /* Cliqz: Moved Firefox Strings to Cliqz table
-    ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your bookmarks"), image: "AddToBookmarks")
-     */
-    ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks", tableName: "Cliqz", comment: "On/off toggle to select adding this url to your bookmarks"), image: "AddToBookmarks")
-]
-||||||| merged common ancestors
-let ShareDestinations = [
-    ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your reading list"), image: "AddToReadingList"),
-    ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your bookmarks"), image: "AddToBookmarks")
-]
-=======
 // Credit: https://stackoverflow.com/a/48860391/490488
 extension String {
     static var quotes: (String, String) {
@@ -52,7 +38,6 @@ extension String {
             let bQuote = Locale.current.quotationBeginDelimiter,
             let eQuote = Locale.current.quotationEndDelimiter
             else { return ("“", "”") }
->>>>>>> firefox-releases
 
         return (bQuote, eQuote)
     }

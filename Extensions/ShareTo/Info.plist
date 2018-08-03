@@ -17,13 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
-<<<<<<< HEAD
 	<string>1.0.0</string>
-||||||| merged common ancestors
-	<string>11.1</string>
-=======
-	<string>12.2</string>
->>>>>>> firefox-releases
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -32,41 +26,21 @@
 	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>NSExtension</key>
 	<dict>
-<<<<<<< HEAD
-		<key>NSExtensionAttributes</key>
-		<dict>
-			<key>NSExtensionActivationRule</key>
-			<string>SUBQUERY ( extensionItems, $extensionItem, SUBQUERY ( $extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url").@count == 1 ).@count == 1</string>
-		</dict>
-		<key>NSExtensionPointIdentifier</key>
-		<string>com.apple.share-services</string>
-		<key>NSExtensionPrincipalClass</key>
-||||||| merged common ancestors
-		<key>NSExtensionAttributes</key>
-		<dict>
-			<key>NSExtensionActivationRule</key>
-			<string>SUBQUERY ( extensionItems, $extensionItem, SUBQUERY ( $extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;public.url&quot;).@count == 1 ).@count == 1</string>
-		</dict>
-		<key>NSExtensionPointIdentifier</key>
-		<string>com.apple.share-services</string>
-		<key>NSExtensionPrincipalClass</key>
-=======
- <key>NSExtensionAttributes</key>
+ 		<key>NSExtensionAttributes</key>
+            <dict>
+            	<key>NSExtensionActivationRule</key>
                 <dict>
-                        <key>NSExtensionActivationRule</key>
-                        <dict>
-                                <key>NSExtensionActivationSupportsText</key>
-                                <true/>
-                                <key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
-                                <integer>1</integer>
-                                <key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
-                                <integer>1</integer>
-                        </dict>
+                	<key>NSExtensionActivationSupportsText</key>
+                    <true/>
+                    <key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
+                    <integer>1</integer>
+                    <key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
+                    <integer>1</integer>
                 </dict>
-                <key>NSExtensionPointIdentifier</key>
-                <string>com.apple.share-services</string>
-	<key>NSExtensionPrincipalClass</key>
->>>>>>> firefox-releases
+			</dict>
+        <key>NSExtensionPointIdentifier</key>
+        <string>com.apple.share-services</string>
+		<key>NSExtensionPrincipalClass</key>
 		<string>InitialViewController</string>
 	</dict>
 	<key>UIAppFonts</key>

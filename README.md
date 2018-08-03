@@ -12,12 +12,6 @@ This branch is written in Swift 4
 
 Please make sure you aim your pull requests in the right direction.
 
-<<<<<<< HEAD
-||||||| merged common ancestors
-For bug fixes and features for the upcoming v8.0 release, please see the *v8.x* branch.
-=======
-For bug fixes and features for the upcoming v12.0 release, please see the *v12.x* branch. (Which may not exist yet)
->>>>>>> firefox-releases
 
 Getting involved
 ----------------

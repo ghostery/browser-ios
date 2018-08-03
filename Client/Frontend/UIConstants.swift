@@ -114,34 +114,17 @@ public struct UIConstants {
         }
     }
 
-<<<<<<< HEAD
-    static let AppBackgroundColor = UIColor.Defaults.Grey10
-    
+    static let AppBackgroundColor = UIColor.Photon.Grey10
     /* Cliqz: Changed the tint color for UIControl to Cliqz Blue color
-    static let SystemBlueColor = UIColor.Defaults.Blue50
-    static let ControlTintColor = UIColor.Defaults.Blue50
+    static let SystemBlueColor = UIColor.Photon.Blue40
+    static let ControlTintColor = UIColor.Photon.Blue50
     */
     static let SystemBlueColor = UIColor.cliqzBluePrimary
     static let ControlTintColor = UIColor.cliqzBluePrimary
     
-    static let PasscodeDotColor = UIColor.Defaults.Grey60
-    static let PrivateModeAssistantToolbarBackgroundColor = UIColor.Defaults.Grey50
-    static let PrivateModeTextHighlightColor = UIColor.Defaults.Purple50
-||||||| merged common ancestors
-    static let AppBackgroundColor = UIColor.Defaults.Grey10
-    static let SystemBlueColor = UIColor.Defaults.Blue50
-    static let ControlTintColor = UIColor.Defaults.Blue50
-    static let PasscodeDotColor = UIColor.Defaults.Grey60
-    static let PrivateModeAssistantToolbarBackgroundColor = UIColor.Defaults.Grey50
-    static let PrivateModeTextHighlightColor = UIColor.Defaults.Purple50
-=======
-    static let AppBackgroundColor = UIColor.Photon.Grey10
-    static let SystemBlueColor = UIColor.Photon.Blue40
-    static let ControlTintColor = UIColor.Photon.Blue50
     static let PasscodeDotColor = UIColor.Photon.Grey60
     static let PrivateModeAssistantToolbarBackgroundColor = UIColor.Photon.Grey50
     static let PrivateModeTextHighlightColor = UIColor.Photon.Purple60
->>>>>>> firefox-releases
     static let PrivateModePurple = UIColor.Defaults.MobilePrivatePurple
 
     // Static fonts

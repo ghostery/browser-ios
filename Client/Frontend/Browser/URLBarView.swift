@@ -5,20 +5,12 @@
 import Shared
 import SnapKit
 
-/* Cliqz
+/* Cliqz: removed private modifier
 private struct URLBarViewUX {
-<<<<<<< HEAD
- */
+*/
 struct URLBarViewUX {
-    static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
-    static let TextFieldActiveBorderColor = UIColor(rgb: 0xB0D5FB)
-||||||| merged common ancestors
-    static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
-    static let TextFieldActiveBorderColor = UIColor(rgb: 0xB0D5FB)
-=======
     static let TextFieldBorderColor = UIColor.Photon.Grey40
     static let TextFieldActiveBorderColor = UIColor.Defaults.PaleBlue
->>>>>>> firefox-releases
 
     static let LocationLeftPadding: CGFloat = 8
     static let Padding: CGFloat = 10

@@ -68,8 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.launchOptions = launchOptions
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
-<<<<<<< HEAD
-        self.window!.backgroundColor = UIColor.white
+        self.window!.backgroundColor = UIColor.Photon.White100
         
         //Cliqz: Cards Subscription
         SubscriptionsHandler.sharedInstance.configureRemoteNotifications()
@@ -79,11 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         DispatchQueue.global(qos: .utility).async {
             BlockListFileManager.shared.loadGhosteryJson()
         }
-||||||| merged common ancestors
-        self.window!.backgroundColor = UIColor.white
-=======
-        self.window!.backgroundColor = UIColor.Photon.White100
->>>>>>> firefox-releases
 
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.

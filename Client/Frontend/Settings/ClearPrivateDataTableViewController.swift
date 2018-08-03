@@ -38,12 +38,8 @@ class ClearPrivateDataTableViewController: UITableViewController {
         if #available(iOS 11, *) {
             items.append((TrackingProtectionClearable(), true))
         }
-<<<<<<< HEAD
         */
-||||||| merged common ancestors
-=======
         items.append((DownloadedFilesClearable(), false)) // Don't clear downloaded files by default
->>>>>>> firefox-releases
         return items
     }()
 

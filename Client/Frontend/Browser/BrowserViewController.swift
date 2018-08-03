@@ -278,16 +278,10 @@ class BrowserViewController: UIViewController {
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.showToolbars(animated: false)
             if self.isViewLoaded {
-<<<<<<< HEAD
-                /*Cliqz - change color of status bar overlay
-                self.statusBarOverlay.backgroundColor = self.shouldShowTopTabsForTraitCollection(self.traitCollection) ? UIColor.Defaults.Grey80 : self.urlBar.backgroundColor
+                /* Cliqz - change color of status bar overlay
+                self.statusBarOverlay.backgroundColor = self.shouldShowTopTabsForTraitCollection(self.traitCollection) ? UIColor.Photon.Grey80 : self.urlBar.backgroundColor
                 */
                 self.statusBarOverlay.backgroundColor = self.urlBar.backgroundColor
-||||||| merged common ancestors
-                self.statusBarOverlay.backgroundColor = self.shouldShowTopTabsForTraitCollection(self.traitCollection) ? UIColor.Defaults.Grey80 : self.urlBar.backgroundColor
-=======
-                self.statusBarOverlay.backgroundColor = self.shouldShowTopTabsForTraitCollection(self.traitCollection) ? UIColor.Photon.Grey80 : self.urlBar.backgroundColor
->>>>>>> firefox-releases
                 self.setNeedsStatusBarAppearanceUpdate()
             }
             }, completion: nil)
@@ -1686,38 +1680,20 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         guard self.presentedViewController == nil else {
             return
         }
-<<<<<<< HEAD
-        let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: NSLocalizedString("New Tab", tableName:"Cliqz", comment: "Label for New Tab"), style: .default, handler: { _ in
-			self.homePanelController?.shouldShowKeyboard = true
-            self.tabManager.addTabAndSelect(isPrivate: false)
-        }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("New Forget Tab", tableName:"Cliqz", value: "New Ghost Tab", comment: "Label for New Forget Tab"), style: .default, handler: { _ in
-			self.homePanelController?.shouldShowKeyboard = true
-            self.tabManager.addTabAndSelect(isPrivate: true)
-        }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Close Tab", tableName:"Cliqz", comment: "Label for Close Tab"), style: .destructive, handler: { _ in
-||||||| merged common ancestors
-        let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
-            self.tabManager.addTabAndSelect(isPrivate: false)
-        }))
-        controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
-            self.tabManager.addTabAndSelect(isPrivate: true)
-        }))
-        controller.addAction(UIAlertAction(title: Strings.CloseTabTitle, style: .destructive, handler: { _ in
-=======
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
+            // Cliqz: flag homePanelController to show keyboard next time it is displayed
+            self.homePanelController?.shouldShowKeyboard = true
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
         }), accessibilityIdentifier: "toolbarTabButtonLongPress.newTab")
         controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
+            // Cliqz: flag homePanelController to show keyboard next time it is displayed
+            self.homePanelController?.shouldShowKeyboard = true
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
         }), accessibilityIdentifier: "toolbarTabButtonLongPress.newPrivateTab")
         controller.addAction(UIAlertAction(title: Strings.CloseTabTitle, style: .destructive, handler: { _ in
->>>>>>> firefox-releases
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
             }
@@ -2572,15 +2548,9 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             /* Cliqz: Moved Firefox Strings to Cliqz table
             let openNewPrivateTabTitle = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
-<<<<<<< HEAD
             */
             let openNewPrivateTabTitle = NSLocalizedString("Open in New Forget Tab", tableName: "Cliqz", comment: "Context menu option for opening a link in a new forget tab")
-            let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: .default) { (action: UIAlertAction) in
-||||||| merged common ancestors
-            let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: .default) { (action: UIAlertAction) in
-=======
             let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: .default) { _ in
->>>>>>> firefox-releases
                 addTab(url, true)
             }
             actionSheetController.addAction(openNewPrivateTabAction, accessibilityIdentifier: "linkContextMenu.openInNewPrivateTab")
@@ -2920,16 +2890,10 @@ extension BrowserViewController: Themeable {
     func applyTheme(_ theme: Theme) {
         let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
         ui.forEach { $0?.applyTheme(theme) }
-<<<<<<< HEAD
         /*Cliqz - change color of status bar overlay
-        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Defaults.Grey80 : urlBar.backgroundColor
+        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
         */
         statusBarOverlay.backgroundColor = urlBar.backgroundColor
-||||||| merged common ancestors
-        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Defaults.Grey80 : urlBar.backgroundColor
-=======
-        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
->>>>>>> firefox-releases
         setNeedsStatusBarAppearanceUpdate()
     }
 }

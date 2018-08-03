@@ -32,15 +32,11 @@ class UnifiedTelemetry {
     }
 
     init(profile: Profile) {
-<<<<<<< HEAD
         /* Cliqz: Disable FireFox Telemetry
-||||||| merged common ancestors
-=======
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-core", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-mobile-event", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("eventArray-MozTelemetry-Default-mobile-event.json", to: .cachesDirectory)
 
->>>>>>> firefox-releases
         NotificationCenter.default.addObserver(self, selector: #selector(uploadError), name: Telemetry.notificationReportError, object: nil)
 
         let telemetryConfig = Telemetry.default.configuration
@@ -189,26 +185,14 @@ extension UnifiedTelemetry {
         case topTabs = "top-tabs"
     }
 
-<<<<<<< HEAD
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String : Any?]? = nil) {
-        /* Cliqz: Disable FireFox Telemetry
-||||||| merged common ancestors
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String : Any?]? = nil) {
-=======
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any?]? = nil) {
->>>>>>> firefox-releases
+        /* Cliqz: Disable FireFox Telemetry
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value.rawValue, extras: extras)
         */
     }
 
-<<<<<<< HEAD
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String : Any?]? = nil) {
-        /* Cliqz: Disable FireFox Telemetry
-||||||| merged common ancestors
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String : Any?]? = nil) {
-=======
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String: Any?]? = nil) {
->>>>>>> firefox-releases
+        /* Cliqz: Disable FireFox Telemetry
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value, extras: extras)
         */
     }

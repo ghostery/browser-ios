@@ -270,13 +270,11 @@ class Tab: NSObject {
             webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
-<<<<<<< HEAD
+
         //Cliqz: Remove notification observer
         NotificationCenter.default.removeObserver(self)
-||||||| merged common ancestors
-=======
+        
         contentScriptManager.helpers.removeAll()
->>>>>>> firefox-releases
     }
 
     var loading: Bool {

@@ -206,13 +206,10 @@ extension AdjustIntegration {
         profile.prefs.setString("\(deeplink)", forKey: "AdjustDeeplinkKey")
         return true
     }
-<<<<<<< HEAD
     */
-||||||| merged common ancestors
-
-=======
 
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
+        /* Cliqz: Disable Adjust Integration
         guard let oldPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(pathComponent).path, FileManager.default.fileExists(atPath: oldPath) else {
             return
         }
@@ -230,6 +227,6 @@ extension AdjustIntegration {
         } catch let error as NSError {
             print("Unable to move \(pathComponent) to \(destinationSearchPath): \(error.localizedDescription)")
         }
+        */
     }
->>>>>>> firefox-releases
 }

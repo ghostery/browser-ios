@@ -103,16 +103,10 @@ class LeanPlumClient {
     // to prompting with native push permissions.
     /* Cliqz: Disable LeanPlum Integration
     private var useFxAPrePush: LPVar = LPVar.define("useFxAPrePush", with: false)
-<<<<<<< HEAD
-    var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().flatMap({ $0.asDictonary() }))
-    */
-||||||| merged common ancestors
-    var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().flatMap({ $0.asDictonary() }))
-=======
     var enablePocketVideo: LPVar = LPVar.define("pocketVideo", with: false)
-
+         
     var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))
->>>>>>> firefox-releases
+    */
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
