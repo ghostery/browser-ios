@@ -20,7 +20,7 @@ class CliqzOnOffSetting: Setting {
     
     init(settings: SettingsTableViewController, title: String) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
     
     override var status: NSAttributedString {

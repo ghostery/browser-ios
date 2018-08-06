@@ -11,8 +11,8 @@ import UIKit
 class QuerySuggestionView: UIView {
     
     //MARK:- Constants
-    fileprivate let boldFontAttributes = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 17), NSForegroundColorAttributeName: UIColor.white]
-    fileprivate let normalFontAttributes = [NSFontAttributeName: UIFont.systemFont(ofSize: 16), NSForegroundColorAttributeName: UIColor.white]
+    fileprivate let boldFontAttributes = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17), NSAttributedStringKey.foregroundColor: UIColor.white]
+    fileprivate let normalFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 16), NSAttributedStringKey.foregroundColor: UIColor.white]
     fileprivate let separatorBgColor = UIColor(rgb: 0xC7CBD3)
     fileprivate let margin: CGFloat = 10
     
@@ -131,7 +131,7 @@ class QuerySuggestionView: UIView {
     }
     
     fileprivate func getWidth(_ suggestion: String) -> CGFloat {
-        let sizeOfString = (suggestion as NSString).size(attributes: boldFontAttributes)
+        let sizeOfString = (suggestion as NSString).size(withAttributes: boldFontAttributes)
         return sizeOfString.width + 5
     }
     

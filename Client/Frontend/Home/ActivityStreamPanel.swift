@@ -577,11 +577,13 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
     func getPocketVideos() -> Success {
         let showPocket = (profile.prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible) ?? Pocket.IslocaleSupported(Locale.current.identifier))
+        /* Cliqz: Disable LeanPlum Integration
         guard showPocket, LeanPlumClient.shared.enablePocketVideo.boolValue() else {
             self.pocketVideoStories = []
             return succeed()
         }
 
+        */
         return pocketVideoAPI.globalFeed(items: 4).bindQueue(.main) { pStory in
             self.pocketVideoStories = pStory
             return succeed()

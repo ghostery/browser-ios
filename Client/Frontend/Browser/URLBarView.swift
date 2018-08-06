@@ -630,8 +630,10 @@ extension URLBarView: TabLocationViewDelegate {
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
     }
-    
+    /* Cliqz: convert the method to objc that we can override it in the CliqzURLBar subclass
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
+    */
+    @objc func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
         delegate?.urlBarDidPressPageOptions(self, from: tabLocationView.pageOptionsButton)
     }
     
@@ -664,6 +666,9 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
+        // Cliqz: update current query
+        updateCurrentQuery(autocompleteTextField, text)
+        
         delegate?.urlBar(self, didEnterText: text)
     }
 
@@ -672,6 +677,9 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        // Cliqz: update current query
+        updateCurrentQuery(autocompleteTextField, "")
+        
         delegate?.urlBar(self, didEnterText: "")
         return true
     }
@@ -679,6 +687,7 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField) {
         leaveOverlayMode(didCancel: true)
     }
+    
 }
 
 // MARK: UIAppearance

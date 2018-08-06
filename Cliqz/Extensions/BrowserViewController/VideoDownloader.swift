@@ -68,7 +68,7 @@ extension BrowserViewController {
         let labelText = NSLocalizedString("Your video is being downloaded.", tableName: "Cliqz", comment: "[VidoeDownloader] Toast message shown when youtube video download started")
         DispatchQueue.main.async { [weak self] in
             let toast = ButtonToast(labelText: labelText, buttonText: Strings.OKString) { (_) in }
-            self?.show(buttonToast: toast)
+            self?.show(toast: toast)
         }
         
         DownloadManager.downloadVideo(url) { [weak self] (error) in
@@ -101,7 +101,7 @@ extension BrowserViewController {
         //TODO: Add messages for each error type
         let labelText = NSLocalizedString("Could not download Video.", tableName: "Cliqz", comment: "[VidoeDownloader] Toast message shown when youtube video download faild")
         let toast = ButtonToast(labelText: labelText, buttonText: Strings.OKString) { (_) in }
-        self.show(buttonToast: toast)
+        self.show(toast: toast)
     }
     
     private func showDownloadSuccessMessage() {
@@ -113,7 +113,7 @@ extension BrowserViewController {
                     UIApplication.shared.open(photosAppUrl, options: [:])
                 }
             }
-            self?.show(buttonToast: toast)
+            self?.show(toast: toast)
         }
     }
 }

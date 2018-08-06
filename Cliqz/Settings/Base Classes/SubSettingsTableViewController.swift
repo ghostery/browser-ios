@@ -66,7 +66,7 @@ class SubSettingsTableViewController : UITableViewController {
         if footer.isEmpty {
             return 1
         }
-        return footer.height(withConstrainedWidth: tableView.bounds.width, font: UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightRegular)) + FooterMargin
+        return footer.height(withConstrainedWidth: tableView.bounds.width, font: UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)) + FooterMargin
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

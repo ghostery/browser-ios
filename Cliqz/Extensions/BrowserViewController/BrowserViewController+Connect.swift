@@ -10,7 +10,7 @@ import UIKit
 
 extension BrowserViewController {
     
-    func openTabViaConnect(notification: NSNotification) {
+    @objc func openTabViaConnect(notification: NSNotification) {
         guard let data = notification.object as? [String: AnyObject],
             let urlString = data["url"] as? String,
             let isPrivate = data["isPrivate"] as? Bool else {
@@ -21,7 +21,7 @@ extension BrowserViewController {
         }
     }
     
-    func downloadVideoViaConnect(notification: NSNotification) {
+    @objc func downloadVideoViaConnect(notification: NSNotification) {
         guard let data = notification.object as? [String: String], let urlString = data["url"] else {
             return
         }

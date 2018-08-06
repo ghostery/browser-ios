@@ -436,7 +436,7 @@ class OverviewViewController: UIViewController {
 		let pauseGhostery = NSLocalizedString("Pause Ghostery", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Pause Ghostery button title")
 		self.pauseGhosteryButton.setTitle(pauseGhostery, for: .normal)
         self.pauseGhosteryButton.addTarget(self, action: #selector(pauseGhosteryPressed), for: .touchUpInside)
-        self.pauseGhosteryButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
+        self.pauseGhosteryButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
 
 		// TODO: Count should be from DataSource
         self.adBlockingView.delegate = self
@@ -454,7 +454,7 @@ class OverviewViewController: UIViewController {
 
 		self.blockedTrackers.font = UIFont.systemFont(ofSize: 20)
 
-		self.trustSiteButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
+		self.trustSiteButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
 		self.trustSiteButton.backgroundColor = UIColor.white
 		self.trustSiteButton.layer.borderColor = ControlCenterUI.buttonGray.cgColor
 		self.trustSiteButton.layer.borderWidth = 1
@@ -466,7 +466,7 @@ class OverviewViewController: UIViewController {
 		self.trustSiteButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
 		self.trustSiteButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
 
-		self.restrictSiteButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
+		self.restrictSiteButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
 		self.restrictSiteButton.backgroundColor = UIColor.white
 		self.restrictSiteButton.layer.borderColor = ControlCenterUI.buttonGray.cgColor
 		self.restrictSiteButton.layer.borderWidth = 1

@@ -17,7 +17,7 @@ extension TabLocationViewDelegate {
     }
 }
 extension TabLocationView {
-    func updateVideoDownloadButton() {
+    @objc func updateVideoDownloadButton() {
         
     }
 }
@@ -74,7 +74,7 @@ class CliqzTabLocationView: TabLocationView {
         url.isYoutubeURL() ? showVideoDownloadButton() : hideVideoDownloadButton()
     }
 
-    func SELtapVideoDownloadButton() {
+    @objc func SELtapVideoDownloadButton() {
         if let url = url {
             delegate?.tabLocationViewDidTapVideoDownload(self, for: url)
         }

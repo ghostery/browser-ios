@@ -45,15 +45,15 @@ class NewsCellViewModel {
 		logoInfo = Variable(nil)
 	}
     
-    private class func getCustomLabelAttributes() -> [String : Any] {
+    private class func getCustomLabelAttributes() -> [NSAttributedStringKey : Any] {
         let shadow = NSShadow.init()
         shadow.shadowColor = UIColor.black
         shadow.shadowOffset = CGSize.init(width: 0.3, height: 0.3)
         shadow.shadowBlurRadius = 4.0
         
-        let customAttributes = [NSForegroundColorAttributeName: UIColor.cliqzBluePrimary,
-                                NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16),
-                                NSShadowAttributeName : shadow]
+        let customAttributes = [NSAttributedStringKey.foregroundColor: UIColor.cliqzBluePrimary,
+                                NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16),
+                                NSAttributedStringKey.shadow: shadow]
         
         return customAttributes
     }
@@ -104,11 +104,11 @@ class NewsViewCell: ClickableUITableViewCell {
 		cardView.layer.cornerRadius = 4
 		contentView.addSubview(cardView)
 		cardView.addSubview(titleLabel)
-		titleLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightMedium)
+		titleLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
 		titleLabel.textColor = self.textColor()
 		titleLabel.backgroundColor = UIColor.clear
 		cardView.addSubview(URLLabel)
-		URLLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
+		URLLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
 		URLLabel.textColor = UIColor.white
 		URLLabel.backgroundColor = UIColor.clear
 		titleLabel.numberOfLines = 2

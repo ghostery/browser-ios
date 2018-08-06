@@ -374,7 +374,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
         
         if state == .blocked || (tableType == .page && state == .restricted) {
             let str = NSMutableAttributedString(string: t.name)
-            str.addAttributes([NSStrikethroughStyleAttributeName : 1], range: NSMakeRange(0, t.name.count))
+            str.addAttributes([NSAttributedStringKey.strikethroughStyle: 1], range: NSMakeRange(0, t.name.count))
             return (nil, str)
         }
         

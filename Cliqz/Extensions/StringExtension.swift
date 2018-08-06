@@ -37,7 +37,7 @@ extension String {
     func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
         
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs = [NSFontAttributeName: font]
+        let attrs = [NSAttributedStringKey.font: font]
         let boundingRect = NSString(string: self).boundingRect(with: size,
                                                                options: NSStringDrawingOptions.usesLineFragmentOrigin,
                                                                attributes: attrs, context: nil)
