@@ -72,15 +72,8 @@ node('mac-mini-ios') {
                     sh '''#!/bin/bash -l
                         set -e
                         set -x
-                        rm -rf Carthage/*
-                        rm -rf ~/Library/Caches/org.carthage.CarthageKit
-                        CARTHAGE_VERBOSE=""
-                        if [ ! -z "$XCS_BOT_ID"  ]; then
-                            CARTHAGE_VERBOSE="--verbose"
-                        fi
-                        carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
+                        carthage bootstrap --verbose --platform ios --color auto --cache-builds
                         npm install
-                        npm run debug-channel
                         npm run build
                         pod install
                         npm run bundle
@@ -138,11 +131,6 @@ node('mac-mini-ios') {
                         kill $(ps -A | grep -m1 appium | awk '{print \$1}')
                         rm -rf *.log\
                             autobots \
-                            Cartfile.resolved \
-                            Carthage \
-                            node_modules \
-                            Podfile.lock \
-                            Pods \
                             screenshots \
                             screenshots.zip \
                             test-reports
