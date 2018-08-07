@@ -16,9 +16,9 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
         // TODO: Get a dedicated string for this.
         let title = NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "Re-using more info label from 'anonymous usage data' item for showing a 'More Info' link on the Tracking Protection settings screen.")
 
-        var attributes = [String: AnyObject]()
-        attributes[NSFontAttributeName] = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
-        attributes[NSForegroundColorAttributeName] = UIConstants.HighlightBlue
+        var attributes = [NSAttributedStringKey: AnyObject]()
+        attributes[NSAttributedStringKey.font] = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        attributes[NSAttributedStringKey.foregroundColor] = UIConstants.HighlightBlue
 
         let button = UIButton()
         button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
@@ -35,7 +35,7 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
         return footer
     }
 
-    func moreInfoTapped() {
+    @objc func moreInfoTapped() {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("tracking-protection-ios")
         navigationController?.pushViewController(viewController, animated: true)
@@ -96,7 +96,7 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
         let normalBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInNormalBrowsing)) { _ in
             ContentBlockerHelper.prefsChanged()
         }
-        let privateBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.PrivateBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInPrivateBrowsing))  { _ in
+        let privateBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.PrivateBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInPrivateBrowsing)) { _ in
             ContentBlockerHelper.prefsChanged()
         }
 
@@ -109,7 +109,7 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
                 self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
                 ContentBlockerHelper.prefsChanged()
                 self.tableView.reloadData()
-                LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue as AnyObject])
+                LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue])
                 UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockingConfig.Prefs.StrengthKey, extras: ["to": option.rawValue])
             })
         }

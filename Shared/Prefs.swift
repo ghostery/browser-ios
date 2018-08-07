@@ -31,7 +31,10 @@ public struct PrefsKeys {
     public static let KeyCustomSyncOauth = "customSyncOauthServer"
     public static let KeyCustomSyncAuth = "customSyncAuthServer"
     public static let KeyCustomSyncWeb = "customSyncWebServer"
-    
+    public static let UseStageServer = "useStageSyncService"
+
+    public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
+    public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
 }
 
 public struct PrefsDefaults {

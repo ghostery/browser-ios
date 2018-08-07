@@ -207,7 +207,7 @@ class FreshtabViewController: UIViewController, HomePanel {
 		
 	}
     
-    func dismissKeyboard(_ sender: Any? = nil) {
+    @objc func dismissKeyboard(_ sender: Any? = nil) {
         view.window?.rootViewController?.view.endEditing(true)
     }
 }

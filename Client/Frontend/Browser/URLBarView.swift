@@ -5,12 +5,12 @@
 import Shared
 import SnapKit
 
-/* Cliqz
+/* Cliqz: removed private modifier
 private struct URLBarViewUX {
- */
+*/
 struct URLBarViewUX {
-    static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
-    static let TextFieldActiveBorderColor = UIColor(rgb: 0xB0D5FB)
+    static let TextFieldBorderColor = UIColor.Photon.Grey40
+    static let TextFieldActiveBorderColor = UIColor.Defaults.PaleBlue
 
     static let LocationLeftPadding: CGFloat = 8
     static let Padding: CGFloat = 10
@@ -52,14 +52,14 @@ protocol URLBarDelegate: class {
 
 class URLBarView: UIView {
     // Additional UIAppearance-configurable properties
-    dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
+    @objc dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
         didSet {
             if !inOverlayMode {
                 locationContainer.layer.borderColor = locationBorderColor.cgColor
             }
         }
     }
-    dynamic var locationActiveBorderColor: UIColor = URLBarViewUX.TextFieldActiveBorderColor {
+    @objc dynamic var locationActiveBorderColor: UIColor = URLBarViewUX.TextFieldActiveBorderColor {
         didSet {
             if inOverlayMode {
                 locationContainer.layer.borderColor = locationActiveBorderColor.cgColor
@@ -145,7 +145,7 @@ class URLBarView: UIView {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
-        cancelButton.addTarget(self, action: #selector(SELdidClickCancel), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
     }()
@@ -159,8 +159,8 @@ class URLBarView: UIView {
         button.accessibilityIdentifier = "urlBar-scanQRCode"
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
-        button.setContentHuggingPriority(1000, for: .horizontal)
-        button.setContentCompressionResistancePriority(1000, for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         return button
     }()
     
@@ -169,7 +169,7 @@ class URLBarView: UIView {
     */
     lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(SELtappedScrollToTopArea), for: .touchUpInside)
+        button.addTarget(self, action: #selector(tappedScrollToTopArea), for: .touchUpInside)
         return button
     }()
 
@@ -336,7 +336,7 @@ class URLBarView: UIView {
 
     }
     
-    func showQRScanner() {
+    @objc func showQRScanner() {
         self.delegate?.urlBarDidPressQRButton(self)
     }
 
@@ -526,7 +526,7 @@ class URLBarView: UIView {
             removeLocationTextField()
         }
 
-        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: { _ in
+        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: {
             self.transitionToOverlay(cancel)
             self.setNeedsUpdateConstraints()
             self.layoutIfNeeded()
@@ -535,15 +535,15 @@ class URLBarView: UIView {
         })
     }
 
-    func SELdidClickAddTab() {
+    func didClickAddTab() {
         delegate?.urlBarDidPressTabs(self)
     }
 
-    func SELdidClickCancel() {
+    @objc func didClickCancel() {
         leaveOverlayMode(didCancel: true)
     }
 
-    func SELtappedScrollToTopArea() {
+    @objc func tappedScrollToTopArea() {
         delegate?.urlBarDidPressScrollToTop(self)
     }
     
@@ -630,8 +630,10 @@ extension URLBarView: TabLocationViewDelegate {
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
     }
-    
+    /* Cliqz: convert the method to objc that we can override it in the CliqzURLBar subclass
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
+    */
+    @objc func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
         delegate?.urlBarDidPressPageOptions(self, from: tabLocationView.pageOptionsButton)
     }
     
@@ -664,6 +666,9 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
+        // Cliqz: update current query
+        updateCurrentQuery(autocompleteTextField, text)
+        
         delegate?.urlBar(self, didEnterText: text)
     }
 
@@ -672,6 +677,9 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        // Cliqz: update current query
+        updateCurrentQuery(autocompleteTextField, "")
+        
         delegate?.urlBar(self, didEnterText: "")
         return true
     }
@@ -679,17 +687,18 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField) {
         leaveOverlayMode(didCancel: true)
     }
+    
 }
 
 // MARK: UIAppearance
 extension URLBarView {
 
-    dynamic var cancelTintColor: UIColor? {
+    @objc dynamic var cancelTintColor: UIColor? {
         get { return cancelButton.tintColor }
         set { return cancelButton.tintColor = newValue }
     }
     
-    dynamic var showQRButtonTintColor: UIColor? {
+    @objc dynamic var showQRButtonTintColor: UIColor? {
         get { return showQRScannerButton.tintColor }
         set { return showQRScannerButton.tintColor = newValue }
     }
@@ -763,7 +772,7 @@ class TabLocationContainerView: UIView {
 
 class ToolbarTextField: AutocompleteTextField {
 
-    dynamic var clearButtonTintColor: UIColor? {
+    @objc dynamic var clearButtonTintColor: UIColor? {
         didSet {
             // Clear previous tinted image that's cache and ask for a relayout
             tintedClearImage = nil

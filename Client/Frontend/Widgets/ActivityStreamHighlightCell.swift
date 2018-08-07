@@ -7,7 +7,7 @@ import Shared
 import Storage
 
 private struct ActivityStreamHighlightCellUX {
-    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x353535)
+    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey70
     static let BorderWidth: CGFloat = 0.5
     static let CellSideOffset = 20
     static let TitleLabelOffset = 2
@@ -15,10 +15,10 @@ private struct ActivityStreamHighlightCellUX {
     static let SiteImageViewSize = CGSize(width: 99, height: UIDevice.current.userInterfaceIdiom == .pad ? 120 : 90)
     static let StatusIconSize = 12
     static let FaviconSize = CGSize(width: 45, height: 45)
-    static let DescriptionLabelColor = UIColor(rgb: 0x919191) // Not found in Photon colors
+    static let DescriptionLabelColor = UIColor.Photon.Grey50
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
-    static let BorderColor = UIColor(white: 0, alpha: 0.1)
+    static let BorderColor = UIColor.Photon.Grey30
 }
 
 class ActivityStreamHighlightCell: UICollectionViewCell {
@@ -47,7 +47,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
-        descriptionLabel.setContentCompressionResistancePriority(1000, for: .vertical)
+        descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return descriptionLabel
     }()
 
@@ -78,6 +78,18 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         return selectedOverlay
     }()
 
+    fileprivate lazy var playLabel: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage.templateImageNamed("play")
+        view.tintColor = .white
+        view.alpha = 0.97
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.3
+        view.layer.shadowRadius = 2
+        view.isHidden = true
+        return view
+    }()
+
     override var isSelected: Bool {
         didSet {
             self.selectedOverlay.isHidden = !isSelected
@@ -98,6 +110,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(statusIcon)
         contentView.addSubview(domainLabel)
+        contentView.addSubview(playLabel)
 
         siteImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView)
@@ -132,6 +145,10 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
             make.centerY.equalTo(descriptionLabel.snp.centerY)
             make.leading.equalTo(siteImageView)
         }
+
+        playLabel.snp.makeConstraints { make in
+            make.center.equalTo(siteImageView.snp.center)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -143,6 +160,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         self.siteImageView.image = nil
         contentView.backgroundColor = UIColor.clear
         siteImageView.backgroundColor = UIColor.clear
+        playLabel.isHidden = true
     }
 
     func configureWithSite(_ site: Site) {
@@ -183,6 +201,11 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         self.descriptionLabel.text = Strings.PocketTrendingText
         self.statusIcon.image = UIImage(named: "context_pocket")
     }
+
+    func configureWithPocketVideoStory(_ pocketStory: PocketStory) {
+        playLabel.isHidden = false
+        self.configureWithPocketStory(pocketStory)
+    }
 }
 
 private struct HighlightIntroCellUX {
@@ -205,7 +228,7 @@ class HighlightIntroCell: UICollectionViewCell {
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
-        label.textColor = UIColor.darkGray
+        label.textColor = UIColor.Photon.Grey60
         label.numberOfLines = 0
         return label
     }()

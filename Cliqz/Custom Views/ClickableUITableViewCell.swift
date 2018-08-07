@@ -42,7 +42,7 @@ class ClickableUITableViewCell: UITableViewCell {
         clickedElement = "cell"
     }
     
-    func cellPressed(_ gestureRecognizer: UIGestureRecognizer) {
+    @objc func cellPressed(_ gestureRecognizer: UIGestureRecognizer) {
         
     }
 }

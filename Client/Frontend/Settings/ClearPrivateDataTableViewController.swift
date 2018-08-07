@@ -39,6 +39,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             items.append((TrackingProtectionClearable(), true))
         }
         */
+        items.append((DownloadedFilesClearable(), false)) // Don't clear downloaded files by default
         return items
     }()
 
@@ -54,7 +55,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
     fileprivate var clearButtonEnabled = true {
         didSet {
-            clearButton?.textLabel?.textColor = clearButtonEnabled ? UIConstants.DestructiveRed : UIColor.lightGray
+            clearButton?.textLabel?.textColor = clearButtonEnabled ? UIConstants.DestructiveRed : UIColor.Photon.Grey40
         }
     }
 
@@ -124,7 +125,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             let toggles = self.toggles
             self.clearables
                 .enumerated()
-                .flatMap { (i, pair) in
+                .compactMap { (i, pair) in
                     guard toggles[i] else {
                         return nil
                     }

@@ -10,11 +10,11 @@ import UIKit
 
 extension TabTrayController {
 
-    func didTapDone() {
+    @objc func didTapDone() {
         _ = self.navigationController?.popViewController(animated: true)
     }
     
-    func SELlongPressDoneButton(_ recognizer: UILongPressGestureRecognizer) {
+    @objc func SELlongPressDoneButton(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             self.didTapDelete(self.toolbar.doneButton)
         }

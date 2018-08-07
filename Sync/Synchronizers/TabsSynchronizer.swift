@@ -37,7 +37,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
         let tabsJSON = JSON([
             "id": guid,
             "clientName": self.scratchpad.clientName,
-            "tabs": tabs.flatMap { $0.toDictionary() }
+            "tabs": tabs.compactMap { $0.toDictionary() }
         ])
         if Logger.logPII {
             log.verbose("Sending tabs JSON \(tabsJSON.stringValue() ?? "nil")")
@@ -192,7 +192,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
 
 extension RemoteTab {
     public func toDictionary() -> Dictionary<String, Any>? {
-        let tabHistory = history.flatMap { $0.absoluteString }
+        let tabHistory = history.compactMap { $0.absoluteString }
         if tabHistory.isEmpty {
             return nil
         }

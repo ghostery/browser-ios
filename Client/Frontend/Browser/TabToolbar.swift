@@ -38,7 +38,7 @@ protocol TabToolbarDelegate: class {
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
-@objc
+@objcMembers
 open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
 
@@ -160,7 +160,7 @@ class ToolbarButton: UIButton {
         adjustsImageWhenHighlighted = false
         selectedTintColor = tintColor
         unselectedTintColor = tintColor
-        disabledTintColor = UIColor.gray
+        disabledTintColor = UIColor.Photon.Grey50
         imageView?.contentMode = .scaleAspectFit
     }
 

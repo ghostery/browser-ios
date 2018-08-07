@@ -20,6 +20,14 @@ extension URLBarDelegate {
 
 }
 
+extension URLBarView {
+    func updateCurrentQuery(_ autocompleteTextField: AutocompleteTextField, _ text: String) {
+        if let view = autocompleteTextField.inputAccessoryView as? KeyboardAccessoryView {
+            view.updateCurrentQuery(text)
+        }
+    }
+}
+
 class CliqzURLBar: URLBarView {
 
     struct UXOverrides {
@@ -49,7 +57,7 @@ class CliqzURLBar: URLBarView {
         cancelButton.setTitleColor(.white, for: .normal)
         cancelButton.setTitleColor(UIColor.cliqzBlueTwoSecondary, for: UIControlState.highlighted)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
-        cancelButton.addTarget(self, action: #selector(SELdidClickCancel), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
     }()
@@ -274,20 +282,6 @@ class CliqzURLBar: URLBarView {
         locationTextField?.inputAccessoryView = keyboardAccessoryView
     }
     
-    override func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
-        if let view = autocompleteTextField.inputAccessoryView as? KeyboardAccessoryView {
-            view.updateCurrentQuery(text)
-        }
-        super.autocompleteTextField(autocompleteTextField, didEnterText: text)
-    }
-    
-    override func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-        if let view = autocompleteTextField.inputAccessoryView as? KeyboardAccessoryView {
-            view.updateCurrentQuery("")
-        }
-        return super.autocompleteTextFieldShouldClear(autocompleteTextField)
-    }
-
     override func didApplyTheme(_ theme: Theme) {
         ghosteryButton.applyTheme(theme)
     }

@@ -40,7 +40,7 @@ class OrientationManager {
 
 extension BrowserViewController {
     
-    func ghosteryButtonPressed(notification: Notification) {
+    @objc func ghosteryButtonPressed(notification: Notification) {
         
         if let cc = self.childViewControllers.last,
             let _ = cc as? ControlCenterViewController {
@@ -138,7 +138,7 @@ extension BrowserViewController {
                 self?.tabManager.selectedTab?.reload()
             }
         }
-        self.show(buttonToast: toast)
+        self.show(toast: toast)
         
         if let toast = self.webViewContainer.subviews.first(where: { (view) -> Bool in
             return view.tag == 101

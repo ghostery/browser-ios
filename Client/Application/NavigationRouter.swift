@@ -60,6 +60,7 @@ enum NavigationPath {
     case url(webURL: URL?, isPrivate: Bool)
     case fxa(params: FxALaunchParams)
     case deepLink(DeepLink)
+    case text(String)
     
     init?(url: URL) {
         let urlString = url.absoluteString
@@ -85,6 +86,9 @@ enum NavigationPath {
             let url = components.valueForQuery("url")?.asURL
             let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? false
             self = .url(webURL: url, isPrivate: isPrivate)
+        } else if urlString.starts(with: "\(scheme)://open-text") {
+            let text = components.valueForQuery("text")
+            self = .text(text ?? "")
         } else {
             return nil
         }
@@ -95,6 +99,7 @@ enum NavigationPath {
         case .fxa(let params): NavigationPath.handleFxA(params: params, with: bvc)
         case .deepLink(let link): NavigationPath.handleDeepLink(link, with: bvc)
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
+        case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         }
     }
 
@@ -115,9 +120,7 @@ enum NavigationPath {
     }
     
     private static func handleFxA(params: FxALaunchParams, with bvc: BrowserViewController) {
-        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
-            bvc.presentSignInViewController(params)
-        }
+        bvc.presentSignInViewController(params)
     }
     
     private static func handleHomePanel(panel: HomePanelPath, with bvc: BrowserViewController) {
@@ -135,7 +138,12 @@ enum NavigationPath {
         } else {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension" as AnyObject])
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension"])
+    }
+
+    private static func handleText(text: String, with bvc: BrowserViewController) {
+        bvc.openBlankNewTab(focusLocationField: false)
+        bvc.urlBar(bvc.urlBar, didSubmitText: text)
     }
     
     private static func handleSettings(settings: SettingsPage, with rootNav: UINavigationController, baseSettingsVC: AppSettingsTableViewController, and bvc: BrowserViewController) {

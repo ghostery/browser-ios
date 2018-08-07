@@ -12,6 +12,7 @@ private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
 private let PocketGlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
 private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in milliseconds
 private let SupportedLocales = ["en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
+public let PocketVideoFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-video-recs"
 
 /*s
  The Pocket class is used to fetch stories from the Pocked API.
@@ -28,7 +29,7 @@ struct PocketStory {
     let dedupeURL: URL
 
     static func parseJSON(list: Array<[String: Any]>) -> [PocketStory] {
-        return list.flatMap({ (storyDict) -> PocketStory? in
+        return list.compactMap({ (storyDict) -> PocketStory? in
             guard let urlS = storyDict["url"] as? String, let domain = storyDict["domain"] as? String,
                 let dedupe_URL = storyDict["dedupe_url"] as? String,
                 let imageURLS = storyDict["image_src"] as? String,

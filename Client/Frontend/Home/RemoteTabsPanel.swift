@@ -15,15 +15,15 @@ private let log = Logger.browserLogger
 private struct RemoteTabsPanelUX {
     static let HeaderHeight = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
     static let RowHeight = SiteTableViewControllerUX.RowHeight
-    static let HeaderBackgroundColor = UIColor.Defaults.Grey10
+    static let HeaderBackgroundColor = UIColor.Photon.Grey10
 
-    static let EmptyStateTitleTextColor = UIColor.darkGray
+    static let EmptyStateTitleTextColor = UIColor.Photon.Grey60
 
-    static let EmptyStateInstructionsTextColor = UIColor.gray
+    static let EmptyStateInstructionsTextColor = UIColor.Photon.Grey50
     static let EmptyStateInstructionsWidth = 170
     static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
-    static let EmptyStateSignInButtonColor = UIColor(red: 0.3, green: 0.62, blue: 1, alpha: 1)
-    static let EmptyStateSignInButtonTitleColor = UIColor.white
+    static let EmptyStateSignInButtonColor = UIColor.Photon.Green60
+    static let EmptyStateSignInButtonTitleColor = UIColor.Photon.White100
     static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
     static let EmptyStateSignInButtonHeight = 44
     static let EmptyStateSignInButtonWidth = 200
@@ -89,7 +89,7 @@ class RemoteTabsPanel: UIViewController, HomePanel {
         tableViewController.didMove(toParentViewController: self)
     }
 
-    func notificationReceived(_ notification: Notification) {
+    @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
             DispatchQueue.main.async {
@@ -382,12 +382,12 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
-        signInButton.addTarget(self, action: #selector(SELsignIn), for: .touchUpInside)
+        signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         contentView.addSubview(signInButton)
 
         createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), for: [])
         createAnAccountButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
-        createAnAccountButton.addTarget(self, action: #selector(SELcreateAnAccount), for: .touchUpInside)
+        createAnAccountButton.addTarget(self, action: #selector(createAnAccount), for: .touchUpInside)
         contentView.addSubview(createAnAccountButton)
 
         imageView.snp.makeConstraints { (make) -> Void in
@@ -415,13 +415,13 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc fileprivate func SELsignIn() {
+    @objc fileprivate func signIn() {
         if let homePanel = self.homePanel {
             homePanel.homePanelDelegate?.homePanelDidRequestToSignIn(homePanel)
         }
     }
 
-    @objc fileprivate func SELcreateAnAccount() {
+    @objc fileprivate func createAnAccount() {
         if let homePanel = self.homePanel {
             homePanel.homePanelDelegate?.homePanelDidRequestToCreateAccount(homePanel)
         }

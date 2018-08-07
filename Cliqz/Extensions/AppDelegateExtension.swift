@@ -29,7 +29,7 @@ extension AppDelegate {
         navigationBarAppearace.barTintColor = UIColor.cliqzBluePrimary
         navigationBarAppearace.isTranslucent = false
         navigationBarAppearace.tintColor = UIColor.white
-        navigationBarAppearace.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
+        navigationBarAppearace.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
     }
 
 }

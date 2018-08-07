@@ -6,6 +6,9 @@ import Foundation
 import WebKit
 import Storage
 import Shared
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 protocol TabManagerDelegate: class {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?)
@@ -68,6 +71,9 @@ class TabManager: NSObject {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
+        // We do this to go against the configuration of the <meta name="viewport">
+        // tag to behave the same way as Safari :-(
+        configuration.ignoresViewportScaleLimits = true
         return configuration
     }()
 
@@ -76,6 +82,9 @@ class TabManager: NSObject {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
+        // We do this to go against the configuration of the <meta name="viewport">
+        // tag to behave the same way as Safari :-(
+        configuration.ignoresViewportScaleLimits = true
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         return configuration
     }()
@@ -193,6 +202,7 @@ class TabManager: NSObject {
 
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
+        selectedTab?.lastExecutedTime = Date.now()
 
         delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous) }
         if let tab = previous {
@@ -200,6 +210,7 @@ class TabManager: NSObject {
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
+            UITextField.appearance().keyboardAppearance = tab.isPrivate ? .dark : .light
         }
     }
 
@@ -416,7 +427,8 @@ class TabManager: NSObject {
             // If it wasn't the selected tab we removed, then keep it like that.
             // It might have changed index, so we look it up again.
             _selectedIndex = tabs.index(of: oldTab) ?? -1
-        } else if let newTab = viableTabs.reduce(viableTabs.first, { currentBestTab, tab2 in
+        } else if let parentTab = tab.parent,
+            let newTab = viableTabs.reduce(viableTabs.first, { currentBestTab, tab2 in
             if let tab1 = currentBestTab, let time1 = tab1.lastExecutedTime {
                 if let time2 = tab2.lastExecutedTime {
                     return time1 <= time2 ? tab2 : tab1
@@ -425,8 +437,8 @@ class TabManager: NSObject {
             } else {
                 return tab2
             }
-        }), tab !== newTab, newTab.lastExecutedTime != nil {
-            // Next we look for the most recently loaded one. It might not exist, of course.
+        }), parentTab == newTab, tab !== newTab, newTab.lastExecutedTime != nil {
+            // We select the most recently visited tab, only if it is also the parent tab of the closed tab.
             _selectedIndex = tabs.index(of: newTab) ?? -1
         } else {
             // By now, we've just removed the selected one, and no previously loaded
@@ -588,7 +600,7 @@ class TabManager: NSObject {
         preserveTabs()
     }
 
-    func prefsDidChange() {
+    @objc func prefsDidChange() {
         DispatchQueue.main.async {
             let allowPopups = !(self.prefs.boolForKey("blockPopups") ?? true)
             // Each tab may have its own configuration, so we should tell each of them in turn.
@@ -687,11 +699,41 @@ class SavedTab: NSObject, NSCoding {
 extension TabManager {
 
     static fileprivate func tabsStateArchivePath() -> String {
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        return URL(fileURLWithPath: documentsPath).appendingPathComponent("tabsState.archive").path
+        guard let profilePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path else {
+            let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            return URL(fileURLWithPath: documentsPath).appendingPathComponent("tabsState.archive").path
+        }
+
+        return URL(fileURLWithPath: profilePath).appendingPathComponent("tabsState.archive").path
+    }
+
+    static fileprivate func migrateTabsStateArchive() {
+        guard let oldPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("tabsState.archive").path, FileManager.default.fileExists(atPath: oldPath) else {
+            return
+        }
+
+        log.info("Migrating tabsState.archive from ~/Documents to shared container")
+
+        guard let profilePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path else {
+            log.error("Unable to get profile path in shared container to move tabsState.archive")
+            return
+        }
+
+        let newPath = URL(fileURLWithPath: profilePath).appendingPathComponent("tabsState.archive").path
+
+        do {
+            try FileManager.default.createDirectory(atPath: profilePath, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.moveItem(atPath: oldPath, toPath: newPath)
+
+            log.info("Migrated tabsState.archive to shared container successfully")
+        } catch let error as NSError {
+            log.error("Unable to move tabsState.archive to shared container: \(error.localizedDescription)")
+        }
     }
 
     static func tabArchiveData() -> Data? {
+        migrateTabsStateArchive()
+
         let tabStateArchivePath = tabsStateArchivePath()
         if FileManager.default.fileExists(atPath: tabStateArchivePath) {
             return (try? Data(contentsOf: URL(fileURLWithPath: tabStateArchivePath)))

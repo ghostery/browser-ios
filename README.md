@@ -6,9 +6,9 @@ This branch (master)
 
 This branch is for mainline development.
 
-This branch only works with Xcode 9.2 and supports iOS 10, and 11.
+This branch only works with Xcode 9.3 and supports iOS 10, and 11.
 
-This branch is written in Swift 3.2.
+This branch is written in Swift 4
 
 Please make sure you aim your pull requests in the right direction.
 
@@ -22,7 +22,7 @@ We encourage you to participate in this open source project. We love Pull Reques
 Building the code
 -----------------
 
-> __As of Sept. 16, 2016, this project requires Xcode 8.__
+> __As of April 2018, this project requires Xcode 9.3.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install Carthage

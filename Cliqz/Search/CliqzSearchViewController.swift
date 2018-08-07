@@ -231,7 +231,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
     }
     
     //MARK: - Search Engine
-    func searchEngineChanged(_ notification: Notification) {
+    @objc func searchEngineChanged(_ notification: Notification) {
         self.updateExtensionSearchEngine()
     }
     
@@ -311,7 +311,7 @@ extension CliqzSearchViewController {
 
 //MARK: - Util
 extension CliqzSearchViewController {
-    func showOpenSettingsAlert(_ notification: Notification) {
+    @objc func showOpenSettingsAlert(_ notification: Notification) {
         var message: String!
         var settingsAction: UIAlertAction!
         

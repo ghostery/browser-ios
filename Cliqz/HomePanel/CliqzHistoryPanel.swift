@@ -37,7 +37,7 @@ class CliqzHistoryPanel: HistoryPanel {
         tableView.register(CliqzSiteTableViewCell.self, forCellReuseIdentifier: "CliqzCellIdentifier")
     }
     
-    override func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         var count = 0
         for category in self.categories where category.rows > 0 {
             count += 1
@@ -111,7 +111,7 @@ class CliqzHistoryPanel: HistoryPanel {
         return configureSite(cell, for: indexPath)
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let site = self.siteForIndexPath(indexPath), let url = URL(string: site.url) {
             let visitType = VisitType.typed    // Means History, too.
             if let homePanelDelegate = homePanelDelegate {
@@ -151,7 +151,7 @@ class CliqzHistoryPanel: HistoryPanel {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAtIndexPath indexPath: IndexPath) -> [AnyObject]? {
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let title = NSLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
         
         let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in

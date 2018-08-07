@@ -13,11 +13,11 @@ protocol FindInPageBarDelegate: class {
 
 private struct FindInPageUX {
     static let ButtonColor = UIColor.black
-    static let MatchCountColor = UIColor.lightGray
+    static let MatchCountColor = UIColor.Photon.Grey40
     static let MatchCountFont = UIConstants.DefaultChromeFont
-    static let SearchTextColor = UIColor(rgb: 0xe66000)
+    static let SearchTextColor = UIColor.Photon.Orange60
     static let SearchTextFont = UIConstants.DefaultChromeFont
-    static let TopBorderColor = UIColor(rgb: 0xEEEEEE)
+    static let TopBorderColor = UIColor.Photon.Grey20
 }
 
 class FindInPageBar: UIView {
@@ -56,7 +56,7 @@ class FindInPageBar: UIView {
 
         set {
             searchText.text = newValue
-            SELdidTextChange(searchText)
+            didTextChange(searchText)
         }
     }
 
@@ -65,7 +65,7 @@ class FindInPageBar: UIView {
 
         backgroundColor = .white
 
-        searchText.addTarget(self, action: #selector(SELdidTextChange), for: .editingChanged)
+        searchText.addTarget(self, action: #selector(didTextChange), for: .editingChanged)
         searchText.textColor = FindInPageUX.SearchTextColor
         searchText.font = FindInPageUX.SearchTextFont
         searchText.autocapitalizationType = .none
@@ -86,14 +86,14 @@ class FindInPageBar: UIView {
         previousButton.setImage(UIImage(named: "find_previous"), for: [])
         previousButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
         previousButton.accessibilityLabel = NSLocalizedString("Previous in-page result", tableName: "FindInPage", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
-        previousButton.addTarget(self, action: #selector(SELdidFindPrevious), for: .touchUpInside)
+        previousButton.addTarget(self, action: #selector(didFindPrevious), for: .touchUpInside)
         previousButton.accessibilityIdentifier = "FindInPage.find_previous"
         addSubview(previousButton)
 
         nextButton.setImage(UIImage(named: "find_next"), for: [])
         nextButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
         nextButton.accessibilityLabel = NSLocalizedString("Next in-page result", tableName: "FindInPage", comment: "Accessibility label for next result button in Find in Page Toolbar.")
-        nextButton.addTarget(self, action: #selector(SELdidFindNext), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(didFindNext), for: .touchUpInside)
         nextButton.accessibilityIdentifier = "FindInPage.find_next"
         addSubview(nextButton)
 
@@ -101,7 +101,7 @@ class FindInPageBar: UIView {
         closeButton.setImage(UIImage(named: "find_close"), for: [])
         closeButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
         closeButton.accessibilityLabel = NSLocalizedString("Done", tableName: "FindInPage", comment: "Done button in Find in Page Toolbar.")
-        closeButton.addTarget(self, action: #selector(SELdidPressClose), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(didPressClose), for: .touchUpInside)
         closeButton.accessibilityIdentifier = "FindInPage.close"
         addSubview(closeButton)
 
@@ -112,15 +112,15 @@ class FindInPageBar: UIView {
         searchText.snp.makeConstraints { make in
             make.leading.top.bottom.equalTo(self).inset(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0))
         }
-        searchText.setContentHuggingPriority(UILayoutPriorityDefaultLow, for: .horizontal)
-        searchText.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, for: .horizontal)
+        searchText.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        searchText.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
         matchCountView.snp.makeConstraints { make in
             make.leading.equalTo(searchText.snp.trailing)
             make.centerY.equalTo(self)
         }
-        matchCountView.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .horizontal)
-        matchCountView.setContentCompressionResistancePriority(UILayoutPriorityDefaultHigh, for: .horizontal)
+        matchCountView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        matchCountView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
 
         previousButton.snp.makeConstraints { make in
             make.leading.equalTo(matchCountView.snp.trailing)
@@ -155,20 +155,20 @@ class FindInPageBar: UIView {
         return super.becomeFirstResponder()
     }
 
-    @objc fileprivate func SELdidFindPrevious(_ sender: UIButton) {
+    @objc fileprivate func didFindPrevious(_ sender: UIButton) {
         delegate?.findInPage(self, didFindPreviousWithText: searchText.text ?? "")
     }
 
-    @objc fileprivate func SELdidFindNext(_ sender: UIButton) {
+    @objc fileprivate func didFindNext(_ sender: UIButton) {
         delegate?.findInPage(self, didFindNextWithText: searchText.text ?? "")
     }
 
-    @objc fileprivate func SELdidTextChange(_ sender: UITextField) {
+    @objc fileprivate func didTextChange(_ sender: UITextField) {
         matchCountView.isHidden = searchText.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
         delegate?.findInPage(self, didTextChange: searchText.text ?? "")
     }
 
-    @objc fileprivate func SELdidPressClose(_ sender: UIButton) {
+    @objc fileprivate func didPressClose(_ sender: UIButton) {
         delegate?.findInPageDidPressClose(self)
     }
 }

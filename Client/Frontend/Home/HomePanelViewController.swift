@@ -10,10 +10,8 @@ import Storage
 private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 40
-    static let ButtonContainerBorderColor = UIColor.black.withAlphaComponent(0.1)
+    static let ButtonContainerBorderColor = UIColor.Photon.Grey30
     static let BackgroundColorPrivateMode = UIConstants.PrivateModeAssistantToolbarBackgroundColor
-    static let ToolbarButtonDeselectedColorNormalMode = UIColor(white: 0.2, alpha: 0.5)
-    static let ToolbarButtonDeselectedColorPrivateMode = UIColor(white: 0.9, alpha: 1)
     static let ButtonHighlightLineHeight: CGFloat = 2
     static let ButtonSelectionAnimationDuration = 0.2
 }
@@ -51,6 +49,7 @@ enum HomePanelType: Int {
     case bookmarks = 1
     case history = 2
     case readingList = 3
+    case downloads = 4
 
     var localhostURL: URL {
         return URL(string: "#panel=\(self.rawValue)", relativeTo: UIConstants.AboutHomePage as URL)!
@@ -124,7 +123,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
     }
 
-    func dismissKeyboard(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func dismissKeyboard(_ gestureRecognizer: UITapGestureRecognizer) {
         view.window?.rootViewController?.view.endEditing(true)
     }
 
@@ -201,12 +200,14 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         panel.didMove(toParentViewController: self)
     }
 
-    func tappedButton(_ sender: UIButton!) {
+    @objc func tappedButton(_ sender: UIButton!) {
         for (index, button) in buttons.enumerated() where button == sender {
             selectedPanel = HomePanelType(rawValue: index)
             delegate?.homePanelViewController(self, didSelectPanel: index)
             if selectedPanel == .bookmarks {
                 UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .bookmarksPanel, value: .homePanelTabButton)
+            } else if selectedPanel == .downloads {
+                UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .homePanelTabButton)
             }
             break
         }
@@ -244,7 +245,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         // Calling this before makes sure that only the highlightline animates and not the homepanels
         self.view.setNeedsUpdateConstraints()
         self.view.layoutIfNeeded()
-        UIView.animate(withDuration: HomePanelViewControllerUX.ButtonSelectionAnimationDuration, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: { _ in
+        UIView.animate(withDuration: HomePanelViewControllerUX.ButtonSelectionAnimationDuration, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: {
             self.highlightLine.snp.remakeConstraints { make in
                 make.leading.equalTo(button.snp.leading)
                 make.trailing.equalTo(button.snp.trailing)

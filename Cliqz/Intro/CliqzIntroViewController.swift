@@ -22,7 +22,7 @@ class CliqzIntroViewController: UIViewController {
         button.layer.cornerRadius = 23.0
         button.setTitle(Strings.StartBrowsingButtonTitle, for: UIControlState())
         button.setTitleColor(.white, for: UIControlState())
-        button.addTarget(self, action: #selector(IntroViewController.startBrowsing), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(startBrowsing), for: UIControlEvents.touchUpInside)
         button.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
         button.isHidden = true
         return button
@@ -68,10 +68,6 @@ class CliqzIntroViewController: UIViewController {
     fileprivate var imagesBackgroundView = UIView()
     
     override func viewDidLoad() {
-        if AppConstants.MOZ_LP_INTRO {
-            syncViaLP()
-        }
-
         assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
         view.backgroundColor = UIColor.white
 
@@ -108,47 +104,6 @@ class CliqzIntroViewController: UIViewController {
 
         createSlides()
         pageControl.addTarget(self, action: #selector(changePage), for: .valueChanged)
-    }
-    
-    func syncViaLP() {
-        /* Cliqz: comment references to LeanPlumClient
-         let startTime = Date.now()
-         LeanPlumClient.shared.introScreenVars?.onValueChanged({ [weak self] in
-         guard let newIntro = LeanPlumClient.shared.introScreenVars?.object(forKey: nil) as? [[String: Any]] else {
-         return
-         }
-         let decoder = JSONDecoder()
-         let newCards = newIntro.flatMap { (obj) -> IntroCard? in
-         guard let object = try? JSONSerialization.data(withJSONObject: obj, options: []) else {
-         return nil
-         }
-         let card = try? decoder.decode(IntroCard.self, from: object)
-         // Make sure the selector actually goes somewhere. Otherwise dont show that slide
-         if let selectorString = card?.buttonSelector, let wself = self {
-         return wself.responds(to: NSSelectorFromString(selectorString)) ? card : nil
-         } else {
-         return card
-         }
-         }
-         
-         guard newCards != IntroCard.defaultCards(), newCards.count > 1 else {
-         return
-         }
-         
-         // We need to still be on the first page otherwise the content will change underneath the user's finger
-         // We also need to let LP know this happened so we can track when a A/B test was not run
-         guard self?.pageControl.currentPage == 0 else {
-         let totalTime = Date.now() - startTime
-         LeanPlumClient.shared.track(event: .onboardingTestLoadedTooSlow, withParameters: ["Total time": "\(totalTime) ms" as AnyObject])
-         return
-         }
-         
-         self?.cards = newCards
-         self?.createSlides()
-         self?.viewDidLayoutSubviews()
-         
-         })
-         */
     }
     
     override func viewDidLayoutSubviews() {
@@ -205,17 +160,15 @@ class CliqzIntroViewController: UIViewController {
         return cardView
     }
     
-    func startBrowsing() {
+    @objc func startBrowsing() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
-        LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
     }
     
     func login() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: true)
-        LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
     }
     
-    func changePage() {
+    @objc func changePage() {
         let swipeCoordinate = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
         scrollView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: true)
     }
@@ -225,7 +178,7 @@ class CliqzIntroViewController: UIViewController {
             return
         }
         
-        UIView.animate(withDuration: IntroUX.FadeDuration, animations: { _ in
+        UIView.animate(withDuration: IntroUX.FadeDuration, animations: {
             self.cardViews.forEach { $0.alpha = 0.0 }
             introView.alpha = 1.0
             self.pageControl.currentPage = page
@@ -268,7 +221,7 @@ extension CliqzIntroViewController {
 extension CliqzIntroViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged(_:)), name: .DynamicFontChanged, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -276,7 +229,7 @@ extension CliqzIntroViewController {
         NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
     }
     
-    func dynamicFontChanged(_ notification: Notification) {
+    @objc func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
         setupDynamicFonts()
     }
@@ -346,7 +299,7 @@ class CliqzCardView: UIView {
         titleLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         titleLabel.textAlignment = .center
         titleLabel.textColor = UIColor.cliqzBluePrimary
-        titleLabel.setContentHuggingPriority(1000, for: .vertical)
+        titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return titleLabel
     }()
     
@@ -358,7 +311,7 @@ class CliqzCardView: UIView {
         textLabel.textAlignment = .center
         textLabel.textColor = UIColor.cliqzBluePrimary
         textLabel.lineBreakMode = .byTruncatingTail
-        textLabel.setContentHuggingPriority(1000, for: .vertical)
+        textLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return textLabel
     }()
     

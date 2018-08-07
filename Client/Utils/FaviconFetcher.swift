@@ -71,7 +71,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
         var oldIcons: [Favicon] = oldIcons
 
-        queue.async { _ in
+        queue.async {
             self.parseHTMLForFavicons(url).bind({ (result: Maybe<[Favicon]>) -> Deferred<[Maybe<Favicon>]> in
                 var deferreds = [Deferred<Maybe<Favicon>>]()
                 if let icons = result.successValue {
@@ -102,7 +102,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     lazy fileprivate var alamofire: SessionManager = {
         let configuration = URLSessionConfiguration.default
         var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = userAgent
+        defaultHeaders["User-Agent"] = FaviconFetcher.userAgent
         configuration.httpAdditionalHeaders = defaultHeaders
         configuration.timeoutIntervalForRequest = 5
         return SessionManager(configuration: configuration)
@@ -244,11 +244,11 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         }
 
         var faviconImage = UIImage()
-        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize))
+        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         faviconLabel.text = faviconLetter
         faviconLabel.textAlignment = .center
-        faviconLabel.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightMedium)
-        faviconLabel.textColor = UIColor.white
+        faviconLabel.font = UIFont.systemFont(ofSize: 40, weight: UIFont.Weight.medium)
+        faviconLabel.textColor = UIColor.Photon.White100
         UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
         faviconLabel.layer.render(in: UIGraphicsGetCurrentContext()!)
         faviconImage = UIGraphicsGetImageFromCurrentImageContext()!
@@ -261,7 +261,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     // Returns a color based on the url's hash
     class func getDefaultColor(_ url: URL) -> UIColor {
         guard let hash = url.baseDomain?.hashValue else {
-            return UIColor.gray
+            return UIColor.Photon.Grey50
         }
         let index = abs(hash) % (UIConstants.DefaultColorStrings.count - 1)
         let colorHex = UIConstants.DefaultColorStrings[index]

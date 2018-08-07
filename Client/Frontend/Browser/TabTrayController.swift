@@ -5,7 +5,6 @@
 import UIKit
 import SnapKit
 import Storage
-import ReadingList
 import Shared
 
 struct TabTrayControllerUX {
@@ -33,7 +32,7 @@ private struct LightTabCellUX {
 }
 
 private struct DarkTabCellUX {
-    static let TabTitleTextColor = UIColor.white
+    static let TabTitleTextColor = UIColor.Photon.White100
 }
 
 protocol TabCellDelegate: class {
@@ -70,7 +69,7 @@ class TabCell: UICollectionViewCell {
     var margin = CGFloat(0)
 
     override init(frame: CGRect) {
-        self.backgroundHolder.backgroundColor = UIColor.white
+        self.backgroundHolder.backgroundColor = UIColor.Photon.White100
         self.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         self.backgroundHolder.clipsToBounds = true
         self.backgroundHolder.backgroundColor = TabTrayControllerUX.CellBackgroundColor
@@ -95,7 +94,7 @@ class TabCell: UICollectionViewCell {
         self.closeButton.setImage(UIImage.templateImageNamed("tab_close"), for: [])
         self.closeButton.imageView?.contentMode = .scaleAspectFit
         self.closeButton.contentMode = .center
-        self.closeButton.tintColor = UIColor.lightGray
+        self.closeButton.tintColor = UIColor.Photon.Grey40
         self.closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
 
         super.init(frame: frame)
@@ -226,7 +225,7 @@ protocol TabTrayDelegate: class {
     func tabTrayDidDismiss(_ tabTray: TabTrayController)
     func tabTrayDidAddTab(_ tabTray: TabTrayController, tab: Tab)
     func tabTrayDidAddBookmark(_ tab: Tab)
-    func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
+    func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabTrayRequestsPresentationOf(_ viewController: UIViewController)
 }
 
@@ -234,6 +233,7 @@ class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
+    var otherBrowsingModeOffset: CGPoint
 
     var collectionView: UICollectionView!
     var draggedCell: TabCell?
@@ -296,6 +296,7 @@ class TabTrayController: UIViewController {
     init(tabManager: TabManager, profile: Profile) {
         self.tabManager = tabManager
         self.profile = profile
+        self.otherBrowsingModeOffset = CGPoint(x: 0.0, y: 0.0)
         super.init(nibName: nil, bundle: nil)
 
         tabManager.addDelegate(self)
@@ -314,7 +315,7 @@ class TabTrayController: UIViewController {
         self.tabManager.removeDelegate(self)
     }
 
-    func dynamicFontChanged(_ notification: Notification) {
+    @objc func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
 
         self.collectionView.reloadData()
@@ -423,11 +424,11 @@ class TabTrayController: UIViewController {
     }
 
 // MARK: Selectors
-    func didClickDone() {
+    @objc func didClickDone() {
         presentingViewController!.dismiss(animated: true, completion: nil)
     }
 
-    func didClickSettingsItem() {
+    @objc func didClickSettingsItem() {
         assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
         /* Cliqz: Change Settings
         let settingsTableViewController = AppSettingsTableViewController()
@@ -443,21 +444,24 @@ class TabTrayController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
 
-    func didClickAddTab() {
+    @objc func didClickAddTab() {
         openNewTab()
     }
 
-    func didTapLearnMore() {
-        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+    @objc func didTapLearnMore() {
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         if let langID = Locale.preferredLanguages.first {
-            let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(langID)/private-browsing-ios".asURL!)
+            let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion ?? "0.0")/iOS/\(langID)/private-browsing-ios".asURL!)
             openNewTab(learnMoreRequest)
         }
     }
 
-    func didTogglePrivateMode() {
+    @objc func didTogglePrivateMode() {
         let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
+        let newOffset = CGPoint(x: 0.0, y: collectionView.contentOffset.y)
+        collectionView.setContentOffset(self.otherBrowsingModeOffset, animated:false)
+        self.otherBrowsingModeOffset = newOffset
         let fromView: UIView
         if !privateTabsAreEmpty(), let snapshot = collectionView.snapshotView(afterScreenUpdates: false) {
             snapshot.frame = collectionView.frame
@@ -526,7 +530,7 @@ class TabTrayController: UIViewController {
     }
 
     func openNewTab() {
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray" as AnyObject])
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray"])
         openNewTab(nil)
     }
 
@@ -536,18 +540,16 @@ class TabTrayController: UIViewController {
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
         var tab: Tab?
-        self.collectionView.performBatchUpdates({ _ in
+        self.collectionView.performBatchUpdates({
             tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
         }, completion: { finished in
             // The addTab delegate method will pop to the BVC no need to do anything here.
             self.toolbar.isUserInteractionEnabled = true
-            if finished {
-                if request == nil && NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
-                    if let bvc = self.navigationController?.topViewController as? BrowserViewController {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                            bvc.urlBar.tabLocationViewDidTapLocation(bvc.urlBar.locationView)
-                        }
-                    }
+            if finished, request == nil, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage,
+                let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+                let bvc = appDelegate.browserViewController {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                    bvc.urlBar.tabLocationViewDidTapLocation(bvc.urlBar.locationView)
                 }
             }
 
@@ -565,13 +567,13 @@ class TabTrayController: UIViewController {
 
 // MARK: - App Notifications
 extension TabTrayController {
-    func appWillResignActiveNotification() {
+    @objc func appWillResignActiveNotification() {
         if privateMode {
             collectionView.alpha = 0
         }
     }
 
-    func appDidBecomeActiveNotification() {
+    @objc func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: {
@@ -608,12 +610,12 @@ extension TabTrayController: TabManagerDelegate {
         }
 
         let updated = [ selected, previous ]
-            .flatMap { $0 }
-            .flatMap { tabs.index(of: $0) }
+            .compactMap { $0 }
+            .compactMap { tabs.index(of: $0) }
             .map { IndexPath(item: $0, section: 0) }
 
         assertIsMainThread("Changing selected tab is on main thread")
-        collectionView?.performBatchUpdates({ _ in
+        collectionView?.performBatchUpdates({
             self.collectionView.reloadItems(at: updated)
 
             if !updated.isEmpty {
@@ -638,7 +640,7 @@ extension TabTrayController: TabManagerDelegate {
         }
 
         tabDataSource.addTab(tab)
-        self.collectionView?.performBatchUpdates({ _ in
+        self.collectionView?.performBatchUpdates({
             self.collectionView.insertItems(at: [IndexPath(item: index, section: 0)])
         }, completion: { finished in
             if finished {
@@ -679,18 +681,17 @@ extension TabTrayController: TabManagerDelegate {
 
         if let toast = toast {
             view.addSubview(toast)
-            toast.snp.makeConstraints { make in
-                make.left.right.equalTo(view)
-                make.bottom.equalTo(toolbar.snp.top)
-            }
-            toast.showToast()
+            toast.showToast(makeConstraints: { make in
+                make.left.right.equalTo(self.view)
+                make.bottom.equalTo(self.toolbar.snp.top)
+            })
         }
     }
 }
 
 extension TabTrayController: UIScrollViewAccessibilityDelegate {
     func accessibilityScrollStatus(for scrollView: UIScrollView) -> String? {
-        var visibleCells = collectionView.visibleCells as! [TabCell]
+        guard var visibleCells = collectionView.visibleCells as? [TabCell] else { return nil }
         var bounds = collectionView.bounds
         bounds = bounds.offsetBy(dx: collectionView.contentInset.left, dy: collectionView.contentInset.top)
         bounds.size.width -= collectionView.contentInset.left + collectionView.contentInset.right
@@ -723,12 +724,11 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
 
 extension TabTrayController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
-        let tabCell = animator.animatingView as! TabCell
-        if let indexPath = collectionView.indexPath(for: tabCell) {
-            let tab = tabsToDisplay[indexPath.item]
-            tabManager.removeTab(tab)
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
-        }
+        guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
+
+        let tab = tabsToDisplay[indexPath.item]
+        tabManager.removeTab(tab)
+        UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
     }
 }
 
@@ -748,10 +748,10 @@ extension TabTrayController: SettingsDelegate {
 }
 
 extension TabTrayController: PhotonActionSheetProtocol {
-    func didTapDelete(_ sender: UIButton) {
-        let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.closeTabsForCurrentTray() }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
+    @objc func didTapDelete(_ sender: UIButton) {
+        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
         controller.popoverPresentationController?.sourceView = sender
         controller.popoverPresentationController?.sourceRect = sender.bounds
         present(controller, animated: true, completion: nil)
@@ -798,14 +798,14 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let tabCell = collectionView.dequeueReusableCell(withReuseIdentifier: TabCell.Identifier, for: indexPath) as! TabCell
+        guard let tabCell = collectionView.dequeueReusableCell(withReuseIdentifier: TabCell.Identifier, for: indexPath) as? TabCell else { return UICollectionViewCell() }
         tabCell.animator.delegate = cellDelegate
         tabCell.delegate = cellDelegate
 
         let tab = tabs[indexPath.item]
         tabCell.style = tab.isPrivate ? .dark : .light
         tabCell.titleText.text = tab.displayTitle
-        tabCell.closeButton.tintColor = tab.isPrivate ? UIColor.white : UIColor.gray
+        tabCell.closeButton.tintColor = tab.isPrivate ? UIColor.Photon.White100 : UIColor.Photon.Grey50
 
         if !tab.displayTitle.isEmpty {
             tabCell.accessibilityLabel = tab.displayTitle
@@ -815,8 +815,8 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         tabCell.isAccessibilityElement = true
         tabCell.accessibilityHint = NSLocalizedString("Swipe right or left with three fingers to close the tab.", comment: "Accessibility hint for tab tray's displayed tab.")
 
-        if let favIcon = tab.displayFavicon {
-            tabCell.favicon.sd_setImage(with: URL(string: favIcon.url)!)
+        if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
+            tabCell.favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
         } else {
 			/* Cliqz: Changed favicon to Cliqz/Ghostery image
             let defaultFavicon = UIImage(named: "defaultFavicon")
@@ -824,7 +824,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
 			let defaultFavicon = UIImage.defaultFavicon()
             if tab.isPrivate {
                 tabCell.favicon.image = defaultFavicon
-                tabCell.favicon.tintColor = UIColor.white
+                tabCell.favicon.tintColor = UIColor.Photon.White100
             } else {
                 tabCell.favicon.image = defaultFavicon
             }
@@ -840,7 +840,6 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         return tabs.count
     }
 }
-
 
 @available(iOS 11.0, *)
 extension TabManagerDataSource: UICollectionViewDragDelegate {
@@ -872,7 +871,7 @@ extension TabManagerDataSource: UICollectionViewDragDelegate {
         var itemProvider: NSItemProvider
         if url != nil, !(url?.isLocal ?? true) {
             itemProvider = NSItemProvider(contentsOf: url) ?? NSItemProvider()
-        }  else {
+        } else {
             itemProvider = NSItemProvider()
         }
 
@@ -977,11 +976,11 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 }
 
 private struct EmptyPrivateTabsViewUX {
-    static let TitleColor = UIColor.white
-    static let TitleFont = UIFont.systemFont(ofSize: 22, weight: UIFontWeightMedium)
-    static let DescriptionColor = UIColor.white
+    static let TitleColor = UIColor.Photon.White100
+    static let TitleFont = UIFont.systemFont(ofSize: 22, weight: UIFont.Weight.medium)
+    static let DescriptionColor = UIColor.Photon.White100
     static let DescriptionFont = UIFont.systemFont(ofSize: 17)
-    static let LearnMoreFont = UIFont.systemFont(ofSize: 15, weight: UIFontWeightMedium)
+    static let LearnMoreFont = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
     static let TextMargin: CGFloat = 18
     static let LearnMoreMargin: CGFloat = 30
     static let MaxDescriptionWidth: CGFloat = 250
@@ -1076,7 +1075,7 @@ extension TabTrayController: TabPeekDelegate {
         delegate?.tabTrayDidAddBookmark(tab)
     }
 
-    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord? {
+    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
         return delegate?.tabTrayDidAddToReadingList(tab)
     }
 

@@ -154,7 +154,7 @@ class SearchSettingsTableViewController: UITableViewController {
         } else {
             // The first engine -- the default engine -- is not shown in the quick search engine list.
             // But the option to add Custom Engine is.
-            return AppConstants.MOZ_CUSTOM_SEARCH_ENGINE ? model.orderedEngines.count : model.orderedEngines.count - 1
+            return model.orderedEngines.count
         }
     }
 
@@ -288,7 +288,7 @@ class SearchSettingsTableViewController: UITableViewController {
 
 // MARK: - Selectors
 extension SearchSettingsTableViewController {
-    func didToggleEngine(_ toggle: UISwitch) {
+    @objc func didToggleEngine(_ toggle: UISwitch) {
         let engine = model.orderedEngines[toggle.tag] // The tag is 1-based.
         if toggle.isOn {
             model.enableEngine(engine)
@@ -297,7 +297,7 @@ extension SearchSettingsTableViewController {
         }
     }
 
-    func didToggleSearchSuggestions(_ toggle: UISwitch) {
+    @objc func didToggleSearchSuggestions(_ toggle: UISwitch) {
         // Setting the value in settings dismisses any opt-in.
         model.shouldShowSearchSuggestions = toggle.isOn
     }
@@ -306,15 +306,15 @@ extension SearchSettingsTableViewController {
         _ = navigationController?.popViewController(animated: true)
     }
 
-    func dismissAnimated() {
+    @objc func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
     }
 
-    func beginEditing() {
+    @objc func beginEditing() {
         setEditing(true, animated: false)
     }
 
-    func finishEditing() {
+    @objc func finishEditing() {
         setEditing(false, animated: false)
     }
 }

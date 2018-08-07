@@ -32,13 +32,14 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.FxASignInToSync, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: Strings.FxASignInToSync, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAContentViewController(profile: profile)
+        let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
+        let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
         viewController.delegate = self
         viewController.url = settings.profile.accountConfiguration.signInURL
         navigationController?.pushViewController(viewController, animated: true)
@@ -46,13 +47,10 @@ class ConnectSetting: WithoutAccountSetting {
     
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            let image = UIImage(named: "FxA-Default")
-            cell.imageView?.image = image?.createScaled(CGSize(width: 30, height: 30))
-            cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.size.width)! / 2
-            cell.imageView?.layer.masksToBounds = true
-        }
+        cell.imageView?.image = UIImage.templateImageNamed("FxA-Default")
+        cell.imageView?.tintColor = .lightGray
+        cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.size.width)! / 2
+        cell.imageView?.layer.masksToBounds = true
     }
 }
 
@@ -81,8 +79,8 @@ class SyncNowSetting: WithAccountSetting {
             return NSAttributedString(
                 string: Strings.FxANoInternetConnection,
                 attributes: [
-                    NSForegroundColorAttributeName: UIColor.red,
-                    NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultMediumFont
+                    NSAttributedStringKey.foregroundColor: UIColor.Photon.Red60,
+                    NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultMediumFont
                 ]
             )
         }
@@ -90,13 +88,13 @@ class SyncNowSetting: WithAccountSetting {
         return NSAttributedString(
             string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
             attributes: [
-                NSForegroundColorAttributeName: self.enabled ? SettingsUX.TableViewRowSyncTextColor : UIColor.gray,
-                NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont
+                NSAttributedStringKey.foregroundColor: self.enabled ? SettingsUX.TableViewRowSyncTextColor : UIColor.Photon.Grey50,
+                NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFont
             ]
         )
     }
 
-    fileprivate let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowSyncTextColor, NSFontAttributeName: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFontWeightRegular)])
+    fileprivate let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor, NSAttributedStringKey.font: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFont.Weight.regular)])
 
     func startRotateSyncIcon() {
         DispatchQueue.main.async {
@@ -104,7 +102,7 @@ class SyncNowSetting: WithAccountSetting {
         }
     }
     
-    func stopRotateSyncIcon() {
+    @objc func stopRotateSyncIcon() {
         DispatchQueue.main.async {
             self.imageView.layer.removeAllAnimations()
         }
@@ -115,10 +113,6 @@ class SyncNowSetting: WithAccountSetting {
     override var style: UITableViewCellStyle { return .value1 }
     
     override var image: UIImage? {
-        if !AppConstants.MOZ_SHOW_FXA_AVATAR {
-            return nil
-        }
-        
         guard let syncStatus = profile.syncManager.syncDisplayState else {
             return syncIcon
         }
@@ -139,9 +133,9 @@ class SyncNowSetting: WithAccountSetting {
         switch syncStatus {
         case .bad(let message):
             guard let message = message else { return syncNowTitle }
-            return NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowErrorTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+            return NSAttributedString(string: message, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowErrorTextColor, NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .warning(let message):
-            return  NSAttributedString(string: message, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowWarningTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+            return  NSAttributedString(string: message, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowWarningTextColor, NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .inProgress:
             return syncingTitle
         default:
@@ -156,7 +150,7 @@ class SyncNowSetting: WithAccountSetting {
 
         let formattedLabel = timestampFormatter.string(from: Date.fromTimestamp(timestamp))
         let attributedString = NSMutableAttributedString(string: formattedLabel)
-        let attributes = [NSForegroundColorAttributeName: UIColor.gray, NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)]
+        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.Photon.Grey50, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)]
         let range = NSRange(location: 0, length: attributedString.length)
         attributedString.setAttributes(attributes, range: range)
         return attributedString
@@ -235,30 +229,28 @@ class SyncNowSetting: WithAccountSetting {
         cell.accessoryType = accessoryType
         cell.isUserInteractionEnabled = !profile.syncManager.isSyncing && DeviceInfo.hasConnectivity()
         
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            // Animation that loops continously until stopped
-            continuousRotateAnimation.fromValue = 0.0
-            continuousRotateAnimation.toValue = CGFloat(Double.pi)
-            continuousRotateAnimation.isRemovedOnCompletion = true
-            continuousRotateAnimation.duration = 0.5
-            continuousRotateAnimation.repeatCount = .infinity
-            
-            // To ensure sync icon is aligned properly with user's avatar, an image is created with proper
-            // dimensions and color, then the scaled sync icon is added as a subview.
-            imageView.contentMode = .center
-            imageView.image = image
-            
-            cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
-            cell.imageView?.image = syncIconWrapper
-            cell.imageView?.addSubview(imageView)
-            
-            if let syncStatus = profile.syncManager.syncDisplayState {
-                switch syncStatus {
-                case .inProgress:
-                    self.startRotateSyncIcon()
-                default:
-                    self.stopRotateSyncIcon()
-                }
+        // Animation that loops continously until stopped
+        continuousRotateAnimation.fromValue = 0.0
+        continuousRotateAnimation.toValue = CGFloat(Double.pi)
+        continuousRotateAnimation.isRemovedOnCompletion = true
+        continuousRotateAnimation.duration = 0.5
+        continuousRotateAnimation.repeatCount = .infinity
+
+        // To ensure sync icon is aligned properly with user's avatar, an image is created with proper
+        // dimensions and color, then the scaled sync icon is added as a subview.
+        imageView.contentMode = .center
+        imageView.image = image
+
+        cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
+        cell.imageView?.image = syncIconWrapper
+        cell.imageView?.addSubview(imageView)
+
+        if let syncStatus = profile.syncManager.syncDisplayState {
+            switch syncStatus {
+            case .inProgress:
+                self.startRotateSyncIcon()
+            default:
+                self.stopRotateSyncIcon()
             }
         }
     }
@@ -294,18 +286,14 @@ class AccountStatusSetting: WithAccountSetting {
         super.init(settings: settings)
         NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .FirefoxAccountProfileChanged, object: nil)
     }
-    
-    func updateAccount(notification: Notification) {
+
+    @objc func updateAccount(notification: Notification) {
         DispatchQueue.main.async {
             self.settings.tableView.reloadData()
         }
     }
     
     override var image: UIImage? {
-        if !AppConstants.MOZ_SHOW_FXA_AVATAR {
-            return nil
-        }
-        
         if let image = profile.getAccount()?.fxaProfile?.avatar.image {
             return image.createScaled(CGSize(width: 30, height: 30))
         }
@@ -338,14 +326,14 @@ class AccountStatusSetting: WithAccountSetting {
         if let account = profile.getAccount() {
             
             if let displayName = account.fxaProfile?.displayName {
-                return NSAttributedString(string: displayName, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSForegroundColorAttributeName: SettingsUX.TableViewRowSyncTextColor])
+                return NSAttributedString(string: displayName, attributes: [NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor])
             }
             
             if let email = account.fxaProfile?.email {
-                return NSAttributedString(string: email, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSForegroundColorAttributeName: SettingsUX.TableViewRowSyncTextColor])
+                return NSAttributedString(string: email, attributes: [NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor])
             }
             
-            return NSAttributedString(string: account.email, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSForegroundColorAttributeName: SettingsUX.TableViewRowSyncTextColor])
+            return NSAttributedString(string: account.email, attributes: [NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor])
         }
         return nil
     }
@@ -358,19 +346,19 @@ class AccountStatusSetting: WithAccountSetting {
             case .none:
                 return nil
             case .needsVerification:
-                string = NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view")
+                string = Strings.FxAAccountVerifyEmail
                 break
             case .needsPassword:
-                string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
+                string = Strings.FxAAccountVerifyPassword
                 break
             case .needsUpgrade:
-                string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
+                string = Strings.FxAAccountUpgradeFirefox
                 break
             }
             
-            let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
+            let orange = UIColor.Photon.Orange50
             let range = NSRange(location: 0, length: string.count)
-            let attrs = [NSForegroundColorAttributeName: orange]
+            let attrs = [NSAttributedStringKey.foregroundColor: orange]
             let res = NSMutableAttributedString(string: string)
             res.setAttributes(attrs, range: range)
             return res
@@ -379,7 +367,8 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAContentViewController(profile: profile)
+        let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
+        let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
         viewController.delegate = self
 
         if let account = profile.getAccount() {
@@ -411,13 +400,12 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
-            cell.imageView?.frame = CGRect(width: 30, height: 30)
-            cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.height)! / 2
-            cell.imageView?.layer.masksToBounds = true
-            cell.imageView?.image = image
+        if let imageView = cell.imageView {
+            imageView.subviews.forEach({ $0.removeFromSuperview() })
+            imageView.frame = CGRect(width: 30, height: 30)
+            imageView.layer.cornerRadius = (imageView.frame.height) / 2
+            imageView.layer.masksToBounds = true
+            imageView.image = image
         }
     }
 }
@@ -435,7 +423,7 @@ class RequirePasswordDebugSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: require password", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Debug: require password", comment: "Debug option"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -457,7 +445,7 @@ class RequireUpgradeDebugSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: require upgrade", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Debug: require upgrade", comment: "Debug option"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -479,7 +467,7 @@ class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -491,7 +479,7 @@ class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
 class DeleteExportedDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
-        return NSAttributedString(string: "Debug: delete exported databases", attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: "Debug: delete exported databases", attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -513,7 +501,7 @@ class DeleteExportedDataSetting: HiddenSetting {
 class ExportBrowserDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
-        return NSAttributedString(string: "Debug: copy databases to app container", attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: "Debug: copy databases to app container", attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -561,7 +549,7 @@ class FeatureSwitchSetting: BoolSetting {
 class EnableBookmarkMergingSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
-        return NSAttributedString(string: "Enable Bidirectional Bookmark Sync ", attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: "Enable Bidirectional Bookmark Sync ", attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -571,7 +559,7 @@ class EnableBookmarkMergingSetting: HiddenSetting {
 
 class ForceCrashSetting: HiddenSetting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Force Crash", attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: "Debug: Force Crash", attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -583,6 +571,8 @@ class ForceCrashSetting: HiddenSetting {
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
 
+     override var accessibilityIdentifier: String? { return "FxVersion" }
+
     init(settings: SettingsTableViewController) {
         self.settings = settings
         super.init(title: nil)
@@ -591,7 +581,7 @@ class VersionSetting: Setting {
     override var title: NSAttributedString? {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
-        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"), appVersion, buildNumber), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"), appVersion, buildNumber), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -612,7 +602,7 @@ class VersionSetting: Setting {
 // Opens the the license page in a new tab
 class LicenseAndAcknowledgementsSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override var url: URL? {
@@ -628,7 +618,7 @@ class LicenseAndAcknowledgementsSetting: Setting {
 class YourRightsSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: NSLocalizedString("Your Rights", comment: "Your Rights settings section title"), attributes:
-            [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+            [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override var url: URL? {
@@ -648,7 +638,7 @@ class ShowIntroductionSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Show Tour", comment: "Show the on-boarding screen again from the settings"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Show Tour", comment: "Show the on-boarding screen again from the settings"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -662,7 +652,7 @@ class ShowIntroductionSetting: Setting {
 
 class SendFeedbackSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Send Feedback", comment: "Menu item in settings used to open input.mozilla.org where people can submit feedback"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Send Feedback", comment: "Menu item in settings used to open input.mozilla.org where people can submit feedback"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override var url: URL? {
@@ -677,12 +667,12 @@ class SendFeedbackSetting: Setting {
 
 class SendAnonymousUsageDataSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
-        // Cliqz: upgrade to swift 4.1
         let statusText = NSMutableAttributedString()
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewHeaderTextColor]))
+        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor]))
         statusText.append(NSAttributedString(string: " "))
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]))
-        
+        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]))
+
+
         super.init(
             prefs: prefs, prefKey: AppConstants.PrefSendUsageData, defaultValue: true,
             attributedTitleText: NSAttributedString(string: Strings.SendUsageSettingTitle),
@@ -693,14 +683,6 @@ class SendAnonymousUsageDataSetting: BoolSetting {
                 LeanPlumClient.shared.set(enabled: $0)
             }
         )
-    }
-
-    private func createStatusText() -> NSAttributedString {
-        let statusText = NSMutableAttributedString()
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewHeaderTextColor]))
-        statusText.append(NSAttributedString(string: " "))
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]))
-        return statusText
     }
 
     override var url: URL? {
@@ -715,7 +697,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
 // Opens the the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
     init(delegate: SettingsDelegate?) {
-        super.init(title: NSAttributedString(string: NSLocalizedString("Help", comment: "Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]),
+        super.init(title: NSAttributedString(string: NSLocalizedString("Help", comment: "Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]),
             delegate: delegate)
     }
 
@@ -742,7 +724,7 @@ class SearchSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Search", comment: "Open search section of settings"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Search", comment: "Open search section of settings"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -770,7 +752,7 @@ class LoginsSetting: Setting {
         self.settings = settings as? AppSettingsTableViewController
 
         let loginsTitle = NSLocalizedString("Logins", comment: "Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager.")
-        super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]),
+        super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]),
                    delegate: delegate)
     }
 
@@ -831,7 +813,7 @@ class TouchIDPasscodeSetting: Setting {
         } else {
             title = AuthenticationStrings.passcode
         }
-        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]),
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]),
                    delegate: delegate)
     }
 
@@ -852,7 +834,7 @@ class ContentBlockerSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
-        super.init(title: NSAttributedString(string: Strings.SettingsTrackingProtectionSectionName, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: Strings.SettingsTrackingProtectionSectionName, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -876,7 +858,7 @@ class ClearPrivateDataSetting: Setting {
         self.tabManager = settings.tabManager
 
         let clearTitle = Strings.SettingsClearPrivateDataSectionName
-        super.init(title: NSAttributedString(string: clearTitle, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: clearTitle, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -889,7 +871,7 @@ class ClearPrivateDataSetting: Setting {
 
 class PrivacyPolicySetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override var url: URL? {
@@ -907,11 +889,11 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
     let prefKey = "useChinaSyncService"
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "本地同步服务", attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: "本地同步服务", attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override var status: NSAttributedString? {
-        return NSAttributedString(string: "禁用后使用全球服务同步数据", attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewHeaderTextColor])
+        return NSAttributedString(string: "禁用后使用全球服务同步数据", attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor])
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -935,6 +917,8 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
 
     var prefKey: String = "useStageSyncService"
 
+    override var accessibilityIdentifier: String? { return "DebugStageSync" }
+
     override var hidden: Bool {
         if !ShowDebugSettings {
             return true
@@ -946,7 +930,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: use stage servers", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Debug: use stage servers", comment: "Debug option"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
 
     override var status: NSAttributedString? {
@@ -962,7 +946,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
             configurationURL = StageFirefoxAccountConfiguration().authEndpointURL
         }
 
-        return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewHeaderTextColor])
+        return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor])
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -993,7 +977,7 @@ class HomePageSetting: Setting {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
 
-        super.init(title: NSAttributedString(string: Strings.SettingsHomePageSectionName, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: Strings.SettingsHomePageSectionName, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1014,7 +998,7 @@ class NewTabPageSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: Strings.SettingsNewTabSectionName, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: Strings.SettingsNewTabSectionName, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1034,7 +1018,7 @@ class OpenWithSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: Strings.SettingsOpenWithSectionName, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: Strings.SettingsOpenWithSectionName, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1051,7 +1035,7 @@ class AdvanceAccountSetting: HiddenSetting {
     override var accessibilityIdentifier: String? { return "AdvanceAccount.Setting" }
     
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.SettingsAdvanceAccountTitle, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: Strings.SettingsAdvanceAccountTitle, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
     }
     
     override init(settings: SettingsTableViewController) {

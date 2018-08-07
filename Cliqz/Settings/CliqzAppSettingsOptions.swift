@@ -18,7 +18,7 @@ class CliqzConnectSetting: Setting {
         self.profile = settings.profile
         
         let title = NSLocalizedString("Connect", tableName: "Cliqz", comment: "[Settings] Connect")
-        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
     
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
@@ -48,7 +48,7 @@ class RegionalSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         let title = NSLocalizedString("Search Results for", tableName: "Cliqz" , comment: "[Settings] Search Results for")
-        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
@@ -95,7 +95,7 @@ class ComplementarySearchSetting: Setting, SearchEnginePickerDelegate {
     
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Complementary Search", tableName: "Cliqz", comment: "[Settings] Complementary Search"), attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Complementary Search", tableName: "Cliqz", comment: "[Settings] Complementary Search"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
@@ -171,7 +171,7 @@ class AdBlockerSetting: CliqzOnOffSetting {
 class SupportSetting: Setting {
     
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("FAQ & Support", tableName: "Cliqz", comment: "[Settings] FAQ & Support"),attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue])
+        return NSAttributedString(string: NSLocalizedString("FAQ & Support", tableName: "Cliqz", comment: "[Settings] FAQ & Support"),attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue])
     }
     
     override var url: URL? {
@@ -257,7 +257,7 @@ class MyOffrzSetting: ShowCliqzPageSetting {
 class RateUsSetting: Setting {
     
     init() {
-        super.init(title: NSAttributedString(string: NSLocalizedString("Rate Us", tableName: "Cliqz", comment: "[Settings] Rate Us"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Rate Us", tableName: "Cliqz", comment: "[Settings] Rate Us"), attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]))
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
@@ -283,7 +283,7 @@ class AboutSetting: Setting {
     
     init() {
         let title = NSLocalizedString("About", tableName: "Cliqz", comment: "[Settings] About")
-        super.init(title: NSAttributedString(string: title, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
     
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }

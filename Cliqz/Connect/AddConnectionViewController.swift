@@ -18,7 +18,7 @@ class AddConnectionViewController: UIViewController {
     fileprivate let instructionsLabel = UILabel()
     fileprivate var qrCodeScannerReady = true
     fileprivate var qrCodeScanned = false
-    fileprivate let supportedBarCodes = [AVMetadataObjectTypeQRCode]
+    fileprivate let supportedBarCodes = [AVMetadataObject.ObjectType.qr]
 
     init(_ dataSource: ConnectDataSource) {
         self.dataSource = dataSource
@@ -66,7 +66,11 @@ class AddConnectionViewController: UIViewController {
     private func configureScanningView() {
         // Get an instance of the AVCaptureDevice class to initialize a device object and provide the video
         // as the media type parameter.
-        let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        let defaultDevice = AVCaptureDevice.default(for: AVMediaType.video)
+        guard let captureDevice = defaultDevice else {
+            showAllowCameraAccessAlert()
+            return
+        }
         
         do {
             // Get an instance of the AVCaptureDeviceInput class using the previous device object.
@@ -88,8 +92,8 @@ class AddConnectionViewController: UIViewController {
             captureMetadataOutput.metadataObjectTypes = supportedBarCodes
             
             // Initialize the video preview layer and add it as a sublayer to the viewPreview view's layer.
-            videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-            videoPreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+            videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
+            videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
             adjustVideoPreviewLayerFrame()
             view.layer.addSublayer(videoPreviewLayer!)
             
@@ -142,13 +146,13 @@ class AddConnectionViewController: UIViewController {
         
         switch UIDevice.current.orientation {
         case .portrait:
-            videoPreviewLayer?.connection.videoOrientation = .portrait
+            videoPreviewLayer?.connection?.videoOrientation = .portrait
         case .landscapeLeft:
-            videoPreviewLayer?.connection.videoOrientation = .landscapeRight
+            videoPreviewLayer?.connection?.videoOrientation = .landscapeRight
         case .landscapeRight:
-            videoPreviewLayer?.connection.videoOrientation = .landscapeLeft
+            videoPreviewLayer?.connection?.videoOrientation = .landscapeLeft
         default:
-            videoPreviewLayer?.connection.videoOrientation = .portrait
+            videoPreviewLayer?.connection?.videoOrientation = .portrait
         }
     }
 }

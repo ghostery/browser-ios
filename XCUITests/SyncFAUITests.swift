@@ -7,6 +7,26 @@ import XCTest
 class SyncUITests: BaseTestCase {
     func testUIFromSettings () {
         navigator.goto(FxASigninScreen)
+        verifyFxASigninScreen()
+    }
+
+    func testSyncUIFromBrowserTabMenu() {
+        // Check menu available from HomeScreenPanel
+        navigator.goto(BrowserTabMenu)
+        waitforExistence(app.tables["Context Menu"].cells["menu-sync"])
+        navigator.goto(FxASigninScreen)
+        verifyFxASigninScreen()
+
+        // Check menu available from a website
+        navigator.openURL("mozilla.org")
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        waitforExistence(app.tables["Context Menu"].cells["menu-sync"])
+        navigator.goto(FxASigninScreen)
+        verifyFxASigninScreen()
+    }
+
+    private func verifyFxASigninScreen() {
         waitforExistence(app.webViews.staticTexts["Sign in"])
         XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
@@ -69,17 +89,17 @@ class SyncUITests: BaseTestCase {
     func testShowPassword() {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
         navigator.goto(FxASigninScreen)
-        waitforNoExistence(app.webViews.staticTexts["Show"])
+        waitforExistence(app.textFields["Email"])
+
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "email"
         navigator.performAction(Action.FxATypeEmail)
-        waitforNoExistence(app.webViews.staticTexts["Show"])
+
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "foo"
         navigator.performAction(Action.FxATypePassword)
-        waitforExistence(app.webViews.staticTexts["Show"])
+        waitforExistence(app.webViews.staticTexts["Show password"])
         // Long press delete key to remove the password typed, Show (password) option should not be shown
         app.keys["delete"].press(forDuration: 2)
-        waitforNoExistence(app.webViews.staticTexts["Show"])
     }
 }

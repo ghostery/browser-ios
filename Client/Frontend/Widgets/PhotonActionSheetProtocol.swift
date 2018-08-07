@@ -20,12 +20,16 @@ extension PhotonActionSheetProtocol {
     typealias IsPrivateTab = Bool
     typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
     
-    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, suppressPopover: Bool = false) {
+    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, closeButtonTitle: String = Strings.CloseButtonTitle, suppressPopover: Bool = false) {
         let style: UIModalPresentationStyle = (UIDevice.current.userInterfaceIdiom == .pad && !suppressPopover) ? .popover : .overCurrentContext
-        let sheet = PhotonActionSheet(title: title, actions: actions, style: style)
+        let sheet = PhotonActionSheet(title: title, actions: actions, closeButtonTitle: closeButtonTitle, style: style)
         sheet.modalPresentationStyle = style
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
-        
+        if let account = profile.getAccount(), account.actionNeeded == .none {
+            // the sync manager is only needed when we have a logged in user with sync in a good state
+            sheet.syncManager = profile.syncManager // the syncmanager is used to display the sync button in the browser menu
+        }
+
         if let popoverVC = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
@@ -49,20 +53,25 @@ extension PhotonActionSheetProtocol {
             tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
             UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .bookmarksPanel, value: .appMenu)
         }
-        
-        let openHistory = PhotonActionSheetItem(title: Strings.AppMenuHistoryTitleString, iconString: "menu-panel-History") { action in
-            tab.loadRequest(PrivilegedRequest(url: HomePanelType.history.localhostURL) as URLRequest)
-        }
-        
+
         let openReadingList = PhotonActionSheetItem(title: Strings.AppMenuReadingListTitleString, iconString: "menu-panel-ReadingList") { action in
             tab.loadRequest(PrivilegedRequest(url: HomePanelType.readingList.localhostURL) as URLRequest)
         }
-        
+
+        let openHistory = PhotonActionSheetItem(title: Strings.AppMenuHistoryTitleString, iconString: "menu-panel-History") { action in
+            tab.loadRequest(PrivilegedRequest(url: HomePanelType.history.localhostURL) as URLRequest)
+        }
+
+        let openDownloads = PhotonActionSheetItem(title: Strings.AppMenuDownloadsTitleString, iconString: "menu-panel-Downloads") { action in
+            tab.loadRequest(PrivilegedRequest(url: HomePanelType.downloads.localhostURL) as URLRequest)
+            UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .appMenu)
+        }
+
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
             HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
         }
         
-        var actions = [openTopSites, openBookmarks, openReadingList, openHistory]
+        var actions = [openTopSites, openBookmarks, openReadingList, openHistory, openDownloads]
         if HomePageHelper(prefs: self.profile.prefs).isHomePageAvailable {
             actions.insert(openHomePage, at: 0)
         }
@@ -118,14 +127,39 @@ extension PhotonActionSheetProtocol {
 
         return items
     }
-    
+
+    fileprivate func shareFileURL(_ url: URL, buttonView: UIView, presentableVC: PresentableVC) {
+        let helper = ShareExtensionHelper(url: url, tab: nil)
+        let controller = helper.createActivityViewController { completed, activityType in
+            print("Shared downloaded file: \(completed)")
+        }
+
+        if let popoverPresentationController = controller.popoverPresentationController {
+            popoverPresentationController.sourceView = buttonView
+            popoverPresentationController.sourceRect = buttonView.bounds
+            popoverPresentationController.permittedArrowDirections = .up
+        }
+
+        presentableVC.present(controller, animated: true, completion: nil)
+    }
+
     func getTabActions(tab: Tab, buttonView: UIView,
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
                        findInPage:  @escaping () -> Void,
                        presentableVC: PresentableVC,
                        isBookmarked: Bool,
+                       isPinned: Bool,
                        success: @escaping (String) -> Void) -> Array<[PhotonActionSheetItem]> {
-        
+        if tab.url?.isFileURL ?? false {
+            let shareFile = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
+                guard let url = tab.url else { return }
+
+                self.shareFileURL(url, buttonView: buttonView, presentableVC: presentableVC)
+            }
+
+            return [[shareFile]]
+        }
+
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
             tab.toggleDesktopSite()
@@ -134,7 +168,7 @@ extension PhotonActionSheetProtocol {
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
             guard let url = tab.url?.displayURL else { return }
 
-            self.profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
+            self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
             success(Strings.AppMenuAddToReadingListConfirmMessage)
         }
@@ -175,18 +209,27 @@ extension PhotonActionSheetProtocol {
         }
         
         let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { action in
-            guard let url = tab.url?.displayURL,
-                  let sql = self.profile.history as? SQLiteHistory else { return }
-            let absoluteString = url.absoluteString
+            guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
             
-            sql.getSitesForURLs([absoluteString]) >>== { result in
-                guard let siteOp = result.asArray().first, let site = siteOp else {
-                    log.warning("Could not get site for \(absoluteString)")
-                    return
+            sql.getSitesForURLs([url.absoluteString]).bind { val -> Success in
+                guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
+                    return succeed()
                 }
-                
-                _ = self.profile.history.addPinnedTopSite(site).value
-            }
+
+                return self.profile.history.addPinnedTopSite(site)
+                }.uponQueue(.main) { _ in }
+        }
+
+        let removeTopSitesPin = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin") { action in
+            guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
+
+            sql.getSitesForURLs([url.absoluteString]).bind { val -> Success in
+                guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
+                    return succeed()
+                }
+
+                return self.profile.history.removeFromPinnedTopSites(site)
+            }.uponQueue(.main) { _ in }
         }
 
         let sendToDevice = PhotonActionSheetItem(title: Strings.SendToDeviceTitle, iconString: "menu-Send-to-Device") { action in
@@ -209,9 +252,22 @@ extension PhotonActionSheetProtocol {
             bvc.present(navigationController, animated: true, completion: nil)
         }
         
-        let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
+        let sharePage = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let url = tab.canonicalURL?.displayURL else { return }
-            presentShareMenu(url, tab, buttonView, .up)
+
+            if let temporaryDocument = tab.temporaryDocument {
+                temporaryDocument.getURL().uponQueue(.main, block: { tempDocURL in
+                    // If we successfully got a temp file URL, share it like a downloaded file,
+                    // otherwise present the ordinary share menu for the web URL.
+                    if tempDocURL.isFileURL {
+                        self.shareFileURL(tempDocURL, buttonView: buttonView, presentableVC: presentableVC)
+                    } else {
+                        presentShareMenu(url, tab, buttonView, .up)
+                    }
+                })
+            } else {
+                presentShareMenu(url, tab, buttonView, .up)
+            }
         }
 
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
@@ -219,7 +275,7 @@ extension PhotonActionSheetProtocol {
             success(Strings.AppMenuCopyURLConfirmMessage)
         }
 
-        var mainActions = [share]
+        var mainActions = [sharePage]
 
         // Disable bookmarking and reading list if the URL is too long.
         if !tab.urlIsTooLong {
@@ -230,9 +286,10 @@ extension PhotonActionSheetProtocol {
             }
         }
 
+        let pinAction = (isPinned ? removeTopSitesPin : pinToTopSites)
         mainActions.append(contentsOf: [sendToDevice, copyURL])
 
-        return [mainActions, [findInPageAction, toggleDesktopSite, pinToTopSites]]
+        return [mainActions, [findInPageAction, toggleDesktopSite, pinAction]]
     }
 
     func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
@@ -242,6 +299,10 @@ extension PhotonActionSheetProtocol {
             }
             return factory.isBookmarked(url)
         }
+    }
+
+    func fetchPinnedTopSiteStatus(for url: String) -> Deferred<Maybe<Bool>> {
+        return self.profile.history.isPinnedTopSite(url)
     }
 
     func getLongPressLocationBarActions(with urlBar: URLBarView) -> [PhotonActionSheetItem] {
@@ -307,7 +368,7 @@ extension PhotonActionSheetProtocol {
 
         let addToWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionDisableTitle, iconString: "menu-TrackingProtection-Off") { _ in
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
-            ContentBlockerHelper.whitelist(enable: true, url: currentURL) { _ in
+            ContentBlockerHelper.whitelist(enable: true, url: currentURL) {
                 tab.reload()
             }
         }
@@ -321,7 +382,7 @@ extension PhotonActionSheetProtocol {
         }
 
         let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionWhiteListRemove, iconString: "menu-TrackingProtection") { _ in
-            ContentBlockerHelper.whitelist(enable: false, url: currentURL) { _ in
+            ContentBlockerHelper.whitelist(enable: false, url: currentURL) {
                 tab.reload()
             }
         }
@@ -399,5 +460,48 @@ extension PhotonActionSheetProtocol {
         } else {
             return [toggleDesktopSite]
         }
+    }
+
+    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?) -> ()) -> [PhotonActionSheetItem]? {
+        profile.getAccount()?.updateProfile()
+        let account = profile.getAccount()
+
+        func title() -> String? {
+            guard let status = account?.actionNeeded else { return Strings.FxASignInToSync }
+            switch status {
+            case .none:
+                return account?.fxaProfile?.displayName ?? account?.fxaProfile?.email
+            case .needsVerification:
+                return Strings.FxAAccountVerifyEmail
+            case .needsPassword:
+                return Strings.FxAAccountVerifyPassword
+            case .needsUpgrade:
+                return Strings.FxAAccountUpgradeFirefox
+            }
+        }
+
+        func imageName() -> String? {
+            guard let status = account?.actionNeeded else { return "menu-sync" }
+            switch status {
+            case .none:
+                return "placeholder-avatar"
+            case .needsVerification, .needsPassword, .needsUpgrade:
+                return "menu-warning"
+            }
+        }
+
+        let action: ((PhotonActionSheetItem) -> Void) = { action in
+            let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
+            showFxA(fxaParams)
+        }
+
+        guard let title = title(), let iconString = imageName() else { return nil }
+        // .none is also a case on the swift enum "Optional" so the value needs to be unwrapped before we check
+        var iconURL: URL? = nil
+        if let actionNeeded = account?.actionNeeded {
+            iconURL = (actionNeeded == .none) ? account?.fxaProfile?.avatar.url : nil
+        }
+        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, accessory: .Sync, handler: action)
+        return [syncOption]
     }
 }
