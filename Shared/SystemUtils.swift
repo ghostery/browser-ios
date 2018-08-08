@@ -45,11 +45,7 @@ extension SystemUtils {
             return
         }
         let contents = "Device is unlocked".data(using: .utf8)
-        /* Cliqz: fixed compialtion error
         fm.createFile(atPath: lockFile, contents: contents, attributes: [FileAttributeKey(rawValue: FileAttributeKey.protectionKey.rawValue): FileProtectionType.complete])
-        */
-        fm.createFile(atPath: lockFile, contents: contents, attributes: [FileAttributeKey(rawValue: FileAttributeKey.protectionKey.rawValue).rawValue: FileProtectionType.complete])
-        
     }
 
     private static var lockedDeviceURL: URL? {
