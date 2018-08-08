@@ -101,7 +101,7 @@ node('mac-vm-host') {
                             export MATCH_KEYCHAIN_NAME=ios-build.keychain
                             rm -rf ../build-tools
                             fastlane importLocalizations
-                            fastlane beta
+                            fastlane nightly
                         '''
                     }
                 }

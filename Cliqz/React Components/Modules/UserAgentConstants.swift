@@ -14,13 +14,9 @@ open class UserAgentConstants : RCTEventEmitter {
     
     fileprivate var source: String {
         get {
-            if AppStatus.isDebug() {
-                return "MI02" // Debug
-            } else if AppStatus.isRelease() {
-                return "MI00" // Release
-            } else {
-                return "MI01" // TestFlight
-            }
+            let product = getProductType()
+            let type = getChannelType()
+            return "MI\(product)\(type)"
         }
     }
     
@@ -50,6 +46,24 @@ open class UserAgentConstants : RCTEventEmitter {
         }
         #endif
         //return "16917";
+    }
+    
+    private func getProductType() -> String {
+        #if GHOSTERY
+        return "5"
+        #else
+        return "0"
+        #endif
+    }
+    
+    private func getChannelType() -> String {
+        #if RELEASE
+        return "0"
+        #elseif BETA
+        return "1"
+        #else
+        return "2"
+        #endif
     }
     
     open override static func moduleName() -> String! {

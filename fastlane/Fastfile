@@ -39,7 +39,7 @@ platform :ios do
   end
   
   
-  lane :beta do    
+  lane :nightly do    
 
     # Configuring Sentry DSN
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
@@ -74,7 +74,8 @@ platform :ios do
       workspace: "Client.xcworkspace",
       clean: "true",
       scheme: "Firefox",
-      xcconfig: "Client/Configuration/Firefox.xcconfig",      
+      xcconfig: "Client/Configuration/Firefox.xcconfig",  
+      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DBETA'",      
       skip_profile_detection: "true",
       export_options: {
         provisioningProfiles: { 
@@ -96,7 +97,59 @@ platform :ios do
     )
   end
 
+  lane :beta do    
 
+    # Configuring Sentry DSN
+    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
+    
+    # Building ReactNative Entension
+    sh("cd .. && npm run bundle")
+
+    create_keychain(
+      name: ENV["MATCH_KEYCHAIN_NAME"],
+      password: ENV["MATCH_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
+
+    match(
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+      keychain_password: ENV["MATCH_PASSWORD"],
+      git_branch: "ghostery-ios",
+      team_id: ENV["DEVELOPER_TEAM_ID"],
+      app_identifier: ["com.evidon.Ghostery", "*"],
+      readonly: true,
+      verbose: true
+    )
+
+    build_app(
+      workspace: "Client.xcworkspace",
+      clean: "true",
+      scheme: "Firefox",
+      xcconfig: "Client/Configuration/Ghostery.xcconfig",
+      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DBETA'",  
+      skip_profile_detection: "true",
+      export_options: {
+        provisioningProfiles: { 
+          "com.evidon.Ghostery" => "match AppStore com.evidon.Ghostery"
+        }
+      }
+    )
+
+    upload_to_testflight(
+      changelog: "Ghostery Beta",
+      demo_account_required: "false",
+      skip_waiting_for_build_processing: "true"
+    )
+
+    sentry_upload_dsym(
+      auth_token: ENV["SENTRY_AUTH_TOKEN"],
+      org_slug: 'cliqz',
+      project_slug: 'ghostery',
+    )
+  end
 
   lane :release do    
 
@@ -128,8 +181,9 @@ platform :ios do
     build_app(
       workspace: "Client.xcworkspace",
       clean: "true",
-      scheme: "Ghostery",
+      scheme: "Firefox",
       xcconfig: "Client/Configuration/Ghostery.xcconfig",
+      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DRELEASE'",  
       skip_profile_detection: "true",
       export_options: {
         provisioningProfiles: { 
@@ -139,7 +193,7 @@ platform :ios do
     )
 
     upload_to_testflight(
-      changelog: "Ghostery Nightly build",
+      changelog: "Ghostery Release",
       demo_account_required: "false",
       skip_waiting_for_build_processing: "true"
     )
