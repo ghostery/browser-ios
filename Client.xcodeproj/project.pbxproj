@@ -875,7 +875,6 @@
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
 		F84B22241A09122500AAB793 /* HomePanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* HomePanelViewController.swift */; };
-		F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B22491A0920C600AAB793 /* ShareTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8708D251A0970990051AB07 /* Images.xcassets */; };
 		F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8708D291A0970990051AB07 /* ShareViewController.swift */; };
 		FA6B2AC21D41F02D00429414 /* Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* Punycode.swift */; };
@@ -1256,13 +1255,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		F84B22511A0920C600AAB793 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F84B22481A0920C600AAB793;
-			remoteInfo = ShareFirefox;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1310,17 +1302,6 @@
 			files = (
 				E6ECF2381C974E0F00B0DC93 /* KIF.framework in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F84B22531A0920C600AAB793 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -4820,7 +4801,6 @@
 				F84B21BA1A090F8100AAB793 /* Sources */,
 				F84B21BC1A090F8100AAB793 /* Resources */,
 				28CE83DE1A1D1E7C00576538 /* Frameworks */,
-				F84B22531A0920C600AAB793 /* Embed App Extensions */,
 				E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */,
 				E6B09CD31C74EEDB00C63FA1 /* Copy Frameworks */,
 				D6D515078BA2F8059B3DB387 /* [CP] Embed Pods Frameworks */,
@@ -4834,7 +4814,6 @@
 				2FCAE2301ABB51F800877008 /* PBXTargetDependency */,
 				282731741ABC9BE700AA1954 /* PBXTargetDependency */,
 				E69DB0891E97DEAA008A67E6 /* PBXTargetDependency */,
-				F84B22521A0920C600AAB793 /* PBXTargetDependency */,
 			);
 			name = Client;
 			productName = Client;
@@ -6634,11 +6613,6 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = F84B21D41A090F8100AAB793 /* PBXContainerItemProxy */;
-		};
-		F84B22521A0920C600AAB793 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F84B22481A0920C600AAB793 /* ShareTo */;
-			targetProxy = F84B22511A0920C600AAB793 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
