@@ -78,62 +78,46 @@ node('mac-vm-host') {
                 '''                
             }
 
-            if("${branchName}".contains("-beta")){
-                stage('Build & Upload') {
-                    withCredentials([
-                        [
-                            $class          : 'UsernamePasswordMultiBinding',
-                            credentialsId   : '85859bba-4927-4b14-bfdf-aca726009962',
-                            passwordVariable: 'GITHUB_PASSWORD',
-                            usernameVariable: 'GITHUB_USERNAME',
-                        ],
-                        string(credentialsId: 'c9d7aaae-25ee-4b74-b03f-d50312c53edd', variable: 'ITUNES_USER'),
-                        string(credentialsId: '59474dcc-f87e-41ac-803c-e32a0029f7e7', variable: 'SentryDSN'),
-                        string(credentialsId: '070139a0-b210-4692-ab5f-5444f4aadac1', variable: 'FASTLANE_PASSWORD'),
-                        string(credentialsId: 'a1904e28-d791-4118-b8ed-3ff064aee9a4', variable: 'MATCH_PASSWORD'),
-                        string(credentialsId: 'f206e880-e09a-4369-a3f6-f86ee94481f2', variable: 'SENTRY_AUTH_TOKEN'),
-                        string(credentialsId: 'ab91f92a-4588-4034-8d7f-c1a741fa31ab', variable: 'FASTLANE_ITC_TEAM_ID')])
-                    {
+            stage('Build & Upload') {
+                withCredentials([
+                    [
+                        $class          : 'UsernamePasswordMultiBinding',
+                        credentialsId   : '85859bba-4927-4b14-bfdf-aca726009962',
+                        passwordVariable: 'GITHUB_PASSWORD',
+                        usernameVariable: 'GITHUB_USERNAME',
+                    ],
+                    string(credentialsId: 'c9d7aaae-25ee-4b74-b03f-d50312c53edd', variable: 'ITUNES_USER'),
+                    string(credentialsId: 'c033c0cc-a707-4a5d-aa5f-efccdd28c654', variable: 'SentryDSN'),
+                    string(credentialsId: 'd373025a-dc98-4fba-a2e3-da21e2011972', variable: 'FASTLANE_PASSWORD'),
+                    string(credentialsId: '9d4b5abb-a0ab-4d8b-85b7-cf380485da7c', variable: 'MATCH_PASSWORD'),
+                    string(credentialsId: 'f206e880-e09a-4369-a3f6-f86ee94481f2', variable: 'SENTRY_AUTH_TOKEN'),
+                    string(credentialsId: 'd9dc5c33-beef-402e-93d2-376a722a9766', variable: 'FASTLANE_ITC_TEAM_ID')]) 
+                {
+                    sh '''#!/bin/bash -l
+                        set -x
+                        set -e
+                        rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
+                        export MATCH_KEYCHAIN_NAME=ios-build.keychain
+                        rm -rf ../build-tools      
+                        fastlane importLocalizations      
+                    '''
+                    if("${branchName}".contains("-beta")){
+                        sh '''#!/bin/bash -l 
+                            set -x
+                            set -e      
+                            fastlane beta      
+                        '''
+                    }
+                    else if ("${branchName}".contains("-r")){
                         sh '''#!/bin/bash -l
                             set -x
-                            set -e
-                            rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
-                            export MATCH_KEYCHAIN_NAME=ios-build.keychain 
-                            rm -rf ../build-tools     
-                            fastlane importLocalizations   
-                            fastlane beta    
+                            set -e     
+                            fastlane release      
                         '''
                     }
                 }
             }
-            else if ("${branchName}".contains("-r")){
-                stage('Build & Upload') {
-                    withCredentials([
-                        [
-                            $class          : 'UsernamePasswordMultiBinding',
-                            credentialsId   : '85859bba-4927-4b14-bfdf-aca726009962',
-                            passwordVariable: 'GITHUB_PASSWORD',
-                            usernameVariable: 'GITHUB_USERNAME',
-                        ],
-                        string(credentialsId: 'c9d7aaae-25ee-4b74-b03f-d50312c53edd', variable: 'ITUNES_USER'),
-                        string(credentialsId: 'c033c0cc-a707-4a5d-aa5f-efccdd28c654', variable: 'SentryDSN'),
-                        string(credentialsId: 'd373025a-dc98-4fba-a2e3-da21e2011972', variable: 'FASTLANE_PASSWORD'),
-                        string(credentialsId: '9d4b5abb-a0ab-4d8b-85b7-cf380485da7c', variable: 'MATCH_PASSWORD'),
-                        string(credentialsId: 'f206e880-e09a-4369-a3f6-f86ee94481f2', variable: 'SENTRY_AUTH_TOKEN'),
-                        string(credentialsId: 'd9dc5c33-beef-402e-93d2-376a722a9766', variable: 'FASTLANE_ITC_TEAM_ID')]) 
-                    {
-                        sh '''#!/bin/bash -l
-                            set -x
-                            set -e
-                            rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
-                            export MATCH_KEYCHAIN_NAME=ios-build.keychain
-                            rm -rf ../build-tools      
-                            fastlane importLocalizations   
-                            fastlane release    
-                        '''
-                    }
-                }
-            }
+            
             stage("Clean Up"){
                 sh '''#!/bin/bash -l
                     set -x
