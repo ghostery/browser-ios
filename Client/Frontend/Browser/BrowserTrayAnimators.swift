@@ -94,6 +94,8 @@ private extension TrayToBrowserAnimator {
             bvc.homePanelController?.view.isHidden = false
             bvc.urlBar.isTransitioning = false
             transitionContext.completeTransition(true)
+            // Cliqz: Activate the keyboard if necessary
+            bvc.showKeyboardIfNeeded()
         })
     }
 }

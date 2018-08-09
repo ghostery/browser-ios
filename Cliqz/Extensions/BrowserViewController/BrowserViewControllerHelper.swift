@@ -14,7 +14,7 @@ extension BrowserViewController {
     func showKeyboardIfNeeded() {
         guard shouldShowKeyboard() else { return }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             self?.urlBar?.enterOverlayMode("", pasted: false, search: true)
         }
     }
@@ -29,11 +29,12 @@ extension BrowserViewController {
         let selectedHomePanel = homePanelController?.selectedPanel ?? .topSites
         let selectedTab = self.tabManager.selectedTab
         
-        guard selectedHomePanel == .topSites else { return false }
-        if let url = selectedTab?.url {
-            return url.isAboutURL
+        if selectedHomePanel != .topSites {
+            return false
         } else if let tab = selectedTab {
             return tab.restoringFreshtab
+        } else if let url = selectedTab?.url {
+            return url.isAboutURL
         }
         
         return false
