@@ -6,8 +6,8 @@
     "appium": "appium &",
     "build": "webpack --config webpack.config.js",
     "debug-channel": "sed -i '' 's/\"channel\": \".*\",$/\"channel\": \"MI99\",/' node_modules/browser-core/build/modules/core/config.js",
-    "dev-server": "npm run debug-channel && node node_modules/react-native/local-cli/cli.js start",
-    "dev-bundle": "npm run debug-channel && node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
+    "dev-server": "node node_modules/react-native/local-cli/cli.js start",
+    "dev-bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
     "bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ --dev false && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
     "postinstall": "sed -i '' 's#<fishhook/fishhook.h>#\"fishhook.h\"#g' ./node_modules/react-native/Libraries/WebSocket/RCTReconnectingWebSocket.m"
   },
