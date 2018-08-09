@@ -736,6 +736,8 @@ class BrowserViewController: UIViewController {
             addChildViewController(homePanelController)
             view.addSubview(homePanelController.view)
             homePanelController.didMove(toParentViewController: self)
+            // Cliqz: Activate the keyboard if necessary
+            self.showKeyboardIfNeeded()
         }
         guard let homePanelController = self.homePanelController else {
             assertionFailure("homePanelController is still nil after assignment.")
@@ -802,8 +804,6 @@ class BrowserViewController: UIViewController {
                 hideHomePanelController()
             }
         }
-		// Cliqz: Activate the keyboard if necessary
-        showKeyboardIfNeeded()
     }
 
     fileprivate func showSearchController() {
@@ -2464,9 +2464,9 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
                 self.presentSignInViewController(fxaParams)
             }
+            // Cliqz: Activate the keyboard if necessary
+            self.showKeyboardIfNeeded()
         }
-        // Cliqz: Activate the keyboard if necessary
-        showKeyboardIfNeeded()
     }
 
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil) {
