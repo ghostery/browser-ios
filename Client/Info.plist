@@ -73,25 +73,23 @@
 	<string></string>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
-	<key>MozWhatsNewTopic</key>
-	<string>whats-new-ios-11</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This lets you take and upload photos.</string>
+	<string>This lets you scan, take and upload videos or photos.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Firefox requires Face ID to access your saved logins.</string>
+	<string>Ghostery requires Face ID to access your saved logins.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Websites you visit may request your location.</string>
+	<string>Your location is used to provide better search results.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>This lets you take and upload videos.</string>
+	<string>Ghostery will only use the microphone when you choose to record videos inside the browser.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This lets you save photos.</string>
+	<string>Ghostery will only use this access to download videos and pictures to your device.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This lets you save and upload photos.</string>
+	<string>Ghostery will only use this access to download videos and pictures to your device.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.mozilla.ios.firefox.browsing</string>

@@ -14,6 +14,14 @@ default_platform(:ios)
 platform :ios do
   desc "Description of what the lane does"
 
+  lane :exportLocalizations do
+    import_repository(
+      url: 'https://github.com/cliqz-oss/ios-l10n-scripts.git',
+      clone_folder: "../build-tools",
+    )
+    sh("cd .. && sh ../build-tools/export-locales-cliqz.sh Client.xcodeproj browser-ios-l10n cliqz-ios.xliff")
+  end  
+  
   lane :importLocalizations do
     # Import Firefox localizations
     import_repository(
