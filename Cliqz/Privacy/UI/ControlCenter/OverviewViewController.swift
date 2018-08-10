@@ -335,9 +335,9 @@ class OverviewViewController: UIViewController {
             }
             
             self.blockedTrackers.snp.makeConstraints { (make) in
-                make.centerX.equalTo(self.view)
 				make.top.equalTo(self.urlLabel.snp.bottom)
-                make.height.equalTo(30)
+				make.width.equalTo(self.view.snp.width).offset(20)
+                make.height.equalTo(50)
             }
 
             self.trustSiteButton.snp.makeConstraints { (make) in
@@ -393,6 +393,7 @@ class OverviewViewController: UIViewController {
             
             self.blockedTrackers.snp.makeConstraints { (make) in
                 make.centerX.equalTo(self.urlLabel.snp.centerX)
+				make.width.equalTo(self.urlLabel.snp.width)
                 make.top.equalTo(self.urlLabel.snp.bottom).offset(blockedTrackersOffset)
             }
             
@@ -453,7 +454,10 @@ class OverviewViewController: UIViewController {
 		self.urlLabel.textAlignment = .center
 
 		self.blockedTrackers.font = UIFont.systemFont(ofSize: 20)
-
+		self.blockedTrackers.numberOfLines = 2
+		self.blockedTrackers.lineBreakMode = .byWordWrapping
+		self.blockedTrackers.adjustsFontSizeToFitWidth = true
+		self.blockedTrackers.textAlignment = .center
 		self.trustSiteButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
 		self.trustSiteButton.backgroundColor = UIColor.white
 		self.trustSiteButton.layer.borderColor = ControlCenterUI.buttonGray.cgColor
