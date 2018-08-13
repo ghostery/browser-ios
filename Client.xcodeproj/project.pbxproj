@@ -43,6 +43,8 @@
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
 		1E138D7F20A2E4F400B82C13 /* BookmarksModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */; };
 		1E138E1420A5983D00B82C13 /* CliqzBookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */; };
+		1E25A2D32121A7AA0038D8D7 /* LocaleConstantsBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E25A2C92121A7A80038D8D7 /* LocaleConstantsBridge.m */; };
+		1E25A2D42121A7AA0038D8D7 /* LocaleConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E25A2D22121A7A90038D8D7 /* LocaleConstants.swift */; };
 		1E2C202020AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */; };
 		1E2C227C20B4149000AA00B5 /* SendUsageDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */; };
 		1E2E551221187407003B50BE /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C75DF2207584C300BB8AD0 /* UIImageViewAligned.m */; };
@@ -1345,6 +1347,8 @@
 		1E066FAB204D5B1C0017C800 /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Client.entitlements; sourceTree = "<group>"; };
 		1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksModelExtensions.swift; sourceTree = "<group>"; };
 		1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzBookmarksPanel.swift; sourceTree = "<group>"; };
+		1E25A2C92121A7A80038D8D7 /* LocaleConstantsBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocaleConstantsBridge.m; sourceTree = "<group>"; };
+		1E25A2D22121A7A90038D8D7 /* LocaleConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleConstants.swift; sourceTree = "<group>"; };
 		1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzSiteTableViewCell.swift; sourceTree = "<group>"; };
 		1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendUsageDataTableViewController.swift; sourceTree = "<group>"; };
 		1E3B3F2420C1590600C96736 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
@@ -3187,6 +3191,8 @@
 				AF28D3DA207E325F0065FF86 /* PermissionManagerModuleBridge.m */,
 				AF28D3DE207E37A20065FF86 /* GeoLocation.swift */,
 				AF28D3DC207E378E0065FF86 /* GeoLocationBridge.m */,
+				1E25A2D22121A7A90038D8D7 /* LocaleConstants.swift */,
+				1E25A2C92121A7A80038D8D7 /* LocaleConstantsBridge.m */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -5985,6 +5991,7 @@
 			files = (
 				4F304595204FEC5500C99162 /* PanelDataObservers.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
+				1E25A2D32121A7AA0038D8D7 /* LocaleConstantsBridge.m in Sources */,
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
 				1EEA36DD206401EB003B6AD5 /* CliqzTabLocationView.swift in Sources */,
 				D029A04920A62DB0001DB72F /* TemporaryDocument.swift in Sources */,
@@ -6119,6 +6126,7 @@
 				1E4CFBFB2073A5CC00B26E85 /* EditConnectionViewController.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
+				1E25A2D42121A7AA0038D8D7 /* LocaleConstants.swift in Sources */,
 				4F30F5172051670C0049E4F6 /* Telemetry.swift in Sources */,
 				1EDF91C9208DDC5400200100 /* CliqzForgetModeButton.swift in Sources */,
 				AF99C8A2206935F0009404FF /* GhosteryButton.swift in Sources */,
