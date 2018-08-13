@@ -269,6 +269,11 @@ extension BrowserViewController: WKNavigationDelegate {
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab)
         }
+        
+        // Cliqz: set shouldShowKeyboard to false when starting navigating to a website
+        if let url = webView.url, !url.isAboutURL {
+            self.homePanelController?.shouldShowKeyboard = false
+        }
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
