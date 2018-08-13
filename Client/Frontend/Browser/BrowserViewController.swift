@@ -1571,7 +1571,6 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
 		// Cliqz: Close CC
 		self.hideControlCenter()
-		self.homePanelController?.shouldShowKeyboard = false
         BackgroundImageManager.shared.reset()
         if let url = tabManager.selectedTab?.webView?.url {
             NotificationCenter.default.post(name: didLeaveOverlayNotification, object: nil, userInfo: ["url": url])
@@ -2948,6 +2947,8 @@ extension BrowserViewController: TopTabsDelegate {
     
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
+        // Cliqz: show keyboard if needed when adding new tab from the toptabs button (iPad)
+        self.showKeyboardIfNeeded()
     }
 
     func topTabsDidTogglePrivateMode() {
