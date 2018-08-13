@@ -49,7 +49,6 @@ class UpdateOperation: Operation {
     
     override func main() {
         self.isExecuting = true
-        //let timer = ParkBenchTimer()
         var blockLists: [WKContentRuleList] = []
         let dispatchGroup = DispatchGroup()
         for type in BlockingCoordinator.order {
@@ -59,7 +58,9 @@ class UpdateOperation: Operation {
                 let (identifiers, info) = BlockingCoordinator.blockIdentifiers(forType: type, domain: domain, webView: webView)
                 let shouldHitCache: Bool = info?["hitCache"] ?? true
                 BlockListManager.shared.getBlockLists(forIdentifiers: identifiers, type: type, domain: domain, hitCache: shouldHitCache, callback: { (lists) in
-                    blockLists.append(contentsOf: lists)
+                    if !lists.isEmpty {
+                        blockLists.append(contentsOf: lists)
+                    }
                     type == .antitracking ? debugPrint("Antitracking is ON") : debugPrint("Adblocking is ON")
                     dispatchGroup.leave()
                 })
@@ -71,12 +72,10 @@ class UpdateOperation: Operation {
         
         dispatchGroup.notify(queue: .main) {
             self.webView?.configuration.userContentController.removeAllContentRuleLists()
-            if let webView = self.webView {
+            if let webView = self.webView, !blockLists.isEmpty {
                 blockLists.forEach(webView.configuration.userContentController.add)
                 debugPrint("BlockLists Loaded")
             }
-            //timer.stop()
-            //debugPrint("Load time: \(String(describing: timer.duration))")
             self.isFinished = true
             LoadingNotificationManager.shared.loadingFinished()
         }
