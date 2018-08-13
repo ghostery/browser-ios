@@ -73,6 +73,7 @@ node('mac-mini-ios') {
                         set -e
                         set -x
                         carthage bootstrap --verbose --platform ios --color auto --cache-builds
+                        npm cache clean --force
                         npm install
                         npm run build
                         pod install
