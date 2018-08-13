@@ -123,12 +123,12 @@ public class TrackerStateStore: NSObject {
             //set page state to trusted
             setPageState(state: .trusted, appId: appId, domainObj: domainObj, realm: realm)
             //set global state to empty
-            setGlobalState(state: .empty, trackerState: trackerState)
+            setGlobalState(state: trackerState.translatedState, trackerState: trackerState)
         case .restricted:
             //set page state to restricted
             setPageState(state: .restricted, appId: appId, domainObj: domainObj, realm: realm)
             //set global state to empty
-            setGlobalState(state: .empty, trackerState: trackerState)
+            setGlobalState(state: trackerState.translatedState, trackerState: trackerState)
         case .empty:
             //set page state to empty
             setPageState(state: .empty, appId: appId, domainObj: domainObj, realm: realm)
