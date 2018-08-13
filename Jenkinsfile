@@ -73,7 +73,24 @@ node('mac-mini-ios') {
                         set -e
                         set -x
                         carthage bootstrap --verbose --platform ios --color auto --cache-builds
-                        npm install
+                        npm cache clean --force
+                    '''
+                    try {
+                        sh '''#!/bin/bash -l
+                            set -e
+                            set -x
+                            npm install
+                        '''
+                    } catch(e) {
+                        sh '''#!/bin/bash -l
+                            set -e
+                            set -x
+                            npm install
+                        '''
+                    }
+                    sh '''#!/bin/bash -l
+                        set -e
+                        set -x
                         npm run build
                         pod install
                         npm run bundle
