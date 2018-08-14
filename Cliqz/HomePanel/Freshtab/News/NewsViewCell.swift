@@ -84,6 +84,20 @@ class NewsViewCell: ClickableUITableViewCell {
 			}, onError: { (_) in
 				self.logoImageView.image = nil
 			}, onCompleted: nil, onDisposed: nil).disposed(by: disposeBag)
+            
+            viewModel?.logoInfo.asObservable().subscribe(onNext: { (logoInfo) in
+                if let info = logoInfo {
+                    let placeholder = LogoPlaceholder(logoInfo: info)
+                    self.fakeLogoView = placeholder
+                    self.logoContainerView.addSubview(placeholder)
+                    placeholder.snp.makeConstraints({ (make) in
+                        make.top.left.right.bottom.equalTo(self.logoContainerView)
+                    })
+                }
+            }, onError: { (_) in
+                self.fakeLogoView = nil
+                self.fakeLogoView?.removeFromSuperview()
+            }, onCompleted: nil, onDisposed: nil).disposed(by: disposeBag)
 		}
 	}
 
