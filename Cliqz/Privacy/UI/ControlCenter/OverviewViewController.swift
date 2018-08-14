@@ -337,6 +337,7 @@ class OverviewViewController: UIViewController {
             self.blockedTrackers.snp.makeConstraints { (make) in
 				make.top.equalTo(self.urlLabel.snp.bottom)
 				make.width.equalTo(self.view.snp.width).offset(20)
+                make.centerX.equalToSuperview()
                 make.height.equalTo(50)
             }
 
