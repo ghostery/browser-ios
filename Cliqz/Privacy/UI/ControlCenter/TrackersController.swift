@@ -409,17 +409,42 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 		let headerView = sender.view
 		if let section = headerView?.tag {
 			var set = IndexSet()
+            
+            // Note: This is a temporary solution to the table disappearing after a section is collapsed.
+            // The problem seems to be inside the Apple code. One possible solution is to convert this to a UICollectionView.
+            // Build indexPaths
+            let numberOfRows = self.dataSource?.numberOfRows(tableType: type, section: section) ?? 0
+            var indexPaths: [IndexPath] = []
+            for i in 0..<numberOfRows {
+                let indexPath = IndexPath(row: i, section: section)
+                indexPaths.append(indexPath)
+            }
+            
 			if self.expandedSectionIndex == section {
 				self.expandedSectionIndex = -1
 				set.insert(section)
+                
+                self.tableView.performBatchUpdates({
+                    self.tableView.deleteRows(at: indexPaths, with: .fade)
+                }) { (finished) in
+                    if finished {
+                        self.tableView.setContentOffset(CGPoint.zero, animated: true)
+                        //self.tableView.scrollRectToVisible(headerView!.frame, animated: true)
+                    }
+                }
+                
 			} else {
 				if self.expandedSectionIndex != -1 {
 					set.insert(self.expandedSectionIndex)
 				}
 				set.insert(section)
 				self.expandedSectionIndex = section
+                
+                self.tableView.beginUpdates()
+                self.tableView.insertRows(at: indexPaths, with: .fade)
+                self.tableView.endUpdates()
 			}
-			self.tableView.reloadSections(set, with: .fade)
+            
 			if set.count > 1 {
 				self.tableView.scrollToRow(at: IndexPath(row: 0, section: section), at: .top, animated: false)
 			}
