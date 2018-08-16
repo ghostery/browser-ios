@@ -86,7 +86,7 @@ protocol ControlCenterDelegateProtocol: class {
     func pauseGhostery(paused: Bool, time: Date)
     func turnGlobalAdblocking(on: Bool)
     func changeState(category: String, state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void)
-    func changeState(appId: Int, state: TrackerUIState, tableType: TableType, emptyState: EmptyState)
+    func changeState(appId: Int, state: TrackerUIState, tableType: TableType, section: Int, emptyState: EmptyState)
     func undoState(appId: Int, tableType: TableType)
     func undoAll(tableType: TableType, completion: @escaping () -> Void)
     func blockAll(tableType: TableType, completion: @escaping () -> Void)
@@ -471,7 +471,13 @@ class ControlCenterModel: ControlCenterDSProtocol {
             }
         }
         else {
-            stateImageCache = [.page: [:], .global: [:]]
+            if let s = section {
+                stateImageCache[.global]?.removeValue(forKey: s)
+                stateImageCache[.page]?.removeValue(forKey: s)
+            }
+            else {
+                stateImageCache = [.page: [:], .global: [:]]
+            }
         }
     }
     
@@ -485,7 +491,13 @@ class ControlCenterModel: ControlCenterDSProtocol {
             }
         }
         else {
-            blockedTrackerCountCache = [.page: [:], .global: [:]]
+            if let s = section {
+                blockedTrackerCountCache[.global]?.removeValue(forKey: s)
+                blockedTrackerCountCache[.page]?.removeValue(forKey: s)
+            }
+            else {
+                blockedTrackerCountCache = [.page: [:], .global: [:]]
+            }
         }
     }
 }

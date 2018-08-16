@@ -35,10 +35,10 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func changeState(appId: Int, state: TrackerUIState, tableType: TableType, emptyState: EmptyState = .both) {
+    func changeState(appId: Int, state: TrackerUIState, tableType: TableType, section: Int, emptyState: EmptyState = .both) {
         
-        invalidateStateImageCache()
-        invalidateBlockedCountCache()
+        invalidateStateImageCache(section: section)
+        invalidateBlockedCountCache(section: section)
         
         if let domainStr = self.domainStr, tableType == .page {
             TrackerStateStore.change(appIds: [appId], domain: domainStr, toState: state, emptyState: emptyState)
@@ -51,6 +51,7 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
     }
     
     func changeState(appIds: [Int], state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void) {
+        
         invalidateStateImageCache()
         invalidateBlockedCountCache()
         

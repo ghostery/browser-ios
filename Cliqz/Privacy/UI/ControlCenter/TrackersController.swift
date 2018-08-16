@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 import RxSwift
-
+import Storage
 //This is a temporary solution until we build the Ghostery Control Center
 
 let trackerViewDismissedNotification = Notification.Name(rawValue: "TrackerViewDismissed")
@@ -326,6 +326,15 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		return 1
 	}
+    
+    private func updateSection(_ section: Int) {
+        self.tableView.performBatchUpdates({
+            let indexSet = IndexSet.init(integer: section)
+            self.tableView.reloadSections(indexSet, with: .none)
+        }) { (finished) in
+            //do nothing
+        }
+    }
 
 	func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 		let appId = self.dataSource?.appId(tableType: type, indexPath: indexPath) ?? -1
@@ -335,60 +344,48 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 				switch action {
 				case .trust:
 					let trustAction = UIContextualAction(style: .normal, title: NSLocalizedString("Trust", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Trust Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .trusted, tableType: self.type, emptyState: .none)
-						self.tableView.beginUpdates()
-						tableView.reloadRows(at: [indexPath], with: .none)
-						self.tableView.endUpdates()
+                        self.delegate?.changeState(appId: appId, state: .trusted, tableType: self.type, section: indexPath.section, emptyState: .none)
+						self.updateSection(indexPath.section)
 						complHandler(false)
 					}
 					trustAction.backgroundColor = UIColor.cliqzGreenLightFunctional
 					swipeActions.append(trustAction)
                 case .untrust:
                     let untrustAction = UIContextualAction(style: .normal, title: NSLocalizedString("Untrust", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Untrust Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, emptyState: .page)
-                        self.tableView.beginUpdates()
-                        tableView.reloadRows(at: [indexPath], with: .none)
-                        self.tableView.endUpdates()
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, section: indexPath.section, emptyState: .page)
+                        self.updateSection(indexPath.section)
                         complHandler(false)
                     }
                     untrustAction.backgroundColor = UIColor.cliqzGreenLightFunctional
                     swipeActions.append(untrustAction)
 				case .block:
 					let blockAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Block", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Block Action Title")) { [unowned self] (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .blocked, tableType: self.type, emptyState: .none)
-						self.tableView.beginUpdates()
-                        tableView.reloadRows(at: [indexPath], with: .none)
-						self.tableView.endUpdates()
+						self.delegate?.changeState(appId: appId, state: .blocked, tableType: self.type, section: indexPath.section, emptyState: .none)
+						self.updateSection(indexPath.section)
 						complHandler(false)
 					}
 					blockAction.backgroundColor = UIColor(colorString: "E74055")
 					swipeActions.append(blockAction)
 				case .unblock:
 					let unblockAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unblock", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unblock Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, emptyState: .both)
-						self.tableView.beginUpdates()
-						tableView.reloadRows(at: [indexPath], with: .none)
-						self.tableView.endUpdates()
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, section: indexPath.section, emptyState: .both)
+						self.updateSection(indexPath.section)
 						complHandler(false)
 					}
 					unblockAction.backgroundColor = UIColor(colorString: "E74055")
 					swipeActions.append(unblockAction)
 				case .restrict:
 					let restrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Restrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Restrict Action Title")) { [unowned self] (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .restricted, tableType: self.type, emptyState: .none)
-						self.tableView.beginUpdates()
-						tableView.reloadRows(at: [indexPath], with: .none)
-						self.tableView.endUpdates()
+						self.delegate?.changeState(appId: appId, state: .restricted, tableType: self.type, section: indexPath.section, emptyState: .none)
+						self.updateSection(indexPath.section)
 						complHandler(false)
 					}
 					restrictAction.backgroundColor = UIColor(colorString: "BE4948")
 					swipeActions.append(restrictAction)
                 case .unrestrict:
                     let unrestrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unrestrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unrestrict Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, emptyState: .page)
-                        self.tableView.beginUpdates()
-                        tableView.reloadRows(at: [indexPath], with: .none)
-                        self.tableView.endUpdates()
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, section: indexPath.section, emptyState: .page)
+                        self.updateSection(indexPath.section)
                         complHandler(false)
                     }
                     unrestrictAction.backgroundColor = UIColor(colorString: "BE4948")
@@ -405,6 +402,17 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
         }
         self.tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    private func getIndexPaths(_ section: Int) -> [IndexPath] {
+        let numberOfRows = self.dataSource?.numberOfRows(tableType: type, section: section) ?? 0
+        var indexPaths: [IndexPath] = []
+        for i in 0..<numberOfRows {
+            let indexPath = IndexPath(row: i, section: section)
+            indexPaths.append(indexPath)
+        }
+        
+        return indexPaths
+    }
 
 	@objc private func sectionHeaderTapped(_ sender: UITapGestureRecognizer) {
 		let headerView = sender.view
@@ -414,12 +422,8 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
             // Note: This is a temporary solution to the table disappearing after a section is collapsed.
             // The problem seems to be inside the Apple code. One possible solution is to convert this to a UICollectionView.
             // Build indexPaths
-            let numberOfRows = self.dataSource?.numberOfRows(tableType: type, section: section) ?? 0
-            var indexPaths: [IndexPath] = []
-            for i in 0..<numberOfRows {
-                let indexPath = IndexPath(row: i, section: section)
-                indexPaths.append(indexPath)
-            }
+            
+            let indexPaths: [IndexPath] = getIndexPaths(section)
             
 			if self.expandedSectionIndex == section {
 				self.expandedSectionIndex = -1
@@ -457,26 +461,16 @@ extension TrackersController: CategoryHeaderViewProtocol {
     func didPressStatusIcon(section: Int) {
         let categoryState = self.dataSource?.categoryState(type, section)
         if let category = self.dataSource?.category(type, section) {
+            let state: TrackerUIState
+            
             if categoryState == .blocked {
-                self.delegate?.changeState(category: category, state: .empty, tableType: type, completion: {
-                    self.tableView.performBatchUpdates({
-                        let indexSet = IndexSet.init(integer: section)
-                        self.tableView.reloadSections(indexSet, with: .none)
-                    }) { (finished) in
-                        //do nothing
-                    }
-                })
+                state = .empty
             }
             else {
-                self.delegate?.changeState(category: category, state: .blocked, tableType: type, completion: {
-                    self.tableView.performBatchUpdates({
-                        let indexSet = IndexSet.init(integer: section)
-                        self.tableView.reloadSections(indexSet, with: .none)
-                    }) { (finished) in
-                        //do nothing
-                    }
-                })
+                state = .blocked
             }
+            
+            self.updateSection(section)
         }
     }
 }
