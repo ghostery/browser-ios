@@ -514,9 +514,18 @@ class OverviewViewController: UIViewController {
 
 	@objc private func trustSitePressed() {
         if !self.trustSiteButton.isSelected {
-            self.delegate?.changeAll(state: .trusted, tableType: .page, completion: { [weak self] in
-                self?.pauseGhosteryAndRefresh(paused: false)
-            })
+            if self.dataSource?.domainState() == .restricted {
+                self.delegate?.undoAll(tableType: .page, completion: {
+                    self.delegate?.changeAll(state: .trusted, tableType: .page, completion: { [weak self] in
+                        self?.pauseGhosteryAndRefresh(paused: false)
+                    })
+                })
+            }
+            else {
+                self.delegate?.changeAll(state: .trusted, tableType: .page, completion: { [weak self] in
+                    self?.pauseGhosteryAndRefresh(paused: false)
+                })
+            }
         }
         else {
 			if (self.dataSource?.domainPrevState() ?? .empty) == .restricted {
@@ -533,9 +542,18 @@ class OverviewViewController: UIViewController {
 
 	@objc private func restrictSitePressed() {
         if !self.restrictSiteButton.isSelected {
-            self.delegate?.changeAll(state: .restricted, tableType: .page, completion: { [weak self] in
-                self?.pauseGhosteryAndRefresh(paused: false)
-            })
+            if self.dataSource?.domainState() == .trusted {
+                self.delegate?.undoAll(tableType: .page, completion: {
+                    self.delegate?.changeAll(state: .restricted, tableType: .page, completion: { [weak self] in
+                        self?.pauseGhosteryAndRefresh(paused: false)
+                    })
+                })
+            }
+            else {
+                self.delegate?.changeAll(state: .restricted, tableType: .page, completion: { [weak self] in
+                    self?.pauseGhosteryAndRefresh(paused: false)
+                })
+            }
         } else {
 			if (self.dataSource?.domainPrevState() ?? .empty) == .trusted {
 				self.delegate?.changeAll(state: .empty, tableType: .page, completion: { [weak self] in
