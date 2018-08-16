@@ -11,23 +11,31 @@ import Storage
 
 extension ControlCenterModel: ControlCenterDelegateProtocol {
     
-    func changeState(category: String, state: TrackerUIState, section: Int, tableType: TableType) {
+    
+    func changeState(category: String, state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void) {
         
         if let domainStr = self.domainStr, tableType == .page {
             if let appIds = TrackerList.instance.trackersByCategory(domain: domainStr)[category]?.map({ (app) -> Int in return app.appId }) {
                 LoadingNotificationManager.shared.changeInControlCenter()
-                self.changeState(appIds: appIds, state: state, tableType: tableType)
+                self.changeState(appIds: appIds, state: state, tableType: tableType, completion: {
+                    completion()
+                })
             }
         }
         else if tableType == .global {
             if let appIds = TrackerList.instance.appsByCategory[category]?.map({ (app) -> Int in return app.appId }) {
                 LoadingNotificationManager.shared.changeInControlCenter()
-                self.changeState(appIds: appIds, state: state, tableType: tableType)
+                self.changeState(appIds: appIds, state: state, tableType: tableType, completion: {
+                    completion()
+                })
             }
+        }
+        else {
+            completion()
         }
     }
     
-    func changeState(appId: Int, state: TrackerUIState, section: Int?, tableType: TableType) {
+    func changeState(appId: Int, state: TrackerUIState, tableType: TableType) {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
@@ -42,18 +50,61 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         LoadingNotificationManager.shared.changeInControlCenter()
     }
     
-    func changeState(appIds: [Int], state: TrackerUIState, tableType: TableType) {
+    func changeState(appIds: [Int], state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void) {
         invalidateStateImageCache()
         invalidateBlockedCountCache()
         
-        if let domainStr = self.domainStr, tableType == .page {
-            TrackerStateStore.change(appIds: appIds, domain: domainStr, toState: state)
-        }
-        else {
-            TrackerStateStore.change(appIds: appIds, toState: state)
+        LoadingNotificationManager.shared.changeInControlCenter()
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
+            if let d = self?.domainStr, tableType == .page {
+                TrackerStateStore.change(appIds: appIds, domain: d, toState: state)
+            }
+            else if tableType == .global {
+                TrackerStateStore.change(appIds: appIds, toState: state)
+            }
+            
+            DispatchQueue.main.async {
+                completion()
+            }
         }
         
+    }
+    
+    func undoState(appId: Int, tableType: TableType) {
+        invalidateStateImageCache()
+        invalidateBlockedCountCache()
+        
         LoadingNotificationManager.shared.changeInControlCenter()
+        
+        if let domainStr = self.domainStr, tableType == .page {
+            TrackerStateStore.undo(appIds: [appId], domain: domainStr)
+        }
+        else {
+            TrackerStateStore.undo(appIds: [appId])
+        }
+    }
+    
+    func undoState(appIds: [Int], tableType: TableType, completion: @escaping () -> Void) {
+        invalidateStateImageCache()
+        invalidateBlockedCountCache()
+        
+        LoadingNotificationManager.shared.changeInControlCenter()
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
+            if let domainStr = self?.domainStr, tableType == .page {
+                TrackerStateStore.undo(appIds: appIds, domain: domainStr)
+            }
+            else if tableType == .global {
+                TrackerStateStore.undo(appIds: appIds)
+            }
+            
+            DispatchQueue.main.async {
+                completion()
+            }
+        }
     }
     
     func blockAll(tableType: TableType, completion: @escaping () -> Void) {
@@ -139,22 +190,19 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         LoadingNotificationManager.shared.changeInControlCenter()
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-        
-            var trackers: [TrackerListApp] = []
             
             if let d = self?.domainStr, tableType == .page {
-                trackers.append(contentsOf: TrackerList.instance.detectedTrackersForPage(d))
+                TrackerStateStore.change(appIds: TrackerList.instance.detectedTrackersForPage(d).map{app in return app.appId}, domain: d, toState: state)
             }
             else if tableType == .global {
-                trackers.append(contentsOf: TrackerList.instance.appsList)
+                TrackerStateStore.change(appIds: TrackerList.instance.appsList.map{app in return app.appId}, toState: state)
             }
-
-            self?.changeState(appIds: trackers.map{app in return app.appId}, state: state, tableType: tableType)
             
             DispatchQueue.main.async {
                 completion()
             }
         }
+        
     }
     
     private func domainState2TrackerUIState(domainState: DomainState) -> TrackerUIState {

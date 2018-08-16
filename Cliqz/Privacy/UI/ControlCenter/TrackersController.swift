@@ -297,6 +297,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		let header = CategoryHeaderView()
+        header.delegate = self
 		header.type = type
 		header.tag = section
 		header.categoryName = self.dataSource?.title(tableType: type, section: section)
@@ -310,9 +311,9 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
             self.dataSource?.isGhosteryPaused() == true ? header.lookDeactivated() : header.lookActivated()
         }
         
-		let headerTapGesture = UITapGestureRecognizer()
-		headerTapGesture.addTarget(self, action: #selector(sectionHeaderTapped(_:)))
-		header.addGestureRecognizer(headerTapGesture)
+        let headerTapGesture = UITapGestureRecognizer()
+        headerTapGesture.addTarget(self, action: #selector(sectionHeaderTapped(_:)))
+        header.addGestureRecognizer(headerTapGesture)
 		return header
 	}
 
@@ -334,7 +335,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 				switch action {
 				case .trust:
 					let trustAction = UIContextualAction(style: .normal, title: NSLocalizedString("Trust", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Trust Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .trusted, section: indexPath.section, tableType: self.type)
+                        self.delegate?.changeState(appId: appId, state: .trusted, tableType: self.type)
 						self.tableView.beginUpdates()
 						tableView.reloadRows(at: [indexPath], with: .none)
 						self.tableView.endUpdates()
@@ -344,7 +345,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(trustAction)
                 case .untrust:
                     let untrustAction = UIContextualAction(style: .normal, title: NSLocalizedString("Untrust", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Untrust Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .empty, section: indexPath.section, tableType: self.type)
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type)
                         self.tableView.beginUpdates()
                         tableView.reloadRows(at: [indexPath], with: .none)
                         self.tableView.endUpdates()
@@ -354,7 +355,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
                     swipeActions.append(untrustAction)
 				case .block:
 					let blockAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Block", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Block Action Title")) { [unowned self] (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .blocked, section: indexPath.section, tableType: self.type)
+						self.delegate?.changeState(appId: appId, state: .blocked, tableType: self.type)
 						self.tableView.beginUpdates()
                         tableView.reloadRows(at: [indexPath], with: .none)
 						self.tableView.endUpdates()
@@ -364,7 +365,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(blockAction)
 				case .unblock:
 					let unblockAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unblock", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unblock Action Title")) { [unowned self] (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .empty, section: indexPath.section, tableType: self.type)
+						self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type)
 						self.tableView.beginUpdates()
 						tableView.reloadRows(at: [indexPath], with: .none)
 						self.tableView.endUpdates()
@@ -374,7 +375,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(unblockAction)
 				case .restrict:
 					let restrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Restrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Restrict Action Title")) { [unowned self] (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .restricted, section: indexPath.section, tableType: self.type)
+						self.delegate?.changeState(appId: appId, state: .restricted, tableType: self.type)
 						self.tableView.beginUpdates()
 						tableView.reloadRows(at: [indexPath], with: .none)
 						self.tableView.endUpdates()
@@ -384,7 +385,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(restrictAction)
                 case .unrestrict:
                     let unrestrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unrestrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unrestrict Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .empty, section: indexPath.section, tableType: self.type)
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type)
                         self.tableView.beginUpdates()
                         tableView.reloadRows(at: [indexPath], with: .none)
                         self.tableView.endUpdates()
@@ -450,6 +451,34 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 			}
 		}
 	}
+}
+
+extension TrackersController: CategoryHeaderViewProtocol {
+    func didPressStatusIcon(section: Int) {
+        let categoryState = self.dataSource?.categoryState(type, section)
+        if let category = self.dataSource?.category(type, section) {
+            if categoryState == .blocked {
+                self.delegate?.changeState(category: category, state: .empty, tableType: type, completion: {
+                    self.tableView.performBatchUpdates({
+                        let indexSet = IndexSet.init(integer: section)
+                        self.tableView.reloadSections(indexSet, with: .none)
+                    }) { (finished) in
+                        //do nothing
+                    }
+                })
+            }
+            else {
+                self.delegate?.changeState(category: category, state: .blocked, tableType: type, completion: {
+                    self.tableView.performBatchUpdates({
+                        let indexSet = IndexSet.init(integer: section)
+                        self.tableView.reloadSections(indexSet, with: .none)
+                    }) { (finished) in
+                        //do nothing
+                    }
+                })
+            }
+        }
+    }
 }
 
 class TrackerViewCell: UITableViewCell {
@@ -618,6 +647,10 @@ class CategoriesHeaderView: UIControl {
     }
 }
 
+protocol CategoryHeaderViewProtocol: class {
+    func didPressStatusIcon(section: Int)
+}
+
 class CategoryHeaderView: UIView {
 
 	private let iconView = UIImageView()
@@ -626,6 +659,8 @@ class CategoryHeaderView: UIView {
 	private let typeLabel = UILabel()
 	private let statusView = UIImageView()
 	private let expandedIcon = UIImageView()
+    
+    weak var delegate: CategoryHeaderViewProtocol? = nil
 
 	var isExpanded = false {
 		didSet {
@@ -687,6 +722,10 @@ class CategoryHeaderView: UIView {
 		self.addSubview(typeLabel)
 		self.addSubview(expandedIcon)
 		self.setStyles()
+        
+        statusView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(statusViewPressed))
+        statusView.addGestureRecognizer(tap)
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -750,6 +789,10 @@ class CategoryHeaderView: UIView {
         categoryLabel.textColor = UIColor.black
         iconView.alpha = 1.0
         statusView.alpha = 1.0
+    }
+    
+    @objc func statusViewPressed(_ sender: Any) {
+        delegate?.didPressStatusIcon(section: self.tag)
     }
 
 	private func updateStatistics() {

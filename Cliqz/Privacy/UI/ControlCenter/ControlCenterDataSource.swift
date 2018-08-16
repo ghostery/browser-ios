@@ -61,11 +61,33 @@ enum ActionType: Int {
     }
 }
 
+enum CategoryState {
+    case blocked
+    case restricted
+    case trusted
+    case empty
+    case other
+    
+    static func from(trackerState: TrackerUIState) -> CategoryState {
+        switch trackerState {
+        case .blocked:
+            return .blocked
+        case .restricted:
+            return .restricted
+        case .trusted:
+            return .trusted
+        case .empty:
+            return .empty
+        }
+    }
+}
+
 protocol ControlCenterDelegateProtocol: class {
     func pauseGhostery(paused: Bool, time: Date)
     func turnGlobalAdblocking(on: Bool)
-    func changeState(category: String, state: TrackerUIState, section: Int, tableType: TableType)
-    func changeState(appId: Int, state: TrackerUIState, section: Int?, tableType: TableType)
+    func changeState(category: String, state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void)
+    func changeState(appId: Int, state: TrackerUIState, tableType: TableType)
+    func undoState(appId: Int, tableType: TableType)
     func undoAll(tableType: TableType, completion: @escaping () -> Void)
     func blockAll(tableType: TableType, completion: @escaping () -> Void)
     func unblockAll(tableType: TableType, completion: @escaping () -> Void)
@@ -99,6 +121,7 @@ protocol ControlCenterDSProtocol: class {
     func title(tableType: TableType, section: Int) -> String
     func image(tableType: TableType, section: Int) -> UIImage?
     func category(_ tableType: TableType, _ section: Int) -> String
+    func categoryState(_ tableType: TableType, _ section: Int) -> CategoryState
     func trackerCount(tableType: TableType, section: Int) -> Int
     func blockedTrackerCount(tableType: TableType, section: Int) -> Int
     func stateIcon(tableType: TableType, section: Int) -> UIImage?
@@ -130,27 +153,6 @@ final class CategoriesHelper {
 }
 
 class ControlCenterModel: ControlCenterDSProtocol {
-    
-    enum CategoryState {
-        case blocked
-        case restricted
-        case trusted
-        case empty
-        case other
-        
-        static func from(trackerState: TrackerUIState) -> CategoryState {
-            switch trackerState {
-            case .blocked:
-                return .blocked
-            case .restricted:
-                return .restricted
-            case .trusted:
-                return .trusted
-            case .empty:
-                return .empty
-            }
-        }
-    }
     
     var domainStr: String? {
         didSet {
@@ -304,6 +306,40 @@ class ControlCenterModel: ControlCenterDSProtocol {
         guard categories.isIndexValid(index: section) else { return "" }
         return categories[section]
     }
+    
+    func categoryState(_ tableType: TableType, _ section: Int) -> CategoryState {
+        
+        let t = trackers(tableType: tableType, category: category(tableType, section))
+        
+        func trackerStates() -> Set<TrackerUIState> {
+            
+            var set: Set<TrackerUIState> = Set()
+            
+            let domain: String? = tableType == .page ? self.domainStr : nil
+            
+            for tracker in t {
+                set.insert(tracker.state(domain: domain))
+            }
+            
+            return set
+        }
+        
+        let set = trackerStates()
+        
+        let state: CategoryState
+        
+        if set.count == 1 {
+            state = CategoryState.from(trackerState: set.first!)
+        }
+        else if set.count > 0{
+            state = .other
+        }
+        else {
+            state = .empty
+        }
+        
+        return state
+    }
  
     func trackerCount(tableType: TableType, section: Int) -> Int {
         return self.numberOfRows(tableType: tableType, section: section)
@@ -331,34 +367,7 @@ class ControlCenterModel: ControlCenterDSProtocol {
             return image
         }
         
-        let t = trackers(tableType: tableType, category: category(tableType, section))
-
-        func trackerStates() -> Set<TrackerUIState> {
-
-            var set: Set<TrackerUIState> = Set()
-
-            let domain: String? = tableType == .page ? self.domainStr : nil
-
-            for tracker in t {
-                set.insert(tracker.state(domain: domain))
-            }
-
-            return set
-        }
-
-        let set = trackerStates()
-
-        let state: CategoryState
-
-        if set.count == 1 {
-            state = CategoryState.from(trackerState: set.first!)
-        }
-        else if set.count > 0{
-            state = .other
-        }
-        else {
-            state = .empty
-        }
+        let state = categoryState(tableType, section)
 
         let image = iconForCategoryState(state: state)
         
