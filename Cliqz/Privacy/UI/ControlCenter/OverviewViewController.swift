@@ -301,6 +301,7 @@ class OverviewViewController: UIViewController {
             setSiteToNone()
         }
 		setPauseGhostery(datasource.isGhosteryPaused())
+        self.adBlockingView.isSwitchOn = self.dataSource?.isGlobalAdblockerOn()
 	}
 
 	private func setupComponents() {
@@ -499,6 +500,9 @@ class OverviewViewController: UIViewController {
         if self.pauseGhosteryButton.isSelected { //already paused
             //resume
             self.delegate?.pauseGhostery(paused: false, time: Date())
+            if UserPreferences.instance.prevAdblockingMode == .blockAll {
+                self.delegate?.turnGlobalAdblocking(on: true)
+            }
             self.updateData()
             TelemetryHelper.sendControlCenterResumeClick()
         }
@@ -587,6 +591,7 @@ class OverviewViewController: UIViewController {
     
     private func pauseGhostery(_ time: Date) {
         self.delegate?.pauseGhostery(paused: true, time: time)
+        self.delegate?.turnGlobalAdblocking(on: false)
         self.updateData()
         TelemetryHelper.sendControlCenterPauseClick()
     }

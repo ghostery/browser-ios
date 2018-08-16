@@ -50,6 +50,7 @@ import Storage
     let TrackerListVersionKey = "TrackerListVersion"
     let AntitrackingModeKey = "AntitrackingMode"
     let AdblockingModeKey = "AdblockingMode"
+    let PrevAdblockingModeKey = "PreviousAdblockingMode"
     let PauseGhosteryDateKey = "PauseGhosteryDate"
     
     // antitracking mode is supposed to be set only in updateAntitrackingPref. It depends on the number of trackers blocked.
@@ -88,7 +89,23 @@ import Storage
             }
         }
         set {
+            prevAdblockingMode = adblockingMode
             userDefaults().set(newValue.rawValue, forKey: AdblockingModeKey)
+        }
+    }
+    
+    var prevAdblockingMode: AdblockingMode {
+        get {
+            if let mode = userDefaults().object(forKey: PrevAdblockingModeKey) as? Int,
+                let blockingMode = AdblockingMode(rawValue: mode) {
+                return blockingMode
+            }
+            else {
+                return .blockAll
+            }
+        }
+        set {
+            userDefaults().set(newValue.rawValue, forKey: PrevAdblockingModeKey)
         }
     }
     
