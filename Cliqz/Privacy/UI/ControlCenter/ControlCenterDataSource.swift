@@ -86,7 +86,7 @@ protocol ControlCenterDelegateProtocol: class {
     func pauseGhostery(paused: Bool, time: Date)
     func turnGlobalAdblocking(on: Bool)
     func changeState(category: String, state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void)
-    func changeState(appId: Int, state: TrackerUIState, tableType: TableType)
+    func changeState(appId: Int, state: TrackerUIState, tableType: TableType, emptyState: EmptyState)
     func undoState(appId: Int, tableType: TableType)
     func undoAll(tableType: TableType, completion: @escaping () -> Void)
     func blockAll(tableType: TableType, completion: @escaping () -> Void)
