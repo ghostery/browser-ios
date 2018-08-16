@@ -94,14 +94,12 @@ public class TrackerStateStore: NSObject {
         write(state: .empty, appIds: [appId], domain: nil)
     }
     
-    public class func change(appIds: [Int], domain: String? = nil, toState: TrackerUIState, completion: (() -> Void)? = nil) {
+    public class func change(appIds: [Int], domain: String? = nil, toState: TrackerUIState) {
         write(state: toState, appIds: appIds, domain: domain)
-        completion?()
     }
     
-    public class func undo(appIds: [Int], domain: String? = nil, completion: (() -> Void)? = nil) {
+    public class func undo(appIds: [Int], domain: String? = nil) {
         write(state: nil, appIds: appIds, domain: domain)
-        completion?()
     }
     
     public class func getTrackerState(appId: Int) -> TrackerState? {
