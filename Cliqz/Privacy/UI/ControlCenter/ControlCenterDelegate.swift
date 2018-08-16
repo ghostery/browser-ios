@@ -35,16 +35,16 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func changeState(appId: Int, state: TrackerUIState, tableType: TableType) {
+    func changeState(appId: Int, state: TrackerUIState, tableType: TableType, emptyState: EmptyState = .both) {
         
         invalidateStateImageCache()
         invalidateBlockedCountCache()
         
         if let domainStr = self.domainStr, tableType == .page {
-            TrackerStateStore.change(appIds: [appId], domain: domainStr, toState: state)
+            TrackerStateStore.change(appIds: [appId], domain: domainStr, toState: state, emptyState: emptyState)
         }
         else {
-            TrackerStateStore.change(appIds: [appId], toState: state)
+            TrackerStateStore.change(appIds: [appId], toState: state, emptyState: emptyState)
         }
         
         LoadingNotificationManager.shared.changeInControlCenter()

@@ -335,7 +335,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 				switch action {
 				case .trust:
 					let trustAction = UIContextualAction(style: .normal, title: NSLocalizedString("Trust", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Trust Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .trusted, tableType: self.type)
+                        self.delegate?.changeState(appId: appId, state: .trusted, tableType: self.type, emptyState: .none)
 						self.tableView.beginUpdates()
 						tableView.reloadRows(at: [indexPath], with: .none)
 						self.tableView.endUpdates()
@@ -345,7 +345,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(trustAction)
                 case .untrust:
                     let untrustAction = UIContextualAction(style: .normal, title: NSLocalizedString("Untrust", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Untrust Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type)
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, emptyState: .page)
                         self.tableView.beginUpdates()
                         tableView.reloadRows(at: [indexPath], with: .none)
                         self.tableView.endUpdates()
@@ -355,7 +355,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
                     swipeActions.append(untrustAction)
 				case .block:
 					let blockAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Block", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Block Action Title")) { [unowned self] (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .blocked, tableType: self.type)
+						self.delegate?.changeState(appId: appId, state: .blocked, tableType: self.type, emptyState: .none)
 						self.tableView.beginUpdates()
                         tableView.reloadRows(at: [indexPath], with: .none)
 						self.tableView.endUpdates()
@@ -365,7 +365,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(blockAction)
 				case .unblock:
 					let unblockAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unblock", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unblock Action Title")) { [unowned self] (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type)
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, emptyState: .both)
 						self.tableView.beginUpdates()
 						tableView.reloadRows(at: [indexPath], with: .none)
 						self.tableView.endUpdates()
@@ -375,7 +375,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(unblockAction)
 				case .restrict:
 					let restrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Restrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Restrict Action Title")) { [unowned self] (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .restricted, tableType: self.type)
+						self.delegate?.changeState(appId: appId, state: .restricted, tableType: self.type, emptyState: .none)
 						self.tableView.beginUpdates()
 						tableView.reloadRows(at: [indexPath], with: .none)
 						self.tableView.endUpdates()
@@ -385,7 +385,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 					swipeActions.append(restrictAction)
                 case .unrestrict:
                     let unrestrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unrestrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unrestrict Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type)
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, emptyState: .page)
                         self.tableView.beginUpdates()
                         tableView.reloadRows(at: [indexPath], with: .none)
                         self.tableView.endUpdates()

@@ -26,6 +26,14 @@ public enum TrackerGlobalState {
     case blocked
 }
 
+//The empty state can mean multiple things. Empty page state or emtpy global state or both
+public enum EmptyState {
+    case none
+    case both
+    case page
+    case global
+}
+
 public class TrackerState: Object {
     @objc dynamic var appId: Int = -1
     @objc dynamic var state: Int = 0 //0 none, 1 blocked
@@ -94,8 +102,8 @@ public class TrackerStateStore: NSObject {
         write(state: .empty, appIds: [appId], domain: nil)
     }
     
-    public class func change(appIds: [Int], domain: String? = nil, toState: TrackerUIState) {
-        write(state: toState, appIds: appIds, domain: domain)
+    public class func change(appIds: [Int], domain: String? = nil, toState: TrackerUIState, emptyState: EmptyState = .both) {
+        write(state: toState, appIds: appIds, domain: domain, emptyState: emptyState)
     }
     
     public class func undo(appIds: [Int], domain: String? = nil) {
@@ -115,7 +123,7 @@ public class TrackerStateStore: NSObject {
         return nil
     }
     
-    private class func insert(state: TrackerUIState, appId: Int, domainObj: Domain?, trackerState: TrackerState, realm: Realm) {
+    private class func insert(state: TrackerUIState, appId: Int, domainObj: Domain?, trackerState: TrackerState, emptyState: EmptyState, realm: Realm) {
         switch state {
         case .trusted:
             //set page state to trusted
@@ -128,10 +136,20 @@ public class TrackerStateStore: NSObject {
             //set global state to empty
             setGlobalState(state: trackerState.translatedState, trackerState: trackerState)
         case .empty:
-            //set page state to empty
-            setPageState(state: .empty, appId: appId, domainObj: domainObj, realm: realm)
-            //set global state to empty
-            setGlobalState(state: .empty, trackerState: trackerState)
+            if emptyState == .both {
+                //set page state to empty
+                setPageState(state: .empty, appId: appId, domainObj: domainObj, realm: realm)
+                //set global state to empty
+                setGlobalState(state: .empty, trackerState: trackerState)
+            }
+            else if emptyState == .page {
+                //set page state to empty
+                setPageState(state: .empty, appId: appId, domainObj: domainObj, realm: realm)
+            }
+            else if emptyState == .global {
+                //set global state to empty
+                setGlobalState(state: .empty, trackerState: trackerState)
+            }
         case .blocked:
             //set page state to empty
             setPageState(state: .empty, appId: appId, domainObj: domainObj, realm: realm)
@@ -185,7 +203,7 @@ public class TrackerStateStore: NSObject {
         trackerState.state = intForState(state: state)
     }
     
-    private class func write(state: TrackerUIState?, appIds: [Int], domain: String?) {
+    private class func write(state: TrackerUIState?, appIds: [Int], domain: String?, emptyState: EmptyState = .both) {
         autoreleasepool {
             if let realm = try? Realm() {
                 guard realm.isInWriteTransaction == false else { return } //avoid exceptions
@@ -235,7 +253,7 @@ public class TrackerStateStore: NSObject {
                         trackerStatesToAdd.append(trackerState)
                     }
                     
-                    insert(state: toState, appId: appId, domainObj: domainObj, trackerState: trackerState, realm: realm)
+                    insert(state: toState, appId: appId, domainObj: domainObj, trackerState: trackerState, emptyState: emptyState, realm: realm)
                     
                     if toState == .empty {
                         TrackerStateStore.shared.blockedTrackers.remove(appId)
