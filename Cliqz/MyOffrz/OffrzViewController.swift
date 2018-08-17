@@ -44,8 +44,11 @@ class OffrzViewController: UIViewController, HomePanel {
 		super.viewDidLoad()
         setStyles()
         setupComponents()
-        self.loadOffrz()
 	}
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.loadOffrz()
+    }
     
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
@@ -101,10 +104,10 @@ class OffrzViewController: UIViewController, HomePanel {
     }
     
     private func setupOnboardingView() {
-        guard self.onboardingView == nil else {
-            return
-        }
-        if offrzDataSource.hasOffrz() && offrzDataSource.shouldShowOnBoarding() {
+        self.onboardingView?.removeFromSuperview()
+        self.onboardingView = nil
+        
+        if offrzDataSource.hasOffrz() && offrzDataSource.shouldShowOnBoarding(){
 			self.onboardingView = OffrzOnboardingView()
             self.onboardingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
 			containerView.addSubview(onboardingView)

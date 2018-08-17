@@ -19,6 +19,7 @@ class OffrzDataSource {
 	var myOffrz = [Offr]()
     private var lastFetchDate: Date?
     private let expirationDuration = 3600.0 // refresh every hour
+    private var region = SettingsPrefs.shared.getRegionPref()
     
 	static let shared = OffrzDataSource()
 
@@ -65,19 +66,15 @@ class OffrzDataSource {
     func hideOnBoarding() {
         LocalDataStore.set(value: "closed", forKey: OffrzDataSource.OffrzOnboardingKey)
     }
-
+    
 	func loadOffrz() {
-        guard SettingsPrefs.shared.getRegionPref() == "DE" else { return }
+        guard shouldRefreshOffers() else { return }
         
-        guard self.lastFetchDate == nil || Date().timeIntervalSince(self.lastFetchDate!) > self.expirationDuration  else {
-            return
-        }
-        
-		OffrzDataService.shared.getMyOffrz { (offrz, error) in
+        self.region = SettingsPrefs.shared.getRegionPref()
+        OffrzDataService.shared.getMyOffrz(region: region) { (offrz, error) in
             guard error == nil else { return }
-            
+            self.myOffrz = offrz
 			if offrz.count > 0 {
-				self.myOffrz = offrz
 				if let o = self.getLastSeenOffr() {
 					self.currentOffr = o
 					self.currentOffr?.isSeen = true
@@ -85,12 +82,21 @@ class OffrzDataSource {
                     LocalDataStore.removeObject(forKey: OffrzDataSource.LastSeenOffrID)
 					self.currentOffr = self.getNotExpiredOffr()
 				}
-			}
+            } else {
+                self.currentOffr = nil
+            }
             self.lastFetchDate = Date()
             self.observable.on(.next(true))
 		}
 	}
-
+    
+    private func shouldRefreshOffers() -> Bool {
+        if self.region != SettingsPrefs.shared.getRegionPref() {
+            return true
+        }
+        return self.lastFetchDate == nil || Date().timeIntervalSince(self.lastFetchDate!) > self.expirationDuration
+    }
+    
 	private func getNotExpiredOffr() -> Offr? {
 		for o in self.myOffrz {
 			if !self.isExpiredOffr(o) {
