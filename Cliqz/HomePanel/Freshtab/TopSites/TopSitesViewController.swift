@@ -149,6 +149,7 @@ extension TopSitesViewController {
 				cell.isDeleteMode = false
 			}
 		}
+        self.dataSource.refresh()
 	}
 
 }
@@ -276,7 +277,6 @@ extension TopSitesViewController: UIGestureRecognizerDelegate {
 extension TopSitesViewController: TopSiteCellDelegate {
 	
 	func hideTopSite(_ index: Int) {
-		// TODO: for now after hiding top site the view will be refreshed and wobbling is stopped. In future we should support hiding of multiple topsites
 		self.dataSource.hideTopSite(at: index)
 	}
 }

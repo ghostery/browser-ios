@@ -106,9 +106,7 @@ class TopSitesDataSource {
 		guard let host = site.tileURL.normalizedHost else {
 			return
 		}
-		profile.history.removeHostFromTopSites(host).uponQueue(.main) { result in
-			guard result.isSuccess else { return }
-			self.refresh()
+		profile.history.removeHostFromTopSites(host).uponQueue(.main) { _ in
 		}
 	}
 
