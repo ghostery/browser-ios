@@ -40,4 +40,8 @@ class TelemetryHelper: NSObject {
     class func sendFavoriteMigrationSignal(count: Int, rootFolderCount: Int, maxDepth: Int) {
         Engine.sharedInstance.getBridge().callAction("anolysis:handleTelemetrySignal", args: [["count": count, "rootFolderCount": rootFolderCount, "maxDepth": maxDepth], false, "metrics.favorites.migration.folders"])
     }
+    
+    class func sendPageView() {
+        Engine.sharedInstance.getBridge().callAction("anolysis:handleTelemetrySignal", args: [["visitsCount": 1], false, "metrics.history.visits.count"])
+    }
 }

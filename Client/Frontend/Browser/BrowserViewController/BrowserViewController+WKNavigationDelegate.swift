@@ -279,6 +279,10 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if let tab = tabManager[webView] {
             navigateInTab(tab: tab, to: navigation)
+            // Cliqz: send page view signal
+            if !tab.isPrivate && !(tab.url?.isAboutURL ?? true) {
+                TelemetryHelper.sendPageView()
+            }
         }
     }
 }
