@@ -470,7 +470,10 @@ extension TrackersController: CategoryHeaderViewProtocol {
                 state = .blocked
             }
             
-            self.updateSection(section)
+            self.delegate?.changeState(category: category, state: state, tableType: type, completion: {
+                self.updateSection(section)
+            })
+            
         }
     }
 }
@@ -653,6 +656,7 @@ class CategoryHeaderView: UIView {
 	private let typeLabel = UILabel()
 	private let statusView = UIImageView()
 	private let expandedIcon = UIImageView()
+    private let statusButton = UIButton()
     
     weak var delegate: CategoryHeaderViewProtocol? = nil
 
@@ -715,11 +719,10 @@ class CategoryHeaderView: UIView {
 		self.addSubview(statusView)
 		self.addSubview(typeLabel)
 		self.addSubview(expandedIcon)
+        self.addSubview(statusButton)
 		self.setStyles()
         
-        statusView.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(statusViewPressed))
-        statusView.addGestureRecognizer(tap)
+        statusButton.addTarget(self, action: #selector(statusViewPressed), for: .touchUpInside)
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -757,6 +760,11 @@ class CategoryHeaderView: UIView {
 			make.centerY.equalToSuperview().offset(-7)
 			make.centerX.equalTo(expandedIcon)
 		}
+        
+        statusButton.snp.makeConstraints { (make) in
+            make.center.equalTo(statusView.snp.center)
+            make.size.equalTo(60)
+        }
 	}
 
 	func setStyles() {
