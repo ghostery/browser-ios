@@ -23,7 +23,9 @@ struct ControlCenterUI {
 class TrackersController: UIViewController {
     
     let headerView = CategoriesHeaderView()
-
+    
+    var expandedSections: Set<Int> = Set()
+    
 	var type: TableType = .page {
 		didSet {
 			self.tableView.reloadData()
@@ -40,7 +42,6 @@ class TrackersController: UIViewController {
 	let observable = BehaviorSubject(value: "")
 
     let tableView = UITableView()
-	var expandedSectionIndex = -1
 
     var changes = false
 
@@ -242,7 +243,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		if self.expandedSectionIndex == section {
+		if self.expandedSections.contains(section) {
 			return self.dataSource?.numberOfRows(tableType: type, section: section) ?? 0
 		}
         return 0
@@ -305,7 +306,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 		header.trackersCount = self.dataSource?.trackerCount(tableType: type, section: section) ?? 0
 		header.blockedTrackersCount = self.dataSource?.blockedTrackerCount(tableType: type, section: section) ?? 0
 		header.statusIcon = self.dataSource?.stateIcon(tableType: type, section: section)
-		header.isExpanded = section == expandedSectionIndex
+		header.isExpanded = self.expandedSections.contains(section)
         
         if type == .page {
             self.dataSource?.isGhosteryPaused() == true ? header.lookDeactivated() : header.lookActivated()
@@ -417,7 +418,6 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 	@objc private func sectionHeaderTapped(_ sender: UITapGestureRecognizer) {
 		let headerView = sender.view
 		if let section = headerView?.tag {
-			var set = IndexSet()
             
             // Note: This is a temporary solution to the table disappearing after a section is collapsed.
             // The problem seems to be inside the Apple code. One possible solution is to convert this to a UICollectionView.
@@ -425,34 +425,24 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
             
             let indexPaths: [IndexPath] = getIndexPaths(section)
             
-			if self.expandedSectionIndex == section {
-				self.expandedSectionIndex = -1
-				set.insert(section)
+            if self.expandedSections.contains(section) {
+                self.expandedSections.remove(section)
                 
                 self.tableView.performBatchUpdates({
                     self.tableView.deleteRows(at: indexPaths, with: .fade)
                 }) { (finished) in
                     if finished {
                         self.tableView.setContentOffset(CGPoint.zero, animated: true)
-                        //self.tableView.scrollRectToVisible(headerView!.frame, animated: true)
                     }
                 }
+            }
+            else {
+                self.expandedSections.insert(section)
                 
-			} else {
-				if self.expandedSectionIndex != -1 {
-					set.insert(self.expandedSectionIndex)
-				}
-				set.insert(section)
-				self.expandedSectionIndex = section
-                
-                self.tableView.beginUpdates()
-                self.tableView.insertRows(at: indexPaths, with: .fade)
-                self.tableView.endUpdates()
-			}
-            
-			if set.count > 1 {
-				self.tableView.scrollToRow(at: IndexPath(row: 0, section: section), at: .top, animated: false)
-			}
+                self.tableView.performBatchUpdates({
+                    self.tableView.insertRows(at: indexPaths, with: .fade)
+                })
+            }
 		}
 	}
 }
