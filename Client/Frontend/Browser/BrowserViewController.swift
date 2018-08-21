@@ -692,10 +692,14 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.equalTo(self.view)
         }
 
+        // Cliqz: bring footer to front so that the tab toolbar will be visible all time
+        self.view.bringSubview(toFront: footer)
+        
         urlBar.setNeedsUpdateConstraints()
 
         // Remake constraints even if we're already showing the home controller.
         // The home controller may change sizes if we tap the URL bar while on about:home.
+        /* Cliqz: Changed the constraints of homePanel
         homePanelController?.view.snp.remakeConstraints { make in
             make.top.equalTo(self.urlBar.snp.bottom)
             make.left.right.equalTo(self.view)
@@ -704,6 +708,13 @@ class BrowserViewController: UIViewController {
             } else {
                 make.bottom.equalTo(self.view.snp.bottom)
             }
+        }
+        */
+        homePanelController?.view.snp.remakeConstraints { make in
+            make.top.equalTo(self.urlBar.snp.bottom).offset(-1)
+            make.left.equalTo(self.view).offset(-1)
+            make.right.equalTo(self.view).offset(1)
+            make.bottom.equalTo(self.toolbar?.snp.top ?? self.view.snp.bottom)
         }
 
         alertStackView.snp.remakeConstraints { make in
@@ -832,7 +843,10 @@ class BrowserViewController: UIViewController {
             
             view.addSubview(searchController!.view)
             searchController!.view.snp.makeConstraints { make in
+                /* Cliqz: added offset to hide the white line in top of the search view in iPhoneX
                 make.top.equalTo(self.urlBar.snp.bottom)
+                */
+                make.top.equalTo(self.urlBar.snp.bottom).offset(-1)
                 make.left.right.bottom.equalTo(self.view)
                 return
             }
@@ -1634,6 +1648,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // Cliqz: Close CC
         self.hideControlCenter()
+        //Cliqz: dismiss overlay when going forward from home panel
+        if let url = self.tabManager.selectedTab?.url, url.isAboutURL {
+            self.urlBar.leaveOverlayMode()
+        }
         tabManager.selectedTab?.goForward()
     }
 

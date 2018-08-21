@@ -21,7 +21,8 @@ extension TabTrayController {
     }
     
     func setBackgroundImage() {
-        collectionView.backgroundView = UIImageView(image: UIImage.cliqzBackgroundImage(blurred: true))
+        collectionView.backgroundView = UIImageView(image: UIImage.cliqzBackgroundImage(blurred: false))
+        collectionView.backgroundColor = UIColor.clear
     }
     
     @objc func orientationDidChange(_ notification: Notification) {
