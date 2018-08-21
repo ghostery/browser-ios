@@ -78,7 +78,7 @@ private extension TrayToBrowserAnimator {
             /* Cliqz: Change window background color
             UIApplication.shared.windows.first?.backgroundColor = UIConstants.AppBackgroundColor
             */
-            UIApplication.shared.windows.first?.backgroundColor = UIColor.cliqzURLBarColor
+            UIApplication.shared.windows.first?.backgroundColor = UIColor.cliqzBluePrimary
             tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
             tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
             tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
@@ -181,7 +181,7 @@ private extension BrowserToTrayAnimator {
                 /* Cliqz: Change window background color
                 UIApplication.shared.windows.first?.backgroundColor = .TabTrayControllerUX.BackgroundColor
                 */
-                UIApplication.shared.windows.first?.backgroundColor = UIColor.cliqzURLBarColor
+                UIApplication.shared.windows.first?.backgroundColor = UIColor.cliqzBluePrimary
                 tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
                 
                 transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)

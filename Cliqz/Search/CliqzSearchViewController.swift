@@ -69,7 +69,7 @@ class BackgroundImageManager {
         }
         
         orientationForBlurredImage = orientation
-        blurredImage = UIImage.cliqzBackgroundImage(blurred: true)
+        blurredImage = UIImage.cliqzBackgroundImage(blurred: false)
         return blurredImage
     }
     
