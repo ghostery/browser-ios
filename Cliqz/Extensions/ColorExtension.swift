@@ -13,6 +13,7 @@ extension UIColor {
 	static let cliqzBluePrimary = UIColor(colorString: "00AEF0")
     static let cliqzBlackPrimary = UIColor(colorString: "1A1A25")
     static let cliqzWhitePrimary = UIColor(colorString: "FFFFFF")
+    static let cliqzForgetPrimary =  UIColor(red: 0.067, green: 0.333, blue: 0.467, alpha: 1)
     
     //Secondary Colors
     static let cliqzBlueOneSecondary = UIColor(colorString: "0078CA")

@@ -69,7 +69,7 @@ class BackgroundImageManager {
         }
         
         orientationForBlurredImage = orientation
-        blurredImage = UIImage.cliqzBackgroundImage(blurred: false)
+        blurredImage = UIImage.cliqzBackgroundImage()
         return blurredImage
     }
     
@@ -145,7 +145,9 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         }
 
 		KeyboardHelper.defaultHelper.addDelegate(self)
-        
+        if privateMode {
+            backgroundImage.addSubview(UIView.overlay(frame: backgroundImage.bounds))
+        }
         backgroundImage.image = BackgroundImageManager.shared.getBlurredImage()
         
         NotificationCenter.default.addObserver(self, selector: #selector(showOpenSettingsAlert(_:)), name: NSNotification.Name(rawValue: LocationManager.NotificationShowOpenLocationSettingsAlert), object: nil)

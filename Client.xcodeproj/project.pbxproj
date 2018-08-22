@@ -65,6 +65,7 @@
 		1E7A3DC22085FCCA00F53E90 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A3DC12085FCCA00F53E90 /* assets */; };
 		1E7B7688206A8AC000FD0BA5 /* CliqzTabToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */; };
 		1E7B76AF206B9CB500FD0BA5 /* ConnectDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */; };
+		1EA51579212D54E5008DEF0D /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA51578212D54E5008DEF0D /* UIViewExtension.swift */; };
 		1EA949EA20EF6B6D008D32A6 /* UIAlertControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA949E920EF6B6C008D32A6 /* UIAlertControllerExtension.swift */; };
 		1EA94A0620EFB956008D32A6 /* TopTabsViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA949F720EFB956008D32A6 /* TopTabsViewControllerExtension.swift */; };
 		1EAFE4A3205934C8006A36B4 /* CliqzAppSettingsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC162058057700898B05 /* CliqzAppSettingsOptions.swift */; };
@@ -1381,6 +1382,7 @@
 		1E7A3DC12085FCCA00F53E90 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = Cliqz/JSEngine/assets; sourceTree = SOURCE_ROOT; };
 		1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTabToolbar.swift; sourceTree = "<group>"; };
 		1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectDataSource.swift; sourceTree = "<group>"; };
+		1EA51578212D54E5008DEF0D /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		1EA949E920EF6B6C008D32A6 /* UIAlertControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtension.swift; sourceTree = "<group>"; };
 		1EA949F720EFB956008D32A6 /* TopTabsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTabsViewControllerExtension.swift; sourceTree = "<group>"; };
 		1EAFE4EF205BDEC0006A36B4 /* cliqz.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cliqz.json; path = "node_modules/browser-core/build/config/cliqz.json"; sourceTree = SOURCE_ROOT; };
@@ -3124,6 +3126,7 @@
 				AFAB303F20B80EC200FE312E /* AppDelegateExtension.swift */,
 				1EA949E920EF6B6C008D32A6 /* UIAlertControllerExtension.swift */,
 				1EA949F720EFB956008D32A6 /* TopTabsViewControllerExtension.swift */,
+				1EA51578212D54E5008DEF0D /* UIViewExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -6196,6 +6199,7 @@
 				E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */,
 				DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
 				E65075611E37F77D006961AC /* MenuHelper.swift in Sources */,
+				1EA51579212D54E5008DEF0D /* UIViewExtension.swift in Sources */,
 				E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */,
 				4F30F5122051670C0049E4F6 /* QuerySuggestionBridge.m in Sources */,
 				3BB50E201D627539004B33DF /* ActivityStreamPanel.swift in Sources */,
