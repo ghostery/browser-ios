@@ -416,6 +416,31 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
     }
 
 	@objc private func sectionHeaderTapped(_ sender: UITapGestureRecognizer) {
+        
+        func collapseSection(s: Int, bringUp: Bool = false) {
+            self.expandedSections.remove(s)
+            
+            let indexPaths: [IndexPath] = getIndexPaths(s)
+            
+            self.tableView.performBatchUpdates({
+                self.tableView.deleteRows(at: indexPaths, with: .fade)
+            }) { (finished) in
+                if finished && bringUp {
+                    self.tableView.setContentOffset(CGPoint.zero, animated: true)
+                }
+            }
+        }
+        
+        func expandSection(s: Int) {
+            self.expandedSections.insert(s)
+            
+            let indexPaths: [IndexPath] = getIndexPaths(s)
+            
+            self.tableView.performBatchUpdates({
+                self.tableView.insertRows(at: indexPaths, with: .fade)
+            })
+        }
+        
 		let headerView = sender.view
 		if let section = headerView?.tag {
             
@@ -423,25 +448,16 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
             // The problem seems to be inside the Apple code. One possible solution is to convert this to a UICollectionView.
             // Build indexPaths
             
-            let indexPaths: [IndexPath] = getIndexPaths(section)
-            
             if self.expandedSections.contains(section) {
-                self.expandedSections.remove(section)
-                
-                self.tableView.performBatchUpdates({
-                    self.tableView.deleteRows(at: indexPaths, with: .fade)
-                }) { (finished) in
-                    if finished {
-                        self.tableView.setContentOffset(CGPoint.zero, animated: true)
-                    }
-                }
+                collapseSection(s: section, bringUp: true)
             }
             else {
-                self.expandedSections.insert(section)
+                //first close all other sections
+                for s in self.expandedSections {
+                    collapseSection(s: s)
+                }
                 
-                self.tableView.performBatchUpdates({
-                    self.tableView.insertRows(at: indexPaths, with: .fade)
-                })
+                expandSection(s: section)
             }
 		}
 	}
