@@ -11,6 +11,7 @@ import RealmSwift
 
 public class Domain: Object {
     @objc dynamic var name: String = ""
+    @objc dynamic var adblockerState: Int = 0 // 0 none, 1 on, 2 off
     //assumption: appIds are unique in these lists. Make sure your code enforces this.
     public var trustedTrackers = List<Int>()
     public var restrictedTrackers = List<Int>()
@@ -20,6 +21,23 @@ public class Domain: Object {
     override static public func primaryKey() -> String? {
         return "name"
     }
+    
+    public func translatedAdblockerState() -> AdblockerDomainState {
+        if adblockerState == 1 {
+            return .on
+        }
+        else if adblockerState == 2 {
+            return .off
+        }
+        
+        return .none
+    }
+}
+
+public enum AdblockerDomainState {
+    case none
+    case on
+    case off
 }
 
 public enum DomainState {

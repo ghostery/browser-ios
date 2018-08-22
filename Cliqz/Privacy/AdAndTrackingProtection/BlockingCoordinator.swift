@@ -45,7 +45,20 @@ final class BlockingCoordinator {
     
     private unowned let webView: WKWebView
     
-    class func isAdblockerOn() -> Bool {
+    class func isAdblockerOn(domain: String?) -> Bool {
+        
+        if let domain = domain {
+            if let domain = DomainStore.get(domain: domain) {
+                let state = domain.translatedAdblockerState()
+                if state == .on {
+                    return true
+                }
+                else if state == .off {
+                    return false
+                }
+            }
+        }
+        
         return UserPreferences.instance.adblockingMode == .blockAll
     }
     
@@ -62,7 +75,7 @@ final class BlockingCoordinator {
     static let order: [BlockListType] = [.antitracking, .adblocker]
     
     class func featureIsOn(forType: BlockListType, domain: String?) -> Bool {
-        return forType == .antitracking ? isAntitrackingOn(domain: domain) : isAdblockerOn()
+        return forType == .antitracking ? isAntitrackingOn(domain: domain) : isAdblockerOn(domain: domain)
     }
     
     class func blockIdentifiers(forType: BlockListType, domain: String?, webView: WKWebView?) -> ([BlockListIdentifier], [String: Bool]?) {
