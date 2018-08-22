@@ -26,6 +26,23 @@ class NotchView: UIView {
     private let container = UIView()
 
     weak var delegate: NotchViewDelegate? = nil
+    
+    var isSwitchEnabled: Bool? {
+        set {
+            DispatchQueue.main.async { [weak self] in
+                self?.switchControl.isEnabled = newValue ?? false
+                if newValue == true {
+                    self?.titleLabel.textColor = UIColor.cliqzBluePrimary
+                }
+                else if newValue == false {
+                    self?.titleLabel.textColor = UIColor.cliqzGrayFunctional
+                }
+            }
+        }
+        get {
+            return switchControl.isEnabled
+        }
+    }
 
 	var isSwitchOn: Bool? {
 		set {
@@ -301,6 +318,7 @@ class OverviewViewController: UIViewController {
             setSiteToNone()
         }
 		setPauseGhostery(datasource.isGhosteryPaused())
+        self.adBlockingView.isSwitchEnabled = datasource.isGhosteryPaused() ? false : true
         self.adBlockingView.isSwitchOn = self.dataSource?.isGlobalAdblockerOn()
 	}
 
