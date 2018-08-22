@@ -483,6 +483,8 @@ class TabTrayController: UIViewController {
         toolbar.forgetModeButton.setSelected(privateMode, animated: true)
         
         collectionView.layoutSubviews()
+        // Cliqz: reset background image again due to switching between forget and rebular mode
+        self.setBackgroundImage()
 
         let toView: UIView
         if !privateTabsAreEmpty(), let newSnapshot = collectionView.snapshotView(afterScreenUpdates: !exitingPrivateMode) {
@@ -1018,7 +1020,10 @@ fileprivate class EmptyPrivateTabsView: UIView {
     }()
 
     fileprivate var iconImageView: UIImageView = {
+        /* Cliqz: changed the image icon
         let imageView = UIImageView(image: UIImage(named: "largePrivateMask"))
+        */
+        let imageView = UIImageView(image: UIImage(named: "ghost_mode"))
         return imageView
     }()
 
@@ -1046,7 +1051,10 @@ fileprivate class EmptyPrivateTabsView: UIView {
 
         iconImageView.snp.makeConstraints { make in
             make.bottom.equalTo(titleLabel.snp.top).offset(-EmptyPrivateTabsViewUX.TextMargin)
+            /* Cliqz: shifted the ghosty image to apprear centered
             make.centerX.equalTo(self)
+            */
+            make.centerX.equalTo(self).offset(10)
         }
 
         descriptionLabel.snp.makeConstraints { make in
@@ -1059,8 +1067,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
             make.bottom.lessThanOrEqualTo(self).offset(-EmptyPrivateTabsViewUX.MinBottomMargin).priority(1000)
             make.centerX.equalTo(self)
         }
-        // Cliqz: Hide Image and Learn More Button
-        iconImageView.isHidden = true
+        // Cliqz: Hide Learn More Button
         learnMoreButton.isHidden = true
     }
 
@@ -1249,6 +1256,7 @@ class CliqzTrayToolbar : TrayToolbar {
         forgetModeButton.snp.remakeConstraints { make in
             make.centerY.equalTo(self.addTabButton.snp.centerY)
             make.left.equalTo(self).offset(sideOffset)
+            make.width.equalTo(100.0)
         }
         
         #if AUTOMATION

@@ -21,7 +21,11 @@ extension TabTrayController {
     }
     
     func setBackgroundImage() {
-        collectionView.backgroundView = UIImageView(image: UIImage.cliqzBackgroundImage(blurred: false))
+        let backgroundView = UIImageView(image: UIImage.cliqzBackgroundImage())
+        if privateMode {
+            backgroundView.addSubview(UIView.overlay(frame: self.view.bounds))
+        }
+        collectionView.backgroundView = backgroundView
         collectionView.backgroundColor = UIColor.clear
     }
     
