@@ -57,6 +57,7 @@ node('mac-vm-host') {
 
             stage('Prepare') {
                 sh '''#!/bin/bash -l
+                    brew install getsentry/tools/sentry-cli
                     set -e
                     set -x
                     java -version
@@ -67,7 +68,6 @@ node('mac-vm-host') {
                     pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
                     sudo xcodebuild -license accept
                     brew -v
-                    brew install getsentry/tools/sentry-cli
                     npm -g install yarn
                     rm -rf Cartfile.resolved Carthage node_modules Podfile.lock Pods
                     ./bootstrap.sh --force
