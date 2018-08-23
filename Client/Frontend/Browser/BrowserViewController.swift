@@ -738,6 +738,7 @@ class BrowserViewController: UIViewController {
             let homePanelController = HomePanelViewController()
             */
             let homePanelController = CliqzHomePanelViewController()
+            homePanelController.isPrivate = tabManager.selectedTab?.isPrivate ?? false
             homePanelController.profile = profile
             homePanelController.delegate = self
             homePanelController.url = tabManager.selectedTab?.url?.displayURL
@@ -861,6 +862,9 @@ class BrowserViewController: UIViewController {
             searchController?.delegate = self
             searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
             searchLoader!.addListener(HistoryListener.shared)
+        }
+        if let tab = tabManager.selectedTab {
+            self.searchController?.updatePrivateMode(tab.isPrivate)
         }
     }
 
@@ -1933,6 +1937,8 @@ extension BrowserViewController: TabManagerDelegate {
             updateURLBarDisplayURL(tab)
             if tab.isPrivate != previous?.isPrivate {
                 applyTheme(tab.isPrivate ? .Private : .Normal)
+                // Cliqz: update isPrivate var in homepanel
+                self.homePanelController?.isPrivate = tab.isPrivate
             }
             readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
             if let privateModeButton = topTabsViewController?.privateModeButton, previous != nil && previous?.isPrivate != tab.isPrivate {

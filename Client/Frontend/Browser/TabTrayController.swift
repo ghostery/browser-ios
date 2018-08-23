@@ -238,6 +238,8 @@ class TabTrayController: UIViewController {
     var collectionView: UICollectionView!
     var draggedCell: TabCell?
     var dragOffset: CGPoint = .zero
+    // Cliqz: backgroundView as container for background image
+    var backgroundView: UIView!
     /* Cliqz: use CliqzTrayToolbar
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
@@ -372,6 +374,8 @@ class TabTrayController: UIViewController {
         self.setBackgroundImage()
         // Cliqz: lsiten to view orientation
         NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+        // Cliqz: Update window backgroundColor
+        self.updateBackgroundColor()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -485,6 +489,8 @@ class TabTrayController: UIViewController {
         collectionView.layoutSubviews()
         // Cliqz: reset background image again due to switching between forget and rebular mode
         self.setBackgroundImage()
+        // Cliqz: Update window backgroundColor
+        self.updateBackgroundColor()
 
         let toView: UIView
         if !privateTabsAreEmpty(), let newSnapshot = collectionView.snapshotView(afterScreenUpdates: !exitingPrivateMode) {

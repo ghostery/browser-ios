@@ -29,6 +29,9 @@ extension TabTrayController {
         collectionView.backgroundColor = UIColor.clear
     }
     
+    func updateBackgroundColor() {
+        UIApplication.shared.windows.first?.backgroundColor = privateMode ? UIColor.cliqzForgetPrimary : UIColor.cliqzBluePrimary
+    }
     @objc func orientationDidChange(_ notification: Notification) {
         setBackgroundImage()
     }

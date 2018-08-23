@@ -82,7 +82,6 @@ class CliqzURLBar: URLBarView {
         pageOptionsButton.isAccessibilityElement = true
         pageOptionsButton.imageView?.contentMode = .left
         pageOptionsButton.accessibilityIdentifier = "UrlBar.pageOptionsButton"
-        pageOptionsButton.tintColor = UIColor.cliqzBluePrimary
         return pageOptionsButton
     }()
     
@@ -284,6 +283,7 @@ class CliqzURLBar: URLBarView {
     
     override func didApplyTheme(_ theme: Theme) {
         ghosteryButton.applyTheme(theme)
+        pageOptionsButton.tintColor = UIColor.CliqzURLBar.Background.colorFor(theme)
     }
 }
 
