@@ -45,6 +45,9 @@ extension UIColor {
     struct CliqzToolbar {
         static let Background = BrowserColor(normal: UIColor.black, pbm: UIColor.black)
     }
+    struct CliqzURLBar {
+        static let Background = BrowserColor(normal: UIColor.cliqzBluePrimary, pbm: UIColor.cliqzForgetPrimary)
+    }
     
 	struct ControlCenter {
 		static let restrictedColorSet = [

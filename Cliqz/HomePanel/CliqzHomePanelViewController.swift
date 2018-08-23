@@ -18,6 +18,11 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     var panels: [HomePanelDescriptor]!
     var url: URL?
 	var shouldShowKeyboard = true
+    var isPrivate = false {
+        didSet {
+            self.overlayView?.isHidden = !isPrivate
+        }
+    }
 
     weak var delegate: HomePanelViewControllerDelegate?
     
@@ -51,6 +56,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     }
     
     fileprivate let backgroundView = UIImageView()
+    fileprivate var overlayView: UIView!
     fileprivate let segmentedControl: UISegmentedControl
     fileprivate let controllerContainerView: UIView = UIView()
     
@@ -89,6 +95,9 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         view.addSubview(backgroundView)
+        overlayView = UIView.overlay(frame: UIScreen.main.bounds)
+        overlayView.isHidden = !isPrivate
+        view.addSubview(overlayView)
 
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         view.addSubview(segmentedControl)
@@ -110,7 +119,9 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         backgroundView.snp.makeConstraints { (make) in
             make.top.bottom.trailing.leading.equalToSuperview()
         }
-        
+        overlayView.snp.makeConstraints { (make) in
+            make.top.bottom.trailing.leading.equalToSuperview()
+        }
         segmentedControl.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(10)
             make.leading.equalToSuperview().offset(10)

@@ -106,7 +106,7 @@ class OffrzViewController: UIViewController, HomePanel {
         }
         if offrzDataSource.hasOffrz() && offrzDataSource.shouldShowOnBoarding() {
 			self.onboardingView = OffrzOnboardingView()
-            self.onboardingView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
+            self.onboardingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
 			containerView.addSubview(onboardingView)
 			onboardingView.addActionHandler(.hide) { [unowned self] in
 				self.hideOnboardingView()
@@ -148,7 +148,7 @@ class OffrzViewController: UIViewController, HomePanel {
             if isOnboardingOn && offrzDataSource.shouldShowOnBoarding() {
                 self.onboardingView.snp.remakeConstraints({ (make) in
                     make.top.left.right.equalTo(containerView)
-                    make.height.equalTo(175)
+                    make.height.equalTo(115)
                 })
             }
             if let offrView = self.offrView {

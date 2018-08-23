@@ -54,7 +54,7 @@ class OffrzOnboardingView: UIView {
 	}
 
 	private func setupComponents() {
-		self.addSubview(offrzPresentImageView)
+//        self.addSubview(offrzPresentImageView)
 		
         hideButton.setImage(UIImage.templateImageNamed("tab_close"), for: UIControlState())
 		hideButton.addTarget(self, action: #selector(hideOnboardingView) , for: .touchUpInside)
@@ -85,13 +85,13 @@ class OffrzOnboardingView: UIView {
 			make.top.right.equalTo(self).inset(10)
 			make.height.width.equalTo(25)
 		}
-		offrzPresentImageView.snp.remakeConstraints { (make) in
-			make.centerX.equalTo(self)
-			make.top.equalTo(self).inset(10)
-		}
+//        offrzPresentImageView.snp.remakeConstraints { (make) in
+//            make.centerX.equalTo(self)
+//            make.top.equalTo(self).inset(10)
+//        }
 		descriptionLabel.snp.remakeConstraints { (make) in
 			make.right.left.equalTo(self).inset(25)
-			make.top.equalTo(offrzPresentImageView.snp.bottom).offset(10)
+			make.top.equalTo(self).inset(35)
 		}
 		moreButton.snp.remakeConstraints { (make) in
 			make.centerX.equalTo(self)

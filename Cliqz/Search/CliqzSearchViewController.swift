@@ -69,7 +69,7 @@ class BackgroundImageManager {
         }
         
         orientationForBlurredImage = orientation
-        blurredImage = UIImage.cliqzBackgroundImage()
+        blurredImage = UIImage.cliqzBackgroundImage(blurred: true)
         return blurredImage
     }
     
@@ -145,10 +145,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         }
 
 		KeyboardHelper.defaultHelper.addDelegate(self)
-        if privateMode {
-            backgroundImage.addSubview(UIView.overlay(frame: backgroundImage.bounds))
-        }
-        backgroundImage.image = BackgroundImageManager.shared.getBlurredImage()
+        backgroundImage.image = BackgroundImageManager.shared.getImage()
         
         NotificationCenter.default.addObserver(self, selector: #selector(showOpenSettingsAlert(_:)), name: NSNotification.Name(rawValue: LocationManager.NotificationShowOpenLocationSettingsAlert), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.DeviceOrientationChanged, object: nil)
@@ -183,6 +180,9 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         if privateMode != self.privateMode {
             self.privateMode = privateMode
 			self.updateExtensionPreferences()
+            if privateMode {
+                self.backgroundImage.addSubview(UIView.overlay(frame: self.view.bounds))
+            }
         }
     }
 
@@ -238,7 +238,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
     }
     
     @objc func orientationDidChange(_ notification: Notification) {
-        backgroundImage.image = BackgroundImageManager.shared.getBlurredImage()
+        backgroundImage.image = BackgroundImageManager.shared.getImage()
     }
 }
 
