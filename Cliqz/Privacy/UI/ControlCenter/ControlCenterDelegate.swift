@@ -183,6 +183,25 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         LoadingNotificationManager.shared.changeInControlCenter()
     }
     
+    func turnDomainAdblocking(on: Bool?) {
+        if let domainString = domainStr {
+            
+            let state: AdblockerDomainState
+            
+            if on == true {
+                state = .on
+            }
+            else if on == false {
+                state = .off
+            }
+            else {
+                state = .none
+            }
+            
+            DomainStore.changeAdblockerState(toState: state, domain: domainString)
+        }
+    }
+    
     func changeAll(state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void) {
         
         invalidateStateImageCache()
