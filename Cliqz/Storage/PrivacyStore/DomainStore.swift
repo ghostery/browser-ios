@@ -32,6 +32,18 @@ public class Domain: Object {
         
         return .none
     }
+    
+    public class func intForState(_ state: AdblockerDomainState) -> Int {
+        
+        if state == .on {
+            return 1
+        }
+        else if state == .off {
+            return 2
+        }
+        
+        return 0
+    }
 }
 
 public enum AdblockerDomainState {
@@ -62,5 +74,33 @@ public class DomainStore: NSObject {
             }
         }
         return nil
+    }
+    
+    public class func changeAdblockerState(toState: AdblockerDomainState, domain: String) {
+        
+        if let realm = try? Realm() {
+            
+            guard realm.isInWriteTransaction == false else { return } //avoid exceptions
+            realm.beginWrite()
+            
+            if let domainObj = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
+                domainObj.adblockerState = Domain.intForState(toState)
+                realm.add(domainObj, update: true)
+            }
+            else {
+                let domainObj = Domain()
+                domainObj.name = domain
+                domainObj.adblockerState = Domain.intForState(toState)
+                realm.add(domainObj)
+            }
+            
+            do {
+                try realm.commitWrite()
+            }
+            catch {
+                debugPrint("could not change state of trackerState")
+                //do I need to cancel the write?
+            }
+        }
     }
 }

@@ -85,6 +85,7 @@ enum CategoryState {
 protocol ControlCenterDelegateProtocol: class {
     func pauseGhostery(paused: Bool, time: Date)
     func turnGlobalAdblocking(on: Bool)
+    func turnDomainAdblocking(on: Bool?)
     func changeState(category: String, state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void)
     func changeState(appId: Int, state: TrackerUIState, tableType: TableType, section: Int, emptyState: EmptyState)
     func undoState(appId: Int, tableType: TableType)
@@ -112,7 +113,7 @@ protocol ControlCenterDSProtocol: class {
     func blockedTrackerCount() -> Int
     func isGhosteryPaused() -> Bool
     func isGlobalAntitrackingOn() -> Bool
-    func isGlobalAdblockerOn() -> Bool
+    func isAdblockerOn() -> Bool
     func antitrackingCount() -> Int
     
     //SECTIONS
@@ -266,7 +267,22 @@ class ControlCenterModel: ControlCenterDSProtocol {
         return UserPreferences.instance.antitrackingMode == .blockAll
     }
     
-    func isGlobalAdblockerOn() -> Bool {
+    func isAdblockerOn() -> Bool {
+        if let domainString = self.domainStr {
+            //PROBLEM: this takes too long 
+            if let domain = DomainStore.get(domain: domainString) {
+                if domain.translatedAdblockerState() == .on {
+                    return true
+                }
+                else if domain.translatedAdblockerState() == .off {
+                    return false
+                }
+            }
+            else {
+                print("DOMAIN not found")
+            }
+        }
+        
         return UserPreferences.instance.adblockingMode == .blockAll
     }
     

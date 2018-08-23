@@ -13,10 +13,180 @@ protocol NotchViewDelegate: class {
     func switchValueChanged(value: Bool)
 	func viewIsDragging(translation: Float, velocity: Float)
 	func viewStopDragging(velocity: Float)
+    func domainOnEnhancedViewPressed()
+    func allWebsitesOnEnhancedViewPressed()
+}
+
+class TickButton: UIButton {
+    let topSep = UIView()
+    let bottomSep = UIView()
+    let tickView = UIImageView()
+    
+    override var isSelected: Bool {
+        didSet {
+            if isSelected == true {
+                tickView.isHidden = false
+            }
+            else {
+                tickView.isHidden = true
+            }
+        }
+    }
+    
+    override var isHighlighted: Bool {
+        didSet {
+            if isHighlighted == true {
+                UIView.animate(withDuration: 0.1) {
+                    self.backgroundColor = .lightGray
+                }
+            }
+            else {
+                UIView.animate(withDuration: 0.2) {
+                    self.backgroundColor = .white
+                }
+            }
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.contentHorizontalAlignment = .left
+        self.addSubview(topSep)
+        self.addSubview(bottomSep)
+        self.addSubview(tickView)
+        
+        setConstraints()
+        setStyles()
+        
+        tickView.image = UIImage(named: "checkmark")
+        tickView.isHidden = true
+    }
+    
+    func setConstraints() {
+        topSep.snp.makeConstraints { (make) in
+            make.top.left.right.equalToSuperview()
+            make.height.equalTo(1)
+        }
+        
+        bottomSep.snp.makeConstraints { (make) in
+            make.bottom.left.right.equalToSuperview()
+            make.height.equalTo(1)
+        }
+        
+        tickView.snp.makeConstraints { (make) in
+            make.width.equalTo(19.5)
+            make.height.equalTo(15)
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().offset(-10)
+        }
+    }
+    
+    func setStyles() {
+        tickView.backgroundColor = .clear
+        topSep.backgroundColor = UIColor.cliqzGrayFunctional
+        bottomSep.backgroundColor = UIColor.cliqzGrayFunctional
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+protocol EnhancedAdblockerViewProtocol: class {
+    func domainPressed()
+    func allWebsitesPressed()
+}
+
+class EnhancedAdblockerView: UIView {
+    let label = UILabel()
+    let domainButton = TickButton()
+    let allWebsitesButton = TickButton()
+    
+    let labelContainer = UIView()
+    let buttonContainer = UIView()
+    
+    weak var delegate: EnhancedAdblockerViewProtocol? = nil
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubview(labelContainer)
+        self.addSubview(buttonContainer)
+        labelContainer.addSubview(label)
+        buttonContainer.addSubview(domainButton)
+        buttonContainer.addSubview(allWebsitesButton)
+        
+        label.text = "Hello"
+        domainButton.setTitle("Domain", for: .normal)
+        allWebsitesButton.setTitle("Web", for: .normal)
+        allWebsitesButton.topSep.isHidden = true
+        
+        setContraints()
+        setStyles()
+        
+        domainButton.addTarget(self, action: #selector(domainPressed), for: .touchUpInside)
+        allWebsitesButton.addTarget(self, action: #selector(allWebsitesPressed), for: .touchUpInside)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setContraints() {
+        
+        labelContainer.snp.makeConstraints { (make) in
+            make.top.left.right.equalToSuperview()
+            make.height.equalToSuperview().dividedBy(4)
+        }
+        
+        buttonContainer.snp.makeConstraints { (make) in
+            make.top.equalTo(labelContainer.snp.bottom)
+            make.bottom.left.right.equalToSuperview()
+        }
+        
+        label.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+
+        domainButton.snp.makeConstraints { (make) in
+            make.left.right.top.equalToSuperview()
+            make.height.equalToSuperview().dividedBy(3)
+        }
+
+        allWebsitesButton.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview()
+            make.top.equalTo(domainButton.snp.bottom)
+            make.height.equalToSuperview().dividedBy(3)
+        }
+    }
+    
+    func setStyles() {
+        self.backgroundColor = .white
+        labelContainer.backgroundColor = .clear
+        buttonContainer.backgroundColor = .clear
+        label.backgroundColor = .white
+        domainButton.backgroundColor = .white
+        allWebsitesButton.backgroundColor = .white
+        
+        domainButton.setTitleColor(.black, for: .normal)
+        allWebsitesButton.setTitleColor(.black, for: .normal)
+    }
+    
+    @objc func domainPressed(sender: UIButton) {
+        domainButton.isSelected = true
+        allWebsitesButton.isSelected = false
+        self.delegate?.domainPressed()
+    }
+    
+    @objc func allWebsitesPressed(sender: UIButton) {
+        domainButton.isSelected = false
+        allWebsitesButton.isSelected = true
+        self.delegate?.allWebsitesPressed()
+    }
+    
 }
 
 class NotchView: UIView {
-
+    
 	private let notchView = UIImageView()
 	private let iconView = UIImageView()
 	private let countLabel = UILabel()
@@ -24,6 +194,7 @@ class NotchView: UIView {
 	private let switchControl = UISwitch()
 	private let descriptionLabel = UILabel()
     private let container = UIView()
+    private let enhancedView = EnhancedAdblockerView()
 
     weak var delegate: NotchViewDelegate? = nil
     
@@ -45,11 +216,11 @@ class NotchView: UIView {
     }
 
 	var isSwitchOn: Bool? {
-		set {
-			DispatchQueue.main.async {
-				self.switchControl.isOn = newValue ?? false
-			}
-		}
+        set {
+            //DispatchQueue.main.async { [weak self] in
+                self.switchControl.isOn = newValue ?? false
+            //}
+        }
 		get {
 			return switchControl.isOn
 		}
@@ -88,10 +259,13 @@ class NotchView: UIView {
 		container.addSubview(titleLabel)
 		container.addSubview(descriptionLabel)
 		container.addSubview(switchControl)
+        container.addSubview(enhancedView)
 		let gesture = UIPanGestureRecognizer(target: self, action: #selector(wasDragged))
 		self.addGestureRecognizer(gesture)
 		self.isUserInteractionEnabled = true
 		setStyles()
+        
+        enhancedView.delegate = self
 	}
     
 	required init?(coder aDecoder: NSCoder) {
@@ -188,11 +362,16 @@ class NotchView: UIView {
                 make.left.right.equalToSuperview().inset(20)
             }
         }
+        
+        self.enhancedView.snp.makeConstraints { (make) in
+            make.top.equalTo(titleLabel.snp.bottom).offset(12)
+            make.left.right.bottom.equalToSuperview()
+        }
 	}
 
     @objc func switchValueChanged(s: UISwitch) {
-        s.isOn ? self.delegate?.switchValueChanged(value: true) : self.delegate?.switchValueChanged(value: false)
-		updateViewStyle(enabled: s.isOn)
+        updateViewStyle()
+        self.delegate?.switchValueChanged(value: s.isOn)
     }
 
 	@objc func wasDragged(gestureRecognizer: UIPanGestureRecognizer) {
@@ -206,16 +385,42 @@ class NotchView: UIView {
         gestureRecognizer.setTranslation(CGPoint.zero, in: self)
 	}
 
-	private func updateViewStyle(enabled isEnabled: Bool) {
-		if isEnabled {
-			iconView.tintColor = UIColor.cliqzBluePrimary
-			countLabel.textColor = UIColor.cliqzBluePrimary
-		} else {
-			iconView.tintColor = UIColor.gray
-			countLabel.textColor = UIColor.gray
-		}
+    func updateViewStyle() {
+        if switchControl.isOn {
+            enhancedView.isHidden = true
+            iconView.tintColor = UIColor.cliqzBluePrimary
+            countLabel.textColor = UIColor.cliqzBluePrimary
+        } else {
+            iconView.tintColor = UIColor.gray
+            countLabel.textColor = UIColor.gray
+            
+            if switchControl.isEnabled == true {
+                enhancedView.isHidden = false
+                if UserPreferences.instance.adblockingMode == .blockNone {
+                    //select second option - allwebsites
+                    enhancedView.allWebsitesButton.isSelected = true
+                    enhancedView.domainButton.isSelected = false
+                }
+                else {
+                    enhancedView.allWebsitesButton.isSelected = false
+                    enhancedView.domainButton.isSelected = true
+                }
+            }
+        }
+        
+        self.layoutIfNeeded()
 	}
 
+}
+
+extension NotchView: EnhancedAdblockerViewProtocol {
+    func domainPressed() {
+        self.delegate?.domainOnEnhancedViewPressed()
+    }
+    
+    func allWebsitesPressed() {
+        self.delegate?.allWebsitesOnEnhancedViewPressed()
+    }
 }
 
 struct ControlCenterUX {
@@ -319,7 +524,8 @@ class OverviewViewController: UIViewController {
         }
 		setPauseGhostery(datasource.isGhosteryPaused())
         self.adBlockingView.isSwitchEnabled = datasource.isGhosteryPaused() ? false : true
-        self.adBlockingView.isSwitchOn = self.dataSource?.isGlobalAdblockerOn()
+        self.adBlockingView.isSwitchOn = self.dataSource?.isAdblockerOn()
+        self.adBlockingView.updateViewStyle()
 	}
 
 	private func setupComponents() {
@@ -463,8 +669,9 @@ class OverviewViewController: UIViewController {
         self.adBlockingView.delegate = self
 		self.adBlockingView.count = 0
 		self.adBlockingView.title = NSLocalizedString("Enhanced Ad Blocking", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Ad blocking switch title")
-		self.adBlockingView.isSwitchOn = self.dataSource?.isGlobalAdblockerOn()
+		self.adBlockingView.isSwitchOn = self.dataSource?.isAdblockerOn()
 		self.adBlockingView.iconName = "adblocking"
+        self.adBlockingView.updateViewStyle()
 	}
 
 	private func setComponentsStyles() {
@@ -735,7 +942,27 @@ class OverviewViewController: UIViewController {
 extension OverviewViewController: NotchViewDelegate {
 
     func switchValueChanged(value: Bool) {
-        self.delegate?.turnGlobalAdblocking(on: value)
+        
+        if value == true {
+            self.delegate?.turnGlobalAdblocking(on: value)
+            self.delegate?.turnDomainAdblocking(on: nil)
+            
+            //bring donw the notch if it is up
+            let top = self.view.frame.height - CGFloat(ControlCenterUX.adblockerViewMaxHeight)
+            if self.adBlockingView.frame.origin.y == top { //not open
+                self.moveNotch(velocity: 0.00001)
+            }
+        }
+        else {
+            //Default
+            self.delegate?.turnDomainAdblocking(on: false)
+            
+            //bring up the notch if it is not up already
+            let top = self.view.frame.height - CGFloat(ControlCenterUX.adblockerViewMaxHeight)
+            if self.adBlockingView.frame.origin.y != top { //not open
+                self.moveNotch(velocity: -0.00001)
+            }
+        }
 	}
 
 	func viewIsDragging(translation: Float, velocity: Float) {
@@ -750,8 +977,8 @@ extension OverviewViewController: NotchViewDelegate {
 		
         self.view.layoutIfNeeded()
 	}
-
-	func viewStopDragging(velocity: Float) {
+    
+    func moveNotch(velocity: Float) {
         let bottom = self.view.frame.height + CGFloat(ControlCenterUX.adblockerViewInitialOffset) //bottom
         let top = self.view.frame.height - CGFloat(ControlCenterUX.adblockerViewMaxHeight) // top
         
@@ -775,7 +1002,7 @@ extension OverviewViewController: NotchViewDelegate {
         let timeLowerLimit: TimeInterval = 0.2
         
         if delta > 0 {
-            time = Double(delta) / Double(velocity)
+            time = Double(delta) / abs(Double(velocity))
         }
         else {
             time = timeUpperLimit
@@ -791,5 +1018,23 @@ extension OverviewViewController: NotchViewDelegate {
         UIView.animate(withDuration: time) {
             self.view.layoutIfNeeded()
         }
+    }
+
+	func viewStopDragging(velocity: Float) {
+        moveNotch(velocity: velocity)
 	}
+    
+    func domainOnEnhancedViewPressed() {
+        debugPrint("domainOnEnhancedViewPressed")
+        self.delegate?.turnDomainAdblocking(on: false)
+        let prevAdblockerState = UserPreferences.instance.prevAdblockingMode == .blockAll ? true : false
+        self.delegate?.turnGlobalAdblocking(on: prevAdblockerState)
+    }
+    
+    func allWebsitesOnEnhancedViewPressed() {
+        debugPrint("allWebsitesOnEnhancedViewPressed")
+        
+        self.delegate?.turnDomainAdblocking(on: nil)
+        self.delegate?.turnGlobalAdblocking(on: false)
+    }
 }
