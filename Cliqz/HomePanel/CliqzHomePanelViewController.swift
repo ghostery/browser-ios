@@ -10,6 +10,7 @@ import Shared
 import SnapKit
 import UIKit
 import Storage
+import RxSwift
 
 class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     
@@ -25,6 +26,8 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     }
 
     weak var delegate: HomePanelViewControllerDelegate?
+    private let disposeBag = DisposeBag()
+    private let offrzNotificationImage = UIImageView(image: UIImage.circle(diameter: 7.5, color: UIColor.init(colorString: "A10099")))
     
     var selectedPanel: HomePanelType? = nil {
         didSet {
@@ -99,14 +102,17 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         overlayView.isHidden = !isPrivate
         view.addSubview(overlayView)
 
+        segmentedControl.addSubview(offrzNotificationImage)
+        offrzNotificationImage.isHidden = true
+        
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
         view.addSubview(segmentedControl)
-        
         view.addSubview(controllerContainerView)
 		
         setStyling()
         setInitialConstraints()
         setBackgroundImage()
+        updateOffrzIcon()
     }
     
     func setStyling() {
@@ -166,6 +172,7 @@ extension CliqzHomePanelViewController {
         self.dismissKeyboard()
         setBackgroundImage()
         selectedPanel = HomePanelType(rawValue: control.selectedSegmentIndex) //control.selectedSegmentIndex must be between 0 and 3
+        self.updateOffrzIcon()
     }
     
     fileprivate func hideCurrentPanel() {
@@ -200,6 +207,7 @@ extension CliqzHomePanelViewController {
     
     @objc func orientationDidChange(_ notification: Notification) {
         setBackgroundImage()
+        adjustOffrzNotificationImageConstraints()
     }
 }
 
@@ -244,5 +252,29 @@ extension CliqzHomePanelViewController: HomePanelDelegate {
 extension CliqzHomePanelViewController: Themeable {
     func applyTheme(_ theme: Theme) {
         return
+    }
+}
+
+
+//MARK: - Offrz notification image
+extension CliqzHomePanelViewController {
+    fileprivate func updateOffrzIcon() {
+        OffrzDataSource.shared.observable.asObserver().subscribe(onNext: {[weak self] value in
+            DispatchQueue.main.async {
+                self?.offrzNotificationImage.isHidden = !OffrzDataSource.shared.hasUnseenOffrz()
+                self?.adjustOffrzNotificationImageConstraints()
+                
+            }
+        }).disposed(by: disposeBag)
+        
+        OffrzDataSource.shared.loadOffrz()
+    }
+    
+    fileprivate func adjustOffrzNotificationImageConstraints() {
+        let segmentWidth = self.segmentedControl.bounds.width / 4
+        self.offrzNotificationImage.snp.remakeConstraints { (make) in
+            make.top.equalToSuperview().offset(3)
+            make.right.equalTo(self.segmentedControl.snp.right).offset(-1.5 * segmentWidth + 13)
+        }
     }
 }
