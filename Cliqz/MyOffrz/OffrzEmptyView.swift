@@ -9,7 +9,7 @@
 import Foundation
 
 class OffrzEmptyView: UIView {
-	private let offrzPresentImageView = UIImageView(image: UIImage(named: "offrzPresent"))
+    private let emptyTitleLabel = UILabel()
 	private let emptyTextLabel = UILabel()
 
 	override init(frame: CGRect) {
@@ -39,24 +39,42 @@ class OffrzEmptyView: UIView {
 	}
 
 	private func setupComponents() {
+        self.addSubview(emptyTitleLabel)
 		self.addSubview(emptyTextLabel)
-		self.addSubview(offrzPresentImageView)
-		emptyTextLabel.text = NSLocalizedString("Here you'll find a new offer every week", tableName: "Cliqz", comment: "[MyOffrz] No offers label")
+        if SettingsPrefs.shared.getRegionPref() == "DE" {
+            emptyTitleLabel.text = NSLocalizedString("Seems lie we don't have any offers", tableName: "Cliqz", comment: "[MyOffrz] No offers title label for DE")
+            emptyTextLabel.text = NSLocalizedString("But we'll keep looking for you and add them here as soon as we have one", tableName: "Cliqz", comment: "[MyOffrz] No offers text label for DE")
+        } else {
+            emptyTitleLabel.text = NSLocalizedString("We don't have any offers for your country yet", tableName: "Cliqz", comment: "[MyOffrz] No offers title label")
+            emptyTextLabel.text = NSLocalizedString("But stay tuned to receive attractive discounts and bargains in the future", tableName: "Cliqz", comment: "[MyOffrz] No offers text label")
+        }
+        
+        
 	}
 
 	private func setStyles() {
+        emptyTitleLabel.numberOfLines = 2
+        emptyTitleLabel.textAlignment = .center
+        emptyTitleLabel.font = UIFont.boldSystemFont(ofSize: 22)
+        emptyTitleLabel.textColor = UIColor.white
+        emptyTitleLabel.applyShadow()
+        
+        emptyTextLabel.numberOfLines = 2
+        emptyTextLabel.textAlignment = .center
 		emptyTextLabel.textColor = UIColor.white
         emptyTextLabel.applyShadow()
 	}
 
 	private func layoutComponents() {
-		offrzPresentImageView.snp.remakeConstraints({ (make) in
+		emptyTitleLabel.snp.remakeConstraints({ (make) in
 			make.centerX.equalTo(self)
 			make.centerY.equalTo(self).dividedBy(2)
+            make.width.equalTo(self).dividedBy(1.2)
 		})
 		emptyTextLabel.snp.remakeConstraints({ (make) in
 			make.centerX.equalTo(self)
-			make.top.equalTo(offrzPresentImageView.snp.bottom).offset(10)
+            make.width.equalTo(self).dividedBy(1.2)
+			make.top.equalTo(emptyTitleLabel.snp.bottom).offset(10)
 		})
 	}
 }
