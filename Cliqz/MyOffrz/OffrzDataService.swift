@@ -31,9 +31,9 @@ struct Offr {
 
 class OffrzDataService {
 	var lastOffrz = [Offr]()
-
-    private static let CONFIG_URL = "http://offers-api-stage.clyqz.com:8181/api/v1/loadsubtriggers?parent_id=root&t_eng_ver=22&channel=mobile"
-    private static let API_URL = "http://offers-api-stage.clyqz.com:8181/api/v1/offers?t_eng_ver=22&channel=mobile&intent_name="
+    
+    private static let CONFIG_URL = "https://offers-api.cliqz.com/api/v1/loadsubtriggers?parent_id=root&t_eng_ver=22&channel=mobile-ghostery"
+    private static let API_URL = "https://offers-api.cliqz.com/api/v1/offers?t_eng_ver=22&channel=mobile-ghostery&intent_name="
     
 	static let shared = OffrzDataService()
 
@@ -63,11 +63,11 @@ class OffrzDataService {
 	}
     
     private func loadData(intent: String, successHandler: @escaping () -> Void, failureHandler: @escaping (Error?) -> Void) {
-        let url = "\(OffrzDataService.API_URL)\(intent)"
+        guard let url = "\(OffrzDataService.API_URL)\(intent)".escapeURL() else { return }
+        
         Alamofire.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
-
+           
             if response.result.isSuccess {
-
                 let json = JSON(response.result.value ?? "")
                 if let offers = json.array {
                     self.lastOffrz.removeAll()
