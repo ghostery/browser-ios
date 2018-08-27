@@ -54,10 +54,12 @@ class BrowserViewController: UIViewController {
     var readerModeCache: ReaderModeCache
     var statusBarOverlay: UIView!
     fileprivate(set) var toolbar: TabToolbar?
-    /* Cliqz: Replace Search Controller
+    /* Cliqz: Replace Search Controller with Firefox Search Controller
     var searchController: SearchViewController?
     */
-    var searchController: CliqzSearchViewController?
+    var searchController: FirefoxSearchViewController?
+    // Cliqz: Cliqz Search Controller
+    var cliqzSearchController: CliqzSearchViewController?
     fileprivate var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
     fileprivate var searchLoader: SearchLoader?
@@ -819,31 +821,29 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showSearchController() {
-        if searchController != nil {
+        if (searchController != nil && SettingsPrefs.shared.getCliqzSearchPref() == false) ||
+            (cliqzSearchController != nil && SettingsPrefs.shared.getCliqzSearchPref() == true){
             return
         }
-
-        /* Cliqz: Replace Search Controller
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        searchController = SearchViewController(isPrivate: isPrivate)
-        searchController!.searchEngines = profile.searchEngines
-        searchController!.searchDelegate = self
-        searchController!.profile = self.profile
         
-        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-        searchLoader?.addListener(searchController!)
-        */
         //Cliqz: Replace Search Controller
+        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+        searchLoader!.addListener(HistoryListener.shared)
+        
         if SettingsPrefs.shared.getCliqzSearchPref() {
-            searchController = CliqzSearchViewController(profile: self.profile)
-            searchController?.delegate = self
-            searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-            searchLoader!.addListener(HistoryListener.shared)
+            cliqzSearchController = CliqzSearchViewController(profile: self.profile)
+            cliqzSearchController!.delegate = self
             
-            addChildViewController(searchController!)
+            //remove seachController
+            searchController?.willMove(toParentViewController: nil)
+            searchController?.view.removeFromSuperview()
+            searchController?.removeFromParentViewController()
+            self.searchController = nil
             
-            view.addSubview(searchController!.view)
-            searchController!.view.snp.makeConstraints { make in
+            addChildViewController(cliqzSearchController!)
+            
+            view.addSubview(cliqzSearchController!.view)
+            cliqzSearchController!.view.snp.makeConstraints { make in
                 /* Cliqz: added offset to hide the white line in top of the search view in iPhoneX
                 make.top.equalTo(self.urlBar.snp.bottom)
                 */
@@ -854,29 +854,68 @@ class BrowserViewController: UIViewController {
             
             homePanelController?.view?.isHidden = true
             
-            searchController!.didMove(toParentViewController: self)
+            cliqzSearchController!.didMove(toParentViewController: self)
+            
+            if let tab = tabManager.selectedTab {
+                self.cliqzSearchController?.updatePrivateMode(tab.isPrivate)
+            }
         }
         else {
-            //Search controller is still needed for the autocomplete
-            searchController = CliqzSearchViewController(profile: self.profile)
-            searchController?.delegate = self
-            searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-            searchLoader!.addListener(HistoryListener.shared)
-        }
-        if let tab = tabManager.selectedTab {
-            self.searchController?.updatePrivateMode(tab.isPrivate)
+            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+            searchController = FirefoxSearchViewController(isPrivate: isPrivate)
+            searchController!.searchEngines = profile.searchEngines
+            searchController!.searchDelegate = self
+            searchController!.profile = self.profile
+            
+//            searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+//            searchLoader?.addListener(searchController!)
+            HistoryListener.shared.firefoxSearchController = searchController
+            
+            //remove cliqzSeachController
+            cliqzSearchController?.willMove(toParentViewController: nil)
+            cliqzSearchController?.view.removeFromSuperview()
+            cliqzSearchController?.removeFromParentViewController()
+            self.cliqzSearchController = nil
+            
+            addChildViewController(searchController!)
+            
+            view.addSubview(searchController!.view)
+            searchController?.view.snp.makeConstraints { make in
+                /* Cliqz: added offset to hide the white line in top of the search view in iPhoneX
+                 make.top.equalTo(self.urlBar.snp.bottom)
+                 */
+                make.top.equalTo(self.urlBar.snp.bottom).offset(-1)
+                make.left.right.bottom.equalTo(self.view)
+                return
+            }
+            
+            homePanelController?.view?.isHidden = true
+            
+            searchController!.didMove(toParentViewController: self)
         }
     }
 
     fileprivate func hideSearchController() {
-        if let searchController = searchController {
-            searchController.willMove(toParentViewController: nil)
-            searchController.view.removeFromSuperview()
-            searchController.removeFromParentViewController()
-            self.searchController = nil
-            homePanelController?.view?.isHidden = false
-            searchLoader = nil
+        //Cliqz: Hide cliqzSearch or firefoxSearch
+        if SettingsPrefs.shared.getCliqzSearchPref() {
+            if let cliqzSearchController = cliqzSearchController {
+                cliqzSearchController.willMove(toParentViewController: nil)
+                cliqzSearchController.view.removeFromSuperview()
+                cliqzSearchController.removeFromParentViewController()
+                self.cliqzSearchController = nil
+            }
         }
+        else {
+            if let searchController = searchController {
+                searchController.willMove(toParentViewController: nil)
+                searchController.view.removeFromSuperview()
+                searchController.removeFromParentViewController()
+                self.searchController = nil
+            }
+        }
+        
+        homePanelController?.view?.isHidden = false
+        searchLoader = nil
     }
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType) {
@@ -1498,10 +1537,21 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
-		/* Cliqz: repaced check for hiding SearchViewController to prevent hiding SearchController in the case when the user is in search mode but keyboard is dissmissed and moves to overlay mode. Accroding to initial behaviour the typed text becomes selected and homepanel is shown, now it keeps search view.
+		/* Cliqz: replaced check for hiding SearchViewController to prevent hiding SearchController in the case when the user is in search mode but keyboard is dissmissed and moves to overlay mode. Accroding to initial behaviour the typed text becomes selected and homepanel is shown, now it keeps search view.
         if text.isEmpty {
 		*/
-		if shouldHideSearchView(newQuery: text, oldQuery: searchController?.searchQuery, urlBar: urlBar) {
+        
+        //Cliqz: oldQuery needs to come either from cliqzSearch or firefoxSearch
+        var oldQuery: String? = nil
+        
+        if let query = cliqzSearchController?.searchQuery {
+            oldQuery = query
+        }
+        else if let query = searchController?.searchQuery {
+            oldQuery = query
+        }
+        
+		if shouldHideSearchView(newQuery: text, oldQuery: oldQuery, urlBar: urlBar) {
             hideSearchController()
         } else {
             showSearchController()
@@ -1510,6 +1560,7 @@ extension BrowserViewController: URLBarDelegate {
             searchLoader?.query = text
 			*/
 			if !text.isEmpty {
+                cliqzSearchController?.searchQuery = text
 				searchController?.searchQuery = text
 				searchLoader?.query = text
 			}
