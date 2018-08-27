@@ -6,34 +6,30 @@ node('mac-mini-ios') {
     writeFile file: 'Vagrantfile', text: '''
     Vagrant.configure("2") do |config|
         config.vm.box = "ios-xcode9.3"
-    
-        config.vm.define "priosx93" do |priosx93|
-            priosx93.vm.hostname = "priosx93"
-            
-            priosx93.vm.network "public_network", :bridge => "en0", auto_config: false
-            priosx93.vm.boot_timeout = 900
-            priosx93.vm.provider "vmware_fusion" do |v|
-                v.name = "priosx93"
+        config.vm.define "priosx93" do |prvm|
+            prvm.vm.hostname = ENV['NODE_ID']
+            prvm.vm.boot_timeout = 900
+            prvm.vm.provider "vmware_fusion" do |v|
+                v.name = ENV['NODE_ID']
                 v.whitelist_verified = true
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
                 v.cpus = ENV["NODE_CPU_COUNT"]
-                v.cpu_mode = "host-passthrough"
                 v.vmx["remotedisplay.vnc.enabled"] = "TRUE"
                 v.vmx["RemoteDisplay.vnc.port"] = ENV["NODE_VNC_PORT"]
                 v.vmx["ethernet0.pcislotnumber"] = "33"
             end
-            priosx93.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
+            prvm.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                 set -e
                 set -x
                 rm -f agent.jar
                 curl -LO #{ENV['JENKINS_URL']}/jnlpJars/agent.jar
-                nohup java -jar agent.jar -jnlpUrl #{ENV['JENKINS_URL']}/computer/#{ENV['NODE_ID']}/slave-agent.jnlp -secret #{ENV["NODE_SECRET"]} &
+                nohup java -jar agent.jar -jnlpUrl #{ENV['JENKINS_URL']}/computer/#{ENV['NODE_ID']}/slave-agent.jnlp -secret #{ENV['NODE_SECRET']} &
             SHELL
         end
     end
     '''
-    
+
     def jobStatus = 'FAIL'
 
     vagrant.inside(
@@ -43,7 +39,7 @@ node('mac-mini-ios') {
         8000, // MEMORY
         12000, // VNC port
         false, // rebuild image
-    ) { 
+    ) {
         nodeId ->
         node(nodeId) {
             try {
