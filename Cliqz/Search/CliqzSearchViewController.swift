@@ -13,12 +13,14 @@ import Storage
 
 class HistoryListener {
     var historyResults: Cursor<Site>?
+    weak var firefoxSearchController: FirefoxSearchViewController? = nil
     static let shared = HistoryListener()
 }
 
 extension HistoryListener: LoaderListener {
     public func loader(dataLoaded data: Cursor<Site>) {
         self.historyResults = data
+        firefoxSearchController?.loader(dataLoaded: data)
     }
 }
 

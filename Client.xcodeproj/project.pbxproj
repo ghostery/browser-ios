@@ -484,6 +484,7 @@
 		AF28D3DB207E325F0065FF86 /* PermissionManagerModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AF28D3DA207E325F0065FF86 /* PermissionManagerModuleBridge.m */; };
 		AF28D3DD207E378E0065FF86 /* GeoLocationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AF28D3DC207E378E0065FF86 /* GeoLocationBridge.m */; };
 		AF28D3DF207E37A20065FF86 /* GeoLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28D3DE207E37A20065FF86 /* GeoLocation.swift */; };
+		AF2A979F213432D800A37E4E /* FirefoxSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2A979E213432D800A37E4E /* FirefoxSearchViewController.swift */; };
 		AF4C19B920AC7AC400D3F740 /* TopTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4C19B820AC7AC400D3F740 /* TopTabs.swift */; };
 		AF53D3BC206A346B0012A11F /* TabExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF53D3BB206A346B0012A11F /* TabExtension.swift */; };
 		AF6F247D20AF0749009C3D0D /* CliqzStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6F247C20AF0749009C3D0D /* CliqzStrings.swift */; };
@@ -1798,6 +1799,7 @@
 		AF28D3DA207E325F0065FF86 /* PermissionManagerModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PermissionManagerModuleBridge.m; sourceTree = "<group>"; };
 		AF28D3DC207E378E0065FF86 /* GeoLocationBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeoLocationBridge.m; sourceTree = "<group>"; };
 		AF28D3DE207E37A20065FF86 /* GeoLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoLocation.swift; sourceTree = "<group>"; };
+		AF2A979E213432D800A37E4E /* FirefoxSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxSearchViewController.swift; sourceTree = "<group>"; };
 		AF4C19B820AC7AC400D3F740 /* TopTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabs.swift; sourceTree = "<group>"; };
 		AF53D3BB206A346B0012A11F /* TabExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabExtension.swift; sourceTree = "<group>"; };
 		AF6F247C20AF0749009C3D0D /* CliqzStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzStrings.swift; sourceTree = "<group>"; };
@@ -3155,6 +3157,7 @@
 			children = (
 				4F3046AE204FF14100C99162 /* SubscriptionsHandler.swift */,
 				4F3045B2204FF0C500C99162 /* CliqzSearchViewController.swift */,
+				AF2A979E213432D800A37E4E /* FirefoxSearchViewController.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -6044,6 +6047,7 @@
 				4FBBC1502035E02900445AD1 /* NewsViewCell.swift in Sources */,
 				1EDF917820874DAA00200100 /* ShareExtensionActivities.swift in Sources */,
 				E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */,
+				AF2A979F213432D800A37E4E /* FirefoxSearchViewController.swift in Sources */,
 				EB2A63341F3B49A7004EF8B0 /* ContentBlockerHelper.swift in Sources */,
 				FA6B2AC21D41F02D00429414 /* Punycode.swift in Sources */,
 				4F30F5092051670C0049E4F6 /* AutoCompletionBridge.m in Sources */,

@@ -271,14 +271,16 @@ class CliqzURLBar: URLBarView {
     override func createLocationTextField() {
         super.createLocationTextField()
         
-        let keyboardAccessoryView = KeyboardAccessoryView.sharedInstance
-        keyboardAccessoryView.setHandelAccessoryViewAction { [weak self] (action) in
-            switch (action) {
-            case .AutoComplete(let completion):
-                self?.locationTextField?.text = completion
+        if SettingsPrefs.shared.getCliqzSearchPref() {
+            let keyboardAccessoryView = KeyboardAccessoryView.sharedInstance
+            keyboardAccessoryView.setHandelAccessoryViewAction { [weak self] (action) in
+                switch (action) {
+                case .AutoComplete(let completion):
+                    self?.locationTextField?.text = completion
+                }
             }
+            locationTextField?.inputAccessoryView = keyboardAccessoryView
         }
-        locationTextField?.inputAccessoryView = keyboardAccessoryView
     }
     
     override func didApplyTheme(_ theme: Theme) {
