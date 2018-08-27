@@ -17,18 +17,28 @@ protocol NotchViewDelegate: class {
     func allWebsitesOnEnhancedViewPressed()
 }
 
+protocol TickButtonProtocol: class {
+    func didSelect(button: TickButton, isSelected: Bool)
+}
+
 class TickButton: UIButton {
     let topSep = UIView()
     let bottomSep = UIView()
     let tickView = UIImageView()
     
+    let customGray = UIColor.init(red: 0.91, green: 0.91, blue: 0.91, alpha: 0.91)
+    
+    weak var delegate: TickButtonProtocol? = nil
+    
     override var isSelected: Bool {
         didSet {
             if isSelected == true {
                 tickView.isHidden = false
+                delegate?.didSelect(button: self, isSelected: true)
             }
             else {
                 tickView.isHidden = true
+                delegate?.didSelect(button: self, isSelected: false)
             }
         }
     }
@@ -36,12 +46,12 @@ class TickButton: UIButton {
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted == true {
-                UIView.animate(withDuration: 0.1) {
-                    self.backgroundColor = .lightGray
+                UIView.animate(withDuration: 0.1) { [unowned self] in
+                    self.backgroundColor = self.customGray
                 }
             }
             else {
-                UIView.animate(withDuration: 0.2) {
+                UIView.animate(withDuration: 0.2) { [unowned self] in
                     self.backgroundColor = .white
                 }
             }
@@ -83,8 +93,8 @@ class TickButton: UIButton {
     
     func setStyles() {
         tickView.backgroundColor = .clear
-        topSep.backgroundColor = UIColor.cliqzGrayFunctional
-        bottomSep.backgroundColor = UIColor.cliqzGrayFunctional
+        topSep.backgroundColor = customGray
+        bottomSep.backgroundColor = customGray
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -115,16 +125,23 @@ class EnhancedAdblockerView: UIView {
         buttonContainer.addSubview(domainButton)
         buttonContainer.addSubview(allWebsitesButton)
         
-        label.text = "Hello"
-        domainButton.setTitle("Domain", for: .normal)
-        allWebsitesButton.setTitle("Web", for: .normal)
-        allWebsitesButton.topSep.isHidden = true
+        let domainButtonString = NSLocalizedString("This Domain", tableName: "Cliqz", comment:"[Enhanced Adblocker] Domains Button Title")
+        let allWebsitesButtonString = NSLocalizedString("All Websites", tableName: "Cliqz", comment:"[Enhanced Adblocker] Domains Button Title")
+        
+        domainButton.setTitle(domainButtonString, for: .normal)
+        allWebsitesButton.setTitle(allWebsitesButtonString, for: .normal)
         
         setContraints()
         setStyles()
         
         domainButton.addTarget(self, action: #selector(domainPressed), for: .touchUpInside)
         allWebsitesButton.addTarget(self, action: #selector(allWebsitesPressed), for: .touchUpInside)
+        
+        domainButton.tag = 1
+        allWebsitesButton.tag = 2
+        
+        domainButton.delegate = self
+        allWebsitesButton.delegate = self
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -144,7 +161,8 @@ class EnhancedAdblockerView: UIView {
         }
         
         label.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.right.top.bottom.equalToSuperview()
+            make.left.equalToSuperview().offset(16)
         }
 
         domainButton.snp.makeConstraints { (make) in
@@ -169,20 +187,45 @@ class EnhancedAdblockerView: UIView {
         
         domainButton.setTitleColor(.black, for: .normal)
         allWebsitesButton.setTitleColor(.black, for: .normal)
+        
+        label.textColor = UIColor.cliqzGrayFunctional
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.numberOfLines = 0
+        
+        //hide one of the separators
+        allWebsitesButton.topSep.isHidden = true
+        
+        domainButton.titleEdgeInsets.left = 16
+        allWebsitesButton.titleEdgeInsets.left = 16
     }
     
     @objc func domainPressed(sender: UIButton) {
         domainButton.isSelected = true
-        allWebsitesButton.isSelected = false
         self.delegate?.domainPressed()
     }
     
     @objc func allWebsitesPressed(sender: UIButton) {
-        domainButton.isSelected = false
         allWebsitesButton.isSelected = true
         self.delegate?.allWebsitesPressed()
     }
     
+}
+
+extension EnhancedAdblockerView: TickButtonProtocol {
+    func didSelect(button: TickButton, isSelected: Bool) {
+        if button.tag == 1 { // domains
+            if isSelected {
+                allWebsitesButton.isSelected = false
+                label.text = NSLocalizedString("Enhanced Adblocking is turned off for this domain.", tableName: "Cliqz", comment:"[Enhanced Adblocker] Domain Label Title")
+            }
+        }
+        else if button.tag == 2 { // all websites
+            if isSelected {
+                domainButton.isSelected = false
+                label.text = NSLocalizedString("Enhanced Adblocking is turned off for all websites.", tableName: "Cliqz", comment:"[Enhanced Adblocker] All Websites Label Title")
+            }
+        }
+    }
 }
 
 class NotchView: UIView {
@@ -399,10 +442,8 @@ class NotchView: UIView {
                 if UserPreferences.instance.adblockingMode == .blockNone {
                     //select second option - allwebsites
                     enhancedView.allWebsitesButton.isSelected = true
-                    enhancedView.domainButton.isSelected = false
                 }
                 else {
-                    enhancedView.allWebsitesButton.isSelected = false
                     enhancedView.domainButton.isSelected = true
                 }
             }
