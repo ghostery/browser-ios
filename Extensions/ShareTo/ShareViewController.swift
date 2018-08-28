@@ -111,12 +111,19 @@ class ShareViewController: UIViewController {
         makeSeparator(addTo: stackView)
 
         if shareItem?.isUrlType() ?? true {
+            /* Cliqz: Modify these actions
             makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
             makeActionRow(addTo: stackView, label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
             makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
             makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
             makeSeparator(addTo: stackView)
             makeActionRow(addTo: stackView, label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
+            */
+            makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
+            makeSeparator(addTo: stackView)
+            makeActionRow(addTo: stackView, label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
+            makeSeparator(addTo: stackView)
+            makeActionRow(addTo: stackView, label: Strings.AppMenuAddBookmarkTitleString, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
         } else {
             pageInfoRowUrlLabel?.removeFromSuperview()
             makeActionRow(addTo: stackView, label: Strings.ShareSearchInFirefox, imageName: "quickSearch", action: #selector(actionSearchInFirefox), hasNavigation: false)
@@ -205,17 +212,28 @@ class ShareViewController: UIViewController {
         let icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
         icon.contentMode = .scaleAspectFit
         icon.tintColor = UX.actionRowTextAndIconColor
-
+        
+        /*Cliqz: Change title
         let title = UILabel()
         title.font = UX.baseFont
         title.handleLongLabels()
         title.textColor = UX.actionRowTextAndIconColor
         title.text = label
+        */
+        let title = UILabel()
+        title.font = UIFont.boldSystemFont(ofSize: 16)
+        title.handleLongLabels()
+        title.textColor = UIColor(red:0.03, green:0.64, blue:0.93, alpha:1.00)
+        title.text = label
+        title.textAlignment = .center
+        /* Cliqz: Remove icon
         [icon, title].forEach { row.addArrangedSubview($0) }
 
         icon.snp.makeConstraints { make in
             make.width.equalTo(UX.actionRowIconSize)
         }
+        */
+        row.addArrangedSubview(title)
 
         if hasNavigation {
             let navButton = UIImageView(image: UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate))
@@ -374,9 +392,9 @@ extension ShareViewController {
        func firefoxUrl(_ url: String) -> String {
             let encoded = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics) ?? ""
             if isSearch {
-                return "firefox://open-text?text=\(encoded)"
+                return "ghostery://open-text?text=\(encoded)"
             }
-            return "firefox://open-url?url=\(encoded)"
+            return "ghostery://open-url?url=\(encoded)"
         }
 
         guard let url = URL(string: firefoxUrl(url)) else { return }

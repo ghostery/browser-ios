@@ -102,6 +102,42 @@ class TickButton: UIButton {
     }
 }
 
+class TickButtonSubtitle: TickButton {
+    let label = UILabel()
+    let subtitleLabel = UILabel()
+    
+    override func setConstraints() {
+        topSep.snp.makeConstraints { (make) in
+            make.top.left.right.equalToSuperview()
+            make.height.equalTo(1)
+        }
+        
+        bottomSep.snp.makeConstraints { (make) in
+            make.bottom.left.right.equalToSuperview()
+            make.height.equalTo(1)
+        }
+        
+        tickView.snp.makeConstraints { (make) in
+            make.width.equalTo(19.5)
+            make.height.equalTo(15)
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().offset(-10)
+        }
+        
+        label.snp.makeConstraints { (make) in
+            make.right.equalToSuperview()
+            make.left.equalTo(tickView.snp.leading)
+            make.bottom.equalTo(self.snp.bottom).dividedBy(2)
+        }
+        
+        subtitleLabel.snp.makeConstraints { (make) in
+            make.right.equalToSuperview()
+            make.left.equalTo(tickView.snp.leading)
+            make.top.equalTo(label.snp.bottom)
+        }
+    }
+}
+
 protocol EnhancedAdblockerViewProtocol: class {
     func domainPressed()
     func allWebsitesPressed()
