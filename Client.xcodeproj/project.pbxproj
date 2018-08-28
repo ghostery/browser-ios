@@ -532,6 +532,7 @@
 		AFD165B620C6C03B00379381 /* UpdateOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD165B520C6C03B00379381 /* UpdateOperation.swift */; };
 		AFD165B920C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD165B820C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift */; };
 		AFDF458220A9C5F20091CA27 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */; };
+		AFE3BD572135835E0036AEFE /* ShareTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B22491A0920C600AAB793 /* ShareTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AFE484D32056838500554B2E /* CliqzURLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE484D22056838500554B2E /* CliqzURLBar.swift */; };
 		AFF2874E209B54F6001E9B59 /* CliqzHomePanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */; };
 		AFF28766209B5F6E001E9B59 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF28765209B5F6E001E9B59 /* ImageExtension.swift */; };
@@ -1084,6 +1085,13 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
+		AFE3BD582135835E0036AEFE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F84B22481A0920C600AAB793;
+			remoteInfo = ShareTo;
+		};
 		D09A0CE01FAA25C5009A0273 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1280,6 +1288,17 @@
 			files = (
 			);
 			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AFE3BD622135835E0036AEFE /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AFE3BD572135835E0036AEFE /* ShareTo.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E6B09CD31C74EEDB00C63FA1 /* Copy Frameworks */ = {
@@ -1848,6 +1867,7 @@
 		AFD165B820C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopulateBlockedTrackersOperation.swift; sourceTree = "<group>"; };
 		AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
 		AFE484D22056838500554B2E /* CliqzURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzURLBar.swift; sourceTree = "<group>"; };
+		AFEBA6F32135762200CE44B3 /* ShareTo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareTo.entitlements; sourceTree = "<group>"; };
 		AFECF63AADEF4013C5D72D77 /* Pods-Client.firefox.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Client.firefox.xcconfig"; path = "Pods/Target Support Files/Pods-Client/Pods-Client.firefox.xcconfig"; sourceTree = "<group>"; };
 		AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHomePanels.swift; sourceTree = "<group>"; };
 		AFF28765209B5F6E001E9B59 /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
@@ -4130,6 +4150,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				AFEBA6F32135762200CE44B3 /* ShareTo.entitlements */,
 				4F8F3C0D202CB39F001C1A0F /* Cliqz */,
 				E6C191D41E38F7B7000A213B /* Cartfile */,
 				E6C191D51E38F7B7000A213B /* Cartfile.resolved */,
@@ -4816,6 +4837,7 @@
 				E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */,
 				E6B09CD31C74EEDB00C63FA1 /* Copy Frameworks */,
 				D6D515078BA2F8059B3DB387 /* [CP] Embed Pods Frameworks */,
+				AFE3BD622135835E0036AEFE /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -4826,6 +4848,7 @@
 				2FCAE2301ABB51F800877008 /* PBXTargetDependency */,
 				282731741ABC9BE700AA1954 /* PBXTargetDependency */,
 				E69DB0891E97DEAA008A67E6 /* PBXTargetDependency */,
+				AFE3BD592135835E0036AEFE /* PBXTargetDependency */,
 			);
 			name = Client;
 			productName = Client;
@@ -5002,13 +5025,13 @@
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
 							com.apple.Keychain = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.Push = {
 								enabled = 0;
@@ -5031,10 +5054,10 @@
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.Keychain = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.Push = {
 								enabled = 0;
@@ -6535,6 +6558,11 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 82F43438207E44C100FA40AF /* PBXContainerItemProxy */;
 		};
+		AFE3BD592135835E0036AEFE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F84B22481A0920C600AAB793 /* ShareTo */;
+			targetProxy = AFE3BD582135835E0036AEFE /* PBXContainerItemProxy */;
+		};
 		D09A0CE11FAA25C5009A0273 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 288A2D851AB8B3260023ABC3 /* Shared */;
@@ -7777,6 +7805,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Client/Client.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -7850,6 +7879,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = ShareTo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -7861,12 +7891,13 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).ShareTo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "22698f18-e032-49c5-8c20-11c32703ab4f";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore *";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -8709,6 +8740,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Client/Client.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -8775,6 +8807,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = ShareTo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -8786,6 +8819,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).ShareTo";
@@ -9292,6 +9326,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Client/Client.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -9362,6 +9397,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = ShareTo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -9373,6 +9409,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).ShareTo";
@@ -9684,6 +9721,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Client/Client.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -9771,6 +9809,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = ShareTo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -9782,12 +9821,13 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).ShareTo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "91fca0be-1ffb-4fad-b5f0-23505fb37e17";
-				PROVISIONING_PROFILE_SPECIFIER = UniversalWithiCloud;
+				PROVISIONING_PROFILE = "763a2c72-bb80-419b-9a3e-07e178a87ddb";
+				PROVISIONING_PROFILE_SPECIFIER = "New Cliqz ShareTo";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;

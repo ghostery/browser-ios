@@ -8,10 +8,6 @@
 	<string>$(ADJUST_ENVIRONMENT)</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
-	<key>PocketEnvironmentAPIKey</key>
-	<string>$(POCKET_API_KEY)</string>
-	<key>MozWhatsNewTopic</key>
-	<string>whats-new-ios-12</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -33,11 +29,13 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>org.mozilla.Client</string>
+			<string>com.cliqz.ios.newCliqz</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>firefox</string>
+				<string>ghostery</string>
 				<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
 			</array>
 		</dict>
@@ -65,6 +63,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>LeanplumAppId</key>
 	<string></string>
 	<key>LeanplumDevelopmentKey</key>
@@ -73,6 +73,8 @@
 	<string></string>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
+	<key>MozWhatsNewTopic</key>
+	<string>whats-new-ios-12</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -94,6 +96,8 @@
 	<array>
 		<string>org.mozilla.ios.firefox.browsing</string>
 	</array>
+	<key>PocketEnvironmentAPIKey</key>
+	<string>$(POCKET_API_KEY)</string>
 	<key>SentryDSN</key>
 	<string>$(SENTRY_DSN)</string>
 	<key>UIAppFonts</key>
@@ -136,6 +140,8 @@
 		<string>audio</string>
 		<string>remote-notification</string>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>GhosteryLaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -175,9 +181,5 @@
 			<string></string>
 		</dict>
 	</array>
-	<key>UIFileSharingEnabled</key>
-	<true/>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
 </dict>
 </plist>
