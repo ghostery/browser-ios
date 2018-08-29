@@ -47,7 +47,7 @@ open class UserAgentConstants : RCTEventEmitter {
         #endif
         //return "16917";
     }
-    
+
     private func getProductType() -> String {
         #if AUTOMATION
         return "9"
@@ -69,11 +69,21 @@ open class UserAgentConstants : RCTEventEmitter {
         return "2"
         #endif
     }
-    
+
+    fileprivate var appName: String {
+        #if GHOSTERY
+            return "Ghostery"
+        #else
+            return "Cliqz"
+        #endif
+    }
+
     open override static func moduleName() -> String! {
         return "UserAgentConstants"
     }
     
-    override open func constantsToExport() -> [AnyHashable : Any]! { return ["channel": self.source, "appVersion": self.appVersion, "installDate": self.installDate] }
+    override open func constantsToExport() -> [AnyHashable : Any]! {
+        return ["channel": self.source, "appVersion": self.appVersion, "installDate": self.installDate, "appName": self.appName]
+    }
     
 }
