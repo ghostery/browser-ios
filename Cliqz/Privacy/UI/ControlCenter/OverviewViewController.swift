@@ -58,6 +58,17 @@ class TickButton: UIButton {
         }
     }
     
+    override var isEnabled: Bool {
+        didSet {
+            if isEnabled {
+                self.titleLabel?.textColor = UIColor.black
+            }
+            else {
+                self.titleLabel?.textColor = UIColor.cliqzGrayFunctional
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.contentHorizontalAlignment = .left
@@ -473,20 +484,24 @@ class NotchView: UIView {
             iconView.tintColor = UIColor.gray
             countLabel.textColor = UIColor.gray
             
-            if switchControl.isEnabled == true {
-                enhancedView.isHidden = false
-                if UserPreferences.instance.adblockingMode == .blockNone {
-                    //select second option - allwebsites
-                    enhancedView.allWebsitesButton.isSelected = true
-                }
-                else {
-                    enhancedView.domainButton.isSelected = true
-                }
+            enhancedView.isHidden = false
+            if UserPreferences.instance.adblockingMode == .blockNone {
+                //select second option - allwebsites
+                enhancedView.allWebsitesButton.isSelected = true
             }
+            else {
+                enhancedView.domainButton.isSelected = true
+            }
+            
         }
         
         self.layoutIfNeeded()
 	}
+    
+    func activateEnhancedViewButtons(value: Bool) {
+        self.enhancedView.allWebsitesButton.isEnabled = value
+        self.enhancedView.domainButton.isEnabled = value
+    }
 
 }
 
@@ -600,9 +615,10 @@ class OverviewViewController: UIViewController {
             setSiteToNone()
         }
 		setPauseGhostery(datasource.isGhosteryPaused())
-        self.adBlockingView.isSwitchEnabled = datasource.isGhosteryPaused() ? false : true
+        self.adBlockingView.isSwitchEnabled = !datasource.isGhosteryPaused()
         self.adBlockingView.isSwitchOn = self.dataSource?.isAdblockerOn()
         self.adBlockingView.updateViewStyle()
+        self.adBlockingView.activateEnhancedViewButtons(value: !datasource.isGhosteryPaused())
 	}
 
 	private func setupComponents() {
