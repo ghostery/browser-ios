@@ -198,6 +198,8 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
                 state = .none
             }
             
+            LoadingNotificationManager.shared.changeInControlCenter()
+            
             DomainStore.changeAdblockerState(toState: state, domain: domainString)
         }
     }
