@@ -128,17 +128,7 @@ class TrackersController: UIViewController {
 		let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
 		blockTrustAlertController.addAction(cancelAction)
         
-        if let presentation = blockTrustAlertController.popoverPresentationController, let v = sender as? UIView {
-            presentation.sourceView = v
-            presentation.sourceRect = CGRect(x: v.bounds.width/2, y: v.bounds.height/2 + 16, width: 0, height: 0)
-            presentation.canOverlapSourceViewRect = true
-            presentation.permittedArrowDirections = .up
-            self.present(blockTrustAlertController, animated: true, completion: nil)
-        }
-        else if UIDevice.current.isiPad() == false { //avoid crash
-            self.present(blockTrustAlertController, animated: true, completion: nil)
-        }
-        
+        presentActionSheet(actionSheet: blockTrustAlertController, sender: sender)
 	}
 
 	private func showGlobalActionSheet(_ sender: Any) {
@@ -166,24 +156,45 @@ class TrackersController: UIViewController {
         }
         
         let restore = UIAlertAction(title: NSLocalizedString("Restore Default Settings", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Restore Default Settings trackers action title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
-            self?.restoreDefaultSettings()
+            self?.showResetActionSheet(sender)
         })
         blockTrustAlertController.addAction(restore)
 		
 		let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
 		blockTrustAlertController.addAction(cancelAction)
         
-        if let presentation = blockTrustAlertController.popoverPresentationController, let v = sender as? UIView {
+        presentActionSheet(actionSheet: blockTrustAlertController, sender: sender)
+	}
+    
+    private func showResetActionSheet(_ sender: Any) {
+        
+        let actionsheetMessage = NSLocalizedString("Replace previous changes to site and global trackers with the recommended settings? (blocks Ads, Site Analytics, and Adult Advertising)", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Reset actionsheet title")
+        
+        let actionSheet = UIAlertController(title: nil, message: actionsheetMessage, preferredStyle: .actionSheet)
+        
+        let reset = UIAlertAction(title: NSLocalizedString("Reset", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Reset action title"), style: .destructive, handler: { [weak self] (alert: UIAlertAction) -> Void in
+            self?.restoreDefaultSettings()
+        })
+        actionSheet.addAction(reset)
+        
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
+        actionSheet.addAction(cancelAction)
+        
+        presentActionSheet(actionSheet: actionSheet, sender: sender)
+    }
+    
+    private func presentActionSheet(actionSheet: UIAlertController, sender: Any) {
+        if let presentation = actionSheet.popoverPresentationController, let v = sender as? UIView {
             presentation.sourceView = v
             presentation.sourceRect = CGRect(x: v.bounds.width/2, y: v.bounds.height/2 + 16, width: 0, height: 0)
             presentation.canOverlapSourceViewRect = true
             presentation.permittedArrowDirections = .up
-            self.present(blockTrustAlertController, animated: true, completion: nil)
+            self.present(actionSheet, animated: true, completion: nil)
         }
         else if UIDevice.current.isiPad() == false { //avoid crash
-            self.present(blockTrustAlertController, animated: true, completion: nil)
+            self.present(actionSheet, animated: true, completion: nil)
         }
-	}
+    }
 
 	private func blockAll() {
         headerView.showSpinner()
