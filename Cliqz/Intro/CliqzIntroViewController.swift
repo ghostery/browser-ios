@@ -61,6 +61,7 @@ class CliqzIntroViewController: UIViewController {
         let sv = UIStackView()
         sv.axis = .horizontal
         sv.distribution = .fillEqually
+        sv.backgroundColor = .clear
         return sv
     }()
     
@@ -69,7 +70,19 @@ class CliqzIntroViewController: UIViewController {
     
     override func viewDidLoad() {
         assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.clear
+        imagesBackgroundView.backgroundColor = UIColor.clear
+        
+        // Gradient Background
+        let gradient: CAGradientLayer = CAGradientLayer()
+        
+        gradient.colors = [UIColor(red:0.31, green:0.67, blue:0.91, alpha:1.00).cgColor, UIColor.black.cgColor]
+        gradient.locations = [0.0 , 1.0]
+        //gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
+        //gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
+        gradient.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        
+        self.view.layer.insertSublayer(gradient, at: 0)
 
         // Add Views
         view.addSubview(pageControl)
@@ -268,17 +281,7 @@ extension CliqzIntroViewController: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let maximumHorizontalOffset = scrollView.frame.width
-        let currentHorizontalOffset = scrollView.contentOffset.x
-        
-        var percentageOfScroll = currentHorizontalOffset / maximumHorizontalOffset
-        percentageOfScroll = percentageOfScroll > 1.0 ? 1.0 : percentageOfScroll
-        let whiteComponent = UIColor.white.components
-        let grayComponent = UIColor(rgb: 0xF2F2F2).components
-        let newRed   = (1.0 - percentageOfScroll) * whiteComponent.red   + percentageOfScroll * grayComponent.red
-        let newGreen = (1.0 - percentageOfScroll) * whiteComponent.green + percentageOfScroll * grayComponent.green
-        let newBlue  = (1.0 - percentageOfScroll) * whiteComponent.blue  + percentageOfScroll * grayComponent.blue
-        imagesBackgroundView.backgroundColor = UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: 1.0)
+        //empty
     }
 }
 
@@ -298,7 +301,7 @@ class CliqzCardView: UIView {
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         titleLabel.textAlignment = .center
-        titleLabel.textColor = UIColor.cliqzBluePrimary
+        titleLabel.textColor = UIColor.white
         titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return titleLabel
     }()
@@ -309,7 +312,7 @@ class CliqzCardView: UIView {
         textLabel.adjustsFontSizeToFitWidth = true
         textLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         textLabel.textAlignment = .center
-        textLabel.textColor = UIColor.cliqzBluePrimary
+        textLabel.textColor = UIColor.white
         textLabel.lineBreakMode = .byTruncatingTail
         textLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return textLabel
@@ -322,7 +325,7 @@ class CliqzCardView: UIView {
         optInView.textLabel.adjustsFontSizeToFitWidth = true
         optInView.textLabel.minimumScaleFactor = 0.2
         optInView.textLabel.textAlignment = .left
-        optInView.textLabel.textColor = UIColor.cliqzBluePrimary
+        optInView.textLabel.textColor = UIColor.white
         return optInView
     }()
     
