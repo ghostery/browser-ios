@@ -2,17 +2,15 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "iOS_Onbaording: Quick Search@0,5x.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "iOS_Onbaording: Quick Search@0,75x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "iOS_Onbaording: Quick Search.png",
+      "filename" : "QuickSearch.png",
       "scale" : "3x"
     }
   ],
