@@ -49,7 +49,9 @@ open class UserAgentConstants : RCTEventEmitter {
     }
     
     private func getProductType() -> String {
-        #if GHOSTERY
+        #if AUTOMATION
+        return "9"
+        #elseif GHOSTERY
         return "5"
         #else
         return "0"
@@ -61,6 +63,8 @@ open class UserAgentConstants : RCTEventEmitter {
         return "0"
         #elseif BETA
         return "1"
+        #elseif AUTOMATION
+        return "9"
         #else
         return "2"
         #endif
