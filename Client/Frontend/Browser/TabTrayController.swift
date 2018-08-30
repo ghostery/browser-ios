@@ -1227,11 +1227,6 @@ class CliqzTrayToolbar : TrayToolbar {
     lazy var doneButton = TabTrayDoneButton()
 
     lazy var forgetModeButton = CliqzForgetModeButton()
-    
-    #if AUTOMATION
-    let settingsButton = UIButton()
-    #endif
-    
     override lazy var addTabButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage.templateImageNamed("cliqz-nav-add"), for: .normal)
@@ -1264,18 +1259,6 @@ class CliqzTrayToolbar : TrayToolbar {
             make.left.equalTo(self).offset(sideOffset)
             make.width.equalTo(100.0)
         }
-        
-        #if AUTOMATION
-        addSubview(settingsButton)
-        settingsButton.accessibilityIdentifier = "SettingsButton" 
-        settingsButton.backgroundColor = .blue
-        settingsButton.addTarget(self, action: #selector(settingsPressed), for: .touchUpInside)
-        settingsButton.snp.makeConstraints { (make) in
-            make.trailing.equalTo(self.doneButton.snp.leading)
-            make.leading.equalTo(self.addTabButton.snp.trailing)
-            make.centerY.equalTo(self.addTabButton.snp.centerY)
-        }
-        #endif
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -1289,28 +1272,4 @@ class CliqzTrayToolbar : TrayToolbar {
         backgroundColor = UIColor.CliqzToolbar.Background.colorFor(theme)
         addTabButton.tintColor = UIColor.CliqzToolbarButton.Tint.colorFor(theme)
     }
-    
-    #if AUTOMATION
-    @objc func settingsPressed(_ sender: Any) {
-        openSettings()
-    }
-    
-    private func openSettings() {
-        assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
-        
-        /* Cliqz: Change Settings
-         let settingsTableViewController = AppSettingsTableViewController()
-         */
-        guard let appDel = UIApplication.shared.delegate as? AppDelegate, let profile = appDel.profile, let tabManager = appDel.tabManager, let browser = appDel.browserViewController else { return }
-        let settingsTableViewController = CliqzAppSettingsTableViewController()
-        settingsTableViewController.profile = profile
-        settingsTableViewController.tabManager = tabManager
-        settingsTableViewController.settingsDelegate = browser
-        
-        let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
-        controller.popoverDelegate = browser
-        controller.modalPresentationStyle = .formSheet
-        appDel.presentContollerOnTop(controller: controller)
-    }
-    #endif
 }
