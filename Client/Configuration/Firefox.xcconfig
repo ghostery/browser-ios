@@ -7,6 +7,13 @@ MOZ_BUNDLE_DISPLAY_NAME = New Cliqz
 // Bundle Identifier
 MOZ_BUNDLE_ID = com.cliqz.ios.newCliqz
 
+MOZ_BUNDLE_SHARETO_ID = com.cliqz.ios.newCliqz.ShareTo
+
+CLIENT_ENTITLEMENT = Client/Client.entitlements
+
+SHARETO_ENTITLEMENT = ShareTo.entitlements
+
+
 // Flag to indicate if we want to include the debug settings bundle or not
 INCLUDE_SETTINGS_BUNDLE = NO
 

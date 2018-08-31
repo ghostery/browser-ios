@@ -26,20 +26,20 @@
 	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>NSExtension</key>
 	<dict>
- 		<key>NSExtensionAttributes</key>
-            <dict>
-            	<key>NSExtensionActivationRule</key>
-                <dict>
-                	<key>NSExtensionActivationSupportsText</key>
-                    <true/>
-                    <key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
-                    <integer>1</integer>
-                    <key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
-                    <integer>1</integer>
-                </dict>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>NSExtensionActivationRule</key>
+			<dict>
+				<key>NSExtensionActivationSupportsText</key>
+				<true/>
+				<key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
+				<integer>1</integer>
+				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
+				<integer>1</integer>
 			</dict>
-        <key>NSExtensionPointIdentifier</key>
-        <string>com.apple.share-services</string>
+		</dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.share-services</string>
 		<key>NSExtensionPrincipalClass</key>
 		<string>InitialViewController</string>
 	</dict>
