@@ -9,6 +9,10 @@
 import UIKit
 import Shared
 
+struct CliqzIntroUX {
+    static let imageHeight: CGFloat = 290
+}
+
 class CliqzIntroViewController: UIViewController {
     weak var delegate: IntroViewControllerDelegate?
     
@@ -46,6 +50,7 @@ class CliqzIntroViewController: UIViewController {
         sc.isPagingEnabled = true
         sc.showsHorizontalScrollIndicator = false
         sc.accessibilityIdentifier = "IntroViewController.scrollView"
+        sc.isUserInteractionEnabled = true
         return sc
     }()
     
@@ -78,8 +83,6 @@ class CliqzIntroViewController: UIViewController {
         
         gradient.colors = [UIColor(red:0.31, green:0.67, blue:0.91, alpha:1.00).cgColor, UIColor.black.cgColor]
         gradient.locations = [0.0 , 1.0]
-        //gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
-        //gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
         gradient.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
         
         self.view.layer.insertSublayer(gradient, at: 0)
@@ -97,7 +100,7 @@ class CliqzIntroViewController: UIViewController {
         }
         imageViewContainer.snp.makeConstraints { make in
             make.top.equalTo(self.view)
-            make.height.equalTo(self.view.snp.width)
+            make.height.equalTo(CliqzIntroUX.imageHeight)
         }
         startBrowsingButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -151,11 +154,20 @@ class CliqzIntroViewController: UIViewController {
         imageViewContainer.addArrangedSubview(imageView)
         imageView.snp.makeConstraints { make in
             make.height.equalTo(imageViewContainer.snp.height)
-            make.width.equalTo(imageViewContainer.snp.height)
+            make.width.equalTo(self.view.snp.width)
         }
         
         let cardView = CliqzCardView(verticleSpacing: verticalPadding)
         cardView.configureWith(card: card)
+        
+        if let tickButtons = cardView.tickButtons {
+            for i in 0..<tickButtons.count {
+                let tickButton = tickButtons[i]
+                tickButton.addTarget(self, action: #selector(tickButtonPressed), for: .touchUpInside)
+                tickButton.tag = i + 1
+            }
+        }
+        
         if let _ = card.optInText, let _ = card.optInToggleValue { /*, self.responds(to: NSSelectorFromString(selectorString)) {*/
             //cardView.button.addTarget(self, action: NSSelectorFromString(selectorString), for: .touchUpInside)
             cardView.optInView.snp.makeConstraints { make in
@@ -166,11 +178,26 @@ class CliqzIntroViewController: UIViewController {
         }
         self.view.addSubview(cardView)
         cardView.snp.makeConstraints { make in
-            make.top.equalTo(self.imageViewContainer.snp.bottom).offset(verticalPadding)
+            make.top.equalTo(self.imageViewContainer.snp.bottom)//.offset(verticalPadding)
             make.bottom.equalTo(self.startBrowsingButton.snp.top)
             make.left.right.equalTo(self.view).inset(10)
         }
         return cardView
+    }
+    
+    @objc func tickButtonPressed(_ sender: UIButton) {
+        //assume: Only one card with tick buttons
+        let tickButtonCard = cardViews.filter { (card) -> Bool in
+            return card.tickButtons != nil
+            }.first
+        
+        if let tickButtonCard = tickButtonCard, let tickButtons = tickButtonCard.tickButtons {
+            for tickButton in tickButtons {
+                tickButton.isSelected = false
+            }
+        }
+        
+        sender.isSelected = true
     }
     
     @objc func startBrowsing() {
@@ -194,12 +221,14 @@ class CliqzIntroViewController: UIViewController {
         UIView.animate(withDuration: IntroUX.FadeDuration, animations: {
             self.cardViews.forEach { $0.alpha = 0.0 }
             introView.alpha = 1.0
+            introView.superview?.bringSubview(toFront: introView)
+            introView.isUserInteractionEnabled = true
             self.pageControl.currentPage = page
         }, completion: nil)
     }
     
     func imageContainerSize() -> CGSize {
-        return CGSize(width: self.view.frame.width * CGFloat(cards.count), height: 375)
+        return CGSize(width: self.view.frame.width * CGFloat(cards.count), height: CliqzIntroUX.imageHeight)
     }
 }
 
@@ -329,6 +358,26 @@ class CliqzCardView: UIView {
         return optInView
     }()
     
+    
+    var tickButtons: [TickButton]? = nil
+    
+    func createTickButton(info: TickButtonInfo) -> TickButton {
+        
+        var subtitle: Bool = false
+        
+        if info.subtitle != nil {
+            subtitle = true
+        }
+        
+        let tickButton = TickButton(subtitle: subtitle)
+        tickButton.setTitle(info.title, for: [])
+        tickButton.subtitleLabel.text = info.subtitle
+        if info.selected {
+            tickButton.isSelected = true
+        }
+        return tickButton
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -344,6 +393,7 @@ class CliqzCardView: UIView {
             make.bottom.lessThanOrEqualTo(self).offset(-IntroUX.PageControlHeight)
         }
         alpha = 0
+        self.isUserInteractionEnabled = true
     }
     
     func configureWith(card: CliqzIntroCard) {
@@ -356,19 +406,62 @@ class CliqzCardView: UIView {
             // When there is a button reduce the spacing to make more room for text
             stackView.spacing = stackView.spacing / 2
         }
+        
+        if let tickButtonsInfo = card.tickButtons {
+            
+            let buttonStackView = UIStackView()
+            buttonStackView.axis = .vertical
+            buttonStackView.alignment = .center
+            buttonStackView.spacing = 0
+            
+            stackView.addArrangedSubview(buttonStackView)
+            buttonStackView.snp.makeConstraints { (make) in
+                make.left.right.equalToSuperview()
+            }
+            
+            tickButtons = []
+            for i in 0..<tickButtonsInfo.count {
+                let info = tickButtonsInfo[i]
+                let tickButton = createTickButton(info: info)
+                buttonStackView.addArrangedSubview(tickButton)
+                tickButton.snp.makeConstraints { (make) in
+                    make.left.right.equalToSuperview()
+                    make.height.equalTo(50)
+                }
+                if i != tickButtonsInfo.count - 1 {
+                    tickButton.bottomSep.isHidden = true
+                }
+                tickButton.label.textColor = .white
+                tickButton.subtitleLabel.textColor = .white
+                tickButton.label.font = UIFont.systemFont(ofSize: 16)
+                tickButton.subtitleLabel.font = UIFont.systemFont(ofSize: 12)
+                tickButton.sepColor = UIColor.white.withAlphaComponent(0.2)
+                tickButton.bgColorSelected = UIColor.white.withAlphaComponent(0.2)
+                tickButton.isEnabled = true
+                tickButton.isUserInteractionEnabled = true
+                
+                tickButtons?.append(tickButton)
+            }
+        }
     }
     
     // Allows the scrollView to scroll while the CardView is in front
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        if let buttonSV = optInView.superview {
-            return convert(optInView.frame, from: buttonSV).contains(point)
-        }
-        return false
-    }
+//    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+//        if let buttonSV = optInView.superview {
+//            return convert(optInView.frame, from: buttonSV).contains(point)
+//        }
+//        return false
+//    }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+struct TickButtonInfo: Codable {
+    let title: String
+    let subtitle: String?
+    let selected: Bool
 }
 
 struct CliqzIntroCard: Codable {
@@ -377,13 +470,15 @@ struct CliqzIntroCard: Codable {
     let imageName: String
     let optInText: String?
     let optInToggleValue: Bool?
+    let tickButtons: [TickButtonInfo]?
     
-    init(title: String, text: String, imageName: String, optInText: String? = nil, optInToggleValue: Bool? = nil) {
+    init(title: String, text: String, imageName: String, optInText: String? = nil, optInToggleValue: Bool? = nil, tickButtons: [TickButtonInfo]? = nil) {
         self.title = title
         self.text = text
         self.imageName = imageName
         self.optInText = optInText
         self.optInToggleValue = optInToggleValue
+        self.tickButtons = tickButtons
     }
     
     static func defaultCards() -> [CliqzIntroCard] {
@@ -402,10 +497,17 @@ struct CliqzIntroCard: Codable {
         else {
             welcome = CliqzIntroCard(title: OnboardingStrings.introTitle, text: OnboardingStrings.introText, imageName: "ghostery-Introduction", optInText: OnboardingStrings.telemetryText, optInToggleValue: true)
         }
-        let adblock = CliqzIntroCard(title: OnboardingStrings.adblockerTitle, text: OnboardingStrings.adblockerText, imageName: "ghostery-Adblock")
+        let adblock = CliqzIntroCard(title: OnboardingStrings.adblockerTitle, text: OnboardingStrings.adblockerText, imageName: "ghostery-Adblock", tickButtons: CliqzIntroCard.createAdblockerTickButtons())
         let quicksearch = CliqzIntroCard(title: OnboardingStrings.quickSearchTitle, text: OnboardingStrings.quickSearchText, imageName: "ghostery-QuickSearch")
         let freshtab = CliqzIntroCard(title: OnboardingStrings.tabTitle, text: OnboardingStrings.tabText, imageName: "ghostery-CliqzTab")
         return [welcome, adblock, quicksearch, freshtab]
+    }
+    
+    static func createAdblockerTickButtons() -> [TickButtonInfo] {
+        let first = TickButtonInfo(title: "Block Nothing", subtitle: nil, selected: false)
+        let second = TickButtonInfo(title: "Block Recommended", subtitle: "Ads, site analytics and adult advertising", selected: true)
+        let third = TickButtonInfo(title: "Block Everything", subtitle: nil, selected: false)
+        return [first, second, third]
     }
     
     /* Codable doesnt allow quick conversion to a dictonary */
