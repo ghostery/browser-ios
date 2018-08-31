@@ -26,9 +26,33 @@ class TickButton: UIButton {
     let bottomSep = UIView()
     let tickView = UIImageView()
     
-    let customGray = UIColor.init(red: 0.91, green: 0.91, blue: 0.91, alpha: 0.91)
+    let label = UILabel()
+    let subtitleLabel = UILabel()
     
     weak var delegate: TickButtonProtocol? = nil
+    
+    var subtitle: Bool = false
+    
+    private var _sepColor: UIColor = UIColor.init(red: 0.91, green: 0.91, blue: 0.91, alpha: 0.91)
+    var sepColor: UIColor {
+        get {
+            return _sepColor
+        }
+        set {
+            _sepColor = newValue
+            setStyles()
+        }
+    }
+    
+    private var _bgColorSelected: UIColor = UIColor.init(red: 0.91, green: 0.91, blue: 0.91, alpha: 0.91)
+    var bgColorSelected: UIColor {
+        get {
+            return _bgColorSelected
+        }
+        set {
+            _bgColorSelected = newValue
+        }
+    }
     
     override var isSelected: Bool {
         didSet {
@@ -47,12 +71,12 @@ class TickButton: UIButton {
         didSet {
             if isHighlighted == true {
                 UIView.animate(withDuration: 0.1) { [unowned self] in
-                    self.backgroundColor = self.customGray
+                    self.backgroundColor = self.bgColorSelected
                 }
             }
             else {
-                UIView.animate(withDuration: 0.2) { [unowned self] in
-                    self.backgroundColor = .white
+                UIView.animate(withDuration: 0.1) { [unowned self] in
+                    self.backgroundColor = .clear
                 }
             }
         }
@@ -69,11 +93,16 @@ class TickButton: UIButton {
         }
     }
     
-    override init(frame: CGRect) {
+    init(frame: CGRect = CGRect.zero, subtitle: Bool = false) {
         super.init(frame: frame)
-        self.contentHorizontalAlignment = .left
+        self.subtitle = subtitle
+        //self.contentHorizontalAlignment = .left
         self.addSubview(topSep)
         self.addSubview(bottomSep)
+        self.addSubview(label)
+        if subtitle {
+            self.addSubview(subtitleLabel)
+        }
         self.addSubview(tickView)
         
         setConstraints()
@@ -84,6 +113,29 @@ class TickButton: UIButton {
     }
     
     func setConstraints() {
+        
+        if subtitle {
+            
+            label.snp.makeConstraints { (make) in
+                make.left.equalToSuperview()
+                make.right.equalTo(tickView.snp.left)
+                make.bottom.equalTo(self.snp.bottom).dividedBy(2)
+            }
+            
+            subtitleLabel.snp.makeConstraints { (make) in
+                make.left.equalToSuperview()
+                make.right.equalTo(tickView.snp.left)
+                make.top.equalTo(label.snp.bottom)
+            }
+        }
+        else {
+            label.snp.makeConstraints { (make) in
+                make.left.equalToSuperview()
+                make.right.equalTo(tickView.snp.left)
+                make.centerY.equalToSuperview()
+            }
+        }
+        
         topSep.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
             make.height.equalTo(1)
@@ -104,48 +156,19 @@ class TickButton: UIButton {
     
     func setStyles() {
         tickView.backgroundColor = .clear
-        topSep.backgroundColor = customGray
-        bottomSep.backgroundColor = customGray
+        backgroundColor = .clear
+        label.backgroundColor = .clear
+        subtitleLabel.backgroundColor = .clear
+        topSep.backgroundColor = sepColor
+        bottomSep.backgroundColor = sepColor
+    }
+    
+    override func setTitle(_ title: String?, for state: UIControlState) {
+        label.text = title
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class TickButtonSubtitle: TickButton {
-    let label = UILabel()
-    let subtitleLabel = UILabel()
-    
-    override func setConstraints() {
-        topSep.snp.makeConstraints { (make) in
-            make.top.left.right.equalToSuperview()
-            make.height.equalTo(1)
-        }
-        
-        bottomSep.snp.makeConstraints { (make) in
-            make.bottom.left.right.equalToSuperview()
-            make.height.equalTo(1)
-        }
-        
-        tickView.snp.makeConstraints { (make) in
-            make.width.equalTo(19.5)
-            make.height.equalTo(15)
-            make.centerY.equalToSuperview()
-            make.right.equalToSuperview().offset(-10)
-        }
-        
-        label.snp.makeConstraints { (make) in
-            make.right.equalToSuperview()
-            make.left.equalTo(tickView.snp.leading)
-            make.bottom.equalTo(self.snp.bottom).dividedBy(2)
-        }
-        
-        subtitleLabel.snp.makeConstraints { (make) in
-            make.right.equalToSuperview()
-            make.left.equalTo(tickView.snp.leading)
-            make.top.equalTo(label.snp.bottom)
-        }
     }
 }
 
