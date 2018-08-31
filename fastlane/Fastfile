@@ -68,7 +68,7 @@ platform :ios do
       keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
       keychain_password: ENV["MATCH_PASSWORD"],
       git_branch: "new-browser-ios-beta",
-      app_identifier: ["com.cliqz.ios.newCliqz", "*"],
+      app_identifier: ["com.cliqz.ios.newCliqz", "com.cliqz.ios.newCliqz.ShareTo", "*"],
       readonly: true,
       verbose: true
     )
@@ -88,6 +88,7 @@ platform :ios do
       export_options: {
         provisioningProfiles: { 
           "com.cliqz.ios.newCliqz" => "match AppStore com.cliqz.ios.newCliqz",
+          "com.cliqz.ios.newCliqz.ShareTo" => "match AppStore com.cliqz.ios.newCliqz.ShareTo",
         }
       }
     )
@@ -127,7 +128,7 @@ platform :ios do
       keychain_password: ENV["MATCH_PASSWORD"],
       git_branch: "ghostery-ios",
       team_id: ENV["DEVELOPER_TEAM_ID"],
-      app_identifier: ["com.evidon.Ghostery", "*"],
+      app_identifier: ["com.evidon.Ghostery", "com.evidon.Ghostery.ShareTo", "*"],
       readonly: true,
       verbose: true
     )
@@ -141,7 +142,8 @@ platform :ios do
       skip_profile_detection: "true",
       export_options: {
         provisioningProfiles: { 
-          "com.evidon.Ghostery" => "match AppStore com.evidon.Ghostery"
+          "com.evidon.Ghostery" => "match AppStore com.evidon.Ghostery",
+          "com.evidon.Ghostery.ShareTo" => "match AppStore com.evidon.Ghostery.ShareTo",
         }
       }
     )
@@ -181,7 +183,7 @@ platform :ios do
       keychain_password: ENV["MATCH_PASSWORD"],
       git_branch: "ghostery-ios",
       team_id: ENV["DEVELOPER_TEAM_ID"],
-      app_identifier: ["com.evidon.Ghostery", "*"],
+      app_identifier: ["com.evidon.Ghostery", "com.evidon.Ghostery.ShareTo", "*"],
       readonly: true,
       verbose: true
     )
@@ -195,7 +197,8 @@ platform :ios do
       skip_profile_detection: "true",
       export_options: {
         provisioningProfiles: { 
-          "com.evidon.Ghostery" => "match AppStore com.evidon.Ghostery"
+          "com.evidon.Ghostery" => "match AppStore com.evidon.Ghostery",
+          "com.evidon.Ghostery.ShareTo" => "match AppStore com.evidon.Ghostery.ShareTo",
         }
       }
     )
