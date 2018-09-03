@@ -20,6 +20,9 @@ extension BrowserViewController {
     }
     
     func shouldShowKeyboard() -> Bool {
+        if self.urlBar.inOverlayMode {
+            return false
+        }
         if profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
             return false
         }
