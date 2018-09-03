@@ -11,6 +11,7 @@ import Shared
 
 struct CliqzIntroUX {
     static let imageHeight: CGFloat = 290
+    static let PagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 10 : 30
 }
 
 class CliqzIntroViewController: UIViewController {
@@ -19,6 +20,14 @@ class CliqzIntroViewController: UIViewController {
     // We need to hang on to views so we can animate and change constraints as we scroll
     var cardViews = [CliqzCardView]()
     var cards = CliqzIntroCard.defaultCards()
+    
+    enum BlockOption {
+        case none
+        case all
+        case recommended
+    }
+    
+    var blockOptionSelected: BlockOption = .recommended //default
     
     lazy fileprivate var startBrowsingButton: UIButton = {
         let button = UIButton()
@@ -77,15 +86,6 @@ class CliqzIntroViewController: UIViewController {
         assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
         view.backgroundColor = UIColor.clear
         imagesBackgroundView.backgroundColor = UIColor.clear
-        
-        // Gradient Background
-        let gradient: CAGradientLayer = CAGradientLayer()
-        
-        gradient.colors = [UIColor(red:0.31, green:0.67, blue:0.91, alpha:1.00).cgColor, UIColor.black.cgColor]
-        gradient.locations = [0.0 , 1.0]
-        gradient.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
-        
-        self.view.layer.insertSublayer(gradient, at: 0)
 
         // Add Views
         view.addSubview(pageControl)
@@ -100,12 +100,13 @@ class CliqzIntroViewController: UIViewController {
         }
         imageViewContainer.snp.makeConstraints { make in
             make.top.equalTo(self.view)
-            make.height.equalTo(CliqzIntroUX.imageHeight)
+            let height = (290 / 375) * self.view.frame.width
+            make.height.equalTo(height)
         }
         startBrowsingButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().dividedBy(2.2)
-            make.bottom.equalTo(self.view.safeArea.bottom).offset(-IntroUX.PagerCenterOffsetFromScrollViewBottom)
+            make.bottom.equalTo(self.view.safeArea.bottom).offset(-CliqzIntroUX.PagerCenterOffsetFromScrollViewBottom)
             make.height.equalTo(45)
         }
         scrollView.snp.makeConstraints { make in
@@ -115,7 +116,7 @@ class CliqzIntroViewController: UIViewController {
 
         pageControl.snp.makeConstraints { make in
             make.centerX.equalTo(self.scrollView)
-            make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroUX.PagerCenterOffsetFromScrollViewBottom)
+            make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-20)
         }
 
         createSlides()
@@ -157,9 +158,17 @@ class CliqzIntroViewController: UIViewController {
             make.width.equalTo(self.view.snp.width)
         }
         
-        let cardView = CliqzCardView(verticleSpacing: verticalPadding)
+        let cardView: CliqzCardView
+        // In case there are tick buttons everything needs to be closer together
+        if card.tickButtons != nil {
+            cardView = CliqzCardView(verticleSpacing: 10.0)
+        }
+        else {
+            cardView = CliqzCardView(verticleSpacing: verticalPadding)
+        }
         cardView.configureWith(card: card)
         
+        //assumption: Only one card with tickButtons
         if let tickButtons = cardView.tickButtons {
             for i in 0..<tickButtons.count {
                 let tickButton = tickButtons[i]
@@ -198,9 +207,66 @@ class CliqzIntroViewController: UIViewController {
         }
         
         sender.isSelected = true
+        
+        // Show next card
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+//            if (self?.pageControl.currentPage ?? 0) + 1 <= (self?.pageControl.numberOfPages ?? 0) {
+//                self?.pageControl.currentPage += 1
+//                self?.changePage()
+//            }
+//        }
+        
+        //assumption: Only one card with tickButtons, the Antitracking card
+        if sender.tag == 1 { // Block Nothing
+            blockOptionSelected = .none
+        }
+        else if sender.tag == 2 { //Block Recommended
+            blockOptionSelected = .recommended
+        }
+        else if sender.tag == 3 { //BlockEverything
+            blockOptionSelected = .all
+        }
     }
     
     @objc func startBrowsing() {
+        // Start the necessary stuff for antitracking
+        
+        let populateOp = PopulateBlockedTrackersOperation()
+        
+        var loadOp: LoadTrackerListOperation? = nil
+        
+        let loadOperations = GlobalPrivacyQueue.shared.operations.filter { (op) -> Bool in
+            return op is LoadTrackerListOperation && !(op.isFinished || op.isCancelled)
+        }
+        
+        if !loadOperations.isEmpty, let loadOperation = loadOperations.first as? LoadTrackerListOperation {
+            loadOp = loadOperation
+        }
+        
+        func addOp(operation: Operation) {
+            if let loadOperation = loadOp {
+                operation.addDependency(loadOperation)
+            }
+            
+            populateOp.addDependency(operation)
+            
+            GlobalPrivacyQueue.shared.addOperation(operation)
+            GlobalPrivacyQueue.shared.addOperation(populateOp)
+        }
+        
+        if blockOptionSelected != .recommended {
+            let blockOption: ChangeTrackersOperation.BlockOption =  blockOptionSelected == .all ? .blockAll : .unblockAll
+            
+            let operation = ChangeTrackersOperation(blockOption: blockOption)
+            addOp(operation: operation)
+        }
+        else {
+            let applyDefaultsOp = ApplyDefaultsOperation()
+            addOp(operation: applyDefaultsOp)
+            UserDefaults.standard.set(true, forKey: trackersDefaultsAreAppliedKey)
+            UserDefaults.standard.synchronize()
+        }
+        
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
     }
     
@@ -263,6 +329,29 @@ extension CliqzIntroViewController {
 extension CliqzIntroViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Gradient Background
+        let gradient: CAGradientLayer = CAGradientLayer()
+        
+        gradient.colors = [UIColor(red:0.31, green:0.67, blue:0.91, alpha:1.00).cgColor, UIColor.black.cgColor]
+        gradient.locations = [0.0 , 1.0]
+        let width: CGFloat
+        let height: CGFloat
+        
+        //Fix for gradient bug when the intro is shown while the device is in landscape.
+        if UIDevice.current.getDeviceAndOrientation().1 == .portrait && self.view.frame.size.width > self.view.frame.size.height {
+            width = self.view.frame.size.height
+            height = self.view.frame.size.width
+        }
+        else {
+            width = self.view.frame.width
+            height = self.view.frame.height
+        }
+        
+        gradient.frame = CGRect(x: 0.0, y: 0.0, width: width, height: height)
+        
+        self.view.layer.insertSublayer(gradient, at: 0)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged(_:)), name: .DynamicFontChanged, object: nil)
     }
     
@@ -358,8 +447,15 @@ class CliqzCardView: UIView {
         return optInView
     }()
     
-    
     var tickButtons: [TickButton]? = nil
+    
+    var tickButtonHeight: CGFloat {
+        return UIScreen.main.bounds.width <= 320 ? 40 : 50
+    }
+    
+    var tickButtonTitleHeight: CGFloat {
+        return UIScreen.main.bounds.width <= 320 ? 14 : 16
+    }
     
     func createTickButton(info: TickButtonInfo) -> TickButton {
         
@@ -426,14 +522,14 @@ class CliqzCardView: UIView {
                 buttonStackView.addArrangedSubview(tickButton)
                 tickButton.snp.makeConstraints { (make) in
                     make.left.right.equalToSuperview()
-                    make.height.equalTo(50)
+                    make.height.equalTo(tickButtonHeight)
                 }
                 if i != tickButtonsInfo.count - 1 {
                     tickButton.bottomSep.isHidden = true
                 }
-                tickButton.label.textColor = .white
-                tickButton.subtitleLabel.textColor = .white
-                tickButton.label.font = UIFont.systemFont(ofSize: 16)
+                tickButton.labelTextColor = .white
+                tickButton.subtitleLabelTextColor = .white
+                tickButton.label.font = UIFont.systemFont(ofSize: tickButtonTitleHeight)
                 tickButton.subtitleLabel.font = UIFont.systemFont(ofSize: 12)
                 tickButton.sepColor = UIColor.white.withAlphaComponent(0.2)
                 tickButton.bgColorSelected = UIColor.white.withAlphaComponent(0.2)
@@ -446,12 +542,24 @@ class CliqzCardView: UIView {
     }
     
     // Allows the scrollView to scroll while the CardView is in front
-//    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-//        if let buttonSV = optInView.superview {
-//            return convert(optInView.frame, from: buttonSV).contains(point)
-//        }
-//        return false
-//    }
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        if let buttonSV = optInView.superview {
+            return convert(optInView.frame, from: buttonSV).contains(point)
+        }
+        if let tickButtons = tickButtons, !tickButtons.isEmpty, let SV = tickButtons.first!.superview {
+            var values: [Bool] = Array.init(repeating: false, count: tickButtons.count)
+            for i in 0..<tickButtons.count {
+                let button = tickButtons[i]
+                values[i] = convert(button.frame, from: SV).contains(point)
+            }
+            
+            return !(values.filter { (a) -> Bool in
+                return a == true
+            }.isEmpty)
+        }
+        
+        return false
+    }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

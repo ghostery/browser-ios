@@ -65,21 +65,21 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         // To ensure this, loadTrackerList should be called before any calls to a coordinatedUpdate.
         let loadOperation = LoadTrackerListOperation()
         
-        if UserDefaults.standard.bool(forKey: trackersDefaultsAreAppliedKey) == false {
-            applyDefaultsOp = ApplyDefaultsOperation()
-            applyDefaultsOp!.addDependency(loadOperation)
-            populateOp.addDependency(applyDefaultsOp!)
-            UserDefaults.standard.set(true, forKey: trackersDefaultsAreAppliedKey)
-            UserDefaults.standard.synchronize()
-        }
-        else {
-            populateOp.addDependency(loadOperation)
-        }
+//        if UserDefaults.standard.bool(forKey: trackersDefaultsAreAppliedKey) == false {
+//            applyDefaultsOp = ApplyDefaultsOperation()
+//            applyDefaultsOp!.addDependency(loadOperation)
+//            populateOp.addDependency(applyDefaultsOp!)
+//            UserDefaults.standard.set(true, forKey: trackersDefaultsAreAppliedKey)
+//            UserDefaults.standard.synchronize()
+//        }
+//        else {
+              populateOp.addDependency(loadOperation)
+//        }
         
         GlobalPrivacyQueue.shared.addOperation(loadOperation)
-        if let applyOp = applyDefaultsOp {
-            GlobalPrivacyQueue.shared.addOperation(applyOp)
-        }
+//        if let applyOp = applyDefaultsOp {
+//            GlobalPrivacyQueue.shared.addOperation(applyOp)
+//        }
         GlobalPrivacyQueue.shared.addOperation(populateOp)
     }
     
