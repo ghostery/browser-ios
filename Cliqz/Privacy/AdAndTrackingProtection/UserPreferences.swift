@@ -36,7 +36,7 @@ import Storage
         NotificationCenter.default.removeObserver(self)
     }
     
-    @objc func updateAntitrackingPref(_ notificaion: Notification) {
+    @objc func updateAntitrackingPref(_ sender: Any?) {
         if TrackerStateStore.shared.blockedTrackers.count == TrackerList.instance.appsList.count, self._antitrackingMode != .blockAll {
             self._antitrackingMode = .blockAll
             self.writeToDisk()

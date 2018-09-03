@@ -480,6 +480,7 @@
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
 		AF03AA1A20BC117600A9D097 /* LoadTrackerListOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF03AA1920BC117600A9D097 /* LoadTrackerListOperation.swift */; };
 		AF03AA2A20BC129A00A9D097 /* ApplyDefaultsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF03AA2920BC129A00A9D097 /* ApplyDefaultsOperation.swift */; };
+		AF235043213D482900A0CB8A /* ChangeTrackersOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF235042213D482800A0CB8A /* ChangeTrackersOperation.swift */; };
 		AF28D3D8207E32250065FF86 /* PermissionManagerModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28D3D7207E32250065FF86 /* PermissionManagerModule.swift */; };
 		AF28D3DB207E325F0065FF86 /* PermissionManagerModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AF28D3DA207E325F0065FF86 /* PermissionManagerModuleBridge.m */; };
 		AF28D3DD207E378E0065FF86 /* GeoLocationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AF28D3DC207E378E0065FF86 /* GeoLocationBridge.m */; };
@@ -1816,6 +1817,7 @@
 		A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightModeHelper.swift; sourceTree = "<group>"; };
 		AF03AA1920BC117600A9D097 /* LoadTrackerListOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadTrackerListOperation.swift; sourceTree = "<group>"; };
 		AF03AA2920BC129A00A9D097 /* ApplyDefaultsOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyDefaultsOperation.swift; sourceTree = "<group>"; };
+		AF235042213D482800A0CB8A /* ChangeTrackersOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeTrackersOperation.swift; sourceTree = "<group>"; };
 		AF28D3D7207E32250065FF86 /* PermissionManagerModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManagerModule.swift; sourceTree = "<group>"; };
 		AF28D3DA207E325F0065FF86 /* PermissionManagerModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PermissionManagerModuleBridge.m; sourceTree = "<group>"; };
 		AF28D3DC207E378E0065FF86 /* GeoLocationBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeoLocationBridge.m; sourceTree = "<group>"; };
@@ -3551,6 +3553,7 @@
 				AFD165B520C6C03B00379381 /* UpdateOperation.swift */,
 				AF03AA1920BC117600A9D097 /* LoadTrackerListOperation.swift */,
 				AF03AA2920BC129A00A9D097 /* ApplyDefaultsOperation.swift */,
+				AF235042213D482800A0CB8A /* ChangeTrackersOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -6150,6 +6153,7 @@
 				1E2C202020AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift in Sources */,
 				1EEA36D72063F87C003B6AD5 /* URLExtension.swift in Sources */,
 				E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */,
+				AF235043213D482900A0CB8A /* ChangeTrackersOperation.swift in Sources */,
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				AF6FA99220652D4600D7F9F0 /* TrieNode.swift in Sources */,
 				4F4033D82086575500AD2A8D /* OverviewViewController.swift in Sources */,

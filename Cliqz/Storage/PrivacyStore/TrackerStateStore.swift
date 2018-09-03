@@ -82,15 +82,14 @@ public class TrackerStateStore: NSObject {
     
     public func populateBlockedTrackers() {
         if let realm = try? Realm() {
-            let states = realm.objects(TrackerState.self)
-            var set: Set<Int> = Set()
-            for state in states {
-                if state.translatedState == .blocked {
-                    set.insert(state.appId)
-                }
+            let states = realm.objects(TrackerState.self).filter { (state) -> Bool in
+                return state.translatedState == .blocked
+            }.map { (state) -> Int in
+                return state.appId
             }
+            
             //this makes sure the BlockedTrackerSetChanged notification is called only once.
-            blockedTrackers = set
+            blockedTrackers = Set.init(states)
         }
         else {
             //could not init db

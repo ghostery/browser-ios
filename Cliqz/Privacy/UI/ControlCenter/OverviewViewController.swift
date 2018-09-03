@@ -33,6 +33,8 @@ class TickButton: UIButton {
     
     var subtitle: Bool = false
     
+    var identifier: String = ""
+    
     private var _sepColor: UIColor = UIColor.init(red: 0.91, green: 0.91, blue: 0.91, alpha: 0.91)
     var sepColor: UIColor {
         get {
@@ -53,6 +55,42 @@ class TickButton: UIButton {
             _bgColorSelected = newValue
         }
     }
+    
+    private var _labelTextColor: UIColor = UIColor.black
+    var labelTextColor: UIColor {
+        get {
+            return _labelTextColor
+        }
+        set {
+            _labelTextColor = newValue
+            self.label.textColor = _labelTextColor
+        }
+    }
+    
+    private var _subtitleLabelTextColor: UIColor = UIColor.black
+    var subtitleLabelTextColor: UIColor {
+        get {
+            return _subtitleLabelTextColor
+        }
+        set {
+            _subtitleLabelTextColor = newValue
+            self.subtitleLabel.textColor = _subtitleLabelTextColor
+        }
+    }
+    
+    private var _leftTextInset: CGFloat = 10.0
+    var leftTextInset: CGFloat {
+        get {
+            return _leftTextInset
+        }
+        set {
+            _leftTextInset = newValue
+            self.label.snp.updateConstraints { (make) in
+                make.left.equalToSuperview().offset(_leftTextInset)
+            }
+        }
+    }
+    
     
     override var isSelected: Bool {
         didSet {
@@ -86,9 +124,13 @@ class TickButton: UIButton {
         didSet {
             if isEnabled {
                 self.titleLabel?.textColor = UIColor.black
+                self.label.textColor = labelTextColor
+                self.subtitleLabel.textColor = subtitleLabelTextColor
             }
             else {
                 self.titleLabel?.textColor = UIColor.cliqzGrayFunctional
+                self.label.textColor = UIColor.cliqzGrayFunctional
+                self.subtitleLabel.textColor = UIColor.cliqzGrayFunctional
             }
         }
     }
@@ -117,20 +159,20 @@ class TickButton: UIButton {
         if subtitle {
             
             label.snp.makeConstraints { (make) in
-                make.left.equalToSuperview()
+                make.left.equalToSuperview().offset(leftTextInset)
                 make.right.equalTo(tickView.snp.left)
-                make.bottom.equalTo(self.snp.bottom).dividedBy(2)
+                make.bottom.equalTo(self.snp.bottom).dividedBy(2).offset(2)
             }
             
             subtitleLabel.snp.makeConstraints { (make) in
-                make.left.equalToSuperview()
+                make.left.equalToSuperview().offset(leftTextInset)
                 make.right.equalTo(tickView.snp.left)
                 make.top.equalTo(label.snp.bottom)
             }
         }
         else {
             label.snp.makeConstraints { (make) in
-                make.left.equalToSuperview()
+                make.left.equalToSuperview().offset(leftTextInset)
                 make.right.equalTo(tickView.snp.left)
                 make.centerY.equalToSuperview()
             }
@@ -165,6 +207,12 @@ class TickButton: UIButton {
     
     override func setTitle(_ title: String?, for state: UIControlState) {
         label.text = title
+    }
+    
+    override func setTitleColor(_ color: UIColor?, for state: UIControlState) {
+        if let color = color {
+            labelTextColor = color
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -265,8 +313,8 @@ class EnhancedAdblockerView: UIView {
         //hide one of the separators
         allWebsitesButton.topSep.isHidden = true
         
-        domainButton.titleEdgeInsets.left = 16
-        allWebsitesButton.titleEdgeInsets.left = 16
+        domainButton.leftTextInset = 16
+        allWebsitesButton.leftTextInset = 16
     }
     
     @objc func domainPressed(sender: UIButton) {
