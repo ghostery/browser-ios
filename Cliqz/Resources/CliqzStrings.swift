@@ -18,10 +18,11 @@ extension CliqzStrings {
         }
         
         public var introText: String {
-            return NSLocalizedString("Keep your browsing cleaner, faster, and safer.", tableName: "Cliqz", comment: "[Onboarding] Intro Text")
+            return NSLocalizedString("Browse cleaner, faster, and safer on-the-go with Ghostery, now optimized for mobile!", tableName: "Cliqz", comment: "[Onboarding] Intro Text")
         }
+        
         public var introTextOldUsers: String {
-            return NSLocalizedString("Keep your browsing cleaner, faster and safer. Don't worry, all your data will be imported.", tableName: "Cliqz", comment: "[Onboarding] Intro Text Old Users")
+            return NSLocalizedString("Browse cleaner, faster, and safer on-the-go with Ghostery, now optimized for mobile! Don't worry, all your data will be imported.", tableName: "Cliqz", comment: "[Onboarding] Intro Text Old Users")
         }
         public var introTitle: String {
             return NSLocalizedString("Introducing Ghostery", tableName: "Cliqz", comment: "[Onboarding] Intro Title")
@@ -31,24 +32,24 @@ extension CliqzStrings {
         }
         
         public var adblockerText: String {
-            return NSLocalizedString("Browse faster, safer and efficiently with Ad & Tracker Blocking. You can customize your settings in the Ghostery Control Center.", tableName: "Cliqz", comment: "[Onboarding] Adblocker Text")
+            return NSLocalizedString("Choose what you want Ghostery to block for cleaner, faster, and safer browsing. You can change and customize these settings at any time in the Privacy Control Center.", tableName: "Cliqz", comment: "[Onboarding] Adblocker Text")
         }
         public var adblockerTitle: String {
             return NSLocalizedString("Ad & Tracker Blocking", tableName: "Cliqz", comment: "[Onboarding] Adblocker Title")
         }
         
         public var quickSearchText: String {
-            return NSLocalizedString("Save time and data volume: Quick Search instantly shows relevant results while typing.", tableName: "Cliqz", comment: "[Onboarding] QuickSearch Text")
+            return NSLocalizedString("Stay anonymous, reduce data usage, and save time: results appear instantly as you type in the Ghost search bar.", tableName: "Cliqz", comment: "[Onboarding] QuickSearch Text")
         }
         public var quickSearchTitle: String {
-            return NSLocalizedString("Quick Search", tableName: "Cliqz", comment: "[Onboarding] QuickSearch Title")
+            return NSLocalizedString("Ghost Search", tableName: "Cliqz", comment: "[Onboarding] QuickSearch Title")
         }
         
         public var tabText: String {
-            return NSLocalizedString("Every new Tab comes with top sites, news and background image. Customize it to your needs.", tableName: "Cliqz", comment: "[Onboarding] Tab Text")
+            return NSLocalizedString("Each new Start Tab is customizable and can display top sites, the latest news, and other tracking insights to come.", tableName: "Cliqz", comment: "[Onboarding] Tab Text")
         }
         public var tabTitle: String {
-            return NSLocalizedString("Fresh Tab", tableName: "Cliqz", comment: "[Onboarding] Freshtab Title")
+            return NSLocalizedString("Start Tab", tableName: "Cliqz", comment: "[Onboarding] Freshtab Title")
         }
     }
 }
