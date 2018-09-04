@@ -466,6 +466,7 @@ class CliqzCardView: UIView {
         }
         
         let tickButton = TickButton(subtitle: subtitle)
+        tickButton.accessibilityIdentifier = info.accessibilityIdentifier
         tickButton.setTitle(info.title, for: [])
         tickButton.subtitleLabel.text = info.subtitle
         if info.selected {
@@ -570,6 +571,7 @@ struct TickButtonInfo: Codable {
     let title: String
     let subtitle: String?
     let selected: Bool
+    let accessibilityIdentifier: String?
 }
 
 struct CliqzIntroCard: Codable {
@@ -612,9 +614,9 @@ struct CliqzIntroCard: Codable {
     }
     
     static func createAdblockerTickButtons() -> [TickButtonInfo] {
-        let first = TickButtonInfo(title: "Block Nothing", subtitle: nil, selected: false)
-        let second = TickButtonInfo(title: "Block Recommended", subtitle: "Ads, site analytics and adult advertising", selected: true)
-        let third = TickButtonInfo(title: "Block Everything", subtitle: nil, selected: false)
+        let first = TickButtonInfo(title: "Block Nothing", subtitle: nil, selected: false, accessibilityIdentifier: "BlockNothingButtonTitle")
+        let second = TickButtonInfo(title: "Block Recommended", subtitle: "Ads, site analytics and adult advertising", selected: true, accessibilityIdentifier: "BlockRecommendedButtonTitle")
+        let third = TickButtonInfo(title: "Block Everything", subtitle: nil, selected: false, accessibilityIdentifier: "BlockEverythingButtonTitle")
         return [first, second, third]
     }
     
