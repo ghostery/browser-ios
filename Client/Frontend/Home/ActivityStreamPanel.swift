@@ -819,8 +819,12 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                 LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: source)
             }
         }
-
+        /* Cliqz: Moved Firefox Strings to Cliqz table
         let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
+            self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }
+        */
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: CliqzStrings.OpenInNewForgetTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
         

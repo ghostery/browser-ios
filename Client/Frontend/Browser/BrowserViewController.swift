@@ -1759,7 +1759,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
         }), accessibilityIdentifier: "toolbarTabButtonLongPress.newTab")
+        /* Cliqz: Moved Firefox Strings to Cliqz table
         controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
+        */
+        controller.addAction(UIAlertAction(title: CliqzStrings.NewForgetTabTitle, style: .default, handler: { _ in
             // Cliqz: flag homePanelController to show keyboard next time it is displayed
             self.homePanelController?.shouldShowKeyboard = true
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
@@ -2620,7 +2623,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 actionSheetController.addAction(openNewTabAction, accessibilityIdentifier: "linkContextMenu.openInNewTab")
             }
 
-            /* Cliqz: Moved Firefox Strings to Cliqz table
+            /* Cliqz: Moved Firefox Strings to Cliqz table 
             let openNewPrivateTabTitle = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
             */
             let openNewPrivateTabTitle = NSLocalizedString("Open in New Forget Tab", tableName: "Cliqz", comment: "Context menu option for opening a link in a new forget tab")

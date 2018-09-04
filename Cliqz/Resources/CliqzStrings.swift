@@ -52,4 +52,23 @@ extension CliqzStrings {
             return NSLocalizedString("Start Tab", tableName: "Cliqz", comment: "[Onboarding] Freshtab Title")
         }
     }
+    
+    
+    public static let OpenInNewForgetTabContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.OpenInNewForgetTab", tableName: "Cliqz", value: "Open in New Ghost Tab", comment: "The title for the Open in New Forget Tab context menu action for sites in Home Panels")
+    
+    public static let FreshTab = NSLocalizedString("Fresh Tab", tableName: "Cliqz", comment: "Title for Freshtab in tab history list")
+    
+    public static let NewForgetTabTitle = NSLocalizedString("Hotkeys.NewForgetTab.DiscoveryTitle", tableName: "cliqz", value: "New Ghost Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
+    
+    public static let AppMenuAddFavoriteTitleString = NSLocalizedString("Menu.AddFavoriteAction.Title", tableName: "Cliqz", value: "Add to Favorites", comment: "Label for the button, displayed in the menu, used to create a favorite for the current website.")
+    
+    public static let AppMenuRemoveFavoriteTitleString = NSLocalizedString("Menu.RemoveBookmarkAction.Title", tableName: "Cliqz", value: "Remove Favorite", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.")
+    
+    public static let ShareOpenInCliqz = NSLocalizedString("ShareExtension.OpenInCliqzAction.Title", tableName: "Cliqz", value: "Open in Ghostery", comment: "Action label on share extension to immediately open page in Ghostery.")
+    
+    public static let ShareSearchInCliqz = NSLocalizedString("ShareExtension.SeachInCliqzAction.Title", tableName: "Cliqz", value: "Search in Ghostery", comment: "Action label on share extension to search for the selected text in Ghostery.")
+    
+    public static let AppMenuAddFavoriteConfirmMessage = NSLocalizedString("Menu.AddFavorite.Confirm", tableName: "Cliqz", value: "Favorite Added", comment: "Toast displayed to the user after a bookmark has been added.")
+    public static let AppMenuRemoveFavoriteConfirmMessage = NSLocalizedString("Menu.RemoveFavorite.Confirm", tableName: "Cliqz", value: "Favorite Removed", comment: "Toast displayed to the user after a bookmark has been removed.")
+    
 }

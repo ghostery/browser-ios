@@ -110,6 +110,13 @@ class ShareViewController: UIViewController {
         pageInfoRowUrlLabel = pageInfoRow.urlLabel
         makeSeparator(addTo: stackView)
 
+        // Cliqz: Add strings localized strings
+        //start
+        let ShareOpenInCliqz = NSLocalizedString("ShareExtension.OpenInCliqzAction.Title", tableName: "Cliqz", value: "Open in Ghostery", comment: "Action label on share extension to immediately open page in Ghostery.")
+        let AppMenuAddFavoriteTitleString = NSLocalizedString("Menu.AddFavoriteAction.Title", tableName: "Cliqz", value: "Add to Favorites", comment: "Label for the button, displayed in the menu, used to create a favorite for the current website.")
+        let ShareSearchInCliqz = NSLocalizedString("ShareExtension.SeachInCliqzAction.Title", tableName: "Cliqz", value: "Search in Ghostery", comment: "Action label on share extension to search for the selected text in Ghostery.")
+        //end
+ 
         if shareItem?.isUrlType() ?? true {
             /* Cliqz: Modify these actions
             makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
@@ -119,14 +126,14 @@ class ShareViewController: UIViewController {
             makeSeparator(addTo: stackView)
             makeActionRow(addTo: stackView, label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
             */
-            makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: ShareOpenInCliqz, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
             makeSeparator(addTo: stackView)
             makeActionRow(addTo: stackView, label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
             makeSeparator(addTo: stackView)
-            makeActionRow(addTo: stackView, label: Strings.AppMenuAddBookmarkTitleString, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: AppMenuAddFavoriteTitleString, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
         } else {
             pageInfoRowUrlLabel?.removeFromSuperview()
-            makeActionRow(addTo: stackView, label: Strings.ShareSearchInFirefox, imageName: "quickSearch", action: #selector(actionSearchInFirefox), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: ShareSearchInCliqz, imageName: "quickSearch", action: #selector(actionSearchInFirefox), hasNavigation: false)
         }
 
         let footerSpaceRow = UIView()
