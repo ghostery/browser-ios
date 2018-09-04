@@ -177,7 +177,10 @@ extension PhotonActionSheetProtocol {
             findInPage()
         }
 
+        /* Cliqz: Moved Firefox Strings to Cliqz table
         let bookmarkPage = PhotonActionSheetItem(title: Strings.AppMenuAddBookmarkTitleString, iconString: "menu-Bookmark") { action in
+        */
+        let bookmarkPage = PhotonActionSheetItem(title: CliqzStrings.AppMenuAddFavoriteTitleString, iconString: "menu-Bookmark") { action in
             //TODO: can all this logic go somewhere else?
             guard let url = tab.canonicalURL?.displayURL else { return }
             let absoluteString = url.absoluteString
@@ -191,10 +194,16 @@ extension PhotonActionSheetProtocol {
                                                                                 withUserData: userData,
                                                                                 toApplication: .shared)
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
+            /* Cliqz: Moved Firefox Strings to Cliqz table
             success(Strings.AppMenuAddBookmarkConfirmMessage)
+            */
+            success(CliqzStrings.AppMenuAddFavoriteConfirmMessage)
         }
         
+        /* Cliqz: Moved Firefox Strings to Cliqz table
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { action in
+        */
+        let removeBookmark = PhotonActionSheetItem(title: CliqzStrings.AppMenuRemoveFavoriteTitleString, iconString: "menu-Bookmark-Remove") { action in
             //TODO: can all this logic go somewhere else?
             guard let url = tab.url?.displayURL else { return }
             let absoluteString = url.absoluteString
@@ -202,7 +211,10 @@ extension PhotonActionSheetProtocol {
                 $0.removeByURL(absoluteString).uponQueue(.main) { res in
                     if res.isSuccess {
                         UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
+                        /* Cliqz: Moved Firefox Strings to Cliqz table
                         success(Strings.AppMenuRemoveBookmarkConfirmMessage)
+                        */
+                        success(CliqzStrings.AppMenuRemoveFavoriteConfirmMessage)
                     }
                 }
             }

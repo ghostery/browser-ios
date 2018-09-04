@@ -228,7 +228,10 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         cell.connectingForwards = indexPath.item != 0
 
         guard let url = urlString, !item.url.isAboutHomeURL else {
+            /* Cliqz: Moved Firefox Strings to Cliqz table
             cell.site = Site(url: item.url.absoluteString, title: Strings.FirefoxHomePage)
+            */
+            cell.site = Site(url: item.url.absoluteString, title: CliqzStrings.FreshTab)
             return cell
         }
 
