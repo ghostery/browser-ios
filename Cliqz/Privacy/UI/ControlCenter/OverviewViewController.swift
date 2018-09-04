@@ -888,78 +888,88 @@ class OverviewViewController: UIViewController {
     @objc private func pauseGhosteryPressed(_ button: UIButton) {
         if self.pauseGhosteryButton.isSelected { //already paused
             //resume
-            self.delegate?.pauseGhostery(paused: false, time: Date())
-            if UserPreferences.instance.prevAdblockingMode == .blockAll {
-                self.delegate?.turnGlobalAdblocking(on: true)
-            }
-            self.updateData()
+            pauseGhostery(paused: false)
             TelemetryHelper.sendControlCenterResumeClick()
         }
         else {
             //pause
             showPauseActionSheet()
+            TelemetryHelper.sendControlCenterPauseClick()
         }
     }
 
 	@objc private func trustSitePressed() {
+        
+        TelemetryHelper.sendControlCenterTrustClick()
+        
         if !self.trustSiteButton.isSelected {
             if self.dataSource?.domainState() == .restricted {
                 self.delegate?.undoAll(tableType: .page, completion: {
                     self.delegate?.changeAll(state: .trusted, tableType: .page, completion: { [weak self] in
-                        self?.pauseGhosteryAndRefresh(paused: false)
+                        self?.pauseGhostery(paused: false)
                     })
                 })
             }
             else {
                 self.delegate?.changeAll(state: .trusted, tableType: .page, completion: { [weak self] in
-                    self?.pauseGhosteryAndRefresh(paused: false)
+                    self?.pauseGhostery(paused: false)
                 })
             }
         }
         else {
 			if (self.dataSource?.domainPrevState() ?? .empty) == .restricted {
 				self.delegate?.changeAll(state: .empty, tableType: .page, completion: { [weak self] in
-					self?.pauseGhosteryAndRefresh(paused: false)
+					self?.pauseGhostery(paused: false)
 				})
 			} else {
 				self.delegate?.undoAll(tableType: .page, completion: { [weak self] in
-					self?.pauseGhosteryAndRefresh(paused: false)
+					self?.pauseGhostery(paused: false)
 				})
 			}
         }
 	}
 
 	@objc private func restrictSitePressed() {
+        
+        TelemetryHelper.sendControlCenterRestrictClick()
+        
         if !self.restrictSiteButton.isSelected {
             if self.dataSource?.domainState() == .trusted {
                 self.delegate?.undoAll(tableType: .page, completion: {
                     self.delegate?.changeAll(state: .restricted, tableType: .page, completion: { [weak self] in
-                        self?.pauseGhosteryAndRefresh(paused: false)
+                        self?.pauseGhostery(paused: false)
                     })
                 })
             }
             else {
                 self.delegate?.changeAll(state: .restricted, tableType: .page, completion: { [weak self] in
-                    self?.pauseGhosteryAndRefresh(paused: false)
+                    self?.pauseGhostery(paused: false)
                 })
             }
         } else {
 			if (self.dataSource?.domainPrevState() ?? .empty) == .trusted {
 				self.delegate?.changeAll(state: .empty, tableType: .page, completion: { [weak self] in
-					self?.pauseGhosteryAndRefresh(paused: false)
+					self?.pauseGhostery(paused: false)
 				})
 			} else {
 				self.delegate?.undoAll(tableType: .page, completion: { [weak self] in
-					self?.pauseGhosteryAndRefresh(paused: false)
+					self?.pauseGhostery(paused: false)
 				})
 			}
         }
 	}
     
-    private func pauseGhosteryAndRefresh(paused: Bool) {
-        self.delegate?.pauseGhostery(paused: paused, time: Date())
+    private func pauseGhostery(paused: Bool, time: Date = Date()) {
+        self.delegate?.pauseGhostery(paused: paused, time: time)
+        if paused == false {
+            if UserPreferences.instance.prevAdblockingMode == .blockAll {
+                self.delegate?.turnGlobalAdblocking(on: true)
+            }
+        }
+        else {
+            self.delegate?.turnGlobalAdblocking(on: false)
+        }
         self.updateData()
-        TelemetryHelper.sendControlCenterRestrictClick()
     }
     
     private func showPauseActionSheet() {
@@ -968,19 +978,19 @@ class OverviewViewController: UIViewController {
         
         let thirty = UIAlertAction(title: NSLocalizedString("30 minutes", tableName: "Cliqz", comment: "[ControlCenter - Overview] Pause Ghostery for thirty minutes title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
             let time = Date(timeIntervalSinceNow: 30 * 60)
-            self?.pauseGhostery(time)
+            self?.pauseGhostery(paused: true, time: time)
         })
         pauseAlertController.addAction(thirty)
         
         let onehour = UIAlertAction(title: NSLocalizedString("1 hour", tableName: "Cliqz", comment: "[ControlCenter - Overview] Pause Ghostery for one hour title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
             let time = Date(timeIntervalSinceNow: 60 * 60)
-            self?.pauseGhostery(time)
+            self?.pauseGhostery(paused: true, time: time)
         })
         pauseAlertController.addAction(onehour)
         
         let twentyfour = UIAlertAction(title: NSLocalizedString("24 hours", tableName: "Cliqz", comment: "[ControlCenter - Overview] Pause Ghostery for twentyfour hours title"), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
             let time = Date(timeIntervalSinceNow: 24 * 60 * 60)
-            self?.pauseGhostery(time)
+            self?.pauseGhostery(paused: true, time: time)
         })
         pauseAlertController.addAction(twentyfour)
         
@@ -994,13 +1004,6 @@ class OverviewViewController: UIViewController {
         }
         
         self.present(pauseAlertController, animated: true, completion: nil)
-    }
-    
-    private func pauseGhostery(_ time: Date) {
-        self.delegate?.pauseGhostery(paused: true, time: time)
-        self.delegate?.turnGlobalAdblocking(on: false)
-        self.updateData()
-        TelemetryHelper.sendControlCenterPauseClick()
     }
     
     private func setPauseGhostery(_ value: Bool) {
