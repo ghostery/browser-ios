@@ -99,8 +99,16 @@ class CliqzIntroViewController: UIViewController {
             make.edges.equalTo(imageViewContainer)
         }
         imageViewContainer.snp.makeConstraints { make in
-            make.top.equalTo(self.view)
-            let height = (290 / 375) * self.view.frame.width
+            let device = UIDevice.current.getDeviceAndOrientation().0
+            var topOffset: CGFloat = 0
+            if device == .iPhoneX {
+                topOffset = 40
+            }
+            make.top.equalTo(self.view).offset(topOffset)
+            var height = (290 / 375) * self.view.frame.width
+            if device == .iPad {
+                height = 290
+            }
             make.height.equalTo(height)
         }
         startBrowsingButton.snp.makeConstraints { make in
