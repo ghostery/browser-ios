@@ -58,7 +58,7 @@ extension CliqzStrings {
     
     public static let FreshTab = NSLocalizedString("Fresh Tab", tableName: "Cliqz", comment: "Title for Freshtab in tab history list")
     
-    public static let NewForgetTabTitle = NSLocalizedString("Hotkeys.NewForgetTab.DiscoveryTitle", tableName: "cliqz", value: "New Ghost Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
+    public static let NewForgetTabTitle = NSLocalizedString("Hotkeys.NewForgetTab.DiscoveryTitle", tableName: "Cliqz", value: "New Ghost Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     
     public static let AppMenuAddFavoriteTitleString = NSLocalizedString("Menu.AddFavoriteAction.Title", tableName: "Cliqz", value: "Add to Favorites", comment: "Label for the button, displayed in the menu, used to create a favorite for the current website.")
     

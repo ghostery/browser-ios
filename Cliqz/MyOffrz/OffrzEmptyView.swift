@@ -42,7 +42,7 @@ class OffrzEmptyView: UIView {
         self.addSubview(emptyTitleLabel)
 		self.addSubview(emptyTextLabel)
         if SettingsPrefs.shared.getRegionPref() == "DE" {
-            emptyTitleLabel.text = NSLocalizedString("Seems lie we don't have any offers", tableName: "Cliqz", comment: "[MyOffrz] No offers title label for DE")
+            emptyTitleLabel.text = NSLocalizedString("Seems like we don't have any offers", tableName: "Cliqz", comment: "[MyOffrz] No offers title label for DE")
             emptyTextLabel.text = NSLocalizedString("But we'll keep looking for you and add them here as soon as we have one", tableName: "Cliqz", comment: "[MyOffrz] No offers text label for DE")
         } else {
             emptyTitleLabel.text = NSLocalizedString("We don't have any offers for your country yet", tableName: "Cliqz", comment: "[MyOffrz] No offers title label")
