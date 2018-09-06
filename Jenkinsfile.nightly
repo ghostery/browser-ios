@@ -56,6 +56,40 @@ node('mac-vm-host') {
             try {
                 stage('Checkout') {
                     checkout scm
+                    sh """#!/bin/bash -l
+                        set -x
+                        set -e
+                        git clone -b generate-safari-rules --single-branch --depth=1 https://github.com/remusao/adblocker
+                    """
+                }
+                stage('Prepare AdBlocker Chunks'){
+                    sh """#!/bin/bash -l
+                        set -e
+                        set -x
+                        mkdir -p Cliqz/Privacy/Assets/AdBlocker/Chunks
+                        cd adblocker
+                        npm install
+                        npm run generate-safari-rules
+                        jsonPath=safari-rules.json
+                        outputPath=../Cliqz/Privacy/Assets/AdBlocker/Chunks
+                        numberOfRules=$(cat $jsonPath | jq '. | length')
+                        chunkSize=700
+                        modulo=$((numberOfRules % chunkSize))
+                        numberOfFiles=$((numberOfRules / chunkSize))
+                        # remove all files at outputPath
+                        find '$outputPath' -type f -exec rm {} \;
+                        if ((modulo > 0)); then
+                            numberOfFiles=$((numberOfFiles + 1))
+                        fi
+                        numberOfFiles=$((numberOfFiles - 1)) #because counting starts from 0
+                        for i in $(seq 0 $numberOfFiles); do
+                            start=$((i * chunkSize))
+                            end=$(((i+1) * chunkSize))
+                            fileName=adblocker_$i.json
+                            cat $jsonPath | jq -c --arg v $start --arg e $end $'.[($v|tonumber):($e|tonumber)]' > $outputPath$fileName
+                        done
+                        ls ../Cliqz/Privacy/Assets/AdBlocker/Chunks
+                    """
                 }
                 stage('Prepare') {
                     sh '''#!/bin/bash -l
@@ -77,7 +111,7 @@ node('mac-vm-host') {
                         pod install
                         pip install virtualenv
                         sudo /usr/bin/easy_install virtualenv
-                    '''                
+                    '''
                 }
                 stage('Build & Upload') {
                     withCredentials([
@@ -119,7 +153,7 @@ node('mac-vm-host') {
                     sh '''#!/bin/bash -l
                         set -x
                         set -e
-                        rm -rf Cartfile.resolved Carthage node_modules Podfile.lock Pods  
+                        rm -rf Cartfile.resolved Carthage node_modules Podfile.lock Pods adblocker
                     '''
                 }    
             }   
