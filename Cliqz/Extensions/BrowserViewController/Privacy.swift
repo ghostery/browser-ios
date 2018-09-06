@@ -65,6 +65,7 @@ extension BrowserViewController {
         
 		let controlCenter = ControlCenterViewController()
 		controlCenter.delegate = self
+        controlCenter.privateMode = self.tabManager.selectedTab?.isPrivate ?? false
 
         if let pageUrl = pageUrl {
             controlCenter.pageURL = pageUrl
