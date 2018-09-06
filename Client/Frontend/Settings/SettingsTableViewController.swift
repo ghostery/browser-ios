@@ -601,6 +601,12 @@ class SettingsTableViewController: UITableViewController {
         } else {
             headerView.showTopBorder = true
         }
+        
+        //Cliqz: Fix
+        let bgView = UIView()
+        bgView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        headerView.backgroundView = bgView
+        //End
 
         return headerView
     }

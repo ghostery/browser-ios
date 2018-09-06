@@ -20,6 +20,8 @@ class ControlCenterViewController: UIViewController {
 
 	var model: ControlCenterModel = ControlCenterModel()
     
+    var privateMode: Bool = false
+    
 	weak var delegate: ControlCenterViewControllerDelegate? = nil
 
 	private var topTranparentView = UIView()
@@ -117,11 +119,10 @@ class ControlCenterViewController: UIViewController {
 		self.view.backgroundColor = UIColor.clear
 		
 		let bgView = UIView()
-		bgView.backgroundColor = UIColor.cliqzURLBarColor
-		
+		bgView.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: self.privateMode)
 		panelSwitchControl = UISegmentedControl(items: items)
 		panelSwitchControl.tintColor = UIColor.white
-		panelSwitchControl.backgroundColor = UIColor.cliqzURLBarColor
+		panelSwitchControl.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: self.privateMode)
 		panelSwitchControl.addTarget(self, action: #selector(switchPanel), for: .valueChanged)
 		bgView.addSubview(panelSwitchControl)
 		self.view.addSubview(bgView)

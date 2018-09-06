@@ -43,7 +43,10 @@ private extension TrayToBrowserAnimator {
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotView(afterScreenUpdates: false)!
         tabTray.collectionView.alpha = 0
         tabCollectionViewSnapshot.frame = tabTray.collectionView.frame
+        /*Cliqz: Animation fix - View is below bg image (assumption)
         container.insertSubview(tabCollectionViewSnapshot, at: 0)
+        */
+        container.insertSubview(tabCollectionViewSnapshot, at: 10) // 10 is there just to make sure it is on top.
 
         // Create a fake cell to use for the upscaling animation
         let startingFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView, atIndex: expandFromIndex)
