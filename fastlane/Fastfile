@@ -136,7 +136,7 @@ platform :ios do
     build_app(
       workspace: "Client.xcworkspace",
       clean: "true",
-      scheme: "Firefox",
+      scheme: "Ghostery",
       xcconfig: "Client/Configuration/Ghostery.xcconfig",
       xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DBETA'",  
       skip_profile_detection: "true",
@@ -191,7 +191,7 @@ platform :ios do
     build_app(
       workspace: "Client.xcworkspace",
       clean: "true",
-      scheme: "Firefox",
+      scheme: "Ghostery",
       xcconfig: "Client/Configuration/Ghostery.xcconfig",
       xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DRELEASE'",  
       skip_profile_detection: "true",
