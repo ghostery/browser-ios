@@ -821,12 +821,36 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showSearchController() {
+        /* Cliqz: Replace Search Controller
+        if searchController != nil {
+            return
+        }
+        
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        searchController = SearchViewController(profile: profile, isPrivate: isPrivate)
+        searchController!.searchEngines = profile.searchEngines
+        searchController!.searchDelegate = self
+        
+        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+        searchLoader?.addListener(searchController!)
+        
+        addChildViewController(searchController!)
+        view.addSubview(searchController!.view)
+        searchController!.view.snp.makeConstraints { make in
+            make.top.equalTo(self.urlBar.snp.bottom)
+            make.left.right.bottom.equalTo(self.view)
+            return
+        }
+        
+        homePanelController?.view?.isHidden = true
+        
+        searchController!.didMove(toParentViewController: self)
+        */
         if (searchController != nil && SettingsPrefs.shared.getCliqzSearchPref() == false) ||
             (cliqzSearchController != nil && SettingsPrefs.shared.getCliqzSearchPref() == true){
             return
         }
         
-        //Cliqz: Replace Search Controller
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
         searchLoader!.addListener(HistoryListener.shared)
         
@@ -867,8 +891,6 @@ class BrowserViewController: UIViewController {
             searchController!.searchDelegate = self
             searchController!.profile = self.profile
             
-//            searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-//            searchLoader?.addListener(searchController!)
             HistoryListener.shared.firefoxSearchController = searchController
             
             //remove cliqzSeachController
@@ -896,7 +918,16 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func hideSearchController() {
-        //Cliqz: Hide cliqzSearch or firefoxSearch
+        /*Cliqz: Hide cliqzSearch or firefoxSearch
+        if let searchController = searchController {
+            searchController.willMove(toParentViewController: nil)
+            searchController.view.removeFromSuperview()
+            searchController.removeFromParentViewController()
+            self.searchController = nil
+            homePanelController?.view?.isHidden = false
+            searchLoader = nil
+        }
+        */
         if SettingsPrefs.shared.getCliqzSearchPref() {
             if let cliqzSearchController = cliqzSearchController {
                 cliqzSearchController.willMove(toParentViewController: nil)
