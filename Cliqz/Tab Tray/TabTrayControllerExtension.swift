@@ -20,13 +20,37 @@ extension TabTrayController {
         }
     }
     
-    func setBackgroundImage() {
-        let backgroundView = UIImageView(image: UIImage.cliqzBackgroundImage())
-        if privateMode {
-            backgroundView.addSubview(UIView.overlay(frame: self.view.bounds))
+    func setUpOverlay() {
+        if privateMode && privateModeOverlay == nil{
+            privateModeOverlay = UIView.overlay(frame: CGRect.zero)
+            backgroundView.addSubview(privateModeOverlay!)
+            backgroundView.bringSubview(toFront: privateModeOverlay!)
+            privateModeOverlay?.snp.makeConstraints({ (make) in
+                make.edges.equalToSuperview()
+            })
         }
-        collectionView.backgroundView = backgroundView
+        else if !privateMode {
+            privateModeOverlay?.removeFromSuperview()
+            privateModeOverlay = nil
+        }
+    }
+    
+    func setBackgroundImage() {
         collectionView.backgroundColor = UIColor.clear
+        
+        if backgroundView.superview == nil {
+            self.view.addSubview(backgroundView)
+            self.view.sendSubview(toBack: backgroundView)
+        }
+        
+        if backgroundView.constraints.isEmpty {
+            backgroundView.snp.makeConstraints { (make) in
+                make.edges.equalToSuperview()
+            }
+        }
+        
+        self.backgroundView.image = UIImage.cliqzBackgroundImage()
+        setUpOverlay()
     }
     
     func updateBackgroundColor() {
