@@ -53,6 +53,8 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
     fileprivate let isPrivate: Bool
     fileprivate var suggestClient: SearchSuggestClient?
     
+    var privateModeOverlay: UIView = UIView.overlay(frame: CGRect.zero)
+    
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
     fileprivate let searchEngineScrollView = ButtonScrollView()
@@ -85,12 +87,13 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
     
     @objc func orientationDidChange(_ notification: Notification) {
         backgroundImage.image = BackgroundImageManager.shared.getImage()
+        if isPrivate {
+            privateModeOverlay.frame = self.view.bounds
+        }
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = .clear //UIConstants.PanelBackgroundColor
-//        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-//        view.addSubview(blur)
+        view.backgroundColor = .clear
         
         super.viewDidLoad()
         
@@ -106,6 +109,11 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
         self.view.sendSubview(toBack: backgroundImage)
         
         backgroundImage.image = BackgroundImageManager.shared.getImage()
+        
+        if isPrivate {
+            privateModeOverlay = UIView.overlay(frame: self.view.bounds)
+            self.backgroundImage.addSubview(privateModeOverlay)
+        }
         
         searchEngineScrollView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
         searchEngineScrollView.layer.shadowRadius = 0
@@ -135,10 +143,6 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
             make.top.equalTo(self.searchEngineScrollView)
             make.bottom.equalTo(self.searchEngineScrollView)
         }
-        
-//        blur.snp.makeConstraints { make in
-//            make.edges.equalTo(self.view)
-//        }
         
         tableView.backgroundColor = .clear
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.4)
