@@ -239,7 +239,9 @@ class TabTrayController: UIViewController {
     var draggedCell: TabCell?
     var dragOffset: CGPoint = .zero
     // Cliqz: backgroundView as container for background image
-    var backgroundView: UIView!
+    var privateModeOverlay: UIView? = nil
+    let backgroundView = UIImageView()
+    //End Cliqz
     /* Cliqz: use CliqzTrayToolbar
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
