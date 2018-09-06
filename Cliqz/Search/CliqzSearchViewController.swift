@@ -85,6 +85,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
     
     let searchView = Engine.sharedInstance.rootView
     fileprivate let backgroundImage = UIImageView()
+    fileprivate let privateModeOverlay = UIView.overlay(frame: CGRect.zero)
 
     private static let KVOLoading = "loading"
     
@@ -182,8 +183,11 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         if privateMode != self.privateMode {
             self.privateMode = privateMode
 			self.updateExtensionPreferences()
-            if privateMode {
-                self.backgroundImage.addSubview(UIView.overlay(frame: self.view.bounds))
+            if privateMode && privateModeOverlay.superview == nil {
+                backgroundImage.addSubview(privateModeOverlay)
+                privateModeOverlay.snp.makeConstraints { (make) in
+                    make.edges.equalToSuperview()
+                }
             }
         }
     }

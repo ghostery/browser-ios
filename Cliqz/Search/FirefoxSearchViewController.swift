@@ -87,9 +87,6 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
     
     @objc func orientationDidChange(_ notification: Notification) {
         backgroundImage.image = BackgroundImageManager.shared.getImage()
-        if isPrivate {
-            privateModeOverlay.frame = self.view.bounds
-        }
     }
     
     override func viewDidLoad() {
@@ -111,8 +108,10 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
         backgroundImage.image = BackgroundImageManager.shared.getImage()
         
         if isPrivate {
-            privateModeOverlay = UIView.overlay(frame: self.view.bounds)
             self.backgroundImage.addSubview(privateModeOverlay)
+            privateModeOverlay.snp.makeConstraints { (make) in
+                make.edges.equalToSuperview()
+            }
         }
         
         searchEngineScrollView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
