@@ -1087,6 +1087,13 @@ class OverviewViewController: UIViewController {
                 colors.append(touple.1)
             }
         }
+        
+        //Handle the empty case
+        if values.count == 0 {
+            colors = [UIColor.cliqzGrayFunctional]
+            values.append(PieChartDataEntry(value: 1.0))
+        }
+        
         let dataSet = PieChartDataSet(values: values, label: "")
         dataSet.drawIconsEnabled = false
         dataSet.drawValuesEnabled = false
