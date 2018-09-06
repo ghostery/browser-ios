@@ -627,9 +627,10 @@ struct CliqzIntroCard: Codable {
     }
     
     static func createAdblockerTickButtons() -> [TickButtonInfo] {
-        let first = TickButtonInfo(title: "Block Nothing", subtitle: nil, selected: false, accessibilityIdentifier: "BlockNothingButtonTitle")
-        let second = TickButtonInfo(title: "Block Recommended", subtitle: "Ads, site analytics and adult advertising", selected: true, accessibilityIdentifier: "BlockRecommendedButtonTitle")
-        let third = TickButtonInfo(title: "Block Everything", subtitle: nil, selected: false, accessibilityIdentifier: "BlockEverythingButtonTitle")
+        let OnboardingStrings = CliqzStrings.Onboarding()
+        let first = TickButtonInfo(title: OnboardingStrings.blockNothingTickButtonTitle, subtitle: nil, selected: false, accessibilityIdentifier: "BlockNothingButtonTitle")
+        let second = TickButtonInfo(title: OnboardingStrings.blockRecommendedTickButtonTitle, subtitle: OnboardingStrings.blockRecommendedTickButtonSubTitle, selected: true, accessibilityIdentifier: "BlockRecommendedButtonTitle")
+        let third = TickButtonInfo(title: OnboardingStrings.blockEverythingTickButtonTitle, subtitle: nil, selected: false, accessibilityIdentifier: "BlockEverythingButtonTitle")
         return [first, second, third]
     }
     
