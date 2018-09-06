@@ -2626,7 +2626,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             /* Cliqz: Moved Firefox Strings to Cliqz table 
             let openNewPrivateTabTitle = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
             */
-            let openNewPrivateTabTitle = NSLocalizedString("Open in New Forget Tab", tableName: "Cliqz", comment: "Context menu option for opening a link in a new forget tab")
+            let openNewPrivateTabTitle = CliqzStrings.OpenInNewForgetTabContextMenuTitle
+            
             let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: .default) { _ in
                 addTab(url, true)
             }
