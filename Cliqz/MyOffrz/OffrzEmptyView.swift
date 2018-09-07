@@ -55,7 +55,7 @@ class OffrzEmptyView: UIView {
 	private func setStyles() {
         emptyTitleLabel.numberOfLines = 2
         emptyTitleLabel.textAlignment = .center
-        emptyTitleLabel.font = UIFont.boldSystemFont(ofSize: 22)
+        emptyTitleLabel.font = UIFont.boldSystemFont(ofSize: 18)
         emptyTitleLabel.textColor = UIColor.white
         emptyTitleLabel.applyShadow()
         
