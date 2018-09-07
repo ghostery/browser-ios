@@ -19,7 +19,9 @@ RCT_EXPORT_MODULE()
 
 - (UIView *)view
 {
-    return [[UIImageView alloc] init];
+    UIImageView* imageView = [[UIImageView alloc] init];
+    [imageView setContentMode:UIViewContentModeScaleAspectFit];
+    return imageView;
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(color, NSString, UIImageView) {
