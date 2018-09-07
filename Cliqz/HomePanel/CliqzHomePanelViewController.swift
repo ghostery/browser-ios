@@ -113,6 +113,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         setInitialConstraints()
         setBackgroundImage()
         updateOffrzIcon()
+        adjustOffrzNotificationImageConstraints()
     }
     
     func setStyling() {
@@ -271,10 +272,12 @@ extension CliqzHomePanelViewController {
     }
     
     fileprivate func adjustOffrzNotificationImageConstraints() {
-        let segmentWidth = self.segmentedControl.bounds.width / 4
-        self.offrzNotificationImage.snp.remakeConstraints { (make) in
-            make.top.equalToSuperview().offset(3)
-            make.right.equalTo(self.segmentedControl.snp.right).offset(-1.5 * segmentWidth + 13)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            let segmentWidth = self.segmentedControl.bounds.width / 4
+            self.offrzNotificationImage.snp.remakeConstraints { (make) in
+                make.top.equalToSuperview().offset(3)
+                make.right.equalTo(self.segmentedControl.snp.right).offset(-1.5 * segmentWidth + 13)
+            }
         }
     }
 }
