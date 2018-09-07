@@ -122,7 +122,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
             LimitMobileDataUsageSetting(settings: self)
             ]
         
-        let statusText = NSLocalizedString("When Opening Cliqz", tableName: "Cliqz", comment: "Description displayed under the ”Offer to Open Copied Link” option.")
+        let statusText = NSLocalizedString("When Opening Ghostery", tableName: "Cliqz", comment: "Description displayed under the ”Offer to Open Copied Link” option.")
         browsingAndHistorySettings += [
             BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
                         titleText: Strings.SettingsOfferClipboardBarTitle,
