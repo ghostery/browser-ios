@@ -49,13 +49,16 @@ extension BrowserViewController: DownloadQueueDelegate {
             downloadToast.dismiss(false)
 
             if error == nil {
+                /* Cliqz: Eliminate Downloads button
                 let downloadCompleteToast = ButtonToast(labelText: download.filename, imageName: "check", buttonText: Strings.DownloadsButtonTitle, completion: { buttonPressed in
                     if buttonPressed {
                         self.openURLInNewTab(HomePanelType.downloads.localhostURL, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false, isPrivileged: true)
                         UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .downloadCompleteToast)
                     }
                 })
-
+                */
+                let downloadCompleteToast = ButtonToast(labelText: download.filename, imageName: "check")
+                
                 self.show(toast: downloadCompleteToast, duration: DispatchTimeInterval.seconds(8))
             } else {
                 let downloadFailedToast = ButtonToast(labelText: Strings.DownloadFailedToastLabelText, backgroundColor: UIColor.Photon.Grey60, textAlignment: .center)
