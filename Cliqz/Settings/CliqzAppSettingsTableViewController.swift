@@ -150,9 +150,10 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     
     private func generateHelpSettings(prefs: Prefs) -> [Setting] {
         let helpSettings = [
+            FAQSetting(delegate: settingsDelegate),
             SupportSetting(delegate: settingsDelegate),
-            CliqzTipsAndTricksSetting(),
-            ReportWebsiteSetting(),
+            //CliqzTipsAndTricksSetting(),
+            //ReportWebsiteSetting(),
             SendCrashReportsSetting(settings: self),
             SendUsageDataSetting(settings: self),
             MyOffrzSetting()

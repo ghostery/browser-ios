@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MessageUI
 
 // MARK:- cliqz settings
 class CliqzConnectSetting: Setting {
@@ -167,11 +168,37 @@ class AdBlockerSetting: CliqzOnOffSetting {
     }
 }
 
+class FAQSetting: Setting {
+    
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("FAQ", tableName: "Cliqz", comment: "[Settings] FAQ"), attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue])
+    }
+    
+    override var url: URL? {
+        #if GHOSTERY
+        return URL(string: "https://ghostery.zendesk.com/hc/en-us/categories/115000106334-iOS-Mobile-FAQ")
+        #else
+        return URL(string: "https://cliqz.com/support")
+        #endif
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        navigationController?.dismiss(animated: true, completion: {})
+        self.delegate?.settingsOpenURLInNewTab(self.url!)
+        
+        // TODO: Telemetry
+        /*
+         // Cliqz: log telemetry signal
+         let contactSignal = TelemetryLogEventType.Settings("main", "click", "contact", nil, nil)
+         TelemetryLogger.sharedInstance.logEvent(contactSignal)
+         */
+    }
+}
 
 class SupportSetting: Setting {
     
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("FAQ & Support", tableName: "Cliqz", comment: "[Settings] FAQ & Support"),attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue])
+        return NSAttributedString(string: NSLocalizedString("Support", tableName: "Cliqz", comment: "[Settings] Support"), attributes: [:])
     }
     
     override var url: URL? {
@@ -184,7 +211,19 @@ class SupportSetting: Setting {
     
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.dismiss(animated: true, completion: {})
-        self.delegate?.settingsOpenURLInNewTab(self.url!)
+        
+        if !MFMailComposeViewController.canSendMail() {
+            self.delegate?.settingsOpenURLInNewTab(self.url!)
+        }
+        else if let nav = navigationController as? SettingsNavigationController, let vc = nav.popoverDelegate as? BrowserViewController {
+            let mailVC = MFMailComposeViewController()
+            mailVC.mailComposeDelegate = vc
+            mailVC.setToRecipients(["mobile@ghostery.com"])
+            mailVC.setSubject("Ghostery Mobile Browser Feedback")
+            mailVC.setMessageBody("[\(UIDevice.current.modelName), \(UIDevice.current.systemVersion), \(AppStatus.distVersion()), \(AppStatus.extensionVersion())]", isHTML: false)
+            
+            vc.present(mailVC, animated: true, completion: nil)
+        }
         
         // TODO: Telemetry
         /*
@@ -193,7 +232,6 @@ class SupportSetting: Setting {
         TelemetryLogger.sharedInstance.logEvent(contactSignal)
         */
     }
-    
 }
 
 class ReportWebsiteSetting: ShowCliqzPageSetting {
