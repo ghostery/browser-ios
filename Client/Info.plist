@@ -141,7 +141,7 @@
 		<string>remote-notification</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
-	<true/>
+	<false/>
 	<key>UILaunchStoryboardName</key>
 	<string>GhosteryLaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
