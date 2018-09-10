@@ -8,6 +8,7 @@
 
 import Foundation
 import Storage
+import MessageUI
 
 extension NSNotification.Name {
     public static let GhosteryButtonPressed = NSNotification.Name(rawValue: "GhosteryButtonPressedNotification")
@@ -197,4 +198,10 @@ extension BrowserViewController: ControlCenterViewControllerDelegate {
         self.hideControlCenter()
     }
 
+}
+
+extension BrowserViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.dismiss(animated: true, completion: nil)
+    }
 }
