@@ -335,7 +335,7 @@ extension CliqzSearchViewController {
         } else {
             message = NSLocalizedString("To share your location, go to the settings of your smartphone:\n1.Turn on Location Services\n2.Select the CLIQZ App\n3.Enable 'While Using'", tableName: "Cliqz", comment: "Alert message for turning on location service when clicking share location on local card")
             settingsAction = UIAlertAction(title: settingsOptionTitle, style: .default) { (_) -> Void in
-                if let settingsUrl = URL(string: "App-Prefs:root=Privacy&path=LOCATION") {
+                if let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) {
                     UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
                 }
             }
