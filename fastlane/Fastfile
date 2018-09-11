@@ -20,7 +20,7 @@ platform :ios do
       clone_folder: "../build-tools",
     )
     sh("cd .. && sh ../build-tools/export-locales-cliqz.sh Client.xcodeproj browser-ios-l10n cliqz-ios.xliff")
-  end  
+  end
   
   lane :importLocalizations do
     # Import Firefox localizations
@@ -28,7 +28,7 @@ platform :ios do
       url: 'https://github.com/cliqz-oss/ios-l10n-scripts.git',
       clone_folder: "../build-tools",
     )
-    
+
     sh("cd .. && sh ../build-tools/import-locales-firefox.sh --release")
 
     # revert changes that Firefox did to InfoPlist.strings
@@ -46,12 +46,30 @@ platform :ios do
 
   end
   
-  
-  lane :nightly do    
+  lane :clearCache do
+
+    # Remove the Cache
+    sh("cd .. && rm -rf Cartfile.resolved Carthage node_modules Podfile.lock Pods && rm -rf ~/Library/Caches/org.carthage.CarthageKit")
+
+  end
+
+  lane :prepare do
+
+    # Run Bootstrap for Carthage
+    sh("cd .. && carthage bootstrap --verbose --platform ios --color auto --cache-builds")
+
+    # Install NPM and POD Dependencies and Run the Build Script for NPM Dependencies.
+    sh("cd .. && npm install")
+    sh("cd .. && pod install")
+    sh("cd .. && npm run build")
+
+  end
+
+  lane :nightly do
 
     # Configuring Sentry DSN
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
-    
+
     # Building ReactNative Entension
     sh("cd .. && npm run bundle")
 
@@ -82,11 +100,11 @@ platform :ios do
       workspace: "Client.xcworkspace",
       clean: "true",
       scheme: "Firefox",
-      xcconfig: "Client/Configuration/Firefox.xcconfig",  
-      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DBETA'",      
+      xcconfig: "Client/Configuration/Firefox.xcconfig",
+      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DBETA'",
       skip_profile_detection: "true",
       export_options: {
-        provisioningProfiles: { 
+        provisioningProfiles: {
           "com.cliqz.ios.newCliqz" => "match AppStore com.cliqz.ios.newCliqz",
           "com.cliqz.ios.newCliqz.ShareTo" => "match AppStore com.cliqz.ios.newCliqz.ShareTo",
         }
@@ -106,11 +124,11 @@ platform :ios do
     )
   end
 
-  lane :beta do    
+  lane :beta do
 
     # Configuring Sentry DSN
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
-    
+
     # Building ReactNative Entension
     sh("cd .. && npm run bundle")
 
@@ -138,7 +156,7 @@ platform :ios do
       clean: "true",
       scheme: "Ghostery",
       xcconfig: "Client/Configuration/Ghostery.xcconfig",
-      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DBETA'",  
+      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DBETA'",
       skip_profile_detection: "true",
       export_options: {
         provisioningProfiles: { 
@@ -161,11 +179,11 @@ platform :ios do
     )
   end
 
-  lane :release do    
+  lane :release do
 
     # Configuring Sentry DSN
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
-    
+
     # Building ReactNative Entension
     sh("cd .. && npm run bundle")
 
@@ -193,7 +211,7 @@ platform :ios do
       clean: "true",
       scheme: "Ghostery",
       xcconfig: "Client/Configuration/Ghostery.xcconfig",
-      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DRELEASE'",  
+      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DRELEASE'",
       skip_profile_detection: "true",
       export_options: {
         provisioningProfiles: { 
