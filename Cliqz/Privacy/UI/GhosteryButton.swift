@@ -37,7 +37,7 @@ class GhosteryButton: InsetButton {
         ghosty.backgroundColor = .clear
         count.backgroundColor = .clear
         
-        count.text = "0"
+        count.text = "HELLO"
         count.textColor = .white
         count.font = UIFont.systemFont(ofSize: 14)
     }
@@ -80,7 +80,6 @@ class GhosteryButton: InsetButton {
     }
     
     func setCount(count: Int) {
-        
         let count_str = String(count)
         
         if count <= 99 {
@@ -89,7 +88,6 @@ class GhosteryButton: InsetButton {
         else {
             self.count.text = "99"
         }
-        
     }
 }
 
@@ -105,10 +103,15 @@ extension GhosteryButton: GhosteryCountDelegate {
         self.setCount(count: count)
         self.accessibilityValue = "\(count)"
     }
+    
+    func showHello() {
+        self.count.text = "HELLO"
+    }
 }
 
 protocol GhosteryCountDelegate: class {
     func updateCount(count: Int)
+    func showHello()
 }
 
 class GhosteryCount {
@@ -148,6 +151,7 @@ class GhosteryCount {
     
     @objc func didShowFreshtab(_ notification: Notification) {
         self.delegate?.updateCount(count: 0)
+        self.delegate?.showHello()
     }
     
     @objc func didLeaveOverlay(_ notification: Notification) {
