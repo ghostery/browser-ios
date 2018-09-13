@@ -57,5 +57,20 @@ extension String {
         
         return digestHex
     }
+    
+    func lastIndex(of string: String) -> Int? {
+        guard let index = range(of: string, options: .backwards) else { return nil }
+        return self.distance(from: self.startIndex, to: index.lowerBound)
+    }
+    
+    func subSctring(to: Int) -> String {
+        let index = self.index(self.startIndex, offsetBy: to)
+        return String(self.prefix(upTo: index))
+    }
+    
+    func subSctring(from: Int) -> String {
+        let index = self.index(self.startIndex, offsetBy: from)
+        return  String(self.suffix(from: index))
+    }
 
 }

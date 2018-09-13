@@ -36,7 +36,7 @@ extension String {
 
 class LogoLoader {
 	
-	private static let dbVersion = "1515404421880"
+	private static let dbVersion = "1524118567171"
 	private static let dispatchQueue = DispatchQueue(label: "com.cliqz.logoLoader", attributes: .concurrent);
 	
 	private static var _logoDB: JSON?
@@ -85,29 +85,32 @@ class LogoLoader {
 		if url.contains("tz.de") {
 			fixedURL = "http://tz.de"
 		}
-		if let hostName = self.hostName(fixedURL), //URLParser.getURLDetails(fixedURL),
-//			let hostName = urlDetails.name,
+		if let domainName = self.domainName(fixedURL), //URLParser.getURLDetails(fixedURL),
+            let hostName = URL(string: fixedURL)?.host,
 			let db = self.logoDB,
 			db != JSON.null,
 			db["domains"] != JSON.null {
 			let details = db["domains"]
-			let host = details[hostName]
-			logoDetails.hostName = hostName
-			logoDetails.prefix = hostName.substring(to: hostName.index(hostName.startIndex, offsetBy: min(2, hostName.characters.count))).capitalized
+			let host = details[domainName]
+			logoDetails.hostName = domainName
+			logoDetails.prefix = domainName.subSctring(to: min(2, domainName.count)).capitalized
 			if let list = host.array,
 				list.count > 0 {
 				for info in list {
 					if info != JSON.null,
 					   let r = info["r"].string,
-						isMatchingLogoRule(hostName, "", r) || info == list.last {
+						isMatchingLogoRule(hostName, domainName, r) || info == list.last {
 
 						if let doesLogoExist = info["l"].number, doesLogoExist == 1 {
-							logoDetails.url = "https://cdn.cliqz.com/brands-database/database/\(self.dbVersion)/pngs/\(hostName)/\(r)_192.png"
+							logoDetails.url = "https://cdn.cliqz.com/brands-database/database/\(self.dbVersion)/pngs/\(domainName)/\(r)_192.png"
 						}
 						logoDetails.color = info["b"].string
 						if let txt = info["t"].string {
 							logoDetails.prefix = txt
 						}
+                        if r != "$", let address = hostName.lastIndex(of: domainName) {
+                            logoDetails.hostName = hostName.subSctring(to: address + domainName.count)
+                        }
 						break
 					}
 				}
@@ -125,12 +128,17 @@ class LogoLoader {
 		return logoDetails
 	}
 	
-	private class func isMatchingLogoRule(_ domain: String, _ suffix: String, _ rule: String) -> Bool {
-		let r = domain + ".$"
-		return r.contains(rule)
+	private class func isMatchingLogoRule(_ host: String, _ domain: String, _ rule: String) -> Bool {
+        if let address = host.lastIndex(of: domain) {
+            let r = "\(host.subSctring(to: address))$\(host.subSctring(from: address + domain.count))"
+            return r.contains(rule)
+        }
+        let r = domain + ".$"
+        return r.contains(rule)
+
 	}
 
-	private class func hostName(_ urlString: String) -> String? {
+	private class func domainName(_ urlString: String) -> String? {
 		if let url = NSURL(string: urlString),
 			let domain = url.host?.registeredDomain(),
 			let suffix = url.publicSuffix() {
