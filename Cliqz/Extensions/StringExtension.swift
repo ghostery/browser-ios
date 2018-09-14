@@ -63,12 +63,12 @@ extension String {
         return self.distance(from: self.startIndex, to: index.lowerBound)
     }
     
-    func subSctring(to: Int) -> String {
+    func subString(to: Int) -> String {
         let index = self.index(self.startIndex, offsetBy: to)
         return String(self.prefix(upTo: index))
     }
     
-    func subSctring(from: Int) -> String {
+    func subString(from: Int) -> String {
         let index = self.index(self.startIndex, offsetBy: from)
         return  String(self.suffix(from: index))
     }
