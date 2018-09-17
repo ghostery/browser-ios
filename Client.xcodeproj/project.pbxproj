@@ -60,6 +60,8 @@
 		1E4CFBE7207380AD00B26E85 /* ConnectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBE6207380AD00B26E85 /* ConnectTableViewController.swift */; };
 		1E4CFBF92073A5BD00B26E85 /* AddConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBF82073A5BD00B26E85 /* AddConnectionViewController.swift */; };
 		1E4CFBFB2073A5CC00B26E85 /* EditConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4CFBFA2073A5CC00B26E85 /* EditConnectionViewController.swift */; };
+		1E4E772D214F927F007AFA60 /* SearchEnginesModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4E772C214F927F007AFA60 /* SearchEnginesModule.swift */; };
+		1E4E7737214F92B7007AFA60 /* SearchEnginesModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E4E7736214F92B7007AFA60 /* SearchEnginesModuleBridge.m */; };
 		1E521A66213EAF820043416C /* Cliqz.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E521A68213EAF820043416C /* Cliqz.strings */; };
 		1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */; };
 		1E650C9C2091E35D0070C670 /* BrowserViewController+GhosteryMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */; };
@@ -1396,6 +1398,8 @@
 		1E4CFBE6207380AD00B26E85 /* ConnectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTableViewController.swift; sourceTree = "<group>"; };
 		1E4CFBF82073A5BD00B26E85 /* AddConnectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddConnectionViewController.swift; sourceTree = "<group>"; };
 		1E4CFBFA2073A5CC00B26E85 /* EditConnectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditConnectionViewController.swift; sourceTree = "<group>"; };
+		1E4E772C214F927F007AFA60 /* SearchEnginesModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEnginesModule.swift; sourceTree = "<group>"; };
+		1E4E7736214F92B7007AFA60 /* SearchEnginesModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchEnginesModuleBridge.m; sourceTree = "<group>"; };
 		1E521A67213EAF820043416C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Cliqz.strings; sourceTree = "<group>"; };
 		1E6404DF2100953D00B02901 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
 		1E6404E62100956900B02901 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hu; path = hu.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
@@ -3236,6 +3240,8 @@
 				AF28D3DC207E378E0065FF86 /* GeoLocationBridge.m */,
 				1E25A2D22121A7A90038D8D7 /* LocaleConstants.swift */,
 				1E25A2C92121A7A80038D8D7 /* LocaleConstantsBridge.m */,
+				1E4E772C214F927F007AFA60 /* SearchEnginesModule.swift */,
+				1E4E7736214F92B7007AFA60 /* SearchEnginesModuleBridge.m */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -6090,6 +6096,7 @@
 				E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
 				E68E7ADC1CAC208200FDCA76 /* SetupPasscodeViewController.swift in Sources */,
+				1E4E7737214F92B7007AFA60 /* SearchEnginesModuleBridge.m in Sources */,
 				7B3631EA1C244FEE00D12AF9 /* Theme.swift in Sources */,
 				3B61CD491F2A74EF00D38DE1 /* PocketFeed.swift in Sources */,
 				4F30F52420517A6B0049E4F6 /* LogoPlaceholder.swift in Sources */,
@@ -6128,6 +6135,7 @@
 				AF03AA1A20BC117600A9D097 /* LoadTrackerListOperation.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */,
+				1E4E772D214F927F007AFA60 /* SearchEnginesModule.swift in Sources */,
 				4FF07D882063C99E001385A8 /* OffrzDataSource.swift in Sources */,
 				39F819C61FD70F5D009E31E4 /* TabEventHandlers.swift in Sources */,
 				4FBBC1502035E02900445AD1 /* NewsViewCell.swift in Sources */,

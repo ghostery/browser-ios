@@ -13,7 +13,7 @@ class LocaleConstants: NSObject {
 
     @objc
     func constantsToExport() -> [String: Any]! {
-        return ["lang": Locale.current.languageCode ?? "en"]
+        return ["lang": Locale.current.languageCode ?? "en", "locale": Locale.current.identifier]
     }
 
 }
