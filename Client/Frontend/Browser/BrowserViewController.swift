@@ -2664,7 +2664,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             }
             actionSheetController.addAction(openNewPrivateTabAction, accessibilityIdentifier: "linkContextMenu.openInNewPrivateTab")
 
-            /* Cliqz: remove download link option from the long press context menu
             let downloadTitle = NSLocalizedString("Download Link", comment: "Context menu item for downloading a link URL")
             let downloadAction = UIAlertAction(title: downloadTitle, style: .default) { _ in
                 self.pendingDownloadWebView = currentTab.webView
@@ -2672,7 +2671,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
             }
             actionSheetController.addAction(downloadAction, accessibilityIdentifier: "linkContextMenu.download")
-            */
 
             // Cliqz: Added Action handler for the long press to download Youtube videos
             if url.isYoutubeURL() {
