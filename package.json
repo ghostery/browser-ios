@@ -21,7 +21,7 @@
     "readability": "mozilla/readability#3c76104adb00eb9897517e6be6c74c6c05918dfe",
     "@cliqz/indexeddbshim": "3.4.1",
     "appium": "1.9.0",
-    "browser-core": "http://cdn2.cliqz.com/update/edge/ghostery-ios/v3.30/3.30.0.fcb8ed8.tgz",
+    "browser-core": "http://cdn2.cliqz.com/update/edge/ghostery-ios/v3.30/3.30.2.3b4e58b.tgz",
     "buffer": "5.0.7",
     "https-browserify": "1.0.0",
     "path-browserify": "0.0.0",
