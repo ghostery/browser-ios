@@ -43,6 +43,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var receivedURLs = [URL]()
     var unifiedTelemetry: UnifiedTelemetry?
+    
+    //Cliqz: RealmDB path
+    var realmDir: URL {
+        return URL(fileURLWithPath: (try! profile!.files.getAndEnsureDirectory("RealmDB"))).appendingPathComponent("default.realm")
+    }
 
     @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         //
@@ -72,12 +77,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         //Cliqz: Cards Subscription
         SubscriptionsHandler.sharedInstance.configureRemoteNotifications()
-        //Cliqz: load the tracker list
-        TrackerList.instance.loadTrackerList()
-        //Cliqz: Load Ghostery Json
-        DispatchQueue.global(qos: .utility).async {
-            BlockListFileManager.shared.loadGhosteryJson()
-        }
 
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
@@ -117,7 +116,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         Logger.browserLogger.newLogWithDate(logDate)
 
         let profile = getProfile(application)
-        
+        //Cliqz: load the tracker list
+        let bugsURL = URL(fileURLWithPath: (try! profile.files.getAndEnsureDirectory("GhosteryBlocking"))).appendingPathComponent("bugs.json")
+        TrackerList.instance.loadTrackerList(bugsURL: bugsURL)
+        //Cliqz: Load Ghostery Json
+        DispatchQueue.global(qos: .utility).async {
+            BlockListFileManager.shared.loadGhosteryJson()
+        }
         // Cliqz: set SettingsPrefs profile and record install date
         SettingsPrefs.shared.profile = profile
         recordInstallDateIfNecessary()
@@ -240,6 +245,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         // Cliqz: Handle Realm Migration
         let config = Realm.Configuration(
+            fileURL: self.realmDir,
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
             schemaVersion: 3,

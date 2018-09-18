@@ -56,10 +56,13 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     var discoveredBugs = [String: PageTrackersFound]() // Page URL is the key
     var applyDefaultsOp: ApplyDefaultsOperation? = nil
     let populateOp = PopulateBlockedTrackersOperation()
+    var bugsURL: URL? = nil
 
     // MARK: - Tracker List Initialization
     
-    func loadTrackerList() {
+    func loadTrackerList(bugsURL: URL?) {
+        // Set the path - Important
+        self.bugsURL = bugsURL
         // Check version of tracker list.
         // Use a sequencial queue to make sure that the loadOperation is complete before loading the Antritracking/Adblocking (since these are dependent on the Trackers List).
         // To ensure this, loadTrackerList should be called before any calls to a coordinatedUpdate.
@@ -84,8 +87,7 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     }
     
     func localTrackerFileURL() -> URL? {
-        let documentsURLs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return documentsURLs.first?.appendingPathComponent("bugs.json")
+        return bugsURL
     }
     
     func loadTrackerList(_ data: Data) {
