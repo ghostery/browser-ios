@@ -59,6 +59,5 @@ class CliqzTopTabsViewController: TopTabsViewController {
         }
         
         privateModeButton.isHidden = true
-        view.backgroundColor = UIColor.cliqzBluePrimary
     }
 }

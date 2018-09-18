@@ -303,10 +303,12 @@ extension TopTabsViewController: UIDropInteractionDelegate {
 
 extension TopTabsViewController: Themeable {
     func applyTheme(_ theme: Theme) {
+        // Cliqz: Change bg color
+        view.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: theme == Theme.Private)
         tabsButton.applyTheme(theme)
         tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Photon.Grey80
         tabsButton.textColor = UIColor.Photon.Grey40
-
+        
         isPrivate = (theme == Theme.Private)
         privateModeButton.applyTheme(theme)
         privateModeButton.tintColor = UIColor.TopTabs.PrivateModeTint.colorFor(theme)
