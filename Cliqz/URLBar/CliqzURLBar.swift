@@ -43,7 +43,10 @@ class CliqzURLBar: URLBarView {
         set(newURL) {
             locationView.url = newURL
             line.isHidden = newURL?.isAboutHomeURL ?? true
-            pageOptionsButton.alpha = 0
+            if newURL != nil {
+                pageOptionsButton.alpha = 0
+            }
+            
         }
     }
     
