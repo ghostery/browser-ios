@@ -89,6 +89,16 @@ class GhosteryButton: InsetButton {
             self.count.text = "99"
         }
     }
+    
+    func lookDeactivated() {
+        self.ghosty.alpha = 0.8
+        self.count.alpha = 0.8
+    }
+    
+    func lookActivated() {
+        self.ghosty.alpha = 1.0
+        self.count.alpha = 1.0
+    }
 }
 
 extension GhosteryButton: Themeable {
@@ -100,12 +110,14 @@ extension GhosteryButton: Themeable {
 
 extension GhosteryButton: GhosteryCountDelegate {
     func updateCount(count: Int) {
+        self.lookActivated()
         self.setCount(count: count)
         self.accessibilityValue = "\(count)"
     }
     
     func showHello() {
         self.count.text = "HELLO"
+        self.lookDeactivated()
     }
 }
 
@@ -132,17 +144,17 @@ class GhosteryCount {
     
     @objc func urlChanged(notification: Notification) {
         guard let del = UIApplication.shared.delegate as? AppDelegate, let currentTab = del.tabManager.selectedTab else {return}
-        guard let dict = notification.userInfo as? [String: Any], let currentUrl = dict["url"] as? URL, let host = currentUrl.normalizedHost else { return }
         if let tab = notification.object as? Tab, tab == currentTab {
-            let count = TrackerList.instance.detectedTrackerCountForPage(host)
-            self.delegate?.updateCount(count: count)
+            update(notification)
         }
     }
     
     @objc func newTrackerDetected(notification: Notification) {
-        guard let dict = notification.userInfo as? [String: Any], let currentUrl = dict["url"] as? URL, let host = currentUrl.normalizedHost else { return }
-        let count = TrackerList.instance.detectedTrackerCountForPage(host)
-        self.delegate?.updateCount(count: count)
+        guard let dict = notification.userInfo as? [String: Any], let pageURL = dict["url"] as? URL else { return }
+        guard let currentTab = (UIApplication.shared.delegate as? AppDelegate)?.tabManager.selectedTab else { return }
+        if currentTab.url == pageURL {
+            update(notification)
+        }
     }
     
     @objc func newTabSelected(notification: Notification) {
@@ -150,7 +162,6 @@ class GhosteryCount {
     }
     
     @objc func didShowFreshtab(_ notification: Notification) {
-        self.delegate?.updateCount(count: 0)
         self.delegate?.showHello()
     }
     
