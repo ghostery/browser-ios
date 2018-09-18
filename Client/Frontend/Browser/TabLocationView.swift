@@ -80,7 +80,7 @@ class TabLocationView: UIView {
         }
         set (newReaderModeState) {
             //Cliqz: prevent ReaderModeButton from showing on youTube urls
-            guard let url = url, !url.isYoutubeURL() else {
+            if let url = url, url.isYoutubeURL() {
                 readerModeButton.isHidden = true
                 return
             }
