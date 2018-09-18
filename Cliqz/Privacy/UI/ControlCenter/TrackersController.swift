@@ -676,6 +676,8 @@ class CategoryHeaderView: UIView {
     private let statusButton = UIButton()
     
     weak var delegate: CategoryHeaderViewProtocol? = nil
+    
+    let specialGray = UIColor(colorString: "97a4ae")
 
 	var isExpanded = false {
 		didSet {
@@ -788,8 +790,8 @@ class CategoryHeaderView: UIView {
 		self.backgroundColor = UIColor.white
 		categoryLabel.font = UIFont.systemFont(ofSize: 16)
 		statisticsLabel.font = UIFont.systemFont(ofSize: 12)
-		statisticsLabel.textColor = ControlCenterUI.separatorGray
-		typeLabel.textColor = UIColor.black
+		statisticsLabel.textColor = specialGray
+		typeLabel.textColor = specialGray
 		typeLabel.font = UIFont.systemFont(ofSize: 10)
 	}
     
@@ -803,8 +805,8 @@ class CategoryHeaderView: UIView {
     }
     
     func lookActivated() {
-        statisticsLabel.textColor = ControlCenterUI.separatorGray
-        typeLabel.textColor = UIColor.black
+        statisticsLabel.textColor = specialGray
+        typeLabel.textColor = specialGray
         categoryLabel.textColor = UIColor.black
         iconView.alpha = 1.0
         statusView.alpha = 1.0
