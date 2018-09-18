@@ -154,12 +154,12 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         currentIndexType = indexType
         currentOrientation = orientation
         
-        if segmentedControl.selectedSegmentIndex < 1 {
+//        if segmentedControl.selectedSegmentIndex < 1 {
             backgroundView.image = BackgroundImageManager.shared.getImage()
-        }
-        else {
-            backgroundView.image = BackgroundImageManager.shared.getBlurredImage()
-        }
+//        }
+//        else {
+//            backgroundView.image = BackgroundImageManager.shared.getBlurredImage()
+//        }
     }
     
     func dismissKeyboard(_ sender: Any? = nil) {
