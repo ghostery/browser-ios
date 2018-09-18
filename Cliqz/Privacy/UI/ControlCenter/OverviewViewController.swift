@@ -524,8 +524,8 @@ class NotchView: UIView {
             }
         }
         
-        self.enhancedView.snp.makeConstraints { (make) in
-            make.top.equalTo(titleLabel.snp.bottom).offset(12)
+        self.enhancedView.snp.makeConstraints { [unowned self](make) in
+            make.top.equalTo(self.snp.top).offset(-ControlCenterUX.adblockerViewInitialOffset)
             make.left.right.bottom.equalToSuperview()
         }
 	}
@@ -549,6 +549,11 @@ class NotchView: UIView {
     func updateViewStyle() {
         if switchControl.isOn {
             enhancedView.isHidden = true
+            
+            iconView.isHidden = false
+            countLabel.isHidden = false
+            descriptionLabel.isHidden = false
+            
             iconView.tintColor = UIColor.cliqzBluePrimary
             countLabel.textColor = UIColor.cliqzBluePrimary
         } else {
@@ -556,6 +561,11 @@ class NotchView: UIView {
             countLabel.textColor = UIColor.gray
             
             enhancedView.isHidden = false
+            
+            iconView.isHidden = true
+            countLabel.isHidden = true
+            descriptionLabel.isHidden = true
+            
             if UserPreferences.instance.adblockingMode == .blockNone {
                 //select second option - allwebsites
                 enhancedView.allWebsitesButton.isSelected = true
