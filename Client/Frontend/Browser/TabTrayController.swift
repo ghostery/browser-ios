@@ -1245,25 +1245,67 @@ class CliqzTrayToolbar : TrayToolbar {
         deleteButton.removeFromSuperview()
         maskButton.removeFromSuperview()
         
-        addSubview(doneButton)
-        addSubview(forgetModeButton)
-        
-        doneButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self.addTabButton.snp.centerY)
-            make.right.equalTo(self).offset(-sideOffset)
+        if UIDevice.current.getDeviceAndOrientation().0 == .iPad {
+            
+            addSubview(doneButton)
+            addSubview(forgetModeButton)
+            
+            doneButton.snp.makeConstraints { [unowned self] make in
+                make.centerY.equalTo(self.addTabButton.snp.centerY)
+                make.right.equalTo(self).offset(-sideOffset)
+            }
+            
+            addTabButton.snp.remakeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.top.equalToSuperview()
+                make.size.equalTo(toolbarButtonSize)
+            }
+            
+            forgetModeButton.snp.remakeConstraints { [unowned self] make in
+                make.centerY.equalTo(self.addTabButton.snp.centerY)
+                make.left.equalTo(self).offset(sideOffset)
+                make.width.equalTo(forgetModeButton.snp.width).offset(20)
+            }
+        }
+        else {
+            
+            let containerDone = UIView()
+            let containerForget = UIView()
+            
+            addSubview(containerDone)
+            addSubview(containerForget)
+            
+            containerDone.addSubview(doneButton)
+            containerForget.addSubview(forgetModeButton)
+            
+            containerDone.snp.makeConstraints { (make) in
+                make.right.top.equalToSuperview()
+                make.left.equalTo(addTabButton.snp.right)
+                make.height.equalTo(toolbarButtonSize)
+            }
+            
+            containerForget.snp.makeConstraints { (make) in
+                make.left.top.equalToSuperview()
+                make.right.equalTo(addTabButton.snp.left)
+                make.height.equalTo(toolbarButtonSize)
+            }
+            
+            doneButton.snp.makeConstraints { make in
+                make.center.equalToSuperview()
+            }
+            
+            addTabButton.snp.remakeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.top.equalToSuperview()
+                make.size.equalTo(toolbarButtonSize)
+            }
+            
+            forgetModeButton.snp.remakeConstraints { make in
+                make.center.equalToSuperview()
+                make.width.equalTo(100)
+            }
         }
         
-        addTabButton.snp.remakeConstraints { make in
-            make.centerX.equalTo(self)
-            make.top.equalTo(self)
-            make.size.equalTo(toolbarButtonSize)
-        }
-        
-        forgetModeButton.snp.remakeConstraints { make in
-            make.centerY.equalTo(self.addTabButton.snp.centerY)
-            make.left.equalTo(self).offset(sideOffset)
-            make.width.equalTo(100.0)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
