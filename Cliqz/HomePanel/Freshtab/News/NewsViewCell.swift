@@ -46,14 +46,9 @@ class NewsCellViewModel {
 	}
     
     private class func getCustomLabelAttributes() -> [NSAttributedStringKey : Any] {
-        let shadow = NSShadow.init()
-        shadow.shadowColor = UIColor.black
-        shadow.shadowOffset = CGSize.init(width: 0.3, height: 0.3)
-        shadow.shadowBlurRadius = 4.0
         
         let customAttributes = [NSAttributedStringKey.foregroundColor: UIColor.cliqzBluePrimary,
-                                NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16),
-                                NSAttributedStringKey.shadow: shadow]
+                                NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)]
         
         return customAttributes
     }
