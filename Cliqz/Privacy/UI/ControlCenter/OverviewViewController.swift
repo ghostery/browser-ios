@@ -1129,23 +1129,27 @@ extension OverviewViewController: NotchViewDelegate {
         
         if value == true {
             self.delegate?.turnGlobalAdblocking(on: value)
-            self.delegate?.turnDomainAdblocking(on: nil)
-            
-            //bring donw the notch if it is up
-            let top = self.view.frame.height - CGFloat(ControlCenterUX.adblockerViewMaxHeight)
-            if self.adBlockingView.frame.origin.y == top { //not open
-                self.moveNotch(velocity: 0.00001)
-            }
+            self.delegate?.turnDomainAdblocking(on: nil, completion: {
+                DispatchQueue.main.async {
+                    //bring donw the notch if it is up
+                    let top = self.view.frame.height - CGFloat(ControlCenterUX.adblockerViewMaxHeight)
+                    if self.adBlockingView.frame.origin.y == top { //not open
+                        self.moveNotch(velocity: 0.00001)
+                    }
+                }
+            })
         }
         else {
             //Default
-            self.delegate?.turnDomainAdblocking(on: false)
-            
-            //bring up the notch if it is not up already
-            let top = self.view.frame.height - CGFloat(ControlCenterUX.adblockerViewMaxHeight)
-            if self.adBlockingView.frame.origin.y != top { //not open
-                self.moveNotch(velocity: -0.00001)
-            }
+            self.delegate?.turnDomainAdblocking(on: false, completion: {
+                DispatchQueue.main.async {
+                    //bring up the notch if it is not up already
+                    let top = self.view.frame.height - CGFloat(ControlCenterUX.adblockerViewMaxHeight)
+                    if self.adBlockingView.frame.origin.y != top { //not open
+                        self.moveNotch(velocity: -0.00001)
+                    }
+                }
+            })
         }
 	}
 
@@ -1210,15 +1214,17 @@ extension OverviewViewController: NotchViewDelegate {
     
     func domainOnEnhancedViewPressed() {
         debugPrint("domainOnEnhancedViewPressed")
-        self.delegate?.turnDomainAdblocking(on: false)
-        let prevAdblockerState = UserPreferences.instance.prevAdblockingMode == .blockAll ? true : false
-        self.delegate?.turnGlobalAdblocking(on: prevAdblockerState)
+        self.delegate?.turnDomainAdblocking(on: false, completion: {
+            let prevAdblockerState = UserPreferences.instance.prevAdblockingMode == .blockAll ? true : false
+            self.delegate?.turnGlobalAdblocking(on: prevAdblockerState)
+        })
     }
     
     func allWebsitesOnEnhancedViewPressed() {
         debugPrint("allWebsitesOnEnhancedViewPressed")
         
-        self.delegate?.turnDomainAdblocking(on: nil)
-        self.delegate?.turnGlobalAdblocking(on: false)
+        self.delegate?.turnDomainAdblocking(on: nil, completion: {
+            self.delegate?.turnGlobalAdblocking(on: false)
+        })
     }
 }

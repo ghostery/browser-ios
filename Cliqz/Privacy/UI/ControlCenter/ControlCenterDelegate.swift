@@ -10,8 +10,7 @@ import UIKit
 import Storage
 
 extension ControlCenterModel: ControlCenterDelegateProtocol {
-    
-    
+
     func changeState(category: String, state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void) {
         
         if let domainStr = self.domainStr, tableType == .page {
@@ -35,19 +34,23 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
     
-    func changeState(appId: Int, state: TrackerUIState, tableType: TableType, section: Int, emptyState: EmptyState = .both) {
+    func changeState(appId: Int, state: TrackerUIState, tableType: TableType, section: Int, emptyState: EmptyState = .both, completion: @escaping () -> Void) {
         
         invalidateStateImageCache(section: section)
         invalidateBlockedCountCache(section: section)
         
+        LoadingNotificationManager.shared.changeInControlCenter()
+        
         if let domainStr = self.domainStr, tableType == .page {
-            TrackerStateStore.change(appIds: [appId], domain: domainStr, toState: state, emptyState: emptyState)
+            TrackerStateStore.change(appIds: [appId], domain: domainStr, toState: state, emptyState: emptyState, completion: {
+                completion()
+            })
         }
         else {
-            TrackerStateStore.change(appIds: [appId], toState: state, emptyState: emptyState)
+            TrackerStateStore.change(appIds: [appId], toState: state, emptyState: emptyState, completion: {
+                completion()
+            })
         }
-        
-        LoadingNotificationManager.shared.changeInControlCenter()
     }
     
     func changeState(appIds: [Int], state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void) {
@@ -60,30 +63,43 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
             if let d = self?.domainStr, tableType == .page {
-                TrackerStateStore.change(appIds: appIds, domain: d, toState: state)
+                TrackerStateStore.change(appIds: appIds, domain: d, toState: state, completion: {
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                })
             }
             else if tableType == .global {
-                TrackerStateStore.change(appIds: appIds, toState: state)
+                TrackerStateStore.change(appIds: appIds, toState: state, completion: {
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                })
             }
-            
-            DispatchQueue.main.async {
-                completion()
+            else {
+                DispatchQueue.main.async {
+                    completion()
+                }
             }
         }
         
     }
     
-    func undoState(appId: Int, tableType: TableType) {
+    func undoState(appId: Int, tableType: TableType, completion: @escaping () -> Void) {
         invalidateStateImageCache()
         invalidateBlockedCountCache()
         
         LoadingNotificationManager.shared.changeInControlCenter()
         
         if let domainStr = self.domainStr, tableType == .page {
-            TrackerStateStore.undo(appIds: [appId], domain: domainStr)
+            TrackerStateStore.undo(appIds: [appId], domain: domainStr, completion: {
+                completion()
+            })
         }
         else {
-            TrackerStateStore.undo(appIds: [appId])
+            TrackerStateStore.undo(appIds: [appId], completion: {
+                completion()
+            })
         }
     }
     
@@ -96,14 +112,23 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
             if let domainStr = self?.domainStr, tableType == .page {
-                TrackerStateStore.undo(appIds: appIds, domain: domainStr)
+                TrackerStateStore.undo(appIds: appIds, domain: domainStr, completion: {
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                })
             }
             else if tableType == .global {
-                TrackerStateStore.undo(appIds: appIds)
+                TrackerStateStore.undo(appIds: appIds, completion: {
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                })
             }
-            
-            DispatchQueue.main.async {
-                completion()
+            else {
+                DispatchQueue.main.async {
+                    completion()
+                }
             }
         }
     }
@@ -126,14 +151,23 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
             if let d = self?.domainStr, tableType == .page {
-                TrackerStateStore.undo(appIds: TrackerList.instance.detectedTrackersForPage(d).map {app in return app.appId}, domain: d)
+                TrackerStateStore.undo(appIds: TrackerList.instance.detectedTrackersForPage(d).map {app in return app.appId}, domain: d, completion: {
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                })
             }
             else if tableType == .global {
-                TrackerStateStore.undo(appIds: TrackerList.instance.appsList.map {app in return app.appId})
+                TrackerStateStore.undo(appIds: TrackerList.instance.appsList.map {app in return app.appId}, completion: {
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                })
             }
-            
-            DispatchQueue.main.async {
-                completion()
+            else {
+                DispatchQueue.main.async {
+                    completion()
+                }
             }
         }
     }
@@ -162,12 +196,13 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
                 }
             }
             
-            TrackerStateStore.change(appIds: toBlock, toState: .blocked)
-            TrackerStateStore.change(appIds: toEmpty, toState: .empty)
-            
-            DispatchQueue.main.async {
-                completion()
-            }
+            TrackerStateStore.change(appIds: toBlock, toState: .blocked, completion: {
+                TrackerStateStore.change(appIds: toEmpty, toState: .empty, completion: {
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                })
+            })
         }
     }
     
@@ -183,7 +218,7 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         LoadingNotificationManager.shared.changeInControlCenter()
     }
     
-    func turnDomainAdblocking(on: Bool?) {
+    func turnDomainAdblocking(on: Bool?, completion: @escaping () -> Void) {
         if let domainString = domainStr {
             
             let state: AdblockerDomainState
@@ -200,7 +235,7 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
             
             LoadingNotificationManager.shared.changeInControlCenter()
             
-            DomainStore.changeAdblockerState(toState: state, domain: domainString)
+            DomainStore.changeAdblockerState(toState: state, domain: domainString, completion: completion)
         }
     }
     
@@ -214,14 +249,23 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             
             if let d = self?.domainStr, tableType == .page {
-                TrackerStateStore.change(appIds: TrackerList.instance.detectedTrackersForPage(d).map{app in return app.appId}, domain: d, toState: state)
+                TrackerStateStore.change(appIds: TrackerList.instance.detectedTrackersForPage(d).map{app in return app.appId}, domain: d, toState: state, completion: {
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                })
             }
             else if tableType == .global {
-                TrackerStateStore.change(appIds: TrackerList.instance.appsList.map{app in return app.appId}, toState: state)
+                TrackerStateStore.change(appIds: TrackerList.instance.appsList.map{app in return app.appId}, toState: state, completion: {
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                })
             }
-            
-            DispatchQueue.main.async {
-                completion()
+            else {
+                DispatchQueue.main.async {
+                    completion()
+                }
             }
         }
         

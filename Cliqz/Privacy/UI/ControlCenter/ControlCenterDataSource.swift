@@ -85,10 +85,10 @@ enum CategoryState {
 protocol ControlCenterDelegateProtocol: class {
     func pauseGhostery(paused: Bool, time: Date)
     func turnGlobalAdblocking(on: Bool)
-    func turnDomainAdblocking(on: Bool?)
+    func turnDomainAdblocking(on: Bool?, completion: @escaping () -> Void)
     func changeState(category: String, state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void)
-    func changeState(appId: Int, state: TrackerUIState, tableType: TableType, section: Int, emptyState: EmptyState)
-    func undoState(appId: Int, tableType: TableType)
+    func changeState(appId: Int, state: TrackerUIState, tableType: TableType, section: Int, emptyState: EmptyState, completion: @escaping () -> Void)
+    func undoState(appIds: [Int], tableType: TableType, completion: @escaping () -> Void)
     func undoAll(tableType: TableType, completion: @escaping () -> Void)
     func blockAll(tableType: TableType, completion: @escaping () -> Void)
     func unblockAll(tableType: TableType, completion: @escaping () -> Void)

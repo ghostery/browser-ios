@@ -50,7 +50,7 @@ final class BlockListManager {
             }
             else {
                 //This needs to be on main due to problems when accessing DB
-                //TODO: Solve the problem
+                //TODO: Solve the problem - They should be solved now. Still need to check if it works.
                 DispatchQueue.main.async {
                     self.loadFromDisk(id: id, type: type, domain: domain, completion: { (list) in
                         if let list = list {
@@ -101,7 +101,7 @@ final class BlockListManager {
         case .list(let list):
             //debugPrint("CompileOperation: finished loading list for id = \(id)")
             return list
-        case .error(let error):
+        case .error(let _):
             //debugPrint("CompileOperation: error for id = \(id) | ERROR = \(error.debugDescription)")
             return nil
         case .noResult:

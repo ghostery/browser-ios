@@ -84,7 +84,7 @@ public class GhosteryMigrationManager {
     private func migrateBugs() {
         let sql = "SELECT * from  \(TableGhosteryBugs)"
         ghosteryDB!.runQuery(sql, args: [], factory: GhosterySQLiteFactories.bugFactory) >>== { appIds in
-            TrackerStateStore.change(appIds: appIds.asArray(), toState: .blocked)
+            TrackerStateStore.change(appIds: appIds.asArray(), toState: .blocked, completion: {})
         }
     }
     

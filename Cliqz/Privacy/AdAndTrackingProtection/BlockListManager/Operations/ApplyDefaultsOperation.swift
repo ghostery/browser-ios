@@ -48,7 +48,8 @@ final class ApplyDefaultsOperation: Operation {
             return app.appId
         }
         
-        TrackerStateStore.change(appIds: appIds, toState: .blocked)
-        self.isFinished = true
+        TrackerStateStore.change(appIds: appIds, toState: .blocked, completion: {
+            self.isFinished = true
+        })
     }
 }
