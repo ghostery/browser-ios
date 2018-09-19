@@ -69,6 +69,7 @@ node('mac-vm-host') {
                         xcodebuild -version
                         pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
                         sudo xcodebuild -license accept
+                        gem install fastlane --no-document
                         fastlane clearCache
                         fastlane prepare
                         pip install virtualenv
