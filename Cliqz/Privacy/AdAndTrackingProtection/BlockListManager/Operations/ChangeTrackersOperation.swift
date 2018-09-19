@@ -53,12 +53,18 @@ public class ChangeTrackersOperation: Operation {
     override public func main() {
         self.isExecuting = true
         if blockOption == .blockAll {
-            TrackerStateStore.change(appIds: TrackerList.instance.appsList.map{app in return app.appId}, toState: .blocked)
+            TrackerStateStore.change(appIds: TrackerList.instance.appsList.map{app in return app.appId}, toState: .blocked, completion: {
+                self.isFinished = true
+            })
         }
         else if blockOption == .unblockAll {
-            TrackerStateStore.change(appIds: TrackerList.instance.appsList.map{app in return app.appId}, toState: .empty)
+            TrackerStateStore.change(appIds: TrackerList.instance.appsList.map{app in return app.appId}, toState: .empty, completion: {
+                self.isFinished = true
+            })
         }
-        self.isFinished = true
+        else {
+            self.isFinished = true
+        }
     }
 }
 

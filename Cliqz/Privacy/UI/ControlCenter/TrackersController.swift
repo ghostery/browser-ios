@@ -356,49 +356,67 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 				switch action {
 				case .trust:
 					let trustAction = UIContextualAction(style: .normal, title: NSLocalizedString("Trust", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Trust Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .trusted, tableType: self.type, section: indexPath.section, emptyState: .none)
-						self.updateSection(indexPath.section)
-						complHandler(false)
+                        self.delegate?.changeState(appId: appId, state: .trusted, tableType: self.type, section: indexPath.section, emptyState: .none, completion: {
+                            DispatchQueue.main.async {
+                                self.updateSection(indexPath.section)
+                                complHandler(false)
+                            }
+                        })
 					}
 					trustAction.backgroundColor = UIColor.cliqzGreenLightFunctional
 					swipeActions.append(trustAction)
                 case .untrust:
                     let untrustAction = UIContextualAction(style: .normal, title: NSLocalizedString("Untrust", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Untrust Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, section: indexPath.section, emptyState: .page)
-                        self.updateSection(indexPath.section)
-                        complHandler(false)
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, section: indexPath.section, emptyState: .page, completion: {
+                            DispatchQueue.main.async {
+                                self.updateSection(indexPath.section)
+                                complHandler(false)
+                            }
+                        })
                     }
                     untrustAction.backgroundColor = UIColor.cliqzGreenLightFunctional
                     swipeActions.append(untrustAction)
 				case .block:
 					let blockAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Block", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Block Action Title")) { [unowned self] (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .blocked, tableType: self.type, section: indexPath.section, emptyState: .none)
-						self.updateSection(indexPath.section)
-						complHandler(false)
+                        self.delegate?.changeState(appId: appId, state: .blocked, tableType: self.type, section: indexPath.section, emptyState: .none, completion: {
+                            DispatchQueue.main.async {
+                                self.updateSection(indexPath.section)
+                                complHandler(false)
+                            }
+                        })
 					}
 					blockAction.backgroundColor = UIColor(colorString: "E74055")
 					swipeActions.append(blockAction)
 				case .unblock:
 					let unblockAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unblock", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unblock Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, section: indexPath.section, emptyState: .both)
-						self.updateSection(indexPath.section)
-						complHandler(false)
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, section: indexPath.section, emptyState: .both, completion:{
+                            DispatchQueue.main.async {
+                                self.updateSection(indexPath.section)
+                                complHandler(false)
+                            }
+                        })
 					}
 					unblockAction.backgroundColor = UIColor(colorString: "E74055")
 					swipeActions.append(unblockAction)
 				case .restrict:
 					let restrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Restrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Restrict Action Title")) { [unowned self] (action, view, complHandler) in
-						self.delegate?.changeState(appId: appId, state: .restricted, tableType: self.type, section: indexPath.section, emptyState: .none)
-						self.updateSection(indexPath.section)
-						complHandler(false)
+                        self.delegate?.changeState(appId: appId, state: .restricted, tableType: self.type, section: indexPath.section, emptyState: .none, completion: {
+                            DispatchQueue.main.async {
+                                self.updateSection(indexPath.section)
+                                complHandler(false)
+                            }
+                        })
 					}
 					restrictAction.backgroundColor = UIColor(colorString: "BE4948")
 					swipeActions.append(restrictAction)
                 case .unrestrict:
                     let unrestrictAction = UIContextualAction(style: .destructive, title: NSLocalizedString("Unrestrict", tableName: "Cliqz", comment: "[Trackers -> ControlCenter] Unrestrict Action Title")) { [unowned self] (action, view, complHandler) in
-                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, section: indexPath.section, emptyState: .page)
-                        self.updateSection(indexPath.section)
-                        complHandler(false)
+                        self.delegate?.changeState(appId: appId, state: .empty, tableType: self.type, section: indexPath.section, emptyState: .page, completion: {
+                            DispatchQueue.main.async {
+                                self.updateSection(indexPath.section)
+                                complHandler(false)
+                            }
+                        })
                     }
                     unrestrictAction.backgroundColor = UIColor(colorString: "BE4948")
                     swipeActions.append(unrestrictAction)

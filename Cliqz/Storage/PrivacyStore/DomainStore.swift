@@ -76,32 +76,37 @@ public class DomainStore: NSObject {
         return nil
     }
     
-    public class func changeAdblockerState(toState: AdblockerDomainState, domain: String) {
-        autoreleasepool {
-            if let realm = try? Realm() {
-                
-                guard realm.isInWriteTransaction == false else { return } //avoid exceptions
-                realm.beginWrite()
-                
-                if let domainObj = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
-                    domainObj.adblockerState = Domain.intForState(toState)
-                    realm.add(domainObj, update: true)
-                }
-                else {
-                    let domainObj = Domain()
-                    domainObj.name = domain
-                    domainObj.adblockerState = Domain.intForState(toState)
-                    realm.add(domainObj)
-                }
-                
-                do {
-                    try realm.commitWrite()
-                }
-                catch {
-                    debugPrint("could not change state of trackerState")
-                    //do I need to cancel the write?
+    public class func changeAdblockerState(toState: AdblockerDomainState, domain: String, completion: @escaping () -> Void) {
+        RealmDBWriteQueue.shared.addOperation {
+            //All of the code in here needs to be syncronous
+            //If you add async code, you will need to do a custom operation where you correctly indicate when the operation is finished.
+            autoreleasepool {
+                if let realm = try? Realm() {
+                    
+                    guard realm.isInWriteTransaction == false else { return } //avoid exceptions
+                    realm.beginWrite()
+                    
+                    if let domainObj = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
+                        domainObj.adblockerState = Domain.intForState(toState)
+                        realm.add(domainObj, update: true)
+                    }
+                    else {
+                        let domainObj = Domain()
+                        domainObj.name = domain
+                        domainObj.adblockerState = Domain.intForState(toState)
+                        realm.add(domainObj)
+                    }
+                    
+                    do {
+                        try realm.commitWrite()
+                    }
+                    catch {
+                        debugPrint("could not change state of trackerState")
+                        //do I need to cancel the write?
+                    }
                 }
             }
+            completion()
         }
     }
 }
