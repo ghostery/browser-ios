@@ -7,7 +7,7 @@
 #
 
 # Uncomment the line if you want fastlane to automatically update itself
-update_fastlane
+# update_fastlane
 
 default_platform(:ios)
 
@@ -49,7 +49,7 @@ platform :ios do
   lane :clearCache do
 
     # Remove the Cache
-    sh("cd .. && rm -rf Cartfile.resolved Carthage node_modules Podfile.lock Pods && rm -rf ~/Library/Caches/org.carthage.CarthageKit")
+    sh("cd .. && npm cache clean --force && rm -rf Cartfile.resolved Carthage node_modules Podfile.lock Pods && rm -rf ~/Library/Caches/org.carthage.CarthageKit")
 
   end
 
