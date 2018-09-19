@@ -77,29 +77,30 @@ public class DomainStore: NSObject {
     }
     
     public class func changeAdblockerState(toState: AdblockerDomainState, domain: String) {
-        
-        if let realm = try? Realm() {
-            
-            guard realm.isInWriteTransaction == false else { return } //avoid exceptions
-            realm.beginWrite()
-            
-            if let domainObj = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
-                domainObj.adblockerState = Domain.intForState(toState)
-                realm.add(domainObj, update: true)
-            }
-            else {
-                let domainObj = Domain()
-                domainObj.name = domain
-                domainObj.adblockerState = Domain.intForState(toState)
-                realm.add(domainObj)
-            }
-            
-            do {
-                try realm.commitWrite()
-            }
-            catch {
-                debugPrint("could not change state of trackerState")
-                //do I need to cancel the write?
+        autoreleasepool {
+            if let realm = try? Realm() {
+                
+                guard realm.isInWriteTransaction == false else { return } //avoid exceptions
+                realm.beginWrite()
+                
+                if let domainObj = realm.object(ofType: Domain.self, forPrimaryKey: domain) {
+                    domainObj.adblockerState = Domain.intForState(toState)
+                    realm.add(domainObj, update: true)
+                }
+                else {
+                    let domainObj = Domain()
+                    domainObj.name = domain
+                    domainObj.adblockerState = Domain.intForState(toState)
+                    realm.add(domainObj)
+                }
+                
+                do {
+                    try realm.commitWrite()
+                }
+                catch {
+                    debugPrint("could not change state of trackerState")
+                    //do I need to cancel the write?
+                }
             }
         }
     }
