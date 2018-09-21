@@ -1089,6 +1089,11 @@ class BrowserViewController: UIViewController {
 
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
+        
+        // Cliqz: leave overlay mode when switching to a tab that has a url loaded (i.e. when closing a tab by long pressing tabs button)
+        if isPage && urlBar.inOverlayMode {
+            urlBar.leaveOverlayMode()
+        }
     }
 
     // MARK: Opening New Tabs
@@ -1128,6 +1133,8 @@ class BrowserViewController: UIViewController {
         if url == nil && NewTabAccessors.getNewTabPage(profile.prefs) == .blankPage {
             urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
         }
+        // Cliqz: Activate the keyboard if necessary
+        self.showKeyboardIfNeeded()
     }
 
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
@@ -3055,8 +3062,6 @@ extension BrowserViewController: TopTabsDelegate {
     
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
-        // Cliqz: show keyboard if needed when adding new tab from the toptabs button (iPad)
-        self.showKeyboardIfNeeded()
     }
 
     func topTabsDidTogglePrivateMode() {

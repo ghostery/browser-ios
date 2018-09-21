@@ -241,10 +241,8 @@ class Tab: NSObject {
                 urls.append(url.absoluteString)
             }
 
-            // Cliqz: if restoring more than one url then it is not Freshtab
-            if urls.count > 1 {
-                restoringFreshtab = false
-            }
+            // Cliqz: if restoring isFreshtab flag
+            restoringFreshtab = sessionData.isFreshtab
             
             let currentPage = sessionData.currentPage
             self.sessionData = nil

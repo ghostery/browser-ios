@@ -15,14 +15,14 @@ extension BrowserViewController {
         guard shouldShowKeyboard() else { return }
         
         DispatchQueue.main.async { [weak self] in
-            self?.urlBar?.enterOverlayMode("", pasted: false, search: true)
+            let locationText = self?.urlBar?.locationTextField?.text
+            if  locationText == nil || locationText!.isEmpty {
+                self?.urlBar?.enterOverlayMode("", pasted: false, search: true)
+            }
         }
     }
     
     func shouldShowKeyboard() -> Bool {
-        if self.urlBar.inOverlayMode {
-            return false
-        }
         if profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
             return false
         }

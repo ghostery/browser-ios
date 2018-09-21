@@ -206,6 +206,9 @@ private extension BrowserToTrayAnimator {
                 resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
                 bvc.urlBar.isTransitioning = false
                 transitionContext.completeTransition(true)
+                //Cliqz: dismiss overlay mode when moving to tabsOverview
+                bvc.urlBar.leaveOverlayMode()
+                
             })
         }
     }
