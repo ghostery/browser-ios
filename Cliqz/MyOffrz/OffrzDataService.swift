@@ -32,8 +32,8 @@ struct Offr {
 class OffrzDataService {
 	var lastOffrz = [Offr]()
     
-    private static let CONFIG_URL = "https://offers-api.cliqz.com/api/v1/loadsubtriggers?parent_id=root&t_eng_ver=22&channel=mobile-ghostery"
-    private static let API_URL = "https://offers-api.cliqz.com/api/v1/offers?t_eng_ver=22&channel=mobile-ghostery&intent_name="
+    private static let CONFIG_URL = "https://offers-api.ghostery.net/api/v1/loadsubtriggers?parent_id=root&t_eng_ver=22&channel=mobile-ghostery"
+    private static let API_URL = "https://offers-api.ghostery.net/api/v1/offers?t_eng_ver=22&channel=mobile-ghostery&intent_name="
     
 	static let shared = OffrzDataService()
 
