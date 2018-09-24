@@ -21,6 +21,7 @@ class TopSitesDataSource {
 
 	private var profile: Profile!
 	private var topSites = [Site]()
+    private var hiddenTopSitesIndexes = [Int]()
 
 	init() {
         if let delegate = UIApplication.shared.delegate as? AppDelegate, let profile = delegate.profile {
@@ -40,13 +41,14 @@ class TopSitesDataSource {
 	}
 
 	func getTopSite(at: Int) -> Site? {
-		if at < topSites.count {
+		if at < topSites.count && !hiddenTopSitesIndexes.contains(at) {
 			return topSites[at]
 		}
 		return nil
 	}
 
 	private func loadTopSites() {
+        hiddenTopSitesIndexes = [Int]()
 		let _ =		self.profile.history.getTopSitesWithLimit(16).both(self.profile.history.getPinnedTopSites()).bindQueue(.main) { (topsites, pinnedSites)  -> Success in
 			guard let mySites = topsites.successValue?.asArray(), let pinned = pinnedSites.successValue?.asArray() else {
 				return succeed()
@@ -90,6 +92,7 @@ class TopSitesDataSource {
 		guard index < self.topSites.count else {
 			return
 		}
+        hiddenTopSitesIndexes.append(index)
 		let site = self.topSites[index]
 		if let _ =  site as? PinnedSite {
 			// If pinned site, then should be removed from pinned and then hided from topSites
