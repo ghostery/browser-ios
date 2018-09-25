@@ -446,7 +446,7 @@ class NotchView: UIView {
 		descriptionLabel.textColor = UIColor.cliqzGrayFunctional
 		descriptionLabel.font = UIFont.systemFont(ofSize: 12)
 		descriptionLabel.numberOfLines = 0
-		descriptionLabel.text = NSLocalizedString("Enhanced Ad Blocking anonymizes unblocked and unknown trackers for greater browsing protection.", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Ad Blocking description")
+		descriptionLabel.text = NSLocalizedString("This feature blocks advertisments on websites you visit.", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Ad Blocking description")
 		descriptionLabel.textAlignment = .left
 		countLabel.textColor = UIColor.cliqzBluePrimary
 		countLabel.text = NSLocalizedString("Ads Removed", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Removed Ads indicator")
