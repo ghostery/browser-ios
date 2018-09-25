@@ -142,15 +142,15 @@ protocol ControlCenterDSProtocol: class {
 final class CategoriesHelper {
     static let categories = Set(arrayLiteral: "advertising", "audio_video_player", "comments", "customer_interaction", "essential", "pornvertising", "site_analytics", "social_media", "uncategorized")
     static let categoriesBlockedByDefault = Set(arrayLiteral: "pornvertising", "site_analytics", "advertising")
-    static let category2NameAndColor = ["advertising": ("Advertising", UIColor(colorString: "CB55CD")),
-                                 "audio_video_player": ("Audio/Video Player", UIColor(colorString: "EF671E")),
-                                 "comments": ("Comments", UIColor(colorString: "43B7C5")),
-                                 "customer_interaction": ("Customer Interaction", UIColor(colorString: "FDC257")),
-                                 "essential": ("Essential", UIColor(colorString: "FC9734")),
-                                 "pornvertising": ("Adult Content", UIColor(colorString: "ECAFC2")),
-                                 "site_analytics": ("Site Analytics", UIColor(colorString: "87D7EF")),
-                                 "social_media": ("Social Media", UIColor(colorString: "388EE8")),
-                                 "uncategorized": ("Uncategorized", UIColor(colorString: "8459A5"))]
+    static let category2NameAndColor = ["advertising": (NSLocalizedString("Advertising", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "CB55CD")),
+                                 "audio_video_player": (NSLocalizedString("Audio/Video Player", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "EF671E")),
+                                 "comments": (NSLocalizedString("Comments", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "43B7C5")),
+                                 "customer_interaction": (NSLocalizedString("Customer Interaction", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "FDC257")),
+                                 "essential": (NSLocalizedString("Essential", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "FC9734")),
+                                 "pornvertising": (NSLocalizedString("Adult Content", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "ECAFC2")),
+                                 "site_analytics": (NSLocalizedString("Site Analytics", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "87D7EF")),
+                                 "social_media": (NSLocalizedString("Social Media", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "388EE8")),
+                                 "uncategorized": (NSLocalizedString("Uncategorized", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "8459A5"))]
 }
 
 class ControlCenterModel: ControlCenterDSProtocol {
