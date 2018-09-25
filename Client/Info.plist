@@ -85,7 +85,7 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>Ghostery requires Face ID to access your saved logins.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is used to provide better search results.</string>
+	<string>Location-based features or websites you visit may request your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Ghostery will only use the microphone when you choose to record videos inside the browser.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
