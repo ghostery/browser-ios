@@ -176,6 +176,9 @@ class OffrView: UIView {
 			make.left.right.equalTo(self)
 			make.height.equalTo(61)
 		}
+        
+        promoCodeLabel.isHidden = offr.code == nil
+        promoCodeButton.isHidden = offr.code == nil
     }
 
 	@objc
