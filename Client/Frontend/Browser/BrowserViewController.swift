@@ -751,7 +751,9 @@ class BrowserViewController: UIViewController {
             view.addSubview(homePanelController.view)
             homePanelController.didMove(toParentViewController: self)
             // Cliqz: Activate the keyboard if necessary
-            self.showKeyboardIfNeeded()
+            if self.tabTrayController == nil || self.tabTrayController.view.superview == nil {
+                self.showKeyboardIfNeeded()
+            }
         }
         guard let homePanelController = self.homePanelController else {
             assertionFailure("homePanelController is still nil after assignment.")
