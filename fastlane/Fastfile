@@ -59,7 +59,11 @@ platform :ios do
     sh("cd .. && carthage bootstrap --verbose --platform ios --color auto --cache-builds")
 
     # Install NPM and POD Dependencies and Run the Build Script for NPM Dependencies.
-    sh("cd .. && npm install")
+    begin
+      sh("cd .. && npm install")
+    rescue
+      sh("cd .. && npm install")
+    end
     sh("cd .. && pod install")
     sh("cd .. && npm run build")
 
