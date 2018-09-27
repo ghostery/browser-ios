@@ -23,7 +23,7 @@ class SendUsageDataTableViewController: ToggleSubSettingsTableViewController {
     }
     
     override func getSectionFooters() -> [String] {
-        return [NSLocalizedString("Help us improve your browsing experience. Cliqz collects strictly anonymous usage data. At no occasion is any personal data collected. Learn more at http://cliqz.com/en/privacy-browser.", tableName: "Cliqz", comment: "[Settings -> Send Telemetry] Footer text")]
+        return [NSLocalizedString("Help us improve your browsing experience. Ghostery collects strictly anonymous usage data. At no occasion is any personal data collected.", tableName: "Cliqz", comment: "[Settings -> Send Telemetry] Footer text")]
     }
     
     override func saveToggles(isOn: Bool, atIndex: Int) {
