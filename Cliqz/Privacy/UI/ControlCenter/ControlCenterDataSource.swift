@@ -147,7 +147,7 @@ final class CategoriesHelper {
                                  "comments": (NSLocalizedString("Comments", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "43B7C5")),
                                  "customer_interaction": (NSLocalizedString("Customer Interaction", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "FDC257")),
                                  "essential": (NSLocalizedString("Essential", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "FC9734")),
-                                 "pornvertising": (NSLocalizedString("Adult Content", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "ECAFC2")),
+                                 "pornvertising": (NSLocalizedString("Adult Advertising", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "ECAFC2")),
                                  "site_analytics": (NSLocalizedString("Site Analytics", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "87D7EF")),
                                  "social_media": (NSLocalizedString("Social Media", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "388EE8")),
                                  "uncategorized": (NSLocalizedString("Uncategorized", tableName: "Cliqz", comment: "Tracker category in control center"), UIColor(colorString: "8459A5"))]
