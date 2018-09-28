@@ -49,5 +49,17 @@ extension ShareExtensionHelper {
         }
         return activityViewController
     }
+    
+    func generateFooterText() -> String {
+        let shareText = String(format: NSLocalizedString("Shared with %@ Browser for iOS", tableName: "Cliqz", comment: "Shared with [Cliqz Browser | Ghostery Browser] for iOS"), UserAgentConstants.appName)
+        var footerText = "\n--\n\(shareText)"
+        
+        if let url = UserAgentConstants.storeURL {
+            let downloadText = String(format: NSLocalizedString("Get it from %@", tableName: "Cliqz", comment: "Get it from the %link%"), url.absoluteString)
+            footerText.append("\n\(downloadText)")
+        }
+        
+        return footerText
+    }
 
 }
