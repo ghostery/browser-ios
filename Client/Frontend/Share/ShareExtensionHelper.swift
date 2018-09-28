@@ -23,7 +23,7 @@ class ShareExtensionHelper: NSObject {
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: String?) -> Void) -> UIActivityViewController {
         // Cliqz: Configured special share menu for Freshtab
         if let url = selectedTab?.url, url.isAboutURL {
-            return createCliqzTabActivityController(completionHandler)
+            return createStartTabActivityController(completionHandler)
         }
         var activityItems = [AnyObject]()
 
