@@ -70,20 +70,27 @@ open class UserAgentConstants : RCTEventEmitter {
         #endif
     }
 
-    fileprivate var appName: String {
+    static var appName: String {
         #if GHOSTERY
             return "Ghostery"
         #else
             return "Cliqz"
         #endif
     }
-
+    
+    static var storeURL: URL? {
+        #if GHOSTERY
+        return URL(string:"https://itunes.apple.com/de/app/ghostery/id472789016?mt=8")
+        #else
+        return URL(string:"https://itunes.apple.com/de/app/cliqz-browser/id1065837334?mt=8")
+        #endif
+    }
     open override static func moduleName() -> String! {
         return "UserAgentConstants"
     }
     
     override open func constantsToExport() -> [AnyHashable : Any]! {
-        return ["channel": self.source, "appVersion": self.appVersion, "installDate": self.installDate, "appName": self.appName]
+        return ["channel": self.source, "appVersion": self.appVersion, "installDate": self.installDate, "appName": UserAgentConstants.appName]
     }
     
 }

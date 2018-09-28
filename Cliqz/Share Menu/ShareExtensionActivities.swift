@@ -9,19 +9,18 @@
 import UIKit
 
 extension ShareExtensionHelper {
-    static let cliqzdownloadURL = URL(string:"https://cliqz.com/download")
     
     func getApplicationActivities() -> [UIActivity] {
         let applicationActivities = [WiFiProtectionActivity()]
         return applicationActivities
     }
     
-    func createCliqzTabActivityController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: String?) -> Void) -> UIActivityViewController {
+    func createStartTabActivityController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: String?) -> Void) -> UIActivityViewController {
         var activityItems = [AnyObject]()
-        let title = NSLocalizedString("Hey, I would like to invite you to try the Cliqz Browser.", tableName: "Cliqz", comment: "Sharing FreshTab message")
-        activityItems.append(TitleActivityItemProvider(title: title))
+        let shareStartTabtitle = String(format: NSLocalizedString("Hey, I would like to invite you to try the %@ Browser.", tableName: "Cliqz", comment: "Sharing StartTab message"), UserAgentConstants.appName)
+        activityItems.append(TitleActivityItemProvider(title: shareStartTabtitle))
         
-        if let cliqzdownloadURL = ShareExtensionHelper.cliqzdownloadURL {
+        if let cliqzdownloadURL = UserAgentConstants.storeURL {
             activityItems.append(cliqzdownloadURL as AnyObject)
         }
         
