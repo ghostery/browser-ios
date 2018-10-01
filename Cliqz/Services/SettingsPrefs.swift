@@ -29,7 +29,7 @@ class SettingsPrefs {
     static let SendCrashReports = "sendCrashReports"
     static let SendUsageData = "sendUsageData"
 
-	static let SearchBackendOptions = ["DE", "US", "FR"]
+	static let SearchBackendOptions = ["DE", "US", "FR", "IT", "ES", "UK"]
 
 	var profile: Profile?
 
