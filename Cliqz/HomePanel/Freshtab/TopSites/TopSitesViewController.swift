@@ -9,6 +9,11 @@
 import Foundation
 import RxSwift
 
+protocol FreshTabDelegate: class {
+    func showTopSitesOVerlay()
+    func hideTopSitesOVerlay()
+}
+
 struct TopSitesUX {
 	static let TopSitesMinHeight: CGFloat = 95.0
 	static let TopSitesMaxHeight: CGFloat = 185.0
@@ -21,6 +26,7 @@ struct TopSitesUX {
 class TopSitesViewController: UIViewController, HomePanel {
 
 	weak var homePanelDelegate: HomePanelDelegate?
+    weak var freshTabDelegate: FreshTabDelegate?
 
 	fileprivate let dataSource: TopSitesDataSource!
 
@@ -143,12 +149,13 @@ extension TopSitesViewController {
 		}
 	}
 
-	fileprivate func removeDeletedTopSites() {
+    func removeDeletedTopSites() {
 		if let cells = self.topSitesCollection.visibleCells as? [TopSiteViewCell] {
 			for cell in cells {
 				cell.isDeleteMode = false
 			}
 		}
+        self.freshTabDelegate?.hideTopSitesOVerlay()
         self.dataSource.refresh()
 	}
 
@@ -207,6 +214,7 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
                 cell.isDeleteMode = true
             }
         }
+        self.freshTabDelegate?.showTopSitesOVerlay()
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
