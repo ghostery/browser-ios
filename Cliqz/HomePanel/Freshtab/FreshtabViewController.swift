@@ -39,6 +39,8 @@ class FreshtabViewController: UIViewController, HomePanel {
 	fileprivate let topSitesViewController = TopSitesViewController(dataSource: TopSitesDataSource.instance)
 	fileprivate let newsViewController = NewsViewController(dataSource: NewsDataSource.instance)
     
+    fileprivate let topSitesEditModeOverlay = UIView()
+    
     fileprivate let container = UIView()
 
 	fileprivate var scrollCount = 0
@@ -124,6 +126,11 @@ class FreshtabViewController: UIViewController, HomePanel {
                 make.leading.trailing.equalToSuperview()
                 make.bottom.equalTo(self.newsViewController.view.snp.bottom)
             }
+            
+            self.topSitesEditModeOverlay.snp.updateConstraints({ (make) in
+                make.top.equalTo(self.topSitesViewController.view.snp.bottom)
+                make.left.height.width.equalTo(self.view)
+            })
         }
     }
 
@@ -192,6 +199,7 @@ class FreshtabViewController: UIViewController, HomePanel {
         normalModeView.addGestureRecognizer(pan)
         
         self.topSitesViewController.homePanelDelegate = self.homePanelDelegate
+        self.topSitesViewController.freshTabDelegate = self
         self.addChildViewController(self.topSitesViewController)
         if let topSites = self.topSitesViewController.view {
             self.container.addSubview(topSites)
@@ -205,8 +213,18 @@ class FreshtabViewController: UIViewController, HomePanel {
             newsView.backgroundColor = UIColor.clear
         }
 		
+        // Added topSitesEditModeOverlay view
+        self.view.addSubview(self.topSitesEditModeOverlay)
+        self.hideTopSitesOVerlay()
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cancelActions))
+        tapGestureRecognizer.delegate = self
+        self.topSitesEditModeOverlay.addGestureRecognizer(tapGestureRecognizer)
+        
 	}
     
+    @objc fileprivate func cancelActions(_ sender: UITapGestureRecognizer) {
+        topSitesViewController.removeDeletedTopSites()
+    }
     @objc func dismissKeyboard(_ sender: Any? = nil) {
         view.window?.rootViewController?.view.endEditing(true)
     }
@@ -269,4 +287,15 @@ extension FreshtabViewController {
 		}
 		// TODO: ...
 	}
+}
+
+extension FreshtabViewController : FreshTabDelegate {
+    
+    func showTopSitesOVerlay() {
+        self.topSitesEditModeOverlay.isHidden = false
+    }
+    
+    func hideTopSitesOVerlay() {
+        self.topSitesEditModeOverlay.isHidden = true
+    }
 }
