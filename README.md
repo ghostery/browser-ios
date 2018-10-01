@@ -23,6 +23,7 @@ Building the code
 -----------------
 
 > __As of April 2018, this project requires Xcode 9.3.__
+> __Latest Node version 10 breaks. Use node v9.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install Carthage
@@ -30,17 +31,26 @@ Building the code
     brew update
     brew install carthage
     ```
-1. Clone the repository:
+1. Install [cocoadpods](https://cocoapods.org/)
     ```shell
-    git clone https://github.com/cliqz-oss/ghostery-ios
+    sudo gem install cocoapods
+    ```
+1. Fork the repository https://github.com/ghostery/browser-ios
+1. Clone the forked repository:
+    ```shell
+    git clone https://github.com/YOUR_USERNAME/ghostery-ios
     ```
 1. Pull in the project dependencies:
     ```shell
     cd ghostery-ios
     sh ./bootstrap.sh
+    npm install
+    npm run bundle
+    pod install
     ```
-1. Open `Client.xcodeproj` in Xcode.
+1. Open `Client.xcworkspace` in Xcode.
 1. Build the `Fennec` scheme in Xcode.
+
 
 ## Building User Scripts
 
