@@ -14,7 +14,10 @@ class RegionalSettingsTableViewController: SubSettingsTableViewController {
     let telemetrySignalViewName = "search_results_from"
     static let regionsLocalizedStrings = ["region-DE" : NSLocalizedString("region-DE", tableName: "Cliqz", value: "Germany", comment: "Localized String for German region"),
                                           "region-FR" : NSLocalizedString("region-FR", tableName: "Cliqz", value: "France", comment: "Localized String for France region"),
-                                          "region-US" : NSLocalizedString("region-US", tableName: "Cliqz", value: "United States", comment: "Localized String for United States region")]
+                                          "region-US" : NSLocalizedString("region-US", tableName: "Cliqz", value: "United States", comment: "Localized String for United States region"),
+                                          "region-IT" : NSLocalizedString("region-IT", tableName: "Cliqz", value: "Italy", comment: "Localized String for Italy region"),
+                                          "region-ES" : NSLocalizedString("region-ES", tableName: "Cliqz", value: "Spain", comment: "Localized String for Spain region"),
+                                          "region-UK" : NSLocalizedString("region-UK", tableName: "Cliqz", value: "United Kingdom", comment: "Localized String for United Kingdom region")]
     var selectedRegion: String {
         get {
             return SettingsPrefs.shared.getRegionPref()
