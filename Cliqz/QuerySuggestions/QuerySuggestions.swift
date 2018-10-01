@@ -11,10 +11,13 @@ import UIKit
 class QuerySuggestions: NSObject {
     //MARK:- Constants
     static let ShowSuggestionsNotification = NSNotification.Name(rawValue: "ShowSuggestionsNotification")
+    private static let supportedRegions = ["DE", "US", "UK", "FR", "IT", "ES", "AU", "AUS", "RU", "CA"]
     
     //MARK:- public APIs
+    //TODO: optimize this method by storing current region and update it when use change it
     class func querySuggestionEnabledForCurrentRegion() -> Bool {
-        return SettingsPrefs.shared.getRegionPref() == "DE"
+        let currentRegion = SettingsPrefs.shared.getRegionPref()
+        return QuerySuggestions.supportedRegions.contains(currentRegion)
     }
     
     class func isEnabled() -> Bool {
