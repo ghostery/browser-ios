@@ -66,12 +66,15 @@ func getRemoteFrecencySQL() -> String {
 }
 
 func getLocalFrecencySQL() -> String {
+    /* Cliqz: change the LocalFrecencySQL to match with Cliqz tops sites
     let visitCountExpression = "((2 + localVisitCount) * (2 + localVisitCount))"
     let now = Date.nowMicroseconds()
     let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
     let ageDays = "((\(now) - localVisitDate) / \(microsecondsPerDay))"
 
     return "\(visitCountExpression) * max(2, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
+    */
+    return "(localVisitDate / (86400* 1000000) - (strftime('%s', date('now', '-6 months')) / 86400))"
 }
 
 fileprivate func computeWordsWithFilter(_ filter: String) -> [String] {
@@ -225,7 +228,10 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
     }
 
     private func topSiteClauses() -> (String, String) {
+        /* Cliqz: added condition on visits type
         let whereData = "(domains.showOnTopSites IS 1) AND (domains.domain NOT LIKE 'r.%') AND (domains.domain NOT LIKE 'google.%') "
+        */
+        let whereData = "(domains.showOnTopSites IS 1) AND (domains.domain NOT LIKE 'r.%') AND (domains.domain NOT LIKE 'google.%') AND (visits.type < 4 or visits.type == 6)"
         let groupBy = "GROUP BY domain_id "
         return (whereData, groupBy)
     }
@@ -314,12 +320,13 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
         // (Don't do that in the innermost: we want to get the full count, even if some visits are older.)
         // Discard all but the 1000 most frecent.
         // Compute and return the frecency for all 1000 URLs.
+        // Cliqz: changed the condition of the localVisitCount to be > 2 instead of > 0
         let frecenciedSQL = """
             SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency
             FROM (\(ungroupedSQL))
             WHERE (
                 -- Eliminate dead rows from coalescing.
-                ((localVisitCount > 0) OR (remoteVisitCount > 0)) AND
+                ((localVisitCount > 2) OR (remoteVisitCount > 0)) AND
                 -- Exclude really old items.
                 ((localVisitDate > \(sixMonthsAgo)) OR (remoteVisitDate > \(sixMonthsAgo)))
             )

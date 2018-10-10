@@ -1269,7 +1269,10 @@ class BrowserViewController: UIViewController {
         self.present(controller, animated: true, completion: nil)
     }
     
+    /* change the method modifier to pulbic so that it could be called from webView: didFinishNavigation in extension swift file
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
+    */
+    func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
         let notificationCenter = NotificationCenter.default
         var info = [AnyHashable: Any]()
         info["url"] = tab.url?.displayURL
@@ -1291,7 +1294,9 @@ class BrowserViewController: UIViewController {
 
         if let url = webView.url {
             if !url.isErrorPageURL, !url.isAboutHomeURL, !url.isFileURL {
+                /* Move calling `postLocationChangeNotificationForTab` to webView: didFinishNavigation to prevent inserting multiple visits for the same navigation
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
+                */
 
                 // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
                 // because that event wil not always fire due to unreliable page caching. This will either let us know that

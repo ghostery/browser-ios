@@ -279,6 +279,12 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if let tab = tabManager[webView] {
             navigateInTab(tab: tab, to: navigation)
+            
+            // Cliqz: Move calling `postLocationChangeNotificationForTab` to webView: didFinishNavigation to prevent inserting multiple visits for the same navigation
+            if let url = webView.url, !url.isErrorPageURL, !url.isAboutHomeURL, !url.isFileURL {
+                postLocationChangeNotificationForTab(tab, navigation: navigation)
+            }
+            
             // Cliqz: send page view signal
             if !tab.isPrivate && !(tab.url?.isAboutURL ?? true) {
                 TelemetryHelper.sendPageView()
