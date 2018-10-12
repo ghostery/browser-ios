@@ -143,7 +143,8 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
                                             defaultValue: false,
                                             titleText: NSLocalizedString("Close Forget Tabs", tableName: "Cliqz", comment: "Setting for closing forget tabs"),
                                             statusText: NSLocalizedString("When Leaving Forget Mode", tableName: "Cliqz", comment: "Will be displayed in Settings under 'Close Forget Tabs'")),
-                                ClearPrivateDataSetting(settings: self)]
+                                ClearPrivateDataSetting(settings: self),
+                                RestoreTopSitesSetting(settings: self)]
         
         return privacySettings
     }
