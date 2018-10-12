@@ -58,11 +58,23 @@ open class BrowserActions: RCTEventEmitter {
         var results: [[String: String]] = []
         if let r = HistoryListener.shared.historyResults {
             for site in r {
-                let d = ["url": site!.url, "title": site!.title]
-                results.append(d)
+                if let siteUrl = site?.url, let url = URL(string: siteUrl), !isDuckduckGoRedirectURL(url) {
+                    let d = ["url": site!.url, "title": site!.title]
+                    results.append(d)
+                }
             }
         }
         return results
     }
-
+    
+    private func isDuckduckGoRedirectURL(_ url: URL) -> Bool {
+        let urlString = url.absoluteString
+        if "duckduckgo.com" == url.host,
+            urlString.contains("kh="),
+            urlString.contains("uddg=") {
+            return true
+        }
+        
+        return false
+    }
 }
