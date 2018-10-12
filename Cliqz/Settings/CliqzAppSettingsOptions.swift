@@ -168,6 +168,64 @@ class AdBlockerSetting: CliqzOnOffSetting {
     }
 }
 
+class RestoreTopSitesSetting: Setting {
+    
+    let profile: Profile
+    weak var settingsViewController: SettingsTableViewController?
+    
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        self.settingsViewController = settings
+        let hiddenTopsitesCount = self.profile.history.getHiddenTopSitesCount()
+        var attributes: [NSAttributedStringKey : Any]?
+        if hiddenTopsitesCount > 0 {
+            attributes = [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]
+        } else {
+            attributes = [NSAttributedStringKey.foregroundColor: UIColor.lightGray]
+        }
+        
+        super.init(title: NSAttributedString(string: NSLocalizedString("Restore Most Visited Websites", tableName: "Cliqz", comment: "[Settings] Restore Most Visited Websites"), attributes: attributes))
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        guard self.profile.history.getHiddenTopSitesCount() > 0 else {
+            return
+        }
+        
+        let alertController = UIAlertController(
+            title: "",
+            message: NSLocalizedString("All most visited websites will be shown again on the startpage.", tableName: "Cliqz", comment: "[Settings] Text of the 'Restore Most Visited Websites' alert"),
+            preferredStyle: UIAlertControllerStyle.actionSheet)
+        
+        alertController.addAction(
+            UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "Cancel button in the 'Show blocked top-sites' alert"), style: .cancel) { (action) in
+                /* TODO: Telemetry
+                // log telemetry signal
+                let cancelSignal = TelemetryLogEventType.Settings("restore_topsites", "click", "cancel", nil, nil)
+                TelemetryLogger.sharedInstance.logEvent(cancelSignal)
+                */
+        })
+        alertController.addAction(
+            UIAlertAction(title: self.title?.string, style: .destructive) { (action) in
+                // reset top-sites
+                self.profile.history.resetHiddenTopSites()
+                
+                self.settingsViewController?.reloadSettings()
+                /* TODO: Telemetry
+                // log telemetry signal
+                let confirmSignal = TelemetryLogEventType.Settings("restore_topsites", "click", "confirm", nil, nil)
+                TelemetryLogger.sharedInstance.logEvent(confirmSignal)
+                */
+        })
+        navigationController?.present(alertController, animated: true, completion: nil)
+        /* TODO: Telemetry
+        // log telemetry signal
+        let restoreTopsitesSignal = TelemetryLogEventType.Settings("main", "click", "restore_topsites", nil, nil)
+        TelemetryLogger.sharedInstance.logEvent(restoreTopsitesSignal)
+        */
+    }
+}
+
 class FAQSetting: Setting {
     
     override var title: NSAttributedString? {
