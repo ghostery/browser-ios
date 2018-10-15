@@ -48,7 +48,7 @@ final class BlockListFileManager {
                 return
             }
         }
-        else if forIdentifier.contains("adblocker_"), let path = Bundle.main.path(forResource: forIdentifier, ofType: "json", inDirectory: "AdBlocker/Chunks") {
+        else if forIdentifier.contains("adblockerFile_"), let path = Bundle.main.path(forResource: forIdentifier, ofType: "json", inDirectory: "AdBlocker/Chunks") {
             completion(loadJson(path: path))
             return
         }
