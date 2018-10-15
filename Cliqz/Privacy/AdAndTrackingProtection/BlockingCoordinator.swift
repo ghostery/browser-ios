@@ -13,9 +13,13 @@ import Storage
 typealias BlockListIdentifier = String
 typealias JSONIdentifier = String
 
-enum BlockListType {
+enum BlockListType: Comparable {
     case antitracking
     case adblocker
+    
+    static func < (lhs: BlockListType, rhs: BlockListType) -> Bool {
+        return lhs == .antitracking && rhs == .adblocker
+    }
 }
 
 final class GlobalPrivacyQueue {
