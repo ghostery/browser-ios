@@ -143,7 +143,7 @@
 	<key>UIFileSharingEnabled</key>
 	<false/>
 	<key>UILaunchStoryboardName</key>
-	<string>GhosteryLaunchScreen</string>
+	<string>$(LAUNCH_SCREEN)</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
