@@ -11,6 +11,8 @@ MOZ_BUNDLE_SHARETO_ID = com.cliqz.ios.cliqzPaid.ShareTo
 
 CLIENT_ENTITLEMENT = Cliqz/Resources/PaidClient.entitlements
 
+LAUNCH_SCREEN = PaidLaunchScreen
+
 // Flag to indicate if we want to include the debug settings bundle or not
 INCLUDE_SETTINGS_BUNDLE = NO
 
