@@ -23,7 +23,7 @@ final class BlockListManager {
     
     func getBlockLists(forIdentifiers: [BlockListIdentifier], type: BlockListType, domain: String?, hitCache: Bool, callback: @escaping ([WKContentRuleList]) -> Void) {
         
-        var returnList = [WKContentRuleList]()
+        var returnList = [(String, WKContentRuleList)]()
         let dispatchGroup = DispatchGroup()
         let listStore = WKContentRuleListStore.default()
         for id in forIdentifiers {
@@ -33,18 +33,18 @@ final class BlockListManager {
                 listStore?.lookUpContentRuleList(forIdentifier: id) { (ruleList, error) in
                     //Thread: Main
                     if let ruleList = ruleList {
-                        //debugPrint("CACHE: FOUND list for identifier = \(id)")
-                        returnList.append(ruleList)
+                        //debugPrint("CACHE: FOUND list for identifier = \(id)"
+                        returnList.append((id, ruleList))
                         dispatchGroup.leave()
                     }
                     else {
                         //debugPrint("CACHE: did NOT find list for identifier = \(id)")
-                            self.loadFromDisk(id: id, type: type, domain: domain, completion: { (list) in
-                                if let list = list {
-                                    returnList.append(list)
-                                }
-                                dispatchGroup.leave()
-                            })
+                        self.loadFromDisk(id: id, type: type, domain: domain, completion: { (list) in
+                            if let list = list {
+                                returnList.append((id, list))
+                            }
+                            dispatchGroup.leave()
+                        })
                     }
                 }
             }
@@ -54,7 +54,7 @@ final class BlockListManager {
                 DispatchQueue.main.async {
                     self.loadFromDisk(id: id, type: type, domain: domain, completion: { (list) in
                         if let list = list {
-                            returnList.append(list)
+                            returnList.append((id, list))
                         }
                         dispatchGroup.leave()
                     })
@@ -65,7 +65,19 @@ final class BlockListManager {
         dispatchGroup.notify(queue: .global(qos: .utility)) {
             //reset
             self.previousOp = nil
-            callback(returnList)
+            
+            if type == .adblocker {
+                //sort the lists
+                returnList.sort(by: { (a, b) -> Bool in
+                    return a.0 < b.0
+                })
+            }
+            
+            let rules = returnList.map({ (elem) -> WKContentRuleList in
+                return elem.1
+            })
+            
+            callback(rules)
         }
     }
     
