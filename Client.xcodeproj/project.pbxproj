@@ -1382,7 +1382,6 @@
 		1E066FAB204D5B1C0017C800 /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Client.entitlements; sourceTree = "<group>"; };
 		1E0B0B77217485BB0088C520 /* Paid.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Paid.xcconfig; path = Configuration/Paid.xcconfig; sourceTree = "<group>"; };
 		1E0B0B8421748A2A0088C520 /* PaidClient.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = PaidClient.entitlements; sourceTree = "<group>"; };
-		1E0B0B8521748A2A0088C520 /* PaidShareTo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = PaidShareTo.entitlements; sourceTree = "<group>"; };
 		1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksModelExtensions.swift; sourceTree = "<group>"; };
 		1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzBookmarksPanel.swift; sourceTree = "<group>"; };
 		1E25A2C92121A7A80038D8D7 /* LocaleConstantsBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocaleConstantsBridge.m; sourceTree = "<group>"; };
@@ -1460,7 +1459,6 @@
 		1EEA36DC206401EB003B6AD5 /* CliqzTabLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTabLocationView.swift; sourceTree = "<group>"; };
 		1EEA36EC2067DD6F003B6AD5 /* VideoDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDownloader.swift; sourceTree = "<group>"; };
 		1EFE9F2D213976B10068DDE3 /* GhosteryClient.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = GhosteryClient.entitlements; sourceTree = "<group>"; };
-		1EFE9F2E213976B10068DDE3 /* GhosteryShareTo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = GhosteryShareTo.entitlements; sourceTree = "<group>"; };
 		280CB1361C20E0A3005AF147 /* BookmarksSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookmarksSynchronizer.swift; path = Sync/Synchronizers/Bookmarks/BookmarksSynchronizer.swift; sourceTree = SOURCE_ROOT; };
 		28126F471C2F948E006466CC /* SQLiteBookmarksHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksHelpers.swift; sourceTree = "<group>"; };
 		28126F6D1C2F94F9006466CC /* SQLiteBookmarksModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarksModel.swift; sourceTree = "<group>"; };
@@ -1882,7 +1880,6 @@
 		AFD165B820C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopulateBlockedTrackersOperation.swift; sourceTree = "<group>"; };
 		AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
 		AFE484D22056838500554B2E /* CliqzURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzURLBar.swift; sourceTree = "<group>"; };
-		AFEBA6F32135762200CE44B3 /* ShareTo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareTo.entitlements; sourceTree = "<group>"; };
 		AFECF63AADEF4013C5D72D77 /* Pods-Client.firefox.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Client.firefox.xcconfig"; path = "Pods/Target Support Files/Pods-Client/Pods-Client.firefox.xcconfig"; sourceTree = "<group>"; };
 		AFF2874D209B54F6001E9B59 /* CliqzHomePanels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHomePanels.swift; sourceTree = "<group>"; };
 		AFF28765209B5F6E001E9B59 /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
@@ -3198,6 +3195,8 @@
 		4F304596204FEE3B00C99162 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1E0B0B8421748A2A0088C520 /* PaidClient.entitlements */,
+				1EFE9F2D213976B10068DDE3 /* GhosteryClient.entitlements */,
 				4F19FBC520FE2DE300BF0643 /* GhosteryLaunchScreen.xib */,
 				1E3B3F2520C1590600C96736 /* Cliqz.stringsdict */,
 				AF6F247C20AF0749009C3D0D /* CliqzStrings.swift */,
@@ -4197,11 +4196,6 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				1E0B0B8421748A2A0088C520 /* PaidClient.entitlements */,
-				1E0B0B8521748A2A0088C520 /* PaidShareTo.entitlements */,
-				1EFE9F2D213976B10068DDE3 /* GhosteryClient.entitlements */,
-				1EFE9F2E213976B10068DDE3 /* GhosteryShareTo.entitlements */,
-				AFEBA6F32135762200CE44B3 /* ShareTo.entitlements */,
 				4F8F3C0D202CB39F001C1A0F /* Cliqz */,
 				E6C191D41E38F7B7000A213B /* Cartfile */,
 				E6C191D51E38F7B7000A213B /* Cartfile.resolved */,
@@ -6997,7 +6991,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SHARETO_ENTITLEMENT)";
+				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -8152,7 +8146,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SHARETO_ENTITLEMENT)";
+				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -9895,7 +9889,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SHARETO_ENTITLEMENT)";
+				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -10822,7 +10816,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SHARETO_ENTITLEMENT)";
+				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -11411,7 +11405,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SHARETO_ENTITLEMENT)";
+				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -11822,7 +11816,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "$(SHARETO_ENTITLEMENT)";
+				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
