@@ -95,12 +95,12 @@ final class BlockListIdentifiers {
         }
         
         
-        //remove extension and sort
+        //remove extension (and sort)
         return paths.map({ (p) -> String in
             return adblockerFilename(path: p)
-        }).sorted(by: { (p1, p2) -> Bool in
-            return adblockerFileNumber(path: p1) < adblockerFileNumber(path: p2)
-        })
+        })//.sorted(by: { (p1, p2) -> Bool in
+        //    return adblockerFileNumber(path: p1) < adblockerFileNumber(path: p2)
+        //})
     }
 }
 
