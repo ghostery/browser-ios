@@ -28,8 +28,8 @@ final class BlockListFileManager {
         //In the case type == .antitracking, the blockListIdentifiers need to be mapped to jsonIdentifiers
         //Then merge all the small json block lists into a big one.
         
-        func loadJson(path: String) -> String {
-            guard let jsonFileContent = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) else { fatalError("Rule list for \(forIdentifier) doesn't exist!") }
+        func loadJson(path: String) -> String? {
+            guard let jsonFileContent = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) else { return nil }//fatalError("Rule list for \(forIdentifier) doesn't exist!") }
             return jsonFileContent
         }
         
