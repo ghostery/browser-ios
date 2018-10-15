@@ -238,4 +238,60 @@ platform :ios do
     )
   end
 
+
+  lane :paidBeta do
+
+    # Configuring Sentry DSN
+    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
+
+    # Building ReactNative Entension
+    sh("cd .. && npm run bundle")
+
+    create_keychain(
+      name: ENV["MATCH_KEYCHAIN_NAME"],
+      password: ENV["MATCH_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
+
+    match(
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+      keychain_password: ENV["MATCH_PASSWORD"],
+      git_branch: "cliqzPaid-ios",
+      team_id: ENV["DEVELOPER_TEAM_ID"],
+      app_identifier: ["com.cliqz.ios.cliqzPaid", "com.cliqz.ios.cliqzPaid.ShareTo", "*"],
+      readonly: true,
+      verbose: true
+    )
+
+    build_app(
+      workspace: "Client.xcworkspace",
+      clean: "true",
+      scheme: "Paid",
+      xcconfig: "Client/Configuration/Paid.xcconfig",
+      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DBETA'",
+      skip_profile_detection: "true",
+      export_options: {
+        provisioningProfiles: { 
+          "com.cliqz.ios.cliqzPaid" => "match AppStore com.cliqz.ios.cliqzPaid",
+          "com.cliqz.ios.cliqzPaid.ShareTo" => "match AppStore com.cliqz.ios.cliqzPaid.ShareTo",
+        }
+      }
+    )
+
+    upload_to_testflight(
+      changelog: "CliqzPaid Beta",
+      demo_account_required: "false",
+      skip_waiting_for_build_processing: "true"
+    )
+
+    sentry_upload_dsym(
+      auth_token: ENV["SENTRY_AUTH_TOKEN"],
+      org_slug: 'cliqz',
+      project_slug: 'cliqzPaid',
+    )
+  end
+
 end
