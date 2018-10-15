@@ -42,6 +42,7 @@
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
 		1E0B0B78217485BB0088C520 /* Paid.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1E0B0B77217485BB0088C520 /* Paid.xcconfig */; };
+		1E0B0B872174C20E0088C520 /* PaidLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E0B0B862174C20D0088C520 /* PaidLaunchScreen.xib */; };
 		1E138D7F20A2E4F400B82C13 /* BookmarksModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */; };
 		1E138E1420A5983D00B82C13 /* CliqzBookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */; };
 		1E25A2D32121A7AA0038D8D7 /* LocaleConstantsBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E25A2C92121A7A80038D8D7 /* LocaleConstantsBridge.m */; };
@@ -1382,6 +1383,7 @@
 		1E066FAB204D5B1C0017C800 /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Client.entitlements; sourceTree = "<group>"; };
 		1E0B0B77217485BB0088C520 /* Paid.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Paid.xcconfig; path = Configuration/Paid.xcconfig; sourceTree = "<group>"; };
 		1E0B0B8421748A2A0088C520 /* PaidClient.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = PaidClient.entitlements; sourceTree = "<group>"; };
+		1E0B0B862174C20D0088C520 /* PaidLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PaidLaunchScreen.xib; sourceTree = "<group>"; };
 		1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksModelExtensions.swift; sourceTree = "<group>"; };
 		1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzBookmarksPanel.swift; sourceTree = "<group>"; };
 		1E25A2C92121A7A80038D8D7 /* LocaleConstantsBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocaleConstantsBridge.m; sourceTree = "<group>"; };
@@ -3195,6 +3197,7 @@
 		4F304596204FEE3B00C99162 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1E0B0B862174C20D0088C520 /* PaidLaunchScreen.xib */,
 				1E0B0B8421748A2A0088C520 /* PaidClient.entitlements */,
 				1EFE9F2D213976B10068DDE3 /* GhosteryClient.entitlements */,
 				4F19FBC520FE2DE300BF0643 /* GhosteryLaunchScreen.xib */,
@@ -5467,6 +5470,7 @@
 				EB54A8762028CE4000018880 /* disconnect-advertising.json in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
+				1E0B0B872174C20E0088C520 /* PaidLaunchScreen.xib in Resources */,
 				D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
 				74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */,
