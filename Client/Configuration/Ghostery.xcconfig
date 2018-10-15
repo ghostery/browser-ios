@@ -9,9 +9,7 @@ MOZ_BUNDLE_ID = com.evidon.Ghostery
 
 MOZ_BUNDLE_SHARETO_ID = com.evidon.Ghostery.ShareTo
 
-CLIENT_ENTITLEMENT = GhosteryClient.entitlements
-
-SHARETO_ENTITLEMENT = GhosteryShareTo.entitlements
+CLIENT_ENTITLEMENT = Cliqz/Resources/GhosteryClient.entitlements
 
 // Flag to indicate if we want to include the debug settings bundle or not
 INCLUDE_SETTINGS_BUNDLE = NO
