@@ -9,9 +9,7 @@ MOZ_BUNDLE_ID = com.cliqz.ios.cliqzPaid
 
 MOZ_BUNDLE_SHARETO_ID = com.cliqz.ios.cliqzPaid.ShareTo
 
-CLIENT_ENTITLEMENT = PaidClient.entitlements
-
-SHARETO_ENTITLEMENT = PaidShareTo.entitlements
+CLIENT_ENTITLEMENT = Cliqz/Resources/PaidClient.entitlements
 
 // Flag to indicate if we want to include the debug settings bundle or not
 INCLUDE_SETTINGS_BUNDLE = NO
