@@ -11,7 +11,7 @@ import UIKit
 class QuerySuggestions: NSObject {
     //MARK:- Constants
     static let ShowSuggestionsNotification = NSNotification.Name(rawValue: "ShowSuggestionsNotification")
-    private static let supportedRegions = ["DE", "US", "UK", "FR", "IT", "ES", "AU", "AUS", "RU", "CA"]
+    private static let supportedRegions = ["DE", "US", "GB", "FR", "IT", "ES", "AU", "AUS", "RU", "CA"]
     
     //MARK:- public APIs
     //TODO: optimize this method by storing current region and update it when use change it
