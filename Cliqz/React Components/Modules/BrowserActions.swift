@@ -84,7 +84,7 @@ open class BrowserActions: RCTEventEmitter {
                 let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
                 self?.currentDbQuery = deferred as? Cancellable
                 
-                deferred.uponQueue(.main) { result in
+                deferred.uponQueue(.main) { [weak self] result in
                     defer {
                         self?.currentDbQuery = nil
                     }
@@ -100,7 +100,7 @@ open class BrowserActions: RCTEventEmitter {
                         var results: [[String: String]] = []
                         
                         for site in cursor {
-                            if let site = site {
+                            if let site = site, let url = URL(string: site.url), self?.isDuckduckGoRedirectURL(url) == false {
                                 let d = ["url": site.url, "title": site.title]
                                 results.append(d)
                             }
