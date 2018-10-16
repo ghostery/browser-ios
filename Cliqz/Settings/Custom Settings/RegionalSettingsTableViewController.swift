@@ -17,7 +17,7 @@ class RegionalSettingsTableViewController: SubSettingsTableViewController {
                                           "region-US" : NSLocalizedString("region-US", tableName: "Cliqz", value: "United States", comment: "Localized String for United States region"),
                                           "region-IT" : NSLocalizedString("region-IT", tableName: "Cliqz", value: "Italy", comment: "Localized String for Italy region"),
                                           "region-ES" : NSLocalizedString("region-ES", tableName: "Cliqz", value: "Spain", comment: "Localized String for Spain region"),
-                                          "region-UK" : NSLocalizedString("region-UK", tableName: "Cliqz", value: "United Kingdom", comment: "Localized String for United Kingdom region")]
+                                          "region-GB" : NSLocalizedString("region-GB", tableName: "Cliqz", value: "United Kingdom", comment: "Localized String for United Kingdom region")]
     var selectedRegion: String {
         get {
             return SettingsPrefs.shared.getRegionPref()
