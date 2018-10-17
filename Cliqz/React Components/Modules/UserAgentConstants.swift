@@ -53,6 +53,8 @@ open class UserAgentConstants : RCTEventEmitter {
         return "9"
         #elseif GHOSTERY
         return "5"
+        #elseif PAID
+        return "6"
         #else
         return "0"
         #endif
