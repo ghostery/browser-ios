@@ -41,8 +41,37 @@ extension UIImage {
     }
 
 	static func defaultFavicon() -> UIImage? {
-		return UIImage(named: "ghosteryFavicon")
+		#if PAID
+        return UIImage(named: "PaidFavicon")
+        #else
+        return UIImage(named: "ghosteryFavicon")
+        #endif
 	}
+    
+    static func tabTrayGhostModeIcon() -> UIImage? {
+        #if PAID
+            return UIImage(named: "ghost_mode_Paid")
+        #else
+            return UIImage(named: "ghost_mode_Ghostery")
+        #endif
+        
+    }
+    
+    static func controlCenterNormalIcon() -> UIImage? {
+        #if PAID
+        return UIImage(named: "control_center_normal_Paid")
+        #else
+        return UIImage(named: "ghosty")
+        #endif
+    }
+    
+    static func controlCenterPrivateIcon() -> UIImage? {
+        #if PAID
+        return UIImage(named: "control_center_private_Paid")
+        #else
+        return UIImage(named: "ghostyPrivate")
+        #endif
+    }
     
     class func circle(diameter: CGFloat, color: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: diameter, height: diameter), false, 0)
