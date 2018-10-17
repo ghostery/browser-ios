@@ -14,7 +14,7 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ghostery_splash" translatesAutoresizingMaskIntoConstraints="NO" id="8jg-1f-0sB">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Paid_splash" translatesAutoresizingMaskIntoConstraints="NO" id="8jg-1f-0sB">
                     <rect key="frame" x="182" y="175" width="116" height="130"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="116" id="Dlx-Tr-opw"/>
@@ -33,6 +33,6 @@
         </view>
     </objects>
     <resources>
-        <image name="ghostery_splash" width="116" height="130"/>
+        <image name="Paid_splash" width="70" height="70"/>
     </resources>
 </document>

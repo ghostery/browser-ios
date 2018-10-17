@@ -32,20 +32,17 @@ open class UserAgentConstants : RCTEventEmitter {
             //this is an old ghostery user
             return "16917";
         }
-        else {
-            let installDate: Date
-            if let installDateTime = LocalDataStore.value(forKey: InstallDateKey) as? Double {
-                installDate = Date(timeIntervalSince1970: installDateTime)
-            }
-            else {
-                installDate = Date()
-                //register the install date
-                LocalDataStore.set(value: installDate.timeIntervalSince1970, forKey: InstallDateKey)
-            }
-            return String(installDate.daysSince1970())
-        }
         #endif
-        //return "16917";
+        let installDate: Date
+        if let installDateTime = LocalDataStore.value(forKey: InstallDateKey) as? Double {
+            installDate = Date(timeIntervalSince1970: installDateTime)
+        }
+        else {
+            installDate = Date()
+            //register the install date
+            LocalDataStore.set(value: installDate.timeIntervalSince1970, forKey: InstallDateKey)
+        }
+        return String(installDate.daysSince1970())
     }
 
     private func getProductType() -> String {
