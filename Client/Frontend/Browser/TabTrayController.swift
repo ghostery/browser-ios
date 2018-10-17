@@ -1034,7 +1034,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
         /* Cliqz: changed the image icon
         let imageView = UIImageView(image: UIImage(named: "largePrivateMask"))
         */
-        let imageView = UIImageView(image: UIImage(named: "ghost_mode"))
+        let imageView = UIImageView(image: UIImage.tabTrayGhostModeIcon())
         return imageView
     }()
 

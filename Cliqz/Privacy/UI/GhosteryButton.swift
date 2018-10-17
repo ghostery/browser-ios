@@ -45,17 +45,17 @@ class GhosteryButton: InsetButton {
     func setUpConstaints(_ theme: Theme) {
         
         if theme == .Normal {
-            ghosty.image = UIImage.init(named: "ghosty")
+            ghosty.image = UIImage.controlCenterNormalIcon()
         }
         else {
-            ghosty.image = UIImage.init(named: "ghostyPrivate")
+            ghosty.image = UIImage.controlCenterPrivateIcon()
         }
         
         let height: CGFloat = 25.0
         let width = (ghosty.image?.widthOverHeight() ?? 1.0) * height
         
         var centerDifference: CGFloat = 0.0
-        if theme == .Private, let normalImage = UIImage.init(named: "ghosty"), let privImage = ghosty.image {
+        if theme == .Private, let normalImage = UIImage.controlCenterNormalIcon(), let privImage = ghosty.image {
             let ratioNormal = normalImage.widthOverHeight()
             let ratioPrivate = privImage.widthOverHeight()
             let widthNormal = ratioNormal * height

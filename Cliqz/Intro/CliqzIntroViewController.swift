@@ -607,9 +607,11 @@ struct CliqzIntroCard: Codable {
     static func defaultCards() -> [CliqzIntroCard] {
         
         var oldUser: Bool = false
+        #if GHOSTERY
         if let _ = UserDefaults.standard.value(forKey: HasRunBeforeKey) as? String {
             oldUser = true
         }
+        #endif
         
         let OnboardingStrings = CliqzStrings.Onboarding()
         
