@@ -74,9 +74,9 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         
-        self.panels = CliqzHomePanels().enabledPanels
+        self.panels = CliqzHomePanels().getEnabledPanels()
         
-        let imageNames = ["panelIconFreshtab", "panelIconCliqzHistory", "panelIconOffrz", "panelIconFavorite"]
+        let imageNames = self.panels.map { $0.imageName }
         let images = imageNames.map { (name) -> UIImage in return UIImage.templateImageNamed(name)! }
         segmentedControl =  UISegmentedControl(items: images)
         
