@@ -47,6 +47,7 @@
 		1E138E1420A5983D00B82C13 /* CliqzBookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */; };
 		1E25A2D32121A7AA0038D8D7 /* LocaleConstantsBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E25A2C92121A7A80038D8D7 /* LocaleConstantsBridge.m */; };
 		1E25A2D42121A7AA0038D8D7 /* LocaleConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E25A2D22121A7A90038D8D7 /* LocaleConstants.swift */; };
+		1E2720CB21788DD000A8ADD4 /* PaidControlCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2720CA21788DD000A8ADD4 /* PaidControlCenterViewController.swift */; };
 		1E2C202020AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */; };
 		1E2C227C20B4149000AA00B5 /* SendUsageDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */; };
 		1E2E551221187407003B50BE /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C75DF2207584C300BB8AD0 /* UIImageViewAligned.m */; };
@@ -1388,6 +1389,7 @@
 		1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzBookmarksPanel.swift; sourceTree = "<group>"; };
 		1E25A2C92121A7A80038D8D7 /* LocaleConstantsBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocaleConstantsBridge.m; sourceTree = "<group>"; };
 		1E25A2D22121A7A90038D8D7 /* LocaleConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocaleConstants.swift; sourceTree = "<group>"; };
+		1E2720CA21788DD000A8ADD4 /* PaidControlCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaidControlCenterViewController.swift; sourceTree = "<group>"; };
 		1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzSiteTableViewCell.swift; sourceTree = "<group>"; };
 		1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendUsageDataTableViewController.swift; sourceTree = "<group>"; };
 		1E3B3F2420C1590600C96736 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
@@ -3537,6 +3539,7 @@
 				4F4033D72086575500AD2A8D /* OverviewViewController.swift */,
 				4F4033D92086577D00AD2A8D /* GlobalTrackersViewController.swift */,
 				4F82FDB6208F2D3E002CED25 /* TrackersController.swift */,
+				1E2720CA21788DD000A8ADD4 /* PaidControlCenterViewController.swift */,
 			);
 			path = ControlCenter;
 			sourceTree = "<group>";
@@ -6283,6 +6286,7 @@
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
 				1EDF0B24207B86DA00856493 /* QuerySuggestions.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
+				1E2720CB21788DD000A8ADD4 /* PaidControlCenterViewController.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
 				E65075521E37F6D1006961AC /* UIViewExtensions.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WKNavigationDelegate.swift in Sources */,
