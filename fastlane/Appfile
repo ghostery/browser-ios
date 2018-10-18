@@ -15,5 +15,8 @@ for_platform :ios do
   for_lane :release do
     app_identifier 'com.evidon.Ghostery'
   end
+  for_lane :paidBeta do
+    app_identifier 'com.cliqz.ios.cliqzPaid'
+  end
   
 end
