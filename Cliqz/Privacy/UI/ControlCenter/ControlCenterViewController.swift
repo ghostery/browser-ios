@@ -82,21 +82,13 @@ class ControlCenterViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setupComponents()
-        self.panelSwitchControl.selectedSegmentIndex = 0
-        self.switchPanel(self.panelSwitchControl)
 	}
 
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-	}
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
-	private func setupComponents() {
+    func setupComponents() {
 		setupPanelSwitchControl()
 		setupPanelContainer()
+        self.panelSwitchControl.selectedSegmentIndex = 0
+        self.switchPanel(self.panelSwitchControl)
 	}
 
 	func setupPanelContainer() {
