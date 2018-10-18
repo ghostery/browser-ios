@@ -74,11 +74,14 @@ class OffrzViewController: UIViewController, HomePanel {
     }
     
     private func loadOffrz() {
-        self.offrzDataSource.observable.asObserver().subscribe(onNext: {[weak self] value in
-            self?.refreshView()
-        }).disposed(by: disposeBag)
+        #if !PAID
+            self.offrzDataSource.observable.asObserver().subscribe(onNext: {[weak self] value in
+                self?.refreshView()
+            }).disposed(by: disposeBag)
         
-        self.offrzDataSource.loadOffrz()
+            self.offrzDataSource.loadOffrz()
+        #endif
+        
     }
     
     private func refreshView() {
