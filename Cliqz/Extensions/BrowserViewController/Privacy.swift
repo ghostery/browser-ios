@@ -55,7 +55,7 @@ extension BrowserViewController {
         }
     }
 	
-    func showControlCenter(pageUrl: String? = nil) {
+    func showControlCenter(pageUrl: String) {
         
         func applyShadow(view: UIView) {
             view.layer.shadowColor = UIColor.black.cgColor
@@ -64,13 +64,14 @@ extension BrowserViewController {
             view.layer.shadowOffset = CGSize(width: 0, height: 4)
         }
         
-		let controlCenter = ControlCenterViewController()
-		controlCenter.delegate = self
+        #if PAID
+            let controlCenter = PaidControlCenterViewController()
+        #else
+            let controlCenter = ControlCenterViewController()
+        #endif
+        controlCenter.delegate = self
         controlCenter.privateMode = self.tabManager.selectedTab?.isPrivate ?? false
-
-        if let pageUrl = pageUrl {
-            controlCenter.pageURL = pageUrl
-        }
+        controlCenter.pageURL = pageUrl
 		
         let (device,orientation) = UIDevice.current.getDeviceAndOrientation()
         
