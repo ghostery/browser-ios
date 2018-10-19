@@ -84,9 +84,9 @@ node('mac-vm-host') {
                                 passwordVariable: 'GITHUB_PASSWORD',
                                 usernameVariable: 'GITHUB_USERNAME',
                             ],
-                            string(credentialsId: 'c9d7aaae-25ee-4b74-b03f-d50312c53edd', variable: 'ITUNES_USER'),
+                            string(credentialsId: '8b4f7459-c446-4058-be61-3c3d98fe72e2', variable: 'ITUNES_USER'),
                             string(credentialsId: 'c454a3e9-83af-480a-82fe-08c858512140', variable: 'SentryDSN'),
-                            string(credentialsId: '070139a0-b210-4692-ab5f-5444f4aadac1', variable: 'FASTLANE_PASSWORD'),
+                            string(credentialsId: '05be12cd-5177-4adf-9812-809f01451fa0', variable: 'FASTLANE_PASSWORD'),
                             string(credentialsId: 'ee93743c-b0be-46aa-b49a-ab3caaea4f67', variable: 'MATCH_PASSWORD'),
                             string(credentialsId: 'f206e880-e09a-4369-a3f6-f86ee94481f2', variable: 'SENTRY_AUTH_TOKEN'),
                             string(credentialsId: 'ab91f92a-4588-4034-8d7f-c1a741fa31ab', variable: 'FASTLANE_ITC_TEAM_ID')])
