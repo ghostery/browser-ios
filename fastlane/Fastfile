@@ -244,6 +244,9 @@ platform :ios do
     # Configuring Sentry DSN
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
 
+    # Configuring VPN
+    sh("cd .. && plutil -replace VPNPass -string $VPNPass Client/Info.plist")
+
     # Building ReactNative Entension
     sh("cd .. && npm run bundle")
 

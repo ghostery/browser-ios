@@ -86,6 +86,7 @@ node('mac-vm-host') {
                             ],
                             string(credentialsId: '8b4f7459-c446-4058-be61-3c3d98fe72e2', variable: 'ITUNES_USER'),
                             string(credentialsId: 'c454a3e9-83af-480a-82fe-08c858512140', variable: 'SentryDSN'),
+                            string(credentialsId: 'b4d6c48f-2b1e-4f24-8d9f-5f2d8eb4df64', variable: 'VPNPass'),
                             string(credentialsId: '05be12cd-5177-4adf-9812-809f01451fa0', variable: 'FASTLANE_PASSWORD'),
                             string(credentialsId: 'ee93743c-b0be-46aa-b49a-ab3caaea4f67', variable: 'MATCH_PASSWORD'),
                             string(credentialsId: 'f206e880-e09a-4369-a3f6-f86ee94481f2', variable: 'SENTRY_AUTH_TOKEN'),

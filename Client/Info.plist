@@ -99,7 +99,7 @@
 	<key>PocketEnvironmentAPIKey</key>
 	<string>$(POCKET_API_KEY)</string>
 	<key>SentryDSN</key>
-	<string>$(SENTRY_DSN)</string>
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>CharisSILB.ttf</string>
@@ -181,5 +181,7 @@
 			<string></string>
 		</dict>
 	</array>
+	<key>VPNPass</key>
+	<string></string>
 </dict>
 </plist>
