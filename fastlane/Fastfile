@@ -42,6 +42,7 @@ platform :ios do
 
     import_cliqz_localizations(
       l10n_folder: "../build-tools/cliqzios-l10n",
+      app_name: ENV["app_name"]
     )
 
   end
