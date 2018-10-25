@@ -97,6 +97,7 @@ node('mac-vm-host') {
                                 set -e
                                 rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                                 rm -rf ../build-tools
+                                export app_name=Paid
                                 fastlane importLocalizations
                                 export MATCH_KEYCHAIN_NAME=ios-build.keychain
                                 fastlane paidBeta
@@ -123,6 +124,7 @@ node('mac-vm-host') {
                                 set -e
                                 rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                                 rm -rf ../build-tools
+                                export app_name=Ghostery
                                 fastlane importLocalizations
                             '''
                             if("${branchName}".contains("-beta")){

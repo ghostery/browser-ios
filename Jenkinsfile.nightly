@@ -97,6 +97,7 @@ node('mac-vm-host') {
                             rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                             export MATCH_KEYCHAIN_NAME=ios-build.keychain
                             rm -rf ../build-tools
+                            export app_name=Ghostery
                             fastlane importLocalizations
                             fastlane nightly
                         '''

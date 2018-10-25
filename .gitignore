@@ -43,7 +43,6 @@ IDEWorkspaceChecks.plist
 /fastlane/Snapfile
 /fastlane/SnapshotHelper.swift
 /fastlane/frames
-/fastlane/scripts
 /fastlane/templates
 #fastlane certificates, provisioning profiles, and symbolic files
 *.cer
