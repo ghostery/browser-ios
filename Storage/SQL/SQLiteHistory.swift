@@ -207,6 +207,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
         let (frecencyQuery, args) = getFrecencyQuery(historyLimit: limit, params: params)
 
         // We must project, because we get bookmarks in these results.
+        // Cliqz: Added condition for localVisitCount to be > 2
         let insertQuery = """
             WITH siteFrecency AS (\(frecencyQuery))
             INSERT INTO cached_top_sites
@@ -219,6 +220,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
                 FROM siteFrecency LEFT JOIN view_history_id_favicon ON
                     siteFrecency.historyID = view_history_id_favicon.id
             )
+            WHERE localVisitCount > 2
             """
 
         // @TODO: remove the LEFT JOIN to fill in the icon columns, it is just there because the code has been doing this historically.
@@ -320,13 +322,12 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
         // (Don't do that in the innermost: we want to get the full count, even if some visits are older.)
         // Discard all but the 1000 most frecent.
         // Compute and return the frecency for all 1000 URLs.
-        // Cliqz: changed the condition of the localVisitCount to be > 2 instead of > 0
         let frecenciedSQL = """
             SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency
             FROM (\(ungroupedSQL))
             WHERE (
                 -- Eliminate dead rows from coalescing.
-                ((localVisitCount > 2) OR (remoteVisitCount > 0)) AND
+                ((localVisitCount > 0) OR (remoteVisitCount > 0)) AND
                 -- Exclude really old items.
                 ((localVisitDate > \(sixMonthsAgo)) OR (remoteVisitDate > \(sixMonthsAgo)))
             )
