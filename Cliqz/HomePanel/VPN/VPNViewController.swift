@@ -9,7 +9,140 @@
 import UIKit
 import NetworkExtension
 
-//TODO: Take VPN code into a different module ?
+class VPN {
+    
+    static let shared = VPN()
+    
+    let shouldTryToReconnectKey = "VPNShouldTryToReconnectKey"
+    var shouldTryToReconnect: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: shouldTryToReconnectKey)
+            UserDefaults.standard.synchronize()
+        }
+        get {
+            if let value = UserDefaults.standard.value(forKey: shouldTryToReconnectKey) as? Bool {
+                return value
+            }
+            
+            return false //default
+        }
+    }
+    
+    let lastEndPointKey = "VPNLastEndPointKey"
+    var lastEndPoint: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: lastEndPointKey)
+            UserDefaults.standard.synchronize()
+        }
+        get {
+            if let value = UserDefaults.standard.value(forKey: lastEndPointKey) as? String {
+                return value
+            }
+            
+            return "" //default
+        }
+    }
+    
+    //do a last status, and try to reconnect if the last status is connected.
+    let lastStatusKey = "VPNLastStatusKey"
+    var lastStatus: NEVPNStatus {
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: lastStatusKey)
+            UserDefaults.standard.synchronize()
+        }
+        get {
+            if let statusRaw = UserDefaults.standard.value(forKey: lastStatusKey) as? Int {
+                if let status = NEVPNStatus(rawValue: statusRaw) {
+                    return status
+                }
+            }
+            
+            return .disconnected //default
+        }
+    }
+    
+    init() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(VPNStatusDidChange(notification:)),
+                                               name: .NEVPNStatusDidChange,
+                                               object: nil)
+    }
+    
+    func checkConnection() {
+        if (lastStatus == .connected && status != .connected) {
+            VPN.connect2VPN(endPoint: lastEndPoint)
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    var status: NEVPNStatus {
+        return NEVPNManager.shared().connection.status;
+    }
+    
+    
+    //TODO: Tries to reconnect without end. Maybe this is not a good idea.
+    @objc func VPNStatusDidChange(notification: Notification) {
+        //keep button up to date.
+        lastStatus = status
+        if (status == .disconnected && shouldTryToReconnect) {
+            VPN.connect2VPN(endPoint: lastEndPoint)
+        }
+    }
+    
+    static func disconnectVPN() {
+        VPN.shared.shouldTryToReconnect = false
+        NEVPNManager.shared().connection.stopVPNTunnel()
+    }
+    
+    static func connect2VPN(endPoint: String) {
+        
+        VPN.shared.shouldTryToReconnect = true
+        VPN.shared.lastEndPoint = endPoint
+        
+        //Insert credentials into Keychain
+        let username = "cliqz"
+        
+        guard let password = Bundle.main.object(forInfoDictionaryKey: "VPNPass") as? String, !password.isEmpty else {
+            //send a signal
+            return
+        }
+        
+        //TODO: This should be done better.
+        let keychain = DAKeychain.shared
+        keychain[username] = password
+        keychain["sharedSecret"] = "foxyproxy"
+        
+        NEVPNManager.shared().loadFromPreferences { (error) in
+            if NEVPNManager.shared().protocolConfiguration == nil || NEVPNManager.shared().protocolConfiguration?.serverAddress != endPoint {
+                let newIPSec = NEVPNProtocolIPSec()
+                //setUp the protocol
+                newIPSec.useExtendedAuthentication = true
+                
+                newIPSec.authenticationMethod = .sharedSecret
+                newIPSec.sharedSecretReference = keychain.load(withKey: "sharedSecret")
+                
+                newIPSec.username = "cliqz"
+                newIPSec.passwordReference = keychain.load(withKey: username)
+                newIPSec.serverAddress = endPoint;
+                newIPSec.disconnectOnSleep = false
+                
+                NEVPNManager.shared().protocolConfiguration = newIPSec
+                NEVPNManager.shared().isOnDemandEnabled = true
+                NEVPNManager.shared().isEnabled = true
+                NEVPNManager.shared().saveToPreferences(completionHandler: { (error) in
+                    try? NEVPNManager.shared().connection.startVPNTunnel()
+                })
+            }
+            else {
+                NEVPNManager.shared().isEnabled = true;
+                try? NEVPNManager.shared().connection.startVPNTunnel()
+            }
+        }
+    }
+}
 
 struct VPNUX {
     static let bgColor = UIColor(red:0.08, green:0.10, blue:0.11, alpha:1.00)
@@ -70,6 +203,8 @@ class VPNViewController: UIViewController {
         }
     }
     
+    var shouldVPNReconnect = false
+    
     let tableView = UITableView()
     let mapView = UIImageView()
     
@@ -77,6 +212,37 @@ class VPNViewController: UIViewController {
     let infoLabel = UILabel()
     
     let countryButtonHeight: CGFloat = 50.0
+    
+    var VPNStatus: NEVPNStatus {
+        return VPN.shared.status;
+    }
+    
+    var timer: Timer? = nil
+    
+    let connectDateKey = "VPNConnectDateKey"
+    var connectDate: Date? {
+        set {
+            if newValue == nil {
+                UserDefaults.standard.removeObject(forKey: connectDateKey)
+                UserDefaults.standard.synchronize()
+            }
+            else {
+                UserDefaults.standard.set(newValue, forKey: connectDateKey)
+                UserDefaults.standard.synchronize()
+            }
+        }
+        get {
+            if let cDate = UserDefaults.standard.value(forKey: connectDateKey) as? Date {
+                return cDate
+            }
+            
+            return nil //default
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -153,67 +319,25 @@ class VPNViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func disconnectVPN() {
-        NEVPNManager.shared().connection.stopVPNTunnel()
-    }
-    
-    func connect2VPN() {
-        
-        //Insert credentials into Keychain
-        let username = "cliqz"
-        
-        //        guard let password = Bundle.main.object(forInfoDictionaryKey: "VPNPass") as? String, !password.isEmpty else {
-        //            //send a signal
-        //            return
-        //        }
-        
-        //Delete this before moving the code
-        let password = "9kYF2SVEetmS"
-        
-        //TODO: This should be done better.
-        let keychain = DAKeychain.shared
-        keychain[username] = password
-        keychain["sharedSecret"] = "foxyproxy"
-        
-        NEVPNManager.shared().loadFromPreferences { [unowned self] (error) in
-            if NEVPNManager.shared().protocolConfiguration == nil || NEVPNManager.shared().protocolConfiguration?.serverAddress != self.selectedCountry.endPoint() {
-                let newIPSec = NEVPNProtocolIPSec()
-                //setUp the protocol
-                newIPSec.useExtendedAuthentication = true
-                
-                newIPSec.authenticationMethod = .sharedSecret
-                newIPSec.sharedSecretReference = keychain.load(withKey: "sharedSecret")
-                
-                newIPSec.username = "cliqz"
-                newIPSec.passwordReference = keychain.load(withKey: username)
-                newIPSec.serverAddress = self.selectedCountry.endPoint()
-                newIPSec.disconnectOnSleep = false
-                
-                NEVPNManager.shared().protocolConfiguration = newIPSec
-                NEVPNManager.shared().isEnabled = true
-                NEVPNManager.shared().saveToPreferences(completionHandler: { (error) in
-                    try? NEVPNManager.shared().connection.startVPNTunnel()
-                })
-            }
-            else {
-                NEVPNManager.shared().isEnabled = true;
-                try? NEVPNManager.shared().connection.startVPNTunnel()
-            }
-        }
-    }
-    
     func updateConnectButton() {
-        
-        let VPNStatus: NEVPNStatus = NEVPNManager.shared().connection.status
         
         if VPNStatus == .connected {
             self.connectButton.set(state: .Disconnect)
+            //start timer
+            timer = Timer.scheduledTimer(timeInterval: 0.95, target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
+            timer?.fire()
+            if connectDate == nil {
+                connectDate = Date()
+            }
         }
         else if VPNStatus == .disconnected {
             if self.connectButton.currentState == .Connecting || self.connectButton.currentState == .Connect {
                 self.connectButton.set(state: .Retry)
             }
             self.connectButton.set(state: .Connect)
+            timer?.invalidate()
+            timer = nil
+            connectDate = nil
         }
         else if VPNStatus == .disconnecting {
             self.connectButton.set(state: .Disconnecting)
@@ -227,7 +351,7 @@ class VPNViewController: UIViewController {
     }
     
     func updateMapView() {
-        let VPNStatus: NEVPNStatus = NEVPNManager.shared().connection.status
+        
         if VPNStatus == .connected {
             //active image
             mapView.image = UIImage(named: "VPNMapActive")
@@ -242,16 +366,52 @@ class VPNViewController: UIViewController {
         //keep button up to date.
         updateConnectButton()
         updateMapView()
+        
+        if (VPNStatus == .disconnected && shouldVPNReconnect == true) {
+            shouldVPNReconnect = false
+            VPN.connect2VPN(endPoint: self.selectedCountry.endPoint())
+        }
     }
     
     @objc func connectButtonPressed(_ sender: Any) {
         //try to connect
         
         if (NEVPNManager.shared().connection.status == .connected) {
-            self.disconnectVPN()
+            VPN.disconnectVPN()
         }
         else {
-            self.connect2VPN()
+            VPN.connect2VPN(endPoint: self.selectedCountry.endPoint())
+        }
+    }
+    
+    @objc func timerFired(_ sender: Timer) {
+        
+        func convert(num: Int?) -> String {
+            
+            var string = "00"
+            
+            if let s = num {
+                if s < 10 {
+                    string = "0\(String(s))"
+                }
+                else {
+                    string = String(s)
+                }
+            }
+            
+            return string
+        }
+        
+        if let fireDate = connectDate {
+            let comp = Set(arrayLiteral: Calendar.Component.second, Calendar.Component.hour, Calendar.Component.minute)
+            let dateComponents = Calendar.current.dateComponents(comp, from: fireDate, to: Date())
+            
+            let seconds: String = convert(num: dateComponents.second)
+            let minutes: String = convert(num: dateComponents.minute)
+            let hours: String = convert(num: dateComponents.hour)
+            
+            let string = "\(hours):\(minutes):\(seconds)"
+            connectButton.mainLabel.text = string
         }
     }
 }
@@ -308,8 +468,15 @@ extension VPNViewController: UITableViewDelegate {
 
 extension VPNViewController: VPNCountryControllerProtocol {
     func didSelectCountry(country: VPNCountry) {
-        //change the name of the country in the button
+        
+        if (country != selectedCountry) {
+            //country changed
+            //reconnect if necessary
+            VPN.disconnectVPN()
+            shouldVPNReconnect = true
+        }
         selectedCountry = country
+        //change the name of the country in the button
         self.tableView.reloadData()
     }
 }
