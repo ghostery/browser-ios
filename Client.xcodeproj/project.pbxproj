@@ -503,6 +503,10 @@
 		AF2B90D8217F291700550C57 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF2B90D6217F208B00550C57 /* NetworkExtension.framework */; };
 		AF4C19B920AC7AC400D3F740 /* TopTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4C19B820AC7AC400D3F740 /* TopTabs.swift */; };
 		AF53D3BC206A346B0012A11F /* TabExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF53D3BB206A346B0012A11F /* TabExtension.swift */; };
+		AF6C8AFD21873CB9006F8166 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C8AFA21873B5C006F8166 /* Keychain.swift */; };
+		AF6C8AFE21873CB9006F8166 /* VPNButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C8AFC21873B5D006F8166 /* VPNButton.swift */; };
+		AF6C8AFF21873CB9006F8166 /* VPNCountryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C8AF921873B5C006F8166 /* VPNCountryController.swift */; };
+		AF6C8B0021873CB9006F8166 /* VPNViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C8AFB21873B5D006F8166 /* VPNViewController.swift */; };
 		AF6F247D20AF0749009C3D0D /* CliqzStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6F247C20AF0749009C3D0D /* CliqzStrings.swift */; };
 		AF6FA97220652C6800D7F9F0 /* ghostery_content_blocker.json in Resources */ = {isa = PBXBuildFile; fileRef = AF6FA96E20652C6700D7F9F0 /* ghostery_content_blocker.json */; };
 		AF6FA97320652C6800D7F9F0 /* preload.js in Resources */ = {isa = PBXBuildFile; fileRef = AF6FA96F20652C6800D7F9F0 /* preload.js */; };
@@ -1851,6 +1855,10 @@
 		AF2B90D6217F208B00550C57 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		AF4C19B820AC7AC400D3F740 /* TopTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabs.swift; sourceTree = "<group>"; };
 		AF53D3BB206A346B0012A11F /* TabExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabExtension.swift; sourceTree = "<group>"; };
+		AF6C8AF921873B5C006F8166 /* VPNCountryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNCountryController.swift; sourceTree = "<group>"; };
+		AF6C8AFA21873B5C006F8166 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		AF6C8AFB21873B5D006F8166 /* VPNViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNViewController.swift; sourceTree = "<group>"; };
+		AF6C8AFC21873B5D006F8166 /* VPNButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNButton.swift; sourceTree = "<group>"; };
 		AF6F247C20AF0749009C3D0D /* CliqzStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzStrings.swift; sourceTree = "<group>"; };
 		AF6FA96E20652C6700D7F9F0 /* ghostery_content_blocker.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ghostery_content_blocker.json; sourceTree = "<group>"; };
 		AF6FA96F20652C6800D7F9F0 /* preload.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = preload.js; sourceTree = "<group>"; };
@@ -3482,6 +3490,17 @@
 			path = AppiumTests;
 			sourceTree = "<group>";
 		};
+		AF6C8AF021873B4C006F8166 /* VPN */ = {
+			isa = PBXGroup;
+			children = (
+				AF6C8AFA21873B5C006F8166 /* Keychain.swift */,
+				AF6C8AFC21873B5D006F8166 /* VPNButton.swift */,
+				AF6C8AF921873B5C006F8166 /* VPNCountryController.swift */,
+				AF6C8AFB21873B5D006F8166 /* VPNViewController.swift */,
+			);
+			path = VPN;
+			sourceTree = "<group>";
+		};
 		AF6FA95E20652C1100D7F9F0 /* Privacy */ = {
 			isa = PBXGroup;
 			children = (
@@ -3537,6 +3556,7 @@
 		AF77B8B5209B130400E7A0C4 /* HomePanel */ = {
 			isa = PBXGroup;
 			children = (
+				AF6C8AF021873B4C006F8166 /* VPN */,
 				4F0445D52033321D00E2C0C7 /* Freshtab */,
 				1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */,
 				AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */,
@@ -6157,6 +6177,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF6C8AFD21873CB9006F8166 /* Keychain.swift in Sources */,
+				AF6C8AFE21873CB9006F8166 /* VPNButton.swift in Sources */,
+				AF6C8AFF21873CB9006F8166 /* VPNCountryController.swift in Sources */,
+				AF6C8B0021873CB9006F8166 /* VPNViewController.swift in Sources */,
 				4F304595204FEC5500C99162 /* PanelDataObservers.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				1E25A2D32121A7AA0038D8D7 /* LocaleConstantsBridge.m in Sources */,
