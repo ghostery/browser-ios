@@ -339,6 +339,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // We are back in the foreground, so set CleanlyBackgrounded to false so that we can detect that
         // the application was cleanly backgrounded later.
         //
+        
+        //Cliqz: check VPN connection
+        VPN.shared.checkConnection()
 
         let defaults = UserDefaults()
         defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
