@@ -21,6 +21,7 @@ class CCAbstractCell: UIView {
     var titleLabel: UILabel = UILabel()
     var descriptionLabel: UILabel = UILabel()
     private var _widget: CCWidget? = nil
+    
     var widget: CCWidget? {
         get {
             return _widget
@@ -41,17 +42,24 @@ class CCAbstractCell: UIView {
     let stackView = UIStackView()
     let widgetContainer = UIView()
     let descriptionContainer = UIView()
+    let mainContainer = UIView()
+    var extraContainer: UIView? = nil
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(contentView)
-        contentView.addSubview(stackView)
+        contentView.addSubview(mainContainer)
+        mainContainer.addSubview(stackView)
         stackView.addArrangedSubview(widgetContainer)
         stackView.addArrangedSubview(descriptionContainer)
         descriptionContainer.addSubview(titleLabel)
         descriptionContainer.addSubview(descriptionLabel)
         
         contentView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        
+        mainContainer.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
         
@@ -131,7 +139,7 @@ class CCHorizontalCell: CCAbstractCell {
     
     //widgetRatio is the width of the widget over the height of the cell
     //descrRatio is the width of the description over the height of the cell
-    init(widgetRatio: CGFloat, descriptionRatio: CGFloat) {
+    init(widgetRatio: CGFloat, descriptionRatio: CGFloat, optionalView: UIView? = nil, optionalViewHeight: CGFloat? = nil) {
         super.init(frame: CGRect.zero)
         
         titleLabel.textAlignment = .left
@@ -158,6 +166,27 @@ class CCHorizontalCell: CCAbstractCell {
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(5)
         }
+        
+        if let optView = optionalView, let h = optionalViewHeight {
+            extraContainer = UIView()
+            contentView.addSubview(extraContainer!)
+            extraContainer!.addSubview(optView)
+            optView.snp.makeConstraints { (make) in
+                make.edges.equalToSuperview()
+            }
+            
+            mainContainer.snp.remakeConstraints { (make) in
+                make.top.leading.trailing.equalToSuperview()
+                make.bottom.equalTo(extraContainer!.snp.top)
+            }
+            
+            extraContainer?.snp.makeConstraints({ (make) in
+                make.top.equalTo(mainContainer.snp.bottom)
+                make.leading.trailing.bottom.equalToSuperview()
+                make.height.equalTo(h)
+            })
+        }
+        
     }
     
     override init(frame: CGRect) {
