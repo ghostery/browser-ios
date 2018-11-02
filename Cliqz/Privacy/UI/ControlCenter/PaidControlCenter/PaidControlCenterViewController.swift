@@ -63,7 +63,11 @@ extension PaidControlCenterViewController: CCCollectionDataSourceProtocol {
             return v
         }
         
-        let cell = CCHorizontalCell(widgetRatio: CCUX.HorizontalContentWigetRatio, descriptionRatio: 1 - CCUX.HorizontalContentWigetRatio)
+        let cell = CCHorizontalCell(widgetRatio: CCUX.HorizontalContentWigetRatio,
+                                    descriptionRatio: 1 - CCUX.HorizontalContentWigetRatio,
+                                    optionalView: cellDataSource.optionalView(index: index + 1),
+                                    optionalViewHeight: cellDataSource.optionalViewHeight(index: index + 1))
+        
         cellDataSource.configureCell(cell: cell, index: index + 1)
         
         return cell

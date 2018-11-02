@@ -189,3 +189,110 @@ class CCAntiPhishingWidget: CCWidget {
     }
 }
 
+class CCCompaniesWidget: CCWidget {
+    static private let QuantityFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 36, weight: .regular), NSAttributedStringKey.foregroundColor: CCUX.CliqzBlueGlow]
+    static private let ScaleFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .regular), NSAttributedStringKey.foregroundColor: CCUX.CliqzBlueGlow]
+    
+    init(quanitity: Int) {
+        super.init(frame: CGRect.zero)
+        
+        imageView = UIImageView(image: UIImage.init(named: "CCCompanies"))
+        
+        let container = UIView()
+        
+        mainLabel = UILabel()
+        mainLabel?.textAlignment = .center
+        mainLabel?.sizeToFit()
+        
+        auxLabel = UILabel()
+        auxLabel?.textAlignment = .center
+        auxLabel?.sizeToFit()
+        
+        self.addSubview(container)
+        container.addSubview(imageView!)
+        container.addSubview(mainLabel!)
+        container.addSubview(auxLabel!)
+        
+        container.snp.makeConstraints { (make) in
+            make.trailing.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.top.equalTo(imageView!.snp.top)
+            make.bottom.equalTo(auxLabel!.snp.bottom)
+        }
+        
+        imageView!.snp.makeConstraints({ (make) in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview()
+        })
+        
+        mainLabel!.snp.makeConstraints { (make) in
+            make.top.equalTo(imageView!.snp.bottom)
+            make.centerX.equalToSuperview()
+        }
+        
+        auxLabel!.snp.makeConstraints { (make) in
+            make.top.equalTo(mainLabel!.snp.bottom).offset(-6)
+            make.centerX.equalToSuperview()
+        }
+        
+        updateView(quanitity: quanitity)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func updateView(quanitity: Int) {
+        let attributedText = NSMutableAttributedString(string: String(quanitity), attributes: CCCompaniesWidget.QuantityFontAttributes)
+        let auxText = NSAttributedString(string: "COMPANIES", attributes: CCCompaniesWidget.ScaleFontAttributes)
+        mainLabel?.attributedText = attributedText
+        auxLabel?.attributedText = auxText
+    }
+}
+
+class CCMoneySavedWidget: CCWidget {
+    static private let QuantityFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 50, weight: .ultraLight),
+                                                 NSAttributedStringKey.foregroundColor: CCUX.CliqzBlueGlow]
+    
+    static private let ScaleFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 42, weight: .medium),
+                                              NSAttributedStringKey.foregroundColor: CCUX.CliqzBlueGlow]
+    
+    
+    init(quanitity: Int, scale: String) {
+        super.init(frame: CGRect.zero)
+        
+        mainLabel = UILabel()
+        mainLabel?.textAlignment = .center
+        mainLabel?.sizeToFit()
+        
+        auxLabel = UILabel()
+        auxLabel?.textAlignment = .center
+        auxLabel?.sizeToFit()
+        
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = -40.0
+        stackView.addArrangedSubview(mainLabel!)
+        stackView.addArrangedSubview(auxLabel!)
+        
+        self.addSubview(stackView)
+        
+        stackView.snp.makeConstraints { (make) in
+            make.height.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().dividedBy(1.2)
+        }
+        
+        updateView(quanitity: quanitity, scale: scale)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func updateView(quanitity: Int, scale: String) {
+        mainLabel?.attributedText = NSAttributedString(string: String(quanitity), attributes: CCMoneySavedWidget.QuantityFontAttributes)
+        auxLabel?.attributedText = NSAttributedString(string: scale, attributes: CCMoneySavedWidget.ScaleFontAttributes)
+    }
+}
+
