@@ -2581,11 +2581,11 @@
 		1E5E5D5A21809B1700148A2B /* PaidControlCenter */ = {
 			isa = PBXGroup;
 			children = (
-				1E244CCB2180A081004A73E9 /* CCAbstractCell.swift */,
-				1E244CD42180A082004A73E9 /* CCDataSource.swift */,
-				1E244CD52180A082004A73E9 /* CCViewController.swift */,
-				1E244CD62180A082004A73E9 /* CCWidget.swift */,
 				1E2720CA21788DD000A8ADD4 /* PaidControlCenterViewController.swift */,
+				1E244CD52180A082004A73E9 /* CCViewController.swift */,
+				1E244CD42180A082004A73E9 /* CCDataSource.swift */,
+				1E244CD62180A082004A73E9 /* CCWidget.swift */,
+				1E244CCB2180A081004A73E9 /* CCAbstractCell.swift */,
 			);
 			path = PaidControlCenter;
 			sourceTree = "<group>";

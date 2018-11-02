@@ -28,9 +28,9 @@ extension PaidControlCenterViewController: CCCollectionDataSourceProtocol {
     
     func heightFor(index: Int) -> CGFloat {
         if index == 0 {
-            return 250
+            return cellDataSource.heightFor(index: 0)
         }
-        return 120
+        return cellDataSource.heightFor(index: index + 1)
     }
     
     func cellFor(index: Int) -> UIView {
