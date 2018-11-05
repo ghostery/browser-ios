@@ -61,6 +61,27 @@ class VPN {
         }
     }
     
+    let connectDateKey = "VPNConnectDateKey"
+    var connectDate: Date? {
+        set {
+            if newValue == nil {
+                UserDefaults.standard.removeObject(forKey: connectDateKey)
+                UserDefaults.standard.synchronize()
+            }
+            else {
+                UserDefaults.standard.set(newValue, forKey: connectDateKey)
+                UserDefaults.standard.synchronize()
+            }
+        }
+        get {
+            if let cDate = UserDefaults.standard.value(forKey: connectDateKey) as? Date {
+                return cDate
+            }
+            
+            return nil //default
+        }
+    }
+    
     init() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(VPNStatusDidChange(notification:)),
@@ -203,6 +224,7 @@ class VPNViewController: UIViewController {
         }
     }
     
+    //used to reconnect when changing countries
     var shouldVPNReconnect = false
     
     let tableView = UITableView()
@@ -218,27 +240,6 @@ class VPNViewController: UIViewController {
     }
     
     var timer: Timer? = nil
-    
-    let connectDateKey = "VPNConnectDateKey"
-    var connectDate: Date? {
-        set {
-            if newValue == nil {
-                UserDefaults.standard.removeObject(forKey: connectDateKey)
-                UserDefaults.standard.synchronize()
-            }
-            else {
-                UserDefaults.standard.set(newValue, forKey: connectDateKey)
-                UserDefaults.standard.synchronize()
-            }
-        }
-        get {
-            if let cDate = UserDefaults.standard.value(forKey: connectDateKey) as? Date {
-                return cDate
-            }
-            
-            return nil //default
-        }
-    }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -326,8 +327,8 @@ class VPNViewController: UIViewController {
             //start timer
             timer = Timer.scheduledTimer(timeInterval: 0.95, target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
             timer?.fire()
-            if connectDate == nil {
-                connectDate = Date()
+            if VPN.shared.connectDate == nil {
+                VPN.shared.connectDate = Date()
             }
         }
         else if VPNStatus == .disconnected {
@@ -337,7 +338,7 @@ class VPNViewController: UIViewController {
             self.connectButton.set(state: .Connect)
             timer?.invalidate()
             timer = nil
-            connectDate = nil
+            VPN.shared.connectDate = nil
         }
         else if VPNStatus == .disconnecting {
             self.connectButton.set(state: .Disconnecting)
@@ -367,6 +368,7 @@ class VPNViewController: UIViewController {
         updateConnectButton()
         updateMapView()
         
+        //reconnect when changing countries
         if (VPNStatus == .disconnected && shouldVPNReconnect == true) {
             shouldVPNReconnect = false
             VPN.connect2VPN(endPoint: self.selectedCountry.endPoint())
@@ -402,7 +404,7 @@ class VPNViewController: UIViewController {
             return string
         }
         
-        if let fireDate = connectDate {
+        if let fireDate = VPN.shared.connectDate {
             let comp = Set(arrayLiteral: Calendar.Component.second, Calendar.Component.hour, Calendar.Component.minute)
             let dateComponents = Calendar.current.dateComponents(comp, from: fireDate, to: Date())
             
