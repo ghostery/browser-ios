@@ -92,12 +92,12 @@ class CCDataSource {
     
     init() {
         //create the cells here
-        let timeSaved = CCCell(title: "Time Saved", description: "that you can spend with your friends", widget: CCTimeSavedWidget(quanitity: 100, scale: "MIN"), cellHeight: 250)
-        let adsBlocked = CCCell(title: "AdsBlocked", description: "so that you can enjoy surfing without ads", widget: CCAdsBlockedWidget(quanitity: 4000), cellHeight: 250)
-        let dataSaved = CCCell(title: "Data Saved", description: "more than enough to watch another video", widget: CCDataSavedWidget(quanitity: 251, scale: "MB"), cellHeight: 120)
-        let batterySaved = CCCell(title: "Battery Saved", description: "so that you can enjoy your phone a little longer", widget: CCBatterySavedWidget(quanitity: 225, scale: "MIN"), cellHeight: 120)
-        let companies = CCCell(title: "Tracker Companies Blocked", description: "Companies with most trackers: Google, Facebook, Amazon,...", widget: CCCompaniesWidget(quanitity: 4000), cellHeight: 120)
-        let moneySaved = CCCell(title: "Money Saved", description: "how much is your time worth per hour?", widget: CCMoneySavedWidget(quanitity: 251, scale: "EUR"), cellHeight: 204, optionalView: IncomeSlider(), optionalViewHeight: 84)
+        let timeSaved = CCCell(title: "Time Saved", description: "that you can spend with your friends", widget: CCTimeSavedWidget(), cellHeight: 250)
+        let adsBlocked = CCCell(title: "AdsBlocked", description: "so that you can enjoy surfing without ads", widget: CCAdsBlockedWidget(), cellHeight: 250)
+        let dataSaved = CCCell(title: "Data Saved", description: "more than enough to watch another video", widget: CCDataSavedWidget(), cellHeight: 120)
+        let batterySaved = CCCell(title: "Battery Saved", description: "so that you can enjoy your phone a little longer", widget: CCBatterySavedWidget(), cellHeight: 120)
+        let companies = CCCell(title: "Tracker Companies Blocked", description: "Companies with most trackers: Google, Facebook, Amazon,...", widget: CCCompaniesWidget(), cellHeight: 120)
+        let moneySaved = CCCell(title: "Money Saved", description: "how much is your time worth per hour?", widget: CCMoneySavedWidget(), cellHeight: 204, optionalView: IncomeSlider(), optionalViewHeight: 84)
         let phishingProtection = CCCell(title: "Phishing protection", description: "so that you can swim freely with our browser", widget: CCAntiPhishingWidget(), cellHeight: 120)
         
         cells = [timeSaved, adsBlocked, dataSaved, batterySaved, companies, moneySaved, phishingProtection]
