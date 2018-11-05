@@ -8,16 +8,106 @@
 
 import UIKit
 import SnapKit
+import Shared
+
+enum Period {
+    case Today
+    case Last7Days
+}
+
+class CCWidgetManager {
+    //this is where the data for the widgets is managed.
+    static let shared = CCWidgetManager()
+    
+    private let registeredWidgets = WeakList<CCWidget>()
+    
+    var currentPeriod: Period = .Today
+    
+    func registerWidget(widget: CCWidget) {
+        registeredWidgets.insert(widget)
+    }
+    
+    //period changed
+    func update(period: Period) {
+        currentPeriod = period
+        //push update
+        for widget in registeredWidgets {
+            widget.update()
+        }
+    }
+    
+    func savedTime() -> (Int, String) {
+        if currentPeriod == .Today {
+            return (100, "MIN")
+        }
+        
+        return (200, "MIN")
+    }
+    
+    func adsBlocked() -> Int {
+        if currentPeriod == .Today {
+            return 4000
+        }
+        
+        return 5000
+    }
+    
+    func dataSaved() -> (Int, String) {
+        if currentPeriod == .Today {
+            return (100, "MB")
+        }
+        
+        return (200, "MB")
+    }
+    
+    func batterySaved() -> (Int, String) {
+        if currentPeriod == .Today {
+            return (100, "MIN")
+        }
+        
+        return (200, "MIN")
+    }
+    
+    func companies() -> Int {
+        if currentPeriod == .Today {
+            return 4000
+        }
+        
+        return 5000
+    }
+    
+    func moneySaved() -> (Int, String) {
+        if currentPeriod == .Today {
+            return (100, "EUR")
+        }
+        
+        return (200, "EUR")
+    }
+}
 
 class CCWidget: UIView {
+    
     var imageView: UIImageView? = nil
     var mainLabel: UILabel? = nil
     var auxLabel: UILabel? = nil
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        CCWidgetManager.shared.registerWidget(widget: self)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update() {
+        //to be overriden
+    }
 }
 
 class CCTimeSavedWidget: CCWidget {
     
-    init(quanitity: Int, scale: String) {
+    init() {
         super.init(frame: CGRect.zero)
         
         imageView = UIImageView()
@@ -49,18 +139,24 @@ class CCTimeSavedWidget: CCWidget {
         }
         
         imageView?.image = UIImage(named: "CCCircle")
-        mainLabel?.text = String(quanitity)
-        auxLabel?.text = scale
+        
+        update()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func update() {
+        let (quantity, scale) = CCWidgetManager.shared.savedTime()
+        mainLabel?.text = String(quantity)
+        auxLabel?.text = scale
+    }
 }
 
 class CCAdsBlockedWidget: CCWidget {
     
-    init(quanitity: Int) {
+    init() {
         super.init(frame: CGRect.zero)
         
         imageView = UIImageView()
@@ -80,11 +176,16 @@ class CCAdsBlockedWidget: CCWidget {
         }
         
         imageView?.image = UIImage(named: "CCAdBlocking")
-        mainLabel?.text = String(quanitity)
+        update()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func update() {
+        let quantity = CCWidgetManager.shared.adsBlocked()
+        mainLabel?.text = String(quantity)
     }
 }
 
@@ -96,7 +197,7 @@ class CCDataSavedWidget: CCWidget {
                                               NSAttributedStringKey.foregroundColor: CCUX.CliqzBlueGlow]
     
     
-    init(quanitity: Int, scale: String) {
+    init() {
         super.init(frame: CGRect.zero)
         
         mainLabel = UILabel()
@@ -121,7 +222,7 @@ class CCDataSavedWidget: CCWidget {
             make.centerY.equalToSuperview().dividedBy(1.2)
         }
         
-        updateView(quanitity: quanitity, scale: scale)
+        update()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -132,13 +233,18 @@ class CCDataSavedWidget: CCWidget {
         mainLabel?.attributedText = NSAttributedString(string: String(quanitity), attributes: CCDataSavedWidget.QuantityFontAttributes)
         auxLabel?.attributedText = NSAttributedString(string: scale, attributes: CCDataSavedWidget.ScaleFontAttributes)
     }
+    
+    override func update() {
+        let (quantity, scale) = CCWidgetManager.shared.dataSaved()
+        updateView(quanitity: quantity, scale: scale)
+    }
 }
 
 class CCBatterySavedWidget: CCWidget {
     static private let QuantityFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 36, weight: .regular), NSAttributedStringKey.foregroundColor: CCUX.CliqzBlueGlow]
     static private let ScaleFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12, weight: .regular), NSAttributedStringKey.foregroundColor: CCUX.CliqzBlueGlow]
     
-    init(quanitity: Int, scale: String) {
+    init() {
         super.init(frame: CGRect.zero)
         
         imageView = UIImageView(image: UIImage.init(named: "CCBattery"))
@@ -157,7 +263,8 @@ class CCBatterySavedWidget: CCWidget {
             make.centerX.equalTo(imageView!)
             make.top.equalTo(imageView!.snp.bottom)
         }
-        updateView(quanitity: quanitity, scale: scale)
+        
+        update()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -168,6 +275,11 @@ class CCBatterySavedWidget: CCWidget {
         let attributedText = NSMutableAttributedString(string: String(quanitity), attributes: CCBatterySavedWidget.QuantityFontAttributes)
         attributedText.append(NSAttributedString(string: scale, attributes: CCBatterySavedWidget.ScaleFontAttributes))
         mainLabel?.attributedText = attributedText
+    }
+    
+    override func update() {
+        let (quantity, scale) = CCWidgetManager.shared.batterySaved()
+        updateView(quanitity: quantity, scale: scale)
     }
 }
 
@@ -193,7 +305,7 @@ class CCCompaniesWidget: CCWidget {
     static private let QuantityFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 36, weight: .regular), NSAttributedStringKey.foregroundColor: CCUX.CliqzBlueGlow]
     static private let ScaleFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .regular), NSAttributedStringKey.foregroundColor: CCUX.CliqzBlueGlow]
     
-    init(quanitity: Int) {
+    init() {
         super.init(frame: CGRect.zero)
         
         imageView = UIImageView(image: UIImage.init(named: "CCCompanies"))
@@ -235,7 +347,7 @@ class CCCompaniesWidget: CCWidget {
             make.centerX.equalToSuperview()
         }
         
-        updateView(quanitity: quanitity)
+        update()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -248,6 +360,11 @@ class CCCompaniesWidget: CCWidget {
         mainLabel?.attributedText = attributedText
         auxLabel?.attributedText = auxText
     }
+    
+    override func update() {
+        let quantity = CCWidgetManager.shared.companies()
+        updateView(quanitity: quantity)
+    }
 }
 
 class CCMoneySavedWidget: CCWidget {
@@ -258,7 +375,7 @@ class CCMoneySavedWidget: CCWidget {
                                               NSAttributedStringKey.foregroundColor: CCUX.CliqzBlueGlow]
     
     
-    init(quanitity: Int, scale: String) {
+    init() {
         super.init(frame: CGRect.zero)
         
         mainLabel = UILabel()
@@ -283,7 +400,7 @@ class CCMoneySavedWidget: CCWidget {
             make.centerY.equalToSuperview().dividedBy(1.2)
         }
         
-        updateView(quanitity: quanitity, scale: scale)
+        update()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -293,6 +410,11 @@ class CCMoneySavedWidget: CCWidget {
     func updateView(quanitity: Int, scale: String) {
         mainLabel?.attributedText = NSAttributedString(string: String(quanitity), attributes: CCMoneySavedWidget.QuantityFontAttributes)
         auxLabel?.attributedText = NSAttributedString(string: scale, attributes: CCMoneySavedWidget.ScaleFontAttributes)
+    }
+    
+    override func update() {
+        let (quantity, scale) = CCWidgetManager.shared.moneySaved()
+        updateView(quanitity: quantity, scale: scale)
     }
 }
 
