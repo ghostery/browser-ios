@@ -15,7 +15,10 @@ class OptionalView: UIView {
 class IncomeSlider: OptionalView {
     let slider = UISlider()
 
-    let max: Float = 300
+    let max: Float = 200
+    
+    static let defaultValue: Int = 60 //euros
+    let defaultSliderValueValue: Float = Float(IncomeSlider.defaultValue)/200
     
     let floatingLabel = UILabel()
     
@@ -37,7 +40,8 @@ class IncomeSlider: OptionalView {
             make.top.equalTo(slider.snp.bottom).offset(10)
         }
         
-        floatingLabel.text = "0 EUR"
+        slider.value = defaultSliderValueValue
+        floatingLabel.text = "\(IncomeSlider.defaultValue) EUR / Stunde"
         floatingLabel.textColor = CCUX.CliqzBlueGlow
         floatingLabel.font = UIFont.systemFont(ofSize: 20)
         
@@ -51,18 +55,104 @@ class IncomeSlider: OptionalView {
     }
     
     @objc func valueChanged(_ slider: UISlider) {
-        floatingLabel.text = "\(Int(slider.value * max)) EUR"
+        floatingLabel.text = "\(Int(slider.value * max)) EUR / Stunde"
     }
 }
 
 protocol CCDataSourceProtocol {
     func titleFor(index: Int) -> String
-    func descriptionFor(index: Int) -> String
+    func descriptionFor(index: Int, period: Period) -> String
     func widgetFor(index: Int) -> CCWidget
     func numberOfCells() -> Int
     func optionalView(index: Int) -> OptionalView?
     func optionalViewHeight(index: Int) -> CGFloat?
 }
+
+typealias CellDescription = (Period) -> String
+
+let timeSavedDesc: CellDescription = ({ period in
+    
+    if period == .Today {
+        return "2 Minuten um jemandem deine ungeteilte Aufmerksamkeit zu schenken"
+    }
+    else if period == .Last7Days {
+        return "Genug Zeit um 1,3km zu gehen"
+    }
+    
+    return ""
+})
+
+let adsBlockedDesc: CellDescription = ({ period in
+    
+    if period == .Today {
+        return "Für ungestörtes Surfen"
+    }
+    else if period == .Last7Days {
+        return "Für ungestörtes Surfen"
+    }
+    
+    return ""
+})
+
+let dataSavedDesc: CellDescription = ({ period in
+    
+    if period == .Today {
+        return "Genug um einen Song herunterzuladen"
+    }
+    else if period == .Last7Days {
+        return "Genug für 8 Minuten lustige YouTube Videos"
+    }
+    
+    return ""
+})
+
+let batterySavedDesc: CellDescription = ({ period in
+    
+    if period == .Today {
+        return "Damit dein Handy etwas länger hält"
+    }
+    else if period == .Last7Days {
+        return "Damit dein Handy etwas länger hält"
+    }
+    
+    return ""
+})
+
+let companiesDesc: CellDescription = ({ period in
+    
+    if period == .Today {
+        return "Firmen mit den meisten Trackern: Google, Facebook, Amazon"
+    }
+    else if period == .Last7Days {
+        return "Firmen mit den meisten Trackern: Google, Facebook, Amazon"
+    }
+    
+    return ""
+})
+
+let phishingDesc: CellDescription = ({ period in
+    
+    if period == .Today {
+        return "Geschützt vor Webseiten, die versuchen vertrauliche Informationen zu stehlen."
+    }
+    else if period == .Last7Days {
+        return "Geschützt vor Webseiten, die versuchen vertrauliche Informationen zu stehlen."
+    }
+    
+    return ""
+})
+
+let moneySavedDesc: CellDescription = ({ period in
+    
+    if period == .Today {
+        return "Was ist dir deine Zeit Wert?"
+    }
+    else if period == .Last7Days {
+        return "Was ist dir deine Zeit Wert?"
+    }
+    
+    return ""
+})
 
 class CCDataSource {
     
@@ -72,13 +162,13 @@ class CCDataSource {
     
     struct CCCell {
         let title: String
-        let description: String
+        let description: CellDescription
         let widget: CCWidget
         let cellHeight: CGFloat //cell total height
         let optionalView: OptionalView?
         let optionalViewHeight: CGFloat? //optional view height
         
-        init(title: String, description: String, widget: CCWidget, cellHeight: CGFloat, optionalView: OptionalView? = nil, optionalViewHeight: CGFloat? = nil) {
+        init(title: String, description: @escaping CellDescription, widget: CCWidget, cellHeight: CGFloat, optionalView: OptionalView? = nil, optionalViewHeight: CGFloat? = nil) {
             self.title = title
             self.description = description
             self.widget = widget
@@ -92,19 +182,19 @@ class CCDataSource {
     
     init() {
         //create the cells here
-        let timeSaved = CCCell(title: "Time Saved", description: "that you can spend with your friends", widget: CCTimeSavedWidget(), cellHeight: 250)
-        let adsBlocked = CCCell(title: "AdsBlocked", description: "so that you can enjoy surfing without ads", widget: CCAdsBlockedWidget(), cellHeight: 250)
-        let dataSaved = CCCell(title: "Data Saved", description: "more than enough to watch another video", widget: CCDataSavedWidget(), cellHeight: 120)
-        let batterySaved = CCCell(title: "Battery Saved", description: "so that you can enjoy your phone a little longer", widget: CCBatterySavedWidget(), cellHeight: 120)
-        let companies = CCCell(title: "Tracker Companies Blocked", description: "Companies with most trackers: Google, Facebook, Amazon,...", widget: CCCompaniesWidget(), cellHeight: 120)
-        let moneySaved = CCCell(title: "Money Saved", description: "how much is your time worth per hour?", widget: CCMoneySavedWidget(), cellHeight: 204, optionalView: IncomeSlider(), optionalViewHeight: 84)
-        let phishingProtection = CCCell(title: "Phishing protection", description: "so that you can swim freely with our browser", widget: CCAntiPhishingWidget(), cellHeight: 120)
+        let timeSaved = CCCell(title: "Zeit gespart", description: timeSavedDesc, widget: CCTimeSavedWidget(), cellHeight: 250)
+        let adsBlocked = CCCell(title: "Ads blockiert", description: adsBlockedDesc, widget: CCAdsBlockedWidget(), cellHeight: 250)
+        let dataSaved = CCCell(title: "Datenvolumen gespart", description: dataSavedDesc, widget: CCDataSavedWidget(), cellHeight: 120)
+        let batterySaved = CCCell(title: "Akku gespart", description: batterySavedDesc, widget: CCBatterySavedWidget(), cellHeight: 120)
+        let companies = CCCell(title: "Tracker-Firmen blockiert", description: companiesDesc, widget: CCCompaniesWidget(), cellHeight: 120)
+        let phishingProtection = CCCell(title: "Phishing-Schutz", description: phishingDesc, widget: CCAntiPhishingWidget(), cellHeight: 120)
+        let moneySaved = CCCell(title: "Geld gespart", description: moneySavedDesc, widget: CCMoneySavedWidget(), cellHeight: 204, optionalView: IncomeSlider(), optionalViewHeight: 84)
         
-        cells = [timeSaved, adsBlocked, dataSaved, batterySaved, companies, moneySaved, phishingProtection]
+        cells = [timeSaved, adsBlocked, dataSaved, batterySaved, companies, phishingProtection, moneySaved]
     }
     
-    func configureCell(cell: CCAbstractCell, index: Int) {
-        cell.descriptionLabel.text = self.descriptionFor(index: index)
+    func configureCell(cell: CCAbstractCell, index: Int, period: Period) {
+        cell.descriptionLabel.text = self.descriptionFor(index: index, period: period)
         cell.titleLabel.text = self.titleFor(index: index)
         cell.widget = self.widgetFor(index: index)
     }
@@ -118,11 +208,11 @@ extension CCDataSource: CCDataSourceProtocol {
         return cells[index].title
     }
     
-    func descriptionFor(index: Int) -> String {
+    func descriptionFor(index: Int, period: Period) -> String {
         guard cells.isIndexValid(index: index) else {
             return ""
         }
-        return cells[index].description
+        return cells[index].description(period)
     }
     
     func widgetFor(index: Int) -> CCWidget {

@@ -17,19 +17,20 @@ import UIKit
 class PaidControlCenterViewController: ControlCenterViewController {
     
     let controls = CCControlsView()
-    let tabs = UISegmentedControl(items: ["Today", "Last 7 Days"])
+    let tabs = UISegmentedControl(items: ["Heute", "Letzte 7 Tage"])
     let protectionLabel = UILabel()
     
     let dashboard = CCCollectionViewController()
     let cellDataSource = CCDataSource()
     
-    let protectionOn = "ULTIMATE PROTECTION: ON"
-    let protectionOff = "ULTIMATE PROTECTION: OFF"
+    let protectionOn = "Komplettschutz: AN"
+    let protectionOff = "Komplettschutz: AUS"
     
     let protectionOnColor = CCUX.CliqzBlueGlow
     let protectionOffColor = UIColor.white
     
     var isProtectionOn = true
+    var currentPeriod: Period = .Today
     
     override func setupComponents() {
         
@@ -88,11 +89,13 @@ class PaidControlCenterViewController: ControlCenterViewController {
     
     @objc func tabChanged(_ segmentedControl: UISegmentedControl) {
         if segmentedControl.selectedSegmentIndex == 0 {
-            CCWidgetManager.shared.update(period: .Today)
+            currentPeriod = .Today
         }
         else if segmentedControl.selectedSegmentIndex == 1 {
-            CCWidgetManager.shared.update(period: .Last7Days)
+            currentPeriod = .Last7Days
         }
+        
+        CCWidgetManager.shared.update(period: currentPeriod)
     }
 
 }
@@ -148,8 +151,8 @@ extension PaidControlCenterViewController: CCCollectionDataSourceProtocol {
                 make.height.equalToSuperview()
             }
             
-            cellDataSource.configureCell(cell: c1, index: 0)
-            cellDataSource.configureCell(cell: c2, index: 1)
+            cellDataSource.configureCell(cell: c1, index: 0, period: currentPeriod)
+            cellDataSource.configureCell(cell: c2, index: 1, period: currentPeriod)
             
             return v
         }
@@ -159,7 +162,7 @@ extension PaidControlCenterViewController: CCCollectionDataSourceProtocol {
                                     optionalView: cellDataSource.optionalView(index: index + 1),
                                     optionalViewHeight: cellDataSource.optionalViewHeight(index: index + 1))
         
-        cellDataSource.configureCell(cell: cell, index: index + 1)
+        cellDataSource.configureCell(cell: cell, index: index + 1, period: currentPeriod)
         
         return cell
     }
@@ -196,7 +199,7 @@ class CCControlsView: UIView {
     
     func startLabelTitle(isSelected: Bool) -> String {
         if isSelected == false {
-            return "Pause"
+            return "Anhalten"
         }
         else {
             return "Start"
@@ -229,7 +232,7 @@ class CCControlsView: UIView {
         
         startLabel.text = startLabelTitle(isSelected: false)
         vpnLabel.text = "VPN"
-        clearLabel.text = "Clear"
+        clearLabel.text = "Löschen"
         
         startLabel.textColor = CCUX.CliqzBlueGlow
         vpnLabel.textColor = CCUX.CliqzBlueGlow

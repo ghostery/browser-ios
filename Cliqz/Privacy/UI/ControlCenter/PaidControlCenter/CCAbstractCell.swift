@@ -82,12 +82,13 @@ class CCAbstractCell: UIView {
         titleLabel.textColor = UIColor.white
         titleLabel.font = UIFont.systemFont(ofSize: 19, weight: .medium)
         titleLabel.numberOfLines = 0
-        
+        titleLabel.adjustsFontSizeToFitWidth = true
         
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.textColor = UIColor.white
         descriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        descriptionLabel.adjustsFontSizeToFitWidth = true
         
         self.backgroundColor = UIColor.black
         
@@ -123,6 +124,7 @@ class CCVerticalCell: CCAbstractCell {
         descriptionLabel.snp.makeConstraints { (make) in
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(5)
+            make.bottom.lessThanOrEqualToSuperview()
         }
     }
     
@@ -165,6 +167,7 @@ class CCHorizontalCell: CCAbstractCell {
         descriptionLabel.snp.makeConstraints { (make) in
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(5)
+            make.bottom.lessThanOrEqualToSuperview()
         }
         
         if let optView = optionalView, let h = optionalViewHeight {

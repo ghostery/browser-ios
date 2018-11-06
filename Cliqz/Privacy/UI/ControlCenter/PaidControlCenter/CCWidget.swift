@@ -36,52 +36,52 @@ class CCWidgetManager {
         }
     }
     
-    func savedTime() -> (Int, String) {
+    func savedTime() -> (String, String) {
         if currentPeriod == .Today {
-            return (100, "MIN")
+            return ("2:32", "MIN")
         }
         
-        return (200, "MIN")
+        return ("16:03", "MIN")
     }
     
     func adsBlocked() -> Int {
         if currentPeriod == .Today {
-            return 4000
+            return 432
         }
         
-        return 5000
+        return 3842
     }
     
-    func dataSaved() -> (Int, String) {
+    func dataSaved() -> (String, String) {
         if currentPeriod == .Today {
-            return (100, "MB")
+            return ("3,5", "MB")
         }
         
-        return (200, "MB")
+        return ("26,4", "MB")
     }
     
-    func batterySaved() -> (Int, String) {
+    func batterySaved() -> (String, String) {
         if currentPeriod == .Today {
-            return (100, "MIN")
+            return ("4:01", "MIN")
         }
         
-        return (200, "MIN")
+        return ("29:03", "MIN")
     }
     
     func companies() -> Int {
         if currentPeriod == .Today {
-            return 4000
+            return 89
         }
         
-        return 5000
+        return 234
     }
     
-    func moneySaved() -> (Int, String) {
+    func moneySaved() -> (String, String) {
         if currentPeriod == .Today {
-            return (100, "EUR")
+            return ("2,54", "EUR")
         }
         
-        return (200, "EUR")
+        return ("16,01", "EUR")
     }
 }
 
@@ -120,6 +120,9 @@ class CCTimeSavedWidget: CCWidget {
         auxLabel?.textAlignment = .center
         auxLabel?.font = UIFont.systemFont(ofSize: 36, weight: .ultraLight)
         
+        mainLabel?.adjustsFontSizeToFitWidth = true
+        auxLabel?.adjustsFontSizeToFitWidth = true
+        
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 0.0
@@ -135,7 +138,8 @@ class CCTimeSavedWidget: CCWidget {
         
         stackView.snp.makeConstraints { (make) in
             make.center.equalTo(imageView!.snp.center)
-            make.size.equalTo(70)
+            make.width.lessThanOrEqualTo(imageView!.snp.width).multipliedBy(0.7)
+            make.height.equalTo(70)
         }
         
         imageView?.image = UIImage(named: "CCCircle")
@@ -163,6 +167,9 @@ class CCAdsBlockedWidget: CCWidget {
         mainLabel = UILabel()
         mainLabel?.textColor = CCUX.CliqzBlueGlow
         mainLabel?.font = UIFont.systemFont(ofSize: 36, weight: .light)
+        
+        mainLabel?.adjustsFontSizeToFitWidth = true
+        auxLabel?.adjustsFontSizeToFitWidth = true
         
         self.addSubview(imageView!)
         self.addSubview(mainLabel!)
@@ -208,9 +215,12 @@ class CCDataSavedWidget: CCWidget {
         auxLabel?.textAlignment = .center
         auxLabel?.sizeToFit()
         
+        mainLabel?.adjustsFontSizeToFitWidth = true
+        auxLabel?.adjustsFontSizeToFitWidth = true
+        
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = -40.0
+        stackView.spacing = -32.0
         stackView.addArrangedSubview(mainLabel!)
         stackView.addArrangedSubview(auxLabel!)
         
@@ -229,8 +239,8 @@ class CCDataSavedWidget: CCWidget {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateView(quanitity: Int, scale: String) {
-        mainLabel?.attributedText = NSAttributedString(string: String(quanitity), attributes: CCDataSavedWidget.QuantityFontAttributes)
+    func updateView(quanitity: String, scale: String) {
+        mainLabel?.attributedText = NSAttributedString(string: quanitity, attributes: CCDataSavedWidget.QuantityFontAttributes)
         auxLabel?.attributedText = NSAttributedString(string: scale, attributes: CCDataSavedWidget.ScaleFontAttributes)
     }
     
@@ -251,6 +261,9 @@ class CCBatterySavedWidget: CCWidget {
         mainLabel = UILabel()
         mainLabel?.textAlignment = .center
         
+        mainLabel?.adjustsFontSizeToFitWidth = true
+        auxLabel?.adjustsFontSizeToFitWidth = true
+        
         self.addSubview(imageView!)
         self.addSubview(mainLabel!)
         
@@ -262,7 +275,10 @@ class CCBatterySavedWidget: CCWidget {
         mainLabel!.snp.makeConstraints { (make) in
             make.centerX.equalTo(imageView!)
             make.top.equalTo(imageView!.snp.bottom)
+            make.width.lessThanOrEqualToSuperview().offset(-10)
         }
+        
+        mainLabel?.adjustsFontSizeToFitWidth = true
         
         update()
     }
@@ -271,8 +287,8 @@ class CCBatterySavedWidget: CCWidget {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateView(quanitity: Int, scale: String) {
-        let attributedText = NSMutableAttributedString(string: String(quanitity), attributes: CCBatterySavedWidget.QuantityFontAttributes)
+    func updateView(quanitity: String, scale: String) {
+        let attributedText = NSMutableAttributedString(string: quanitity, attributes: CCBatterySavedWidget.QuantityFontAttributes)
         attributedText.append(NSAttributedString(string: scale, attributes: CCBatterySavedWidget.ScaleFontAttributes))
         mainLabel?.attributedText = attributedText
     }
@@ -289,6 +305,10 @@ class CCAntiPhishingWidget: CCWidget {
         super.init(frame: CGRect.zero)
         
         imageView = UIImageView(image: UIImage.init(named: "CCHook"))
+        
+        mainLabel?.adjustsFontSizeToFitWidth = true
+        auxLabel?.adjustsFontSizeToFitWidth = true
+        
         self.addSubview(imageView!)
         
         imageView!.snp.makeConstraints({ (make) in
@@ -319,6 +339,9 @@ class CCCompaniesWidget: CCWidget {
         auxLabel = UILabel()
         auxLabel?.textAlignment = .center
         auxLabel?.sizeToFit()
+        
+        mainLabel?.adjustsFontSizeToFitWidth = true
+        auxLabel?.adjustsFontSizeToFitWidth = true
         
         self.addSubview(container)
         container.addSubview(imageView!)
@@ -356,7 +379,7 @@ class CCCompaniesWidget: CCWidget {
     
     func updateView(quanitity: Int) {
         let attributedText = NSMutableAttributedString(string: String(quanitity), attributes: CCCompaniesWidget.QuantityFontAttributes)
-        let auxText = NSAttributedString(string: "COMPANIES", attributes: CCCompaniesWidget.ScaleFontAttributes)
+        let auxText = NSAttributedString(string: "FIRMEN", attributes: CCCompaniesWidget.ScaleFontAttributes)
         mainLabel?.attributedText = attributedText
         auxLabel?.attributedText = auxText
     }
@@ -386,9 +409,12 @@ class CCMoneySavedWidget: CCWidget {
         auxLabel?.textAlignment = .center
         auxLabel?.sizeToFit()
         
+        mainLabel?.adjustsFontSizeToFitWidth = true
+        auxLabel?.adjustsFontSizeToFitWidth = true
+        
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = -40.0
+        stackView.spacing = -32.0
         stackView.addArrangedSubview(mainLabel!)
         stackView.addArrangedSubview(auxLabel!)
         
@@ -407,8 +433,8 @@ class CCMoneySavedWidget: CCWidget {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateView(quanitity: Int, scale: String) {
-        mainLabel?.attributedText = NSAttributedString(string: String(quanitity), attributes: CCMoneySavedWidget.QuantityFontAttributes)
+    func updateView(quanitity: String, scale: String) {
+        mainLabel?.attributedText = NSAttributedString(string: quanitity, attributes: CCMoneySavedWidget.QuantityFontAttributes)
         auxLabel?.attributedText = NSAttributedString(string: scale, attributes: CCMoneySavedWidget.ScaleFontAttributes)
     }
     
