@@ -29,8 +29,11 @@ class PaidControlCenterViewController: ControlCenterViewController {
     let protectionOnColor = CCUX.CliqzBlueGlow
     let protectionOffColor = UIColor.white
     
+    var isProtectionOn = true
+    
     override func setupComponents() {
         
+        controls.delegate = self
         dashboard.dataSource = self
         
         self.addChildViewController(dashboard)
@@ -39,8 +42,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
         self.view.addSubview(protectionLabel)
         self.view.addSubview(dashboard.view)
         
-        protectionLabel.text = protectionOn
-        protectionLabel.textColor = protectionOnColor
+        updateProtectionLabel(isOn: isProtectionOn)
         protectionLabel.textAlignment = .center
         protectionLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
         
@@ -73,6 +75,17 @@ class PaidControlCenterViewController: ControlCenterViewController {
         self.view.backgroundColor = .black
     }
     
+    func updateProtectionLabel(isOn: Bool) {
+        if isOn {
+            protectionLabel.text = protectionOn
+            protectionLabel.textColor = protectionOnColor
+        }
+        else {
+            protectionLabel.text = protectionOff
+            protectionLabel.textColor = protectionOffColor
+        }
+    }
+    
     @objc func tabChanged(_ segmentedControl: UISegmentedControl) {
         if segmentedControl.selectedSegmentIndex == 0 {
             CCWidgetManager.shared.update(period: .Today)
@@ -82,6 +95,21 @@ class PaidControlCenterViewController: ControlCenterViewController {
         }
     }
 
+}
+
+extension PaidControlCenterViewController: CCControlViewProtocol {
+    func vpnButtonPressed() {
+        
+    }
+    
+    func startButtonPressed() {
+        isProtectionOn = !isProtectionOn
+        updateProtectionLabel(isOn: isProtectionOn)
+    }
+    
+    func clearButtonPressed() {
+        
+    }
 }
 
 extension PaidControlCenterViewController: CCCollectionDataSourceProtocol {
