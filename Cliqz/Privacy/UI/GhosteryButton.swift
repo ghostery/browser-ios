@@ -32,7 +32,9 @@ class GhosteryButton: InsetButton {
     
     func setUpComponent() {
         addSubview(ghosty)
+        #if !PAID
         addSubview(count)
+        #endif
         
         ghosty.backgroundColor = .clear
         count.backgroundColor = .clear
@@ -40,6 +42,10 @@ class GhosteryButton: InsetButton {
         count.text = "HELLO"
         count.textColor = .white
         count.font = UIFont.systemFont(ofSize: 14)
+        
+        #if PAID
+        count.isHidden = true
+        #endif
     }
     
     func setUpConstaints(_ theme: Theme) {
@@ -54,6 +60,7 @@ class GhosteryButton: InsetButton {
         let height: CGFloat = 25.0
         let width = (ghosty.image?.widthOverHeight() ?? 1.0) * height
         
+        #if GHOSTERY
         var centerDifference: CGFloat = 0.0
         if theme == .Private, let normalImage = UIImage.controlCenterNormalIcon(), let privImage = ghosty.image {
             let ratioNormal = normalImage.widthOverHeight()
@@ -73,6 +80,13 @@ class GhosteryButton: InsetButton {
             make.centerX.equalToSuperview().offset(-centerDifference)
             make.bottom.equalToSuperview().offset(-4)
         }
+        #elseif PAID
+        ghosty.snp.remakeConstraints { (make) in
+            make.center.equalToSuperview()
+            make.height.equalTo(height)
+            make.width.equalTo(width)
+        }
+        #endif
     }
     
     required init?(coder aDecoder: NSCoder) {
