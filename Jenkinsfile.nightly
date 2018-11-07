@@ -72,8 +72,7 @@ node('mac-vm-host') {
                         gem install fastlane --no-document
                         fastlane clearCache
                         fastlane prepare
-                        pip install virtualenv
-                        sudo /usr/bin/easy_install virtualenv
+                        pip install --user virtualenv
                     '''
                 }
                 stage('Build & Upload') {
