@@ -1,5 +1,6 @@
 import 'process-nextick-args';
 import 'react-native/Libraries/Core/InitializeCore';
+import setup from './setup';
 import React from 'react';
 import { AppRegistry, StyleSheet, View } from 'react-native';
 import { startup, components } from 'browser-core';
