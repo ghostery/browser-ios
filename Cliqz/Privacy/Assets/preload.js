@@ -5,6 +5,7 @@
 (function(){
   var messageHandler = window.webkit.messageHandlers.cliqzTrackingProtection;
   var win = window;
+  var tabID = REPLACE_WITH_TAB_ID;
   while (win != win.parent) win = win.parent;
   var pageUrl = win.location.href;
  // -------------------------------------------------
@@ -20,7 +21,7 @@
   };
 
   xhrProto.send = function(body) {
-      messageHandler.postMessage({ url: this._url, location: pageUrl })
+      messageHandler.postMessage({ url: this._url, location: pageUrl, tabIdentifier: tabID })
       return originalSend.apply(this, arguments)
   };
 
@@ -34,7 +35,7 @@
       return originalImageSrc.get.call(this);
     },
     set: function(value) {
-      messageHandler.postMessage({ url: value, location: pageUrl })
+      messageHandler.postMessage({ url: value, location: pageUrl, tabIdentifier: tabID })
       originalImageSrc.set.call(this, value);
     }
   });
@@ -47,7 +48,7 @@
     mutations.forEach(function(mutation) {
       mutation.addedNodes.forEach(function(node) {
         if (node.tagName === 'SCRIPT' || node.tagName === 'IFRAME' || node.tagName === 'LINK') {
-            messageHandler.postMessage({ url: node.src, location: pageUrl });
+            messageHandler.postMessage({ url: node.src, location: pageUrl, tabIdentifier: tabID });
         }
       });
     });
