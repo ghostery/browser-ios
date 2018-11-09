@@ -5,9 +5,10 @@
 var win = window;
 while (win != win.parent) win = win.parent;
 var pageUrl = win.location.href;
+var tabID = REPLACE_WITH_TAB_ID;
 
 var messageHandler = window.webkit.messageHandlers.cliqzTrackingProtectionPostLoad
-var sendMessage = function(url) { messageHandler.postMessage({ url: url, location: pageUrl }) }
+var sendMessage = function(url) { messageHandler.postMessage({ url: url, location: pageUrl, tabIdentifier: tabID }) }
 
 // Send back the sources of every script and image in the dom back to the host applicaiton
 Array.prototype.map.call(document.scripts, function(t) { return t.src }).forEach(sendMessage)

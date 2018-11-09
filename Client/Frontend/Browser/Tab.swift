@@ -68,6 +68,9 @@ class Tab: NSObject {
     //Cliqz: Privacy
     var blockingCoordinator: BlockingCoordinator? = nil
     var lastDomain = ""
+    let tabID: Int
+    var currentPageInfo: CurrentPageInfo? = nil
+    //Cliqz: End
 
     var userActivity: NSUserActivity?
 
@@ -149,8 +152,19 @@ class Tab: NSObject {
 
     init(configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         self.configuration = configuration
+        //Cliqz: Add Tab ID
+        if let appDel = UIApplication.shared.delegate as? AppDelegate, let tabManager = appDel.tabManager {
+            self.tabID = tabManager.tabs.count
+        }
+        else {
+            self.tabID = -1
+        }
+        //Cliqz: End
+        
         super.init()
         self.isPrivate = isPrivate
+        //Cliqz: Add Page Info
+        currentPageInfo = CurrentPageInfo(tab: self)
 
         /* Cliqz: disable firefox tracking protection
         if #available(iOS 11, *) {
