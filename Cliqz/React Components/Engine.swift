@@ -59,9 +59,12 @@ open class Engine {
         self.getBridge().callAction("core:setPref", args: [prefName, prefValue as! NSObject])
     }
     
-    func getPref(_ prefName: String) -> Any {
-        let result = self.getBridge().callAction("core:getPref", args: [prefName])
-        return result["result"]
+    func getPref(_ prefName: String, callback: @escaping (Any) -> Void) {
+        self.getBridge().callAction("core:getPref", args: [prefName]) { (result) in
+            if let val = result["result"] as? [[String: Any]] {
+                callback(val)
+            }
+        }
     }
     
     open func parseJSON(_ dictionary: [String: AnyObject]) -> String {

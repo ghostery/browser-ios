@@ -31,7 +31,7 @@ open class JSBridge : RCTEventEmitter {
     // callbacks waiting for replies from js
     var eventCallbacks = [NSInteger: Callback]()
     // Dictionary of actions waiting for a function to be registered before executing
-    var awaitingRegistration = [String: Array<(Array<AnyObject>, Callback)>]()
+    var awaitingRegistration = [String: Array<(Array<Any>, Callback)>]()
     
     // serial queue for access to eventSemaphores and eventCallbacks
     fileprivate let semaphoresDispatchQueue = DispatchQueue(label: "com.cliqz.jsbridge.sync", attributes: [])
@@ -74,63 +74,16 @@ open class JSBridge : RCTEventEmitter {
         return nextId
     }
 
-    /// Call an action over the JSBridge and return the result synchronously.
+    /// Call an action over the JSBridge and discard the result.
     ///
     /// - parameter functionName: String name of the function to call
     /// - parameter args:         arguments to pass to the function
-    ///
-    /// - returns: A Dictionary with keys "error" and "result". If an error occured "error" will contain a string
-    /// description of the type of error which occured. This may be:
-    ///  * "function not registered": the function is not known to the bridge.
-    ///  * "timeout": timeout occured waiting for the reply
-    ///  * "exception when running action": javascript exception when running this action (see JS logs for details)
-    ///  * "invalid action": action was not known on the Javascript side
-    @discardableResult open func callAction(_ functionName: String, args: Array<Any>) -> NSDictionary {
-        // check listener is registered on other end
-        guard self.registeredActions.contains(functionName) else {
-            debugPrint("ERROR: callAction - function not registered: \(functionName)")
-            
-            if var array = missedActions[functionName] {
-                array.append(args)
-                missedActions[functionName] = array
+    open func callAction(_ functionName: String, args: Array<Any>) {
+        self.callAction(functionName, args: args) { result -> () in
+            if let error = result["error"] as? [[String: Any]] {
+                debugPrint("Error calling action \(functionName): \(error)")
             }
-            else {
-                missedActions[functionName] = [args]
-            }
-            
-            return ["error": "function not registered"]
         }
-        
-        // create unique id
-        let actionId = nextActionId()
-        
-        // create a semaphore for this action
-        let sem = DispatchSemaphore(value: 0)
-        semaphoresDispatchQueue.sync {
-            self.eventSemaphores[actionId] = sem
-        }
-        
-        // dispatch event
-        self.sendEvent(withName: "callAction", body: ["id": actionId, "action": functionName, "args": args])
-        
-        // wait for the semaphore
-        let timeout = sem.wait(timeout: DispatchTime.now() + Double(self.ACTION_TIMEOUT) / Double(NSEC_PER_SEC))
-
-        var reply = NSDictionary()
-        // after signal the reply should be ready in the cache
-        semaphoresDispatchQueue.sync {
-            if timeout == .timedOut {
-                print("action timeout \(actionId), \(functionName)")
-                self.replyCache[actionId] = ["error": "timeout"]
-            }
-            reply = self.replyCache[actionId]!
-        
-            // clear semaphore and reply cache
-            self.replyCache[actionId] = nil
-            self.eventSemaphores[actionId] = nil
-        }
-        
-        return reply
     }
     
     /// Call an action over the JSBridge and execute a callback with the result. Invokation of the callback is
@@ -141,7 +94,7 @@ open class JSBridge : RCTEventEmitter {
     /// - parameter functionName: String name of the function to call
     /// - parameter args:         arguments to pass to the function
     /// - parameter callback:     Callback to invoke with the result
-    open func callAction(_ functionName: String, args: Array<AnyObject>, callback: @escaping Callback) {
+    open func callAction(_ functionName: String, args: Array<Any>, callback: @escaping Callback) {
         guard self.registeredActions.contains(functionName) else {
             lockDispatchQueue.sync {
                 if self.awaitingRegistration[functionName] == nil {
