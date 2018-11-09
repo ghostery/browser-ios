@@ -164,8 +164,9 @@ open class Crypto : RCTEventEmitter {
     
     private func generateRandomBytes(_ length: Int) -> String? {
         var keyData = Data(count: length)
+        let count = keyData.count
         let result = keyData.withUnsafeMutableBytes {
-            SecRandomCopyBytes(kSecRandomDefault, keyData.count, $0)
+            SecRandomCopyBytes(kSecRandomDefault, count, $0)
         }
         if result == errSecSuccess {
             return keyData.base64EncodedString()
