@@ -198,7 +198,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
         // Cliqz: init react Engine
-        _ = Engine.sharedInstance
+        let jsengine = Engine.sharedInstance
+        
+        #if PAID
+            jsengine.setPref("insights.datasaved", prefValue: true)
+            jsengine.setPref("modules.insights.enabled", prefValue: true)
+        #endif
 
         log.info("startApplication end")
         return true
