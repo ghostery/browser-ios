@@ -32,12 +32,12 @@ target 'Client' do
 	pod 'AWSCore', '~> 2.6'
 	pod 'AWSSNS', '~> 2.6'
 	pod 'RxSwift', '~> 4.0'
-    pod 'RealmSwift'
+	pod 'RealmSwift', '~> 3.7.0'
 	pod 'Charts', '~> 3.0.1'
 end
 
 target 'Storage' do
-    pod 'RealmSwift'
+	pod 'RealmSwift', '~> 3.7.0'
 end
 
 post_install do |installer|
