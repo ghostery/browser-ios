@@ -10,8 +10,6 @@ import UIKit
 
 //TODO: 3 connections
 
-//Tabs and different information
-//Start button and protection label text
 //VPNButton and VPN view
 
 class PaidControlCenterViewController: ControlCenterViewController {
