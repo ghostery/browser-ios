@@ -7,12 +7,12 @@ import UIKit
 
 open class UserAgent {
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+    private static let firefoxAppVersion = 13
 
     private static func clientUserAgent(prefix: String) -> String {
         /* Cliqz: Change user agent
         return "\(prefix)/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName))"
         */
-        let firefoxAppVersion = 13
         return "\(prefix)/\(firefoxAppVersion)b\(AppInfo.buildNumber) (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName))"
     }
 
@@ -43,7 +43,10 @@ open class UserAgent {
         let lastiOSVersion = defaults.string(forKey: "LastDeviceSystemVersionNumber")
 
         let currentFirefoxBuildNumber = AppInfo.buildNumber
+        /* Cliqz: Change user agent
         let currentFirefoxVersion = AppInfo.appVersion
+        */
+        let currentFirefoxVersion = String(firefoxAppVersion)
         let lastFirefoxVersion = defaults.string(forKey: "LastFirefoxVersionNumber")
         let lastFirefoxBuildNumber = defaults.string(forKey: "LastFirefoxBuildNumber")
         
@@ -71,7 +74,10 @@ open class UserAgent {
 
         let webView = UIWebView()
 
+        /* Cliqz: Change user agent
         let appVersion = AppInfo.appVersion
+        */
+        let appVersion = firefoxAppVersion
         let buildNumber = AppInfo.buildNumber
         let currentiOSVersion = UIDevice.current.systemVersion
         defaults.set(currentiOSVersion, forKey: "LastDeviceSystemVersionNumber")
