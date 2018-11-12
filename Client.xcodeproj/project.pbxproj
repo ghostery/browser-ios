@@ -551,6 +551,7 @@
 		AFBEDE9A20B56BB200C3119A /* TrackerStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA9FAA0208DD9C00028CA1B /* TrackerStateStore.swift */; };
 		AFD165B620C6C03B00379381 /* UpdateOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD165B520C6C03B00379381 /* UpdateOperation.swift */; };
 		AFD165B920C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD165B820C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift */; };
+		AFDB5D8A2199B29900692FD0 /* timing.js in Resources */ = {isa = PBXBuildFile; fileRef = AFDB5D892199B29900692FD0 /* timing.js */; };
 		AFDF458220A9C5F20091CA27 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */; };
 		AFE3BD572135835E0036AEFE /* ShareTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B22491A0920C600AAB793 /* ShareTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AFE484D32056838500554B2E /* CliqzURLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE484D22056838500554B2E /* CliqzURLBar.swift */; };
@@ -1902,6 +1903,7 @@
 		AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzIntroViewController.swift; sourceTree = "<group>"; };
 		AFD165B520C6C03B00379381 /* UpdateOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateOperation.swift; sourceTree = "<group>"; };
 		AFD165B820C6C1AD00379381 /* PopulateBlockedTrackersOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopulateBlockedTrackersOperation.swift; sourceTree = "<group>"; };
+		AFDB5D892199B29900692FD0 /* timing.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = timing.js; sourceTree = "<group>"; };
 		AFDF458120A9C5F20091CA27 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
 		AFE484D22056838500554B2E /* CliqzURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzURLBar.swift; sourceTree = "<group>"; };
 		AFECF63AADEF4013C5D72D77 /* Pods-Client.firefox.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Client.firefox.xcconfig"; path = "Pods/Target Support Files/Pods-Client/Pods-Client.firefox.xcconfig"; sourceTree = "<group>"; };
@@ -3519,6 +3521,7 @@
 				AF6FA96E20652C6700D7F9F0 /* ghostery_content_blocker.json */,
 				AF6FA97020652C6800D7F9F0 /* postload.js */,
 				AF6FA96F20652C6800D7F9F0 /* preload.js */,
+				AFDB5D892199B29900692FD0 /* timing.js */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -5536,6 +5539,7 @@
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
 				74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */,
 				FA9294011D6584A200AC8D33 /* QRCode.xcassets in Resources */,
+				AFDB5D8A2199B29900692FD0 /* timing.js in Resources */,
 				4F304598204FEE5500C99162 /* jsengine.bundle.js in Resources */,
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,

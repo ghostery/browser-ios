@@ -11,6 +11,20 @@ import Shared
 
 let urlChangedNotification = Notification.Name(rawValue: "URLChangedNotification")
 
+class PageTimingInterceptor: NSObject {
+    static let shared = PageTimingInterceptor()
+}
+
+let pageTimingNotification = Notification.Name(rawValue: "pageTimingNotification")
+
+extension PageTimingInterceptor: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if let dict = message.body as? [String: Any] {
+            NotificationCenter.default.post(name: pageTimingNotification, object: self, userInfo: dict)
+        }
+    }
+}
+
 extension Tab {
     
     func addPrivacy() {
@@ -19,7 +33,6 @@ extension Tab {
         self.webView?.configuration.userContentController.add(URLInterceptor.shared, name: "cliqzTrackingProtectionPostLoad")
         
         //Cliqz: Privacy - Add user scripts
-        //Insert a tab id in the scriptString to identify the tab.
         let preloadSource = try! String(contentsOf: Bundle.main.url(forResource: "preload", withExtension: "js")!).replace("REPLACE_WITH_TAB_ID", replacement: "\(self.tabID)")
         let preloadScript = WKUserScript(source: preloadSource, injectionTime: .atDocumentStart, forMainFrameOnly: true)
         self.webView?.configuration.userContentController.addUserScript(preloadScript)
@@ -27,6 +40,14 @@ extension Tab {
         let postloadSource = try! String(contentsOf: Bundle.main.url(forResource: "postload", withExtension: "js")!).replace("REPLACE_WITH_TAB_ID", replacement: "\(self.tabID)")
         let postloadScript = WKUserScript(source: postloadSource, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
         self.webView?.configuration.userContentController.addUserScript(postloadScript)
+        //pageTiming
+        
+        #if PAID
+        self.webView?.configuration.userContentController.add(PageTimingInterceptor.shared, name: "pageTiming")
+        let timingSource = try! String(contentsOf: Bundle.main.url(forResource: "timing", withExtension: "js")!).replace("REPLACE_WITH_TAB_ID", replacement: "\(self.tabID)")
+        let timingScript = WKUserScript(source: timingSource, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        self.webView?.configuration.userContentController.addUserScript(timingScript)
+        #endif
         
         //Cliqz: Privacy - SetUpBlocking
         if let webView = self.webView {
@@ -86,8 +107,12 @@ extension Tab {
 class CurrentPageInfo: NSObject {
     
     struct PageTiming {
-        let navigationStart: Float
-        let loadEventEnd: Float
+        let navigationStart: Int
+        let loadEventEnd: Int
+        
+        func toDict() -> [String: Any] {
+            return ["navigationStart": self.navigationStart, "loadEventEnd": self.loadEventEnd]
+        }
     }
     
     struct Source {
@@ -123,12 +148,14 @@ class CurrentPageInfo: NSObject {
     var bugIDs: [Int: Info] = [:]
     
     var currentPage: URL? = nil
+    var dataSentForCurrentPage = false
     
     init(tab: Tab) {
         self.tab = tab
         super.init()
         
         NotificationCenter.default.addObserver(self, selector: #selector(trackerDetected), name: detectedTrackerNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pageTimingReceived), name: pageTimingNotification, object: nil)
     }
     
     deinit {
@@ -140,8 +167,63 @@ class CurrentPageInfo: NSObject {
     
     //I need a page complete loading event
     //I need a page changed event
+    
+    /**
+     * Stats from ghostery when a navigation event happens.
+     * @param tabId int
+     * @param pageInfo Object: {
+     *  timestamp: when page navigation was started
+     *  pageTiming: {
+     *    timing: {
+     *      navigationStart: from performance api
+     *      loadEventEnd: from performance api
+     *    }
+     *  },
+     *  host: first party hostname
+     * }
+     * @param apps Array [{
+     *  id: app ID,
+     *  blocked: Boolean,
+     *  sources: Array [{ src: string url, blocked: boolean }]
+     * }, ...]
+     * @param bugs Object {
+     *  [bug ID]: {
+     *    blocked: Boolean,
+     *    sources: Array [{ src: string url, blocked: boolean }]
+     *  }
+     * }
+     */
+    
+    
+    //TODO: get timestamp: when page navigation was started
+    //TODO: Send data to ghostery module
+    func sendData() {
+        //convert data
+        guard dataSentForCurrentPage == false else {return}
+        
+        let tabID = self.tab.tabID
+        let apps = convertAppIds()
+        let bugs = convertBugIds()
+        
+        let timeStamp = 0
+        let pageInfo: [String: Any]
+        
+        if let pt = self.pageTiming {
+            let pageTime: [String: Any] = ["timing": pt.toDict()]
+            pageInfo = ["timestamp": timeStamp, "pageTiming": pageTime, "host": self.host ?? ""]
+        }
+        else {
+            pageInfo = ["timestamp": timeStamp, "host": self.host ?? ""]
+        }
+        
+        //send stuff here
+        
+        dataSentForCurrentPage = true
+    }
+    
     func pageChanged() {
-        //send data: Make sure data is sent once for a page
+        //send data: Make sure data is sent once for a page - Done using a flag (dataSentForCurrentPage)
+        sendData()
         //reset
         reset()
     }
@@ -152,20 +234,30 @@ class CurrentPageInfo: NSObject {
         self.pageTiming = nil
         self.appIDs.removeAll()
         self.bugIDs.removeAll()
+        self.dataSentForCurrentPage = false
     }
     
     //I need to get the host
     //I need to get the start loading time
+    //I need page timing
+    //Question: Should I consider this the point where the page is loaded?
+    //loadEventEnd is always 0
+    
+    //Page loaded event
+    //TODO: Send data
+    @objc func pageTimingReceived(_ notification: Notification) {
+        if let userInfo = notification.userInfo as? [String: Any], let tabIdentifier = userInfo["tabIdentifier"] as? Int, tabIdentifier == tab.tabID {
+            guard let navStart = userInfo["navigationStart"] as? Int, let loadEnd = userInfo["loadEventEnd"] as? Int, loadEnd > 0 else {return}
+            print("userInfo = \(userInfo)")
+            self.pageTiming = PageTiming(navigationStart: navStart, loadEventEnd: loadEnd)
+            self.sendData()
+        }
+    }
     //I need the tracker info
-    
-    
     // I will start with the tracker info.
     @objc func trackerDetected(_ notification: Notification) {
         //filter by tab id.
         //then add the tracker info to the arrays
-        
-        //TODO: Use the page URL to determine if the page changed.
-        //let pageURL = userInfo["url"] as? URL
         
         func addSourceTo(dict: inout [Int: Info], source: Source, id: Int) {
             if let info = dict[id] {
@@ -179,6 +271,19 @@ class CurrentPageInfo: NSObject {
         }
         
         if let userInfo = notification.userInfo as? [String: Any], let tabIdentifier = userInfo["tabID"] as? Int, tabIdentifier == tab.tabID {
+            
+            //Use the page URL to determine if the page changed.
+            guard let pageURL = userInfo["url"] as? URL, let domainURL = userInfo["domainURL"] as? URL else {return}
+            if (currentPage == nil) {
+                currentPage = pageURL
+            }
+            else if (pageURL.absoluteString != currentPage?.absoluteString) {
+                //pageChanged
+                pageChanged()
+                self.host = domainURL.absoluteString
+                currentPage = pageURL
+            }
+            
             guard let bug = userInfo["bug"] as? TrackerListBug, let sourceURL = userInfo["sourceURL"] as? URL else {return}
             let source = Source(src: sourceURL.absoluteString, blocked: true) //blocked is true always for now.
             let appID = bug.appId
@@ -211,42 +316,3 @@ class CurrentPageInfo: NSObject {
         return dict
     }
 }
-
-
-/**
- * Stats from ghostery when a navigation event happens.
- * @param tabId int
- * @param pageInfo Object: {
- *  timestamp: when page navigation was started
- *  pageTiming: {
- *    timing: {
- *      navigationStart: from performance api
- *      loadEventEnd: from performance api
- *    }
- *  },
- *  host: first party hostname
- * }
- * @param apps Array [{
- *  id: app ID,
- *  blocked: Boolean,
- *  sources: Array [{ src: string url, blocked: boolean }]
- * }, ...]
- * @param bugs Object {
- *  [bug ID]: {
- *    blocked: Boolean,
- *    sources: Array [{ src: string url, blocked: boolean }]
- *  }
- * }
- */
-
-
-
-
-
-
-
-
-
-
-
-
