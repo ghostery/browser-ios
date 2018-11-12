@@ -10,7 +10,7 @@ import UIKit
 
 class VPNButton: UIButton {
     
-    enum State: Int {
+    enum StateVPN: Int {
         case Connect
         case Connecting
         case Disconnect
@@ -60,14 +60,14 @@ class VPNButton: UIButton {
     let auxLabel = UILabel()
     
     let lastConnectButtonStateKey = "VPNLastConnectButtonStateKey"
-    var currentState: State {
+    var currentState: StateVPN {
         set {
             UserDefaults.standard.set(newValue.rawValue, forKey: lastConnectButtonStateKey)
             UserDefaults.standard.synchronize()
         }
         get {
             if let raw = UserDefaults.standard.value(forKey: lastConnectButtonStateKey) as? Int {
-                if let state = State(rawValue: raw) {
+                if let state = StateVPN(rawValue: raw) {
                     return state
                 }
             }
@@ -133,7 +133,7 @@ class VPNButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(state: State) {
+    func set(state: StateVPN) {
         
         currentState = state
         
