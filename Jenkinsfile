@@ -88,7 +88,7 @@ node('mac-mini-ios') {
                         set -e
                         set -x
                         npm run build
-                        pod install
+                        pod install --repo-update
                         npm run bundle
                     '''
                 }

@@ -13,7 +13,7 @@ node('mac-vm-host') {
 
     writeFile file: 'Vagrantfile', text: '''
     Vagrant.configure("2") do |config|
-        config.vm.box = "browser-ios-v300"
+        config.vm.box = "browser-f-ios10.12.6-305"
         
         config.vm.define "nightlyios" do |nightlyios|
             nightlyios.vm.hostname ="nightlyios"
@@ -22,14 +22,8 @@ node('mac-vm-host') {
             nightlyios.vm.boot_timeout = 900
             nightlyios.vm.provider "vmware_fusion" do |v|
                 v.name = "nightlyios"
-                v.whitelist_verified = true
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
-                v.cpus = ENV["NODE_CPU_COUNT"]
-                v.cpu_mode = "host-passthrough"
-                v.vmx["remotedisplay.vnc.enabled"] = "TRUE"
-                v.vmx["RemoteDisplay.vnc.port"] = ENV["NODE_VNC_PORT"]
-                v.vmx["ethernet0.pcislotnumber"] = "33"
             end
             nightlyios.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                 set -e

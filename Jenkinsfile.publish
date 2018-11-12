@@ -11,7 +11,7 @@ node('mac-vm-host') {
 
     writeFile file: 'Vagrantfile', text: '''
     Vagrant.configure("2") do |config|
-        config.vm.box = "browser-ios-v300"
+        config.vm.box = "browser-f-ios10.12.6-305"
 
         config.vm.define "publishios" do |publishios|
             publishios.vm.hostname ="publishios"
@@ -20,14 +20,8 @@ node('mac-vm-host') {
             publishios.vm.boot_timeout = 900
             publishios.vm.provider "vmware_fusion" do |v|
                 v.name = "publishios"
-                v.whitelist_verified = true
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
-                v.cpus = ENV["NODE_CPU_COUNT"]
-                v.cpu_mode = "host-passthrough"
-                v.vmx["remotedisplay.vnc.enabled"] = "TRUE"
-                v.vmx["RemoteDisplay.vnc.port"] = ENV["NODE_VNC_PORT"]
-                v.vmx["ethernet0.pcislotnumber"] = "33"
             end
             publishios.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                 set -e
