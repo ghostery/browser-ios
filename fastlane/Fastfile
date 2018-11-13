@@ -65,7 +65,7 @@ platform :ios do
     rescue
       sh("cd .. && npm install")
     end
-    sh("cd .. && pod install")
+    sh("cd .. && pod install --repo-update")
     sh("cd .. && npm run build")
 
   end
