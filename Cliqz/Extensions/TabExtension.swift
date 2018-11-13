@@ -20,6 +20,7 @@ let pageTimingNotification = Notification.Name(rawValue: "pageTimingNotification
 extension PageTimingInterceptor: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if let dict = message.body as? [String: Any] {
+            //print(dict)
             NotificationCenter.default.post(name: pageTimingNotification, object: self, userInfo: dict)
         }
     }
@@ -154,19 +155,14 @@ class CurrentPageInfo: NSObject {
         self.tab = tab
         super.init()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(trackerDetected), name: detectedTrackerNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleInterceptedURL), name: detectedTrackerNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleInterceptedURL), name: newInterceptedURLNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(pageTimingReceived), name: pageTimingNotification, object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
-    //TODO: First find how to colect all data
-    //Then figure out the currentPage -> newPage transition
-    
-    //I need a page complete loading event
-    //I need a page changed event
     
     /**
      * Stats from ghostery when a navigation event happens.
@@ -192,20 +188,23 @@ class CurrentPageInfo: NSObject {
      *    sources: Array [{ src: string url, blocked: boolean }]
      *  }
      * }
+     * async pushGhosteryPageStats(tabId, pageInfo, apps, bugs)
      */
     
-    
-    //TODO: get timestamp: when page navigation was started
-    //TODO: Send data to ghostery module
     func sendData() {
-        //convert data
+
         guard dataSentForCurrentPage == false else {return}
+        dataSentForCurrentPage = true
+        
+        //Should I push if there were no trackers detected?
+        //Answer is no.
+        guard bugIDs.count > 0 else { /*print("Will send -- No trackers for \(String(describing: currentPage))"); */ return}
         
         let tabID = self.tab.tabID
         let apps = convertAppIds()
         let bugs = convertBugIds()
         
-        let timeStamp = 0
+        let timeStamp = Int((self.startLoadTime?.timeIntervalSince1970 ?? 0.0) * 1000.0)
         let pageInfo: [String: Any]
         
         if let pt = self.pageTiming {
@@ -218,7 +217,12 @@ class CurrentPageInfo: NSObject {
         
         //send stuff here
         
-        dataSentForCurrentPage = true
+        //let currentP = self.currentPage
+        DispatchQueue.global(qos: .utility).async {
+            //print("Will send data for tab = \(tabID) and page = \(String(describing: currentP))")
+            Engine.sharedInstance.getBridge().callAction("insights:pushGhosteryPageStats", args: [tabID, pageInfo, apps, bugs])
+        }
+        
     }
     
     func pageChanged() {
@@ -237,28 +241,26 @@ class CurrentPageInfo: NSObject {
         self.dataSentForCurrentPage = false
     }
     
-    //I need to get the host
-    //I need to get the start loading time
-    //I need page timing
-    //Question: Should I consider this the point where the page is loaded?
-    //loadEventEnd is always 0
-    
     //Page loaded event
-    //TODO: Send data
+    //Careful: This event can come after the page was changed. Check the currentURL.
     @objc func pageTimingReceived(_ notification: Notification) {
-        if let userInfo = notification.userInfo as? [String: Any], let tabIdentifier = userInfo["tabIdentifier"] as? Int, tabIdentifier == tab.tabID {
+        if let userInfo = notification.userInfo as? [String: Any],
+            let tabIdentifier = userInfo["tabIdentifier"] as? Int,
+            let pageURL = userInfo["pageURL"] as? String,
+            tabIdentifier == tab.tabID,
+            currentPage?.absoluteString == pageURL {
+            
             guard let navStart = userInfo["navigationStart"] as? Int, let loadEnd = userInfo["loadEventEnd"] as? Int, loadEnd > 0 else {return}
             print("userInfo = \(userInfo)")
             self.pageTiming = PageTiming(navigationStart: navStart, loadEventEnd: loadEnd)
             self.sendData()
         }
     }
-    //I need the tracker info
-    // I will start with the tracker info.
-    @objc func trackerDetected(_ notification: Notification) {
+    
+    //Page changed event
+    @objc func handleInterceptedURL(_ notification: Notification) {
         //filter by tab id.
         //then add the tracker info to the arrays
-        
         func addSourceTo(dict: inout [Int: Info], source: Source, id: Int) {
             if let info = dict[id] {
                 info.sources.append(source)
@@ -276,12 +278,15 @@ class CurrentPageInfo: NSObject {
             guard let pageURL = userInfo["url"] as? URL, let domainURL = userInfo["domainURL"] as? URL else {return}
             if (currentPage == nil) {
                 currentPage = pageURL
+                self.host = domainURL.absoluteString
+                self.startLoadTime = Date()
             }
             else if (pageURL.absoluteString != currentPage?.absoluteString) {
                 //pageChanged
                 pageChanged()
-                self.host = domainURL.absoluteString
                 currentPage = pageURL
+                self.host = domainURL.absoluteString
+                self.startLoadTime = Date()
             }
             
             guard let bug = userInfo["bug"] as? TrackerListBug, let sourceURL = userInfo["sourceURL"] as? URL else {return}
@@ -294,13 +299,14 @@ class CurrentPageInfo: NSObject {
     }
     
     func convertAppIds() -> [[String: Any]] {
-        let array: [[String: Any]] = []
+        var array: [[String: Any]] = []
         
         for (key, value) in appIDs {
             var dict: [String: Any] = [:]
             dict["id"] = key
             dict["blocked"] = value.blocked
             dict["sources"] = value.sources.map{$0.toDict()}
+            array.append(dict)
         }
         
         return array
@@ -310,7 +316,7 @@ class CurrentPageInfo: NSObject {
         var dict = [String: Any]()
         
         for (key, value) in bugIDs {
-            dict[String(key)] = value.toDict
+            dict[String(key)] = value.toDict()
         }
         
         return dict

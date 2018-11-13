@@ -39,7 +39,7 @@ const PageInfo = (function (window, document) {
       const tabID = REPLACE_WITH_TAB_ID; 
       const messageHandler = window.webkit.messageHandlers.pageTiming;
       const analyzePageInfo = function () {
-            //const { host, pathname, protocol } = document.location;
+            const { host, pathname, protocol } = document.location;
             //const pTime = (performance.timing.domContentLoadedEventStart - performance.timing.requestStart);
             //const pageLatency = pTime || 0;
 
@@ -55,7 +55,7 @@ const PageInfo = (function (window, document) {
             //             }
             //       }
             // });
-            messageHandler.postMessage({navigationStart: window.performance.timing.navigationStart, loadEventEnd: window.performance.timing.loadEventEnd, tabIdentifier: tabID});
+                  messageHandler.postMessage({navigationStart: window.performance.timing.navigationStart, loadEventEnd: window.performance.timing.loadEventEnd, pageURL: document.location.href, tabIdentifier: tabID, host: host});
       };
       /**
        * Initialize functionality of this script.
