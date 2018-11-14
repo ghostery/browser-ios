@@ -72,6 +72,8 @@ class PaidControlCenterViewController: ControlCenterViewController {
         }
         
         self.view.backgroundColor = .black
+        
+        CCWidgetManager.shared.update(period: currentPeriod)
     }
     
     func updateProtectionLabel(isOn: Bool) {

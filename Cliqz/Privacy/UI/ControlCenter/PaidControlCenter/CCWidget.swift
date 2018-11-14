@@ -13,15 +13,135 @@ import Shared
 enum Period {
     case Today
     case Last7Days
+    
+    func toString() -> String {
+        switch self {
+        case .Today:
+            return "day"
+        case .Last7Days:
+            return "week"
+        }
+    }
+}
+
+extension Int {
+    func add(num: Int?) -> Int {
+        guard let num = num else {return self}
+        return self + num
+    }
 }
 
 class CCWidgetManager {
     //this is where the data for the widgets is managed.
+    
+    static private func microSeconds2Mili(_ micro: Int?) -> Float? {
+        guard let micro = micro else {return nil}
+        return Float(micro) / 1000.0
+    }
+    
+    static private func milisec2Sec(_ mili: Float?) -> Float? {
+        guard let mili = mili else {return nil}
+        return mili / 1000
+    }
+    
+    static private func sec2Min(_ sec: Float?) -> Float? {
+        guard let sec = sec else {return nil}
+        return sec / 60
+    }
+    
+    static private func bytes2MB(_ bytes: Int?) -> Int? {
+        guard let bytes = bytes else {return nil}
+        return bytes / 1000000
+    }
+    
+    enum TimeUnit {
+        case Seconds
+        case Milliseconds
+        case Minutes
+    }
+    
+    enum DataUnit {
+        case Bytes
+        case Megabytes
+    }
+    
+    struct Info: Codable {
+        let timeSaved: Int?
+        let adsBlocked: Int?
+        let dataSaved: Int?
+        let batterySaved: Int?
+        let trackersDetected: Int?
+        
+        func merge(info: Info) -> Info {
+            let timeSaved = self.timeSaved?.add(num: info.timeSaved)
+            let adsBlocked = self.adsBlocked?.add(num: info.adsBlocked)
+            let dataSaved = self.dataSaved?.add(num: info.dataSaved)
+            let batterySaved = self.dataSaved?.add(num: info.dataSaved)
+            let trackersDetected = self.trackersDetected?.add(num: info.trackersDetected)
+            
+            return Info(timeSaved: timeSaved, adsBlocked: adsBlocked, dataSaved: dataSaved, batterySaved: batterySaved, trackersDetected: trackersDetected)
+        }
+        
+        static var zero: Info {
+            return Info(timeSaved: 0, adsBlocked: 0, dataSaved: 0, batterySaved: 0, trackersDetected: 0)
+        }
+
+        
+        func timeSaved(unit: TimeUnit) -> String {
+            
+            var number: Float? = 0.0
+            
+            switch unit {
+            case .Seconds:
+                number = milisec2Sec(microSeconds2Mili(self.timeSaved))
+            case .Milliseconds:
+                number = microSeconds2Mili(self.timeSaved)
+            case .Minutes:
+                number = sec2Min(milisec2Sec(microSeconds2Mili(self.timeSaved)))
+            }
+            
+            return String(format: "%.2f", number ?? 0)
+        }
+        
+        func dataSaved(unit: DataUnit) -> String {
+            
+            var number: Int = 0
+            
+            switch unit {
+            case .Bytes:
+                number = self.dataSaved ?? 0
+            case .Megabytes:
+                number = bytes2MB(self.dataSaved) ?? 0
+            }
+            
+            return String(number)
+        }
+        
+        func batterySaved(unit: TimeUnit) -> String {
+            
+            var number: Float? = 0.0
+            
+            switch unit {
+            case .Seconds:
+                number = milisec2Sec(microSeconds2Mili(self.batterySaved))
+            case .Milliseconds:
+                number =  microSeconds2Mili(self.batterySaved)
+            case .Minutes:
+                number = sec2Min(milisec2Sec(microSeconds2Mili(self.batterySaved)))
+            }
+            
+            return String(format: "%.2f", number ?? 0)
+        }
+    }
+    
     static let shared = CCWidgetManager()
     
     private let registeredWidgets = WeakList<CCWidget>()
     
     var currentPeriod: Period = .Today
+    
+    var todayInfo: Info = Info.zero
+    var last7DaysInfo: Info = Info.zero
     
     func registerWidget(widget: CCWidget) {
         registeredWidgets.insert(widget)
@@ -31,49 +151,100 @@ class CCWidgetManager {
     func update(period: Period) {
         currentPeriod = period
         //push update
-        for widget in registeredWidgets {
-            widget.update()
+        
+        Engine.sharedInstance.getBridge().callAction("insights:getDashboardStats", args: [currentPeriod.toString()]) { [weak self] (response) in
+            print("getDashboardStats = \(response)")
+            if let info = self?.parseResponse(response: response),
+                let widgets = self?.registeredWidgets {
+                
+                if period == .Today {
+                    self?.todayInfo = info
+                }
+                else if period == .Last7Days {
+                    self?.last7DaysInfo = info
+                }
+                
+                DispatchQueue.main.async {
+                    for widget in widgets {
+                        widget.update()
+                    }
+                }
+                
+            }
         }
+    }
+    
+    private func parseResponse(response: NSDictionary) -> Info? {
+        if let result = response.value(forKey: "result") as? [String: Any] {
+            var timeSaved: Int? = nil
+            var adsBlocked: Int? = nil
+            var dataSaved: Int? = nil
+            var batterySaved: Int? = nil
+            var trackersDetected: Int? = nil
+            
+            if let v = result["timeSaved"] as? Int {
+                timeSaved = v
+                //TODO: Battery saved
+                //batterySaved = v
+            }
+            
+            if let v = result["adsBlocked"] as? Int {
+                adsBlocked = v
+            }
+            
+            if let v = result["dataSaved"] as? Int {
+                dataSaved = v
+            }
+            
+            if let v = result["trackersDetected"] as? Int {
+                trackersDetected = v
+            }
+            
+            return Info(timeSaved: timeSaved, adsBlocked: adsBlocked, dataSaved: dataSaved, batterySaved: batterySaved, trackersDetected: trackersDetected)
+            
+        }
+        
+        return nil;
     }
     
     func savedTime() -> (String, String) {
         if currentPeriod == .Today {
-            return ("2:32", "MIN")
+            return (todayInfo.timeSaved(unit: .Seconds), "SEC")
         }
         
-        return ("16:03", "MIN")
+        return (last7DaysInfo.timeSaved(unit: .Seconds), "SEC")
     }
     
     func adsBlocked() -> Int {
         if currentPeriod == .Today {
-            return 432
+            return todayInfo.adsBlocked ?? 0
         }
         
-        return 3842
+        return last7DaysInfo.adsBlocked ?? 0
     }
     
     func dataSaved() -> (String, String) {
         if currentPeriod == .Today {
-            return ("3,5", "MB")
+            return (todayInfo.dataSaved(unit: .Megabytes), "MB")
         }
         
-        return ("26,4", "MB")
+        return (last7DaysInfo.dataSaved(unit: .Megabytes), "MB")
     }
     
     func batterySaved() -> (String, String) {
         if currentPeriod == .Today {
-            return ("4:01", "MIN")
+            return (todayInfo.batterySaved(unit: .Seconds), "SEC")
         }
         
-        return ("29:03", "MIN")
+        return (last7DaysInfo.batterySaved(unit: .Seconds), "SEC")
     }
     
     func companies() -> Int {
         if currentPeriod == .Today {
-            return 89
+            return todayInfo.trackersDetected ?? 0
         }
         
-        return 234
+        return last7DaysInfo.trackersDetected ?? 0
     }
     
     func moneySaved() -> (String, String) {

@@ -20,7 +20,6 @@ let pageTimingNotification = Notification.Name(rawValue: "pageTimingNotification
 extension PageTimingInterceptor: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if let dict = message.body as? [String: Any] {
-            //print(dict)
             NotificationCenter.default.post(name: pageTimingNotification, object: self, userInfo: dict)
         }
     }
