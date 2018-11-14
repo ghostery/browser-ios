@@ -90,7 +90,7 @@ node('mac-vm-host') {
                                 set -e
                                 rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                                 rm -rf ../build-tools
-                                export app_name=Paid
+                                export app_name=Lumen
                                 fastlane importLocalizations
                                 export MATCH_KEYCHAIN_NAME=ios-build.keychain
                                 fastlane paidBeta
