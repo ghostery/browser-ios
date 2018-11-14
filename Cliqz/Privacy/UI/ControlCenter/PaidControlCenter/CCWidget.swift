@@ -34,14 +34,11 @@ extension Int {
 class CCWidgetManager {
     //this is where the data for the widgets is managed.
     
-    static private func microSeconds2Mili(_ micro: Int?) -> Float? {
-        guard let micro = micro else {return nil}
-        return Float(micro) / 1000.0
-    }
+    //Note: Time from ghostery comes in miliseconds. Data comes in bytes.
     
-    static private func milisec2Sec(_ mili: Float?) -> Float? {
+    static private func milisec2Sec(_ mili: Int?) -> Float? {
         guard let mili = mili else {return nil}
-        return mili / 1000
+        return Float(mili) / 1000.0
     }
     
     static private func sec2Min(_ sec: Float?) -> Float? {
@@ -49,9 +46,9 @@ class CCWidgetManager {
         return sec / 60
     }
     
-    static private func bytes2MB(_ bytes: Int?) -> Int? {
+    static private func bytes2MB(_ bytes: Int?) -> Float? {
         guard let bytes = bytes else {return nil}
-        return bytes / 1000000
+        return Float(bytes) / 1000000.0
     }
     
     enum TimeUnit {
@@ -93,28 +90,28 @@ class CCWidgetManager {
             
             switch unit {
             case .Seconds:
-                number = milisec2Sec(microSeconds2Mili(self.timeSaved))
+                number = milisec2Sec(self.timeSaved)
             case .Milliseconds:
-                number = microSeconds2Mili(self.timeSaved)
+                number = Float(self.timeSaved ?? 0)
             case .Minutes:
-                number = sec2Min(milisec2Sec(microSeconds2Mili(self.timeSaved)))
+                number = sec2Min(milisec2Sec(self.timeSaved))
             }
             
-            return String(format: "%.2f", number ?? 0)
+            return String(format: "%.1f", number ?? 0)
         }
         
         func dataSaved(unit: DataUnit) -> String {
             
-            var number: Int = 0
+            var number: Float? = 0
             
             switch unit {
             case .Bytes:
-                number = self.dataSaved ?? 0
+                number = Float(self.dataSaved ?? 0)
             case .Megabytes:
-                number = bytes2MB(self.dataSaved) ?? 0
+                number = bytes2MB(self.dataSaved) ?? 0.0
             }
             
-            return String(number)
+            return String(format: "%.1f", number ?? 0)
         }
         
         func batterySaved(unit: TimeUnit) -> String {
@@ -123,14 +120,14 @@ class CCWidgetManager {
             
             switch unit {
             case .Seconds:
-                number = milisec2Sec(microSeconds2Mili(self.batterySaved))
+                number = milisec2Sec(self.batterySaved)
             case .Milliseconds:
-                number =  microSeconds2Mili(self.batterySaved)
+                number = Float(self.batterySaved ?? 0)
             case .Minutes:
-                number = sec2Min(milisec2Sec(microSeconds2Mili(self.batterySaved)))
+                number = sec2Min(milisec2Sec(self.batterySaved))
             }
             
-            return String(format: "%.2f", number ?? 0)
+            return String(format: "%.1f", number ?? 0)
         }
     }
     
