@@ -188,9 +188,9 @@ class CCDataSource {
         let batterySaved = CCCell(title: "Akku gespart", description: batterySavedDesc, widget: CCBatterySavedWidget(), cellHeight: 120)
         let companies = CCCell(title: "Tracker-Firmen blockiert", description: companiesDesc, widget: CCCompaniesWidget(), cellHeight: 120)
         let phishingProtection = CCCell(title: "Phishing-Schutz", description: phishingDesc, widget: CCAntiPhishingWidget(), cellHeight: 120)
-        let moneySaved = CCCell(title: "Geld gespart", description: moneySavedDesc, widget: CCMoneySavedWidget(), cellHeight: 204, optionalView: IncomeSlider(), optionalViewHeight: 84)
+//        let moneySaved = CCCell(title: "Geld gespart", description: moneySavedDesc, widget: CCMoneySavedWidget(), cellHeight: 204, optionalView: IncomeSlider(), optionalViewHeight: 84)
         
-        cells = [timeSaved, adsBlocked, dataSaved, batterySaved, companies, phishingProtection, moneySaved]
+        cells = [timeSaved, adsBlocked, dataSaved, batterySaved, companies, phishingProtection]
     }
     
     func configureCell(cell: CCAbstractCell, index: Int, period: Period) {
