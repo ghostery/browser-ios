@@ -46,20 +46,56 @@ class CCWidgetManager {
         return sec / 60
     }
     
-    static private func bytes2MB(_ bytes: Int?) -> Float? {
+    static private func min2Hour(_ min: Float?) -> Float? {
+        guard let min = min else {return nil}
+        return min / 60
+    }
+    
+    static private func hour2Day(_ hour: Float?) -> Float? {
+        guard let hour = hour else {return nil}
+        return hour / 24
+    }
+    
+    static private func bytes2MB(_ bytes: Float?) -> Float? {
         guard let bytes = bytes else {return nil}
-        return Float(bytes) / 1000000.0
+        return bytes / 1000000.0
     }
     
     enum TimeUnit {
         case Seconds
         case Milliseconds
         case Minutes
+        case Hours
+        case Days
+        
+        func toString() -> String {
+            switch self {
+            case .Seconds:
+                return "SEC"
+            case .Milliseconds:
+                return "MILLI"
+            case .Minutes:
+                return "MIN"
+            case .Hours:
+                return "HOURS"
+            case .Days:
+                return "DAYS"
+            }
+        }
     }
     
     enum DataUnit {
         case Bytes
         case Megabytes
+        
+        func toString() -> String {
+            switch self {
+            case .Bytes:
+                return "BYTES"
+            case .Megabytes:
+                return "MB"
+            }
+        }
     }
     
     struct Info: Codable {
@@ -84,50 +120,71 @@ class CCWidgetManager {
         }
 
         
-        func timeSaved(unit: TimeUnit) -> String {
+        func timeSavedStrings() -> (String, String) {
             
-            var number: Float? = 0.0
+            var unit: TimeUnit = .Seconds
             
-            switch unit {
-            case .Seconds:
-                number = milisec2Sec(self.timeSaved)
-            case .Milliseconds:
-                number = Float(self.timeSaved ?? 0)
-            case .Minutes:
-                number = sec2Min(milisec2Sec(self.timeSaved))
+            if var time = milisec2Sec(self.timeSaved) {
+                if time > 59 {
+                    //convert to mins
+                    time = sec2Min(time) ?? 0.0
+                    unit = .Minutes
+                    
+                    if time > 59 {
+                        time = min2Hour(time) ?? 0.0
+                        unit = .Hours
+                        
+                        if time > 24 {
+                            time = hour2Day(time) ?? 0.0
+                            unit = .Days
+                        }
+                    }
+                }
+
+                return (String(format: "%.1f", time), unit.toString())
             }
             
-            return String(format: "%.1f", number ?? 0)
+            return (String(0), unit.toString())
         }
         
-        func dataSaved(unit: DataUnit) -> String {
+        func dataSavedStrings() -> (String, String) {
             
-            var number: Float? = 0
+            var unit: DataUnit = .Bytes
             
-            switch unit {
-            case .Bytes:
-                number = Float(self.dataSaved ?? 0)
-            case .Megabytes:
-                number = bytes2MB(self.dataSaved) ?? 0.0
+            var data = Float(self.dataSaved ?? 0)
+            if data > 1000000.0 {
+                data = bytes2MB(data) ?? 0.0
+                unit = .Megabytes
             }
             
-            return String(format: "%.1f", number ?? 0)
+            return (String(format: "%.1f", data), unit.toString())
         }
         
-        func batterySaved(unit: TimeUnit) -> String {
+        func batterySavedStrings() -> (String, String) {
             
-            var number: Float? = 0.0
+            var unit: TimeUnit = .Seconds
             
-            switch unit {
-            case .Seconds:
-                number = milisec2Sec(self.batterySaved)
-            case .Milliseconds:
-                number = Float(self.batterySaved ?? 0)
-            case .Minutes:
-                number = sec2Min(milisec2Sec(self.batterySaved))
+            if var time = milisec2Sec(self.batterySaved) {
+                if time > 59 {
+                    //convert to mins
+                    time = sec2Min(time) ?? 0.0
+                    unit = .Minutes
+                    
+                    if time > 59 {
+                        time = min2Hour(time) ?? 0.0
+                        unit = .Hours
+                        
+                        if time > 24 {
+                            time = hour2Day(time) ?? 0.0
+                            unit = .Days
+                        }
+                    }
+                }
+                
+                return (String(format: "%.1f", time), unit.toString())
             }
             
-            return String(format: "%.1f", number ?? 0)
+            return (String(0), unit.toString())
         }
     }
     
@@ -206,10 +263,10 @@ class CCWidgetManager {
     
     func savedTime() -> (String, String) {
         if currentPeriod == .Today {
-            return (todayInfo.timeSaved(unit: .Seconds), "SEC")
+            return todayInfo.timeSavedStrings()
         }
         
-        return (last7DaysInfo.timeSaved(unit: .Seconds), "SEC")
+        return last7DaysInfo.timeSavedStrings()
     }
     
     func adsBlocked() -> Int {
@@ -222,18 +279,18 @@ class CCWidgetManager {
     
     func dataSaved() -> (String, String) {
         if currentPeriod == .Today {
-            return (todayInfo.dataSaved(unit: .Megabytes), "MB")
+            return todayInfo.dataSavedStrings()
         }
         
-        return (last7DaysInfo.dataSaved(unit: .Megabytes), "MB")
+        return last7DaysInfo.dataSavedStrings()
     }
     
     func batterySaved() -> (String, String) {
         if currentPeriod == .Today {
-            return (todayInfo.batterySaved(unit: .Seconds), "SEC")
+            return todayInfo.batterySavedStrings()
         }
         
-        return (last7DaysInfo.batterySaved(unit: .Seconds), "SEC")
+        return last7DaysInfo.batterySavedStrings()
     }
     
     func companies() -> Int {
