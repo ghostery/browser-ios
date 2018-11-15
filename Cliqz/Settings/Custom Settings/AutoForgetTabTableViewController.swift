@@ -25,7 +25,11 @@ class AutoForgetTabTableViewController: ToggleSubSettingsTableViewController {
     }
     
     override func getSectionFooters() -> [String] {
-        return [NSLocalizedString("Websites which are known to contain explicit content are automatically opened in Forget Tabs. Visits to such websites are therefore not saved to your history.", tableName: "Cliqz", comment: "[Settings -> AutoForget Tab] toogle footer")]
+        #if PAID
+            return [NSLocalizedString("Websites which are known to contain explicit content are automatically opened in Private Tabs. Visits to such websites are therefore not saved to your history.", tableName: "Lumen", comment: "[Settings -> AutoForget Tab] toogle footer")]
+        #else
+            return [NSLocalizedString("Websites which are known to contain explicit content are automatically opened in Ghost Tabs. Visits to such websites are therefore not saved to your history.", tableName: "Ghostery", comment: "[Settings -> AutoForget Tab] toogle footer")]
+        #endif
     }
     
     override func saveToggles(isOn: Bool, atIndex: Int) {

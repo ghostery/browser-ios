@@ -128,9 +128,9 @@
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
-			<string>quick_action_new_ghost_tab</string>
+			<string>$(SHORTCUT_PRIVATE_TAB_ICON)</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>ShortcutItemTitleNewPrivateTab</string>
+			<string>$(SHORTCUT_PRIVATE_TAB_TITLE)</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).NewPrivateTab</string>
 		</dict>

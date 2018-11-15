@@ -137,6 +137,13 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     }
     
     private func generatePrivacySettings(prefs: Prefs) -> [Setting] {
+        #if PAID
+            let statusText = NSLocalizedString("When Leaving Private Mode", tableName: "Lumen", comment: "Will be displayed in Settings under 'Close Private Tabs'")
+            let titleText = NSLocalizedString("Close Private Tabs", tableName: "Lumen", comment: "Setting for closing private tabs")
+        #else
+            let statusText = NSLocalizedString("When Leaving Forget Mode", tableName: "Ghostery", comment: "Will be displayed in Settings under 'Close Forget Tabs'")
+            let titleText = NSLocalizedString("Close Forget Tabs", tableName: "Ghostery", comment: "Setting for closing forget tabs")
+        #endif
         
         let privacySettings = [ LoginsSetting(settings: self, delegate: settingsDelegate),
                                 TouchIDPasscodeSetting(settings: self),
@@ -145,8 +152,8 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
                                 BoolSetting(prefs: prefs,
                                             prefKey: "settings.closePrivateTabs",
                                             defaultValue: false,
-                                            titleText: NSLocalizedString("Close Forget Tabs", tableName: "Cliqz", comment: "Setting for closing forget tabs"),
-                                            statusText: NSLocalizedString("When Leaving Forget Mode", tableName: "Cliqz", comment: "Will be displayed in Settings under 'Close Forget Tabs'")),
+                                            titleText: titleText,
+                                            statusText: statusText),
                                 ClearPrivateDataSetting(settings: self),
                                 RestoreTopSitesSetting(settings: self)]
         

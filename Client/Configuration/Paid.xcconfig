@@ -13,6 +13,10 @@ CLIENT_ENTITLEMENT = Cliqz/Resources/PaidClient.entitlements
 
 LAUNCH_SCREEN = PaidLaunchScreen
 
+SHORTCUT_PRIVATE_TAB_TITLE = ShortcutItemTitleNewPrivateTab
+
+SHORTCUT_PRIVATE_TAB_ICON = quick_action_new_private_tab
+
 // Flag to indicate if we want to include the debug settings bundle or not
 INCLUDE_SETTINGS_BUNDLE = NO
 

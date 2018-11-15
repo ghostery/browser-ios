@@ -75,12 +75,7 @@ extension CliqzStrings {
         
     }
     
-    
-    public static let OpenInNewForgetTabContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.OpenInNewForgetTab", tableName: "Cliqz", value: "Open in New Ghost Tab", comment: "The title for the Open in New Forget Tab context menu action for sites in Home Panels")
-    
     public static let FreshTab = NSLocalizedString("Fresh Tab", tableName: "Cliqz", comment: "Title for Freshtab in tab history list")
-    
-    public static let NewForgetTabTitle = NSLocalizedString("Hotkeys.NewForgetTab.DiscoveryTitle", tableName: "Cliqz", value: "New Ghost Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     
     public static let AppMenuAddFavoriteTitleString = NSLocalizedString("Menu.AddFavoriteAction.Title", tableName: "Cliqz", value: "Add to Favorites", comment: "Label for the button, displayed in the menu, used to create a favorite for the current website.")
     
@@ -92,5 +87,13 @@ extension CliqzStrings {
     
     public static let AppMenuAddFavoriteConfirmMessage = NSLocalizedString("Menu.AddFavorite.Confirm", tableName: "Cliqz", value: "Favorite Added", comment: "Toast displayed to the user after a bookmark has been added.")
     public static let AppMenuRemoveFavoriteConfirmMessage = NSLocalizedString("Menu.RemoveFavorite.Confirm", tableName: "Cliqz", value: "Favorite Removed", comment: "Toast displayed to the user after a bookmark has been removed.")
+    
+    #if PAID
+        public static let OpenInNewForgetTabContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.OpenInNewPrivateTab", tableName: "Lumen", value: "Open in New Private Tab", comment: "The title for the Open in New Forget Tab context menu action for sites in Home Panels")
+        public static let NewForgetTabTitle = NSLocalizedString("Hotkeys.NewPrivateTab.DiscoveryTitle", tableName: "Lumen", value: "New Private Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
+    #else
+        public static let OpenInNewForgetTabContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.OpenInNewForgetTab", tableName: "Ghostery", value: "Open in New Ghost Tab", comment: "The title for the Open in New Forget Tab context menu action for sites in Home Panels")
+        public static let NewForgetTabTitle = NSLocalizedString("Hotkeys.NewForgetTab.DiscoveryTitle", tableName: "Ghostery", value: "New Ghost Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
+    #endif
     
 }
