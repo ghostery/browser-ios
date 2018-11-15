@@ -164,7 +164,10 @@ class Tab: NSObject {
         super.init()
         self.isPrivate = isPrivate
         //Cliqz: Add Page Info
+        #if PAID
         currentPageInfo = CurrentPageInfo(tab: self)
+        #endif
+        //Cliqz: End
 
         /* Cliqz: disable firefox tracking protection
         if #available(iOS 11, *) {
