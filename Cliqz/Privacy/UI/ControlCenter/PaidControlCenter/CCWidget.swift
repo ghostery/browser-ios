@@ -56,9 +56,9 @@ class CCWidgetManager {
         return hour / 24
     }
     
-    static private func bytes2MB(_ bytes: Float?) -> Float? {
+    static private func bytes2MB(_ bytes: Int?) -> Float? {
         guard let bytes = bytes else {return nil}
-        return bytes / 1000000.0
+        return Float(bytes) / 1000000.0
     }
     
     enum TimeUnit {
@@ -148,16 +148,7 @@ class CCWidgetManager {
         }
         
         func dataSavedStrings() -> (String, String) {
-            
-            var unit: DataUnit = .Bytes
-            
-            var data = Float(self.dataSaved ?? 0)
-            if data > 1000000.0 {
-                data = bytes2MB(data) ?? 0.0
-                unit = .Megabytes
-            }
-            
-            return (String(format: "%.1f", data), unit.toString())
+            return (String(format: "%.1f", bytes2MB(self.dataSaved) ?? 0.0), DataUnit.Megabytes.toString())
         }
         
         func batterySavedStrings() -> (String, String) {
@@ -238,8 +229,8 @@ class CCWidgetManager {
             
             if let v = result["timeSaved"] as? Int {
                 timeSaved = v
-                //TODO: Battery saved
-                //batterySaved = v
+                //Battery saved (measured as time) is the same as time saved
+                batterySaved = v
             }
             
             if let v = result["adsBlocked"] as? Int {
