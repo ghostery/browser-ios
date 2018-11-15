@@ -12,7 +12,11 @@ import QuartzCore
 class CliqzForgetModeButton: UIButton, Themeable {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setTitle(NSLocalizedString("Forget", tableName: "Cliqz", comment: "Forget toogle button in tab overview"), for: [])
+        #if PAID
+            setTitle(NSLocalizedString("Private Tabs", tableName: "Lumen", comment: "Private tabs toogle button in tab overview"), for: [])
+        #else
+            setTitle(NSLocalizedString("Ghost Tabs", tableName: "Ghostery", comment: "Ghost tabs toogle button in tab overview"), for: [])
+        #endif
         self.accessibilityIdentifier = "TabTrayController.forgetModeButton"
         self.layer.cornerRadius  = 5.0
         self.layer.masksToBounds = true

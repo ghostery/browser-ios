@@ -1047,10 +1047,13 @@ fileprivate class EmptyPrivateTabsView: UIView {
         descriptionLabel.text = NSLocalizedString("Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.",
             tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
         */
-        titleLabel.text =  NSLocalizedString("Forget Mode",
-                                             tableName: "Cliqz", comment: "Title displayed for when there are no open tabs while in forget mode")
-        descriptionLabel.text = NSLocalizedString("You are browsing in Forget Mode: Websites you visit in the mode will not be saved in your history, and local data, including cookies, will not be stored.",
-                                                  tableName: "Cliqz", comment: "Description text displayed when there are no open tabs while in private mode")
+        #if PAID
+            titleLabel.text =  NSLocalizedString("Private Mode", tableName: "Lumen", comment: "Title displayed for when there are no open tabs while in private mode")
+            descriptionLabel.text = NSLocalizedString("You are browsing in Private Mode: Websites you visit in the mode will not be saved in your history, and local data, including cookies, will not be stored.", tableName: "Lumen", comment: "Description text displayed when there are no open tabs while in private mode")
+        #else
+            titleLabel.text =  NSLocalizedString("Forget Mode", tableName: "Ghostery", comment: "Title displayed for when there are no open tabs while in forget mode")
+            descriptionLabel.text = NSLocalizedString("You are browsing in Forget Mode: Websites you visit in the mode will not be saved in your history, and local data, including cookies, will not be stored.", tableName: "Ghostery", comment: "Description text displayed when there are no open tabs while in forget mode")
+        #endif
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         addSubview(iconImageView)
