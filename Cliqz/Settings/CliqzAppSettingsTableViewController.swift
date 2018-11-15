@@ -69,7 +69,9 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     private func generateSearchSettings(prefs: Prefs) -> [Setting] {
         
         let complementarySearchSetting      = ComplementarySearchSetting(settings: self)
-
+        #if PAID
+        return [complementarySearchSetting]
+        #else
         let blockExplicitContentTitle = NSLocalizedString("Block Explicit Content", tableName: "Cliqz", comment: "[Settings] Block explicit content")
         let blockExplicitContentSettings = BoolSetting(prefs: prefs,
                                                        prefKey: SettingsPrefs.BlockExplicitContentPrefKey,
@@ -78,7 +80,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         
         let humanWebSetting = HumanWebSetting(settings: self)
         
-        #if GHOSTERY
+        
         let regionalSetting = RegionalSetting(settings: self)
         let querySuggestionTitle = NSLocalizedString("Search Query Suggestions", tableName: "Cliqz", comment: "[Settings] Search Query Suggestions")
         let querySuggestionSettings = BoolSetting(prefs: prefs,
@@ -87,20 +89,15 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
                                                   titleText: querySuggestionTitle)
         let cliqzSearchTitle = NSLocalizedString("Quick Search", tableName: "Cliqz", comment: "[Settings] Quick Search")
         let cliqzSearchSetting = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.CliqzSearchPrefKey, defaultValue: true, titleText: cliqzSearchTitle)
+        
+        if QuerySuggestions.querySuggestionEnabledForCurrentRegion() {
+            return [regionalSetting, querySuggestionSettings, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
+        }
+        return [regionalSetting, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
+        
         #endif
         
-        var searchSettings: [Setting]!
-        #if GHOSTERY
-            if QuerySuggestions.querySuggestionEnabledForCurrentRegion() {
-                searchSettings = [regionalSetting, querySuggestionSettings, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
-            } else {
-                searchSettings = [regionalSetting, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
-            }
-        #else
-            searchSettings = [complementarySearchSetting, humanWebSetting]
-        #endif
         
-        return searchSettings
     }
     
     private func generateCliqzTabSettings(prefs: Prefs) -> [Setting] {
