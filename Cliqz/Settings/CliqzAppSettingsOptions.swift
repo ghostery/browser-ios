@@ -179,7 +179,12 @@ class ComplementarySearchSetting: Setting, SearchEnginePickerDelegate {
     
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Complementary Search", tableName: "Cliqz", comment: "[Settings] Complementary Search"), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
+        #if PAID
+            let title  = NSLocalizedString("Search", tableName: "Cliqz", comment: "[Settings] Complementary Search")
+        #else
+            let title  = NSLocalizedString("Complementary Search", tableName: "Cliqz", comment: "[Settings] Complementary Search")
+        #endif
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
