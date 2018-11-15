@@ -81,7 +81,11 @@ class SettingsPrefs {
     }
     
     func getCliqzSearchPref() -> Bool {
-        let defaultValue = true
+        #if PAID
+            let defaultValue = false
+        #else
+            let defaultValue = true
+        #endif
         if let humanWebPref = self.getBoolPref(SettingsPrefs.CliqzSearchPrefKey) {
             return humanWebPref
         }
@@ -159,7 +163,11 @@ class SettingsPrefs {
     }
 
     func getQuerySuggestionPref() -> Bool {
-        let defaultValue = true
+        #if PAID
+            let defaultValue = false
+        #else
+            let defaultValue = true
+        #endif
         if let querySuggestionPref = self.getBoolPref(SettingsPrefs.querySuggestionPrefKey) {
             return querySuggestionPref
         }

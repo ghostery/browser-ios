@@ -67,15 +67,9 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     
     // MARK:- Helper methods
     private func generateSearchSettings(prefs: Prefs) -> [Setting] {
-        let regionalSetting                 = RegionalSetting(settings: self)
+        
         let complementarySearchSetting      = ComplementarySearchSetting(settings: self)
 
-        let querySuggestionTitle = NSLocalizedString("Search Query Suggestions", tableName: "Cliqz", comment: "[Settings] Search Query Suggestions")
-        let querySuggestionSettings = BoolSetting(prefs: prefs,
-                                                  prefKey: SettingsPrefs.querySuggestionPrefKey,
-                                                  defaultValue: SettingsPrefs.shared.getQuerySuggestionPref(),
-                                                  titleText: querySuggestionTitle)
-        
         let blockExplicitContentTitle = NSLocalizedString("Block Explicit Content", tableName: "Cliqz", comment: "[Settings] Block explicit content")
         let blockExplicitContentSettings = BoolSetting(prefs: prefs,
                                                        prefKey: SettingsPrefs.BlockExplicitContentPrefKey,
@@ -85,24 +79,27 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let humanWebSetting = HumanWebSetting(settings: self)
         
         #if GHOSTERY
+        let regionalSetting = RegionalSetting(settings: self)
+        let querySuggestionTitle = NSLocalizedString("Search Query Suggestions", tableName: "Cliqz", comment: "[Settings] Search Query Suggestions")
+        let querySuggestionSettings = BoolSetting(prefs: prefs,
+                                                  prefKey: SettingsPrefs.querySuggestionPrefKey,
+                                                  defaultValue: SettingsPrefs.shared.getQuerySuggestionPref(),
+                                                  titleText: querySuggestionTitle)
         let cliqzSearchTitle = NSLocalizedString("Quick Search", tableName: "Cliqz", comment: "[Settings] Quick Search")
         let cliqzSearchSetting = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.CliqzSearchPrefKey, defaultValue: true, titleText: cliqzSearchTitle)
         #endif
         
         var searchSettings: [Setting]!
-        if QuerySuggestions.querySuggestionEnabledForCurrentRegion() {
-            #if GHOSTERY
-            searchSettings = [regionalSetting, querySuggestionSettings, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
-            #else
-            searchSettings = [regionalSetting, querySuggestionSettings, blockExplicitContentSettings, humanWebSetting, complementarySearchSetting]
-            #endif
-        } else {
-            #if GHOSTERY
-            searchSettings = [regionalSetting, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
-            #else
-            searchSettings = [regionalSetting, blockExplicitContentSettings, humanWebSetting, complementarySearchSetting]
-            #endif
-        }
+        #if GHOSTERY
+            if QuerySuggestions.querySuggestionEnabledForCurrentRegion() {
+                searchSettings = [regionalSetting, querySuggestionSettings, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
+            } else {
+                searchSettings = [regionalSetting, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
+            }
+        #else
+            searchSettings = [complementarySearchSetting, humanWebSetting]
+        #endif
+        
         return searchSettings
     }
     
