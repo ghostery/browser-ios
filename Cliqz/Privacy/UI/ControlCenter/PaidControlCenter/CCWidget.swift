@@ -229,8 +229,9 @@ class CCWidgetManager {
             
             if let v = result["timeSaved"] as? Int {
                 timeSaved = v
-                //Battery saved (measured as time) is the same as time saved
-                batterySaved = v
+                //Battery saved in time = C / T * TimeSaved, where C is the rate at which Cliqz is consuming battery, and T the rate at which the system is consuming battery with all apps running.
+                //Since we cannot get C (Tim has not found a way), we assume that C = T/10, and therefore Battery saved in time = 1/10 * TimeSaved
+                batterySaved = v / 10
             }
             
             if let v = result["adsBlocked"] as? Int {
