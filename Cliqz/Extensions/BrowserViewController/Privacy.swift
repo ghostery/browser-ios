@@ -49,13 +49,17 @@ extension BrowserViewController {
         }
         else {
             //show it
-            if let pageUrl = notification.object as? String {
-                showControlCenter(pageUrl: pageUrl)
-            }
+            #if PAID
+                showControlCenter(pageUrl: nil)
+            #else
+                if let pageUrl = notification.object as? String {
+                    showControlCenter(pageUrl: pageUrl)
+                }
+            #endif
         }
     }
 	
-    func showControlCenter(pageUrl: String) {
+    func showControlCenter(pageUrl: String?) {
         
         func applyShadow(view: UIView) {
             view.layer.shadowColor = UIColor.black.cgColor
@@ -71,7 +75,9 @@ extension BrowserViewController {
         #endif
         controlCenter.delegate = self
         controlCenter.privateMode = self.tabManager.selectedTab?.isPrivate ?? false
-        controlCenter.pageURL = pageUrl
+        if let pageUrl = pageUrl {
+            controlCenter.pageURL = pageUrl
+        }
 		
         let (device,orientation) = UIDevice.current.getDeviceAndOrientation()
         
