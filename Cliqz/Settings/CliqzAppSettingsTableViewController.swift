@@ -18,9 +18,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         #if GHOSTERY
         // Connect is not available in Ghostery
         #elseif PAID
-        let connectVPNSettings = [VPNConnectSetting(settings: self)]
-        let connectVPNSettingsTitle = NSLocalizedString("ConnectVPN", tableName: "Cliqz", comment: "[Settings] ConnectVPN section title")
-        settings += [ SettingSection(title: NSAttributedString(string: connectVPNSettingsTitle), footerTitle: nil, children: connectVPNSettings)]
+        // Connect is not available in Paid Product
         #else
         // Connect
         let conenctSettings = [CliqzConnectSetting(settings: self)]
