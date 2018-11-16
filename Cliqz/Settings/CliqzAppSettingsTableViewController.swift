@@ -155,15 +155,26 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     }
     
     private func generateHelpSettings(prefs: Prefs) -> [Setting] {
-        let helpSettings = [
-            FAQSetting(delegate: settingsDelegate),
-            SupportSetting(delegate: settingsDelegate),
-            //CliqzTipsAndTricksSetting(),
-            //ReportWebsiteSetting(),
-            SendCrashReportsSetting(settings: self),
-            SendUsageDataSetting(settings: self),
-            MyOffrzSetting()
-        ]
+        #if PAID
+            let helpSettings = [
+                FAQSetting(delegate: settingsDelegate),
+                SupportSetting(delegate: settingsDelegate),
+                //CliqzTipsAndTricksSetting(),
+                //ReportWebsiteSetting(),
+                SendCrashReportsSetting(settings: self),
+                SendUsageDataSetting(settings: self),
+            ]
+        #else
+            let helpSettings = [
+                FAQSetting(delegate: settingsDelegate),
+                SupportSetting(delegate: settingsDelegate),
+                //CliqzTipsAndTricksSetting(),
+                //ReportWebsiteSetting(),
+                SendCrashReportsSetting(settings: self),
+                SendUsageDataSetting(settings: self),
+                MyOffrzSetting()
+            ]
+        #endif
         
         return helpSettings
     }
