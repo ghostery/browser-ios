@@ -220,6 +220,11 @@ class CCWidgetManager {
     }
     
     private func parseResponse(response: NSDictionary) -> Info? {
+        
+        if response.allKeys.count == 0 {
+            return Info.zero
+        }
+        
         if let result = response.value(forKey: "result") as? [String: Any] {
             var timeSaved: Int? = nil
             var adsBlocked: Int? = nil
