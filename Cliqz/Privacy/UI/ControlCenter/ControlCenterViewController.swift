@@ -17,13 +17,41 @@ protocol ControlCenterViewControllerDelegate: class {
 }
 
 class ControlCenterViewController: UIViewController {
-
-	var model: ControlCenterModel = ControlCenterModel()
     
     var privateMode: Bool = false
+    var lastOrientation: DeviceOrientation
     
-	weak var delegate: ControlCenterViewControllerDelegate? = nil
-
+    weak var delegate: ControlCenterViewControllerDelegate? = nil
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        lastOrientation = UIDevice.current.getDeviceAndOrientation().1
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged(notification:)), name: Notification.Name.DeviceOrientationChanged, object: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupComponents()
+    }
+    
+    #if PAID
+    
+    func setupComponents() {
+        //to be overriden
+    }
+    
+    #else
+    
+	var model: ControlCenterModel = ControlCenterModel()
+    
 	private var topTranparentView = UIView()
 	fileprivate var panelSwitchControl = UISegmentedControl(items: [])
 	fileprivate var panelContainerView = UIView()
@@ -61,27 +89,6 @@ class ControlCenterViewController: UIViewController {
 				self.overviewViewController.pageURL = url.host ?? ""
 			}
 		}
-	}
-    
-    var lastOrientation: DeviceOrientation
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        lastOrientation = UIDevice.current.getDeviceAndOrientation().1
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged(notification:)), name: Notification.Name.DeviceOrientationChanged, object: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		setupComponents()
 	}
 
     func setupComponents() {
@@ -169,6 +176,8 @@ class ControlCenterViewController: UIViewController {
 			return UIViewController()
 		}
 	}
+    
+    #endif
     
     @objc func orientationChanged(notification: Notification) {
         let orientation = UIDevice.current.getDeviceAndOrientation().1

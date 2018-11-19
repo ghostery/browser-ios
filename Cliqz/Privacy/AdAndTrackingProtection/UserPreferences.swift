@@ -8,6 +8,12 @@
 import Foundation
 import Storage
 
+#if PAID
+extension Notification.Name {
+    static let privacyStatusChanged = Notification.Name("BlockedTrackerSetChangedNotification")
+}
+#endif
+
 @objc open class UserPreferences : NSObject {
     
     enum AntitrackingMode: Int {
@@ -29,12 +35,39 @@ import Storage
     
     public override init() {
         super.init()
+        #if !PAID
         NotificationCenter.default.addObserver(self, selector: #selector(updateAntitrackingPref), name: Notification.Name.BlockedTrackerSetChanged, object: nil)
+        #endif
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+    
+    let TrackerListVersionKey = "TrackerListVersion"
+    let AntitrackingModeKey = "AntitrackingMode"
+    let AdblockingModeKey = "AdblockingMode"
+    let PrevAdblockingModeKey = "PreviousAdblockingMode"
+    let PauseGhosteryDateKey = "PauseGhosteryDate"
+    
+    #if PAID
+    let IsProtectionOnKey = "IsProtectionOnKey"
+    
+    var isProtectionOn: Bool {
+        get {
+            if let val = userDefaults().value(forKey: IsProtectionOnKey) as? Bool {
+                return val
+            }
+            
+            return true
+        }
+        set {
+            userDefaults().set(newValue, forKey: IsProtectionOnKey)
+            NotificationCenter.default.post(name: Notification.Name.privacyStatusChanged, object: self, userInfo: ["newValue": newValue])
+        }
+    }
+    
+    #else
     
     @objc func updateAntitrackingPref(_ sender: Any?) {
         if TrackerStateStore.shared.blockedTrackers.count == TrackerList.instance.appsList.count, self._antitrackingMode != .blockAll {
@@ -46,12 +79,6 @@ import Storage
             self.writeToDisk()
         }
     }
-    
-    let TrackerListVersionKey = "TrackerListVersion"
-    let AntitrackingModeKey = "AntitrackingMode"
-    let AdblockingModeKey = "AdblockingMode"
-    let PrevAdblockingModeKey = "PreviousAdblockingMode"
-    let PauseGhosteryDateKey = "PauseGhosteryDate"
     
     // antitracking mode is supposed to be set only in updateAntitrackingPref. It depends on the number of trackers blocked.
     var antitrackingMode: AntitrackingMode {
@@ -130,6 +157,8 @@ import Storage
             userDefaults().set(newValue.timeIntervalSince1970, forKey: PauseGhosteryDateKey)
         }
     }
+    
+    #endif
     
     func userDefaults() -> UserDefaults {
         return UserDefaults.standard

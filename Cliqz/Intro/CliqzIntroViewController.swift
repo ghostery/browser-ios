@@ -244,6 +244,8 @@ class CliqzIntroViewController: UIViewController {
     @objc func startBrowsing() {
         // Start the necessary stuff for antitracking
         
+        #if PAID
+        #else
         let populateOp = PopulateBlockedTrackersOperation()
         
         var loadOp: LoadTrackerListOperation? = nil
@@ -279,6 +281,8 @@ class CliqzIntroViewController: UIViewController {
             UserDefaults.standard.set(true, forKey: trackersDefaultsAreAppliedKey)
             UserDefaults.standard.synchronize()
         }
+        
+        #endif
         
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
     }

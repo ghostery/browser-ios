@@ -66,12 +66,16 @@ class ChangeCoordinator {
 final class BlockListIdentifiers {
     
     class func antitrackingIdentifiers(domain: String?, webView: WKWebView?) -> ([BlockListIdentifier], [String: Bool]?) {
+        #if PAID
+        return ([], nil)
+        #else
         if ChangeCoordinator.shared.areBlocklistsLoadedFor(webView: webView) {
             return (Array.init(ChangeCoordinator.shared.identifiersWithChanges(domain: domain)), ["hitCache": false])
         }
         else {
             return (Array.init(CategoriesHelper.categories), ["hitCache": true])
         }
+        #endif
     }
     
     class func adblockingIdentifiers() -> [BlockListIdentifier] {

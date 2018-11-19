@@ -9,6 +9,7 @@
 import UIKit
 import Storage
 
+#if !PAID
 final class ApplyDefaultsOperation: Operation {
     
     private var _executing: Bool = false
@@ -53,3 +54,4 @@ final class ApplyDefaultsOperation: Operation {
         })
     }
 }
+#endif

@@ -54,8 +54,11 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
     var regexes = [TrackerListRegex]()
     var paths = [TrackerListPath]()
     var discoveredBugs = [String: PageTrackersFound]() // Page URL is the key
+    #if !PAID
     var applyDefaultsOp: ApplyDefaultsOperation? = nil
     let populateOp = PopulateBlockedTrackersOperation()
+    #endif
+    
     var bugsURL: URL? = nil
 
     // MARK: - Tracker List Initialization
@@ -67,23 +70,11 @@ let trackersLoadedNotification = Notification.Name(rawValue:"TrackersLoadedNotif
         // Use a sequencial queue to make sure that the loadOperation is complete before loading the Antritracking/Adblocking (since these are dependent on the Trackers List).
         // To ensure this, loadTrackerList should be called before any calls to a coordinatedUpdate.
         let loadOperation = LoadTrackerListOperation()
-        
-//        if UserDefaults.standard.bool(forKey: trackersDefaultsAreAppliedKey) == false {
-//            applyDefaultsOp = ApplyDefaultsOperation()
-//            applyDefaultsOp!.addDependency(loadOperation)
-//            populateOp.addDependency(applyDefaultsOp!)
-//            UserDefaults.standard.set(true, forKey: trackersDefaultsAreAppliedKey)
-//            UserDefaults.standard.synchronize()
-//        }
-//        else {
-              populateOp.addDependency(loadOperation)
-//        }
-        
         GlobalPrivacyQueue.shared.addOperation(loadOperation)
-//        if let applyOp = applyDefaultsOp {
-//            GlobalPrivacyQueue.shared.addOperation(applyOp)
-//        }
+        #if !PAID
+        populateOp.addDependency(loadOperation)
         GlobalPrivacyQueue.shared.addOperation(populateOp)
+        #endif
     }
     
     func localTrackerFileURL() -> URL? {

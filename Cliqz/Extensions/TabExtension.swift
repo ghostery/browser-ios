@@ -54,11 +54,23 @@ extension Tab {
             self.blockingCoordinator = BlockingCoordinator(webView: webView)
         }
         updateBlocking()
-        
+        #if PAID
+        NotificationCenter.default.addObserver(self, selector: #selector(privacyChanged), name: Notification.Name.privacyStatusChanged, object: nil)
+        #else
         NotificationCenter.default.addObserver(self, selector: #selector(trackersChanged), name: controlCenterDismissedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(trackersChanged), name: trackersLoadedNotification, object: nil)
+        #endif
     }
     
+    func updateBlocking() {
+        blockingCoordinator?.coordinatedUpdate()
+    }
+    
+    #if PAID
+    @objc func privacyChanged(_ notification: Notification) {
+        updateBlocking()
+    }
+    #else
     @objc func trackersChanged(_ notification: Notification) {
 //        if let userInfo = notification.userInfo {
 //            if let changes = userInfo["changes"] as? Bool, changes == false {
@@ -67,6 +79,7 @@ extension Tab {
 //        }
         updateBlocking()
     }
+    #endif
     
     func didDomainChange() -> Bool {
         if let domain = self.webView?.url?.normalizedHost {
@@ -75,9 +88,7 @@ extension Tab {
         return false
     }
     
-    func updateBlocking() {
-        blockingCoordinator?.coordinatedUpdate()
-    }
+    
     
     func urlChanged() {
         if didDomainChange() {

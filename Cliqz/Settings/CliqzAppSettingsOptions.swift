@@ -170,7 +170,11 @@ class AdBlockerSetting: CliqzOnOffSetting {
     }
     
     override func getSubSettingViewController() -> SubSettingsTableViewController {
+        #if PAID
+        return SubSettingsTableViewController()
+        #else
         return AdBlockerSettingsTableViewController()
+        #endif
     }
 }
 

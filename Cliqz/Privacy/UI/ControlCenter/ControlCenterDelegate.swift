@@ -9,6 +9,8 @@
 import UIKit
 import Storage
 
+#if !PAID
+
 extension ControlCenterModel: ControlCenterDelegateProtocol {
 
     func changeState(category: String, state: TrackerUIState, tableType: TableType, completion: @escaping () -> Void) {
@@ -282,3 +284,5 @@ extension ControlCenterModel: ControlCenterDelegateProtocol {
         }
     }
 }
+
+#endif

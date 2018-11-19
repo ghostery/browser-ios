@@ -14,6 +14,8 @@ import Storage
 
 let trackerViewDismissedNotification = Notification.Name(rawValue: "TrackerViewDismissed")
 
+#if !PAID
+
 struct ControlCenterUI {
 	static let separatorGray = UIColor(colorString: "E0E0E0")
 	static let textGray = UIColor(colorString: "C7C7CD")
@@ -838,3 +840,5 @@ class CategoryHeaderView: UIView {
 		statisticsLabel.text = String(format: NSLocalizedString("%d Tracker(s) %d Blocked", tableName: "Cliqz", comment: "[ControlCenter -> Trackers] Detected and Blocked trackers count"), self.trackersCount, self.blockedTrackersCount)
 	}
 }
+
+#endif

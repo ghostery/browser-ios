@@ -198,7 +198,7 @@ class CCWidgetManager {
         //push update
         
         Engine.sharedInstance.getBridge().callAction("insights:getDashboardStats", args: [currentPeriod.toString()]) { [weak self] (response) in
-            print("getDashboardStats = \(response)")
+            //print("getDashboardStats = \(response)")
             if let info = self?.parseResponse(response: response),
                 let widgets = self?.registeredWidgets {
                 
