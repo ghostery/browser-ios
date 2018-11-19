@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '9.0'
+# platform :ios, '9.0'
 use_frameworks!
 
 def project_pods
@@ -27,7 +27,7 @@ end
 
 target 'Client' do
     project_pods
-
+    pod 'BondAPI', :path => '.'
 	pod 'KKDomain', :git => 'https://github.com/kejinlu/KKDomain.git'
 	pod 'AWSCore', '~> 2.6'
 	pod 'AWSSNS', '~> 2.6'
