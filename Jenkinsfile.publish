@@ -13,12 +13,13 @@ node('mac-vm-host') {
     Vagrant.configure("2") do |config|
         config.vm.box = "browser-f-ios10.12.6-305"
 
+        config.vm.synced_folder ".", "/vagrant", disabled: true
         config.vm.define "publishios" do |publishios|
             publishios.vm.hostname ="publishios"
             
-            publishios.vm.network "public_network", :bridge => "en0", auto_config: false
+            publishios.vm.network "public_network", :bridge => "en0: Ethernet 1", auto_config: false
             publishios.vm.boot_timeout = 900
-            publishios.vm.provider "vmware_fusion" do |v|
+            publishios.vm.provider "virtualbox" do |v|
                 v.name = "publishios"
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
@@ -30,7 +31,7 @@ node('mac-vm-host') {
                 curl -LO #{ENV['JENKINS_URL']}/jnlpJars/agent.jar
                 ls .
                 java -version
-                nohup java -jar agent.jar -jnlpUrl #{ENV['JENKINS_URL']}/computer/#{ENV['NODE_ID']}/slave-agent.jnlp -secret #{ENV["NODE_SECRET"]} &
+                java -jar agent.jar -jnlpUrl #{ENV['JENKINS_URL']}/computer/#{ENV['NODE_ID']}/slave-agent.jnlp -secret #{ENV["NODE_SECRET"]} &
             SHELL
         end
     end

@@ -15,12 +15,13 @@ node('mac-vm-host') {
     Vagrant.configure("2") do |config|
         config.vm.box = "browser-f-ios10.12.6-305"
         
+        config.vm.synced_folder ".", "/vagrant", disabled: true
         config.vm.define "nightlyios" do |nightlyios|
             nightlyios.vm.hostname ="nightlyios"
             
-            nightlyios.vm.network "public_network", :bridge => "en0", auto_config: false
+            nightlyios.vm.network "public_network", :bridge => "en0: Ethernet 1", auto_config: false
             nightlyios.vm.boot_timeout = 900
-            nightlyios.vm.provider "vmware_fusion" do |v|
+            nightlyios.vm.provider "virtualbox" do |v|
                 v.name = "nightlyios"
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
@@ -32,7 +33,7 @@ node('mac-vm-host') {
                 curl -LO #{ENV['JENKINS_URL']}/jnlpJars/agent.jar
                 ls .
                 java -version
-                nohup java -jar agent.jar -jnlpUrl #{ENV['JENKINS_URL']}/computer/#{ENV['NODE_ID']}/slave-agent.jnlp -secret #{ENV["NODE_SECRET"]} &
+                java -jar agent.jar -jnlpUrl #{ENV['JENKINS_URL']}/computer/#{ENV['NODE_ID']}/slave-agent.jnlp -secret #{ENV["NODE_SECRET"]} &
             SHELL
         end
     end
