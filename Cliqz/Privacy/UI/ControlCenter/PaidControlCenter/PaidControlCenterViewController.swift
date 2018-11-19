@@ -107,6 +107,7 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
     
     func startButtonPressed() {
         isProtectionOn = !isProtectionOn
+        UserPreferences.instance.isProtectionOn = isProtectionOn
         updateProtectionLabel(isOn: isProtectionOn)
     }
     

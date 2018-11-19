@@ -9,6 +9,8 @@
 import UIKit
 import Storage
 
+#if !PAID
+
 enum TableType {
     case page
     case global
@@ -608,3 +610,5 @@ extension ControlCenterModel {
 	}
 
 }
+
+#endif

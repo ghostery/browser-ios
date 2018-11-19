@@ -8,6 +8,8 @@
 
 import UIKit
 
+#if !PAID
+
 class AdBlockerSettingsTableViewController: ToggleSubSettingsTableViewController {
     // MARK:- Abstract methods Implementation
     override func getViewName() -> String {
@@ -45,3 +47,5 @@ class AdBlockerSettingsTableViewController: ToggleSubSettingsTableViewController
         return 1
     }
 }
+
+#endif

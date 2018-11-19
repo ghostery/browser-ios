@@ -8,6 +8,8 @@
 
 import Foundation
 
+#if !PAID
+
 class GlobalTrackersViewController: UIViewController {
 	let tableView = UITableView()
 	
@@ -75,3 +77,5 @@ extension GlobalTrackersViewController: UITableViewDataSource, UITableViewDelega
 	}
 
 }
+
+#endif

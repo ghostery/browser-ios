@@ -51,6 +51,9 @@ final class BlockingCoordinator {
     
     class func isAdblockerOn(domain: String?) -> Bool {
         
+        #if PAID
+        return UserPreferences.instance.isProtectionOn
+        #else
         if let domain = domain {
             if let domain = DomainStore.get(domain: domain) {
                 let state = domain.translatedAdblockerState()
@@ -62,17 +65,21 @@ final class BlockingCoordinator {
                 }
             }
         }
-        
         return UserPreferences.instance.adblockingMode == .blockAll
+        #endif
     }
     
     class func isAntitrackingOn(domain: String?) -> Bool {
         
+        #if PAID
+        return UserPreferences.instance.isProtectionOn
+        #else
         if UserPreferences.instance.pauseGhosteryMode == .paused {
             return false
         }
-
+        
         return true
+        #endif
     }
     
     //order in which to load the blocklists
@@ -84,10 +91,14 @@ final class BlockingCoordinator {
     
     class func blockIdentifiers(forType: BlockListType, domain: String?, webView: WKWebView?) -> ([BlockListIdentifier], [String: Bool]?) {
         if forType == .antitracking {
+            #if PAID
+            return (AntitrackingJSONIdentifiers.antitrackingBlockAllIdentifiers(), nil)
+            #else
             if UserPreferences.instance.antitrackingMode == .blockAll {
                 return (AntitrackingJSONIdentifiers.antitrackingBlockAllIdentifiers(), nil)
             }
             return BlockListIdentifiers.antitrackingIdentifiers(domain: domain, webView: webView)
+            #endif
         }
         else {
             return (BlockListIdentifiers.adblockingIdentifiers(), nil)
@@ -113,7 +124,9 @@ final class BlockingCoordinator {
             if GlobalPrivacyQueue.shared.operations.filter(opFilter).count == 0 {
                 debugPrint("Add to Update Queue")
                 let updateOp = UpdateOperation(webView: self.webView, domain: self.webView.url?.normalizedHost)
+                #if !PAID
                 updateOp.addDependency(TrackerList.instance.populateOp)
+                #endif
                 GlobalPrivacyQueue.shared.addOperation(updateOp)
             }
         }

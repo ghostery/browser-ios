@@ -9,14 +9,6 @@
 import Foundation
 import Charts
 
-protocol NotchViewDelegate: class {
-    func switchValueChanged(value: Bool)
-	func viewIsDragging(translation: Float, velocity: Float)
-	func viewStopDragging(velocity: Float)
-    func domainOnEnhancedViewPressed()
-    func allWebsitesOnEnhancedViewPressed()
-}
-
 protocol TickButtonProtocol: class {
     func didSelect(button: TickButton, isSelected: Bool)
 }
@@ -218,6 +210,16 @@ class TickButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+#if !PAID
+
+protocol NotchViewDelegate: class {
+    func switchValueChanged(value: Bool)
+	func viewIsDragging(translation: Float, velocity: Float)
+	func viewStopDragging(velocity: Float)
+    func domainOnEnhancedViewPressed()
+    func allWebsitesOnEnhancedViewPressed()
 }
 
 protocol EnhancedAdblockerViewProtocol: class {
@@ -1228,3 +1230,5 @@ extension OverviewViewController: NotchViewDelegate {
         })
     }
 }
+
+#endif
