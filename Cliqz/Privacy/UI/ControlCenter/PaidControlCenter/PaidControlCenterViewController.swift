@@ -30,7 +30,25 @@ class PaidControlCenterViewController: ControlCenterViewController {
     var isProtectionOn = true
     var currentPeriod: Period = .Today
     
+    fileprivate lazy var clearables: [Clearable] = {
+        
+        if let appDel = UIApplication.shared.delegate as? AppDelegate, let tabManager = appDel.tabManager, let profile = appDel.profile {
+            return [HistoryClearable(profile: profile),
+                    CacheClearable(tabManager: tabManager),
+                    CookiesClearable(tabManager: tabManager),
+                    SiteDataClearable(tabManager: tabManager),
+                    DownloadedFilesClearable()]
+        }
+        
+        return []
+    }()
+    
     override func setupComponents() {
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(VPNStatusDidChange(notification:)),
+                                               name: .NEVPNStatusDidChange,
+                                               object: nil)
         
         controls.delegate = self
         dashboard.dataSource = self
@@ -97,12 +115,20 @@ class PaidControlCenterViewController: ControlCenterViewController {
         
         CCWidgetManager.shared.update(period: currentPeriod)
     }
+    
+    @objc func VPNStatusDidChange(notification: Notification) {
+        //keep button up to date.
+        controls.vpnButton.isSelected = VPN.shared.status == .connected
+    }
 
 }
 
 extension PaidControlCenterViewController: CCControlViewProtocol {
     func vpnButtonPressed() {
-        
+        if let appDel = UIApplication.shared.delegate as? AppDelegate, let tab = appDel.tabManager.selectedTab {
+            //open vpn view
+            tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
+        }
     }
     
     func startButtonPressed() {
@@ -112,7 +138,37 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
     }
     
     func clearButtonPressed() {
-        
+        let alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
+        if let appDel = UIApplication.shared.delegate as? AppDelegate {
+            appDel.presentContollerOnTop(controller: alert)
+        }
+    }
+    
+    func clearPrivateData(_ action: UIAlertAction) {
+        DispatchQueue.global(qos: .utility).async { [weak self] in
+            //print("Will send data for tab = \(tabID) and page = \(String(describing: currentP))")
+            Engine.sharedInstance.getBridge().callAction("insights:clearData", args: [], callback: { (result) in
+                if let error = result["error"] as? [[String: Any]] {
+                    debugPrint("Error calling action insights:clearData: \(error)")
+                    //TODO: What should I do in this case?
+                }
+                else {
+                    DispatchQueue.main.async {
+                        self?.clearables
+                            .enumerated()
+                            .compactMap { (i, clearable) in
+                                return clearable.clear()
+                            }
+                            .allSucceed()
+                            .uponQueue(.main) { result in
+                                assert(result.isSuccess, "Private data cleared successfully")
+                                //TODO: Change UI
+                                CCWidgetManager.shared.update(period: self?.currentPeriod ?? .Today)
+                        }
+                    }
+                }
+            })
+        }
     }
 }
 
@@ -279,7 +335,7 @@ class CCControlsView: UIView {
     }
     
     @objc func vpnPressed(_ button: UIButton) {
-        button.isSelected = !button.isSelected
+        //button.isSelected = !button.isSelected
         delegate?.vpnButtonPressed()
     }
     
