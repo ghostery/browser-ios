@@ -8,6 +8,20 @@
 
 import UIKit
 import NetworkExtension
+import BondAPI
+
+
+class BondClient {
+    static let shared = BondClient()
+    
+    let client: BondV1
+    
+    static let hostname: String = "ambassador.dev.k8s.eu-central-1.clyqz.com"
+    
+    init() {
+        client = BondV1.init(host: BondClient.hostname)
+    }
+}
 
 class VPN {
     
@@ -87,6 +101,34 @@ class VPN {
                                                selector: #selector(VPNStatusDidChange(notification:)),
                                                name: .NEVPNStatusDidChange,
                                                object: nil)
+        
+        if !areCredsAvailable() {
+            //make a call for creds
+            //TODO: Use auth after merging with Naira
+            let username = "Hello@cliqz.com"
+            let auth = UserAuth()
+            auth.username = username
+            auth.password = ""
+            BondClient.shared.client.getIPSecCreds(withRequest: auth) { (response, error) in
+                //TODO: write the credentials into the keychain
+                print(response?.config)
+            }
+        }
+    }
+    
+    private func areCredsAvailable() -> Bool {
+        let keychain = DAKeychain.shared
+        if keychain["username"] == nil  || keychain["sharedSecret"] == nil || keychain["password"] == nil {
+            return false
+        }
+        return true
+    }
+    
+    private func writeCreds(username: String, password: String, sharedSecret: String) {
+        let keychain = DAKeychain.shared
+        keychain["username"] = username
+        keychain["password"] = password
+        keychain["sharedSecret"] = sharedSecret
     }
     
     func checkConnection() {
@@ -123,18 +165,9 @@ class VPN {
         VPN.shared.shouldTryToReconnect = true
         VPN.shared.lastEndPoint = endPoint
         
-        //Insert credentials into Keychain
-        let username = "cliqz"
-        
-        guard let password = Bundle.main.object(forInfoDictionaryKey: "VPNPass") as? String, !password.isEmpty else {
-            //send a signal
-            return
-        }
-        
-        //TODO: This should be done better.
+        guard VPN.shared.areCredsAvailable() == true else { return }
+
         let keychain = DAKeychain.shared
-        keychain[username] = password
-        keychain["sharedSecret"] = "foxyproxy"
         
         NEVPNManager.shared().loadFromPreferences { (error) in
             if NEVPNManager.shared().protocolConfiguration == nil || NEVPNManager.shared().protocolConfiguration?.serverAddress != endPoint {
@@ -145,8 +178,8 @@ class VPN {
                 newIPSec.authenticationMethod = .sharedSecret
                 newIPSec.sharedSecretReference = keychain.load(withKey: "sharedSecret")
                 
-                newIPSec.username = "cliqz"
-                newIPSec.passwordReference = keychain.load(withKey: username)
+                newIPSec.username = keychain["username"]
+                newIPSec.passwordReference = keychain.load(withKey: "password")
                 newIPSec.serverAddress = endPoint;
                 newIPSec.disconnectOnSleep = false
                 
