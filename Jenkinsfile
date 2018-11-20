@@ -45,11 +45,10 @@ node('mac-mini-ios') {
             try {
                 stage("Checkout") {
                     checkout scm
-                    withCredentials([file(credentialsId: 'ceb2d5e9-fc88-418f-aa65-ce0e0d2a7ea1', variable: 'SSH_KEY')]) {
-                        cloneRepoViaSSH(
-                            'git@github.com:cliqz/autobots.git',
-                            '-b version2.0 --single-branch --depth=1'
-                        )
+                    dir('cliqz-mobile-tests'){
+                        git branch:'master',
+                        credentialsId: 'cliqz-oss-ci',
+                        url: 'https://github.com/cliqz-oss/cliqz-mobile-tests.git'
                     }
                 }
                 stage('Prepare Environment') {
@@ -60,8 +59,8 @@ node('mac-mini-ios') {
                         brew list carthage &>/dev/null || brew install carthage
                         brew list python2 &>/dev/null || brew install python2
                         sudo -H python2 -m ensurepip
-                        chmod 0755 autobots/requirements.txt
-                        sudo -H python2 -m pip install -vvvr autobots/requirements.txt
+                        chmod 0755 cliqz-mobile-tests/requirements.txt
+                        sudo -H python2 -m pip install -vvvr cliqz-mobile-tests/requirements.txt
                     '''
                 }
                 stage('Setup Build Environment') {
@@ -124,7 +123,7 @@ node('mac-mini-ios') {
                                 set -e
                                 npm run appium
                                 sleep 15
-                                python autobots/testRunner.py
+                                python cliqz-mobile-tests/testRunner.py
                             '''
                         }
                     }
@@ -143,7 +142,7 @@ node('mac-mini-ios') {
                         set -x
                         kill $(ps -A | grep -m1 appium | awk '{print \$1}')
                         rm -rf *.log\
-                            autobots \
+                            cliqz-mobile-tests \
                             screenshots \
                             screenshots.zip \
                             test-reports
@@ -161,18 +160,6 @@ node('mac-mini-ios') {
     if (jobStatus == 'FAIL') {
         error "Something Failed. Check the above logs."
     }
-}
-
-def cloneRepoViaSSH(String repoLink, String args) {
-    sh """#!/bin/bash -l
-        set -x
-        set -e
-        mkdir -p ~/.ssh
-        cp $SSH_KEY ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-        git clone ${args} ${repoLink}
-    """
 }
 
 def archiveTestResults() {
