@@ -72,13 +72,12 @@ extension BrowserViewController {
             let controlCenter = PaidControlCenterViewController()
         #else
             let controlCenter = ControlCenterViewController()
-            controlCenter.pageURL = pageUrl
+            if let pageURL = pageURL {
+                controlCenter.pageURL = pageUrl
+            }
         #endif
         controlCenter.delegate = self
         controlCenter.privateMode = self.tabManager.selectedTab?.isPrivate ?? false
-        if let pageUrl = pageUrl {
-            controlCenter.pageURL = pageUrl
-        }
 		
         let (device,orientation) = UIDevice.current.getDeviceAndOrientation()
         
