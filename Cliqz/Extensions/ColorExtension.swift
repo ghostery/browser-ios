@@ -8,6 +8,57 @@
 
 import Foundation
 
+//Lumen colors
+//Enumerate all colors that I need
+
+//Then have the colors for each element by component
+//Ex: Dashboard - Shadow Color
+
+//Every theme can have a number of modes
+enum LumenThemeName {
+    case Light
+    case Dark
+}
+
+enum LumenThemeMode {
+    case Private
+    case Normal
+}
+
+//What do I want? I want a structure to which I pass a theme name and mode and get the color for a certain element
+
+//(theme, mode) -> UIColor
+
+typealias LumenColor = (LumenThemeName, LumenThemeMode) -> UIColor
+typealias LumenColorCombo = [LumenThemeName: [LumenThemeMode : UIColor]]
+
+extension UIColor {
+    //Enumerate lumen colors here
+}
+
+struct Lumen {
+    
+    //helpers
+    private static let bgCombo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .black], .Dark: [.Normal: .black, .Private: .white]]
+    
+    static let defaultColor: (LumenThemeName) -> UIColor = { name in
+        if (name == .Light) {
+            return .black
+        }
+        return .white
+    }
+    
+    struct Dashboard {
+        static let backgroundColor: LumenColor = { name, mode in
+            return bgCombo[name]?[mode] ?? Lumen.defaultColor(name)
+        }
+        
+        static let shadowColor: LumenColor = { name, mode in
+            return bgCombo[name]?[mode] ?? Lumen.defaultColor(name)
+        }
+    }
+}
+
 extension UIColor {
     //Primary Colors
 	static let cliqzBluePrimary = UIColor(colorString: "00AEF0")
