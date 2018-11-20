@@ -127,7 +127,10 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
     func vpnButtonPressed() {
         if let appDel = UIApplication.shared.delegate as? AppDelegate, let tab = appDel.tabManager.selectedTab {
             //open vpn view
-            tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
+            self.delegate?.dismiss()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { //[weak self] in
+                tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
+            }
         }
     }
     
@@ -153,19 +156,20 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
                     //TODO: What should I do in this case?
                 }
                 else {
-                    DispatchQueue.main.async {
-                        self?.clearables
-                            .enumerated()
-                            .compactMap { (i, clearable) in
-                                return clearable.clear()
-                            }
-                            .allSucceed()
-                            .uponQueue(.main) { result in
-                                assert(result.isSuccess, "Private data cleared successfully")
-                                //TODO: Change UI
-                                CCWidgetManager.shared.update(period: self?.currentPeriod ?? .Today)
-                        }
-                    }
+//                    DispatchQueue.main.async {
+//                        self?.clearables
+//                            .enumerated()
+//                            .compactMap { (i, clearable) in
+//                                return clearable.clear()
+//                            }
+//                            .allSucceed()
+//                            .uponQueue(.main) { result in
+//                                assert(result.isSuccess, "Private data cleared successfully")
+//                                //TODO: Change UI
+//
+//                        }
+//                    }
+                    CCWidgetManager.shared.update(period: self?.currentPeriod ?? .Today)
                 }
             })
         }
