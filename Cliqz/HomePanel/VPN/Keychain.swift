@@ -30,7 +30,7 @@ open class DAKeychain {
     
     open subscript(key: String) -> String? {
         get {
-            return ""//load(withKey: key)
+            return loadString(withKey: key)
         } set {
             DispatchQueue.global().sync(flags: .barrier) {
                 self.save(newValue, forKey: key)
@@ -80,24 +80,24 @@ open class DAKeychain {
         }
     }
     
-    //    private func load(withKey key: String) -> String? {
-    //        let query = keychainQuery(withKey: key)
-    //        query.setValue(kCFBooleanTrue, forKey: kSecReturnData as String)
-    //        query.setValue(kCFBooleanTrue, forKey: kSecReturnAttributes as String)
-    //
-    //        var result: CFTypeRef?
-    //        let status = SecItemCopyMatching(query, &result)
-    //
-    //        guard
-    //            let resultsDict = result as? NSDictionary,
-    //            let resultsData = resultsDict.value(forKey: kSecValueData as String) as? Data,
-    //            status == noErr
-    //            else {
-    //                logPrint("Load status: ", status)
-    //                return nil
-    //        }
-    //        return String(data: resultsData, encoding: .utf8)
-    //    }
+    private func loadString(withKey key: String) -> String? {
+        let query = keychainQuery(withKey: key)
+        query.setValue(kCFBooleanTrue, forKey: kSecReturnData as String)
+        query.setValue(kCFBooleanTrue, forKey: kSecReturnAttributes as String)
+
+        var result: CFTypeRef?
+        let status = SecItemCopyMatching(query, &result)
+
+        guard
+            let resultsDict = result as? NSDictionary,
+            let resultsData = resultsDict.value(forKey: kSecValueData as String) as? Data,
+            status == noErr
+            else {
+                logPrint("Load status: ", status)
+                return nil
+        }
+        return String(data: resultsData, encoding: .utf8)
+    }
     
     private func keychainQuery(withKey key: String) -> NSMutableDictionary {
         let result = NSMutableDictionary()
