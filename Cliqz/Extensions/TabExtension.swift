@@ -202,7 +202,7 @@ class CurrentPageInfo: NSObject {
      */
     
     func sendData() {
-
+        guard UserPreferences.instance.isProtectionOn == true else { return }
         guard dataSentForCurrentPage == false else {return}
         dataSentForCurrentPage = true
         
@@ -254,6 +254,7 @@ class CurrentPageInfo: NSObject {
     //Page loaded event
     //Careful: This event can come after the page was changed. Check the currentURL.
     @objc func pageTimingReceived(_ notification: Notification) {
+        guard UserPreferences.instance.isProtectionOn == true else { return }
         if let userInfo = notification.userInfo as? [String: Any],
             let tabIdentifier = userInfo["tabIdentifier"] as? Int,
             let pageURL = userInfo["pageURL"] as? String,
@@ -269,6 +270,7 @@ class CurrentPageInfo: NSObject {
     
     //Page changed event
     @objc func handleInterceptedURL(_ notification: Notification) {
+        guard UserPreferences.instance.isProtectionOn == true else { return }
         //filter by tab id.
         //then add the tracker info to the arrays
         func addSourceTo(dict: inout [Int: Info], source: Source, id: Int) {
