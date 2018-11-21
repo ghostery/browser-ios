@@ -70,7 +70,7 @@ node('mac-vm-host') {
                 }
 
                 stage('Build & Upload') {
-                    if("${branchName}".contains("-p")){ 
+                    if("${branchName}".contains("-lumenBeta")){ 
                         withCredentials([
                             [
                                 $class          : 'UsernamePasswordMultiBinding',
@@ -94,7 +94,35 @@ node('mac-vm-host') {
                                 export app_name=Lumen
                                 fastlane importLocalizations
                                 export MATCH_KEYCHAIN_NAME=ios-build.keychain
-                                fastlane paidBeta
+                                fastlane lumenBeta
+                            '''
+                        }
+                    } 
+                    else if("${branchName}".contains("-lumenRelease")){ 
+                        withCredentials([
+                            [
+                                $class          : 'UsernamePasswordMultiBinding',
+                                credentialsId   : '85859bba-4927-4b14-bfdf-aca726009962',
+                                passwordVariable: 'GITHUB_PASSWORD',
+                                usernameVariable: 'GITHUB_USERNAME',
+                            ],
+                            string(credentialsId: '8b4f7459-c446-4058-be61-3c3d98fe72e2', variable: 'ITUNES_USER'),
+                            string(credentialsId: 'Lumen_SentryKey', variable: 'SentryDSN'),
+                            string(credentialsId: 'b4d6c48f-2b1e-4f24-8d9f-5f2d8eb4df64', variable: 'VPNPass'),
+                            string(credentialsId: '05be12cd-5177-4adf-9812-809f01451fa0', variable: 'FASTLANE_PASSWORD'),
+                            string(credentialsId: 'ee93743c-b0be-46aa-b49a-ab3caaea4f67', variable: 'MATCH_PASSWORD'),
+                            string(credentialsId: 'f206e880-e09a-4369-a3f6-f86ee94481f2', variable: 'SENTRY_AUTH_TOKEN'),
+                            string(credentialsId: 'ab91f92a-4588-4034-8d7f-c1a741fa31ab', variable: 'FASTLANE_ITC_TEAM_ID')])
+                        {
+                            sh '''#!/bin/bash -l
+                                set -x
+                                set -e
+                                rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
+                                rm -rf ../build-tools
+                                export app_name=Lumen
+                                fastlane importLocalizations
+                                export MATCH_KEYCHAIN_NAME=ios-build.keychain
+                                fastlane lumenRelease
                             '''
                         }
                     }

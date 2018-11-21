@@ -240,13 +240,10 @@ platform :ios do
   end
 
 
-  lane :paidBeta do
+  lane :lumenBeta do
 
     # Configuring Sentry DSN
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
-
-    # Configuring VPN
-    sh("cd .. && plutil -replace VPNPass -string $VPNPass Client/Info.plist")
 
     # Building ReactNative Entension
     sh("cd .. && npm run bundle")
@@ -268,11 +265,6 @@ platform :ios do
       app_identifier: ["com.cliqz.ios.cliqzPaid", "com.cliqz.ios.cliqzPaid.ShareTo", "*"],
       readonly: true,
       verbose: true
-    )
-
-    increment_build_number(
-      build_number: latest_testflight_build_number + 1,
-      xcodeproj: "Client.xcodeproj"
     )
 
     build_app(
@@ -300,6 +292,62 @@ platform :ios do
       auth_token: ENV["SENTRY_AUTH_TOKEN"],
       org_slug: 'cliqz',
       project_slug: 'cliqzpaid',
+    )
+  end
+
+
+  lane :lumenRelease do
+
+    # Configuring Sentry DSN
+    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
+
+    # Building ReactNative Entension
+    sh("cd .. && npm run bundle")
+
+    create_keychain(
+      name: ENV["MATCH_KEYCHAIN_NAME"],
+      password: ENV["MATCH_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
+
+    match(
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+      keychain_password: ENV["MATCH_PASSWORD"],
+      git_branch: "lumen-ios",
+      team_id: ENV["DEVELOPER_TEAM_ID"],
+      app_identifier: ["com.cliqz.ios.lumen", "com.cliqz.ios.lumen.ShareTo", "*"],
+      readonly: true,
+      verbose: true
+    )
+
+    build_app(
+      workspace: "Client.xcworkspace",
+      clean: "true",
+      scheme: "Lumen",
+      xcconfig: "Client/Configuration/Lumen.xcconfig",
+      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DRELEASE'",
+      skip_profile_detection: "true",
+      export_options: {
+        provisioningProfiles: { 
+          "com.cliqz.ios.lumen" => "match AppStore com.cliqz.ios.lumen",
+          "com.cliqz.ios.lumen.ShareTo" => "match AppStore com.cliqz.ios.lumen.ShareTo",
+        }
+      }
+    )
+
+    upload_to_testflight(
+      changelog: "Lumen Brwoser",
+      demo_account_required: "false",
+      skip_waiting_for_build_processing: "true"
+    )
+
+    sentry_upload_dsym(
+      auth_token: ENV["SENTRY_AUTH_TOKEN"],
+      org_slug: 'cliqz',
+      project_slug: 'lumen',
     )
   end
 
