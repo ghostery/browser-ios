@@ -15,8 +15,11 @@ for_platform :ios do
   for_lane :release do
     app_identifier 'com.evidon.Ghostery'
   end
-  for_lane :paidBeta do
+  for_lane :lumenBeta do
     app_identifier 'com.cliqz.ios.cliqzPaid'
+  end
+  for_lane :lumenRelease do
+    app_identifier 'com.cliqz.ios.lumen'
   end
   
 end
