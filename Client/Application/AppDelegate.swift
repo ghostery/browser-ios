@@ -77,6 +77,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         //Cliqz: Cards Subscription
         SubscriptionsHandler.sharedInstance.configureRemoteNotifications()
+        #if PAID
+        //Cliqz: VPN Endpoint init
+        _ = VPNEndPointManager.shared
+        #endif
 
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.

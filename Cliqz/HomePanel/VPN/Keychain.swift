@@ -55,7 +55,7 @@ open class DAKeychain {
                 logPrint("Load status: ", status)
                 return nil
         }
-        return resultsData//String(data: resultsData, encoding: .utf8)
+        return resultsData
     }
     
     private func save(_ string: String?, forKey key: String) {
