@@ -9,13 +9,12 @@
 import UIKit
 
 protocol VPNCountryControllerProtocol: class {
-    func didSelectCountry(country: VPNCountry)
+    func didSelectCountry(shouldReconnect: Bool)
 }
 
 class VPNCountryController: UIViewController {
     
     weak var delegate: VPNCountryControllerProtocol? = nil
-    var selectedCountry: VPNCountry? = nil
     
     let tableView = UITableView()
     
@@ -64,21 +63,14 @@ extension VPNCountryController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return VPNEndPointManager.shared.countries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CountryCell", for: indexPath) as! CustomVPNCountryCell
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
-        
-        if indexPath.row == 0 {
-            cell.textLabel?.text = VPNCountry.Germany.toString()
-        }
-        else {
-            cell.textLabel?.text = VPNCountry.USA.toString()
-        }
-        
+        cell.textLabel?.text = VPNEndPointManager.shared.countries[indexPath.row].name;
         cell.textLabel?.textColor = .white
         
         //do the setup
@@ -86,11 +78,8 @@ extension VPNCountryController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-
-        if indexPath.row == 0 && selectedCountry == VPNCountry.Germany {
-            tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
-        }
-        else if indexPath.row == 1 && selectedCountry == VPNCountry.USA {
+        let country = VPNEndPointManager.shared.countries[indexPath.row]
+        if country == VPNEndPointManager.shared.selectedCountry {
             tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
         }
     }
@@ -99,12 +88,9 @@ extension VPNCountryController: UITableViewDataSource {
 extension VPNCountryController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if indexPath.row == 0 {
-            self.delegate?.didSelectCountry(country: .Germany)
-        }
-        else {
-            self.delegate?.didSelectCountry(country: .USA)
-        }
+        let country = VPNEndPointManager.shared.countries[indexPath.row]
+        self.delegate?.didSelectCountry(shouldReconnect: country != VPNEndPointManager.shared.selectedCountry)
+        VPNEndPointManager.shared.selectedCountry = country
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.navigationController?.popViewController(animated: true)

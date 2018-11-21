@@ -10,6 +10,11 @@ import UIKit
 import NetworkExtension
 import BondAPI
 
+struct VPNUX {
+    static let bgColor = UIColor(red:0.08, green:0.10, blue:0.11, alpha:1.00)
+    static let cliqzBlue = UIColor(red: 7/255, green: 230/255, blue: 254/255, alpha: 1.0)
+    static let secondaryBlue = UIColor(red:0.00, green:0.61, blue:0.92, alpha:1.00)
+}
 
 class BondClient {
     static let shared = BondClient()
@@ -39,21 +44,6 @@ class VPN {
             }
             
             return false //default
-        }
-    }
-    
-    let lastEndPointKey = "VPNLastEndPointKey"
-    var lastEndPoint: String {
-        set {
-            UserDefaults.standard.set(newValue, forKey: lastEndPointKey)
-            UserDefaults.standard.synchronize()
-        }
-        get {
-            if let value = UserDefaults.standard.value(forKey: lastEndPointKey) as? String {
-                return value
-            }
-            
-            return "" //default
         }
     }
     
@@ -102,38 +92,11 @@ class VPN {
                                                name: .NEVPNStatusDidChange,
                                                object: nil)
         
-        if !areCredsAvailable() {
-            //make a call for creds
-            //TODO: Use auth after merging with Naira
-            let username = "Hello@cliqz.com"
-            let auth = UserAuth()
-            auth.username = username
-            auth.password = ""
-            BondClient.shared.client.getIPSecCreds(withRequest: auth) { (response, error) in
-                //TODO: write the credentials into the keychain
-                print(response?.config)
-            }
-        }
-    }
-    
-    private func areCredsAvailable() -> Bool {
-        let keychain = DAKeychain.shared
-        if keychain["username"] == nil  || keychain["sharedSecret"] == nil || keychain["password"] == nil {
-            return false
-        }
-        return true
-    }
-    
-    private func writeCreds(username: String, password: String, sharedSecret: String) {
-        let keychain = DAKeychain.shared
-        keychain["username"] = username
-        keychain["password"] = password
-        keychain["sharedSecret"] = sharedSecret
     }
     
     func checkConnection() {
         if (lastStatus == .connected && status != .connected) {
-            VPN.connect2VPN(endPoint: lastEndPoint)
+            VPN.connect2VPN()
         }
     }
     
@@ -151,7 +114,7 @@ class VPN {
         //keep button up to date.
         lastStatus = status
         if (status == .disconnected && shouldTryToReconnect) {
-            VPN.connect2VPN(endPoint: lastEndPoint)
+            VPN.connect2VPN()
         }
     }
     
@@ -160,27 +123,25 @@ class VPN {
         NEVPNManager.shared().connection.stopVPNTunnel()
     }
     
-    static func connect2VPN(endPoint: String) {
+    static func connect2VPN() {
         
         VPN.shared.shouldTryToReconnect = true
-        VPN.shared.lastEndPoint = endPoint
         
-        guard VPN.shared.areCredsAvailable() == true else { return }
-
-        let keychain = DAKeychain.shared
+        let country = VPNEndPointManager.shared.selectedCountry
+        guard let creds = VPNEndPointManager.shared.selectedCountry.getCredentials() else { return }
         
         NEVPNManager.shared().loadFromPreferences { (error) in
-            if NEVPNManager.shared().protocolConfiguration == nil || NEVPNManager.shared().protocolConfiguration?.serverAddress != endPoint {
+            if NEVPNManager.shared().protocolConfiguration == nil || NEVPNManager.shared().protocolConfiguration?.serverAddress != country.endpoint {
                 let newIPSec = NEVPNProtocolIPSec()
                 //setUp the protocol
                 newIPSec.useExtendedAuthentication = true
                 
                 newIPSec.authenticationMethod = .sharedSecret
-                newIPSec.sharedSecretReference = keychain.load(withKey: "sharedSecret")
+                newIPSec.sharedSecretReference = creds.sharedSecret
                 
-                newIPSec.username = keychain["username"]
-                newIPSec.passwordReference = keychain.load(withKey: "password")
-                newIPSec.serverAddress = endPoint;
+                newIPSec.username = creds.username
+                newIPSec.passwordReference = creds.password
+                newIPSec.serverAddress = country.endpoint;
                 newIPSec.disconnectOnSleep = false
                 
                 NEVPNManager.shared().protocolConfiguration = newIPSec
@@ -198,64 +159,110 @@ class VPN {
     }
 }
 
-struct VPNUX {
-    static let bgColor = UIColor(red:0.08, green:0.10, blue:0.11, alpha:1.00)
-    static let cliqzBlue = UIColor(red: 7/255, green: 230/255, blue: 254/255, alpha: 1.0)
-    static let secondaryBlue = UIColor(red:0.00, green:0.61, blue:0.92, alpha:1.00)
-}
-
-public enum VPNCountry: Int {
-    case Germany
-    case USA
+class VPNEndPointManager {
+    //manages the endpoints and credentials for each country
     
-    func toString() -> String {
-        switch self {
-        case .Germany:
-            return "Germany"
-        default:
-            return "United States"
+    struct Credentials {
+        let username: String
+        let password: Data
+        let sharedSecret: Data
+    }
+    
+    struct VPNCountry: Codable, Equatable {
+        let id: String //id from the server
+        let name: String //display name
+        let endpoint: String //endpoint address
+        
+        static func != (lhs: VPNCountry, rhs: VPNCountry) -> Bool {
+            return lhs.id != rhs.id
+        }
+        
+        func getCredentials() -> Credentials? {
+            let keychain = DAKeychain.shared
+            if let username = keychain[usernameHash],
+                let pass = keychain.load(withKey: passwordHash),
+                let sharedS = keychain.load(withKey: sharedSecretHash)
+            {
+                return Credentials(username: username, password: pass, sharedSecret: sharedS)
+            }
+            
+            return nil
+        }
+        
+        func setCreds(username: String, password: String, sharedSecret: String) {
+            let keychain = DAKeychain.shared
+            keychain[usernameHash] = username
+            keychain[passwordHash] = password
+            keychain[sharedSecretHash] = sharedSecret
+        }
+        
+        var hashPrefix: String {
+            return "\(self.id)|\(self.endpoint)"
+        }
+        
+        var usernameHash: String {
+            return "\(self.hashPrefix)|username"
+        }
+        
+        var passwordHash: String {
+            return "\(self.hashPrefix)|password"
+        }
+        
+        var sharedSecretHash: String {
+            return "\(self.hashPrefix)|sharedSecret"
         }
     }
     
-    func endPoint() -> String {
-        switch self {
-        case .Germany:
-            return "195.181.170.100"
-        default:
-            return "195.181.168.14"
-        }
-    }
+    static let defaultCountry = VPNCountry(id: "de", name: "Germany", endpoint: "195.181.170.100")
     
-    static func country(string: String) -> VPNCountry {
-        if string == VPNCountry.Germany.toString() {
-            return .Germany
-        }
-        else {
-            return .USA
-        }
-    }
-}
-
-class VPNViewController: UIViewController {
+    //list of possible countries. Each country has its own credentials and endpoints
+    var countries: [VPNCountry] = [
+        VPNCountry(id: "us", name: "United States", endpoint: "195.181.168.14"),
+        defaultCountry
+    ]
     
-    //save this to userdefaults
     let selectedCountryKey = "VPNSelectedCountry"
     
     var selectedCountry: VPNCountry {
         set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: selectedCountryKey)
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: selectedCountryKey)
             UserDefaults.standard.synchronize()
         }
         get {
-            if let countryRaw = UserDefaults.standard.value(forKey: selectedCountryKey) as? Int {
-                if let country = VPNCountry(rawValue: countryRaw) {
-                    return country
-                }
+            
+            if let data = UserDefaults.standard.value(forKey: selectedCountryKey) as? Data, let country = try? PropertyListDecoder().decode(VPNCountry.self, from: data) {
+                return country
             }
             
-            return .Germany //default
+            return VPNEndPointManager.defaultCountry //default
         }
     }
+    
+    static let shared = VPNEndPointManager()
+    
+    init() {
+        //get credential for each country
+        let auth = UserAuth()
+        auth.username = "test@cliqz.com"
+        auth.password = "uk4lj2m8jqcclbzi80itb6"
+        BondClient.shared.client.getIPSecCreds(withRequest: auth) { [weak self] (response, error) in
+            //TODO: write the credentials into the keychain
+            if let config = response?.config as? [String: IPSecConfig] {
+                for (key, value) in config {
+                    if let country = self?.country(id: key) {
+                        country.setCreds(username: value.username, password: value.password, sharedSecret: value.secret)
+                    }
+                }
+            }
+        }
+    }
+    
+    func country(id: String) -> VPNCountry? {
+        return countries.filter{$0.id == id}.first
+    }
+}
+
+class VPNViewController: UIViewController {
     
     //used to reconnect when changing countries
     var shouldVPNReconnect = false
@@ -404,7 +411,7 @@ class VPNViewController: UIViewController {
         //reconnect when changing countries
         if (VPNStatus == .disconnected && shouldVPNReconnect == true) {
             shouldVPNReconnect = false
-            VPN.connect2VPN(endPoint: self.selectedCountry.endPoint())
+            VPN.connect2VPN()
         }
     }
     
@@ -415,7 +422,7 @@ class VPNViewController: UIViewController {
             VPN.disconnectVPN()
         }
         else {
-            VPN.connect2VPN(endPoint: self.selectedCountry.endPoint())
+            VPN.connect2VPN()
         }
     }
     
@@ -478,7 +485,7 @@ extension VPNViewController: UITableViewDataSource {
         cell.textLabel?.text = "Connect to:"
         cell.textLabel?.textColor = .white
         cell.backgroundColor = .clear
-        cell.detailTextLabel?.text = selectedCountry.toString()
+        cell.detailTextLabel?.text = VPNEndPointManager.shared.selectedCountry.name
         cell.selectionStyle = .none
         
         return cell
@@ -495,22 +502,19 @@ extension VPNViewController: UITableViewDelegate {
         
         //push new view controller
         let countryVC = VPNCountryController()
-        countryVC.selectedCountry = selectedCountry
         countryVC.delegate = self
         self.navigationController?.pushViewController(countryVC, animated: true)
     }
 }
 
 extension VPNViewController: VPNCountryControllerProtocol {
-    func didSelectCountry(country: VPNCountry) {
-        
-        if (country != selectedCountry) {
+    func didSelectCountry(shouldReconnect: Bool) {
+        if (shouldReconnect) {
             //country changed
             //reconnect if necessary
             VPN.disconnectVPN()
             shouldVPNReconnect = true
         }
-        selectedCountry = country
         //change the name of the country in the button
         self.tableView.reloadData()
     }
