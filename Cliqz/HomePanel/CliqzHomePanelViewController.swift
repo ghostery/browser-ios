@@ -73,7 +73,6 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     fileprivate var currentOrientation: DeviceOrientation? = nil
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        
         self.panels = CliqzHomePanels().getEnabledPanels()
         
         let imageNames = self.panels.map { $0.imageName }

@@ -32,4 +32,13 @@ extension AppDelegate {
         navigationBarAppearace.tintColor = UIColor.white
         navigationBarAppearace.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
     }
+
+	func showBrowser() {
+		let navigationController = UINavigationController(rootViewController: browserViewController)
+		rootViewController = navigationController
+		self.window!.rootViewController = rootViewController
+		navigationController.delegate = self
+		navigationController.isNavigationBarHidden = true
+		navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
+	}
 }
