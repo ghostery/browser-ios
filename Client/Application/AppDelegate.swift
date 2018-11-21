@@ -165,11 +165,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             })
         }
 
-        let navigationController = UINavigationController(rootViewController: browserViewController)
-        navigationController.delegate = self
-        navigationController.isNavigationBarHidden = true
-        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
-        rootViewController = navigationController
+/* Cliqz: Initial VC changed for Lumen */
+        #if PAID
+			AuthenticationService.shared.isDeviceActivated({ (isActivated) in
+				if isActivated {
+					self.showBrowser()
+				} else {
+					let navigationController = UINavigationController(rootViewController: RegistrationViewController())
+					self.rootViewController = navigationController
+				}
+			})
+        #else
+            self.showBrowser()
+        #endif
+		/* Cliqz: End */
 
         self.window!.rootViewController = rootViewController
 
