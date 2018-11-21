@@ -26,7 +26,7 @@ class EmailVerificationViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.navigationController?.isNavigationBarHidden = false
-		self.navigationController?.navigationBar.barTintColor = UIColor.clear
+		self.navigationController?.navigationBar.barTintColor = AuthenticationUX.backgroundDarkGradientStart
 		self.timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(checkActivation), userInfo: nil, repeats: true)
 		self.timer?.fire()
 		self.setupViews()
@@ -67,7 +67,7 @@ class EmailVerificationViewController: UIViewController {
 			make.bottom.equalTo(self.titleLabel.snp.top).offset(-104)
 		}
 	}
-	
+
 	private func setupViews() {
 		self.view.addSubview(self.backgroundView)
 		self.view.addSubview(self.image)
@@ -77,6 +77,7 @@ class EmailVerificationViewController: UIViewController {
 		self.view.addSubview(self.openEmailButton)
 
 		self.image.image = UIImage(named: "circleAuthentication")
+		self.animateImage()
 
 		self.titleLabel.text = NSLocalizedString("Your account is almost ready!", tableName: "Cliqz", comment: "")
 		self.titleLabel.textAlignment = .center
@@ -150,5 +151,13 @@ class EmailVerificationViewController: UIViewController {
 		let nextVC = RegistrationConfirmationViewController()
 		self.navigationController?.pushViewController(nextVC, animated: true)
 	}
-	
+
+	private func animateImage() {
+		let rotation : CABasicAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
+		rotation.toValue = NSNumber(value: Double.pi * 2)
+		rotation.duration = 1
+		rotation.isCumulative = true
+		rotation.repeatCount = Float.greatestFiniteMagnitude
+		self.image.layer.add(rotation, forKey: "rotationAnimation")
+	}
 }
