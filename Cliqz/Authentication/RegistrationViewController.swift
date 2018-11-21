@@ -132,6 +132,10 @@ class RegistrationViewController: UIViewController {
 
 		self.image.image = UIImage(named: "logoAuthentication")
 
+		let tap = UITapGestureRecognizer(target: self, action: #selector(endEditing))
+		tap.cancelsTouchesInView = false
+		contentView.addGestureRecognizer(tap)
+
 		self.contentView.addSubview(self.image)
 		self.contentView.addSubview(self.titleLabel)
 		self.contentView.addSubview(self.descriptionLabel)
@@ -220,6 +224,11 @@ class RegistrationViewController: UIViewController {
 		changeButtonState(isEnabled)
 		emailTextField.isEnabled = isEnabled
 	}
+
+	@objc
+	func endEditing() {
+		self.emailTextField.resignFirstResponder()
+	}
 }
 
 extension RegistrationViewController: UITextFieldDelegate {
@@ -231,9 +240,22 @@ extension RegistrationViewController: UITextFieldDelegate {
 	
 	func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
 		UIView.animate(withDuration: 0.2) {
+			self.image.alpha = 0
 			self.contentView.snp.remakeConstraints { (make) in
 				make.top.left.right.equalToSuperview()
 				make.bottom.equalTo(self.view.snp.bottom).offset(-300)
+			}
+			self.contentView.layoutIfNeeded()
+		}
+		return true
+	}
+
+	func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+		UIView.animate(withDuration: 0.2) {
+			self.image.alpha = 1
+			self.contentView.snp.remakeConstraints { (make) in
+				make.top.left.right.equalToSuperview()
+				make.bottom.equalTo(self.view.snp.bottom).offset(0)
 			}
 			self.contentView.layoutIfNeeded()
 		}
