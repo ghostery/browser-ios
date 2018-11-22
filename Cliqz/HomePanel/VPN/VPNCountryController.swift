@@ -5,7 +5,7 @@
 //  Created by Tim Palade on 10/26/18.
 //  Copyright © 2018 Tim Palade. All rights reserved.
 //
-
+#if PAID
 import UIKit
 
 protocol VPNCountryControllerProtocol: class {
@@ -133,3 +133,4 @@ class CustomVPNCountryCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
 }
+#endif
