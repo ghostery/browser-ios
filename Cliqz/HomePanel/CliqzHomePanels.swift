@@ -31,6 +31,7 @@ class CliqzHomePanels {
                         accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label"),
                         accessibilityIdentifier: "HomePanels.History")
     
+    #if PAID
     let VPNPanel =  HomePanelDescriptor(
                         makeViewController: { profile in
                             let controller = UINavigationController(rootViewController: VPNViewController())
@@ -41,6 +42,7 @@ class CliqzHomePanels {
                         imageName: "panelVPN",
                         accessibilityLabel: NSLocalizedString("VPN", comment: "Panel accessibility label"),
                         accessibilityIdentifier: "HomePanels.VPN")
+    #endif
 
     let offrzPanel = HomePanelDescriptor(
                         makeViewController: { profile in
