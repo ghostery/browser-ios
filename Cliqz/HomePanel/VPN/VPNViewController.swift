@@ -17,19 +17,6 @@ struct VPNUX {
     static let secondaryBlue = UIColor(red:0.00, green:0.61, blue:0.92, alpha:1.00)
 }
 
-
-class BondClient {
-    static let shared = BondClient()
-    
-    let client: BondV1
-    
-    static let hostname: String = "ambassador.dev.k8s.eu-central-1.clyqz.com"
-    
-    init() {
-        client = BondV1.init(host: BondClient.hostname)
-    }
-}
-
 class VPN {
     
     static let shared = VPN()
@@ -244,18 +231,20 @@ class VPNEndPointManager {
     
     init() {
         //get credential for each country
-        let auth = UserAuth()
-        auth.username = "test@cliqz.com"
-        auth.password = "uk4lj2m8jqcclbzi80itb6"
-        BondClient.shared.client.getIPSecCreds(withRequest: auth) { [weak self] (response, error) in
-            //TODO: write the credentials into the keychain
-            if let config = response?.config as? [String: IPSecConfig] {
-                for (key, value) in config {
-                    if let country = self?.country(id: key) {
-                        country.setCreds(username: value.username, password: value.password, sharedSecret: value.secret)
+        if let userCred = AuthenticationService.shared.userCredentials() {
+            BondAPIManager.shared.currentBondHandler().getIPSecCreds(withRequest: userCred) { [weak self] (response, error) in
+                //TODO: write the credentials into the keychain
+                if let config = response?.config as? [String: IPSecConfig] {
+                    for (key, value) in config {
+                        if let country = self?.country(id: key) {
+                            country.setCreds(username: value.username, password: value.password, sharedSecret: value.secret)
+                        }
                     }
                 }
             }
+        }
+        else {
+            //TODO: What if there are no userCreds?
         }
     }
     
