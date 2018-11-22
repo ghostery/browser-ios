@@ -5,18 +5,18 @@
 //  Created by Tim Palade on 10/26/18.
 //  Copyright © 2018 Tim Palade. All rights reserved.
 //
+#if PAID
 
 import UIKit
 import NetworkExtension
-#if PAID
 import BondAPI
-#endif
 
 struct VPNUX {
     static let bgColor = UIColor(red:0.08, green:0.10, blue:0.11, alpha:1.00)
     static let cliqzBlue = UIColor(red: 7/255, green: 230/255, blue: 254/255, alpha: 1.0)
     static let secondaryBlue = UIColor(red:0.00, green:0.61, blue:0.92, alpha:1.00)
 }
+
 
 class BondClient {
     static let shared = BondClient()
@@ -521,3 +521,5 @@ extension VPNViewController: VPNCountryControllerProtocol {
         self.tableView.reloadData()
     }
 }
+
+#endif
