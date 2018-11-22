@@ -509,7 +509,7 @@ extension VPNViewController: UITableViewDelegate {
 
 extension VPNViewController: VPNCountryControllerProtocol {
     func didSelectCountry(shouldReconnect: Bool) {
-        if (shouldReconnect) {
+        if (VPN.shared.status == .connected && shouldReconnect) {
             //country changed
             //reconnect if necessary
             VPN.disconnectVPN()
