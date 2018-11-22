@@ -11,7 +11,7 @@ import BondAPI
 
 class BondAPIManager {
 	
-	private static let hostName = "ambassador.dev.k8s.eu-central-1.clyqz.com"
+	private static let hostName = "api.lumenbrowser.com"
 	private let euBondHandler = BondV1(host: BondAPIManager.hostName)
 
 	static let shared = BondAPIManager()
