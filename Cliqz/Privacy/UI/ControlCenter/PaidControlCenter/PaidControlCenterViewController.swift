@@ -6,6 +6,7 @@
 //  Copyright © 2018 Cliqz. All rights reserved.
 //
 
+#if PAID
 import UIKit
 
 //TODO: 3 connections
@@ -360,3 +361,4 @@ class CCControlsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+#endif

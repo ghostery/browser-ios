@@ -6,6 +6,7 @@
 //  Copyright © 2018 Tim Palade. All rights reserved.
 //
 
+#if PAID
 import UIKit
 
 class VPNButton: UIButton {
@@ -156,3 +157,5 @@ class VPNButton: UIButton {
         mainLabel.text = title
     }
 }
+
+#endif

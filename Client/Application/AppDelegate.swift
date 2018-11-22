@@ -359,7 +359,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         //
         
         //Cliqz: check VPN connection
+        #if PAID
         VPN.shared.checkConnection()
+        #endif
 
         let defaults = UserDefaults()
         defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
