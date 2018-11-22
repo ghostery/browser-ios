@@ -8,7 +8,9 @@
 
 import UIKit
 import NetworkExtension
+#if PAID
 import BondAPI
+#endif
 
 struct VPNUX {
     static let bgColor = UIColor(red:0.08, green:0.10, blue:0.11, alpha:1.00)

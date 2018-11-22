@@ -72,8 +72,8 @@ extension BrowserViewController {
             let controlCenter = PaidControlCenterViewController()
         #else
             let controlCenter = ControlCenterViewController()
-            if let pageURL = pageURL {
-                controlCenter.pageURL = pageUrl
+            if let pageURL = pageUrl {
+                controlCenter.pageURL = pageURL
             }
         #endif
         controlCenter.delegate = self

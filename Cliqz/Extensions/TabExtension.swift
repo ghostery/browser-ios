@@ -115,6 +115,7 @@ extension Tab {
 
 //this stores information about the current page in a tab
 //it is meant to be used with a Tab
+#if PAID
 class CurrentPageInfo: NSObject {
     
     struct PageTiming {
@@ -334,3 +335,4 @@ class CurrentPageInfo: NSObject {
         return dict
     }
 }
+#endif

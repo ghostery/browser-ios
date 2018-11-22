@@ -69,7 +69,9 @@ class Tab: NSObject {
     var blockingCoordinator: BlockingCoordinator? = nil
     var lastDomain = ""
     let tabID: Int
+    #if PAID
     var currentPageInfo: CurrentPageInfo? = nil
+    #endif
     //Cliqz: End
 
     var userActivity: NSUserActivity?
