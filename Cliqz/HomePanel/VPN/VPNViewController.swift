@@ -117,7 +117,7 @@ class VPN {
         VPN.shared.shouldTryToReconnect = true
         
         let country = VPNEndPointManager.shared.selectedCountry
-        guard let creds = VPNEndPointManager.shared.selectedCountry.getCredentials() else { return }
+        guard let creds = VPNEndPointManager.shared.getCredentials(country: country) else { return }
         
         NEVPNManager.shared().loadFromPreferences { (error) in
             if NEVPNManager.shared().protocolConfiguration == nil || NEVPNManager.shared().protocolConfiguration?.serverAddress != country.endpoint {
@@ -166,25 +166,6 @@ class VPNEndPointManager {
             return lhs.id != rhs.id
         }
         
-        func getCredentials() -> Credentials? {
-            let keychain = DAKeychain.shared
-            if let username = keychain[usernameHash],
-                let pass = keychain.load(withKey: passwordHash),
-                let sharedS = keychain.load(withKey: sharedSecretHash)
-            {
-                return Credentials(username: username, password: pass, sharedSecret: sharedS)
-            }
-            
-            return nil
-        }
-        
-        func setCreds(username: String, password: String, sharedSecret: String) {
-            let keychain = DAKeychain.shared
-            keychain[usernameHash] = username
-            keychain[passwordHash] = password
-            keychain[sharedSecretHash] = sharedSecret
-        }
-        
         var hashPrefix: String {
             return "\(self.id)|\(self.endpoint)"
         }
@@ -231,13 +212,17 @@ class VPNEndPointManager {
     
     init() {
         //get credential for each country
+        getVPNCredentialsFromServer()
+    }
+    
+    private func getVPNCredentialsFromServer() {
         if let userCred = AuthenticationService.shared.userCredentials() {
             BondAPIManager.shared.currentBondHandler().getIPSecCreds(withRequest: userCred) { [weak self] (response, error) in
                 //TODO: write the credentials into the keychain
                 if let config = response?.config as? [String: IPSecConfig] {
                     for (key, value) in config {
                         if let country = self?.country(id: key) {
-                            country.setCreds(username: value.username, password: value.password, sharedSecret: value.secret)
+                            self?.setCreds(country: country, username: value.username, password: value.password, sharedSecret: value.secret)
                         }
                     }
                 }
@@ -250,6 +235,26 @@ class VPNEndPointManager {
     
     func country(id: String) -> VPNCountry? {
         return countries.filter{$0.id == id}.first
+    }
+    
+    func getCredentials(country: VPNCountry) -> Credentials? {
+        let keychain = DAKeychain.shared
+        if let username = keychain[country.usernameHash],
+            let pass = keychain.load(withKey: country.passwordHash),
+            let sharedS = keychain.load(withKey: country.sharedSecretHash)
+        {
+            return Credentials(username: username, password: pass, sharedSecret: sharedS)
+        }
+        //initiate a call to get the credentials?
+        getVPNCredentialsFromServer()
+        return nil
+    }
+    
+    private func setCreds(country: VPNCountry, username: String, password: String, sharedSecret: String) {
+        let keychain = DAKeychain.shared
+        keychain[country.usernameHash] = username
+        keychain[country.passwordHash] = password
+        keychain[country.sharedSecretHash] = sharedSecret
     }
 }
 
