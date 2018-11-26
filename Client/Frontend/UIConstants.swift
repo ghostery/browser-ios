@@ -106,7 +106,14 @@ extension UIColor {
     }
 
     struct TabTray {
+        /* Cliqz: change color
         static let Background = Browser.Background
+        */
+        #if PAID
+        static let Background = BrowserColor(normal: .clear, pbm: .clear)
+        #else
+        static let Background = Browser.Background
+        #endif
     }
 
     struct TopTabs {

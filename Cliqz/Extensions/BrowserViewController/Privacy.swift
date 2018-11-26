@@ -133,6 +133,16 @@ extension BrowserViewController {
         }
 	}
     
+    #if PAID
+    func showWebview() {
+        self.webViewContainer.isHidden = false
+    }
+    
+    func hideWebview() {
+        self.webViewContainer.isHidden = true
+    }
+    #endif
+    
     func showBlocklistLoadToast() {
         let text = NSLocalizedString("Applying Changes...", tableName: "Cliqz", comment: "Applying Changes Toast")
         CustomSimpleToast().showAlertWithText(text, bottomContainer: self.webViewContainer)

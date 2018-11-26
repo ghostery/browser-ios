@@ -260,6 +260,11 @@ class TabTrayController: UIViewController {
         return toolbar
     }()
     
+    //Cliqz: Add gradient
+    #if PAID
+    let gradient = BrowserGradientView()
+    #endif
+    //Cliqz: end
 
     fileprivate(set) internal var privateMode: Bool = false {
         didSet {
@@ -337,8 +342,15 @@ class TabTrayController: UIViewController {
         collectionView.delegate = tabLayoutDelegate
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.BottomToolbarHeight, right: 0)
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
+        /* Cliqz: Chage for lumen
         collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
+        */
+        #if !PAID
+        collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
+        #else
+        collectionView.backgroundColor = .clear
+        #endif
         if #available(iOS 11.0, *) {
             collectionView.dragInteractionEnabled = true
             collectionView.dragDelegate = tabDataSource
@@ -348,6 +360,14 @@ class TabTrayController: UIViewController {
         view.addSubview(collectionView)
         view.addSubview(toolbar)
 
+        
+        //Cliqz: Add gradient
+        #if PAID
+        view.addSubview(gradient)
+        view.sendSubview(toBack: gradient)
+        #endif
+        //Cliqz: end
+        
         makeConstraints()
 
         view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
@@ -427,6 +447,13 @@ class TabTrayController: UIViewController {
             make.left.right.bottom.equalTo(view)
             make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
+        //Cliqz: Add gradient
+        #if PAID
+        gradient.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        #endif
+        //Cliqz: end
     }
 
 // MARK: Selectors

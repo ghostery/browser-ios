@@ -57,6 +57,17 @@ struct Lumen {
     
 //    let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Private: .black], .Dark: [.Normal: .black, .Private: .black]]
     
+    struct Browser {
+        static let backgroundGradient: (LumenThemeName) -> ([CGColor], [NSNumber]) = { name in
+            
+            if name == .Light {
+                return ([UIColor.white.cgColor, UIColor.white.cgColor], [0.0, 1.0])
+            }
+            
+            return ([UIColor.lumenDeepBlue.cgColor, UIColor.lumenPurple.cgColor, UIColor.lumenDeepBlue.cgColor], [0.0, 0.5 ,1.0])
+        }
+    }
+    
     struct Dashboard {
         static let backgroundColor: LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Disabled: .white], .Dark: [.Normal: .black, .Disabled: .black]]
@@ -182,10 +193,18 @@ extension UIColor {
     }
     
     struct CliqzToolbar {
+        #if PAID
+        static let Background = BrowserColor(normal: UIColor.lumenDeepBlue, pbm: UIColor.lumenDeepBlue)
+        #else
         static let Background = BrowserColor(normal: UIColor.black, pbm: UIColor.black)
+        #endif
     }
     struct CliqzURLBar {
+        #if PAID
+        static let Background = BrowserColor(normal: UIColor.lumenDeepBlue, pbm: UIColor.lumenDeepBlue)
+        #else
         static let Background = BrowserColor(normal: UIColor.cliqzBluePrimary, pbm: UIColor.cliqzForgetPrimary)
+        #endif
     }
     
 	struct ControlCenter {
