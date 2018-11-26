@@ -170,6 +170,7 @@ class RegistrationViewController: UIViewController {
 		self.termsConditionsLabel.textColor = AuthenticationUX.blue
 		self.termsConditionsLabel.font = UIFont.systemFont(ofSize: 11)
 		self.termsConditionsLabel.numberOfLines = 2
+		self.termsConditionsLabel.isHidden = true
 
 		self.errorLabel.text = ""
 		self.errorLabel.textAlignment = .center
