@@ -11,7 +11,6 @@ import SnapKit
 
 struct CCCellUX {
     static let CornerRadius: CGFloat = 20.0
-    static let ShadowColor: CGColor = UIColor.init(colorString: "00AEF0").cgColor
     static let ShadowRadius: CGFloat = 4.0
     static let ShadowOpacity: Float = 0.9
 }
@@ -67,8 +66,8 @@ class CCAbstractCell: UIView {
             make.edges.equalToSuperview()
         }
         
-        self.backgroundColor = .clear
-        self.layer.shadowColor = CCCellUX.ShadowColor
+        self.backgroundColor = Lumen.Dashboard.widgetBackgroundColor(lumenTheme, lumenDashboardMode)
+        self.layer.shadowColor = Lumen.Dashboard.shadowColor(lumenTheme, lumenDashboardMode).cgColor
         self.layer.shadowRadius = CCCellUX.ShadowRadius
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowOpacity = CCCellUX.ShadowOpacity
@@ -79,19 +78,16 @@ class CCAbstractCell: UIView {
         self.contentView.clipsToBounds = true
         
         titleLabel.textAlignment = .center
-        titleLabel.textColor = UIColor.white
+        titleLabel.textColor = Lumen.Dashboard.titleColor(lumenTheme, lumenDashboardMode)
         titleLabel.font = UIFont.systemFont(ofSize: 19, weight: .medium)
         titleLabel.numberOfLines = 0
         titleLabel.adjustsFontSizeToFitWidth = true
         
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
-        descriptionLabel.textColor = UIColor.white
+        descriptionLabel.textColor = Lumen.Dashboard.descriptionColor(lumenTheme, lumenDashboardMode)
         descriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         descriptionLabel.adjustsFontSizeToFitWidth = true
-        
-        self.backgroundColor = UIColor.black
-        
     }
     
     required init?(coder aDecoder: NSCoder) {

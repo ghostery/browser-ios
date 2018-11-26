@@ -23,24 +23,27 @@ enum LumenThemeName {
 enum LumenThemeMode {
     case Private
     case Normal
+    case Disabled
 }
 
 //What do I want? I want a structure to which I pass a theme name and mode and get the color for a certain element
 
 //(theme, mode) -> UIColor
-
+typealias LumenImage = (LumenThemeName, LumenThemeMode) -> UIImage?
+typealias LumenImageCombo = [LumenThemeName: [LumenThemeMode : UIImage?]]
 typealias LumenColor = (LumenThemeName, LumenThemeMode) -> UIColor
 typealias LumenColorCombo = [LumenThemeName: [LumenThemeMode : UIColor]]
 
 extension UIColor {
     //Enumerate lumen colors here
+    static let lumenBrightBlue = UIColor(colorString: "3073DB")
+    static let lumenDeepBlue = UIColor(colorString: "0D0F22")
+    static let lumenPurple = UIColor(colorString: "1E2247")
 }
 
 struct Lumen {
     
     //helpers
-    private static let bgCombo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .black], .Dark: [.Normal: .black, .Private: .white]]
-    
     static let defaultColor: (LumenThemeName) -> UIColor = { name in
         if (name == .Light) {
             return .black
@@ -48,13 +51,98 @@ struct Lumen {
         return .white
     }
     
+    static let fallback: (LumenThemeName, LumenColorCombo) -> UIColor = { name, combo in
+        return combo[name]?.values.first ?? Lumen.defaultColor(name)
+    }
+    
+//    let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Private: .black], .Dark: [.Normal: .black, .Private: .black]]
+    
     struct Dashboard {
         static let backgroundColor: LumenColor = { name, mode in
-            return bgCombo[name]?[mode] ?? Lumen.defaultColor(name)
+            let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Disabled: .white], .Dark: [.Normal: .black, .Disabled: .black]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let backgroundColorAlpha: (LumenThemeName) -> CGFloat = { name in
+            if (name == .Light) {
+                return 0.97
+            }
+            return 0.9
+        }
+        
+        static let widgetBackgroundColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Disabled: .white], .Dark: [.Normal: .black, .Disabled: .black]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
         static let shadowColor: LumenColor = { name, mode in
-            return bgCombo[name]?[mode] ?? Lumen.defaultColor(name)
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let widgetTextColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .black], .Dark: [.Normal: .white, .Disabled: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let titleColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .black], .Dark: [.Normal: .white, .Disabled: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let descriptionColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .black], .Dark: [.Normal: .white, .Disabled: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let protectionLabelColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .black], .Dark: [.Normal: .white, .Disabled: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let segmentedControlColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let buttonTitleColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let startButtonImage: LumenImage = { name, mode in
+            let bright = UIImage(named: "CCPause_Bright")
+            let dark   = UIImage(named: "CCPause_Dark")
+            let combo: LumenImageCombo  = [.Light: [.Normal: bright, .Disabled: bright], .Dark: [.Normal: dark, .Disabled: dark]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let startButtonImageSelected: LumenImage = { name, mode in
+            let bright = UIImage(named: "CCStart_Bright")
+            let dark   = UIImage(named: "CCStart_Dark")
+            let combo: LumenImageCombo  = [.Light: [.Normal: bright, .Disabled: bright], .Dark: [.Normal: dark, .Disabled: dark]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let VPNButtonImage: LumenImage = { name, mode in
+            let bright = UIImage(named: "CCVPNOff_Bright")
+            let dark   = UIImage(named: "CCVPNOff_Dark")
+            let combo: LumenImageCombo  = [.Light: [.Normal: bright, .Disabled: bright], .Dark: [.Normal: dark, .Disabled: dark]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let VPNButtonImageSelected: LumenImage = { name, mode in
+            let bright = UIImage(named: "CCVPNOn_Bright")
+            let dark   = UIImage(named: "CCVPNOn_Dark")
+            let combo: LumenImageCombo  = [.Light: [.Normal: bright, .Disabled: bright], .Dark: [.Normal: dark, .Disabled: dark]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let clearButtonImage: LumenImage = { name, mode in
+            let bright = UIImage(named: "CCClear_Bright")
+            let dark   = UIImage(named: "CCClear_Dark")
+            let combo: LumenImageCombo  = [.Light: [.Normal: bright, .Disabled: bright], .Dark: [.Normal: dark, .Disabled: dark]]
+            return combo[name]?[mode] ?? nil
         }
     }
 }
