@@ -21,7 +21,9 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
 	var shouldShowKeyboard = true
     var isPrivate = false {
         didSet {
+            #if !PAID
             self.overlayView?.isHidden = !isPrivate
+            #endif
         }
     }
 
@@ -95,11 +97,12 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        #if !PAID
         view.addSubview(backgroundView)
         overlayView = UIView.overlay(frame: UIScreen.main.bounds)
         overlayView.isHidden = !isPrivate
         view.addSubview(overlayView)
+        #endif
 
         segmentedControl.addSubview(offrzNotificationImage)
         offrzNotificationImage.isHidden = true
@@ -122,12 +125,14 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     
     func setInitialConstraints() {
         
+        #if !PAID
         backgroundView.snp.makeConstraints { (make) in
             make.top.bottom.trailing.leading.equalToSuperview()
         }
         overlayView.snp.makeConstraints { (make) in
             make.top.bottom.trailing.leading.equalToSuperview()
         }
+        #endif
         segmentedControl.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(10)
             make.leading.equalToSuperview().offset(10)
@@ -142,6 +147,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     
     func setBackgroundImage() {
         
+        #if !PAID
         func index2type(_ index: Int) -> IndexType {
             return index < 1 ? .notBlurred : .blurred
         }
@@ -159,6 +165,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
 //        else {
 //            backgroundView.image = BackgroundImageManager.shared.getBlurredImage()
 //        }
+        #endif
     }
     
     func dismissKeyboard(_ sender: Any? = nil) {

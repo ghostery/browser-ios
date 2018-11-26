@@ -10,7 +10,7 @@ import Foundation
 
 class RegistrationConfirmationViewController: UIViewController {
 	
-	private let backgroundView = GradientBackgroundView()
+	private let backgroundView = LoginGradientView()
 
 	private let image = UIImageView()
 	private let titleLabel = UILabel()

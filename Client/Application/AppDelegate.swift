@@ -75,12 +75,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.backgroundColor = UIColor.Photon.White100
         
-        //Cliqz: Cards Subscription
+        //Cliqz: Cards Subscription, VPN Endpoint init, and windowBG
         SubscriptionsHandler.sharedInstance.configureRemoteNotifications()
         #if PAID
-        //Cliqz: VPN Endpoint init
+        self.window!.backgroundColor = UIColor.white
         _ = VPNEndPointManager.shared
         #endif
+        //Cliqz: end
 
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
@@ -131,7 +132,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         SettingsPrefs.shared.profile = profile
         recordInstallDateIfNecessary()
         // Cliqz: changed the tint color of window (ActionSheets, AlertViews, NavigationBar)
+        #if !PAID
         self.window!.tintColor = .cliqzBluePrimary
+        #endif
+        //Cliqz: end
 
         unifiedTelemetry = UnifiedTelemetry(profile: profile)
 
