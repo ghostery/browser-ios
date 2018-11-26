@@ -38,11 +38,14 @@ class VPNCountryController: UIViewController {
     }
     
     func setStyling() {
-        self.view.backgroundColor = VPNUX.bgColor
-        self.navigationController?.navigationBar.barTintColor = VPNUX.bgColor
+        self.view.backgroundColor = .clear
+        self.navigationController?.navigationBar.barTintColor = .clear
+        self.navigationController?.navigationBar.backgroundColor = .clear
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         self.tableView.backgroundColor = .clear
-        self.tableView.separatorColor = .black
+        self.tableView.separatorColor = Lumen.VPN.separatorColor(lumenTheme, .Normal)
     }
     
     override func viewWillAppear(_ animated: Bool) {

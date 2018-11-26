@@ -336,7 +336,7 @@ class VPNViewController: UIViewController {
     }
     
     func setStyling() {
-        self.view.backgroundColor = VPNUX.bgColor
+        self.view.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
         self.tableView.separatorColor = .clear
         
