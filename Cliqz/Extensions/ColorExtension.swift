@@ -68,6 +68,13 @@ struct Lumen {
         }
     }
     
+    struct VPN {
+        static let separatorColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+    }
+    
     struct Dashboard {
         static let backgroundColor: LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Disabled: .white], .Dark: [.Normal: .black, .Disabled: .black]]
