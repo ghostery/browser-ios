@@ -13,6 +13,9 @@ import UIKit
 
 //VPNButton and VPN view
 
+let lumenTheme: LumenThemeName = .Dark
+let lumenDashboardMode: LumenThemeMode = .Normal
+
 class PaidControlCenterViewController: ControlCenterViewController {
     
     let controls = CCControlsView()
@@ -25,8 +28,8 @@ class PaidControlCenterViewController: ControlCenterViewController {
     let protectionOn = "Komplettschutz: EIN"
     let protectionOff = "Komplettschutz: AUS"
     
-    let protectionOnColor = CCUX.CliqzBlueGlow
-    let protectionOffColor = UIColor.white
+    let protectionOnColor = Lumen.Dashboard.protectionLabelColor(lumenTheme, lumenDashboardMode)
+    let protectionOffColor = Lumen.Dashboard.protectionLabelColor(lumenTheme, lumenDashboardMode)
     
     var isProtectionOn = true
     var currentPeriod: Period = .Today
@@ -61,8 +64,6 @@ class PaidControlCenterViewController: ControlCenterViewController {
         self.view.addSubview(dashboard.view)
         
         updateProtectionLabel(isOn: isProtectionOn)
-        protectionLabel.textAlignment = .center
-        protectionLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
         
         tabs.selectedSegmentIndex = 0
         tabs.addTarget(self, action: #selector(tabChanged), for: .valueChanged)
@@ -90,9 +91,16 @@ class PaidControlCenterViewController: ControlCenterViewController {
             make.trailing.leading.bottom.equalToSuperview()
         }
         
-        self.view.backgroundColor = .black
+        setStyle()
         
         CCWidgetManager.shared.update(period: currentPeriod)
+    }
+    
+    func setStyle() {
+        protectionLabel.textAlignment = .center
+        protectionLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
+        self.view.backgroundColor = Lumen.Dashboard.backgroundColor(lumenTheme, lumenDashboardMode).withAlphaComponent(Lumen.Dashboard.backgroundColorAlpha(lumenTheme))
+        tabs.tintColor = Lumen.Dashboard.segmentedControlColor(lumenTheme, lumenDashboardMode)
     }
     
     func updateProtectionLabel(isOn: Bool) {
@@ -298,9 +306,9 @@ class CCControlsView: UIView {
         vpnLabel.text = "VPN"
         clearLabel.text = "Zurücksetzen"
         
-        startLabel.textColor = CCUX.CliqzBlueGlow
-        vpnLabel.textColor = CCUX.CliqzBlueGlow
-        clearLabel.textColor = CCUX.CliqzBlueGlow
+        startLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
+        vpnLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
+        clearLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
         
         startLabel.textAlignment = .center
         vpnLabel.textAlignment = .center
@@ -308,13 +316,13 @@ class CCControlsView: UIView {
         
         startButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis(rawValue: 1000)!)
         
-        vpnButton.setImage(UIImage(named:"CCVPNOff"), for: .normal)
-        vpnButton.setImage(UIImage(named: "CCVPNOn"), for: .selected)
+        vpnButton.setImage(Lumen.Dashboard.VPNButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
+        vpnButton.setImage(Lumen.Dashboard.VPNButtonImageSelected(lumenTheme, lumenDashboardMode), for: .selected)
         
-        startButton.setImage(UIImage(named: "CCPause"), for: .normal)
-        startButton.setImage(UIImage(named: "CCStart"), for: .selected)
+        startButton.setImage(Lumen.Dashboard.startButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
+        startButton.setImage(Lumen.Dashboard.startButtonImageSelected(lumenTheme, lumenDashboardMode), for: .selected)
         
-        clearButton.setImage(UIImage(named: "CCClear"), for: .normal)
+        clearButton.setImage(Lumen.Dashboard.clearButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
         
         vpnButton.addTarget(self, action: #selector(vpnPressed), for: .touchUpInside)
         startButton.addTarget(self, action: #selector(startPressed), for: .touchUpInside)
