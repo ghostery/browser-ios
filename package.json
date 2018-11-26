@@ -19,7 +19,7 @@
   "dependencies": {
     "@cliqz/indexeddbshim": "3.4.1",
     "appium": "1.9.0",
-    "browser-core": "http://cdn2.cliqz.com/update/edge/ghostery-ios/v3.31/3.31.1.77785df.tgz",
+    "browser-core": "http://cdn2.cliqz.com/update/edge/ghostery-ios/v3.31/3.31.1.6c0fcbe.tgz",
     "buffer": "5.0.7",
     "https-browserify": "1.0.0",
     "page-metadata-parser": "^1.1.2",
