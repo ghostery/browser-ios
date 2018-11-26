@@ -132,6 +132,12 @@ class BrowserViewController: UIViewController {
     weak var pendingDownloadWebView: WKWebView? = nil
 
     let downloadQueue = DownloadQueue()
+    
+    //Cliqz: Add gradient
+    #if PAID
+    let gradient = BrowserGradientView()
+    #endif
+    //Cliqz: end
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
@@ -430,6 +436,13 @@ class BrowserViewController: UIViewController {
         scrollController.snackBars = alertStackView
 
         self.updateToolbarStateForTraitCollection(self.traitCollection)
+        
+        //Cliqz: Add gradient
+        #if PAID
+        view.addSubview(gradient)
+        view.sendSubview(toBack: gradient)
+        #endif
+        //Cliqz: end
 
         setupConstraints()
 
@@ -461,6 +474,13 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer)
         }
+        //Cliqz: Add gradient
+        #if PAID
+        gradient.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        #endif
+        //Cliqz: end
     }
 
     override func viewDidLayoutSubviews() {
@@ -781,6 +801,11 @@ class BrowserViewController: UIViewController {
                 self.webViewContainer.accessibilityElementsHidden = true
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             }
+            //Cliqz: Hide the webView
+            #if PAID
+            self.hideWebview()
+            #endif
+            //end
         })
         view.setNeedsUpdateConstraints()
         
@@ -791,7 +816,10 @@ class BrowserViewController: UIViewController {
     fileprivate func hideHomePanelController() {
         if let controller = homePanelController {
             self.homePanelController = nil
-            UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
+            UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { [unowned self] () -> Void in
+                #if PAID
+                self.showWebview()
+                #endif
                 controller.view.alpha = 0
             }, completion: { _ in
                 controller.willMove(toParentViewController: nil)

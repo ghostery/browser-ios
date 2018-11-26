@@ -21,6 +21,7 @@ extension TabTrayController {
     }
     
     func setUpOverlay() {
+        #if !PAID
         if privateMode && privateModeOverlay == nil{
             privateModeOverlay = UIView.overlay(frame: CGRect.zero)
             backgroundView.addSubview(privateModeOverlay!)
@@ -33,9 +34,11 @@ extension TabTrayController {
             privateModeOverlay?.removeFromSuperview()
             privateModeOverlay = nil
         }
+        #endif
     }
     
     func setBackgroundImage() {
+        #if !PAID
         collectionView.backgroundColor = UIColor.clear
         
         if backgroundView.superview == nil {
@@ -51,10 +54,13 @@ extension TabTrayController {
         
         self.backgroundView.image = UIImage.cliqzBackgroundImage()
         setUpOverlay()
+        #endif
     }
     
     func updateBackgroundColor() {
+        #if !PAID
         UIApplication.shared.windows.first?.backgroundColor = privateMode ? UIColor.cliqzForgetPrimary : UIColor.cliqzBluePrimary
+        #endif
     }
     @objc func orientationDidChange(_ notification: Notification) {
         setBackgroundImage()

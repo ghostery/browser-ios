@@ -13,7 +13,7 @@ import SnapKit
 class RegistrationViewController: UIViewController {
 
 	private let contentView = UIView()
-	private let backgroundView = GradientBackgroundView()
+	private let backgroundView = LoginGradientView()
 
 	private let image = UIImageView()
 	private let titleLabel = UILabel()
