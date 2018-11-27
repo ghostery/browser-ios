@@ -5,7 +5,7 @@
 //  Created by Tim Palade on 10/22/18.
 //  Copyright © 2018 Tim Palade. All rights reserved.
 //
-
+#if PAID
 import UIKit
 import SnapKit
 
@@ -196,3 +196,5 @@ class CCHorizontalCell: CCAbstractCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+#endif

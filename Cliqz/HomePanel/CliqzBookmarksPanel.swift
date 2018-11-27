@@ -73,8 +73,10 @@ class CliqzBookmarksPanel: BookmarksPanel {
                     cell.imageShadowView.transform = CGAffineTransform.identity
                 })
             })
+            #if PAID
             cell.textLabel?.textColor = Lumen.Browser.homePanelTextColor(lumenTheme, .Normal)
             cell.detailTextLabel?.textColor = cell.textLabel?.textColor ?? .white
+            #endif
             return cell
         default:
             // This should never happen.
@@ -104,7 +106,11 @@ class CliqzBookmarksPanel: BookmarksPanel {
         welcomeLabel.text = NSLocalizedString("Favorites you save will show up here.", tableName: "Cliqz", comment: "Status label for the empty Favorites state.")
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
+        #if PAID
         welcomeLabel.textColor = Lumen.Browser.homePanelTextColor(lumenTheme, .Normal)
+        #else
+        welcomeLabel.textColor = .white
+        #endif
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
         #if !PAID

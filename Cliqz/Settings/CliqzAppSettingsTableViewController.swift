@@ -158,7 +158,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         #if PAID
             let lumenThemeSetting = BoolSetting(prefs: prefs,
                                                 prefKey: lumenThemeKey,
-                                                defaultValue: false,
+                                                defaultValue: true,
                                                 titleText: "Dark Theme",
                                                 settingDidChange: { newValue in
                                                     NotificationCenter.default.post(name: .themeChanged, object: nil)
