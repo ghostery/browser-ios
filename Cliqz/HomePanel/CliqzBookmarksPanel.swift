@@ -73,6 +73,8 @@ class CliqzBookmarksPanel: BookmarksPanel {
                     cell.imageShadowView.transform = CGAffineTransform.identity
                 })
             })
+            cell.textLabel?.textColor = Lumen.Browser.homePanelTextColor(lumenTheme, .Normal)
+            cell.detailTextLabel?.textColor = cell.textLabel?.textColor ?? .white
             return cell
         default:
             // This should never happen.
@@ -102,10 +104,12 @@ class CliqzBookmarksPanel: BookmarksPanel {
         welcomeLabel.text = NSLocalizedString("Favorites you save will show up here.", tableName: "Cliqz", comment: "Status label for the empty Favorites state.")
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
-        welcomeLabel.textColor = .white
+        welcomeLabel.textColor = Lumen.Browser.homePanelTextColor(lumenTheme, .Normal)
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
+        #if !PAID
         welcomeLabel.applyShadow()
+        #endif
         
         welcomeLabel.snp.makeConstraints { make in
             make.centerX.equalTo(overlayView)

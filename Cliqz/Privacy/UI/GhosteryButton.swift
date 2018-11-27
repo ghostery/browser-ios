@@ -57,10 +57,9 @@ class GhosteryButton: InsetButton {
             ghosty.image = UIImage.controlCenterPrivateIcon()
         }
         
+        #if !PAID
         let height: CGFloat = 25.0
         let width = (ghosty.image?.widthOverHeight() ?? 1.0) * height
-        
-        #if GHOSTERY
         var centerDifference: CGFloat = 0.0
         if theme == .Private, let normalImage = UIImage.controlCenterNormalIcon(), let privImage = ghosty.image {
             let ratioNormal = normalImage.widthOverHeight()
@@ -80,7 +79,9 @@ class GhosteryButton: InsetButton {
             make.centerX.equalToSuperview().offset(-centerDifference)
             make.bottom.equalToSuperview().offset(-4)
         }
-        #elseif PAID
+        #else
+        let height: CGFloat = 40.0
+        let width = (ghosty.image?.widthOverHeight() ?? 1.0) * height
         ghosty.snp.remakeConstraints { (make) in
             make.center.equalToSuperview()
             make.height.equalTo(height)

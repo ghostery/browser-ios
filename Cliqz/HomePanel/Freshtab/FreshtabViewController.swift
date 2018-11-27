@@ -57,8 +57,10 @@ class FreshtabViewController: UIViewController, HomePanel {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+        #if !PAID
 		self.setupViews()
         self.setupConstraints()
+        #endif
         
         self.normalModeView.alpha = 0.0
         self.logShowSignal()
@@ -68,10 +70,11 @@ class FreshtabViewController: UIViewController, HomePanel {
 		super.viewWillAppear(animated)
 		startTime = Date.now()
 		scrollCount = 0
-		
+        #if !PAID
 		restoreToInitialState()
 		
 		updateViews()
+        #endif
 	}
     
     override func viewDidAppear(_ animated: Bool) {

@@ -70,6 +70,41 @@ struct Lumen {
             
             return ([UIColor.lumenDeepBlue.cgColor, UIColor.lumenPurple.cgColor, UIColor.lumenDeepBlue.cgColor], [0.0, 0.5 ,1.0])
         }
+        
+        static let homePanelSegmentedControlTint : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let urlBarColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .white], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenDeepBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let toolBarColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .white], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenDeepBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let toolBarButtonColorTint : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let toolBarButtonColorSelectedTint : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let toolBarButtonColorDisabledTint : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let homePanelTextColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Private: .black], .Dark: [.Normal: .white, .Private: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
     }
     
     struct VPN {
@@ -247,21 +282,27 @@ extension UIColor {
     }
     
     struct CliqzToolbarButton {
+        #if PAID
+        static let Tint = BrowserColor(normal: Lumen.Browser.toolBarButtonColorTint(lumenTheme, .Normal), pbm: Lumen.Browser.toolBarButtonColorTint(lumenTheme, .Private))
+        static let SelectedTint = BrowserColor(normal: Lumen.Browser.toolBarButtonColorSelectedTint(lumenTheme, .Normal), pbm: Lumen.Browser.toolBarButtonColorSelectedTint(lumenTheme, .Private))
+        static let DisabledTint = BrowserColor(normal: Lumen.Browser.toolBarButtonColorDisabledTint(lumenTheme, .Normal), pbm: Lumen.Browser.toolBarButtonColorDisabledTint(lumenTheme, .Private))
+        #else
         static let Tint = BrowserColor(normal: UIColor.white, pbm: UIColor.white)
         static let SelectedTint = BrowserColor(normal: UIColor.gray, pbm: UIColor.gray)
         static let DisabledTint = BrowserColor(normal: UIColor.gray, pbm: UIColor.gray)
+        #endif
     }
     
     struct CliqzToolbar {
         #if PAID
-        static let Background = BrowserColor(normal: UIColor.lumenDeepBlue, pbm: UIColor.lumenDeepBlue)
+        static let Background = BrowserColor(normal: Lumen.Browser.toolBarColor(lumenTheme, .Normal), pbm: Lumen.Browser.toolBarColor(lumenTheme, .Private))
         #else
         static let Background = BrowserColor(normal: UIColor.black, pbm: UIColor.black)
         #endif
     }
     struct CliqzURLBar {
         #if PAID
-        static let Background = BrowserColor(normal: UIColor.lumenDeepBlue, pbm: UIColor.lumenDeepBlue)
+        static let Background = BrowserColor(normal: Lumen.Browser.urlBarColor(lumenTheme, .Normal), pbm: Lumen.Browser.urlBarColor(lumenTheme, .Private))
         #else
         static let Background = BrowserColor(normal: UIColor.cliqzBluePrimary, pbm: UIColor.cliqzForgetPrimary)
         #endif
