@@ -57,7 +57,11 @@ class CliqzURLBar: URLBarView {
         let cancelButton = InsetButton()
         //cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.setTitle(NSLocalizedString("Cancel", tableName: "Cliqz", comment: "Cancel button title in the urlbar"), for: .normal)
+        #if !PAID
         cancelButton.setTitleColor(.white, for: .normal)
+        #else
+        cancelButton.setTitleColor(Lumen.URLBar.cancelButtonTextColor(lumenTheme, .Normal), for: .normal)
+        #endif
         cancelButton.setTitleColor(UIColor.cliqzBlueTwoSecondary, for: UIControlState.highlighted)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)

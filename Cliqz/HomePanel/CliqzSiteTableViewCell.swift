@@ -95,16 +95,21 @@ class CliqzSiteTableViewCell: SiteTableViewCell {
     
     private func setUpLabels() {
         
-        _textLabel.textColor = .white
         _textLabel.font = UIFont.boldSystemFont(ofSize: 16)
         #if !PAID
+        _textLabel.textColor = .white
         _textLabel.applyShadow()
+        #else
+        _textLabel.textColor = Lumen.Search.textColor(lumenTheme, .Normal)
         #endif
         
-        _detailTextLabel.textColor = .white
+        
         _detailTextLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
         #if !PAID
+        _detailTextLabel.textColor = .white
         _detailTextLabel.applyShadow()
+        #else
+        _detailTextLabel.textColor = Lumen.Search.textColor(lumenTheme, .Normal)
         #endif
     }
 }
