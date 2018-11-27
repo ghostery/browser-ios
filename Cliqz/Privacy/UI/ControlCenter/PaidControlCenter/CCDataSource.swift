@@ -5,7 +5,7 @@
 //  Created by Tim Palade on 10/23/18.
 //  Copyright © 2018 Tim Palade. All rights reserved.
 //
-
+#if PAID
 import UIKit
 
 class OptionalView: UIView {
@@ -199,3 +199,5 @@ extension CCDataSource: CCDataSourceProtocol {
         return cells[index].optionalViewHeight
     }
 }
+
+#endif
