@@ -64,6 +64,9 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     fileprivate var overlayView: UIView!
     fileprivate let segmentedControl: UISegmentedControl
     fileprivate let controllerContainerView: UIView = UIView()
+    #if PAID
+    fileprivate let gradient = BrowserGradientView()
+    #endif
     
     enum IndexType {
         case blurred
@@ -102,6 +105,8 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         overlayView = UIView.overlay(frame: UIScreen.main.bounds)
         overlayView.isHidden = !isPrivate
         view.addSubview(overlayView)
+        #else
+        view.addSubview(gradient)
         #endif
 
         segmentedControl.addSubview(offrzNotificationImage)
@@ -131,6 +136,10 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
         }
         overlayView.snp.makeConstraints { (make) in
             make.top.bottom.trailing.leading.equalToSuperview()
+        }
+        #else
+        gradient.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
         }
         #endif
         segmentedControl.snp.makeConstraints { (make) in
