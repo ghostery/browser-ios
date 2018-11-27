@@ -9,11 +9,20 @@
 #if PAID
 import UIKit
 
-//TODO: 3 connections
+extension Notification.Name {
+    static let themeChanged = Notification.Name("LumenThemeChanged")
+}
 
-//VPNButton and VPN view
+let lumenThemeKey = "LumenThemeKey"
+var lumenTheme: LumenThemeName {
+    
+    if (SettingsPrefs.shared.getLumenTheme() == true) {
+        return .Dark
+    }
+    
+    return .Light
+}
 
-let lumenTheme: LumenThemeName = .Light
 let lumenDashboardMode: LumenThemeMode = .Normal
 
 class PaidControlCenterViewController: ControlCenterViewController {

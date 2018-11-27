@@ -361,6 +361,7 @@ extension TabLocationView: AccessibilityActionsSource {
 
 extension TabLocationView: Themeable {
     func applyTheme(_ theme: Theme) {
+        /*Cliqz
         backgroundColor = UIColor.TextField.Background.colorFor(theme)
         urlTextField.textColor = UIColor.Browser.Tint.colorFor(theme)
         readerModeButton.selectedTintColor = UIColor.TextField.ReaderModeButtonSelected.colorFor(theme)
@@ -370,6 +371,28 @@ extension TabLocationView: Themeable {
         pageOptionsButton.unselectedTintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
         separatorLine.backgroundColor = UIColor.TextField.Separator.colorFor(theme)
+        */
+        #if !PAID
+        backgroundColor = UIColor.TextField.Background.colorFor(theme)
+        urlTextField.textColor = UIColor.Browser.Tint.colorFor(theme)
+        readerModeButton.selectedTintColor = UIColor.TextField.ReaderModeButtonSelected.colorFor(theme)
+        readerModeButton.unselectedTintColor = UIColor.TextField.ReaderModeButtonUnselected.colorFor(theme)
+        
+        pageOptionsButton.selectedTintColor = UIColor.TextField.PageOptionsSelected.colorFor(theme)
+        pageOptionsButton.unselectedTintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
+        pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
+        separatorLine.backgroundColor = UIColor.TextField.Separator.colorFor(theme)
+        #else
+        backgroundColor = UIColor.TextField.Background.colorFor(theme)
+        urlTextField.textColor = UIColor.TextField.TextAndTint.colorFor(theme)
+        readerModeButton.selectedTintColor = UIColor.TextField.ReaderModeButtonSelected.colorFor(theme)
+        readerModeButton.unselectedTintColor = UIColor.TextField.ReaderModeButtonUnselected.colorFor(theme)
+        
+        pageOptionsButton.selectedTintColor = UIColor.TextField.PageOptionsSelected.colorFor(theme)
+        pageOptionsButton.unselectedTintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
+        pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
+        separatorLine.backgroundColor = UIColor.TextField.Separator.colorFor(theme)
+        #endif
     }
 }
 

@@ -15,7 +15,7 @@ import Foundation
 //Ex: Dashboard - Shadow Color
 
 //Every theme can have a number of modes
-enum LumenThemeName {
+enum LumenThemeName: Int {
     case Light
     case Dark
 }
@@ -76,11 +76,6 @@ struct Lumen {
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
-        static let urlBarColor : LumenColor = { name, mode in
-            let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .white], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenDeepBlue]]
-            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
-        }
-        
         static let toolBarColor : LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .white], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenDeepBlue]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
@@ -104,6 +99,76 @@ struct Lumen {
         static let homePanelTextColor : LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Private: .black], .Dark: [.Normal: .white, .Private: .white]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let tintColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+    }
+    
+    struct Search {
+        static let textColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .white, .Private: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+    }
+    
+    struct URLBar {
+        
+        static let backgroundColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .white], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenDeepBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let cancelButtonTextColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let textFieldBackgroundColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenDeepBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenDeepBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let textFieldBorderColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let textFieldActiveBorderColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let textFieldTintColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let textFieldCursorColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .lumenBrightBlue], .Dark: [.Normal: .white, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let textFieldTextColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .lumenBrightBlue], .Dark: [.Normal: .white, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let textFieldTextColorInactive: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .lumenBrightBlue], .Dark: [.Normal: .white, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode]?.withAlphaComponent(0.7) ?? Lumen.fallback(name, combo)
+        }
+        
+        static let pageOptionsColorUnselected: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenDeepBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode]?.withAlphaComponent(0.7) ?? Lumen.fallback(name, combo)
+        }
+        
+        static let pageOptionsColorSelected: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenDeepBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode]?.withAlphaComponent(0.7) ?? Lumen.fallback(name, combo)
         }
     }
     
@@ -251,6 +316,13 @@ struct Lumen {
             return combo[name]?[mode] ?? nil
         }
     }
+    
+    struct TabTray {
+        static let highlightColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black], .Dark: [.Normal: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+    }
 }
 
 extension UIColor {
@@ -278,7 +350,11 @@ extension UIColor {
     static let cliqzURLBarColor = UIColor(colorString: "4EABEA")
     
     struct CliqzTabTray {
+        #if !PAID
         static let ButtonText = BrowserColor(normal: cliqzWhitePrimary, pbm: cliqzWhitePrimary)
+        #else
+        static let ButtonText = BrowserColor(normal: .lumenBrightBlue, pbm: .lumenBrightBlue)
+        #endif
     }
     
     struct CliqzToolbarButton {
@@ -302,7 +378,7 @@ extension UIColor {
     }
     struct CliqzURLBar {
         #if PAID
-        static let Background = BrowserColor(normal: Lumen.Browser.urlBarColor(lumenTheme, .Normal), pbm: Lumen.Browser.urlBarColor(lumenTheme, .Private))
+        static let Background = BrowserColor(normal: Lumen.URLBar.backgroundColor(lumenTheme, .Normal), pbm: Lumen.URLBar.backgroundColor(lumenTheme, .Private))
         #else
         static let Background = BrowserColor(normal: UIColor.cliqzBluePrimary, pbm: UIColor.cliqzForgetPrimary)
         #endif

@@ -97,7 +97,7 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
         tableView.register(CliqzSiteTableViewCell.self, forCellReuseIdentifier: "CliqzCellIdentifier")
         
         KeyboardHelper.defaultHelper.addDelegate(self)
-        
+        #if !PAID
         self.view.addSubview(backgroundImage)
         self.backgroundImage.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -113,7 +113,7 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
                 make.edges.equalToSuperview()
             }
         }
-        
+        #endif
         searchEngineScrollView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
         searchEngineScrollView.layer.shadowRadius = 0
         searchEngineScrollView.layer.shadowOpacity = 100
@@ -725,7 +725,7 @@ fileprivate class SuggestionCell: UITableViewCell {
 fileprivate class SuggestionButton: InsetButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        /* Cliqz
         setTitleColor(UIColor.white, for: [])
         setTitleColor(UIColor.Photon.White100, for: .highlighted)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
@@ -736,6 +736,30 @@ fileprivate class SuggestionButton: InsetButton {
         contentEdgeInsets = SearchViewControllerUX.SuggestionInsets
 
         accessibilityHint = NSLocalizedString("Searches for the suggestion", comment: "Accessibility hint describing the action performed when a search suggestion is clicked")
+        */
+        #if !PAID
+        setTitleColor(UIColor.white, for: [])
+        setTitleColor(UIColor.Photon.White100, for: .highlighted)
+        titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
+        backgroundColor = UIColor.clear
+        layer.borderColor = UIColor.white.cgColor
+        layer.borderWidth = SearchViewControllerUX.SuggestionBorderWidth
+        layer.cornerRadius = SearchViewControllerUX.SuggestionCornerRadius
+        contentEdgeInsets = SearchViewControllerUX.SuggestionInsets
+        
+        accessibilityHint = NSLocalizedString("Searches for the suggestion", comment: "Accessibility hint describing the action performed when a search suggestion is clicked")
+        #else
+        setTitleColor(Lumen.Search.textColor(lumenTheme, .Normal), for: [])
+        setTitleColor(Lumen.Search.textColor(lumenTheme, .Normal), for: .highlighted)
+        titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
+        backgroundColor = UIColor.clear
+        layer.borderColor = Lumen.Search.textColor(lumenTheme, .Normal).cgColor
+        layer.borderWidth = SearchViewControllerUX.SuggestionBorderWidth
+        layer.cornerRadius = SearchViewControllerUX.SuggestionCornerRadius
+        contentEdgeInsets = SearchViewControllerUX.SuggestionInsets
+        
+        accessibilityHint = NSLocalizedString("Searches for the suggestion", comment: "Accessibility hint describing the action performed when a search suggestion is clicked")
+        #endif
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -36,7 +36,11 @@ class CliqzForgetModeButton: UIButton, Themeable {
         self.isSelected = selected
         let duration = animated ? 0.4 : 0.0
         UIView.transition(with: self, duration:duration, options: .curveEaseInOut, animations: {
+            #if !PAID
             self.backgroundColor = selected ? UIColor.cliqzBluePrimary : UIColor.clear
+            #else
+            self.backgroundColor = selected ? Lumen.TabTray.highlightColor(lumenTheme, .Normal) : UIColor.clear
+            #endif
         })
     }
     
