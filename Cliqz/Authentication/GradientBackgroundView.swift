@@ -46,6 +46,7 @@ class LoginGradientView: GradientBackgroundView {
     }
 }
 
+#if PAID
 class BrowserGradientView: GradientBackgroundView {
     
     override init(colors: [CGColor], locations: [NSNumber]) {
@@ -61,3 +62,4 @@ class BrowserGradientView: GradientBackgroundView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+#endif

@@ -5,7 +5,7 @@
 //  Created by Tim Palade on 10/23/18.
 //  Copyright © 2018 Tim Palade. All rights reserved.
 //
-
+#if PAID
 import UIKit
 import SnapKit
 import Shared
@@ -626,3 +626,4 @@ class CCCompaniesWidget: CCWidget {
         updateView(quanitity: quantity)
     }
 }
+#endif

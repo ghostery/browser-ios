@@ -148,8 +148,10 @@ class CliqzHistoryPanel: HistoryPanel {
                 })
             })
         }
+        #if PAID
         cell.textLabel?.textColor = Lumen.Browser.homePanelTextColor(lumenTheme, .Normal)
         cell.detailTextLabel?.textColor = cell.textLabel?.textColor ?? .white
+        #endif
         return cell
     }
     
@@ -230,7 +232,11 @@ class CliqzHistoryPanel: HistoryPanel {
         welcomeLabel.text = Strings.HistoryPanelEmptyStateTitle
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
+        #if PAID
         welcomeLabel.textColor = Lumen.Browser.homePanelTextColor(lumenTheme, .Normal)
+        #else
+        welcomeLabel.textColor = UIColor.white
+        #endif
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
         
