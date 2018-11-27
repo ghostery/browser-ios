@@ -84,7 +84,7 @@ class EmailVerificationViewController: UIViewController {
 		self.titleLabel.textColor = AuthenticationUX.textColor
 		self.titleLabel.font = AuthenticationUX.titleFont
 
-		self.descriptionLabel.text = NSLocalizedString("We sent an activation link to your email. Please check your mailbox to confirm your account.", tableName: "Cliqz", comment: "Next")
+		self.descriptionLabel.text = NSLocalizedString("We just sent you an activation link. Please check your inbox and open the link to confirm your account.", tableName: "Cliqz", comment: "Next")
 		self.descriptionLabel.textAlignment = .center
 		self.descriptionLabel.textColor = AuthenticationUX.textColor
 		self.descriptionLabel.font = AuthenticationUX.subtitleFont

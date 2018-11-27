@@ -71,75 +71,27 @@ protocol CCDataSourceProtocol {
 typealias CellDescription = (Period) -> String
 
 let timeSavedDesc: CellDescription = ({ period in
-    
-    if period == .Today {
-        return "2 Minuten um jemandem deine ungeteilte Aufmerksamkeit zu schenken"
-    }
-    else if period == .Last7Days {
-        return "Genug Zeit um 1,3km zu gehen"
-    }
-    
-    return ""
+    return "für die wichtigen Dinge im Leben."
 })
 
 let adsBlockedDesc: CellDescription = ({ period in
-    
-    if period == .Today {
-        return "Für ungestörtes Surfen"
-    }
-    else if period == .Last7Days {
-        return "Für ungestörtes Surfen"
-    }
-    
-    return ""
+    return "für ungestörtes Surfen"
 })
 
 let dataSavedDesc: CellDescription = ({ period in
-    
-    if period == .Today {
-        return "Genug um einen Song herunterzuladen"
-    }
-    else if period == .Last7Days {
-        return "Genug für 8 Minuten lustige YouTube Videos"
-    }
-    
-    return ""
+    return "Keine Daten für Werbung verschwendet"
 })
 
 let batterySavedDesc: CellDescription = ({ period in
-    
-    if period == .Today {
-        return "Damit dein Handy etwas länger hält"
-    }
-    else if period == .Last7Days {
-        return "Damit dein Handy etwas länger hält"
-    }
-    
-    return ""
+    return "Damit du länger surfen kannst"
 })
 
 let companiesDesc: CellDescription = ({ period in
-    
-    if period == .Today {
-        return "Firmen mit den meisten Trackern: Google, Facebook, Amazon"
-    }
-    else if period == .Last7Days {
-        return "Firmen mit den meisten Trackern: Google, Facebook, Amazon"
-    }
-    
-    return ""
+    return "So viele Tracking-Firmen wollten dich ausspionieren"
 })
 
 let phishingDesc: CellDescription = ({ period in
-    
-    if period == .Today {
-        return "Geschützt vor Webseiten, die versuchen vertrauliche Informationen zu stehlen."
-    }
-    else if period == .Last7Days {
-        return "Geschützt vor Webseiten, die versuchen vertrauliche Informationen zu stehlen."
-    }
-    
-    return ""
+    return "verhindert Identitätsdiebstahl durch betrügerische Webseiten"
 })
 
 let moneySavedDesc: CellDescription = ({ period in
@@ -183,10 +135,10 @@ class CCDataSource {
     init() {
         //create the cells here
         let timeSaved = CCCell(title: "Zeit gespart", description: timeSavedDesc, widget: CCTimeSavedWidget(), cellHeight: 250)
-        let adsBlocked = CCCell(title: "Ads blockiert", description: adsBlockedDesc, widget: CCAdsBlockedWidget(), cellHeight: 250)
+        let adsBlocked = CCCell(title: "Werbungen entfernt", description: adsBlockedDesc, widget: CCAdsBlockedWidget(), cellHeight: 250)
         let dataSaved = CCCell(title: "Datenvolumen gespart", description: dataSavedDesc, widget: CCDataSavedWidget(), cellHeight: 120)
-        let batterySaved = CCCell(title: "Akku gespart", description: batterySavedDesc, widget: CCBatterySavedWidget(), cellHeight: 120)
-        let companies = CCCell(title: "Tracker-Firmen blockiert", description: companiesDesc, widget: CCCompaniesWidget(), cellHeight: 120)
+        let batterySaved = CCCell(title: "Akkulaufzeit verlängert", description: batterySavedDesc, widget: CCBatterySavedWidget(), cellHeight: 120)
+        let companies = CCCell(title: "Datensammler abgewehrt", description: companiesDesc, widget: CCCompaniesWidget(), cellHeight: 120)
         let phishingProtection = CCCell(title: "Phishing-Schutz", description: phishingDesc, widget: CCAntiPhishingWidget(), cellHeight: 120)
 //        let moneySaved = CCCell(title: "Geld gespart", description: moneySavedDesc, widget: CCMoneySavedWidget(), cellHeight: 204, optionalView: IncomeSlider(), optionalViewHeight: 84)
         

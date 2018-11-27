@@ -77,9 +77,9 @@ class CCWidgetManager {
             case .Minutes:
                 return "MIN"
             case .Hours:
-                return "HOURS"
+                return "STD"
             case .Days:
-                return "DAYS"
+                return "TAG(E)"
             }
         }
     }

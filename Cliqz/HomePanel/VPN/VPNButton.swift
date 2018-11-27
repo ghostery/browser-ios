@@ -30,15 +30,15 @@ class VPNButton: UIButton {
         func toString() -> String {
             switch self {
             case .Connect:
-                return "CONNECT"
+                return NSLocalizedString("CONNECT", tableName: "Lumen", comment: "[VPN] vpn button")
             case .Connecting:
-                return "CONNECTING"
+                return NSLocalizedString("CONNECTING", tableName: "Lumen", comment: "[VPN] vpn button")
             case .Disconnect:
-                return "DISCONNECT"
+                return NSLocalizedString("DISCONNECT", tableName: "Lumen", comment: "[VPN] vpn button")
             case .Disconnecting:
-                return "DISCONNECTING"
+                return NSLocalizedString("DISCONNECTING", tableName: "Lumen", comment: "[VPN] vpn button")
             case .Retry:
-                return "RETRY"
+                return NSLocalizedString("RETRY", tableName: "Lumen", comment: "[VPN] vpn button")
             }
         }
         
