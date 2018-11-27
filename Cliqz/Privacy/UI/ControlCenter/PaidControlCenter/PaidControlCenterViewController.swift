@@ -22,7 +22,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
     let dashboard = CCCollectionViewController()
     let cellDataSource = CCDataSource()
     
-    let protectionOn = "Komplettschutz: AN"
+    let protectionOn = "Komplettschutz: EIN"
     let protectionOff = "Komplettschutz: AUS"
     
     let protectionOnColor = CCUX.CliqzBlueGlow
@@ -263,7 +263,7 @@ class CCControlsView: UIView {
     
     func startLabelTitle(isSelected: Bool) -> String {
         if isSelected == false {
-            return "Anhalten"
+            return "Pause"
         }
         else {
             return "Start"
@@ -296,7 +296,7 @@ class CCControlsView: UIView {
         
         startLabel.text = startLabelTitle(isSelected: false)
         vpnLabel.text = "VPN"
-        clearLabel.text = "Löschen"
+        clearLabel.text = "Zurücksetzen"
         
         startLabel.textColor = CCUX.CliqzBlueGlow
         vpnLabel.textColor = CCUX.CliqzBlueGlow

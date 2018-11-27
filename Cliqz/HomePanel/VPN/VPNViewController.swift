@@ -183,11 +183,11 @@ class VPNEndPointManager {
         }
     }
     
-    static let defaultCountry = VPNCountry(id: "de", name: "Germany", endpoint: "195.181.170.100")
+    static let defaultCountry = VPNCountry(id: "de", name: NSLocalizedString("Germany", tableName: "Lumen", comment: "VPN country name for Germany"), endpoint: "195.181.170.100")
     
     //list of possible countries. Each country has its own credentials and endpoints
     var countries: [VPNCountry] = [
-        VPNCountry(id: "us", name: "United States", endpoint: "195.181.168.14"),
+        VPNCountry(id: "us", name: NSLocalizedString("USA", tableName: "Lumen", comment: "VPN country name for USA"), endpoint: "195.181.168.14"),
         defaultCountry
     ]
     
@@ -330,7 +330,7 @@ class VPNViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
         
-        infoLabel.text = "Turn on VPN protection to browse safely on the Internet."
+        infoLabel.text = NSLocalizedString("Tap 'connect' to browse the Internet with VPN protection.", tableName: "Lumen", comment: "[VPN] vpn info label text")
         
         setStyling()
     }
@@ -478,7 +478,7 @@ extension VPNViewController: UITableViewDataSource {
         
         //do the setup
         cell.accessoryType = .disclosureIndicator
-        cell.textLabel?.text = "Connect to:"
+        cell.textLabel?.text = NSLocalizedString("Choose VPN Location", tableName: "Lumen", comment: "[VPN] vpn choose location") 
         cell.textLabel?.textColor = .white
         cell.backgroundColor = .clear
         cell.detailTextLabel?.text = VPNEndPointManager.shared.selectedCountry.name

@@ -32,7 +32,7 @@ class VPNCountryController: UIViewController {
             make.topMargin.equalToSuperview().offset(10)
         }
         
-        self.navigationItem.title = "Countries"
+        self.navigationItem.title = NSLocalizedString("Available VPN Locations", tableName: "Lumen", comment: "[VPN] vpn locations") 
         
         setStyling()
     }

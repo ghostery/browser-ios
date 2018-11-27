@@ -179,7 +179,7 @@ class RegistrationViewController: UIViewController {
 		self.errorLabel.numberOfLines = 2
 		self.errorLabel.isHidden = true
 		
-		self.descriptionLabel.text = NSLocalizedString("A browser tailored to keep you smart and safe", tableName: "Cliqz", comment: "Description")
+		self.descriptionLabel.text = NSLocalizedString("See the Web in a whole new light with Lumen Browser!", tableName: "Cliqz", comment: "Description")
 		self.descriptionLabel.textAlignment = .center
 		self.descriptionLabel.textColor = AuthenticationUX.textColor
 		self.descriptionLabel.font = AuthenticationUX.subtitleFont

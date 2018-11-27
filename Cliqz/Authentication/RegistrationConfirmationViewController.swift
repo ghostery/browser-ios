@@ -71,7 +71,7 @@ class RegistrationConfirmationViewController: UIViewController {
 		self.titleLabel.textColor = AuthenticationUX.textColor
 		self.titleLabel.font = AuthenticationUX.titleFont
 
-		self.descriptionLabel.text = NSLocalizedString("Your free 2 weeks trial starts now! We are sure you'll like it.", tableName: "Cliqz", comment: "")
+		self.descriptionLabel.text = NSLocalizedString("Have fun with your free two-week trial and take your time to explore all Lumen features!", tableName: "Cliqz", comment: "")
 		self.descriptionLabel.textAlignment = .center
 		self.descriptionLabel.textColor = AuthenticationUX.textColor
 		self.descriptionLabel.font = AuthenticationUX.subtitleFont
