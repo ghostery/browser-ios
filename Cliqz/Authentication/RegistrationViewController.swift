@@ -9,9 +9,11 @@
 import Foundation
 import BondAPI
 import SnapKit
+import Shared
 
 class RegistrationViewController: UIViewController {
 
+    var profile: Profile?
 	private let contentView = UIView()
 	private let backgroundView = LoginGradientView()
 
@@ -25,6 +27,8 @@ class RegistrationViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
+        presentIntroViewController()
+        
 		self.title = NSLocalizedString("Login", tableName: "Cliqz", comment: "Back Button Title")
 		if let cred = AuthenticationService.shared.userCredentials() {
 			AuthenticationService.shared.isDeviceActivated(cred) { (isActivated) in
@@ -38,6 +42,18 @@ class RegistrationViewController: UIViewController {
 		}
 		setupViews()
 	}
+    func presentIntroViewController(_ force: Bool = false, animated: Bool = true) {
+        guard let profile = profile else {
+            return
+        }
+        if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
+            
+            let introViewController = LumenIntroViewController()
+            
+            introViewController.delegate = self
+            present(introViewController, animated: animated)
+        }
+    }
 
 	override open var shouldAutorotate: Bool {
 		return false
@@ -315,4 +331,11 @@ extension RegistrationViewController: UIGestureRecognizerDelegate {
 		}
 		return false
 	}
+}
+
+extension RegistrationViewController : IntroViewControllerDelegate {
+    func introViewControllerDidFinish(_ introViewController: UIViewController, requestToLogin: Bool) {
+        self.profile?.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+        introViewController.dismiss(animated: true)
+    }
 }

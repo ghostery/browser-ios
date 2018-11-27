@@ -173,13 +173,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             })
         }
 
-/* Cliqz: Initial VC changed for Lumen */
+        /* Cliqz: Initial VC changed for Lumen */
         #if PAID
 			AuthenticationService.shared.isDeviceActivated({ (isActivated) in
 				if isActivated {
 					self.showBrowser()
 				} else {
-					let navigationController = UINavigationController(rootViewController: RegistrationViewController())
+                    let registrationViewController = RegistrationViewController()
+                    registrationViewController.profile = self.profile
+					let navigationController = UINavigationController(rootViewController: registrationViewController)
 					self.rootViewController = navigationController
 				}
 			})

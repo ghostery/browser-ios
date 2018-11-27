@@ -677,6 +677,11 @@ class OptInView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setCustomIcons(normalIcon: String, selectedIcon: String) {
+        toggle.setImage(UIImage(named: normalIcon), for: .normal)
+        toggle.setImage(UIImage(named: selectedIcon), for: .selected)
+    }
+    
     func setConstraints() {
         toggle.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
