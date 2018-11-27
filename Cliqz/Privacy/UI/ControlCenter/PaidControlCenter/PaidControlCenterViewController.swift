@@ -13,7 +13,7 @@ import UIKit
 
 //VPNButton and VPN view
 
-let lumenTheme: LumenThemeName = .Dark
+let lumenTheme: LumenThemeName = .Light
 let lumenDashboardMode: LumenThemeMode = .Normal
 
 class PaidControlCenterViewController: ControlCenterViewController {
@@ -101,6 +101,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
         protectionLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
         self.view.backgroundColor = Lumen.Dashboard.backgroundColor(lumenTheme, lumenDashboardMode).withAlphaComponent(Lumen.Dashboard.backgroundColorAlpha(lumenTheme))
         tabs.tintColor = Lumen.Dashboard.segmentedControlColor(lumenTheme, lumenDashboardMode)
+        controls.vpnButton.isSelected = VPN.shared.status == .connected
     }
     
     func updateProtectionLabel(isOn: Bool) {

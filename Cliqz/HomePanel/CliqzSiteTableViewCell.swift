@@ -97,10 +97,14 @@ class CliqzSiteTableViewCell: SiteTableViewCell {
         
         _textLabel.textColor = .white
         _textLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        #if !PAID
         _textLabel.applyShadow()
+        #endif
         
         _detailTextLabel.textColor = .white
         _detailTextLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
+        #if !PAID
         _detailTextLabel.applyShadow()
+        #endif
     }
 }

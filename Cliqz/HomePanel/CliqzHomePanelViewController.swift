@@ -124,7 +124,7 @@ class CliqzHomePanelViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setStyling() {
-        segmentedControl.tintColor = .white
+        segmentedControl.tintColor = Lumen.Browser.homePanelSegmentedControlTint(lumenTheme, isPrivate ? .Private : .Normal)
         controllerContainerView.backgroundColor = .clear
     }
     
