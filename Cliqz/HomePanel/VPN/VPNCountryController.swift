@@ -38,12 +38,19 @@ class VPNCountryController: UIViewController {
     }
     
     func setStyling() {
-        self.view.backgroundColor = .clear
-        self.navigationController?.navigationBar.barTintColor = .clear
+        //this fixes the animation for the light theme
+        if lumenTheme == .Light {
+            self.view.backgroundColor = .white
+        }
+        else {
+            self.view.backgroundColor = .clear
+        }
+        self.navigationController?.navigationBar.tintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
+        self.navigationController?.navigationBar.barTintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
         self.navigationController?.navigationBar.backgroundColor = .clear
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)]
         self.tableView.backgroundColor = .clear
         self.tableView.separatorColor = Lumen.VPN.separatorColor(lumenTheme, .Normal)
     }
@@ -74,7 +81,7 @@ extension VPNCountryController: UITableViewDataSource {
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
         cell.textLabel?.text = VPNEndPointManager.shared.countries[indexPath.row].name;
-        cell.textLabel?.textColor = .white
+        cell.textLabel?.textColor = Lumen.VPN.countryTextColor(lumenTheme, .Normal)
         
         //do the setup
         return cell
@@ -95,8 +102,8 @@ extension VPNCountryController: UITableViewDelegate {
         self.delegate?.didSelectCountry(shouldReconnect: country != VPNEndPointManager.shared.selectedCountry)
         VPNEndPointManager.shared.selectedCountry = country
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.navigationController?.popViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
         }
         
     }

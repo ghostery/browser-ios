@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "map_OFF_Bright.png",
+      "filename" : "Map_OFF_Bright (1).png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "map_OFF_Bright@2x.png",
+      "filename" : "Map_OFF_Bright@2x (1).png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "map_OFF_Bright@3x.png",
+      "filename" : "Map_OFF_Bright@3x (1).png",
       "scale" : "3x"
     }
   ],
