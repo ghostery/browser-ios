@@ -39,6 +39,14 @@ class RegistrationViewController: UIViewController {
 		setupViews()
 	}
 
+	override open var shouldAutorotate: Bool {
+		return false
+	}
+	
+	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+		return .portrait
+	}
+
 	override func viewWillAppear(_ animated: Bool) {
 		super .viewWillAppear(animated)
 		self.navigationController?.isNavigationBarHidden = true
@@ -110,6 +118,7 @@ class RegistrationViewController: UIViewController {
 			let cred = AuthenticationService.shared.generateNewCredentials(email)
 			registerDevice(cred)
 		} else {
+			self.enableEditing(true)
 			showErrorMessage("Please specify valid email")
 		}
 	}
@@ -133,7 +142,7 @@ class RegistrationViewController: UIViewController {
 		self.image.image = UIImage(named: "logoAuthentication")
 
 		let tap = UITapGestureRecognizer(target: self, action: #selector(endEditing))
-		tap.cancelsTouchesInView = false
+		tap.delegate = self
 		contentView.addGestureRecognizer(tap)
 
 		self.contentView.addSubview(self.image)
@@ -156,12 +165,13 @@ class RegistrationViewController: UIViewController {
 
 		self.emailTextField.backgroundColor = UIColor.clear
 		self.emailTextField.keyboardType = .emailAddress
+		self.emailTextField.autocapitalizationType = .none
 		self.emailTextField.layer.cornerRadius = AuthenticationUX.cornerRadius
 		self.emailTextField.layer.borderWidth = 1
 		self.emailTextField.layer.borderColor = AuthenticationUX.blue.cgColor
 		self.emailTextField.textColor = AuthenticationUX.blue
 		self.emailTextField.layer.masksToBounds = true
-		self.emailTextField.placeholder = NSLocalizedString("Email", tableName: "Cliqz", comment: "Email")
+		self.emailTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Email", tableName: "Cliqz", comment: "Email"), attributes: [NSAttributedStringKey.foregroundColor: AuthenticationUX.blue])
 		self.emailTextField.delegate = self
 		self.emailTextField.addTarget(self, action: #selector(emailChanged), for: .editingChanged)
 
@@ -261,5 +271,48 @@ extension RegistrationViewController: UITextFieldDelegate {
 			self.contentView.layoutIfNeeded()
 		}
 		return true
+	}
+}
+
+extension UINavigationController {
+	
+	override open var shouldAutorotate: Bool {
+		get {
+			if let visibleVC = visibleViewController {
+				return visibleVC.shouldAutorotate
+			}
+			return super.shouldAutorotate
+		}
+	}
+	
+	override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
+		get {
+			if let visibleVC = visibleViewController {
+				return visibleVC.preferredInterfaceOrientationForPresentation
+			}
+			return super.preferredInterfaceOrientationForPresentation
+		}
+	}
+	
+	override open var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+		get {
+			if let visibleVC = visibleViewController {
+				return visibleVC.supportedInterfaceOrientations
+			}
+			return super.supportedInterfaceOrientations
+		}
+	}
+}
+
+extension RegistrationViewController: UIGestureRecognizerDelegate {
+	
+	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+		if gestureRecognizer is UITapGestureRecognizer {
+			if let _ = gestureRecognizer.view as? UIButton {
+				return false
+			}
+			return true
+		}
+		return false
 	}
 }

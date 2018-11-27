@@ -27,6 +27,14 @@ class RegistrationConfirmationViewController: UIViewController {
 		super .viewWillAppear(animated)
 	}
 
+	override open var shouldAutorotate: Bool {
+		return false
+	}
+	
+	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+		return .portrait
+	}
+
 	override func viewWillLayoutSubviews() {
 		super.viewWillLayoutSubviews()
 		self.backgroundView.snp.remakeConstraints { (make) in
