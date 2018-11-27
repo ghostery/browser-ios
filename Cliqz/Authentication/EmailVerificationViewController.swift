@@ -27,6 +27,8 @@ class EmailVerificationViewController: UIViewController {
 		super.viewDidLoad()
 		self.navigationController?.isNavigationBarHidden = false
 		self.navigationController?.navigationBar.barTintColor = AuthenticationUX.backgroundDarkGradientStart
+		self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+		self.navigationController?.navigationBar.tintColor = UIColor(rgb: 0xB2B8FF)
 		self.timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(checkActivation), userInfo: nil, repeats: true)
 		self.timer?.fire()
 		self.setupViews()
@@ -55,7 +57,7 @@ class EmailVerificationViewController: UIViewController {
 			make.left.equalToSuperview().offset(29)
 			make.right.equalToSuperview().offset(-29)
 			make.bottom.equalTo(self.resendActivationLinkButton.snp.top).offset(-40)
-			make.height.equalTo(38)
+			make.height.equalTo(60)
 		}
 		self.titleLabel.snp.remakeConstraints { (make) in
 			make.centerX.equalToSuperview()
@@ -66,6 +68,14 @@ class EmailVerificationViewController: UIViewController {
 			make.centerX.equalToSuperview()
 			make.bottom.equalTo(self.titleLabel.snp.top).offset(-104)
 		}
+	}
+
+	override open var shouldAutorotate: Bool {
+		return false
+	}
+	
+	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+		return .portrait
 	}
 
 	private func setupViews() {
@@ -88,7 +98,7 @@ class EmailVerificationViewController: UIViewController {
 		self.descriptionLabel.textAlignment = .center
 		self.descriptionLabel.textColor = AuthenticationUX.textColor
 		self.descriptionLabel.font = AuthenticationUX.subtitleFont
-		self.descriptionLabel.numberOfLines = 2
+		self.descriptionLabel.numberOfLines = 3
 
 		self.resendActivationLinkButton.setTitle(NSLocalizedString("Resend Activation Link", tableName: "Cliqz", comment: ""), for: .normal)
 		self.resendActivationLinkButton.backgroundColor = UIColor.clear
@@ -134,7 +144,7 @@ class EmailVerificationViewController: UIViewController {
 	}
 
 	private func showAlertView() {
-		let linkSent = UIAlertController(title: "Activation Link Resent", message: "We sent you another activation link to your email. Please also check your Spam folder", preferredStyle: .alert)
+		let linkSent = UIAlertController(title: "Activation Link Resent", message: "We resent the activation link. Please check your inbox and your spam folder.", preferredStyle: .alert)
 		
 		let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
 		linkSent.addAction(cancelAction)
