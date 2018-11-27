@@ -39,7 +39,11 @@ class CliqzTabLocationView: TabLocationView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        #if !PAID
         lockImageView.tintColor = UIColor.black
+        #else
+        lockImageView.tintColor = UIColor.white
+        #endif
         
         // re-init contectView
         contentView.removeFromSuperview()

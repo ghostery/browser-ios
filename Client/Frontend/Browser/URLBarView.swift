@@ -715,6 +715,7 @@ extension URLBarView: Themeable {
 
         progressBar.setGradientColors(startColor: UIColor.LoadingBar.Start.colorFor(theme), endColor: UIColor.LoadingBar.End.colorFor(theme))
         currentTheme = theme
+        #if !PAID
         /* Cliqz
         locationBorderColor = UIColor.URLBar.Border.colorFor(theme).withAlphaComponent(0.3)
         locationActiveBorderColor = UIColor.URLBar.ActiveBorder.colorFor(theme)
@@ -732,6 +733,18 @@ extension URLBarView: Themeable {
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
         // Cliqz - Override applyTheme workaround
         didApplyTheme(theme)
+        #else
+        locationBorderColor = UIColor.URLBar.Border.colorFor(theme)
+        locationActiveBorderColor = UIColor.URLBar.ActiveBorder.colorFor(theme)
+        cancelTintColor = UIColor.Browser.Tint.colorFor(theme)
+        showQRButtonTintColor = UIColor.Browser.Tint.colorFor(theme)
+        backgroundColor = UIColor.Browser.Background.colorFor(theme)
+
+        line.backgroundColor = UIColor.Browser.URLBarDivider.colorFor(theme)
+        locationContainer.layer.shadowColor = locationBorderColor.cgColor
+        // Cliqz - Override applyTheme workaround
+        didApplyTheme(theme)
+        #endif
     }
 }
 
@@ -840,5 +853,10 @@ extension ToolbarTextField: Themeable {
         textColor = UIColor.TextField.TextAndTint.colorFor(theme)
         clearButtonTintColor = textColor
         highlightColor = UIColor.TextField.Highlight.colorFor(theme)
+        //Cliqz
+        #if PAID
+        tintColor = UIColor.TextField.Cursor.colorFor(theme)
+        #endif
+        //Cliqz: end
     }
 }

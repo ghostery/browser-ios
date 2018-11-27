@@ -40,6 +40,7 @@ extension UIColor {
     }
     
     struct Browser {
+        #if !PAID
         static let Background = BrowserColor(normal: Photon.Grey10, pbm: Photon.Grey70)
         /* Cliqz: changed colors to be white in both themes
         static let Text = BrowserColor(normal: .white, pbm: Photon.Grey60)
@@ -51,6 +52,13 @@ extension UIColor {
         static let Tint = BrowserColor(normal: Photon.Grey80, pbm: Photon.Grey30)
         */
         static let Tint = BrowserColor(normal: Photon.Grey80, pbm: Photon.Grey80)
+        #else
+        static let Background = BrowserColor(normal: Lumen.URLBar.backgroundColor(lumenTheme, .Normal), pbm: Lumen.URLBar.backgroundColor(lumenTheme, .Private))
+        static let Text = BrowserColor(normal: Lumen.URLBar.textFieldTextColor(lumenTheme, .Normal), pbm: Lumen.URLBar.textFieldTextColor(lumenTheme, .Private))
+        static let URLBarDivider = BrowserColor(normal: Photon.Grey90A10, pbm: Photon.Grey60)
+        static let LocationBarBackground = BrowserColor(normal: Lumen.URLBar.textFieldBackgroundColor(lumenTheme, .Normal), pbm: Lumen.URLBar.textFieldBackgroundColor(lumenTheme, .Private))
+        static let Tint = BrowserColor(normal: Lumen.Browser.tintColor(lumenTheme, .Normal), pbm: Lumen.Browser.tintColor(lumenTheme, .Private))
+        #endif
     }
     
     struct URLBar {
@@ -59,9 +67,15 @@ extension UIColor {
         static let ActiveBorder = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Grey60)
         static let Tint = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Grey10)
         */
+        #if !PAID
         static let Border = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey50)
         static let ActiveBorder = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Blue50A30)
         static let Tint = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Blue50A30)
+        #else
+        static let Border = BrowserColor(normal: Lumen.URLBar.textFieldBorderColor(lumenTheme, .Normal), pbm: Lumen.URLBar.textFieldBorderColor(lumenTheme, .Private))
+        static let ActiveBorder = BrowserColor(normal: Lumen.URLBar.textFieldActiveBorderColor(lumenTheme, .Normal), pbm:  Lumen.URLBar.textFieldActiveBorderColor(lumenTheme, .Private))
+        static let Tint = BrowserColor(normal: Lumen.URLBar.textFieldTintColor(lumenTheme, .Normal), pbm: Lumen.URLBar.textFieldTintColor(lumenTheme, .Private))
+        #endif
     }
 
     struct TextField {
@@ -76,6 +90,7 @@ extension UIColor {
         static let Separator = BrowserColor(normal: Photon.Grey30, pbm: Photon.Grey70)
         */
         
+        #if !PAID
         static let Background = BrowserColor(normal: .white, pbm: .white)
         static let TextAndTint = BrowserColor(normal: Photon.Grey80, pbm: Photon.Grey80)
         static let Highlight = BrowserColor(normal: Defaults.iOSHighlightBlue, pbm: Defaults.iOSHighlightBlue)
@@ -84,6 +99,18 @@ extension UIColor {
         static let PageOptionsSelected = ReaderModeButtonSelected
         static let PageOptionsUnselected = UIColor.Browser.Tint
         static let Separator = BrowserColor(normal: Photon.Grey30, pbm: Photon.Grey30)
+        #else
+        static let Background = BrowserColor(normal: Lumen.URLBar.textFieldBackgroundColor(lumenTheme, .Normal), pbm: Lumen.URLBar.textFieldBackgroundColor(lumenTheme, .Private))
+        static let TextAndTint = BrowserColor(normal: Lumen.URLBar.textFieldTextColor(lumenTheme, .Normal), pbm: Lumen.URLBar.textFieldTextColor(lumenTheme, .Private))
+        static let Highlight = BrowserColor(normal: Defaults.iOSHighlightBlue, pbm: Defaults.iOSHighlightBlue)
+        static let ReaderModeButtonSelected = BrowserColor(normal: Photon.Blue40, pbm: Photon.Blue40)
+        static let ReaderModeButtonUnselected = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey50)
+        static let PageOptionsSelected = BrowserColor(normal: Lumen.URLBar.pageOptionsColorSelected(lumenTheme, .Normal), pbm: Lumen.URLBar.pageOptionsColorSelected(lumenTheme, .Private))
+        static let PageOptionsUnselected = BrowserColor(normal: Lumen.URLBar.pageOptionsColorSelected(lumenTheme, .Normal), pbm: Lumen.URLBar.pageOptionsColorSelected(lumenTheme, .Private))
+        static let Separator = BrowserColor(normal: Photon.Grey30, pbm: Photon.Grey30)
+        static let Cursor = BrowserColor(normal: Lumen.URLBar.textFieldCursorColor(lumenTheme, .Normal), pbm: Lumen.URLBar.textFieldCursorColor(lumenTheme, .Private))
+        static let Placeholder = BrowserColor(normal: Lumen.URLBar.textFieldTextColorInactive(lumenTheme, .Normal), pbm: Lumen.URLBar.textFieldTextColorInactive(lumenTheme, .Private))
+        #endif
     }
 
     // The back/forward/refresh/menu button (bottom toolbar)
