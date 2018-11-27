@@ -73,6 +73,7 @@
 		1E51104C2170A22C0092B038 /* SQLiteHistoryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E51104A2170A2250092B038 /* SQLiteHistoryExtension.swift */; };
 		1E51104E2170A97E0092B038 /* SettingsTableViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E51104D2170A97E0092B038 /* SettingsTableViewControllerExtension.swift */; };
 		1E521A66213EAF820043416C /* Cliqz.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E521A68213EAF820043416C /* Cliqz.strings */; };
+		1E60134B21AC43E300392E80 /* LumenIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */; };
 		1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */; };
 		1E650C9C2091E35D0070C670 /* BrowserViewController+GhosteryMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */; };
 		1E78A3A4214BBB02005E2539 /* LogoLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78A389214BB0EB005E2539 /* LogoLoaderTests.swift */; };
@@ -1437,6 +1438,7 @@
 		1E51104A2170A2250092B038 /* SQLiteHistoryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteHistoryExtension.swift; sourceTree = "<group>"; };
 		1E51104D2170A97E0092B038 /* SettingsTableViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerExtension.swift; sourceTree = "<group>"; };
 		1E521A67213EAF820043416C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Cliqz.strings; sourceTree = "<group>"; };
+		1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenIntroViewController.swift; sourceTree = "<group>"; };
 		1E6404DF2100953D00B02901 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
 		1E6404E62100956900B02901 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hu; path = hu.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
 		1E6404ED2100957300B02901 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ja; path = ja.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
@@ -3692,6 +3694,7 @@
 			isa = PBXGroup;
 			children = (
 				AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */,
+				1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */,
 			);
 			path = Intro;
 			sourceTree = "<group>";
@@ -6338,6 +6341,7 @@
 				E6108FF91C84E91C005D25E8 /* BasePasscodeViewController.swift in Sources */,
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
 				E4CD9F2D1A6DC91200318571 /* TabLocationView.swift in Sources */,
+				1E60134B21AC43E300392E80 /* LumenIntroViewController.swift in Sources */,
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				AF6FA99520652DF200D7F9F0 /* PersistentSet.swift in Sources */,
 				AF77B8C5209B132700E7A0C4 /* CliqzHomePanelViewController.swift in Sources */,
