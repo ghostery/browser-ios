@@ -309,8 +309,8 @@ class VPNViewController: UIViewController {
         
         updateMapView()
         mapView.snp.makeConstraints { (make) in
-            make.trailing.equalToSuperview().offset(-10)
-            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().offset(-20)
+            make.leading.equalToSuperview().offset(20)
             make.top.equalTo(tableView.snp.bottom).offset(20)
         }
         
@@ -328,9 +328,12 @@ class VPNViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-26)
             make.width.equalToSuperview().dividedBy(1.25)
             make.centerX.equalToSuperview()
+            //I should not set the height. Quick fix. 
+            make.height.equalTo(40)
         }
         
-        infoLabel.text = NSLocalizedString("Tap 'connect' to browse the Internet with VPN protection.", tableName: "Lumen", comment: "[VPN] vpn info label text")
+        //infoLabel.text = "Turn on VPN protection to browse safely on the Internet."
+        updateInfoLabel()
         
         setStyling()
     }
@@ -342,13 +345,16 @@ class VPNViewController: UIViewController {
         
         infoLabel.textAlignment = .center
         infoLabel.numberOfLines = 0
-        infoLabel.textColor = VPNUX.cliqzBlue
+        infoLabel.textColor = Lumen.VPN.infoLabelTextColor(lumenTheme, .Normal)
         infoLabel.font = UIFont.systemFont(ofSize: 14)
+        
+        mapView.contentMode = .scaleAspectFill
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.view.alpha = 1.0
     }
     
     override func didReceiveMemoryWarning() {
@@ -391,16 +397,34 @@ class VPNViewController: UIViewController {
         
         if VPNStatus == .connected {
             //active image
-            mapView.image = UIImage(named: "VPNMapActive")
+            mapView.image = Lumen.VPN.mapImageActive(lumenTheme, .Normal)
         }
         else {
             //inactive image
-            mapView.image = UIImage(named: "VPNMapInactive")
+            mapView.image = Lumen.VPN.mapImageInactive(lumenTheme, .Normal)
+        }
+    }
+    
+    func updateInfoLabel() {
+        
+        let connectedText = "You are safely connected to the Internet."
+        let retryText = "You are safely connected to the Internet."
+        let defaultText = "Turn on VPN protection to browse safely on the Internet."
+        
+        if VPNStatus == .connected {
+            self.infoLabel.text = connectedText
+        }
+        else if VPNStatus == .disconnected && (self.connectButton.currentState == .Connecting || self.connectButton.currentState == .Connect) {
+                self.infoLabel.text = retryText
+        }
+        else {
+            self.infoLabel.text = defaultText
         }
     }
     
     @objc func VPNStatusDidChange(notification: Notification) {
         //keep button up to date.
+        updateInfoLabel()
         updateConnectButton()
         updateMapView()
         
@@ -478,10 +502,11 @@ extension VPNViewController: UITableViewDataSource {
         
         //do the setup
         cell.accessoryType = .disclosureIndicator
-        cell.textLabel?.text = NSLocalizedString("Choose VPN Location", tableName: "Lumen", comment: "[VPN] vpn choose location") 
-        cell.textLabel?.textColor = .white
+        cell.textLabel?.text = NSLocalizedString("Choose VPN Location", tableName: "Lumen", comment: "[VPN] vpn choose location")
+        cell.textLabel?.textColor = Lumen.VPN.selectTextColor(lumenTheme, .Normal)
         cell.backgroundColor = .clear
         cell.detailTextLabel?.text = VPNEndPointManager.shared.selectedCountry.name
+        cell.detailTextLabel?.textColor = Lumen.VPN.selectDetailTextColor(lumenTheme, .Normal)
         cell.selectionStyle = .none
         
         return cell
@@ -499,7 +524,10 @@ extension VPNViewController: UITableViewDelegate {
         //push new view controller
         let countryVC = VPNCountryController()
         countryVC.delegate = self
-        self.navigationController?.pushViewController(countryVC, animated: true)
+        UIView.animate(withDuration: 0.1, animations: {
+            self.view.alpha = 0.0
+            self.navigationController?.pushViewController(countryVC, animated: true)
+        })
     }
 }
 

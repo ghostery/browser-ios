@@ -19,12 +19,13 @@ class VPNButton: UIButton {
         case Retry
         
         func labelColor() -> UIColor {
-            switch self {
-            case .Disconnect:
-                return VPNUX.cliqzBlue
-            default:
-                return VPNUX.bgColor
-            }
+//            switch self {
+//            case .Disconnect:
+//                return VPNUX.cliqzBlue
+//            default:
+//                return VPNUX.bgColor
+//            }
+            return Lumen.VPN.VPNButtonTextColor(lumenTheme, .Normal)
         }
         
         func toString() -> String {
@@ -43,16 +44,18 @@ class VPNButton: UIButton {
         }
         
         func bgImage() -> UIImage? {
-            switch self {
-            case .Connect:
-                return UIImage(named: "VPNButtonFilled")
-            case .Disconnect:
-                return UIImage(named: "VPNButtonOutline")
-            case .Retry:
-                return UIImage(named: "VPNButtonFilled")
-            default:
-                return UIImage(named: "VPNButtonFilled")
-            }
+//            switch self {
+//            case .Connect:
+//                return UIImage(named: "VPNButtonFilled")
+//            case .Disconnect:
+//                return UIImage(named: "VPNButtonOutline")
+//            case .Retry:
+//                return UIImage(named: "VPNButtonFilled")
+//            default:
+//                return UIImage(named: "VPNButtonFilled")
+//            }
+            
+            return Lumen.VPN.buttonImage(lumenTheme, .Normal)
         }
     }
     
@@ -107,14 +110,14 @@ class VPNButton: UIButton {
     }
     
     func setStyling() {
+        self.setImage(currentState.bgImage(), for: .normal)
+//        self.setBackgroundImage(currentState.bgImage(), for: .normal)
         
-        self.setBackgroundImage(currentState.bgImage(), for: .normal)
-        
-        self.layer.shadowColor = UIColor(red: 0, green: 175/255, blue: 240/255, alpha: 1.0).cgColor
-        self.layer.shadowRadius = 4.0
-        self.layer.shadowOffset = CGSize.zero
-        self.layer.shadowOpacity = 1.0
-        
+//        self.layer.shadowColor = UIColor(red: 0, green: 175/255, blue: 240/255, alpha: 1.0).cgColor
+//        self.layer.shadowRadius = 4.0
+//        self.layer.shadowOffset = CGSize.zero
+//        self.layer.shadowOpacity = 1.0
+//        
         mainLabel.textColor = currentState.labelColor()
         auxLabel.textColor = currentState.labelColor()
         
@@ -144,13 +147,30 @@ class VPNButton: UIButton {
         mainLabel.textColor = currentState.labelColor()
         auxLabel.textColor = currentState.labelColor()
         
-        self.setBackgroundImage(state.bgImage(), for: .normal)
+        //self.setImage(state.bgImage(), for: .normal)
         if state == .Connecting || state == .Disconnecting {
             self.isUserInteractionEnabled = false
+            rotate()
         }
         else {
             self.isUserInteractionEnabled = true
+            stopRotating()
         }
+    }
+    
+    fileprivate func rotate() {
+        
+        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotateAnimation.fromValue = 0.0
+        rotateAnimation.toValue = CGFloat(.pi * 2.0)
+        rotateAnimation.duration = 2.0
+        rotateAnimation.repeatCount = Float.greatestFiniteMagnitude;
+        
+        self.imageView?.layer.add(rotateAnimation, forKey: "rotateRing")
+    }
+    
+    fileprivate func stopRotating() {
+        self.imageView?.layer.removeAnimation(forKey: "rotateRing")
     }
     
     override func setTitle(_ title: String?, for state: UIControlState) {

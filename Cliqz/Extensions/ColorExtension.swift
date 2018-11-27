@@ -38,7 +38,7 @@ extension UIColor {
     //Enumerate lumen colors here
     static let lumenBrightBlue = UIColor(colorString: "3073DB")
     static let lumenDeepBlue = UIColor(colorString: "0D0F22")
-    static let lumenPurple = UIColor(colorString: "1E2247")
+    static let lumenPurple = UIColor(colorString: "151834")
 }
 
 struct Lumen {
@@ -53,6 +53,10 @@ struct Lumen {
     
     static let fallback: (LumenThemeName, LumenColorCombo) -> UIColor = { name, combo in
         return combo[name]?.values.first ?? Lumen.defaultColor(name)
+    }
+    
+    static let fallbackImage: (LumenThemeName, LumenImageCombo) -> UIImage? = { name, combo in
+        return combo[name]?.values.first ?? nil
     }
     
 //    let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Private: .black], .Dark: [.Normal: .black, .Private: .black]]
@@ -72,6 +76,55 @@ struct Lumen {
         static let separatorColor : LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let selectTextColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black], .Dark: [.Normal: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let selectDetailTextColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let infoLabelTextColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let VPNButtonTextColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black], .Dark: [.Normal: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let countryTextColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black], .Dark: [.Normal: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let navigationBarTextColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue], .Dark: [.Normal: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let buttonImage: LumenImage = { name, mode in
+            let image = UIImage(named: "VPNButtonOutline")
+            let combo: LumenImageCombo  = [.Light: [.Normal: image, .Disabled: image], .Dark: [.Normal: image, .Disabled: image]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let mapImageInactive: LumenImage = { name, mode in
+            let bright = UIImage(named: "VPNMapInactive_Bright")
+            let dark = UIImage(named: "VPNMapInactive_Dark")
+            let combo: LumenImageCombo  = [.Light: [.Normal: bright, .Disabled: bright], .Dark: [.Normal: dark, .Disabled: dark]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let mapImageActive: LumenImage = { name, mode in
+            let image = UIImage(named: "VPNMapActive")
+            let combo: LumenImageCombo  = [.Light: [.Normal: image, .Disabled: image], .Dark: [.Normal: image, .Disabled: image]]
+            return combo[name]?[mode] ?? nil
         }
     }
     
