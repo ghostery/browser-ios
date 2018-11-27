@@ -148,6 +148,8 @@ class CliqzHistoryPanel: HistoryPanel {
                 })
             })
         }
+        cell.textLabel?.textColor = Lumen.Browser.homePanelTextColor(lumenTheme, .Normal)
+        cell.detailTextLabel?.textColor = cell.textLabel?.textColor ?? .white
         return cell
     }
     
@@ -228,15 +230,16 @@ class CliqzHistoryPanel: HistoryPanel {
         welcomeLabel.text = Strings.HistoryPanelEmptyStateTitle
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
-        welcomeLabel.textColor = UIColor.white
+        welcomeLabel.textColor = Lumen.Browser.homePanelTextColor(lumenTheme, .Normal)
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
         
+        #if !PAID
         welcomeLabel.layer.shadowColor = UIColor.black.cgColor
         welcomeLabel.layer.shadowOpacity = 0.5
         welcomeLabel.layer.shadowRadius = 0.5
         welcomeLabel.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        
+        #endif
         
         welcomeLabel.snp.makeConstraints { make in
             make.centerX.equalTo(overlayView)
