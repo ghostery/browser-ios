@@ -92,7 +92,9 @@ extension Tab {
     
     func urlChanged() {
         if didDomainChange() {
+            #if !PAID
             updateBlocking()
+            #endif
             if let domain = self.webView?.url?.normalizedHost {
                 lastDomain = domain
             }

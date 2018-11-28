@@ -126,6 +126,16 @@ struct Lumen {
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
+        static let readerModeButtonColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenDeepBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenBrightBlue]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
+        static let readerModeButtonSelectedColor: LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .white], .Dark: [.Normal: .white, .Private: .white]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
         static let textFieldBackgroundColor: LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenDeepBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenDeepBlue]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
@@ -163,12 +173,12 @@ struct Lumen {
         
         static let pageOptionsColorUnselected: LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .lumenDeepBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenBrightBlue]]
-            return combo[name]?[mode]?.withAlphaComponent(0.7) ?? Lumen.fallback(name, combo)
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
         static let pageOptionsColorSelected: LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .lumenDeepBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenBrightBlue]]
-            return combo[name]?[mode]?.withAlphaComponent(0.7) ?? Lumen.fallback(name, combo)
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
     }
     

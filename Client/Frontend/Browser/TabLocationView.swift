@@ -390,7 +390,7 @@ extension TabLocationView: Themeable {
         
         pageOptionsButton.selectedTintColor = UIColor.TextField.PageOptionsSelected.colorFor(theme)
         pageOptionsButton.unselectedTintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
-        pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
+        pageOptionsButton.tintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
         separatorLine.backgroundColor = UIColor.TextField.Separator.colorFor(theme)
         #endif
     }

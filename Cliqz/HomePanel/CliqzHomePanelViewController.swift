@@ -229,6 +229,13 @@ extension CliqzHomePanelViewController {
         setBackgroundImage()
         adjustOffrzNotificationImageConstraints()
     }
+    #if PAID
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        // This actually does the right thing on iPad where the modally
+        // presented version happily rotates with the iPad orientation.
+        return .portrait
+    }
+    #endif
 }
 
 extension CliqzHomePanelViewController: HomePanelDelegate {
