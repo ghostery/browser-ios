@@ -39,6 +39,16 @@
 				<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>group.com.cliqz.ios.lumen</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>lumen</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
