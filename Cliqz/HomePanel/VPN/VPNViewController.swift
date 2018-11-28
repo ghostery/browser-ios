@@ -133,9 +133,13 @@ class VPN {
                 newIPSec.serverAddress = country.endpoint;
                 newIPSec.disconnectOnSleep = false
                 
+                let alwaysConnected = NEOnDemandRule()
+                alwaysConnected.interfaceTypeMatch = .any
+                
                 NEVPNManager.shared().protocolConfiguration = newIPSec
                 NEVPNManager.shared().isOnDemandEnabled = true
                 NEVPNManager.shared().isEnabled = true
+                NEVPNManager.shared().onDemandRules = [alwaysConnected]
                 NEVPNManager.shared().saveToPreferences(completionHandler: { (error) in
                     try? NEVPNManager.shared().connection.startVPNTunnel()
                 })
