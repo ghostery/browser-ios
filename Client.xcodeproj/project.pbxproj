@@ -426,6 +426,7 @@
 		4FFD424321A44EC600EABF87 /* GradientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD424221A44EC600EABF87 /* GradientBackgroundView.swift */; };
 		4FFD424521A44F9300EABF87 /* AuthenticationUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD424421A44F9300EABF87 /* AuthenticationUX.swift */; };
 		4FFD424A21A5767800EABF87 /* BondAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD424921A5767800EABF87 /* BondAPIManager.swift */; };
+		4FFD428221ADA29100EABF87 /* Cliqz.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FFD428121ADA29100EABF87 /* Cliqz.xcassets */; };
 		5002717C41BC7C50F67F1CAD /* StateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50027345B49B967409DDA348 /* StateTests.swift */; };
 		554867231DC3935A00183DAA /* HomePageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554867221DC3935A00183DAA /* HomePageTests.swift */; };
 		55A747171DC46FC400CE1B57 /* HomePageUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A747161DC46FC400CE1B57 /* HomePageUITest.swift */; };
@@ -1795,6 +1796,7 @@
 		4FFD424221A44EC600EABF87 /* GradientBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackgroundView.swift; sourceTree = "<group>"; };
 		4FFD424421A44F9300EABF87 /* AuthenticationUX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationUX.swift; sourceTree = "<group>"; };
 		4FFD424921A5767800EABF87 /* BondAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondAPIManager.swift; sourceTree = "<group>"; };
+		4FFD428121ADA29100EABF87 /* Cliqz.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Cliqz.xcassets; sourceTree = "<group>"; };
 		50027345B49B967409DDA348 /* StateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StateTests.swift; path = SyncTests/StateTests.swift; sourceTree = "<group>"; };
 		52E513DEB09CCDAA858D5CDE /* Pods_Client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		554867221DC3935A00183DAA /* HomePageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageTests.swift; sourceTree = "<group>"; };
@@ -4573,6 +4575,7 @@
 				E41A7D4A1A1BE04500245963 /* InitialViewController.swift */,
 				EB940747208134AF00702E05 /* UXConstants.swift */,
 				F8708D291A0970990051AB07 /* ShareViewController.swift */,
+				4FFD428121ADA29100EABF87 /* Cliqz.xcassets */,
 			);
 			path = ShareTo;
 			sourceTree = "<group>";
@@ -5634,6 +5637,7 @@
 				EBE7635920ADCB7600E27F2D /* SendTo.xcassets in Resources */,
 				F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */,
 				E487B2501AC1CC9800F3E86F /* FiraSans-Light.ttf in Resources */,
+				4FFD428221ADA29100EABF87 /* Cliqz.xcassets in Resources */,
 				E487B24E1AC1C66400F3E86F /* FiraSans-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7157,7 +7161,7 @@
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SHARETO";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SHARETO -DPAID";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_SHARETO_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "935b5ee9-781d-4d43-81f1-2016ca4bf8a4";
@@ -8315,7 +8319,7 @@
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SHARETO";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SHARETO -DPAID";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_SHARETO_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "af6da778-5024-40cf-8c85-67d00d5d9b06";
@@ -12701,7 +12705,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DPAID";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";

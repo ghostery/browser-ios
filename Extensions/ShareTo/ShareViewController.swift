@@ -313,7 +313,12 @@ class ShareViewController: UIViewController {
     private func setupNavBar() {
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.setValue(true, forKey: "hidesShadow") // hide separator line
-        navigationItem.titleView = UIImageView(image: UIImage(named: "Icon-Small"))
+		navigationItem.titleView = UIImageView(image: UIImage(named: "Icon-Small"))
+		// Cliqz
+		#if PAID
+        navigationItem.titleView = UIImageView(image: UIImage(named: "lumenIcon"))
+		#endif
+		// Cliqz End
         navigationItem.titleView?.contentMode = .scaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SendToCancelButton, style: .plain, target: self, action: #selector(finish))
     }
@@ -399,9 +404,17 @@ extension ShareViewController {
        func firefoxUrl(_ url: String) -> String {
             let encoded = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics) ?? ""
             if isSearch {
+				#if PAID
+				return "lumen://open-text?text=\(encoded)"
+				#else
                 return "ghostery://open-text?text=\(encoded)"
+				#endif
             }
+			#if PAID
+			return "lumen://open-url?url=\(encoded)"
+			#else
             return "ghostery://open-url?url=\(encoded)"
+			#endif
         }
 
         guard let url = URL(string: firefoxUrl(url)) else { return }
