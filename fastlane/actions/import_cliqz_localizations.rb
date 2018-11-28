@@ -1,7 +1,7 @@
 module Fastlane
   module Actions
     OUTER_CONST = 99  
-    SUPPORTED_LANGUAGES = ["de", "es", "fr", "hu", "it", "ja", "ko", "nl", "pl", "pt-BR", "ru", "zh-CN", "zh-TW"]
+    SUPPORTED_LANGUAGES = ["en", "de", "es", "fr", "hu", "it", "ja", "ko", "nl", "pl", "pt-BR", "ru", "zh-CN", "zh-TW"]
 
     class ImportCliqzLocalizationsAction < Action
     
