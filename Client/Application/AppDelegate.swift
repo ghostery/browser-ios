@@ -365,6 +365,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         //Cliqz: check VPN connection
         #if PAID
         VPN.shared.checkConnection()
+		AuthenticationService.shared.updateSubscriptionStatus()
         #endif
 
         let defaults = UserDefaults()

@@ -11,8 +11,15 @@ import BondAPI
 
 class AuthenticationService {
 
+	enum SubscriptionType {
+		case basic
+		case trial
+		case premium
+	}
+
 	private static let registeredEmailKey = "registeredEmail"
 	private static let activatedDeviceKey = "deviceActivationState"
+	private var subscriptionType: SubscriptionType = .basic
 
 	private let bondService = BondAPIManager.shared.currentBondHandler()
     
@@ -74,6 +81,33 @@ class AuthenticationService {
 		}
 	}
 
+	func updateSubscriptionStatus() {
+		if let cred = self.userCredentials() {
+			bondService.getSubscriptionWithRequest(cred) { [weak self] (response, error) in
+				if let type = response?.subscription.type {
+					switch (type) {
+					case BondAPI.SubscriptionType.basic:
+						self?.subscriptionType = .basic
+						break
+					case BondAPI.SubscriptionType.trial, BondAPI.SubscriptionType.trialCode:
+						self?.subscriptionType = .trial
+						break
+					case BondAPI.SubscriptionType.premiumMonthly:
+						self?.subscriptionType = .premium
+						break
+					default:
+						self?.subscriptionType = .basic
+						break
+					}
+				}
+			}
+		}
+	}
+	
+	func hasValidSubscription() -> Bool {
+		return self.subscriptionType != .basic
+	}
+
 	func userCredentials() -> UserAuth? {
 		if let email = self.getRegisteredEmail() {
 			let cred = UserAuth()
@@ -110,4 +144,5 @@ class AuthenticationService {
 	private func updateDeviceActivationState(_ isActivated: Bool) {
 		LocalDataStore.defaults.set(isActivated, forKey: AuthenticationService.activatedDeviceKey)
 	}
+
 }
