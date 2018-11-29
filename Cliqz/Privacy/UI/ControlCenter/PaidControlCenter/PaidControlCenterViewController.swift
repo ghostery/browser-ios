@@ -151,18 +151,16 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
     func vpnButtonPressed() {
         if let appDel = UIApplication.shared.delegate as? AppDelegate, let tab = appDel.tabManager.selectedTab {
             //open vpn view
-            self.delegate?.dismiss()
+            tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { //[weak self] in
-                tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
+                self.delegate?.dismiss()
             }
         }
     }
     
     func startButtonPressed() {
-        #if PAID
         UserPreferences.instance.isProtectionOn = !UserPreferences.instance.isProtectionOn
         updateProtectionLabel(isOn: UserPreferences.instance.isProtectionOn)
-        #endif
     }
     
     func clearButtonPressed() {
