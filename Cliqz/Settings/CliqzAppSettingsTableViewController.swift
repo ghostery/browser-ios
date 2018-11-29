@@ -158,13 +158,13 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     
     private func generateHelpSettings(prefs: Prefs) -> [Setting] {
         #if PAID
-            let lumenThemeSetting = BoolSetting(prefs: prefs,
-                                                prefKey: lumenThemeKey,
-                                                defaultValue: true,
-                                                titleText: "Dark Theme",
-                                                settingDidChange: { newValue in
-                                                    NotificationCenter.default.post(name: .themeChanged, object: nil)
-                                                })
+//            let lumenThemeSetting = BoolSetting(prefs: prefs,
+//                                                prefKey: lumenThemeKey,
+//                                                defaultValue: true,
+//                                                titleText: NSLocalizedString("Dark Theme", tableName: "Lumen", comment: "[Settings] Dark Theme"),
+//                                                settingDidChange: { newValue in
+//                                                    NotificationCenter.default.post(name: .themeChanged, object: nil)
+//                                                })
         
             let helpSettings = [
                 FAQSetting(delegate: settingsDelegate),
@@ -173,7 +173,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
                 //ReportWebsiteSetting(),
                 SendCrashReportsSetting(settings: self),
                 SendUsageDataSetting(settings: self),
-                lumenThemeSetting
+//                lumenThemeSetting
             ]
         #else
             let helpSettings = [
