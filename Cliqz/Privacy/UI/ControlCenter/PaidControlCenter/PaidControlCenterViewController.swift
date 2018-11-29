@@ -42,19 +42,6 @@ class PaidControlCenterViewController: ControlCenterViewController {
     
     var currentPeriod: Period = .Today
     
-    fileprivate lazy var clearables: [Clearable] = {
-        
-        if let appDel = UIApplication.shared.delegate as? AppDelegate, let tabManager = appDel.tabManager, let profile = appDel.profile {
-            return [HistoryClearable(profile: profile),
-                    CacheClearable(tabManager: tabManager),
-                    CookiesClearable(tabManager: tabManager),
-                    SiteDataClearable(tabManager: tabManager),
-                    DownloadedFilesClearable()]
-        }
-        
-        return []
-    }()
-    
     override func setupComponents() {
         
         NotificationCenter.default.addObserver(self,
@@ -144,6 +131,26 @@ class PaidControlCenterViewController: ControlCenterViewController {
         //keep button up to date.
         updateVPNButton()
     }
+    
+    func alert(text: String, actionButtonTitle: String, actionCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+        let alert = UIAlertController(
+            title: "",
+            message: text,
+            preferredStyle: .alert
+        )
+        
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "Cancel button title in the urlbar"), style: .destructive, handler: nil)
+        
+        let action = UIAlertAction(
+            title: actionButtonTitle,
+            style: .default,
+            handler: actionCallback
+        )
+        
+        alert.addAction(cancel)
+        alert.addAction(action)
+        return alert
+    }
 
 }
 
@@ -164,39 +171,29 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
     }
     
     func clearButtonPressed() {
-        let alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
+        
+        func clearDashboardData(_ action: UIAlertAction) {
+            DispatchQueue.global(qos: .utility).async { [weak self] in
+                //print("Will send data for tab = \(tabID) and page = \(String(describing: currentP))")
+                Engine.sharedInstance.getBridge().callAction("insights:clearData", args: [], callback: { (result) in
+                    if let error = result["error"] as? [[String: Any]] {
+                        debugPrint("Error calling action insights:clearData: \(error)")
+                        //TODO: What should I do in this case?
+                    }
+                    else {
+                        CCWidgetManager.shared.update(period: self?.currentPeriod ?? .Today)
+                    }
+                })
+            }
+        }
+        let alertText = NSLocalizedString("This will delete all your dashboard data and cannot be undone.", tableName: "Cliqz", comment: "Lumen Clear Dashboard Data Popup Text")
+        let actionTitle = NSLocalizedString("Clear", tableName: "Cliqz", comment: "Lumen Clear Dashboard Data Popup Clear Button Text")
+        let alert = self.alert(text: alertText, actionButtonTitle: actionTitle, actionCallback: clearDashboardData)
         if let appDel = UIApplication.shared.delegate as? AppDelegate {
             appDel.presentContollerOnTop(controller: alert)
         }
     }
     
-    func clearPrivateData(_ action: UIAlertAction) {
-        DispatchQueue.global(qos: .utility).async { [weak self] in
-            //print("Will send data for tab = \(tabID) and page = \(String(describing: currentP))")
-            Engine.sharedInstance.getBridge().callAction("insights:clearData", args: [], callback: { (result) in
-                if let error = result["error"] as? [[String: Any]] {
-                    debugPrint("Error calling action insights:clearData: \(error)")
-                    //TODO: What should I do in this case?
-                }
-                else {
-//                    DispatchQueue.main.async {
-//                        self?.clearables
-//                            .enumerated()
-//                            .compactMap { (i, clearable) in
-//                                return clearable.clear()
-//                            }
-//                            .allSucceed()
-//                            .uponQueue(.main) { result in
-//                                assert(result.isSuccess, "Private data cleared successfully")
-//                                //TODO: Change UI
-//
-//                        }
-//                    }
-                    CCWidgetManager.shared.update(period: self?.currentPeriod ?? .Today)
-                }
-            })
-        }
-    }
 }
 
 extension PaidControlCenterViewController: CCCollectionDataSourceProtocol {
