@@ -17,18 +17,18 @@ extension UIAlertController {
         )
     }
     
-    class func alertWithCancelAndAction(text: String, actionButtonTitle: String, actionCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+    class func alertWithCancelAndAction(text: String, actionButtonTitle: String, isActionDestructive: Bool,actionCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
             message: text,
             preferredStyle: .alert
         )
         
-        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "Cancel button title in the urlbar"), style: .destructive, handler: nil)
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "Cancel button title in the urlbar"), style: .cancel, handler: nil)
         
         let action = UIAlertAction(
             title: actionButtonTitle,
-            style: .default,
+            style: isActionDestructive ? .destructive : .default,
             handler: actionCallback
         )
         
@@ -44,7 +44,7 @@ extension UIAlertController {
             preferredStyle: .alert
         )
         
-        let okay = UIAlertAction(title: NSLocalizedString("Okay", tableName: "Cliqz", comment: "Okay button for alerts"), style: .destructive, handler: nil)
+        let okay = UIAlertAction(title: NSLocalizedString("Okay", tableName: "Lumen", comment: "Okay button for alerts"), style: .default, handler: nil)
         
         alert.addAction(okay)
         return alert
