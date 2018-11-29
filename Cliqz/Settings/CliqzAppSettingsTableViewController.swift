@@ -102,11 +102,13 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         
         let showTopSitesTitle = NSLocalizedString("Show most visited websites", tableName: "Cliqz", comment: "[Settings] Show most visited websites")
         let showTopSitesSetting = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.ShowTopSitesPrefKey, defaultValue: true, titleText: showTopSitesTitle)
-        
+        #if PAID
+        return [showTopSitesSetting]
+        #else
         let showNewsTitle = NSLocalizedString("Show News", tableName: "Cliqz", comment: "[Settings] Show News")
         let showNewsSetting = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.ShowNewsPrefKey, defaultValue: true, titleText: showNewsTitle)
-        
         return [showTopSitesSetting, showNewsSetting]
+        #endif
     }
     
     private func generateBrowsingAndHistorySettings(prefs: Prefs) -> [Setting] {
