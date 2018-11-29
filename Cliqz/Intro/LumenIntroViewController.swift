@@ -21,10 +21,24 @@ class LumenIntroViewController: UIViewController {
         return self.view.frame.width <= 320 ? 20 : 50
     }
     
-    var verticalPadding: CGFloat {
+    var topOffset : CGFloat {
+        if isIphoneX { return 50 }
+        return self.view.frame.width <= 320 ? -30 : 20
+    }
+    
+    var bottomOffset : CGFloat {
+        if isIphoneX { return 70 }
         return self.view.frame.width <= 320 ? 10 : 20
     }
     
+    var verticalPadding: CGFloat {
+        if isIphoneX { return 25 }
+        return self.view.frame.width <= 320 ? 10 : 20
+    }
+    
+    var isIphoneX: Bool {
+         return UIDevice.current.isiPhoneXDevice()
+    }
     
     private let backgroundView = LoginGradientView()
     
@@ -100,19 +114,17 @@ class LumenIntroViewController: UIViewController {
         optInView.snp.makeConstraints { make in
             make.trailing.leading.equalToSuperview()
             make.height.equalTo(44)
-            make.bottom.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(bottomOffset)
         }
         
         // Setup constraints
         imageViewContainer.snp.makeConstraints { make in
-            let device = UIDevice.current.getDeviceAndOrientation().0
-            let topOffset: CGFloat = (device == .iPhoneX) ? 40 : 20
             make.top.equalTo(self.view).offset(topOffset)
             make.height.equalTo(LumenIntroUX.imageHeight)
         }
         startBrowsingButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(30)
-            make.bottom.equalTo(optInView.snp.top).offset(-10)
+            make.bottom.equalTo(optInView.snp.top).offset(-verticalPadding)
             make.height.equalTo(30)
         }
         scrollView.snp.makeConstraints { make in
@@ -122,7 +134,7 @@ class LumenIntroViewController: UIViewController {
         
         pageControl.snp.makeConstraints { make in
             make.centerX.equalTo(self.scrollView)
-            make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-20)
+            make.bottom.equalTo(self.startBrowsingButton.snp.top).offset(-verticalPadding)
         }
         
         createSlides()
@@ -395,7 +407,7 @@ struct LumenIntroCard: Codable, Equatable {
         
         let welcome = LumenIntroCard(title: onboardingStrings.introTitle, text: onboardingStrings.introText, imageName: "lumen-Logo")
         let adblock = LumenIntroCard(title: onboardingStrings.adblockerTitle, text: onboardingStrings.adblockerText, imageName: "lumen-Adblock")
-        let vpn = LumenIntroCard(title: "", text: onboardingStrings.vpnText, imageName: "lumen-VPN")
+        let vpn = LumenIntroCard(title: onboardingStrings.vpnTitle, text: onboardingStrings.vpnText, imageName: "lumen-VPN")
         let dashboard = LumenIntroCard(title: onboardingStrings.dashboardTitle, text: onboardingStrings.dashboardText, imageName: "lumen-Dashboard")
         return [welcome, adblock, vpn, dashboard]
     }
