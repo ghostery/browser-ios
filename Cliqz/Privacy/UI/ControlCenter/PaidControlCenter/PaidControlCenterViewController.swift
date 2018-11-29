@@ -131,26 +131,6 @@ class PaidControlCenterViewController: ControlCenterViewController {
         //keep button up to date.
         updateVPNButton()
     }
-    
-    func alert(text: String, actionButtonTitle: String, actionCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
-        let alert = UIAlertController(
-            title: "",
-            message: text,
-            preferredStyle: .alert
-        )
-        
-        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "Cancel button title in the urlbar"), style: .destructive, handler: nil)
-        
-        let action = UIAlertAction(
-            title: actionButtonTitle,
-            style: .default,
-            handler: actionCallback
-        )
-        
-        alert.addAction(cancel)
-        alert.addAction(action)
-        return alert
-    }
 
 }
 
@@ -186,9 +166,10 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
                 })
             }
         }
-        let alertText = NSLocalizedString("This will delete all your dashboard data and cannot be undone.", tableName: "Cliqz", comment: "Lumen Clear Dashboard Data Popup Text")
-        let actionTitle = NSLocalizedString("Clear", tableName: "Cliqz", comment: "Lumen Clear Dashboard Data Popup Clear Button Text")
-        let alert = self.alert(text: alertText, actionButtonTitle: actionTitle, actionCallback: clearDashboardData)
+        
+        let alertText = NSLocalizedString("This will delete all your dashboard data and cannot be undone.", tableName: "Lumen", comment: "Lumen Clear Dashboard Data Popup Text")
+        let actionTitle = NSLocalizedString("Clear", tableName: "Lumen", comment: "Lumen Clear Dashboard Data Popup Clear Button Text")
+        let alert = UIAlertController.alertWithCancelAndAction(text: alertText, actionButtonTitle: actionTitle, actionCallback: clearDashboardData)
         if let appDel = UIApplication.shared.delegate as? AppDelegate {
             appDel.presentContollerOnTop(controller: alert)
         }
