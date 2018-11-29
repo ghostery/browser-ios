@@ -84,6 +84,11 @@ class VPN {
     }
     
     func checkConnection() {
+        guard AuthenticationService.shared.hasValidSubscription() == true else {
+            VPN.disconnectVPN()
+            return
+        }
+        
         if (lastStatus == .connected && status != .connected) {
             VPN.connect2VPN()
         }
@@ -441,6 +446,13 @@ class VPNViewController: UIViewController {
     
     @objc func connectButtonPressed(_ sender: Any) {
         //try to connect
+        
+        guard AuthenticationService.shared.hasValidSubscription() == true else {
+            let text = NSLocalizedString("Your subscription has expired. Renew your subscription to continue to use the VPN.", tableName: "Lumen", comment: "[VPN] subscription expired alert text")
+            let alert = UIAlertController.alertWithOkay(text: text)
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
         
         if (NEVPNManager.shared().connection.status == .connected) {
             VPN.disconnectVPN()
