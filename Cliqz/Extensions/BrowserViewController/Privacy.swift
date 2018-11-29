@@ -61,6 +61,13 @@ extension BrowserViewController {
 	
     func showControlCenter(pageUrl: String?) {
         
+        guard AuthenticationService.shared.hasValidSubscription() == true else {
+            let text = NSLocalizedString("Your subscription has expired. Renew your subscription to continue to see the Dashboard.", tableName: "Lumen", comment: "[Dashboard] subscription expired alert text Dashboard")
+            let alert = UIAlertController.alertWithOkay(text: text)
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
         func applyShadow(view: UIView) {
             view.layer.shadowColor = UIColor.black.cgColor
             view.layer.shadowOpacity = 0.4
