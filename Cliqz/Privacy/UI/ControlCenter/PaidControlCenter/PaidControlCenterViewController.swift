@@ -40,7 +40,6 @@ class PaidControlCenterViewController: ControlCenterViewController {
     let protectionOnColor = Lumen.Dashboard.protectionLabelColor(lumenTheme, lumenDashboardMode)
     let protectionOffColor = Lumen.Dashboard.protectionLabelColor(lumenTheme, lumenDashboardMode)
     
-    var isProtectionOn = true
     var currentPeriod: Period = .Today
     
     fileprivate lazy var clearables: [Clearable] = {
@@ -72,8 +71,6 @@ class PaidControlCenterViewController: ControlCenterViewController {
         self.view.addSubview(protectionLabel)
         self.view.addSubview(dashboard.view)
         
-        updateProtectionLabel(isOn: isProtectionOn)
-        
         tabs.selectedSegmentIndex = 0
         tabs.addTarget(self, action: #selector(tabChanged), for: .valueChanged)
         
@@ -102,6 +99,9 @@ class PaidControlCenterViewController: ControlCenterViewController {
         
         setStyle()
         
+        updateProtectionLabel(isOn: UserPreferences.instance.isProtectionOn)
+        updateVPNButton()
+        
         CCWidgetManager.shared.update(period: currentPeriod)
     }
     
@@ -124,6 +124,11 @@ class PaidControlCenterViewController: ControlCenterViewController {
         }
     }
     
+    
+    func updateVPNButton() {
+        controls.vpnButton.isSelected = VPN.shared.status == .connected
+    }
+    
     @objc func tabChanged(_ segmentedControl: UISegmentedControl) {
         if segmentedControl.selectedSegmentIndex == 0 {
             currentPeriod = .Today
@@ -137,7 +142,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
     
     @objc func VPNStatusDidChange(notification: Notification) {
         //keep button up to date.
-        controls.vpnButton.isSelected = VPN.shared.status == .connected
+        updateVPNButton()
     }
 
 }
@@ -154,10 +159,9 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
     }
     
     func startButtonPressed() {
-        isProtectionOn = !isProtectionOn
         #if PAID
-        UserPreferences.instance.isProtectionOn = isProtectionOn
-        updateProtectionLabel(isOn: isProtectionOn)
+        UserPreferences.instance.isProtectionOn = !UserPreferences.instance.isProtectionOn
+        updateProtectionLabel(isOn: UserPreferences.instance.isProtectionOn)
         #endif
     }
     
@@ -312,7 +316,7 @@ class CCControlsView: UIView {
         setUpContainer(container: vpnContainer, button: vpnButton, label: vpnLabel)
         setUpContainer(container: clearContainer, button: clearButton, label: clearLabel)
         
-        startLabel.text = startLabelTitle(isSelected: false)
+        startLabel.text = startLabelTitle(isSelected: !UserPreferences.instance.isProtectionOn)
         vpnLabel.text = "VPN"
         clearLabel.text = "Zurücksetzen"
         
@@ -337,6 +341,9 @@ class CCControlsView: UIView {
         vpnButton.addTarget(self, action: #selector(vpnPressed), for: .touchUpInside)
         startButton.addTarget(self, action: #selector(startPressed), for: .touchUpInside)
         clearButton.addTarget(self, action: #selector(clearPressed), for: .touchUpInside)
+        
+        startButton.isSelected = !UserPreferences.instance.isProtectionOn
+        vpnButton.isSelected = VPN.shared.status == .connected
     }
     
     func setUpContainer(container: UIView, button: UIButton, label: UILabel) {
