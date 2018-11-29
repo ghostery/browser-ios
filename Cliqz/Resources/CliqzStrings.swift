@@ -111,7 +111,11 @@ extension CliqzStrings {
             return NSLocalizedString("Block Ads & Trackers", tableName: "Lumen", comment: "[Onboarding] Adblocker title")
         }
         public var adblockerText: String {
-            return NSLocalizedString("Enjoy pure websites without the clutter and safe data & time.", tableName: "Lumen", comment: "[Onboarding] Adblocker text")
+            return NSLocalizedString("Enjoy clutter-free websites and save data & time.", tableName: "Lumen", comment: "[Onboarding] Adblocker text")
+        }
+        
+        public var vpnTitle: String {
+            return NSLocalizedString("Be always carefree on the Web", tableName: "Lumen", comment: "[Onboarding] VPN title")
         }
         
         public var vpnText: String {
@@ -131,7 +135,7 @@ extension CliqzStrings {
         }
         
         public var telemetryText: String {
-            return NSLocalizedString("I agree to sharing strictly anonymous analytics data to improve Lumen's performance.", tableName: "Lumen", comment: "[Onboarding] Telemetry")
+            return NSLocalizedString("I agree to share strictly anonymous analytics data to improve Lumen's performance.", tableName: "Lumen", comment: "[Onboarding] Telemetry")
         }
     }
     
