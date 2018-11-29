@@ -169,7 +169,7 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
         
         let alertText = NSLocalizedString("This will delete all your dashboard data and cannot be undone.", tableName: "Lumen", comment: "Lumen Clear Dashboard Data Popup Text")
         let actionTitle = NSLocalizedString("Clear", tableName: "Lumen", comment: "Lumen Clear Dashboard Data Popup Clear Button Text")
-        let alert = UIAlertController.alertWithCancelAndAction(text: alertText, actionButtonTitle: actionTitle, actionCallback: clearDashboardData)
+        let alert = UIAlertController.alertWithCancelAndAction(text: alertText, actionButtonTitle: actionTitle, isActionDestructive: true,actionCallback: clearDashboardData)
         if let appDel = UIApplication.shared.delegate as? AppDelegate {
             appDel.presentContollerOnTop(controller: alert)
         }
