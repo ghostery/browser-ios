@@ -2562,11 +2562,9 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 
 extension BrowserViewController: IntroViewControllerDelegate {
     @discardableResult func presentIntroViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
-        //Cliqz: This is temporary. We should remove this once we have an Intro.
         #if PAID
-        return false
-        #endif
-        
+        #else
+        //Cliqz: This is temporary. We should remove this once we have an Intro.        
         if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
             self.launchFxAFromDeeplinkURL(url)
             return true
@@ -2577,6 +2575,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             let introViewController = IntroViewController()
             */
             let introViewController = CliqzIntroViewController()
+            
             introViewController.delegate = self
             // On iPad we present it modally in a controller
             if topTabsVisible {
@@ -2592,7 +2591,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
             return true
         }
-
+        #endif
         return false
     }
     

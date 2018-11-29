@@ -96,4 +96,43 @@ extension CliqzStrings {
         public static let NewForgetTabTitle = NSLocalizedString("Hotkeys.NewForgetTab.DiscoveryTitle", tableName: "Ghostery", value: "New Ghost Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     #endif
     
+    
+    public struct LumenOnboarding {
+        
+        public var introTitle: String {
+            return NSLocalizedString("LUMEN", tableName: "Lumen", comment: "[Onboarding] Intro Title")
+        }
+        public var introText: String {
+            return NSLocalizedString("See the Web in a whole new light!", tableName: "Lumen", comment: "[Onboarding] Intro text")
+        }
+        
+        
+        public var adblockerTitle: String {
+            return NSLocalizedString("Block Ads & Trackers", tableName: "Lumen", comment: "[Onboarding] Adblocker title")
+        }
+        public var adblockerText: String {
+            return NSLocalizedString("Enjoy pure websites without the clutter and safe data & time.", tableName: "Lumen", comment: "[Onboarding] Adblocker text")
+        }
+        
+        public var vpnText: String {
+            return NSLocalizedString("As safe as at home or in the office – wherever you are.", tableName: "Lumen", comment: "[Onboarding] VPN text")
+        }
+        
+        
+        public var dashboardTitle: String {
+            return NSLocalizedString("Dashboard", tableName: "Lumen", comment: "[Onboarding] Dashboard title")
+        }
+        public var dashboardText: String {
+            return NSLocalizedString("Lumen brings to light what happens in the shadows and protects you.", tableName: "Lumen", comment: "[Onboarding] Dashboard text")
+        }
+        
+        public var getStartedButtonText: String {
+            return NSLocalizedString("GET STARTED", tableName: "Lumen", comment: "[Onboarding] Get Started button text")
+        }
+        
+        public var telemetryText: String {
+            return NSLocalizedString("I agree to sharing strictly anonymous analytics data to improve Lumen's performance.", tableName: "Lumen", comment: "[Onboarding] Telemetry")
+        }
+    }
+    
 }
