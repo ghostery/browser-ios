@@ -50,7 +50,7 @@ extension UIImage {
     
     static func tabTrayGhostModeIcon() -> UIImage? {
         #if PAID
-            return UIImage(named: "ghost_mode_Paid")
+            return UIImage(named: "")
         #else
             return UIImage(named: "ghost_mode_Ghostery")
         #endif
