@@ -65,7 +65,11 @@ class TopSiteViewCell: UICollectionViewCell {
 		logoImageView.snp.makeConstraints { make in
 			make.top.left.bottom.right.equalTo(self.logoContainerView)
 		}
+        #if !PAID
 		self.logoContainerView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        #else
+        self.logoContainerView.backgroundColor = UIColor(colorString:"BDC0CE").withAlphaComponent(0.4)
+        #endif
 		self.logoContainerView.layer.cornerRadius = 12
         self.logoContainerView.layer.borderWidth = 2
         self.logoContainerView.layer.borderColor = UIColor.clear.cgColor//UIConstants.AppBackgroundColor.CGColor
