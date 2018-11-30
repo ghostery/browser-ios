@@ -14,6 +14,8 @@ import Shared
 class RegistrationViewController: UIViewController {
 
     var profile: Profile?
+	var tabManager: TabManager!
+
 	private let contentView = UIView()
 	private let backgroundView = LoginGradientView()
 
@@ -35,13 +37,12 @@ class RegistrationViewController: UIViewController {
 				if isActivated {
 					let nextVC = RegistrationConfirmationViewController()
 					self.navigationController?.pushViewController(nextVC, animated: true)
-				} else {
-					self.registerDevice(cred)
 				}
 			}
 		}
 		setupViews()
 	}
+
     func presentIntroViewController(_ force: Bool = false, animated: Bool = true) {
         guard let profile = profile else {
             return
@@ -141,6 +142,11 @@ class RegistrationViewController: UIViewController {
 	}
 
 	private func registerDevice(_ credentials: UserAuth) {
+		if let oldCred = AuthenticationService.shared.userCredentials() {
+			if credentials.username != oldCred.username {
+				self.clearData()
+			}
+		}
 		AuthenticationService.shared.registerDevice(credentials) { (isRegistered, errMessage) in
 			self.enableEditing(true)
 			if let err = errMessage {
@@ -148,6 +154,21 @@ class RegistrationViewController: UIViewController {
 			} else if isRegistered {
 				let emailActivationVC = EmailVerificationViewController()
 				self.navigationController?.pushViewController(emailActivationVC, animated: true)
+			}
+		}
+	}
+
+	private func clearData() {
+		if let profile = self.profile {
+			var clearables: [Clearable] = [
+					HistoryClearable(profile: profile),
+					CacheClearable(tabManager: self.tabManager),
+					CookiesClearable(tabManager: self.tabManager),
+					SiteDataClearable(tabManager: self.tabManager)
+				]
+			clearables.append(DownloadedFilesClearable())
+			for i in clearables {
+				let _ = i.clear()
 			}
 		}
 	}

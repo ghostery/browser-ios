@@ -41,4 +41,13 @@ extension AppDelegate {
 		navigationController.isNavigationBarHidden = true
 		navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
 	}
+
+	func showAuthentication() {
+		let registrationViewController = RegistrationViewController()
+		registrationViewController.profile = self.profile
+		registrationViewController.tabManager = self.tabManager
+		let navigationController = UINavigationController(rootViewController: registrationViewController)
+		self.rootViewController = navigationController
+		self.window!.rootViewController = rootViewController
+	}
 }

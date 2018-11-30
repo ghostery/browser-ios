@@ -19,6 +19,8 @@ class AuthenticationService {
 
 	private static let registeredEmailKey = "registeredEmail"
 	private static let activatedDeviceKey = "deviceActivationState"
+	private static let activatedDeviceIDKey = "deviceActivationID"
+
 	private var subscriptionType: SubscriptionType = .basic
 
 	private let bondService = BondAPIManager.shared.currentBondHandler()
@@ -59,7 +61,7 @@ class AuthenticationService {
             if err != nil || response?.errorArray?.count != 0 {
                 completion(false)
 			} else {
-				self.updateDeviceActivationState(true)
+				self.updateDeviceActivationState(true, deviceID: response?.deviceId)
 				completion(true)
 			}
         }
@@ -113,11 +115,14 @@ class AuthenticationService {
 	func signOut(completion: @escaping (_ isSignedOut: Bool, _ errorString: String?) -> Void) {
 		let request = UnregisterDeviceRequest()
 		request.auth = self.userCredentials()
-		request.hasAuth = true
+		if let deviceID = LocalDataStore.defaults.value(forKey: AuthenticationService.activatedDeviceIDKey) as? Int64 {
+			request.deviceId = deviceID
+		}
 		self.bondService.unregisterDevice(with: request) { (response, error) in
 			if error != nil || response?.errorArray.count != 0 {
 				completion(false, AuthenticationService.generalErrorMessage)
 			} else {
+				self.updateDeviceActivationState(false, deviceID: -1)
 				completion(true, nil)
 			}
 		}
@@ -169,8 +174,11 @@ class AuthenticationService {
 		LocalDataStore.defaults.set(email, forKey: AuthenticationService.registeredEmailKey)
 	}
 
-	private func updateDeviceActivationState(_ isActivated: Bool) {
+	private func updateDeviceActivationState(_ isActivated: Bool, deviceID: Int64?) {
 		LocalDataStore.defaults.set(isActivated, forKey: AuthenticationService.activatedDeviceKey)
+		if let deviceID = deviceID {
+			LocalDataStore.defaults.set(deviceID, forKey: AuthenticationService.activatedDeviceIDKey)
+		}
 	}
 
 }

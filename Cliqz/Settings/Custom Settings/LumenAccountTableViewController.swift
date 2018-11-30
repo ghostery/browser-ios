@@ -88,7 +88,13 @@ class LumenAccountTableViewController: SubSettingsTableViewController {
 	private func signOut() {
 		AuthenticationService.shared.signOut { [weak self] (isSignedOut, errorMsg) in
 			if isSignedOut {
-				
+				DispatchQueue.main.async {
+					if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+						self?.navigationController?.dismiss(animated: true, completion: {
+							appDelegate.showAuthentication()
+						})
+					}
+				}
 			} else if let msg = errorMsg {
 				self?.showErrorMsg(msg)
 			}
@@ -96,6 +102,13 @@ class LumenAccountTableViewController: SubSettingsTableViewController {
 	}
 
 	private func showErrorMsg(_ message: String) {
+		let title = ""
+		let msg = message
+		let errorAlert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
 		
+		let okAction = UIAlertAction(title: NSLocalizedString("OK", tableName: "Cliqz", comment: "[Settings] Cancel account deletion"), style: .cancel)
+		errorAlert.addAction(okAction)
+		
+		self.present(errorAlert, animated: true, completion: nil)
 	}
 }

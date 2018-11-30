@@ -179,18 +179,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 				if isActivated {
 					self.showBrowser()
 				} else {
-                    let registrationViewController = RegistrationViewController()
-                    registrationViewController.profile = self.profile
-					let navigationController = UINavigationController(rootViewController: registrationViewController)
-					self.rootViewController = navigationController
+					self.showAuthentication()
 				}
 			})
         #else
             self.showBrowser()
         #endif
 		/* Cliqz: End */
-
-        self.window!.rootViewController = rootViewController
 
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
