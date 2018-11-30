@@ -22,9 +22,9 @@ class CliqzConnectSetting: Setting {
         let title = NSLocalizedString("Connect", tableName: "Cliqz", comment: "[Settings] Connect")
         super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
-    
+
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
-    
+
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = ConnectTableViewController()
         viewController.title = self.title?.string
@@ -464,6 +464,32 @@ class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
 
 #else
 
+class LumenAccountSetting: Setting {
+//	let profile: Profile
+	
+	override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+	
+	override var style: UITableViewCellStyle { return .value1 }
+	
+	override var status: NSAttributedString {
+		return NSAttributedString(string: "")
+	}
+	
+	override var accessibilityIdentifier: String? { return "Lumen Account" }
+	
+	init() {
+//		self.profile = settings.profile
+		let title = NSLocalizedString("Lumen Account", tableName: "Cliqz" , comment: "[Settings] Account")
+		super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
+	}
+	
+	override func onClick(_ navigationController: UINavigationController?) {
+		let viewController = LumenAccountTableViewController()
+		viewController.title = self.title?.string
+		navigationController?.pushViewController(viewController, animated: true)
+	}
+}
+
 class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
     
     override func getTitle() -> String {
@@ -498,5 +524,3 @@ class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
 }
 
 #endif
-
-

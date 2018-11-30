@@ -405,6 +405,8 @@
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
 		4F989018219DC8A7003BC800 /* RegistrationConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F989017219DC8A7003BC800 /* RegistrationConfirmationViewController.swift */; };
 		4F9DD64320BD562B00107976 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8752028CE4000018880 /* disconnect-social.json */; };
+		4FAA4EC621AFEF8000CD41A7 /* LumenAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAA4EC521AFEF8000CD41A7 /* LumenAccountTableViewController.swift */; };
+		4FAA4ED021B051F400CD41A7 /* ConfirmDeletionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAA4ECF21B051F400CD41A7 /* ConfirmDeletionViewController.swift */; };
 		4FB2BBB120B70A21006FB03D /* DeviceInfoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB2BBAE20B70680006FB03D /* DeviceInfoExtension.swift */; };
 		4FB2BBB420B70BC8006FB03D /* WifiProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB2BBB220B70A72006FB03D /* WifiProtectionViewController.swift */; };
 		4FB2BBB820B70FB5006FB03D /* WiFiProtectionActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB2BBB720B70FB4006FB03D /* WiFiProtectionActivity.swift */; };
@@ -1775,6 +1777,8 @@
 		4F82FDB6208F2D3E002CED25 /* TrackersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackersController.swift; sourceTree = "<group>"; };
 		4F9757391AFA6F37006ECC24 /* readerContent.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readerContent.html; sourceTree = "<group>"; };
 		4F989017219DC8A7003BC800 /* RegistrationConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationConfirmationViewController.swift; sourceTree = "<group>"; };
+		4FAA4EC521AFEF8000CD41A7 /* LumenAccountTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenAccountTableViewController.swift; sourceTree = "<group>"; };
+		4FAA4ECF21B051F400CD41A7 /* ConfirmDeletionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmDeletionViewController.swift; sourceTree = "<group>"; };
 		4FB2BBAE20B70680006FB03D /* DeviceInfoExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoExtension.swift; sourceTree = "<group>"; };
 		4FB2BBB220B70A72006FB03D /* WifiProtectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WifiProtectionViewController.swift; sourceTree = "<group>"; };
 		4FB2BBB720B70FB4006FB03D /* WiFiProtectionActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiFiProtectionActivity.swift; sourceTree = "<group>"; };
@@ -2657,6 +2661,8 @@
 				1EAFE56A205FFE82006A36B4 /* RegionalSettingsTableViewController.swift */,
 				1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */,
 				1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */,
+				4FAA4EC521AFEF8000CD41A7 /* LumenAccountTableViewController.swift */,
+				4FAA4ECF21B051F400CD41A7 /* ConfirmDeletionViewController.swift */,
 			);
 			path = "Custom Settings";
 			sourceTree = "<group>";
@@ -6571,6 +6577,7 @@
 				4FB2BBB820B70FB5006FB03D /* WiFiProtectionActivity.swift in Sources */,
 				1EEA36D52063E105003B6AD5 /* FileManagerExtension.swift in Sources */,
 				28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */,
+				4FAA4ED021B051F400CD41A7 /* ConfirmDeletionViewController.swift in Sources */,
 				C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */,
 				4F3FA4E32044194400A9E7F6 /* ColorExtension.swift in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
@@ -6599,6 +6606,7 @@
 				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
 				1E3CBC1D205806F000898B05 /* DateExtension.swift in Sources */,
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
+				4FAA4EC621AFEF8000CD41A7 /* LumenAccountTableViewController.swift in Sources */,
 				C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */,
 				E69DB0BD1E97E301008A67E6 /* ActivityStreamTopics.swift in Sources */,
 				1EAFE56D205FFE82006A36B4 /* AboutSettingsTableViewController.swift in Sources */,
