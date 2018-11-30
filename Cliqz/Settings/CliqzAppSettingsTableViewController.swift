@@ -30,8 +30,9 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
 		// Account Settings
 		#if PAID
 		let accountSettings = generateAccountSettings(prefs: prefs)
-        let accountSettingsTitle = NSLocalizedString("Lumen Account", tableName: "Cliqz" , comment: "[Settings] Account")
-        settings += [SettingSection(title: NSAttributedString(string: accountSettingsTitle), children: accountSettings)]
+		let accountSettingsTitle = NSLocalizedString("Lumen Account", tableName: "Cliqz" , comment: "[Settings] Account")
+//NSLocalizedString("", tableName: "Cliqz", comment: "[Settings] TBD")
+		settings += [SettingSection(title: NSAttributedString(string: accountSettingsTitle), children: accountSettings)]
 		#endif
         // Search Settings
         let searchSettings = generateSearchSettings(prefs: prefs)
