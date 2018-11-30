@@ -22,7 +22,9 @@ struct AboutLicenseHandler {
             /* Cliqz Changed Modied the path method for Licenses resource
             let path = Bundle.main.path(forResource: "Licenses", ofType: "html")
             */
-            #if GHOSTERY
+            #if PAID
+            let path = Bundle.main.path(forResource: "Lumen-Licenses", ofType: "html")
+            #elseif GHOSTERY
             let path = Bundle.main.path(forResource: "Ghostery-Licenses", ofType: "html")
             #else
             let path = Bundle.main.path(forResource: "Licenses", ofType: "html")

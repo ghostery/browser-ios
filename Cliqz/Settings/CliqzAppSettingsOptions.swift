@@ -456,6 +456,29 @@ class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
     }
 }
 
+class LumenAccountSetting: Setting {
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+    override var style: UITableViewCellStyle { return .value1 }
+    override var accessibilityIdentifier: String? { return "Lumen Account" }
+    
+    init() {
+        let title = NSLocalizedString("Lumen Account", tableName: "Cliqz" , comment: "[Settings] Account")
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
+    }
+    
+    override var status: NSAttributedString? {
+        if let email = AuthenticationService.shared.getRegisteredEmail() {
+            return NSAttributedString(string: email, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor])
+        } else {
+            return nil
+        }
+    }
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = LumenAccountTableViewController()
+        viewController.title = self.title?.string
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
 #elseif GHOSTERY
 class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
     
@@ -491,37 +514,6 @@ class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
 }
 
 #else
-
-class LumenAccountSetting: Setting {
-//	let profile: Profile
-	
-	override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
-	
-	override var style: UITableViewCellStyle { return .value1 }
-	
-	override var accessibilityIdentifier: String? { return "Lumen Account" }
-	
-	init() {
-//		self.profile = settings.profile
-		let title = NSLocalizedString("Lumen Account", tableName: "Cliqz" , comment: "[Settings] Account")
-		super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
-	}
-	
-	override var status: NSAttributedString? {
-		if let email = AuthenticationService.shared.getRegisteredEmail() {
-			return NSAttributedString(string: email, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor])
-		} else {
-			return nil
-		}
-	}
-
-	override func onClick(_ navigationController: UINavigationController?) {
-		let viewController = LumenAccountTableViewController()
-		viewController.title = self.title?.string
-		navigationController?.pushViewController(viewController, animated: true)
-	}
-}
-
 class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
     
     override func getTitle() -> String {
