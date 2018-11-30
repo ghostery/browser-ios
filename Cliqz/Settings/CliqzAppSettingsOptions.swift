@@ -462,18 +462,10 @@ class LumenAccountSetting: Setting {
     override var accessibilityIdentifier: String? { return "Lumen Account" }
     
     init() {
-        let title = NSLocalizedString("Lumen Account", tableName: "Cliqz" , comment: "[Settings] Account")
+        let title =  AuthenticationService.shared.getRegisteredEmail() ?? "N/A"
         super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
     
-    override var status: NSAttributedString? {
-        if let email = AuthenticationService.shared.getRegisteredEmail() {
-            return NSAttributedString(string: email, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor])
-        } else {
-            return nil
-        }
-    }
-
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = LumenAccountTableViewController()
         viewController.title = self.title?.string
