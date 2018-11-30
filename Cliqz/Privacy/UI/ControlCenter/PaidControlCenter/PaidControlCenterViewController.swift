@@ -28,14 +28,15 @@ let lumenDashboardMode: LumenThemeMode = .Normal
 class PaidControlCenterViewController: ControlCenterViewController {
     
     let controls = CCControlsView()
-    let tabs = UISegmentedControl(items: ["Heute", "Letzte 7 Tage"])
+    let tabs = UISegmentedControl(items: [NSLocalizedString("Today", tableName: "Lumen", comment:"[Lumen->Dashboard] Today tab"),
+                                          NSLocalizedString("Last 7 days", tableName: "Lumen", comment:"[Lumen->Dashboard] Last 7 days tab")])
     let protectionLabel = UILabel()
     
     let dashboard = CCCollectionViewController()
     let cellDataSource = CCDataSource()
     
-    let protectionOn = "Komplettschutz: EIN"
-    let protectionOff = "Komplettschutz: AUS"
+    let protectionOn = NSLocalizedString("Ultimate Protection: ON", tableName: "Lumen", comment:"[Lumen->Dashboard] Security Status ON")
+    let protectionOff = NSLocalizedString("Ultimate Protection: OFF", tableName: "Lumen", comment:"[Lumen->Dashboard] Security Status OFF")
     
     let protectionOnColor = Lumen.Dashboard.protectionLabelColor(lumenTheme, lumenDashboardMode)
     let protectionOffColor = Lumen.Dashboard.protectionLabelColor(lumenTheme, lumenDashboardMode)
@@ -261,10 +262,10 @@ class CCControlsView: UIView {
     
     func startLabelTitle(isSelected: Bool) -> String {
         if isSelected == false {
-            return "Pause"
+            return NSLocalizedString("Pause", tableName: "Lumen", comment:"[Lumen->Dashboard] Pause button")
         }
         else {
-            return "Start"
+            return NSLocalizedString("Start", tableName: "Lumen", comment:"[Lumen->Dashboard] Start button")
         }
     }
     
@@ -293,8 +294,8 @@ class CCControlsView: UIView {
         setUpContainer(container: clearContainer, button: clearButton, label: clearLabel)
         
         startLabel.text = startLabelTitle(isSelected: !UserPreferences.instance.isProtectionOn)
-        vpnLabel.text = "VPN"
-        clearLabel.text = "Zurücksetzen"
+        vpnLabel.text = NSLocalizedString("VPN", tableName: "Lumen", comment:"[Lumen->Dashboard] VPN button")
+        clearLabel.text = NSLocalizedString("Clear", tableName: "Lumen", comment:"[Lumen->Dashboard] Clear button")
         
         startLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
         vpnLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
