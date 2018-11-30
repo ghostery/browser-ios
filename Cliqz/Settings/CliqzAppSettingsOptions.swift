@@ -432,8 +432,31 @@ class CliqzLicenseAndAcknowledgementsSetting: LocalResourceSetting {
         return ("license", "about")
     }
 }
+#if PAID
 
-#if GHOSTERY
+class EulaSetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("EULA", tableName: "Cliqz", comment: "[Settings -> About] EULA")
+    }
+    
+    override var url: URL? {
+        return URL(string: "https://lumenbrowser.com/lumen_eula.html")
+    }
+}
+
+class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
+    
+    override func getTitle() -> String {
+        return NSLocalizedString("Privacy Policy", tableName: "Cliqz", comment: "[Settings -> About] Privacy Policy")
+    }
+    
+    override var url: URL? {
+        return URL(string: "https://lumenbrowser.com/dse.html")
+    }
+}
+
+#elseif GHOSTERY
 class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
     
     override func getTitle() -> String {
