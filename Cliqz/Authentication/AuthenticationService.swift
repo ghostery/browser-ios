@@ -25,6 +25,9 @@ class AuthenticationService {
     
     static let shared = AuthenticationService()
 
+	// TODO: move to ui and organize errorcodes for error handling
+	private static let generalErrorMessage = NSLocalizedString("Something went wrong. Please try again later.", tableName: "Cliqz", comment: "General error message")
+	
     func registerDevice(_ credentials: UserAuth, completion: @escaping (_ isRegistered: Bool, _ errorString: String?) -> Void) {
         let reg = RegisterDeviceRequest()
         reg.auth = credentials
@@ -36,15 +39,14 @@ class AuthenticationService {
                     if i.code == BondAPI.ErrorCode.deviceExists {
 						self.updateRegisteredEmail(credentials.username)
                         completion(true, nil)
-                        print("already registered")
                         break
                     } else {
-                        completion(false, "Something went wrong")
+                        completion(false, AuthenticationService.generalErrorMessage)
                         break
                     }
                 }
 			} else if err != nil {
-                completion(false, "Something went wrong")
+                completion(false, AuthenticationService.generalErrorMessage)
             } else {
 				self.updateRegisteredEmail(credentials.username)
                 completion(true, nil)
@@ -106,6 +108,32 @@ class AuthenticationService {
 	
 	func hasValidSubscription() -> Bool {
 		return self.subscriptionType != .basic
+	}
+
+	func signOut(completion: @escaping (_ isSignedOut: Bool, _ errorString: String?) -> Void) {
+		let request = UnregisterDeviceRequest()
+		request.auth = self.userCredentials()
+		request.hasAuth = true
+		self.bondService.unregisterDevice(with: request) { (response, error) in
+			if error != nil || response?.errorArray.count != 0 {
+				completion(false, AuthenticationService.generalErrorMessage)
+			} else {
+				completion(true, nil)
+			}
+		}
+	}
+
+	func deleteAccount(completion: @escaping (_ isDeleteSent: Bool, _ errorString: String?) -> Void) {
+		if let cred = self.userCredentials() {
+			self.bondService.requestDelete(withRequest: cred) { (response, error) in
+				if error != nil || response?.errorArray.count != 0 {
+					completion(false, AuthenticationService.generalErrorMessage)
+				} else {
+					completion(true, nil)
+				}
+				print("Response -- \(response) -- Error: \(error)")
+			}
+		}
 	}
 
 	func userCredentials() -> UserAuth? {

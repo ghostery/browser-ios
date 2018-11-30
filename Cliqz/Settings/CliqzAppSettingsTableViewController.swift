@@ -26,7 +26,13 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         let connectSettingsFooter = NSLocalizedString("Connect Cliqz on your computer with Cliqz on your iOS device. This will allow you to send tabs from your desktop to your mobile device. You can also directly download videos from your desktop browser to your mobile device.", tableName: "Cliqz", comment: "[Settings] Connect section footer")
         settings += [ SettingSection(title: NSAttributedString(string: connectSettingsTitle), footerTitle: NSAttributedString(string: connectSettingsFooter), children: conenctSettings)]
         #endif
-        
+		
+		// Account Settings
+		#if PAID
+		let accountSettings = generateAccountSettings(prefs: prefs)
+		let accountSettingsTitle = NSLocalizedString("", tableName: "Cliqz", comment: "[Settings] TBD")
+		settings += [SettingSection(title: NSAttributedString(string: accountSettingsTitle), children: accountSettings)]
+		#endif
         // Search Settings
         let searchSettings = generateSearchSettings(prefs: prefs)
         let searchSettingsTitle = NSLocalizedString("Search", tableName: "Cliqz", comment: "[Settings] Search section title")
@@ -66,7 +72,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     // MARK:- Helper methods
     private func generateSearchSettings(prefs: Prefs) -> [Setting] {
         
-        let complementarySearchSetting      = ComplementarySearchSetting(settings: self)
+        let complementarySearchSetting = ComplementarySearchSetting(settings: self)
         #if PAID
         return [complementarySearchSetting]
         #else
@@ -153,9 +159,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         
         return privacySettings
     }
-    
-    
-    
+
     private func generateHelpSettings(prefs: Prefs) -> [Setting] {
         #if PAID
 //            let lumenThemeSetting = BoolSetting(prefs: prefs,
@@ -194,6 +198,10 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         
         return [RateUsSetting(), AboutSetting()]
     }
-    
-    
+	
+	#if PAID
+	private func generateAccountSettings(prefs: Prefs) -> [Setting] {
+		return [LumenAccountSetting()]
+	}
+	#endif
 }

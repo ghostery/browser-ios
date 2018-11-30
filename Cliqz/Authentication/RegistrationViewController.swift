@@ -135,7 +135,8 @@ class RegistrationViewController: UIViewController {
 			registerDevice(cred)
 		} else {
 			self.enableEditing(true)
-			showErrorMessage("Please specify valid email")
+			let invalidErrorMessage = NSLocalizedString("Please specify valid email", tableName: "Cliqz", comment: "Invalid email error message")
+			showErrorMessage(invalidErrorMessage)
 		}
 	}
 

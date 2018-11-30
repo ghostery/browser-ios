@@ -144,7 +144,9 @@ class EmailVerificationViewController: UIViewController {
 	}
 
 	private func showAlertView() {
-		let linkSent = UIAlertController(title: "Activation Link Resent", message: "We resent the activation link. Please check your inbox and your spam folder.", preferredStyle: .alert)
+		let title = NSLocalizedString("Activation Link Resent", tableName: "Cliqz", comment: "Alert title")
+		let message = NSLocalizedString("We resent the activation link. Please check your inbox and your spam folder.", tableName: "Cliqz", comment: "Activation message")
+		let linkSent = UIAlertController(title: title, message: message, preferredStyle: .alert)
 		
 		let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
 		linkSent.addAction(cancelAction)
