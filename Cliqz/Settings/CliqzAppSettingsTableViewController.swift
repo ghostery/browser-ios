@@ -100,8 +100,6 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         return [regionalSetting, blockExplicitContentSettings, humanWebSetting, cliqzSearchSetting, complementarySearchSetting]
         
         #endif
-        
-        
     }
     
     private func generateCliqzTabSettings(prefs: Prefs) -> [Setting] {

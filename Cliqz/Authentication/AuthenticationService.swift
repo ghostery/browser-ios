@@ -162,7 +162,7 @@ class AuthenticationService {
 		return UIDevice.current.identifierForVendor?.uuidString ?? ""
 	}
 
-	private func getRegisteredEmail() -> String? {
+	func getRegisteredEmail() -> String? {
 		return LocalDataStore.defaults.value(forKey: AuthenticationService.registeredEmailKey) as? String
 	}
 
