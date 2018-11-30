@@ -286,8 +286,13 @@ class SupportSetting: Setting {
         else if let nav = navigationController as? SettingsNavigationController, let vc = nav.popoverDelegate as? BrowserViewController {
             let mailVC = MFMailComposeViewController()
             mailVC.mailComposeDelegate = vc
+            #if PAID
+            mailVC.setToRecipients(["support@lumenbrowser.com"])
+            mailVC.setSubject("Lumen Mobile Browser Feedback")
+            #else
             mailVC.setToRecipients(["mobile@ghostery.com"])
             mailVC.setSubject("Ghostery Mobile Browser Feedback")
+            #endif
             mailVC.setMessageBody("[\(UIDevice.current.modelName), \(UIDevice.current.systemVersion), \(AppStatus.distVersion()), \(AppStatus.extensionVersion())]", isHTML: false)
             
             vc.present(mailVC, animated: true, completion: nil)
