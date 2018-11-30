@@ -52,7 +52,7 @@ class RegistrationConfirmationViewController: UIViewController {
 			make.left.equalToSuperview().offset(29)
 			make.right.equalToSuperview().offset(-29)
 			make.bottom.equalTo(self.startButton.snp.top).offset(-40)
-			make.height.equalTo(45)
+			make.height.equalTo(60)
 		}
 		self.titleLabel.snp.remakeConstraints { (make) in
 			make.centerX.equalToSuperview()
@@ -61,7 +61,7 @@ class RegistrationConfirmationViewController: UIViewController {
 		}
 		self.image.snp.remakeConstraints { (make) in
 			make.centerX.equalToSuperview()
-			make.bottom.equalTo(self.titleLabel.snp.top).offset(-104)
+			make.bottom.equalTo(self.titleLabel.snp.top).offset(-60)
 		}
 	}
 	
@@ -83,7 +83,7 @@ class RegistrationConfirmationViewController: UIViewController {
 		self.descriptionLabel.textAlignment = .center
 		self.descriptionLabel.textColor = AuthenticationUX.textColor
 		self.descriptionLabel.font = AuthenticationUX.subtitleFont
-		self.descriptionLabel.numberOfLines = 2
+		self.descriptionLabel.numberOfLines = 3
 		self.descriptionLabel.lineBreakMode = .byWordWrapping
 
 		self.startButton.setTitle(NSLocalizedString("Start", tableName: "Cliqz", comment: ""), for: .normal)
