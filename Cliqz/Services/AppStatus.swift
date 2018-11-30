@@ -9,7 +9,9 @@
 import Foundation
 
 class AppStatus {
-    #if GHOSTERY
+    #if PAID
+    static let AppId = "1444118792"
+    #elseif GHOSTERY
     static let AppId = "472789016"
     #else
     static let AppId = "1065837334"
