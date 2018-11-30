@@ -123,7 +123,7 @@ class RegistrationViewController: UIViewController {
 		}
 		self.image.snp.remakeConstraints { (make) in
 			make.centerX.equalToSuperview()
-			make.bottom.equalTo(self.titleLabel.snp.top).offset(-104)
+			make.bottom.equalTo(self.titleLabel.snp.top).offset(-70)
 		}
 	}
 
@@ -343,7 +343,7 @@ extension UINavigationController {
 }
 
 extension RegistrationViewController: UIGestureRecognizerDelegate {
-	
+
 	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
 		if gestureRecognizer is UITapGestureRecognizer {
 			if let _ = gestureRecognizer.view as? UIButton {

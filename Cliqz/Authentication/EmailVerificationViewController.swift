@@ -66,7 +66,7 @@ class EmailVerificationViewController: UIViewController {
 		}
 		self.image.snp.remakeConstraints { (make) in
 			make.centerX.equalToSuperview()
-			make.bottom.equalTo(self.titleLabel.snp.top).offset(-104)
+			make.bottom.equalTo(self.titleLabel.snp.top).offset(-70)
 		}
 	}
 
