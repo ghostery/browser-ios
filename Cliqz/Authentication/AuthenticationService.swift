@@ -33,7 +33,7 @@ class AuthenticationService {
     func registerDevice(_ credentials: UserAuth, completion: @escaping (_ isRegistered: Bool, _ errorString: String?) -> Void) {
         let reg = RegisterDeviceRequest()
         reg.auth = credentials
-        reg.description_p = "mobile-iOS"
+        reg.description_p = UIDevice.current.name
         bondService.registerDevice(with: reg) { (response, err) in
             if let errs = response?.errorArray as? [BondAPI.Error],
 				errs.count > 0 {
