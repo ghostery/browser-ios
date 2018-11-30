@@ -616,7 +616,8 @@ class CCCompaniesWidget: CCWidget {
     
     func updateView(quanitity: Int) {
         let attributedText = NSMutableAttributedString(string: String(quanitity), attributes: CCCompaniesWidget.QuantityFontAttributes)
-        let auxText = NSAttributedString(string: "FIRMEN", attributes: CCCompaniesWidget.ScaleFontAttributes)
+        let auxText = NSAttributedString(string: NSLocalizedString("Companies", tableName: "Lumen", comment:"[Lumen->Dashboard] Companies"),
+                                         attributes: CCCompaniesWidget.ScaleFontAttributes)
         mainLabel?.attributedText = attributedText
         auxLabel?.attributedText = auxText
     }

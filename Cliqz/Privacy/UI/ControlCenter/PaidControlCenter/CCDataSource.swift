@@ -71,27 +71,27 @@ protocol CCDataSourceProtocol {
 typealias CellDescription = (Period) -> String
 
 let timeSavedDesc: CellDescription = ({ period in
-    return "für die wichtigen Dinge im Leben."
+    return NSLocalizedString("for things that really matter", tableName: "Lumen", comment:"[Lumen->Dashboard] time saved widget description")
 })
 
 let adsBlockedDesc: CellDescription = ({ period in
-    return "für ungestörtes Surfen"
+    return NSLocalizedString("Enjoy clutter-free browsing", tableName: "Lumen", comment:"[Lumen->Dashboard] AdsBlock widget description")
 })
 
 let dataSavedDesc: CellDescription = ({ period in
-    return "Keine Daten für Werbung verschwendet"
+    return NSLocalizedString("Enjoy clutter-free browsing", tableName: "Lumen", comment:"[Lumen->Dashboard] Data Saved widget description")
 })
 
 let batterySavedDesc: CellDescription = ({ period in
-    return "Damit du länger surfen kannst"
+    return NSLocalizedString("for longer device usage", tableName: "Lumen", comment:"[Lumen->Dashboard] Battery Saved widget description")
 })
 
 let companiesDesc: CellDescription = ({ period in
-    return "So viele Tracking-Firmen wollten dich ausspionieren"
+    return NSLocalizedString("Number of tracker companies that tried to spy on you", tableName: "Lumen", comment:"[Lumen->Dashboard] Tracking companies widget description")
 })
 
 let phishingDesc: CellDescription = ({ period in
-    return "verhindert Identitätsdiebstahl durch betrügerische Webseiten"
+    return NSLocalizedString("prevents identity theft by fraudulent websites", tableName: "Lumen", comment:"[Lumen->Dashboard] Phishing protection widget description")
 })
 
 let moneySavedDesc: CellDescription = ({ period in
@@ -134,12 +134,36 @@ class CCDataSource {
     
     init() {
         //create the cells here
-        let timeSaved = CCCell(title: "Zeit gespart", description: timeSavedDesc, widget: CCTimeSavedWidget(), cellHeight: 250)
-        let adsBlocked = CCCell(title: "Werbungen entfernt", description: adsBlockedDesc, widget: CCAdsBlockedWidget(), cellHeight: 250)
-        let dataSaved = CCCell(title: "Datenvolumen gespart", description: dataSavedDesc, widget: CCDataSavedWidget(), cellHeight: 120)
-        let batterySaved = CCCell(title: "Akkulaufzeit verlängert", description: batterySavedDesc, widget: CCBatterySavedWidget(), cellHeight: 120)
-        let companies = CCCell(title: "Datensammler abgewehrt", description: companiesDesc, widget: CCCompaniesWidget(), cellHeight: 120)
-        let phishingProtection = CCCell(title: "Phishing-Schutz", description: phishingDesc, widget: CCAntiPhishingWidget(), cellHeight: 120)
+        let timeSaved = CCCell(title: NSLocalizedString("Time Saved", tableName: "Lumen", comment:"[Lumen->Dashboard] Time Saved widget title"),
+                               description: timeSavedDesc,
+                               widget: CCTimeSavedWidget(),
+                               cellHeight: 250)
+        
+        let adsBlocked = CCCell(title: NSLocalizedString("Ads Blocked", tableName: "Lumen", comment:"[Lumen->Dashboard] Ads Blocked widget title"),
+                                description: adsBlockedDesc,
+                                widget: CCAdsBlockedWidget(),
+                                cellHeight: 250)
+        
+        let dataSaved = CCCell(title: NSLocalizedString("Data Volume Saved", tableName: "Lumen", comment:"[Lumen->Dashboard] Data Volume Saved widget title"),
+                               description: dataSavedDesc,
+                               widget: CCDataSavedWidget(),
+                               cellHeight: 120)
+        
+        let batterySaved = CCCell(title: NSLocalizedString("Battery Life Saved", tableName: "Lumen", comment:"[Lumen->Dashboard] Battery Life Saved widget title"),
+                                  description: batterySavedDesc,
+                                  widget: CCBatterySavedWidget(),
+                                  cellHeight: 120)
+        
+        let companies = CCCell(title: NSLocalizedString("Data Collectors Detained", tableName: "Lumen", comment:"[Lumen->Dashboard]  widget title"),
+                               description: companiesDesc,
+                               widget: CCCompaniesWidget(),
+                               cellHeight: 120)
+        
+        let phishingProtection = CCCell(title: NSLocalizedString("Phishing Protection", tableName: "Lumen", comment:"[Lumen->Dashboard] Phishing Protection widget title"),
+                                        description: phishingDesc,
+                                        widget: CCAntiPhishingWidget(),
+                                        cellHeight: 120)
+        
 //        let moneySaved = CCCell(title: "Geld gespart", description: moneySavedDesc, widget: CCMoneySavedWidget(), cellHeight: 204, optionalView: IncomeSlider(), optionalViewHeight: 84)
         
         cells = [timeSaved, adsBlocked, dataSaved, batterySaved, companies, phishingProtection]
