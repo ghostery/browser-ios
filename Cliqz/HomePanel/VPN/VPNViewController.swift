@@ -416,9 +416,9 @@ class VPNViewController: UIViewController {
     
     func updateInfoLabel() {
         
-        let connectedText = "You are safely connected to the Internet."
-        let retryText = "You are safely connected to the Internet."
-        let defaultText = "Turn on VPN protection to browse safely on the Internet."
+        let connectedText = NSLocalizedString("You are safely connected to the Internet.", tableName: "Lumen", comment: "VPN connected text")
+        let retryText = NSLocalizedString("You are safely connected to the Internet.", tableName: "Lumen", comment: "VPN retry text")
+        let defaultText = NSLocalizedString("Tap 'connect' to browse the Internet with VPN protection.", tableName: "Lumen", comment: "VPN default text")
         
         if VPNStatus == .connected {
             self.infoLabel.text = connectedText
