@@ -39,6 +39,7 @@ extension UIColor {
     static let lumenBrightBlue = UIColor(colorString: "3073DB")
     static let lumenDeepBlue = UIColor(colorString: "0D0F22")
     static let lumenPurple = UIColor(colorString: "151834")
+    static let lumenDisabled = UIColor(colorString: "BDC0CE")
 }
 
 struct Lumen {
@@ -257,22 +258,22 @@ struct Lumen {
         }
         
         static let shadowColor: LumenColor = { name, mode in
-            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue]]
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Disabled: .lumenDisabled], .Dark: [.Normal: .lumenBrightBlue, .Disabled: .lumenDisabled]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
         static let widgetTextColor: LumenColor = { name, mode in
-            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .black], .Dark: [.Normal: .white, .Disabled: .white]]
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .lumenDisabled], .Dark: [.Normal: .white, .Disabled: .lumenDisabled]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
         static let titleColor: LumenColor = { name, mode in
-            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .black], .Dark: [.Normal: .white, .Disabled: .white]]
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .lumenDisabled], .Dark: [.Normal: .white, .Disabled: .lumenDisabled]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
         static let descriptionColor: LumenColor = { name, mode in
-            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .black], .Dark: [.Normal: .white, .Disabled: .white]]
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .lumenDisabled], .Dark: [.Normal: .white, .Disabled: .lumenDisabled]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
@@ -323,6 +324,41 @@ struct Lumen {
             let bright = UIImage(named: "CCClear_Bright")
             let dark   = UIImage(named: "CCClear_Dark")
             let combo: LumenImageCombo  = [.Light: [.Normal: bright, .Disabled: bright], .Dark: [.Normal: dark, .Disabled: dark]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let timeSavedImage: LumenImage = { name, mode in
+            let enabled  = UIImage(named: "CCCircle_Normal")
+            let disabled = UIImage(named: "CCCircle_Disabled")
+            let combo: LumenImageCombo  = [.Light: [.Normal: enabled, .Disabled: disabled], .Dark: [.Normal: enabled, .Disabled: disabled]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let adsBlockedImage: LumenImage = { name, mode in
+            let enabled  = UIImage(named: "CCAdBlocking_Normal")
+            let disabled = UIImage(named: "CCAdBlocking_Disabled")
+            let combo: LumenImageCombo  = [.Light: [.Normal: enabled, .Disabled: disabled], .Dark: [.Normal: enabled, .Disabled: disabled]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let batterySavedImage: LumenImage = { name, mode in
+            let enabled  = UIImage(named: "CCBattery_Normal")
+            let disabled = UIImage(named: "CCBattery_Disabled")
+            let combo: LumenImageCombo  = [.Light: [.Normal: enabled, .Disabled: disabled], .Dark: [.Normal: enabled, .Disabled: disabled]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let companiesBlockedImage: LumenImage = { name, mode in
+            let enabled  = UIImage(named: "CCCompanies_Normal")
+            let disabled = UIImage(named: "CCCompanies_Disabled")
+            let combo: LumenImageCombo  = [.Light: [.Normal: enabled, .Disabled: disabled], .Dark: [.Normal: enabled, .Disabled: disabled]]
+            return combo[name]?[mode] ?? nil
+        }
+        
+        static let antiphisingImage: LumenImage = { name, mode in
+            let enabled  = UIImage(named: "CCHook_Normal")
+            let disabled = UIImage(named: "CCHook_Disabled")
+            let combo: LumenImageCombo  = [.Light: [.Normal: enabled, .Disabled: disabled], .Dark: [.Normal: enabled, .Disabled: disabled]]
             return combo[name]?[mode] ?? nil
         }
     }

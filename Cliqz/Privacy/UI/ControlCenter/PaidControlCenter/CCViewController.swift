@@ -5,7 +5,7 @@
 //  Created by Tim Palade on 10/22/18.
 //  Copyright © 2018 Tim Palade. All rights reserved.
 //
-
+#if PAID
 import UIKit
 
 protocol CCCollectionDataSourceProtocol: class {
@@ -76,6 +76,16 @@ class CCCollectionViewController: UIViewController {
             }
         }
     }
+    
+    func update() {
+        if let rows = dataSource?.numberOfRows() {
+            for i in 0..<rows {
+                if let cell = dataSource?.cellFor(index: i) as? UpdateViewProtocol {
+                    cell.update()
+                }
+            }
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -94,3 +104,4 @@ class CCCollectionViewController: UIViewController {
     */
 
 }
+#endif

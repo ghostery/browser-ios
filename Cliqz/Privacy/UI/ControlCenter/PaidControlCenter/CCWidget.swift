@@ -192,6 +192,10 @@ class CCWidgetManager {
         registeredWidgets.insert(widget)
     }
     
+    func updateAppearance() {
+        
+    }
+    
     //period changed
     func update(period: Period) {
         currentPeriod = period
@@ -324,6 +328,8 @@ class CCWidget: UIView {
     
     func update() {
         //to be overriden
+        mainLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
+        auxLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
     }
 }
 
@@ -342,9 +348,6 @@ class CCTimeSavedWidget: CCWidget {
         
         mainLabel?.adjustsFontSizeToFitWidth = true
         auxLabel?.adjustsFontSizeToFitWidth = true
-        
-        mainLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
-        auxLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
         
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -365,8 +368,6 @@ class CCTimeSavedWidget: CCWidget {
             make.height.equalTo(70)
         }
         
-        imageView?.image = UIImage(named: "CCCircle")
-        
         update()
     }
     
@@ -375,6 +376,8 @@ class CCTimeSavedWidget: CCWidget {
     }
     
     override func update() {
+        super.update()
+        imageView?.image = Lumen.Dashboard.timeSavedImage(lumenTheme, lumenDashboardMode)
         let (quantity, scale) = CCWidgetManager.shared.savedTime()
         mainLabel?.text = String(quantity)
         auxLabel?.text = scale
@@ -393,9 +396,6 @@ class CCAdsBlockedWidget: CCWidget {
         mainLabel?.adjustsFontSizeToFitWidth = true
         auxLabel?.adjustsFontSizeToFitWidth = true
         
-        mainLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
-        auxLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
-        
         self.addSubview(imageView!)
         self.addSubview(mainLabel!)
         
@@ -407,7 +407,6 @@ class CCAdsBlockedWidget: CCWidget {
             make.center.equalTo(imageView!.snp.center)
         }
         
-        imageView?.image = UIImage(named: "CCAdBlocking")
         update()
     }
     
@@ -416,18 +415,23 @@ class CCAdsBlockedWidget: CCWidget {
     }
     
     override func update() {
+        super.update()
+        imageView?.image = Lumen.Dashboard.adsBlockedImage(lumenTheme, lumenDashboardMode)
         let quantity = CCWidgetManager.shared.adsBlocked()
         mainLabel?.text = String(quantity)
     }
 }
 
 class CCDataSavedWidget: CCWidget {
-    static private let QuantityFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 50, weight: .ultraLight),
-                                                 NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
+    var QuantityFontAttributes: [NSAttributedStringKey: Any] {
+        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 50, weight: .ultraLight),
+                NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
+    }
     
-    static private let ScaleFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 50, weight: .medium),
-                                              NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
-    
+    var ScaleFontAttributes: [NSAttributedStringKey: Any] {
+        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 50, weight: .medium),
+                NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
+    }
     
     init() {
         super.init(frame: CGRect.zero)
@@ -442,9 +446,6 @@ class CCDataSavedWidget: CCWidget {
         
         mainLabel?.adjustsFontSizeToFitWidth = true
         auxLabel?.adjustsFontSizeToFitWidth = true
-        
-        mainLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
-        auxLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
         
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -468,32 +469,34 @@ class CCDataSavedWidget: CCWidget {
     }
     
     func updateView(quanitity: String, scale: String) {
-        mainLabel?.attributedText = NSAttributedString(string: quanitity, attributes: CCDataSavedWidget.QuantityFontAttributes)
-        auxLabel?.attributedText = NSAttributedString(string: scale, attributes: CCDataSavedWidget.ScaleFontAttributes)
+        mainLabel?.attributedText = NSAttributedString(string: quanitity, attributes: QuantityFontAttributes)
+        auxLabel?.attributedText = NSAttributedString(string: scale, attributes: ScaleFontAttributes)
     }
     
     override func update() {
+        super.update()
         let (quantity, scale) = CCWidgetManager.shared.dataSaved()
         updateView(quanitity: quantity, scale: scale)
     }
 }
 
 class CCBatterySavedWidget: CCWidget {
-    static private let QuantityFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 36, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
-    static private let ScaleFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
+    var QuantityFontAttributes: [NSAttributedStringKey: Any] {
+        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 36, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
+    }
+    var ScaleFontAttributes: [NSAttributedStringKey: Any] {
+        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
+    }
     
     init() {
         super.init(frame: CGRect.zero)
         
-        imageView = UIImageView(image: UIImage.init(named: "CCBattery"))
+        imageView = UIImageView()
         mainLabel = UILabel()
         mainLabel?.textAlignment = .center
         
         mainLabel?.adjustsFontSizeToFitWidth = true
         auxLabel?.adjustsFontSizeToFitWidth = true
-        
-        mainLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
-        auxLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
         
         self.addSubview(imageView!)
         self.addSubview(mainLabel!)
@@ -519,12 +522,14 @@ class CCBatterySavedWidget: CCWidget {
     }
     
     func updateView(quanitity: String, scale: String) {
-        let attributedText = NSMutableAttributedString(string: quanitity, attributes: CCBatterySavedWidget.QuantityFontAttributes)
-        attributedText.append(NSAttributedString(string: scale, attributes: CCBatterySavedWidget.ScaleFontAttributes))
+        let attributedText = NSMutableAttributedString(string: quanitity, attributes: QuantityFontAttributes)
+        attributedText.append(NSAttributedString(string: scale, attributes: ScaleFontAttributes))
         mainLabel?.attributedText = attributedText
     }
     
     override func update() {
+        super.update()
+        imageView?.image = Lumen.Dashboard.batterySavedImage(lumenTheme, lumenDashboardMode)
         let (quantity, scale) = CCWidgetManager.shared.batterySaved()
         updateView(quanitity: quantity, scale: scale)
     }
@@ -535,36 +540,44 @@ class CCAntiPhishingWidget: CCWidget {
     init() {
         super.init(frame: CGRect.zero)
         
-        imageView = UIImageView(image: UIImage.init(named: "CCHook"))
+        imageView = UIImageView()
         
         mainLabel?.adjustsFontSizeToFitWidth = true
         auxLabel?.adjustsFontSizeToFitWidth = true
-        
-        mainLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
-        auxLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
         
         self.addSubview(imageView!)
         
         imageView!.snp.makeConstraints({ (make) in
             make.center.equalToSuperview()
         })
+        
+        update()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func update() {
+        super.update()
+        imageView?.image = Lumen.Dashboard.antiphisingImage(lumenTheme, lumenDashboardMode)
+    }
 }
 
 class CCCompaniesWidget: CCWidget {
-    static private let QuantityFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 36, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
-    static private let ScaleFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
+    var QuantityFontAttributes: [NSAttributedStringKey: Any] {
+        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 36, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
+    }
+    var ScaleFontAttributes: [NSAttributedStringKey: Any] {
+        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
+    }
     
     init() {
         super.init(frame: CGRect.zero)
         
-        imageView = UIImageView(image: UIImage.init(named: "CCCompanies"))
-        
         let container = UIView()
+        
+        imageView = UIImageView()
         
         mainLabel = UILabel()
         mainLabel?.textAlignment = .center
@@ -576,9 +589,6 @@ class CCCompaniesWidget: CCWidget {
         
         mainLabel?.adjustsFontSizeToFitWidth = true
         auxLabel?.adjustsFontSizeToFitWidth = true
-        
-        mainLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
-        auxLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
         
         self.addSubview(container)
         container.addSubview(imageView!)
@@ -615,14 +625,15 @@ class CCCompaniesWidget: CCWidget {
     }
     
     func updateView(quanitity: Int) {
-        let attributedText = NSMutableAttributedString(string: String(quanitity), attributes: CCCompaniesWidget.QuantityFontAttributes)
-        let auxText = NSAttributedString(string: NSLocalizedString("Companies", tableName: "Lumen", comment:"[Lumen->Dashboard] Companies"),
-                                         attributes: CCCompaniesWidget.ScaleFontAttributes)
+        let attributedText = NSMutableAttributedString(string: String(quanitity), attributes: QuantityFontAttributes)
+        let auxText = NSAttributedString(string: "FIRMEN", attributes: ScaleFontAttributes)
         mainLabel?.attributedText = attributedText
         auxLabel?.attributedText = auxText
     }
     
     override func update() {
+        super.update()
+        imageView?.image = Lumen.Dashboard.companiesBlockedImage(lumenTheme, lumenDashboardMode)
         let quantity = CCWidgetManager.shared.companies()
         updateView(quanitity: quantity)
     }

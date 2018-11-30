@@ -23,7 +23,7 @@ var lumenTheme: LumenThemeName {
     return .Light
 }
 
-let lumenDashboardMode: LumenThemeMode = .Normal
+var lumenDashboardMode: LumenThemeMode = UserPreferences.instance.isProtectionOn ? .Normal : .Disabled
 
 class PaidControlCenterViewController: ControlCenterViewController {
     
@@ -51,7 +51,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
                                                object: nil)
         
         controls.delegate = self
-        dashboard.dataSource = self
+        dashboard.dataSource = cellDataSource
         
         self.addChildViewController(dashboard)
         self.view.addSubview(controls)
@@ -148,7 +148,10 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
     
     func startButtonPressed() {
         UserPreferences.instance.isProtectionOn = !UserPreferences.instance.isProtectionOn
+        lumenDashboardMode = UserPreferences.instance.isProtectionOn ? .Normal : .Disabled
+        
         updateProtectionLabel(isOn: UserPreferences.instance.isProtectionOn)
+        dashboard.update()
     }
     
     func clearButtonPressed() {
@@ -176,67 +179,6 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
         }
     }
     
-}
-
-extension PaidControlCenterViewController: CCCollectionDataSourceProtocol {
-    func numberOfRows() -> Int {
-        return cellDataSource.numberOfCells() - 1
-    }
-    
-    func heightFor(index: Int) -> CGFloat {
-        if index == 0 {
-            return cellDataSource.heightFor(index: 0)
-        }
-        return cellDataSource.heightFor(index: index + 1)
-    }
-    
-    func cellFor(index: Int) -> UIView {
-        if index == 0 {
-            let v = UIStackView()
-            
-            v.axis = .horizontal
-            //v.spacing = 10
-            v.distribution = .equalSpacing
-            
-            let c1 = CCVerticalCell(widgetRatio: CCUX.VerticalContentWidgetRatio, descriptionRatio: 1 - CCUX.VerticalContentWidgetRatio)
-            let c2 = CCVerticalCell(widgetRatio: CCUX.VerticalContentWidgetRatio, descriptionRatio: 1 - CCUX.VerticalContentWidgetRatio)
-            
-            v.addArrangedSubview(c1)
-            v.addArrangedSubview(c2)
-            
-            c1.snp.makeConstraints { (make) in
-                make.width.equalToSuperview().dividedBy(2).offset(-5)
-                make.height.equalToSuperview()
-            }
-            
-            c2.snp.makeConstraints { (make) in
-                make.width.equalToSuperview().dividedBy(2).offset(-5)
-                make.height.equalToSuperview()
-            }
-            
-            cellDataSource.configureCell(cell: c1, index: 0, period: currentPeriod)
-            cellDataSource.configureCell(cell: c2, index: 1, period: currentPeriod)
-            
-            return v
-        }
-        
-        let cell = CCHorizontalCell(widgetRatio: CCUX.HorizontalContentWigetRatio,
-                                    descriptionRatio: 1 - CCUX.HorizontalContentWigetRatio,
-                                    optionalView: cellDataSource.optionalView(index: index + 1),
-                                    optionalViewHeight: cellDataSource.optionalViewHeight(index: index + 1))
-        
-        cellDataSource.configureCell(cell: cell, index: index + 1, period: currentPeriod)
-        
-        return cell
-    }
-    
-    func cellSpacing() -> CGFloat {
-        return 22.0
-    }
-    
-    func horizontalPadding() -> CGFloat {
-        return 20
-    }
 }
 
 protocol CCControlViewProtocol: class {

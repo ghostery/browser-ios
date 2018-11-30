@@ -9,13 +9,17 @@
 import UIKit
 import SnapKit
 
+protocol UpdateViewProtocol {
+    func update()
+}
+
 struct CCCellUX {
     static let CornerRadius: CGFloat = 20.0
     static let ShadowRadius: CGFloat = 4.0
     static let ShadowOpacity: Float = 0.9
 }
 
-class CCAbstractCell: UIView {
+class CCAbstractCell: UIView, UpdateViewProtocol {
 
     var titleLabel: UILabel = UILabel()
     var descriptionLabel: UILabel = UILabel()
@@ -93,6 +97,15 @@ class CCAbstractCell: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func update() {
+        //to be overriden
+        self.backgroundColor = Lumen.Dashboard.widgetBackgroundColor(lumenTheme, lumenDashboardMode)
+        self.layer.shadowColor = Lumen.Dashboard.shadowColor(lumenTheme, lumenDashboardMode).cgColor
+        titleLabel.textColor = Lumen.Dashboard.titleColor(lumenTheme, lumenDashboardMode)
+        descriptionLabel.textColor = Lumen.Dashboard.descriptionColor(lumenTheme, lumenDashboardMode)
+        widget?.update()
+    }
 }
 
 class CCVerticalCell: CCAbstractCell {
@@ -130,6 +143,10 @@ class CCVerticalCell: CCAbstractCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func update() {
+        super.update()
     }
 }
 
@@ -194,6 +211,10 @@ class CCHorizontalCell: CCAbstractCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func update() {
+        super.update()
     }
 }
 

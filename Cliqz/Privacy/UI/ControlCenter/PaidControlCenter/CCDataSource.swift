@@ -12,58 +12,11 @@ class OptionalView: UIView {
     
 }
 
-class IncomeSlider: OptionalView {
-    let slider = UISlider()
-
-    let max: Float = 200
-    
-    static let defaultValue: Int = 60 //euros
-    let defaultSliderValueValue: Float = Float(IncomeSlider.defaultValue)/200
-    
-    let floatingLabel = UILabel()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        addSubview(slider)
-        addSubview(floatingLabel)
-        slider.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview().offset(-40)
-        }
-        
-        floatingLabel.textAlignment = .center
-        
-        floatingLabel.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(slider.snp.bottom).offset(10)
-        }
-        
-        slider.value = defaultSliderValueValue
-        floatingLabel.text = "\(IncomeSlider.defaultValue) EUR / Stunde"
-        floatingLabel.textColor = CCUX.CliqzBlueGlow
-        floatingLabel.font = UIFont.systemFont(ofSize: 20)
-        
-        slider.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
-        slider.setThumbImage(UIImage(named: "CCSliderThumb"), for: .normal)
-        slider.tintColor = CCUX.CliqzBlueGlow //UIColor(red:0.24, green:0.40, blue:0.54, alpha:1.00)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    @objc func valueChanged(_ slider: UISlider) {
-        floatingLabel.text = "\(Int(slider.value * max)) EUR / Stunde"
-    }
-}
-
 protocol CCDataSourceProtocol {
     func titleFor(index: Int) -> String
     func descriptionFor(index: Int, period: Period) -> String
+    func cellViewHeight(index: Int) -> CGFloat
     func widgetFor(index: Int) -> CCWidget
-    func numberOfCells() -> Int
     func optionalView(index: Int) -> OptionalView?
     func optionalViewHeight(index: Int) -> CGFloat?
 }
@@ -106,6 +59,20 @@ let moneySavedDesc: CellDescription = ({ period in
     return ""
 })
 
+class CellGroupView: UIStackView {
+    
+}
+
+extension CellGroupView: UpdateViewProtocol {
+    func update() {
+        for subview in self.subviews {
+            if let s = subview as? UpdateViewProtocol {
+                s.update()
+            }
+        }
+    }
+}
+
 class CCDataSource {
     
     //struct and mapping
@@ -130,7 +97,9 @@ class CCDataSource {
         }
     }
     
+    var currentPeriod: Period = .Today
     var cells: [CCCell] = []
+    var cellViews: [UIView] = []
     
     init() {
         //create the cells here
@@ -164,15 +133,89 @@ class CCDataSource {
                                         widget: CCAntiPhishingWidget(),
                                         cellHeight: 120)
         
-//        let moneySaved = CCCell(title: "Geld gespart", description: moneySavedDesc, widget: CCMoneySavedWidget(), cellHeight: 204, optionalView: IncomeSlider(), optionalViewHeight: 84)
-        
         cells = [timeSaved, adsBlocked, dataSaved, batterySaved, companies, phishingProtection]
+        createCellViews()
+    }
+    
+    func createCellViews() {
+        
+        //first group time saved and adsblocked
+        let group = createTimeSaveAdsBlockedGroup()
+        cellViews.append(group)
+        
+        //add the rest
+        for i in 2..<cells.count {
+            let cell = CCHorizontalCell(widgetRatio: CCUX.HorizontalContentWigetRatio,
+                                        descriptionRatio: 1 - CCUX.HorizontalContentWigetRatio,
+                                        optionalView: self.optionalView(index: i),
+                                        optionalViewHeight: self.optionalViewHeight(index: i))
+            
+            self.configureCell(cell: cell, index: i, period: currentPeriod)
+            
+            cellViews.append(cell)
+        }
+    }
+    
+    func createTimeSaveAdsBlockedGroup() -> UIView {
+        let v = CellGroupView()
+        
+        v.axis = .horizontal
+        //v.spacing = 10
+        v.distribution = .equalSpacing
+        
+        let c1 = CCVerticalCell(widgetRatio: CCUX.VerticalContentWidgetRatio, descriptionRatio: 1 - CCUX.VerticalContentWidgetRatio)
+        let c2 = CCVerticalCell(widgetRatio: CCUX.VerticalContentWidgetRatio, descriptionRatio: 1 - CCUX.VerticalContentWidgetRatio)
+        
+        v.addArrangedSubview(c1)
+        v.addArrangedSubview(c2)
+        
+        c1.snp.makeConstraints { (make) in
+            make.width.equalToSuperview().dividedBy(2).offset(-5)
+            make.height.equalToSuperview()
+        }
+        
+        c2.snp.makeConstraints { (make) in
+            make.width.equalToSuperview().dividedBy(2).offset(-5)
+            make.height.equalToSuperview()
+        }
+        
+        self.configureCell(cell: c1, index: 0, period: currentPeriod)
+        self.configureCell(cell: c2, index: 1, period: currentPeriod)
+        
+        return v
     }
     
     func configureCell(cell: CCAbstractCell, index: Int, period: Period) {
         cell.descriptionLabel.text = self.descriptionFor(index: index, period: period)
         cell.titleLabel.text = self.titleFor(index: index)
         cell.widget = self.widgetFor(index: index)
+    }
+}
+
+extension CCDataSource: CCCollectionDataSourceProtocol {
+    func numberOfRows() -> Int {
+        return self.cellViews.count
+    }
+    
+    func heightFor(index: Int) -> CGFloat {
+        //special case because of the group
+        if index == 0 {
+            return self.cellViewHeight(index: 0)
+        }
+        return self.cellViewHeight(index: index + 1)
+    }
+    
+    func cellFor(index: Int) -> UIView {
+        guard cellViews.isIndexValid(index) else { return UIView() }
+        return cellViews[index]
+    }
+    
+    func cellSpacing() -> CGFloat {
+        return 22.0
+    }
+    
+    func horizontalPadding() -> CGFloat {
+        return 20
     }
 }
 
@@ -198,11 +241,7 @@ extension CCDataSource: CCDataSourceProtocol {
         return cells[index].widget
     }
     
-    func numberOfCells() -> Int {
-        return cells.count
-    }
-    
-    func heightFor(index: Int) -> CGFloat {
+    func cellViewHeight(index: Int) -> CGFloat {
         guard cells.isIndexValid(index: index) else {
             return 120
         }
