@@ -499,10 +499,6 @@ class LumenAccountSetting: Setting {
 	
 	override var style: UITableViewCellStyle { return .value1 }
 	
-	override var status: NSAttributedString {
-		return NSAttributedString(string: "")
-	}
-	
 	override var accessibilityIdentifier: String? { return "Lumen Account" }
 	
 	init() {
@@ -511,6 +507,14 @@ class LumenAccountSetting: Setting {
 		super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
 	}
 	
+	override var status: NSAttributedString? {
+		if let email = AuthenticationService.shared.getRegisteredEmail() {
+			return NSAttributedString(string: email, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor])
+		} else {
+			return nil
+		}
+	}
+
 	override func onClick(_ navigationController: UINavigationController?) {
 		let viewController = LumenAccountTableViewController()
 		viewController.title = self.title?.string
