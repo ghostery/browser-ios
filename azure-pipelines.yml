@@ -1,0 +1,67 @@
+# Xcode
+# Build, test, and archive an Xcode workspace on macOS.
+# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
+
+pool:
+  vmImage: 'macOS 10.13'
+
+steps:
+
+- script: git clone https://github.com/cliqz-oss/cliqz-mobile-tests.git --branch azure-pipelines --single-branch
+  displayName: Clone Tests
+
+- bash: |
+      sudo xcode-select --switch /Applications/Xcode_9.4.1.app
+      xcrun simctl create Test-iPhone6s com.apple.CoreSimulator.SimDeviceType.iPhone-6s com.apple.CoreSimulator.SimRuntime.iOS-11-4 > cliqz-mobile-tests/dev.id
+      xcrun simctl boot $(cat cliqz-mobile-tests/dev.id)
+      sleep 10
+      xcrun simctl list
+  displayName: 'Create a Test Simulator'
+
+- script: sudo xcode-select --switch /Applications/Xcode_9.3.1.app
+  displayName: 'set default xcode to 9.3.1'
+
+- script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
+  displayName: 'carthage bootstrap'
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    command: 'install'
+
+- task: CocoaPods@0
+  displayName: 'pod install'
+
+- task: Npm@1
+  displayName: 'npm run bundle'
+  inputs:
+    command: 'custom'
+    customCommand: 'run bundle'
+
+- script: xcodebuild -workspace Client.xcworkspace -scheme "Fennec" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=11.4,name=Test-iPhone6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
+  displayName: 'Xcode Build on Test iPhone 6s Simulator'
+
+- script: sudo xcode-select --switch /Applications/Xcode_9.4.1.app
+  displayName: 'set default xcode to 9.4.1'
+
+- bash: |
+      cd cliqz-mobile-tests
+      export DEV_NAME="Test-iPhone6s"
+      export DEV_UDID=$(cat dev.id)
+      xcrun simctl boot $(cat dev.id)
+      sleep 10
+      source scripts/azure-scripts/setup.sh ios
+      source scripts/azure-scripts/envs.sh ios
+      source scripts/azure-scripts/appium.sh
+      python testRunner.py || true
+      source scripts/azure-scripts/cleanup.sh ios
+      cat *-testreport.log
+  displayName: 'Setup and Run Tests'
+
+- task: PublishTestResults@2
+  condition: always()
+  displayName: 'Publish JUnit Test'
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'cliqz-mobile-tests/test-reports/*.xml'
