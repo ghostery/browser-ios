@@ -76,7 +76,11 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, HistoryListener> {
                 if let cursor = result.successValue {
                     // First, see if the query matches any URLs from the user's search history.
                     self.load(cursor)
-                    /* Cliqz: disable auto complete from both history and top domains
+                    // Cliqz: Disable Firefox auto complete only when Cliqz Search is ON
+                    if SettingsPrefs.shared.getCliqzSearchPref() {
+                        return
+                    }
+                    
                     for site in cursor {
                         if let url = site?.url, let completion = self.completionForURL(url) {
                             if oldValue.count < self.query.count {
@@ -95,7 +99,6 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, HistoryListener> {
                             return
                         }
                     }
-                    */
                 }
             }
             
