@@ -239,10 +239,8 @@ class LumenIntroViewController: UIViewController {
 //MARK:- OptInViewDelegate
 extension LumenIntroViewController: OptInViewDelegate {
     func toggled(value: Bool) {
-        if pageControl.currentPage == 0 {
-            SettingsPrefs.shared.updateSendUsageDataPref(value)
-            SettingsPrefs.shared.updateSendCrashReportsPref(value)
-        }
+        SettingsPrefs.shared.updateSendUsageDataPref(value)
+        SettingsPrefs.shared.updateSendCrashReportsPref(value)
     }
 }
 
