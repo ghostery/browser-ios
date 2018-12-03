@@ -23,6 +23,7 @@ extension BrowserViewController {
     }
     
     func shouldShowKeyboard() -> Bool {
+        #if !PAID
         if profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
             return false
         }
@@ -40,6 +41,7 @@ extension BrowserViewController {
             return url.isAboutURL
         }
         
+        #endif
         return false
     }
 
