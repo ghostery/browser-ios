@@ -330,6 +330,7 @@ class CCWidget: UIView {
         //to be overriden
         mainLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
         auxLabel?.textColor = Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)
+        self.alpha = (lumenDashboardMode == .Normal) ? 1.0 : 0.7
     }
 }
 
