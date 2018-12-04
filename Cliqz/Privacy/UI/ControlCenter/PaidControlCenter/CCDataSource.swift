@@ -211,7 +211,7 @@ extension CCDataSource: CCCollectionDataSourceProtocol {
     }
     
     func cellSpacing() -> CGFloat {
-        return 22.0
+        return 10.0
     }
     
     func horizontalPadding() -> CGFloat {
