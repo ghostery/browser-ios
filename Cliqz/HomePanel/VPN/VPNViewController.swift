@@ -123,7 +123,7 @@ class VPN {
         
         let country = VPNEndPointManager.shared.selectedCountry
         guard let creds = VPNEndPointManager.shared.getCredentials(country: country) else { return }
-        
+
         NEVPNManager.shared().loadFromPreferences { (error) in
             if NEVPNManager.shared().protocolConfiguration == nil || NEVPNManager.shared().protocolConfiguration?.serverAddress != country.endpoint {
                 let newIPSec = NEVPNProtocolIPSec()
@@ -138,13 +138,15 @@ class VPN {
                 newIPSec.serverAddress = country.endpoint;
                 newIPSec.disconnectOnSleep = false
                 
-                let alwaysConnected = NEOnDemandRule()
-                alwaysConnected.interfaceTypeMatch = .any
+                //Need to figure out how to do this properly. If we do it like this it will say that the configuration is invalid.
+//                let alwaysConnected = NEOnDemandRule()
+//                alwaysConnected.interfaceTypeMatch = .any
+//                NEVPNManager.shared().onDemandRules = [alwaysConnected]
                 
                 NEVPNManager.shared().protocolConfiguration = newIPSec
                 NEVPNManager.shared().isOnDemandEnabled = true
                 NEVPNManager.shared().isEnabled = true
-                NEVPNManager.shared().onDemandRules = [alwaysConnected]
+
                 NEVPNManager.shared().saveToPreferences(completionHandler: { (error) in
                     try? NEVPNManager.shared().connection.startVPNTunnel()
                 })
