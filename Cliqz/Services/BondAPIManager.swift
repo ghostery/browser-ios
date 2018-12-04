@@ -12,9 +12,19 @@ import BondAPI
 class BondAPIManager {
 	
 	private static let hostName = "api.lumenbrowser.com"
-	private let euBondHandler = BondV1(host: BondAPIManager.hostName)
+	private static let stagingHostName = "api-staging.lumenbrowser.com"
+
+	private let euBondHandler: BondV1
 
 	static let shared = BondAPIManager()
+
+	init() {
+		#if BETA
+		euBondHandler = BondV1(host: BondAPIManager.stagingHostName)
+		#else
+		euBondHandler = BondV1(host: BondAPIManager.hostName)
+		#endif
+	}
 
 	func currentBondHandler() -> BondV1 {
 		return euBondHandler
