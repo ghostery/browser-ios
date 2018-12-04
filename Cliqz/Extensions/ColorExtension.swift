@@ -365,7 +365,7 @@ struct Lumen {
     
     struct TabTray {
         static let highlightColor: LumenColor = { name, mode in
-            let combo: LumenColorCombo  = [.Light: [.Normal: .black], .Dark: [.Normal: .white]]
+            let combo: LumenColorCombo  = [.Light: [.Normal: .black], .Dark: [.Normal: .lumenBrightBlue]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
     }
@@ -398,8 +398,10 @@ extension UIColor {
     struct CliqzTabTray {
         #if !PAID
         static let ButtonText = BrowserColor(normal: cliqzWhitePrimary, pbm: cliqzWhitePrimary)
+        static let PrivateTabsButtonText = BrowserColor(normal: cliqzWhitePrimary, pbm: cliqzWhitePrimary)
         #else
         static let ButtonText = BrowserColor(normal: .lumenBrightBlue, pbm: .lumenBrightBlue)
+        static let PrivateTabsButtonText = BrowserColor(normal: .lumenBrightBlue, pbm: .lumenDeepBlue)
         #endif
     }
     

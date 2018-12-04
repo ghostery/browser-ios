@@ -27,7 +27,7 @@ class CliqzForgetModeButton: UIButton, Themeable {
     }
     
     func applyTheme(_ theme: Theme) {
-        setTitleColor(UIColor.CliqzTabTray.ButtonText.colorFor(theme), for: [])
+        setTitleColor(UIColor.CliqzTabTray.PrivateTabsButtonText.colorFor(theme), for: [])
         isSelected = theme == .Private
         accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
     }
