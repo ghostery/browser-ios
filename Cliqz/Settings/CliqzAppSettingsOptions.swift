@@ -473,12 +473,14 @@ class LumenAccountSetting: Setting {
             return nil
         }
     }
+
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = LumenAccountTableViewController()
         viewController.title = self.title?.string
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
+
 #elseif GHOSTERY
 class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
     
@@ -514,6 +516,7 @@ class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
 }
 
 #else
+
 class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
     
     override func getTitle() -> String {
