@@ -32,38 +32,50 @@ extension Int {
 }
 
 class CCWidgetManager {
+    
+    static func timeSavedTuple(seconds: Int) -> (String, String) {
+        if seconds < 60 {
+            // Seconds
+            return (String(format: "%d", seconds), TimeUnit.Seconds.toString())
+        } else if seconds < 3600 {
+            // Minutes : Seconds
+            let minutes = seconds / 60
+            let seconds = seconds % 60
+            return (String(format: "%d:%d", minutes, seconds), TimeUnit.Minutes.toString())
+        } else if seconds < 86400 {
+            // Hours : Minutes
+            let hours = seconds / 3600
+            let minutes = (seconds / 60) % 60
+            return (String(format: "%d:%d", hours, minutes), TimeUnit.Hours.toString())
+        } else {
+            // Days
+            let days = seconds / 86400
+            return (String(format: "%d", days), TimeUnit.Days.toString())
+        }
+    }
+    
+    static func dataSavedTuple(kiloBytes: Int) -> (String, String) {
+        if kiloBytes < 1000 {
+            // Kilobytes
+            return (String(format: "%d", kiloBytes), DataUnit.Kilobytes.toString())
+        } else if kiloBytes < 1000000 {
+            // Megabytes
+            let megabytes = Float(kiloBytes) / 1000.0
+            if megabytes < 100 {
+                return (String(format: "%.1f", megabytes), DataUnit.Megabytes.toString())
+            } else {
+                return (String(format: "%.0f", megabytes), DataUnit.Megabytes.toString())
+            }
+        } else {
+            // Gigabytes
+            let gigabytes = Float(kiloBytes) / 1000000.0
+            return (String(format: "%.2f", gigabytes), DataUnit.Gigabytes.toString())
+        }
+    }
+    
     //this is where the data for the widgets is managed.
-    
-    //Note: Time from ghostery comes in miliseconds. Data comes in bytes.
-    
-    static private func milisec2Sec(_ mili: Int?) -> Float? {
-        guard let mili = mili else {return nil}
-        return Float(mili) / 1000.0
-    }
-    
-    static private func sec2Min(_ sec: Float?) -> Float? {
-        guard let sec = sec else {return nil}
-        return sec / 60
-    }
-    
-    static private func min2Hour(_ min: Float?) -> Float? {
-        guard let min = min else {return nil}
-        return min / 60
-    }
-    
-    static private func hour2Day(_ hour: Float?) -> Float? {
-        guard let hour = hour else {return nil}
-        return hour / 24
-    }
-    
-    static private func bytes2MB(_ bytes: Int?) -> Float? {
-        guard let bytes = bytes else {return nil}
-        return Float(bytes) / 1000000.0
-    }
-    
     enum TimeUnit {
         case Seconds
-        case Milliseconds
         case Minutes
         case Hours
         case Days
@@ -71,29 +83,30 @@ class CCWidgetManager {
         func toString() -> String {
             switch self {
             case .Seconds:
-                return "SEC"
-            case .Milliseconds:
-                return "MILLI"
+                return NSLocalizedString("SEC", tableName: "Lumen", comment: "Seconds unit for dashboard")
             case .Minutes:
-                return "MIN"
+                return NSLocalizedString("MIN", tableName: "Lumen", comment: "Minutes unit for dashboard")
             case .Hours:
-                return "STD"
+                return NSLocalizedString("HRS", tableName: "Lumen", comment: "Hours unit for dashboard")
             case .Days:
-                return "TAG(E)"
+                return NSLocalizedString("DAY(S)", tableName: "Lumen", comment: "Day(s) unit for dashboard")
             }
         }
     }
     
     enum DataUnit {
-        case Bytes
+        case Kilobytes
         case Megabytes
+        case Gigabytes
         
         func toString() -> String {
             switch self {
-            case .Bytes:
-                return "BYTES"
+            case .Kilobytes:
+                return "KB"
             case .Megabytes:
                 return "MB"
+            case .Gigabytes:
+                return "GB"
             }
         }
     }
@@ -119,63 +132,19 @@ class CCWidgetManager {
             return Info(timeSaved: 0, adsBlocked: 0, dataSaved: 0, batterySaved: 0, trackersDetected: 0)
         }
 
-        
         func timeSavedStrings() -> (String, String) {
-            
-            var unit: TimeUnit = .Seconds
-            
-            if var time = milisec2Sec(self.timeSaved) {
-                if time > 59 {
-                    //convert to mins
-                    time = sec2Min(time) ?? 0.0
-                    unit = .Minutes
-                    
-                    if time > 59 {
-                        time = min2Hour(time) ?? 0.0
-                        unit = .Hours
-                        
-                        if time > 24 {
-                            time = hour2Day(time) ?? 0.0
-                            unit = .Days
-                        }
-                    }
-                }
-
-                return (String(format: "%.1f", time), unit.toString())
-            }
-            
-            return (String(0), unit.toString())
+            // self.timeSaved is in milliseconds
+            return timeSavedTuple(seconds: (self.timeSaved ?? 0) / 1000)
         }
         
         func dataSavedStrings() -> (String, String) {
-            return (String(format: "%.1f", bytes2MB(self.dataSaved) ?? 0.0), DataUnit.Megabytes.toString())
+            // self.dataSaved is in bytes
+            return dataSavedTuple(kiloBytes: (self.dataSaved ?? 0) / 1000)
         }
         
         func batterySavedStrings() -> (String, String) {
-            
-            var unit: TimeUnit = .Seconds
-            
-            if var time = milisec2Sec(self.batterySaved) {
-                if time > 59 {
-                    //convert to mins
-                    time = sec2Min(time) ?? 0.0
-                    unit = .Minutes
-                    
-                    if time > 59 {
-                        time = min2Hour(time) ?? 0.0
-                        unit = .Hours
-                        
-                        if time > 24 {
-                            time = hour2Day(time) ?? 0.0
-                            unit = .Days
-                        }
-                    }
-                }
-                
-                return (String(format: "%.1f", time), unit.toString())
-            }
-            
-            return (String(0), unit.toString())
+            // self.batterySaved is in milliseconds
+            return timeSavedTuple(seconds: (self.batterySaved ?? 0) / 1000)
         }
     }
     
