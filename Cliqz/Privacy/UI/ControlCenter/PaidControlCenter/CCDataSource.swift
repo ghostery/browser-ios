@@ -32,7 +32,7 @@ let adsBlockedDesc: CellDescription = ({ period in
 })
 
 let dataSavedDesc: CellDescription = ({ period in
-    return NSLocalizedString("Enjoy clutter-free browsing", tableName: "Lumen", comment:"[Lumen->Dashboard] Data Saved widget description")
+    return NSLocalizedString("No data wasted on ads", tableName: "Lumen", comment:"[Lumen->Dashboard] Data Saved widget description")
 })
 
 let batterySavedDesc: CellDescription = ({ period in
