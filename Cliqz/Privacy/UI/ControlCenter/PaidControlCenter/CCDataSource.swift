@@ -118,10 +118,10 @@ class CCDataSource {
                                widget: CCDataSavedWidget(),
                                cellHeight: 120)
         
-        let batterySaved = CCCell(title: NSLocalizedString("Battery Life Saved", tableName: "Lumen", comment:"[Lumen->Dashboard] Battery Life Saved widget title"),
-                                  description: batterySavedDesc,
-                                  widget: CCBatterySavedWidget(),
-                                  cellHeight: 120)
+//        let batterySaved = CCCell(title: NSLocalizedString("Battery Life Saved", tableName: "Lumen", comment:"[Lumen->Dashboard] Battery Life Saved widget title"),
+//                                  description: batterySavedDesc,
+//                                  widget: CCBatterySavedWidget(),
+//                                  cellHeight: 120)
         
         let companies = CCCell(title: NSLocalizedString("Data Collectors Detained", tableName: "Lumen", comment:"[Lumen->Dashboard]  widget title"),
                                description: companiesDesc,
@@ -133,7 +133,7 @@ class CCDataSource {
                                         widget: CCAntiPhishingWidget(),
                                         cellHeight: 120)
         
-        cells = [timeSaved, adsBlocked, dataSaved, batterySaved, companies, phishingProtection]
+        cells = [timeSaved, adsBlocked, dataSaved, companies, phishingProtection]
         createCellViews()
     }
     
