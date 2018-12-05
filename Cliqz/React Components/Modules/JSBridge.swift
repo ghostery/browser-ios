@@ -12,6 +12,10 @@ import React
 @objc(JSBridge)
 open class JSBridge : RCTEventEmitter {
 
+	enum Action: String {
+		case cleanData = "insights:clearData"
+	}
+
     public typealias Callback = (NSDictionary) -> Void
     private typealias ActionArgs = Array<Any>
     

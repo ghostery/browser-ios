@@ -75,6 +75,23 @@ class AuthenticationService {
 		}
 	}
 
+	func isDeviceDeleted(_ credentials: UserAuth, completion: @escaping (_ isDeleted: Bool) -> Void) {
+		bondService.isDeviceActivated(withRequest: credentials) { (response, err) in
+			if let errs = response?.errorArray as? [BondAPI.Error],
+				errs.count > 0 {
+				for i in errs {
+					if i.code == BondAPI.ErrorCode.credentialsInvalid {
+						completion(true)
+						return
+					}
+				}
+				completion(false)
+			} else {
+				completion(false)
+			}
+		}
+	}
+
 	func resendActivationEmail(_ credentials: UserAuth, completion: @escaping (_ isSent: Bool) -> Void) {
 		bondService.resendActivationEmail(withRequest: credentials) { (response, error) in
 			if error != nil || response?.errorArray?.count != 0 {

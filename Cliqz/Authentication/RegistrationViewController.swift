@@ -43,14 +43,17 @@ class RegistrationViewController: UIViewController {
 		setupViews()
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+		super .viewWillAppear(animated)
+		self.navigationController?.isNavigationBarHidden = true
+	}
+
     func presentIntroViewController(_ force: Bool = false, animated: Bool = true) {
         guard let profile = profile else {
             return
         }
         if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
-            
             let introViewController = LumenIntroViewController()
-            
             introViewController.delegate = self
             present(introViewController, animated: animated)
         }
@@ -62,11 +65,6 @@ class RegistrationViewController: UIViewController {
 	
 	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
 		return .portrait
-	}
-
-	override func viewWillAppear(_ animated: Bool) {
-		super .viewWillAppear(animated)
-		self.navigationController?.isNavigationBarHidden = true
 	}
 
 	override func viewWillLayoutSubviews() {
@@ -133,7 +131,12 @@ class RegistrationViewController: UIViewController {
 		if let email = self.emailTextField.text,
 			isValidEmail(email) {
 			let cred = AuthenticationService.shared.generateNewCredentials(email)
-			registerDevice(cred)
+			if let oldCred = AuthenticationService.shared.userCredentials(),
+				cred.username != oldCred.username {
+				self.askDeletePermissionAndRegister(cred)
+			} else {
+				registerDevice(cred)
+			}
 		} else {
 			self.enableEditing(true)
 			let invalidErrorMessage = NSLocalizedString("Please specify valid email", tableName: "Cliqz", comment: "Invalid email error message")
@@ -141,21 +144,23 @@ class RegistrationViewController: UIViewController {
 		}
 	}
 
-	private func registerDevice(_ credentials: UserAuth) {
-		if let oldCred = AuthenticationService.shared.userCredentials() {
-			if credentials.username != oldCred.username {
-				self.clearData()
-			}
-		}
-		AuthenticationService.shared.registerDevice(credentials) { (isRegistered, errMessage) in
-			self.enableEditing(true)
-			if let err = errMessage {
-				self.showErrorMessage(err)
-			} else if isRegistered {
-				let emailActivationVC = EmailVerificationViewController()
-				self.navigationController?.pushViewController(emailActivationVC, animated: true)
-			}
-		}
+	private func askDeletePermissionAndRegister(_ credentials: UserAuth) {
+		let title = NSLocalizedString("Sign in with another account?", tableName: "Lumen", comment: "Alert title")
+		let message = NSLocalizedString("This will log you out and all your app data well be deleted.", tableName: "Lumen", comment: "Deletion message")
+		let permissionAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+		
+		let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Cliqz", comment: "[ControlCenter - Trackers list] Cancel action title"), style: .cancel)
+		permissionAlert.addAction(cancelAction)
+		
+		let deleteAction = UIAlertAction(title: NSLocalizedString("Delete", tableName: "Cliqz", comment: ""), style: .default, handler: { [weak self] (alert: UIAlertAction) -> Void in
+			self?.tabManager.removeAll()
+			self?.clearData()
+			self?.registerDevice(credentials)
+		})
+		permissionAlert.addAction(deleteAction)
+		
+		self.present(permissionAlert, animated: true, completion: nil)
+
 	}
 
 	private func clearData() {
@@ -169,6 +174,24 @@ class RegistrationViewController: UIViewController {
 			clearables.append(DownloadedFilesClearable())
 			for i in clearables {
 				let _ = i.clear()
+			}
+		}
+		Engine.sharedInstance.getBridge().callAction(JSBridge.Action.cleanData.rawValue, args: [], callback: { (result) in
+			if let error = result["error"] as? [[String: Any]] {
+				debugPrint("Error calling action insights:clearData: \(error)")
+				//TODO: What should I do in this case?
+			}
+		})
+	}
+
+	private func registerDevice(_ credentials: UserAuth) {
+		AuthenticationService.shared.registerDevice(credentials) { (isRegistered, errMessage) in
+			self.enableEditing(true)
+			if let err = errMessage {
+				self.showErrorMessage(err)
+			} else if isRegistered {
+				let emailActivationVC = EmailVerificationViewController()
+				self.navigationController?.pushViewController(emailActivationVC, animated: true)
 			}
 		}
 	}
