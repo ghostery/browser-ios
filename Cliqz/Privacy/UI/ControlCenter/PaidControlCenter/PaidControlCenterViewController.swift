@@ -159,7 +159,7 @@ extension PaidControlCenterViewController: CCControlViewProtocol {
         func clearDashboardData(_ action: UIAlertAction) {
             DispatchQueue.global(qos: .utility).async { [weak self] in
                 //print("Will send data for tab = \(tabID) and page = \(String(describing: currentP))")
-                Engine.sharedInstance.getBridge().callAction("insights:clearData", args: [], callback: { (result) in
+                Engine.sharedInstance.getBridge().callAction(JSBridge.Action.cleanData.rawValue, args: [], callback: { (result) in
                     if let error = result["error"] as? [[String: Any]] {
                         debugPrint("Error calling action insights:clearData: \(error)")
                         //TODO: What should I do in this case?
