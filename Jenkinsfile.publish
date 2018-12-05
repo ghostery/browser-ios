@@ -92,7 +92,7 @@ node('mac-vm-host') {
                                 rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                                 rm -rf ../build-tools
                                 export app_name=Lumen
-                                export PATH="$PATH:/Users/vagrant/Library/Python/2.7/bin
+                                export PATH="$PATH:/Users/vagrant/Library/Python/2.7/bin"
                                 echo de > shipping_locales.txt && echo en-US >> shipping_locales.txt
                                 fastlane importLocalizations
                                 export MATCH_KEYCHAIN_NAME=ios-build.keychain
@@ -122,7 +122,7 @@ node('mac-vm-host') {
                                 rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                                 rm -rf ../build-tools
                                 export app_name=Lumen
-                                export PATH="$PATH:/Users/vagrant/Library/Python/2.7/bin
+                                export PATH="$PATH:/Users/vagrant/Library/Python/2.7/bin"
                                 echo de > shipping_locales.txt && echo en-US >> shipping_locales.txt
                                 fastlane importLocalizations
                                 export MATCH_KEYCHAIN_NAME=ios-build.keychain
@@ -151,7 +151,7 @@ node('mac-vm-host') {
                                 rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                                 rm -rf ../build-tools
                                 export app_name=Ghostery
-                                export PATH="$PATH:/Users/vagrant/Library/Python/2.7/bin
+                                export PATH="$PATH:/Users/vagrant/Library/Python/2.7/bin"
                                 fastlane importLocalizations
                             '''
                             if("${branchName}".contains("-beta")){
