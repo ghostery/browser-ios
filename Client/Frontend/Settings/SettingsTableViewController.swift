@@ -185,7 +185,7 @@ class BoolSetting: Setting {
         super.onConfigureCell(cell)
 
         let control = UISwitch()
-        control.onTintColor = UIConstants.SystemBlueColor
+        control.onTintColor = UIConstants.ControlTintColor
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
         

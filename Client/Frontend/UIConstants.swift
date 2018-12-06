@@ -186,7 +186,11 @@ public struct UIConstants {
     static let ControlTintColor = UIColor.Photon.Blue50
     */
     static let SystemBlueColor = UIColor.cliqzBluePrimary
+    #if PAID
+    static let ControlTintColor: UIColor? = nil
+    #else
     static let ControlTintColor = UIColor.cliqzBluePrimary
+    #endif
     
     static let PasscodeDotColor = UIColor.Photon.Grey60
     static let PrivateModeAssistantToolbarBackgroundColor = UIColor.Photon.Grey50

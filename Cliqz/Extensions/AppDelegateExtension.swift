@@ -27,7 +27,11 @@ extension AppDelegate {
     
     func customizeNnavigationBarAppearace() {
         let navigationBarAppearace = UINavigationBar.appearance()
+        #if PAID
+        navigationBarAppearace.barTintColor = Lumen.Browser.toolBarColor(lumenTheme, .Normal)
+        #else
         navigationBarAppearace.barTintColor = UIColor.cliqzBluePrimary
+        #endif
         navigationBarAppearace.isTranslucent = false
         navigationBarAppearace.tintColor = UIColor.white
         navigationBarAppearace.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
