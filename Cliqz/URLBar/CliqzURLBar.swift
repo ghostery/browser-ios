@@ -292,7 +292,9 @@ class CliqzURLBar: URLBarView {
     
     override func didApplyTheme(_ theme: Theme) {
         ghosteryButton.applyTheme(theme)
-        #if !PAID
+        #if PAID
+        pageOptionsButton.tintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
+        #else
         pageOptionsButton.tintColor = UIColor.CliqzURLBar.Background.colorFor(theme)
         #endif
     }
