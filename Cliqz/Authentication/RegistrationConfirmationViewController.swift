@@ -16,6 +16,8 @@ class RegistrationConfirmationViewController: UIViewController {
 	private let titleLabel = UILabel()
 	private let descriptionLabel = UILabel()
 	private let startButton = UIButton(type: .custom)
+	
+	var availableDaysTimeInterval: Double = 0
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -79,7 +81,8 @@ class RegistrationConfirmationViewController: UIViewController {
 		self.titleLabel.textColor = AuthenticationUX.textColor
 		self.titleLabel.font = AuthenticationUX.titleFont
 
-		self.descriptionLabel.text = NSLocalizedString("Have fun with your free two-week trial and take your time to explore all Lumen features!", tableName: "Cliqz", comment: "")
+		let days = self.availableDays()
+		self.descriptionLabel.text = String(format: NSLocalizedString("%d daysLeft", tableName: "Lumen", comment: ""), days)
 		self.descriptionLabel.textAlignment = .center
 		self.descriptionLabel.textColor = AuthenticationUX.textColor
 		self.descriptionLabel.font = AuthenticationUX.subtitleFont
@@ -99,5 +102,10 @@ class RegistrationConfirmationViewController: UIViewController {
 		if let appDel = UIApplication.shared.delegate as? AppDelegate {
 			appDel.showBrowser()
 		}
+	}
+
+	private func availableDays() -> Int {
+		let days = Int((self.availableDaysTimeInterval - Date().timeIntervalSince1970) / 86400.0)
+		return days >= 0 ? days : 0
 	}
 }

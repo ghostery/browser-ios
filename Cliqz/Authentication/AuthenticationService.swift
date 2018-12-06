@@ -56,13 +56,13 @@ class AuthenticationService {
         }
     }
 
-    func isDeviceActivated(_ credentials: UserAuth, completion: @escaping (_ isActivated: Bool) -> Void) {
+	func isDeviceActivated(_ credentials: UserAuth, completion: @escaping (_ isActivated: Bool, _ expirationDate: Int64) -> Void) {
         bondService.isDeviceActivated(withRequest: credentials) { (response, err) in
             if err != nil || response?.errorArray?.count != 0 {
-                completion(false)
+                completion(false, 0)
 			} else {
 				self.updateDeviceActivationState(true, deviceID: response?.deviceId)
-				completion(true)
+				completion(true, response?.subscription?.expires ?? 0)
 			}
         }
     }

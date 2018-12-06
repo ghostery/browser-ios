@@ -119,10 +119,13 @@ class EmailVerificationViewController: UIViewController {
 
 	@objc
 	private func checkActivation() {
-		AuthenticationService.shared.isDeviceActivated(self.credentials) { [weak self] (isActivated) in
+		AuthenticationService.shared.isDeviceActivated(self.credentials) { [weak self] (isActivated,
+			timestamp) in
 			if isActivated {
 				self?.timer?.invalidate()
-				self?.navigateToConfirmation()
+				let nextVC = RegistrationConfirmationViewController()
+				nextVC.availableDaysTimeInterval = Double(timestamp)
+				self?.navigationController?.pushViewController(nextVC, animated: true)
 			}
 		}
 	}
@@ -157,11 +160,6 @@ class EmailVerificationViewController: UIViewController {
 		linkSent.addAction(openMail)
 		
 		self.present(linkSent, animated: true, completion: nil)
-	}
-
-	private func navigateToConfirmation() {
-		let nextVC = RegistrationConfirmationViewController()
-		self.navigationController?.pushViewController(nextVC, animated: true)
 	}
 
 	private func animateImage() {

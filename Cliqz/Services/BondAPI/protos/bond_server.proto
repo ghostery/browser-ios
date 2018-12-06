@@ -8,6 +8,7 @@ service BondV1 {
   rpc ResendActivationEmail(UserAuth) returns (Response);
   rpc IsDeviceActivated(UserAuth) returns (IsDeviceActivatedResponse);
   rpc RequestDelete(UserAuth) returns (Response);
+  rpc ProcessToken(ProcessTokenRequest) returns (Response);
 
   // Subscription management
   rpc GetSubscription(UserAuth) returns (GetSubscriptionResponse);
@@ -34,6 +35,8 @@ enum ErrorCode {
   NOT_SUBSCRIBED = 10;
   DEVICE_EXISTS = 11;
   DEVICE_ACTIVATED = 12;
+  TOKEN_INVALID = 13;
+  TOKEN_EXPIRED = 14;
 }
 
 enum SubscriptionType {
@@ -73,6 +76,11 @@ message UnregisterDeviceRequest {
 message IsDeviceActivatedResponse {
     repeated Error error = 1;
     int64 deviceId = 2;
+    Subscription subscription = 3;
+}
+
+message ProcessTokenRequest {
+    string token = 1;
 }
 
 message Device {

@@ -33,9 +33,10 @@ class RegistrationViewController: UIViewController {
         
 		self.title = NSLocalizedString("Login", tableName: "Cliqz", comment: "Back Button Title")
 		if let cred = AuthenticationService.shared.userCredentials() {
-			AuthenticationService.shared.isDeviceActivated(cred) { (isActivated) in
+			AuthenticationService.shared.isDeviceActivated(cred) { (isActivated, timestamp) in
 				if isActivated {
 					let nextVC = RegistrationConfirmationViewController()
+					nextVC.availableDaysTimeInterval = Double(timestamp)
 					self.navigationController?.pushViewController(nextVC, animated: true)
 				}
 			}
