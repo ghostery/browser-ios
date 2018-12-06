@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>%d daysLeft</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Have fun with your free %#@daysleft@ trial and take your time to explore all Lumen features!</string>
+		<key>daysleft</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>%d days</string>
+			<key>one</key>
+			<string>%d day</string>
+			<key>two</key>
+			<string>%d days</string>
+			<key>many</key>
+			<string>%d days</string>
+			<key>other</key>
+			<string>%d days</string>
+		</dict>
+	</dict>
+</dict>
+</plist>
