@@ -134,7 +134,7 @@ class LumenIntroViewController: UIViewController {
         
         pageControl.snp.makeConstraints { make in
             make.centerX.equalTo(self.scrollView)
-            make.bottom.equalTo(self.startBrowsingButton.snp.top).offset(-verticalPadding)
+            make.bottom.equalTo(self.startBrowsingButton.snp.top).offset(-10)
         }
         
         createSlides()
@@ -184,11 +184,8 @@ class LumenIntroViewController: UIViewController {
         let imageView = UIImageView(image: image)
         imageViewContainer.addArrangedSubview(imageView)
         imageView.snp.makeConstraints { make in
-//            make.center.equalToSuperview()
-//            make.width.equalTo(image.size.width)
-//            make.height.equalTo(image.size.height)
-//            make.height.equalTo(imageViewContainer.snp.height)
             make.width.equalTo(self.view.snp.width)
+            make.height.equalTo(self.view.snp.width)
         }
         
         let cardView: LumenCardView
@@ -196,7 +193,7 @@ class LumenIntroViewController: UIViewController {
         cardView.configureWith(card: card)
         self.view.addSubview(cardView)
         cardView.snp.makeConstraints { make in
-            make.top.equalTo(self.imageViewContainer.snp.bottom).offset(verticalPadding)
+            make.top.equalTo(self.imageViewContainer.snp.bottom).offset(-10)
             make.bottom.equalTo(self.startBrowsingButton.snp.top)
             make.left.right.equalTo(self.view).inset(10)
         }
