@@ -1294,7 +1294,7 @@ class CliqzTrayToolbar : TrayToolbar {
             forgetModeButton.snp.remakeConstraints { [unowned self] make in
                 make.centerY.equalTo(self.addTabButton.snp.centerY)
                 make.left.equalTo(self).offset(sideOffset)
-                make.width.equalTo(forgetModeButton.snp.width).offset(20)
+                make.width.equalTo(110)
             }
         }
         else {
@@ -1332,7 +1332,7 @@ class CliqzTrayToolbar : TrayToolbar {
             
             forgetModeButton.snp.remakeConstraints { make in
                 make.center.equalToSuperview()
-                make.width.equalTo(100)
+                make.width.equalTo(110)
             }
         }
         
