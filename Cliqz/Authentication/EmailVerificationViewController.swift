@@ -57,7 +57,6 @@ class EmailVerificationViewController: UIViewController {
 			make.left.equalToSuperview().offset(29)
 			make.right.equalToSuperview().offset(-29)
 			make.bottom.equalTo(self.resendActivationLinkButton.snp.top).offset(-40)
-			make.height.equalTo(60)
 		}
 		self.titleLabel.snp.remakeConstraints { (make) in
 			make.centerX.equalToSuperview()
@@ -98,7 +97,7 @@ class EmailVerificationViewController: UIViewController {
 		self.descriptionLabel.textAlignment = .center
 		self.descriptionLabel.textColor = AuthenticationUX.textColor
 		self.descriptionLabel.font = AuthenticationUX.subtitleFont
-		self.descriptionLabel.numberOfLines = 3
+		self.descriptionLabel.numberOfLines = 0
 
 		self.resendActivationLinkButton.setTitle(NSLocalizedString("Resend Activation Link", tableName: "Cliqz", comment: ""), for: .normal)
 		self.resendActivationLinkButton.backgroundColor = UIColor.clear

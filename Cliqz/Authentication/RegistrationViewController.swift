@@ -113,7 +113,6 @@ class RegistrationViewController: UIViewController {
 			make.left.equalToSuperview().offset(29)
 			make.right.equalToSuperview().offset(-29)
 			make.bottom.equalTo(self.errorLabel.snp.top).offset(-40)
-			make.height.equalTo(40)
 		}
 		self.titleLabel.snp.remakeConstraints { (make) in
 			make.centerX.equalToSuperview()
@@ -255,7 +254,7 @@ class RegistrationViewController: UIViewController {
 		self.descriptionLabel.textAlignment = .center
 		self.descriptionLabel.textColor = AuthenticationUX.textColor
 		self.descriptionLabel.font = AuthenticationUX.subtitleFont
-		self.descriptionLabel.numberOfLines = 2
+		self.descriptionLabel.numberOfLines = 0
 
 		self.titleLabel.text = NSLocalizedString("Lumen Browser", tableName: "Cliqz", comment: "Lumen Browser")
 		self.titleLabel.textAlignment = .center
