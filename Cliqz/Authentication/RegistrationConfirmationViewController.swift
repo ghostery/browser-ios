@@ -100,6 +100,7 @@ class RegistrationConfirmationViewController: UIViewController {
 	private func startBrowsing(sender: UIButton) {
 		if let appDel = UIApplication.shared.delegate as? AppDelegate {
 			appDel.showBrowser()
+            AuthenticationService.shared.updateSubscriptionStatus()
 		}
 	}
 
