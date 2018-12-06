@@ -9,7 +9,9 @@
     "dev-server": "node node_modules/react-native/local-cli/cli.js start",
     "dev-bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
     "bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ --dev false && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
-    "postinstall": "sed -i '' 's#<fishhook/fishhook.h>#\"fishhook.h\"#g' ./node_modules/react-native/Libraries/WebSocket/RCTReconnectingWebSocket.m"
+    "fix-websocket": "sed -i '' 's#<fishhook/fishhook.h>#\"fishhook.h\"#g' ./node_modules/react-native/Libraries/WebSocket/RCTReconnectingWebSocket.m",
+    "fix-animation": "sed -i '' 's/#import <RCTAnimation\\/RCTValueAnimatedNode.h>/#import \"RCTValueAnimatedNode.h\"/' ./node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h",
+    "postinstall": "npm run fix-websocket && npm run fix-animation"
   },
   "repository": {
     "type": "git",
@@ -26,13 +28,13 @@
     "path-browserify": "0.0.0",
     "pouchdb-adapter-react-native-sqlite": "1.0.3",
     "pouchdb-react-native": "6.3.4",
-    "react": "16.0.0",
-    "react-native": "0.51.0",
+    "react": "16.6.3",
+    "react-native": "0.56.1",
     "react-native-collapsible": "0.8.1",
     "react-native-device-info": "0.10.2",
     "react-native-fs": "2.8.1",
     "react-native-share": "1.0.23",
-    "react-native-snap-carousel": "3.3.4",
+    "react-native-snap-carousel": "3.7.5",
     "react-native-sqlite-2": "1.5.0",
     "react-native-view-shot": "2.2.0",
     "react-native-webrtc": "1.58.3",
