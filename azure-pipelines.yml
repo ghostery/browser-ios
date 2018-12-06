@@ -25,6 +25,10 @@ steps:
 - script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
   displayName: 'carthage bootstrap'
 
+- task: NodeTool@0
+  inputs:
+    versionSpec: '9.11.2'
+
 - task: Npm@1
   displayName: 'npm install'
   inputs:
