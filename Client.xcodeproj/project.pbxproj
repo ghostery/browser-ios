@@ -7080,6 +7080,7 @@
 				INFOPLIST_FILE = Client/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MOZ_BUNDLE_DISPLAY_NAME = "Lumen Staging";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
