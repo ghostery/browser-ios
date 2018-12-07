@@ -154,6 +154,10 @@ class LumenIntroViewController: UIViewController {
         scrollView.contentSize = imageContainerSize()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
