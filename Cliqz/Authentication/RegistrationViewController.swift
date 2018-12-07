@@ -68,6 +68,10 @@ class RegistrationViewController: UIViewController {
 		return .portrait
 	}
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
 	override func viewWillLayoutSubviews() {
 		super.viewWillLayoutSubviews()
 		self.backgroundView.snp.remakeConstraints { (make) in
@@ -363,6 +367,10 @@ extension UINavigationController {
 			return super.supportedInterfaceOrientations
 		}
 	}
+    
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        return topViewController?.preferredStatusBarStyle ?? .default
+    }
 }
 
 extension RegistrationViewController: UIGestureRecognizerDelegate {
