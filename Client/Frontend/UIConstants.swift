@@ -102,7 +102,7 @@ extension UIColor {
         #else
         static let Background = BrowserColor(normal: Lumen.URLBar.textFieldBackgroundColor(lumenTheme, .Normal), pbm: Lumen.URLBar.textFieldBackgroundColor(lumenTheme, .Private))
         static let TextAndTint = BrowserColor(normal: Lumen.URLBar.textFieldTextColor(lumenTheme, .Normal), pbm: Lumen.URLBar.textFieldTextColor(lumenTheme, .Private))
-        static let Highlight = BrowserColor(normal: Defaults.iOSHighlightBlue, pbm: Defaults.iOSHighlightBlue)
+        static let Highlight = BrowserColor(normal: UIColor.init(colorString: "B2B8FF"), pbm: UIColor.init(colorString: "B2B8FF"))
         static let ReaderModeButtonSelected = BrowserColor(normal: Lumen.URLBar.readerModeButtonSelectedColor(lumenTheme, .Normal), pbm: Lumen.URLBar.readerModeButtonSelectedColor(lumenTheme, .Private))
         static let ReaderModeButtonUnselected = BrowserColor(normal: Lumen.URLBar.readerModeButtonColor(lumenTheme, .Normal), pbm: Lumen.URLBar.readerModeButtonColor(lumenTheme, .Private))
         static let PageOptionsSelected = BrowserColor(normal: Lumen.URLBar.pageOptionsColorSelected(lumenTheme, .Normal), pbm: Lumen.URLBar.pageOptionsColorSelected(lumenTheme, .Private))
