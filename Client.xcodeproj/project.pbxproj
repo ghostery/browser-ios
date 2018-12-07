@@ -73,6 +73,7 @@
 		1E51104C2170A22C0092B038 /* SQLiteHistoryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E51104A2170A2250092B038 /* SQLiteHistoryExtension.swift */; };
 		1E51104E2170A97E0092B038 /* SettingsTableViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E51104D2170A97E0092B038 /* SettingsTableViewControllerExtension.swift */; };
 		1E521A66213EAF820043416C /* Cliqz.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E521A68213EAF820043416C /* Cliqz.strings */; };
+		1E5CEA5121BA7CEE00EC0226 /* Lumen.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 1E5CEA5321BA7CEE00EC0226 /* Lumen.stringsdict */; };
 		1E60134B21AC43E300392E80 /* LumenIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */; };
 		1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */; };
 		1E650C9C2091E35D0070C670 /* BrowserViewController+GhosteryMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */; };
@@ -403,7 +404,6 @@
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
 		4F69309A2048185600FB0B2E /* TopSitesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6930992048185600FB0B2E /* TopSitesDataSource.swift */; };
 		4F82FDC5208F2D3E002CED25 /* TrackersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F82FDB6208F2D3E002CED25 /* TrackersController.swift */; };
-		4F86CB1521B96EE600E30D85 /* Lumen.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 4F86CB1421B96EE600E30D85 /* Lumen.stringsdict */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
 		4F989018219DC8A7003BC800 /* RegistrationConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F989017219DC8A7003BC800 /* RegistrationConfirmationViewController.swift */; };
 		4F9DD64320BD562B00107976 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8752028CE4000018880 /* disconnect-social.json */; };
@@ -1443,6 +1443,8 @@
 		1E51104A2170A2250092B038 /* SQLiteHistoryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteHistoryExtension.swift; sourceTree = "<group>"; };
 		1E51104D2170A97E0092B038 /* SettingsTableViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerExtension.swift; sourceTree = "<group>"; };
 		1E521A67213EAF820043416C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Cliqz.strings; sourceTree = "<group>"; };
+		1E5CEA5221BA7CEE00EC0226 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Lumen.stringsdict; sourceTree = "<group>"; };
+		1E5CEA5C21BA7CFE00EC0226 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Lumen.stringsdict; sourceTree = "<group>"; };
 		1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenIntroViewController.swift; sourceTree = "<group>"; };
 		1E6404DF2100953D00B02901 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
 		1E6404E62100956900B02901 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hu; path = hu.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
@@ -1778,7 +1780,6 @@
 		4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		4F6930992048185600FB0B2E /* TopSitesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDataSource.swift; sourceTree = "<group>"; };
 		4F82FDB6208F2D3E002CED25 /* TrackersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackersController.swift; sourceTree = "<group>"; };
-		4F86CB1421B96EE600E30D85 /* Lumen.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Lumen.stringsdict; sourceTree = "<group>"; };
 		4F9757391AFA6F37006ECC24 /* readerContent.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readerContent.html; sourceTree = "<group>"; };
 		4F989017219DC8A7003BC800 /* RegistrationConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationConfirmationViewController.swift; sourceTree = "<group>"; };
 		4FAA4EC521AFEF8000CD41A7 /* LumenAccountTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenAccountTableViewController.swift; sourceTree = "<group>"; };
@@ -3285,7 +3286,7 @@
 				4F3046AC204FF0EA00C99162 /* Cliqz.xcassets */,
 				4F304597204FEE5500C99162 /* jsengine.bundle.js */,
 				1EBB08AA2068FC9600C6DFFE /* Eula.html */,
-				4F86CB1421B96EE600E30D85 /* Lumen.stringsdict */,
+				1E5CEA5321BA7CEE00EC0226 /* Lumen.stringsdict */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -5624,7 +5625,7 @@
 				1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */,
 				D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */,
 				1EAFE524205FBBBC006A36B4 /* CliqzLaunchScreen.xib in Resources */,
-				4F86CB1521B96EE600E30D85 /* Lumen.stringsdict in Resources */,
+				1E5CEA5121BA7CEE00EC0226 /* Lumen.stringsdict in Resources */,
 				AF6FA97420652C6800D7F9F0 /* postload.js in Resources */,
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
 				2F44FB2D1A9D5D8500FD20CC /* FiraSans-BoldItalic.ttf in Resources */,
@@ -6957,6 +6958,15 @@
 				1E521A67213EAF820043416C /* en */,
 			);
 			name = Cliqz.strings;
+			sourceTree = "<group>";
+		};
+		1E5CEA5321BA7CEE00EC0226 /* Lumen.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1E5CEA5221BA7CEE00EC0226 /* en */,
+				1E5CEA5C21BA7CFE00EC0226 /* de */,
+			);
+			name = Lumen.stringsdict;
 			sourceTree = "<group>";
 		};
 		7B2142FC1E5E055000CDD3FC /* InfoPlist.strings */ = {
