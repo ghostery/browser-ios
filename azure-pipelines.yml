@@ -102,5 +102,6 @@ steps:
     publishLocation: 'Container'
 
 - bash: |
-    source cliqz-mobile-tests/scripts/azure-scripts/parseReports.sh
+    cd cliqz-mobile-tests
+    source scripts/azure-scripts/parseReports.sh
   displayName: 'Parse Reports'
