@@ -1,8 +1,6 @@
 module Fastlane
   module Actions
     OUTER_CONST = 99  
-    SUPPORTED_LANGUAGES = ["en", "de", "es", "fr", "hu", "it", "ja", "ko", "nl", "pl", "pt-BR", "ru", "zh-CN", "zh-TW"]
-
     class ImportCliqzLocalizationsAction < Action
     
       def self.run(params)
@@ -13,8 +11,11 @@ module Fastlane
       end
 
       def self.import_localization(directory, app_name, xliff_name)
+        supportedLanguages = File.readlines("shipping_locales.txt")
         command_line = ""
-        for language in SUPPORTED_LANGUAGES do
+        
+        for supportedLanguage in supportedLanguages do
+          language = supportedLanguage.strip
           filePath = "#{directory}/#{language}/#{xliff_name}"
           Actions.sh("source import-locales-env/bin/activate && fastlane/scripts/inject_app_name.py #{filePath} #{app_name}")
 
