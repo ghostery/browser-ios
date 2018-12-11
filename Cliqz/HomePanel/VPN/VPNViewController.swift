@@ -86,6 +86,11 @@ class VPN {
     func checkConnection() {
         guard AuthenticationService.shared.hasValidSubscription() == true else {
             VPN.disconnectVPN()
+            NEVPNManager.shared().removeFromPreferences { (error) in
+//                if let e = error {
+//                    //there was an error taking this out of the preferences.
+//                }
+            }
             return
         }
         
