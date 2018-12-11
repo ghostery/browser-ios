@@ -371,6 +371,9 @@ class VPNViewController: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         self.view.alpha = 1.0
+        updateMapView()
+        updateConnectButton()
+        updateInfoLabel()
     }
     
     override func didReceiveMemoryWarning() {
