@@ -136,7 +136,7 @@ class AuthenticationService {
 			request.deviceId = deviceID
 		}
 		self.bondService.unregisterDevice(with: request) { (response, error) in
-			if error != nil || response?.errorArray.count != 0 {
+			if error != nil || response == nil || response?.errorArray.count != 0 {
 				completion(false, AuthenticationService.generalErrorMessage)
 			} else {
 				self.updateDeviceActivationState(false, deviceID: -1)
