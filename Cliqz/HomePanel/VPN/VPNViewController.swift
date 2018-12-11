@@ -153,12 +153,22 @@ class VPN {
                 NEVPNManager.shared().isEnabled = true
 
                 NEVPNManager.shared().saveToPreferences(completionHandler: { (error) in
-                    try? NEVPNManager.shared().connection.startVPNTunnel()
+                    do {
+                        try NEVPNManager.shared().connection.startVPNTunnel()
+                    }
+                    catch {
+                        VPN.shared.shouldTryToReconnect = false
+                    }
                 })
             }
             else {
                 NEVPNManager.shared().isEnabled = true;
-                try? NEVPNManager.shared().connection.startVPNTunnel()
+                do {
+                    try NEVPNManager.shared().connection.startVPNTunnel()
+                }
+                catch {
+                    VPN.shared.shouldTryToReconnect = false
+                }
             }
         }
     }
