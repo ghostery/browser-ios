@@ -109,7 +109,7 @@ class RegistrationConfirmationViewController: UIViewController {
 	}
 
 	private func availableDays() -> Int {
-		let days = Int((self.availableDaysTimeInterval - Date().timeIntervalSince1970) / 86400.0)
+		let days = Int(ceil((self.availableDaysTimeInterval - Date().timeIntervalSince1970) / 86400.0))
 		return days >= 0 ? days : 0
 	}
 }
