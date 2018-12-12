@@ -25,6 +25,10 @@ steps:
 - script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
   displayName: 'carthage bootstrap'
 
+- task: NodeTool@0
+  inputs:
+    versionSpec: '9.11.2'
+
 - task: Npm@1
   displayName: 'npm install'
   inputs:
@@ -65,3 +69,43 @@ steps:
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: 'cliqz-mobile-tests/test-reports/*.xml'
+
+- task: ArchiveFiles@2
+  condition: always()
+  displayName: 'Archive Screenshots'
+  inputs:
+    rootFolderOrFile: 'cliqz-mobile-tests/screenshots'
+    archiveType: 'zip'
+    tarCompression: 'none'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/screenshots.zip'
+
+- task: ArchiveFiles@2
+  condition: always()
+  displayName: 'Archive Logs'
+  inputs:
+    rootFolderOrFile: 'cliqz-mobile-tests/logs'
+    archiveType: 'zip'
+    tarCompression: 'none'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/logs.zip'
+
+- task: ArchiveFiles@2
+  condition: always()
+  displayName: 'Archive Reports Folder'
+  inputs:
+    rootFolderOrFile: 'cliqz-mobile-tests/test-reports'
+    archiveType: 'zip'
+    tarCompression: 'none'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/reports.zip'
+
+- task: PublishBuildArtifacts@1
+  condition: always()
+  displayName: 'Publish Artifacts'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: '$(Build.BuildId)'
+    publishLocation: 'Container'
+
+- bash: |
+    cd cliqz-mobile-tests
+    source scripts/azure-scripts/parseReports.sh
+  displayName: 'Parse Reports'

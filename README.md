@@ -1,7 +1,7 @@
 Cliqz for iOS
 ===============
 
-This branch (master)
+This branch (master)   [![Build Status](https://dev.azure.com/cliqzci/IOS/_apis/build/status/ghostery.browser-ios)](https://dev.azure.com/cliqzci/IOS/_build/latest?definitionId=1)
 -----------
 
 This branch is for mainline development.

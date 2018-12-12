@@ -136,7 +136,7 @@ class AuthenticationService {
 			request.deviceId = deviceID
 		}
 		self.bondService.unregisterDevice(with: request) { (response, error) in
-			if error != nil || response?.errorArray.count != 0 {
+			if error != nil || response == nil || response?.errorArray.count != 0 {
 				completion(false, AuthenticationService.generalErrorMessage)
 			} else {
 				self.updateDeviceActivationState(false, deviceID: -1)
@@ -148,7 +148,7 @@ class AuthenticationService {
 	func deleteAccount(completion: @escaping (_ isDeleteSent: Bool, _ errorString: String?) -> Void) {
 		if let cred = self.userCredentials() {
 			self.bondService.requestDelete(withRequest: cred) { (response, error) in
-				if error != nil || response?.errorArray.count != 0 {
+				if error != nil || response == nil || response?.errorArray.count != 0 {
 					completion(false, AuthenticationService.generalErrorMessage)
 				} else {
 					completion(true, nil)

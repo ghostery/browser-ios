@@ -17,12 +17,14 @@ node('mac-vm-host') {
         config.vm.define "publishios" do |publishios|
             publishios.vm.hostname ="publishios"
             
+            config.ssh.private_key_path = "/Users/jenkins/publishiosmobile/.vagrant/machines/publishios/virtualbox/private_key"
             publishios.vm.network "public_network", :bridge => "en0: Ethernet 1", auto_config: false
             publishios.vm.boot_timeout = 900
             publishios.vm.provider "virtualbox" do |v|
                 v.name = "publishios"
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
+                v.cpus = ENV["NODE_CPU_COUNT"]
             end
             publishios.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                 set -e
@@ -35,6 +37,13 @@ node('mac-vm-host') {
             SHELL
         end
     end
+    '''
+    sh '''#!/bin/bash -l
+        set -e
+        set -x
+        mkdir -p .vagrant/machines/publishios/virtualbox
+        cd .vagrant/machines/publishios/virtualbox/
+        if [ ! -f id ]; then touch id && echo "d2fc4bdc-ee6e-432d-8be4-25cad07672bd" >> id; fi
     '''
 
     vagrant.inside(

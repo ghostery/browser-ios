@@ -86,6 +86,11 @@ class VPN {
     func checkConnection() {
         guard AuthenticationService.shared.hasValidSubscription() == true else {
             VPN.disconnectVPN()
+            NEVPNManager.shared().removeFromPreferences { (error) in
+//                if let e = error {
+//                    //there was an error taking this out of the preferences.
+//                }
+            }
             return
         }
         
@@ -148,12 +153,22 @@ class VPN {
                 NEVPNManager.shared().isEnabled = true
 
                 NEVPNManager.shared().saveToPreferences(completionHandler: { (error) in
-                    try? NEVPNManager.shared().connection.startVPNTunnel()
+                    do {
+                        try NEVPNManager.shared().connection.startVPNTunnel()
+                    }
+                    catch {
+                        VPN.shared.shouldTryToReconnect = false
+                    }
                 })
             }
             else {
                 NEVPNManager.shared().isEnabled = true;
-                try? NEVPNManager.shared().connection.startVPNTunnel()
+                do {
+                    try NEVPNManager.shared().connection.startVPNTunnel()
+                }
+                catch {
+                    VPN.shared.shouldTryToReconnect = false
+                }
             }
         }
     }
@@ -366,6 +381,9 @@ class VPNViewController: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         self.view.alpha = 1.0
+        updateMapView()
+        updateConnectButton()
+        updateInfoLabel()
     }
     
     override func didReceiveMemoryWarning() {
