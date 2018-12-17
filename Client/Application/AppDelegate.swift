@@ -151,8 +151,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
         }
 
-        self.tabManager = TabManager(prefs: profile.prefs, imageStore: imageStore)
-        self.tabManager.stateDelegate = self
+        self.tabManager = TabManager(profile: profile, imageStore: imageStore)
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
@@ -257,9 +256,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
+<<<<<<< HEAD
         // Cliqz: customize Navigationbar Appearace
         customizeNnavigationBarAppearace()
         
+||||||| merged common ancestors
+=======
+        Profiler.appDidFinishLaunching() // NimbleDroid lib setup, runs in non-release only
+
+>>>>>>> firefox-releases
         adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
         
         // Cliqz: Handle Realm Migration
@@ -395,6 +400,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
+
+        Profiler.shared?.appIsActive()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -509,6 +516,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+        if #available(iOS 12.0, *) {
+            if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
+                browserViewController.openBlankNewTab(focusLocationField: false)
+                return true
+            }
+        }
 
         // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
         // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
@@ -583,20 +596,6 @@ extension AppDelegate: UINavigationControllerDelegate {
     }
 }
 
-extension AppDelegate: TabManagerStateDelegate {
-    func tabManagerWillStoreTabs(_ tabs: [Tab]) {
-        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toTab )
-
-        // Don't insert into the DB immediately. We tend to contend with more important
-        // work like querying for top sites.
-        let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
-        queue.asyncAfter(deadline: DispatchTime.now() + Double(Int64(ProfileRemoteTabsSyncDelay * Double(NSEC_PER_MSEC))) / Double(NSEC_PER_SEC)) {
-            self.profile?.storeTabs(storedTabs)
-        }
-    }
-}
-
 extension AppDelegate: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         // Dismiss the view controller and start the app up
@@ -606,10 +605,12 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
+    // Called when the user taps on a sent-tab notification from the background.
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         openURLsInNewTabs(response.notification)
     }
 
+    // Called when the user receives a tab while in foreground.
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         openURLsInNewTabs(notification)
     }
@@ -650,10 +651,10 @@ extension AppDelegate {
         // NotificationService will have decrypted the push message, and done some syncing
         // activity. If the `client` collection was synced, and there are `displayURI` commands (i.e. sent tabs)
         // NotificationService will have collected them for us in the userInfo.
-        if let serializedTabs = userInfo["sentTabs"] as? [[String: String]] {
+        if let serializedTabs = userInfo["sentTabs"] as? [NSDictionary] {
             // Let's go ahead and open those.
             for item in serializedTabs {
-                if let tabURL = item["url"], let url = URL(string: tabURL) {
+                if let urlString = item["url"] as? String, let url = URL(string: urlString) {
                     receivedURLs.append(url)
                 }
             }

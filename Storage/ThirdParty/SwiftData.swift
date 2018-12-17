@@ -50,10 +50,21 @@ class DeferredDBOperation<T>: Deferred<T>, Cancellable {
     fileprivate var dispatchWorkItem: DispatchWorkItem?
     private var _running = false
 
+    fileprivate weak var connection: ConcreteSQLiteDBConnection?
+
     func cancel() {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
+
+        let queue = OperationQueue.current?.underlyingQueue
+        queue?.suspend()
+        defer { queue?.resume() }
+
         dispatchWorkItem?.cancel()
+
+        if _running {
+            connection?.interrupt()
+        }
     }
 
     var cancelled: Bool {
@@ -109,14 +120,19 @@ open class SwiftData {
     /// Used to keep track of the corrupted databases we've logged.
     static var corruptionLogsWritten = Set<String>()
 
-    /// Used for testing.
-    static var ReuseConnections = true
+    /// For thread-safe access to the primary shared connection.
+    fileprivate let primaryConnectionQueue: DispatchQueue
 
-    /// For thread-safe access to the shared connection.
-    fileprivate let sharedConnectionQueue: DispatchQueue
+    /// For thread-safe access to the secondary shared connection.
+    fileprivate let secondaryConnectionQueue: DispatchQueue
 
-    /// Shared connection to this database.
-    fileprivate var sharedConnection: ConcreteSQLiteDBConnection?
+    /// Primary shared connection to this database.
+    fileprivate var primaryConnection: ConcreteSQLiteDBConnection?
+
+    /// Secondary shared connection to this database.
+    fileprivate var secondaryConnection: ConcreteSQLiteDBConnection?
+
+    /// SQLCipher keys for encrypted databases.
     fileprivate var key: String?
     fileprivate var prevKey: String?
 
@@ -132,7 +148,8 @@ open class SwiftData {
         self.schema = schema
         self.files = files
 
-        self.sharedConnectionQueue = DispatchQueue(label: "SwiftData queue: \(filename)", attributes: [])
+        self.primaryConnectionQueue = DispatchQueue(label: "SwiftData primary queue: \(filename)", attributes: [])
+        self.secondaryConnectionQueue = DispatchQueue(label: "SwiftData secondary queue: \(filename)", attributes: [])
 
         // Ensure that multi-thread mode is enabled by default.
         // See https://www.sqlite.org/threadsafe.html
@@ -144,9 +161,24 @@ open class SwiftData {
      * close a database connection and run a block of code inside it.
      */
     func withConnection<T>(_ flags: SwiftData.Flags, synchronous: Bool = false, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
-        let deferred = DeferredDBOperation<Maybe<T>>()
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
 
-        let queue = self.sharedConnectionQueue
+        // We can only use the secondary queue if we already have a primary
+        // connection and a read-only connection has been requested. This is
+        // because if we do not yet have a primary connection, we need to ensure
+        // we wait for any operations on the primary queue (such as schema prep).
+        let queue: DispatchQueue
+        let useSecondaryConnection: Bool
+        if  flags == .readOnly && primaryConnection != nil {
+            queue = secondaryConnectionQueue
+            useSecondaryConnection = true
+        } else {
+            queue = primaryConnectionQueue
+            useSecondaryConnection = false
+        }
+
+        let deferred = DeferredDBOperation<Maybe<T>>()
 
         func doWork() {
             if deferred.cancelled {
@@ -157,24 +189,30 @@ open class SwiftData {
             deferred.running = true
             defer {
                 deferred.running = false
+                deferred.connection = nil
             }
 
-            if !self.closed && self.sharedConnection == nil {
-                self.sharedConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
+            if !self.closed {
+                if useSecondaryConnection && self.secondaryConnection == nil {
+                    self.secondaryConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readOnly, key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
+                } else if self.primaryConnection == nil {
+                    self.primaryConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate, key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
+                }
             }
 
-            guard let connection = SwiftData.ReuseConnections ? self.sharedConnection :
-                ConcreteSQLiteDBConnection(filename: self.filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
-                    do {
-                        _ = try callback(FailedSQLiteDBConnection())
+            guard let connection = useSecondaryConnection ? self.secondaryConnection : self.primaryConnection else {
+                do {
+                    _ = try callback(FailedSQLiteDBConnection())
 
-                        deferred.fill(Maybe(failure: NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])))
-                    } catch let err as NSError {
-                        deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                    }
-                    return
+                    deferred.fill(Maybe(failure: NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])))
+                } catch let err as NSError {
+                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                }
+                return
             }
-            
+
+            deferred.connection = connection
+
             do {
                 let result = try callback(connection)
                 deferred.fill(Maybe(success: result))
@@ -191,7 +229,7 @@ open class SwiftData {
         } else {
             queue.async(execute: work)
         }
-        
+
         return deferred
     }
 
@@ -209,32 +247,19 @@ open class SwiftData {
     /// The shutdown is *sync*, meaning the queue will complete the current db operations before closing.
     /// If an operation is queued with an open connection, it will execute before this runs.
     func forceClose() {
-        sharedConnectionQueue.sync {
+        primaryConnectionQueue.sync {
             self.closed = true
-            self.sharedConnection = nil
+            self.primaryConnection = nil
+            self.secondaryConnection = nil
         }
     }
 
     /// Reopens a database that had previously been force-closed.
     /// Does nothing if this database is already open.
     func reopenIfClosed() {
-        sharedConnectionQueue.sync {
+        primaryConnectionQueue.sync {
             self.closed = false
         }
-    }
-
-    public func cancel() {
-        if let db = sharedConnection?.sqliteDB, !closed {
-            sqlite3_interrupt(db)
-        }
-    }
-
-    public func suspendQueue() {
-        sharedConnectionQueue.suspend()
-    }
-
-    public func resumeQueue() {
-        sharedConnectionQueue.resume()
     }
 
     public enum Flags {
@@ -295,6 +320,8 @@ private class SQLiteDBStatement {
             // Doubles also pass obj as Int, so order is important here.
             if obj is Double {
                 status = sqlite3_bind_double(pointer, Int32(index+1), obj as! Double)
+            } else if obj is Int64 {
+                status = sqlite3_bind_int64(pointer, Int32(index+1), Int64(obj as! Int64))
             } else if obj is Int {
                 status = sqlite3_bind_int(pointer, Int32(index+1), Int32(obj as! Int))
             } else if obj is Bool {
@@ -337,7 +364,7 @@ private class SQLiteDBStatement {
 }
 
 public protocol SQLiteDBConnection {
-    var lastInsertedRowID: Int { get }
+    var lastInsertedRowID: Int64 { get }
     var numberOfRowsModified: Int { get }
     var version: Int { get }
 
@@ -359,7 +386,7 @@ public protocol SQLiteDBConnection {
 
 // Represents a failure to open.
 class FailedSQLiteDBConnection: SQLiteDBConnection {
-    var lastInsertedRowID: Int = 0
+    var lastInsertedRowID: Int64 = 0
     var numberOfRowsModified: Int = 0
     var version: Int = 0
 
@@ -400,8 +427,8 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
 }
 
 open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
-    open var lastInsertedRowID: Int {
-        return Int(sqlite3_last_insert_rowid(sqliteDB))
+    open var lastInsertedRowID: Int64 {
+        return Int64(sqlite3_last_insert_rowid(sqliteDB))
     }
 
     open var numberOfRowsModified: Int {
@@ -418,18 +445,22 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     fileprivate var sqliteDB: OpaquePointer?
     fileprivate let filename: String
+    fileprivate let flags: SwiftData.Flags
     fileprivate let schema: Schema
     fileprivate let files: FileAccessor
-    
+
     fileprivate let debug_enabled = false
 
-    init?(filename: String, flags: Int32, key: String? = nil, prevKey: String? = nil, schema: Schema, files: FileAccessor) {
+    private var didAttemptToMoveToBackup = false
+
+    init?(filename: String, flags: SwiftData.Flags, key: String? = nil, prevKey: String? = nil, schema: Schema, files: FileAccessor) {
         log.debug("Opening connection to \(filename).")
 
         self.filename = filename
+        self.flags = flags
         self.schema = schema
         self.files = files
-        
+
         func doOpen() -> Bool {
             if let failure = openWithFlags(flags) {
                 log.warning("Opening connection to \(filename) failed: \(failure).")
@@ -446,6 +477,13 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 do {
                     try self.prepareEncrypted(flags, key: key, prevKey: prevKey)
                 } catch {
+                    // Don't attempt to move the database if this is a read-only
+                    // connection or if we've already attempted to move it.
+                    if self.flags != .readOnly && !didAttemptToMoveToBackup {
+                        self.moveDatabaseFileToBackupLocation()
+                        return doOpen()
+                    }
+
                     return false
                 }
             }
@@ -581,7 +619,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         sqlite3_busy_timeout(self.sqliteDB, DatabaseBusyTimeout)
     }
 
-    fileprivate func prepareEncrypted(_ flags: Int32, key: String?, prevKey: String? = nil) throws {
+    fileprivate func prepareEncrypted(_ flags: SwiftData.Flags, key: String?, prevKey: String? = nil) throws {
         // Setting the key needs to be the first thing done with the database.
         if let _ = setKey(key) {
             if let err = closeCustomConnection(immediately: true) {
@@ -733,6 +771,11 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     // Calls to this function will be serialized to prevent race conditions when
     // creating or updating the schema.
     fileprivate func prepareSchema() -> SQLiteDBConnectionCreatedResult {
+        if self.flags == .readOnly {
+            log.debug("Skipping schema (\(self.schema.name)) preparation for read-only connection.")
+            return .success
+        }
+
         Sentry.shared.addAttributes(["dbSchema.\(schema.name).version": schema.version])
         
         // Get the current schema version for the database.
@@ -842,6 +885,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     fileprivate func moveDatabaseFileToBackupLocation() {
+        didAttemptToMoveToBackup = true
+
         let baseFilename = URL(fileURLWithPath: filename).lastPathComponent
 
         // Attempt to make a backup as long as the database file still exists.
@@ -932,8 +977,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     /// Open the connection. This is called when the db is created. You should not call it yourself.
-    fileprivate func openWithFlags(_ flags: Int32) -> NSError? {
-        let status = sqlite3_open_v2(filename.cString(using: .utf8)!, &sqliteDB, flags, nil)
+    fileprivate func openWithFlags(_ flags: SwiftData.Flags) -> NSError? {
+        let status = sqlite3_open_v2(filename.cString(using: .utf8)!, &sqliteDB, flags.toSQL(), nil)
         if status != SQLITE_OK {
             return createErr("During: Opening Database with Flags", status: Int(status))
         }

@@ -29,8 +29,8 @@ private struct SearchViewControllerUX {
     static let SearchImageHeight: Float = 44
     static let SearchImageWidth: Float = 24
 
-    static let SuggestionBackgroundColor = UIColor.Photon.White100
-    static let SuggestionBorderColor = UIConstants.HighlightBlue
+    static var SuggestionBackgroundColor: UIColor { return UIColor.theme.homePanel.searchSuggestionPillBackground }
+    static var SuggestionBorderColor: UIColor { return UIColor.theme.homePanel.searchSuggestionPillForeground }
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
     static let SuggestionInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -44,7 +44,7 @@ private struct SearchViewControllerUX {
     static let IconBorderWidth: CGFloat = 0.5
 }
 
-protocol SearchViewControllerDelegate: class {
+protocol SearchViewControllerDelegate: AnyObject {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
     func searchViewController(_ searchViewController: SearchViewController, didLongPressSuggestion suggestion: String)
     func presentSearchSettingsController()
@@ -72,9 +72,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     static var userAgent: String?
 
-    init(isPrivate: Bool) {
+    init(profile: Profile, isPrivate: Bool) {
         self.isPrivate = isPrivate
-        super.init(nibName: nil, bundle: nil)
+        super.init(profile: profile)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -82,7 +82,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.PanelBackgroundColor
+        view.backgroundColor = UIColor.theme.homePanel.panelBackground
         let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         view.addSubview(blur)
 
@@ -157,7 +157,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
             // Show the default search engine first.
             if !isPrivate {
-                let ua = SearchViewController.userAgent as String! ?? "FxSearch"
+                let ua = SearchViewController.userAgent ?? "FxSearch"
                 suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine, userAgent: ua)
             }
 
@@ -276,7 +276,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     @objc func didClickSearchButton() {
-        self.searchDelegate?.presentSearchSettingsController()  
+        self.searchDelegate?.presentSearchSettingsController()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
@@ -398,8 +398,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     let isBookmark = site.bookmarked ?? false
                     cell.setLines(site.title, detailText: site.url)
                     cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
-                    cell.imageView!.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                    cell.imageView!.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                    cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                    cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
                     cell.imageView?.setIcon(site.icon, forURL: site.tileURL, completed: { (color, url) in
                         if site.tileURL == url {
                             cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
@@ -435,6 +435,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             let suggestion = data[indexPath.item] {
             searchDelegate?.searchViewController(self, didHighlightText: suggestion.url, search: false)
         }
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+
+        reloadData()
     }
 }
 
@@ -503,6 +509,7 @@ extension SearchViewController: SuggestionCellDelegate {
         // Assume that only the default search engine can provide search suggestions.
         let engine = searchEngines.defaultEngine
 
+<<<<<<< HEAD
         var url = URIFixup.getURL(suggestion)
         if url == nil {
             url = engine.searchURLForQuery(suggestion)
@@ -513,6 +520,19 @@ extension SearchViewController: SuggestionCellDelegate {
          */
 
         if let url = url {
+||||||| merged common ancestors
+        var url = URIFixup.getURL(suggestion)
+        if url == nil {
+            url = engine.searchURLForQuery(suggestion)
+        }
+
+        Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
+
+        if let url = url {
+=======
+        if let url = engine.searchURLForQuery(suggestion) {
+            Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
+>>>>>>> firefox-releases
             searchDelegate?.searchViewController(self, didSelectURL: url)
         }
     }
@@ -543,7 +563,7 @@ fileprivate class ButtonScrollView: UIScrollView {
     }
 }
 
-fileprivate protocol SuggestionCellDelegate: class {
+fileprivate protocol SuggestionCellDelegate: AnyObject {
     func suggestionCell(_ suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String)
     func suggestionCell(_ suggestionCell: SuggestionCell, didLongPressSuggestion suggestion: String)
 }
@@ -692,7 +712,7 @@ fileprivate class SuggestionButton: InsetButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        setTitleColor(UIConstants.HighlightBlue, for: [])
+        setTitleColor(UIColor.theme.homePanel.searchSuggestionPillForeground, for: [])
         setTitleColor(UIColor.Photon.White100, for: .highlighted)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         backgroundColor = SearchViewControllerUX.SuggestionBackgroundColor
@@ -711,7 +731,7 @@ fileprivate class SuggestionButton: InsetButton {
     @objc
     override var isHighlighted: Bool {
         didSet {
-            backgroundColor = isHighlighted ? UIConstants.HighlightBlue : SearchViewControllerUX.SuggestionBackgroundColor
+            backgroundColor = isHighlighted ? UIColor.theme.general.highlightBlue : SearchViewControllerUX.SuggestionBackgroundColor
         }
     }
 }

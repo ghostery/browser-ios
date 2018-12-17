@@ -9,31 +9,10 @@ import Deferred
 
 import XCTest
 
-let threeMonthsInMillis: UInt64 = 3 * 30 * 24 * 60 * 60 * 1000
-let threeMonthsInMicros: UInt64 = UInt64(threeMonthsInMillis) * UInt64(1000)
-
-// Start everything three months ago.
-let baseInstantInMillis = Date.now() - threeMonthsInMillis
-let baseInstantInMicros = Date.nowMicroseconds() - threeMonthsInMicros
-
-func advanceTimestamp(_ timestamp: Timestamp, by: Int) -> Timestamp {
-    return timestamp + UInt64(by)
-}
-
-func advanceMicrosecondTimestamp(_ timestamp: MicrosecondTimestamp, by: Int) -> MicrosecondTimestamp {
-    return timestamp + UInt64(by)
-}
-
-extension Site {
-    func asPlace() -> Place {
-        return Place(guid: self.guid!, url: self.url, title: self.title)
-    }
-}
-
 class BaseHistoricalBrowserSchema: Schema {
     var name: String { return "BROWSER" }
     var version: Int { return -1 }
-    
+
     func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
         fatalError("Should never be called.")
     }
@@ -41,7 +20,7 @@ class BaseHistoricalBrowserSchema: Schema {
     func create(_ db: SQLiteDBConnection) -> Bool {
         return false
     }
-    
+
     func drop(_ db: SQLiteDBConnection) -> Bool {
         return false
     }
@@ -1078,7 +1057,7 @@ class TestSQLiteHistory: XCTestCase {
 
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
-        let results = history.getSitesByLastVisit(10).value.successValue
+        let results = history.getSitesByLastVisit(limit: 10, offset: 0).value.successValue
         XCTAssertNotNil(results)
         XCTAssertEqual(results![0]?.url, "http://www.example.com")
 
@@ -1099,7 +1078,7 @@ class TestSQLiteHistory: XCTestCase {
             let args: Args = [Bytes.generateGUID(), site.url, site.title, Date.now(), 0, 0, -1]
             try connection.executeChange(insert, withArgs: args)
         }
-        
+
         XCTAssertTrue(insertDeferred.value.isSuccess)
 
         // Now insert it again. This should update the domain.
@@ -1111,7 +1090,7 @@ class TestSQLiteHistory: XCTestCase {
             let args: Args = [site.url]
             return connection.executeQuery(sql, factory: { $0[0] as? Int }, withArgs: args)
         }
-        
+
         let results = resultsDeferred.value.successValue!
         let domain = results[0]!         // Unwrap to get the first item from the cursor.
         XCTAssertNil(domain)
@@ -1217,7 +1196,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func checkSitesByDate(_ f: @escaping (Cursor<Site>) -> Success) -> () -> Success {
             return {
-                history.getSitesByLastVisit(10)
+                history.getSitesByLastVisit(limit: 10, offset: 0)
                 >>== f
             }
         }
@@ -1314,7 +1293,7 @@ class TestSQLiteHistory: XCTestCase {
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
-        
+
         let expectation = self.expectation(description: "First.")
         func done() -> Success {
             expectation.fulfill()
@@ -1369,6 +1348,40 @@ class TestSQLiteHistory: XCTestCase {
 
         waitForExpectations(timeout: 10.0) { error in
             return
+        }
+    }
+
+    func testRemoveHistoryForUrl() {
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        history.setTopSitesCacheSize(20)
+        history.clearTopSitesCache().succeeded()
+        history.clearHistory().succeeded()
+
+        let url1 = "http://url1/"
+        let site1 = Site(url: "http://url1/", title: "title one")
+        let siteVisit1 = SiteVisit(site: site1, date: Date.nowMicroseconds(), type: VisitType.link)
+
+        let url2 = "http://url2/"
+        let site2 = Site(url: "http://url2/", title: "title two")
+        let siteVisit2 = SiteVisit(site: site2, date: Date.nowMicroseconds() + 2000, type: VisitType.link)
+
+        let url3 = "http://url3/"
+        let site3 = Site(url: url3, title: "title three")
+        let siteVisit3 = SiteVisit(site: site3, date: Date.nowMicroseconds() + 4000, type: VisitType.link)
+
+        history.addLocalVisit(siteVisit1).succeeded()
+        history.addLocalVisit(siteVisit2).succeeded()
+        history.addLocalVisit(siteVisit3).succeeded()
+
+        history.removeHistoryForURL(url1).succeeded()
+        history.removeHistoryForURL(url2).succeeded()
+
+        history.getDeletedHistoryToUpload()
+            >>== { guids in
+                XCTAssertEqual(2, guids.count)
         }
     }
 
@@ -1723,35 +1736,3 @@ class TestSQLiteHistoryFilterSplitting: XCTestCase {
     }
 }
 
-// MARK - Private Test Helper Methods
-
-enum VisitOrigin {
-    case local
-    case remote
-}
-
-private func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, siteCount count: Int) {
-    for i in 0...count {
-        let site = Site(url: "http://s\(i)ite\(i).com/foo", title: "A \(i)")
-        site.guid = "abc\(i)def"
-
-        let baseMillis: UInt64 = baseInstantInMillis - 20000
-        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).succeeded()
-
-        for j in 0...20 {
-            let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
-            addVisitForSite(site, intoHistory: history, from: .local, atTime: visitTime)
-            addVisitForSite(site, intoHistory: history, from: .remote, atTime: visitTime - 100)
-        }
-    }
-}
-
-func addVisitForSite(_ site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: MicrosecondTimestamp) {
-    let visit = SiteVisit(site: site, date: atTime, type: VisitType.link)
-    switch from {
-    case .local:
-            history.addLocalVisit(visit).succeeded()
-    case .remote:
-        history.storeRemoteVisits([visit], forGUID: site.guid!).succeeded()
-    }
-}

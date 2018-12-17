@@ -122,6 +122,7 @@ class SearchTests: BaseTestCase {
         app.textFields["address"].press(forDuration: 5)
         app.menuItems["Select All"].tap()
         app.menuItems["Copy"].tap()
+        waitforExistence(app.buttons["goBack"])
         app.buttons["goBack"].tap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -162,6 +163,7 @@ class SearchTests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
         }
 
+    // Smoketest
     func testSearchEngine() {
         // Change to the each search engine and verify the search uses it
         changeSearchEngine(searchEngine: "Bing")
@@ -176,5 +178,24 @@ class SearchTests: BaseTestCase {
     func testDefaultSearchEngine() {
         navigator.goto(SearchSettings)
         XCTAssert(app.tables.staticTexts["Google"].exists)
+    }
+
+    func testSearchWithFirefoxOption() {
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        waitUntilPageLoad()
+        waitforExistence(app.webViews.staticTexts["cloud"], timeout: 5)
+        // Select some text and long press to find the option
+        app.webViews.staticTexts["cloud"].press(forDuration: 1)
+        if !iPad() {
+            waitforExistence(app.menus.children(matching: .menuItem).element(boundBy: 3))
+            app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
+        }
+        waitforExistence(app.menuItems["Search with Firefox"])
+        app.menuItems["Search with Firefox"].tap()
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: "google")
+        // Now there should be two tabs open
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numTab)
     }
 }

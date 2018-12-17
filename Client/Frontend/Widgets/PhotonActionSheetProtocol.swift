@@ -35,7 +35,7 @@ extension PhotonActionSheetProtocol {
             popoverVC.sourceView = view
             popoverVC.sourceRect = CGRect(x: view.frame.width/2, y: view.frame.size.height * 0.75, width: 1, height: 1)
             popoverVC.permittedArrowDirections = .up
-            popoverVC.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
+            popoverVC.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
@@ -121,7 +121,12 @@ extension PhotonActionSheetProtocol {
             let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
             controller.popoverDelegate = vcDelegate
             controller.modalPresentationStyle = .formSheet
-            vcDelegate.present(controller, animated: true, completion: nil)
+
+            // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+            // of this popover on iPad seems to block the presentation of the modal VC.
+            DispatchQueue.main.async {
+                vcDelegate.present(controller, animated: true, completion: nil)
+            }
         }
         items.append(openSettings)
 
@@ -513,7 +518,7 @@ extension PhotonActionSheetProtocol {
         if let actionNeeded = account?.actionNeeded {
             iconURL = (actionNeeded == .none) ? account?.fxaProfile?.avatar.url : nil
         }
-        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, accessory: .Sync, handler: action)
+        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, iconType: .URL, accessory: .Sync, handler: action)
         return [syncOption]
     }
 }

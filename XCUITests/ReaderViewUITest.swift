@@ -5,7 +5,9 @@
 import XCTest
 
 class ReaderViewTest: BaseTestCase {
+    // Smoketest
     func testLoadReaderContent() {
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         app.buttons["Reader View"].tap()
         app.buttons["Reload"].tap()
@@ -15,6 +17,7 @@ class ReaderViewTest: BaseTestCase {
     }
 
     private func addContentToReaderView() {
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
         app.buttons["Reader View"].tap()
@@ -30,6 +33,7 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertEqual(list, items, "The number of items in the reading table is not correct")
     }
 
+    // Smoketest
     func testAddToReadingList() {
         // Initially reading list is empty
         navigator.goto(HomePanel_ReadingList)
@@ -56,6 +60,8 @@ class ReaderViewTest: BaseTestCase {
     func testAddToReadingListPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         // Initially reading list is empty
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_ReadingList)
 
         // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
@@ -103,6 +109,7 @@ class ReaderViewTest: BaseTestCase {
         waitforExistence(app.buttons["Add to Reading List"])
 
         // Go to reader list view to check that there is not any item there
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
@@ -153,6 +160,7 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
 
         // Add item to Reading List from Page Options Menu
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
         navigator.browserPerformAction(.addReadingListOption)

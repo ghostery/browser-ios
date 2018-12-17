@@ -5,6 +5,7 @@
 import XCTest
 
 class PhotonActionSheetTest: BaseTestCase {
+    // Smoketest
     func testPinToTop() {
         navigator.openURL("http://example.com")
         waitUntilPageLoad()
@@ -12,14 +13,16 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.performAction(Action.PinToTopSitesPAM)
 
         // Navigate to topsites to verify that the site has been pinned
-        navigator.goto(NewTabScreen)
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
 
         // Verify that the site is pinned to top
-        let cell = app.cells["TopSite"].firstMatch
-        XCTAssertEqual(cell.label, "example")
+        waitforExistence(app.cells["example"])
+        let cell = app.cells["example"]
+        waitforExistence(cell)
 
         // Remove pin
-        cell.press(forDuration: 2)
+        app.cells["example"].press(forDuration: 2)
         app.cells["action_unpin"].tap()
 
         // Check that it has been unpinned
@@ -34,11 +37,16 @@ class PhotonActionSheetTest: BaseTestCase {
         waitforExistence(app.buttons["Copy"])
     }
 
+    // Smoketest
     func testShareOptionIsShownFromShortCut() {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
-        app.buttons["TabLocationView.pageOptionsButton"].press(forDuration: 1)
-        // Wait to see the Share options sheet
+        waitforExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        let pageObjectButton = app.buttons["TabLocationView.pageOptionsButton"]
+        // Fix to bug 1467393, url bar long press is shown sometimes instead of the share menu
+        let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
+        pageObjectButtonCenter.press(forDuration: 1)
+
         waitforExistence(app.buttons["Copy"])
     }
 
@@ -103,6 +111,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitforExistence(app.buttons["Copy"])
     }
 
+    // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
         XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)

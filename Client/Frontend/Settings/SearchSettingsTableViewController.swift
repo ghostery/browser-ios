@@ -6,11 +6,11 @@ import UIKit
 import SDWebImage
 import Shared
 
-protocol SearchEnginePickerDelegate: class {
+protocol SearchEnginePickerDelegate: AnyObject {
     func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?)
 }
 
-class SearchSettingsTableViewController: UITableViewController {
+class SearchSettingsTableViewController: ThemedTableViewController {
     fileprivate let SectionDefault = 0
     fileprivate let ItemDefaultEngine = 0
     fileprivate let ItemDefaultSuggestions = 1
@@ -20,9 +20,9 @@ class SearchSettingsTableViewController: UITableViewController {
     fileprivate let NumberOfSections = 2
     fileprivate let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
     fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-    
+
     fileprivate var showDeletion = false
-    
+
     var profile: Profile?
     var tabManager: TabManager?
 
@@ -45,19 +45,17 @@ class SearchSettingsTableViewController: UITableViewController {
         // So that we push the default search engine controller on selection.
         tableView.allowsSelectionDuringEditing = true
 
-        tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is SettingsNavigationController) {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchDoneButton, style: .done, target: self, action: #selector(self.dismissAnimated))
         }
 
-        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: 44))
+        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: 44))
+        footer.showTopBorder = false
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
-
-        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .plain, target: self,
                                                                  action: #selector(beginEditing))
@@ -77,14 +75,13 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: UITableViewCell!
+        let cell = ThemedTableViewCell()
         var engine: OpenSearchEngine!
 
         if indexPath.section == SectionDefault {
             switch indexPath.item {
             case ItemDefaultEngine:
                 engine = model.defaultEngine
-                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
                 cell.accessibilityValue = engine.shortName
@@ -93,10 +90,9 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
             case ItemDefaultSuggestions:
-                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
-                let toggle = UISwitch()
-                toggle.onTintColor = UIConstants.ControlTintColor
+                let toggle = UISwitchThemed()
+                toggle.onTintColor = UIColor.theme.tableView.controlTint
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
@@ -110,12 +106,10 @@ class SearchSettingsTableViewController: UITableViewController {
             let index = indexPath.item + 1
             if index < model.orderedEngines.count {
                 engine = model.orderedEngines[index]
-
-                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.showsReorderControl = true
 
-                let toggle = UISwitch()
-                toggle.onTintColor = UIConstants.ControlTintColor
+                let toggle = UISwitchThemed()
+                toggle.onTintColor = UIColor.theme.tableView.controlTint
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
                 toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)
@@ -130,7 +124,6 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.imageView?.layer.masksToBounds = true
                 cell.selectionStyle = .none
             } else {
-                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = Strings.SettingsAddCustomEngineTitle
                 cell.accessibilityIdentifier = "customEngineViewButton"
@@ -209,7 +202,7 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
         var sectionTitle: String
         if section == SectionDefault {
             sectionTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")

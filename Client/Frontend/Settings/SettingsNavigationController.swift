@@ -16,10 +16,33 @@ class SettingsNavigationController: UINavigationController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
+<<<<<<< HEAD
         /* Cliqz: prevent changing the statusbar style to default
         return .default
         */
         return .lightContent
+||||||| merged common ancestors
+        return .default
+=======
+        return ThemeManager.instance.statusBarStyle
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        applyTheme()
+    }
+}
+
+extension SettingsNavigationController: Themeable {
+    func applyTheme() {
+        navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
+        navigationBar.tintColor = UIColor.theme.general.controlTint
+        navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerTextDark]
+        setNeedsStatusBarAppearanceUpdate()
+        viewControllers.forEach {
+            ($0 as? Themeable)?.applyTheme()
+        }
+>>>>>>> firefox-releases
     }
 }
 

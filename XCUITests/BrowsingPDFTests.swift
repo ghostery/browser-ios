@@ -9,11 +9,11 @@ let PDF_website = ["url": "http://www.pdf995.com/samples/pdf.pdf", "pdfValue": "
 class BrowsingPDFTests: BaseTestCase {
     func testOpenPDFViewer() {
         navigator.openURL(PDF_website["url"]!)
+
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
-
         // Swipe Up and Down
-        let element = app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element
+        let element = app.children(matching: .other).element
         element.swipeUp()
         waitforExistence(app.staticTexts["2 of 5"])
 
@@ -115,6 +115,7 @@ class BrowsingPDFTests: BaseTestCase {
     func testBookmarkPDF() {
         navigator.openURL(PDF_website["url"]!)
         navigator.performAction(Action.BookmarkThreeDots)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Bookmarks)
         waitforExistence(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!].exists)

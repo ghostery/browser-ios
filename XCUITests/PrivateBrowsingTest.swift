@@ -45,7 +45,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
         // Open two tabs in normal browsing and check the number of tabs open
-        navigator.openNewURL(urlString: url1)
+        navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.goto(TabTray)
 
@@ -89,7 +89,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         //  Open a Private tab
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(url1)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
 
         // Go back to regular browser
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -116,46 +116,11 @@ class PrivateBrowsingTest: BaseTestCase {
         checkOpenTabsAfterClosingPrivateMode()
     }
 
-    private func checkOpenTabsBeforeClosingPrivateMode() {
-        let numPrivTabs = userState.numTabs
-        XCTAssertEqual(numPrivTabs, 1, "The number of tabs is not correct, the private tab should not have been closed")
-    }
-
-    private func checkOpenTabsAfterClosingPrivateMode() {
-        let numPrivTabsAfterClosing = userState.numTabs
-        XCTAssertEqual(numPrivTabsAfterClosing, 0, "The number of tabs is not correct, the private tab should have been closed")
-        XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is not shown")
-    }
-
-    private func enableClosePrivateBrowsingOptionWhenLeaving() {
-        navigator.goto(SettingsScreen)
-        print(app.debugDescription)
-        let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
-
-        while settingsTableView.staticTexts["Close Private Tabs"].exists == false {
-            settingsTableView.swipeUp()
-        }
-        let closePrivateTabsSwitch = settingsTableView.switches["settings.closePrivateTabs"]
-        closePrivateTabsSwitch.tap()
-    }
-
-    // This test is only enabled for iPad. Shortcut does not exists on iPhone
-    func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(url1)
-        enableClosePrivateBrowsingOptionWhenLeaving()
-        // Leave PM by tapping on PM shourt cut
-        navigator.goto(NewTabScreen)
-        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
-
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        checkOpenTabsAfterClosingPrivateMode()
-    }
-
     func testClosePrivateTabsOptionClosesPrivateTabsDirectlyFromTabTray() {
         // See scenario described in bug 1434545 for more info about this scenario
         enableClosePrivateBrowsingOptionWhenLeaving()
-        navigator.openURL(urlExample)
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitUntilPageLoad()
         app.webViews.links.staticTexts["More information..."].press(forDuration: 3)
         app.buttons["Open in New Private Tab"].tap()
         waitUntilPageLoad()
@@ -193,8 +158,48 @@ class PrivateBrowsingTest: BaseTestCase {
         let numPrivTabsOpen = userState.numTabs
         XCTAssertEqual(numPrivTabsOpen, 1, "The number of tabs is not correct, there should be one private tab")
     }
+}
+
+fileprivate extension BaseTestCase {
+    func checkOpenTabsBeforeClosingPrivateMode() {
+        let numPrivTabs = userState.numTabs
+        XCTAssertEqual(numPrivTabs, 1, "The number of tabs is not correct, the private tab should not have been closed")
+    }
+
+    func checkOpenTabsAfterClosingPrivateMode() {
+        let numPrivTabsAfterClosing = userState.numTabs
+        XCTAssertEqual(numPrivTabsAfterClosing, 0, "The number of tabs is not correct, the private tab should have been closed")
+        XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is not shown")
+    }
+
+    func enableClosePrivateBrowsingOptionWhenLeaving() {
+        navigator.goto(SettingsScreen)
+        let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
+
+        while settingsTableView.staticTexts["Close Private Tabs"].exists == false {
+            settingsTableView.swipeUp()
+        }
+        let closePrivateTabsSwitch = settingsTableView.switches["settings.closePrivateTabs"]
+        closePrivateTabsSwitch.tap()
+    }
+}
+
+class PrivateBrowsingTestIpad: IpadOnlyTestCase {
+    // This test is only enabled for iPad. Shortcut does not exists on iPhone
+    func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
+        if skipPlatform { return }
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        enableClosePrivateBrowsingOptionWhenLeaving()
+        // Leave PM by tapping on PM shourt cut
+        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
+
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        checkOpenTabsAfterClosingPrivateMode()
+    }
 
     func testiPadDirectAccessPrivateMode() {
+        if skipPlatform { return }
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
 
         // A Tab opens directly in HomePanels view
@@ -214,6 +219,7 @@ class PrivateBrowsingTest: BaseTestCase {
     }
 
     func testiPadDirectAccessPrivateModeBrowserTab() {
+        if skipPlatform { return }
         navigator.openURL("www.mozilla.org")
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
 

@@ -18,7 +18,7 @@ struct ReaderModeHandlers {
         // Register a handler that simply lets us know if a document is in the cache or not. This is called from the
         // reader view interstitial page to find out when it can stop showing the 'Loading...' page and instead load
         // the readerized content.
-        webServer.registerHandlerForMethod("GET", module: "reader-mode", resource: "page-exists") { (request: GCDWebServerRequest?) -> GCDWebServerResponse! in
+        webServer.registerHandlerForMethod("GET", module: "reader-mode", resource: "page-exists") { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
             guard let stringURL = request?.query["url"] as? String,
                   let url = URL(string: stringURL) else {
                 return GCDWebServerResponse(statusCode: 500)
@@ -29,7 +29,7 @@ struct ReaderModeHandlers {
         }
 
         // Register the handler that accepts /reader-mode/page?url=http://www.example.com requests.
-        webServer.registerHandlerForMethod("GET", module: "reader-mode", resource: "page") { (request: GCDWebServerRequest?) -> GCDWebServerResponse! in
+        webServer.registerHandlerForMethod("GET", module: "reader-mode", resource: "page") { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
             if let url = request?.query["url"] as? String {
                 if let url = URL(string: url), url.isWebPage() {
                     do {
@@ -60,9 +60,9 @@ struct ReaderModeHandlers {
                         if let readerViewLoadingPath = Bundle.main.path(forResource: "ReaderViewLoading", ofType: "html") {
                             do {
                                 let readerViewLoading = try NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: String.Encoding.utf8.rawValue)
-                                readerViewLoading.replaceOccurrences(of: "%ORIGINAL-URL%", with: url.absoluteString, 
+                                readerViewLoading.replaceOccurrences(of: "%ORIGINAL-URL%", with: url.absoluteString,
                                     options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(of: "%LOADING-TEXT%", with: NSLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app."), 
+                                readerViewLoading.replaceOccurrences(of: "%LOADING-TEXT%", with: NSLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app."),
                                     options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 readerViewLoading.replaceOccurrences(of: "%LOADING-FAILED-TEXT%", with: NSLocalizedString("The page could not be displayed in Reader View.", comment: "Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
                                     options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))

@@ -4,19 +4,54 @@ Cliqz for iOS
 This branch (master)   [![Build Status](https://dev.azure.com/cliqzci/IOS/_apis/build/status/ghostery.browser-ios)](https://dev.azure.com/cliqzci/IOS/_build/latest?definitionId=1)
 -----------
 
+<<<<<<< HEAD
 This branch is for mainline development.
+||||||| merged common ancestors
+This branch is for mainline development that will ship in *v11.0*.
+=======
+This branch is for mainline development that will ship in *v14.0*.
+>>>>>>> firefox-releases
 
-This branch only works with Xcode 9.3 and supports iOS 10, and 11.
+This branch only works with Xcode 9.4 and supports iOS 10.3, and 11.x.
 
 This branch is written in Swift 4
 
 Please make sure you aim your pull requests in the right direction.
 
+<<<<<<< HEAD
+||||||| merged common ancestors
+For bug fixes and features for the upcoming v12.0 release, please see the *v12.x* branch. (Which may not exist yet)
+=======
+For bug fixes and features for the upcoming v13.0 release, please see the *v13.x* branch.
+>>>>>>> firefox-releases
 
 Getting involved
 ----------------
 
+<<<<<<< HEAD
 We encourage you to participate in this open source project. We love Pull Requests, Bug Reports, ideas, (security) code reviews or any kind of positive contribution.
+||||||| merged common ancestors
+We encourage you to participate in this open source project. We love Pull Requests, Bug Reports, ideas, (security) code reviews or any kind of positive contribution. Please read the [Community Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
+
+* IRC:            [#mobile](https://wiki.mozilla.org/IRC) for general discussion and [#mobistatus](https://wiki.mozilla.org/IRC) for team status updates.
+* Mailing list:   [mobile-firefox-dev@mozilla.org](https://mail.mozilla.org/listinfo/mobile-firefox-dev).
+* Bugs:           [File a new bug](https://bugzilla.mozilla.org/enter_bug.cgi?bug_file_loc=http%3A%2F%2F&bug_ignored=0&op_sys=iOS%20&product=Firefox%20for%20iOS&rep_platform=All) • [Existing bugs](https://bugzilla.mozilla.org/describecomponents.cgi?product=Firefox%20for%20iOS)
+
+Want to contribute but don't know where to start? Here is a list of [Good First Bugs.](http://www.joshmatthews.net/bugsahoy/?mobileios=1&simple=1)
+
+Likewise, the design and UX is still in flux. Don't get attached to them. They will change tomorrow!
+https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScrollPosition=false
+=======
+We encourage you to participate in this open source project. We love Pull Requests, Bug Reports, ideas, (security) code reviews or any kind of positive contribution. Please read the [Community Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
+
+* IRC:            [#mobile](https://wiki.mozilla.org/IRC) for general discussion and [#mobistatus](https://wiki.mozilla.org/IRC) for team status updates.
+* Mailing list:   [mobile-firefox-dev@mozilla.org](https://mail.mozilla.org/listinfo/mobile-firefox-dev).
+* Bugs:           [File a new bug](https://bugzilla.mozilla.org/enter_bug.cgi?bug_file_loc=http%3A%2F%2F&bug_ignored=0&op_sys=iOS%20&product=Firefox%20for%20iOS&rep_platform=All) • [Existing bugs](https://bugzilla.mozilla.org/describecomponents.cgi?product=Firefox%20for%20iOS)
+
+Want to contribute but don't know where to start? Here is a list of [Good First Bugs.](http://www.joshmatthews.net/bugsahoy/?mobileios=1&simple=1)
+
+Likewise, the design and UX is still in flux. Don't get attached to them. They will change tomorrow!
+>>>>>>> firefox-releases
 
 
 Building the code

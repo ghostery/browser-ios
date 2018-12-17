@@ -12,7 +12,7 @@ private struct PasscodeUX {
     static let PasscodeFieldSize: CGSize = CGSize(width: 160, height: 32)
 }
 
-@objc protocol PasscodeInputViewDelegate: class {
+@objc protocol PasscodeInputViewDelegate: AnyObject {
     func passcodeInputView(_ inputView: PasscodeInputView, didFinishEnteringCode code: String)
 }
 
@@ -39,6 +39,7 @@ class PasscodeInputView: UIView, UIKeyInput {
     }
 
     @objc var keyboardType: UIKeyboardType = .numberPad
+    @objc var keyboardAppearance: UIKeyboardAppearance = ThemeManager.instance.currentName == .dark ? .dark : .default
 
     init(frame: CGRect, passcodeSize: Int) {
         self.passcodeSize = passcodeSize
@@ -95,8 +96,8 @@ class PasscodeInputView: UIView, UIKeyInput {
         guard let context = UIGraphicsGetCurrentContext() else { return }
 
         context.setLineWidth(1)
-        context.setStrokeColor(UIConstants.PasscodeDotColor.cgColor)
-        context.setFillColor(UIConstants.PasscodeDotColor.cgColor)
+        context.setStrokeColor(UIColor.theme.general.passcodeDot.cgColor)
+        context.setFillColor(UIColor.theme.general.passcodeDot.cgColor)
 
         (0..<passcodeSize).forEach { index in
             let offset = floor(rect.width / CGFloat(passcodeSize))
@@ -123,6 +124,7 @@ class PasscodePane: UIView {
         let label = UILabel()
         label.font = UIConstants.DefaultChromeFont
         label.isAccessibilityElement = true
+        label.textColor = UIColor.theme.tableView.rowText
         return label
     }()
 
@@ -142,7 +144,7 @@ class PasscodePane: UIView {
     init(title: String? = nil, passcodeSize: Int = 4) {
         codeInputView = PasscodeInputView(passcodeSize: passcodeSize)
         super.init(frame: .zero)
-        backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        backgroundColor = UIColor.theme.tableView.headerBackground
 
         titleLabel.text = title
         centerContainer.addSubview(titleLabel)
@@ -178,25 +180,25 @@ class PasscodePane: UIView {
             UIView.animate(withDuration: 0.1, animations: {
                 self.codeViewCenterConstraint?.update(offset: 0)
                 self.layoutIfNeeded()
-            }) 
-        }) 
+            })
+        })
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     @objc func keyboardWillShow(_ sender: Notification) {
         guard let keyboardFrame = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue else {
             return
         }
-        
+
         UIView.animate(withDuration: 0.1, animations: {
             self.containerCenterConstraint?.update(offset: -keyboardFrame.height/2)
             self.layoutIfNeeded()
         })
     }
-    
+
     @objc func keyboardWillHide(_ sender: Notification) {
         UIView.animate(withDuration: 0.1, animations: {
             self.containerCenterConstraint?.update(offset: 0)

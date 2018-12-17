@@ -16,7 +16,6 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
 // MARK: -  Lifecycle
 struct ASPanelUX {
-    static let backgroundColor = UIConstants.AppBackgroundColor
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 14)
@@ -108,10 +107,11 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         Section.allValues.forEach { self.collectionView?.register(Section($0.rawValue).cellType, forCellWithReuseIdentifier: Section($0.rawValue).cellIdentifier) }
         self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header")
         self.collectionView?.register(ASFooterView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer")
-        collectionView?.backgroundColor = ASPanelUX.backgroundColor
         collectionView?.keyboardDismissMode = .onDrag
         
         self.profile.panelDataObservers.activityStream.delegate = self
+
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -135,8 +135,12 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
             }
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
-        }, completion: nil)
+        }, completion: { _ in
+            // Workaround: label positions are not correct without additional reload
+            self.collectionView?.reloadData()
+        })
     }
+
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -145,6 +149,14 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
     @objc func reload(notification: Notification) {
         reloadAll()
+    }
+
+    func applyTheme() {
+        collectionView?.backgroundColor = UIColor.theme.browser.background
+        topSiteCell.collectionView.reloadData()
+        if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
+            collectionView.reloadData()
+        }
     }
 }
 
@@ -1007,28 +1019,31 @@ struct ActivityStreamTracker {
 
 // MARK: - Section Header View
 private struct ASHeaderViewUX {
-    static let SeperatorColor =  UIColor.Photon.Grey20
+    static var SeparatorColor: UIColor { return UIColor.theme.homePanel.separator }
     static let TextFont = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
-    static let SeperatorHeight = 1
+    static let SeparatorHeight = 1
     static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASPanelUX.MinimumInsets : ASPanelUX.MinimumInsets
     static let TitleTopInset: CGFloat = 5
 }
 
 class ASFooterView: UICollectionReusableView {
 
+    private var separatorLineView: UIView?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        let seperatorLine = UIView()
-        seperatorLine.backgroundColor = ASHeaderViewUX.SeperatorColor
+        let separatorLine = UIView()
         self.backgroundColor = UIColor.clear
-        addSubview(seperatorLine)
-        seperatorLine.snp.makeConstraints { make in
-            make.height.equalTo(ASHeaderViewUX.SeperatorHeight)
+        addSubview(separatorLine)
+        separatorLine.snp.makeConstraints { make in
+            make.height.equalTo(ASHeaderViewUX.SeparatorHeight)
             make.leading.equalTo(self.snp.leading)
             make.trailing.equalTo(self.snp.trailing)
             make.top.equalTo(self.snp.top)
         }
+        separatorLineView = separatorLine
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -1036,11 +1051,17 @@ class ASFooterView: UICollectionReusableView {
     }
 }
 
+extension ASFooterView: Themeable {
+    func applyTheme() {
+        separatorLineView?.backgroundColor = ASHeaderViewUX.SeparatorColor
+    }
+}
+
 class ASHeaderView: UICollectionReusableView {
     lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = self.title
-        titleLabel.textColor = UIColor.Photon.Grey50
+        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
         titleLabel.font = ASHeaderViewUX.TextFont
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
@@ -1055,7 +1076,7 @@ class ASHeaderView: UICollectionReusableView {
         button.titleLabel?.font = ASHeaderViewUX.TextFont
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
-        button.setTitleColor(.gray, for: .highlighted)
+        button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
         return button
     }()
 
@@ -1087,11 +1108,11 @@ class ASHeaderView: UICollectionReusableView {
         moreButton.snp.makeConstraints { make in
             make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
             make.bottom.equalTo(self)
-            self.rightConstraint = make.trailing.equalTo(self).inset(-titleInsets).constraint
+            self.rightConstraint = make.trailing.equalTo(self.safeArea.trailing).inset(-titleInsets).constraint
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
-            self.leftConstraint = make.leading.equalTo(self).inset(titleInsets).constraint
+            self.leftConstraint = make.leading.equalTo(self.safeArea.leading).inset(titleInsets).constraint
             make.trailing.equalTo(moreButton.snp.leading).inset(-ASHeaderViewUX.TitleTopInset)
             make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
             make.bottom.equalTo(self)

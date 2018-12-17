@@ -3,20 +3,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 struct TopTabsSeparatorUX {
     static let Identifier = "Separator"
+<<<<<<< HEAD
     /* Cliqz: change color
     static let Color = UIColor.Defaults.Grey70
     */
     static let Color = UIColor.white
+||||||| merged common ancestors
+    static let Color = UIColor.Photon.Grey70
+=======
+>>>>>>> firefox-releases
     static let Width: CGFloat = 1
 }
 
 class TopTabsSeparator: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = TopTabsSeparatorUX.Color
+        self.backgroundColor = UIColor.theme.topTabs.separator
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -30,7 +36,7 @@ class TopTabsHeaderFooter: UICollectionReusableView {
         super.init(frame: frame)
         line.semanticContentAttribute = .forceLeftToRight
         addSubview(line)
-        line.backgroundColor = TopTabsSeparatorUX.Color
+        line.backgroundColor = UIColor.theme.topTabs.separator
     }
 
     func arrangeLine(_ kind: String) {
@@ -63,35 +69,17 @@ class TopTabsHeaderFooter: UICollectionReusableView {
     }
 }
 
-class TopTabCell: UICollectionViewCell {
-    enum Style {
-        case light
-        case dark
-    }
-    
+class TopTabCell: UICollectionViewCell, PrivateModeUI {
+
     static let Identifier = "TopTabCellIdentifier"
     static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator
-    
-    var style: Style = .light {
-        didSet {
-            if style != oldValue {
-                applyStyle(style)
-            }
-        }
-    }
-    
+
     var selectedTab = false {
         didSet {
-            backgroundColor = selectedTab ? UIColor.Photon.Grey10 : UIColor.Photon.Grey80
-            titleText.textColor = selectedTab ? UIColor.Photon.Grey90 : UIColor.Photon.Grey40
+            backgroundColor = selectedTab ? UIColor.theme.topTabs.tabBackgroundSelected : UIColor.theme.topTabs.tabBackgroundUnselected
+            titleText.textColor = selectedTab ? UIColor.theme.topTabs.tabForegroundSelected : UIColor.theme.topTabs.tabForegroundUnselected
             highlightLine.isHidden = !selectedTab
-            closeButton.tintColor = selectedTab ? UIColor.Photon.Grey80 : UIColor.Photon.Grey40
-            // restyle if we are in PBM
-            if style == .dark && selectedTab {
-                backgroundColor =  UIColor.Photon.Grey70
-                titleText.textColor = UIColor.Photon.Grey10
-                closeButton.tintColor = UIColor.Photon.Grey10
-            }
+            closeButton.tintColor = selectedTab ? UIColor.theme.topTabs.closeButtonSelectedTab : UIColor.theme.topTabs.closeButtonUnselectedTab
             closeButton.backgroundColor = backgroundColor
             closeButton.layer.shadowColor = backgroundColor?.cgColor
             if selectedTab {
@@ -176,20 +164,44 @@ class TopTabCell: UICollectionViewCell {
         }
         
         self.clipsToBounds = false
-        
-        applyStyle(style)
+
+        applyUIMode(isPrivate: false)
     }
-    
-    fileprivate func applyStyle(_ style: Style) {
-        switch style {
-        case Style.light:
-            titleText.textColor = UIColor.darkText
-            backgroundColor = UIConstants.AppBackgroundColor
-            highlightLine.backgroundColor = UIColor.Photon.Blue60
-        case Style.dark:
-            titleText.textColor = UIColor.lightText
-            backgroundColor = UIColor.Photon.Grey70
-            highlightLine.backgroundColor = UIColor.Photon.Purple50
+
+    func applyUIMode(isPrivate: Bool) {
+        highlightLine.backgroundColor = UIColor.theme.topTabs.tabSelectedIndicatorBar(isPrivate)
+    }
+
+    func configureWith(tab: Tab, isSelected: Bool) {
+        applyUIMode(isPrivate: tab.isPrivate)
+        self.titleText.text = tab.displayTitle
+
+        if tab.displayTitle.isEmpty {
+            if tab.webView?.url?.isLocalUtility ?? true {
+                self.titleText.text = Strings.AppMenuNewTabTitleString
+            } else {
+                self.titleText.text = tab.webView?.url?.absoluteDisplayString
+            }
+            self.accessibilityLabel = tab.url?.aboutComponent ?? ""
+            self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
+        } else {
+            self.accessibilityLabel = tab.displayTitle
+            self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
+        }
+
+        self.selectedTab = isSelected
+        if let siteURL = tab.url?.displayURL {
+            self.favicon.setIcon(tab.displayFavicon, forURL: siteURL, completed: { (color, url) in
+                if siteURL == url {
+                    self.favicon.image = self.favicon.image?.createScaled(CGSize(width: 15, height: 15))
+                    self.favicon.backgroundColor = color == .clear ? .white : color
+                    self.favicon.contentMode = .center
+                }
+            })
+        } else {
+            self.favicon.image = UIImage(named: "defaultFavicon")
+            self.favicon.contentMode = .scaleAspectFit
+            self.favicon.backgroundColor = .clear
         }
     }
     

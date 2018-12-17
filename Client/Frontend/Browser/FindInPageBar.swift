@@ -3,8 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 
-protocol FindInPageBarDelegate: class {
+protocol FindInPageBarDelegate: AnyObject {
     func findInPage(_ findInPage: FindInPageBar, didTextChange text: String)
     func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String)
     func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String)
@@ -29,6 +30,7 @@ class FindInPageBar: UIView {
 
     var currentResult = 0 {
         didSet {
+            Profiler.shared?.end(bookend: .find_in_page)
             if totalResults > 500 {
                 matchCountView.text = "\(currentResult)/500+"
             } else {
@@ -39,6 +41,7 @@ class FindInPageBar: UIView {
 
     var totalResults = 0 {
         didSet {
+            Profiler.shared?.end(bookend: .find_in_page)
             if totalResults > 500 {
                 matchCountView.text = "\(currentResult)/500+"
             } else {
@@ -75,6 +78,7 @@ class FindInPageBar: UIView {
         searchText.enablesReturnKeyAutomatically = true
         searchText.returnKeyType = .search
         searchText.accessibilityIdentifier = "FindInPage.searchField"
+        searchText.delegate = self
         addSubview(searchText)
 
         matchCountView.textColor = FindInPageUX.MatchCountColor
@@ -164,11 +168,23 @@ class FindInPageBar: UIView {
     }
 
     @objc fileprivate func didTextChange(_ sender: UITextField) {
+        Profiler.shared?.begin(bookend: .find_in_page)
         matchCountView.isHidden = searchText.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
         delegate?.findInPage(self, didTextChange: searchText.text ?? "")
     }
 
     @objc fileprivate func didPressClose(_ sender: UIButton) {
         delegate?.findInPageDidPressClose(self)
+    }
+}
+
+extension FindInPageBar: UITextFieldDelegate {
+    // Keyboard with a .search returnKeyType doesn't dismiss when return pressed. Handle this manually.
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if string == "\n" {
+            textField.resignFirstResponder()
+            return false
+        }
+        return true
     }
 }
