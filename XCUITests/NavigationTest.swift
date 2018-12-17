@@ -9,6 +9,7 @@ let website_2 = ["url": "www.example.com", "label": "Example", "value": "example
 
 let urlAddons = "addons.mozilla.org"
 let urlGoogle = "www.google.com"
+let popUpTestUrl = "http://www.popuptest.com/popuptest1.html"
 
 let requestMobileSiteLabel = "Request Mobile Site"
 let requestDesktopSiteLabel = "Request Desktop Site"
@@ -146,7 +147,7 @@ class NavigationTest: BaseTestCase {
     }
 
     private func checkDesktopView() {
-        let desktopViewElement = app.webViews.links.staticTexts["About Google"]
+        let desktopViewElement = app.webViews.links.staticTexts["About"]
         waitforExistence(desktopViewElement)
         XCTAssertTrue (desktopViewElement.exists, "Desktop view is not available")
     }
@@ -187,7 +188,7 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(urlGoogle)
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "google")
-        
+
         // Mobile view by default, desktop view should be available
         navigator.browserPerformAction(.toggleDesktopOption)
         checkDesktopSite()
@@ -206,14 +207,14 @@ class NavigationTest: BaseTestCase {
         waitforExistence(app.tables.cells["menu-RequestDesktopSite"].staticTexts[requestDesktopSiteLabel])
         navigator.goto(BrowserTab)
     }
-    
+
     private func checkDesktopSite() {
         navigator.nowAt(BrowserTab)
         navigator.goto(PageOptionsMenu)
         waitforExistence(app.tables.cells["menu-RequestDesktopSite"].staticTexts[requestMobileSiteLabel])
         navigator.goto(BrowserTab)
     }
-    
+
     func testNavigationPreservesDesktopSiteOnSameHost() {
         clearData()
         navigator.openURL(urlGoogle)
@@ -295,8 +296,10 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue (desktopViewElement.exists, "Desktop view is not available after coming from another site in mobile view")
      }
      */
+
+    // Smoketest
     func testLongPressLinkOptions() {
-        navigator.openURL(website_2["url"]!)
+        navigator.openURL(path(forTestPage: "test-example.html"))
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         waitforExistence(app.sheets[website_2["moreLinkLongPressUrl"]!])
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
@@ -308,7 +311,7 @@ class NavigationTest: BaseTestCase {
 
     func testLongPressLinkOptionsPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(website_2["url"]!)
+        navigator.openURL(path(forTestPage: "test-example.html"))
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         waitforExistence(app.sheets[website_2["moreLinkLongPressUrl"]!])
         XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
@@ -343,7 +346,7 @@ class NavigationTest: BaseTestCase {
     }
 
     private func longPressLinkOptions(optionSelected: String) {
-        navigator.openURL(website_2["url"]!)
+        navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         app.buttons[optionSelected].tap()
@@ -393,5 +396,50 @@ class NavigationTest: BaseTestCase {
 
         waitforNoExistence(app.sheets[website_2["moreLinkLongPressInfo"]!])
         XCTAssertEqual(app.textFields["url"].value! as? String, "www.example.com/", "After canceling the menu user is in a different website")
+    }
+
+    // Smoketest
+    func testPopUpBlocker() {
+        // Check that it is enabled by default
+        navigator.goto(SettingsScreen)
+        waitforExistence(app.tables["AppSettingsTableViewController.tableView"])
+        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
+        let switchValue = switchBlockPopUps.value!
+        XCTAssertEqual(switchValue as? String, "1")
+
+        // Check that there are no pop ups
+        navigator.openURL(popUpTestUrl)
+        waitForValueContains(app.textFields["url"], value: "popuptest1.html")
+        waitforNoExistence(app.images["popup"])
+        let numTabs = app.buttons["Show Tabs"].value
+        XCTAssertEqual("1", numTabs as? String, "There should be only on tab")
+
+        // Now disable the Block PopUps option
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(SettingsScreen)
+        switchBlockPopUps.tap()
+        let switchValueAfter = switchBlockPopUps.value!
+        XCTAssertEqual(switchValueAfter as? String, "0")
+
+        // Check that now pop ups are shown
+        navigator.openURL(popUpTestUrl)
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: "popup6.html")
+        waitforExistence(app.images["popup"])
+        XCTAssertTrue(app.images["popup"].exists, "There is a pop up")
+        let numTabsAfter = app.buttons["Show Tabs"].value
+        XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
+    }
+
+    // Smoketest
+    func testSSL() {
+        navigator.openURL("https://expired.badssl.com/")
+        waitforExistence(app.buttons["Advanced"], timeout: 10)
+        app.buttons["Advanced"].tap()
+
+        waitforExistence(app.links["Visit site anyway"])
+        app.links["Visit site anyway"].tap()
+        waitforExistence(app.webViews.otherElements["expired.badssl.com"], timeout: 10)
+        XCTAssertTrue(app.webViews.otherElements["expired.badssl.com"].exists)
     }
  }

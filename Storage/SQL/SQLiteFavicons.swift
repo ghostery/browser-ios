@@ -79,8 +79,8 @@ open class SQLiteFavicons {
         } catch {
             return nil
         }
-        
-        return conn.lastInsertedRowID
+
+        return Int(conn.lastInsertedRowID)
     }
     
     public func cleanupFavicons() -> Success {

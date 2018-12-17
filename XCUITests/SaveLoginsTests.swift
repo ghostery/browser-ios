@@ -4,14 +4,18 @@
 
 import XCTest
 
-let testLoginPage = "http://wopr.norad.org/~sarentz/fxios/testpages/password.html"
-let savedLoginEntry = "test@example.com, https://wopr.norad.org"
+let domain = "http://localhost:6571"
+let testLoginPage = path(forTestPage: "test-password.html")
+let savedLoginEntry = "test@example.com, http://localhost:6571"
+let urlLogin = "linkedin.com"
+let mailLogin = "iosmztest@mailinator.com"
 
 class SaveLoginTest: BaseTestCase {
 
     private func saveLogin() {
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
+        waitforExistence(app.buttons["submit"], timeout: 3)
         app.buttons["submit"].tap()
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
     }
@@ -44,6 +48,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, 0)
     }
 
+    // Smoketest
     func testSavedLoginSelectUnselect() {
         saveLogin()
         openLoginsSettings()
@@ -63,6 +68,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertTrue(app.cells.images["loginUnselected"].exists)
     }
 
+
     func testDeleteLogin() {
         saveLogin()
         openLoginsSettings()
@@ -76,6 +82,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertTrue(app.tables["No logins found"].exists)
     }
 
+
     func testEditOneLoginEntry() {
         saveLogin()
         openLoginsSettings()
@@ -83,11 +90,12 @@ class SaveLoginTest: BaseTestCase {
 
         app.tables.cells[savedLoginEntry].tap()
         waitforExistence(app.tables["Login Detail List"])
-        XCTAssertTrue(app.tables.cells["website, https://wopr.norad.org"].exists)
+        XCTAssertTrue(app.tables.cells["website, \(domain)"].exists)
         XCTAssertTrue(app.tables.cells["username, test@example.com"].exists)
         XCTAssertTrue(app.tables.cells["password"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts["Delete"].exists)
     }
+
 
     func testSearchLogin() {
         saveLogin()
@@ -109,5 +117,31 @@ class SaveLoginTest: BaseTestCase {
         // Clear Text
         app.buttons["Clear Search"].tap()
         XCTAssertEqual(app.tables["Login List"].cells.count, 1)
+    }
+
+    // Smoketest
+    func testSavedLoginAutofilled() {
+        navigator.openURL(urlLogin)
+        waitUntilPageLoad()
+        app.webViews.links["Sign in"].tap()
+        waitforExistence(app.webViews.textFields["Email"])
+        app.webViews.textFields["Email"].tap()
+        app.webViews.textFields["Email"].typeText(mailLogin)
+
+        app.webViews.secureTextFields["Password"].tap()
+        app.webViews.secureTextFields["Password"].typeText("test15mz")
+
+        app.webViews.buttons["Sign in"].tap()
+        app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
+
+        // Clear Data and go to linkedin, fields should be filled in
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.AcceptClearPrivateData)
+        navigator.openNewURL(urlString: urlLogin)
+        waitUntilPageLoad()
+        let emailValue = app.webViews.textFields["Email"].value!
+        XCTAssertEqual(emailValue as! String, mailLogin)
+        let passwordValue = app.webViews.secureTextFields["Password"].value!
+        XCTAssertEqual(passwordValue as! String, "••••••••")
     }
 }

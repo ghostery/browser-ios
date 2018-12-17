@@ -21,7 +21,7 @@ struct IntroUX {
     static let FadeDuration = 0.25
 }
 
-protocol IntroViewControllerDelegate: class {
+protocol IntroViewControllerDelegate: AnyObject {
     func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool)
 }
 
@@ -274,6 +274,11 @@ extension IntroViewController {
         NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Profiler.shared?.end(bookend: .intro_did_appear)
+    }
+
     @objc func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
         setupDynamicFonts()
@@ -452,7 +457,7 @@ func == (lhs: IntroCard, rhs: IntroCard) -> Bool {
 }
 
 extension UIColor {
-    var components:(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+    var components: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         var r: CGFloat = 0
         var g: CGFloat = 0
         var b: CGFloat = 0

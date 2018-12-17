@@ -53,8 +53,10 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 return
             }
 
+            Profiler.shared?.begin(bookend: .url_autocomplete)
+
             if let currentDbQuery = currentDbQuery {
-                profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
+                currentDbQuery.cancel()
             }
 
             let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
@@ -63,6 +65,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             deferred.uponQueue(.main) { result in
                 defer {
                     self.currentDbQuery = nil
+                    Profiler.shared?.end(bookend: .url_autocomplete)
                 }
 
                 guard let deferred = deferred as? Cancellable, !deferred.cancelled else {
@@ -100,7 +103,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         // Extract the pre-path substring from the URL. This should be more efficient than parsing via
         // NSURL since we need to only look at the beginning of the string.
         // Note that we won't match non-HTTP(S) URLs.
-        guard let match = URLBeforePathRegex.firstMatch(in: url, options: [], range: NSRange(location: 0, length: url.characters.count)) else {
+        guard let match = URLBeforePathRegex.firstMatch(in: url, options: [], range: NSRange(location: 0, length: url.count)) else {
             return nil
         }
 
@@ -127,7 +130,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         if let range = domainWithDotPrefix.range(of: ".\(query)", options: .caseInsensitive, range: nil, locale: nil) {
             // We don't actually want to match the top-level domain ("com", "org", etc.) by itself, so
             // so make sure the result includes at least one ".".
-            let matchedDomain: String = domainWithDotPrefix.substring(from: domainWithDotPrefix.index(range.lowerBound, offsetBy: 1))
+            let matchedDomain: String = String(domainWithDotPrefix[domainWithDotPrefix.index(range.lowerBound, offsetBy: 1)...])
             if matchedDomain.contains(".") {
                 return matchedDomain
             }

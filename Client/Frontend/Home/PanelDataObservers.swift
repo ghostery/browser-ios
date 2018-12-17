@@ -12,12 +12,12 @@ private let log = Logger.browserLogger
 
 protocol DataObserver {
     var profile: Profile { get }
-    weak var delegate: DataObserverDelegate? { get set }
+    var delegate: DataObserverDelegate? { get set }
 
     func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
 }
 
-protocol DataObserverDelegate: class {
+protocol DataObserverDelegate: AnyObject {
     func didInvalidateDataSources(refresh forced: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool)
     func willInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
 }
@@ -62,9 +62,9 @@ class ActivityStreamDataObserver: DataObserver {
 
         // Highlights are cached for 15 mins
         let userEnabledHighlights = profile.prefs.boolForKey(PrefsKeys.ASRecentHighlightsVisible) ?? true
-        let lastInvalidationTime = UInt64(profile.prefs.unsignedLongForKey(PrefsKeys.ASLastInvalidation) ?? 0)
-        let shouldInvalidateHighlights = (highlights || (Date.now() - lastInvalidationTime > invalidationTime)) && userEnabledHighlights
-        
+        let lastInvalidationTime = profile.prefs.longForKey(PrefsKeys.ASLastInvalidation) ?? 0
+        let shouldInvalidateHighlights = (highlights || (Int64(Date.now()) - lastInvalidationTime > Int64(invalidationTime))) && userEnabledHighlights
+
         // KeyTopSitesCacheIsValid is false when we want to invalidate. Thats why this logic is so backwards
         let shouldInvalidateTopSites = topSites || !(profile.prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false)
         if !shouldInvalidateTopSites && !shouldInvalidateHighlights {
@@ -72,17 +72,21 @@ class ActivityStreamDataObserver: DataObserver {
             return
         }
 
+        // Flip the `KeyTopSitesCacheIsValid` flag now to prevent subsequent calls to refresh
+        // from re-invalidating the cache.
+        if shouldInvalidateTopSites {
+            self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+        }
+
+        // Set the `ASLastInvalidation` timestamp now to prevent subsequent calls to refresh
+        // from re-invalidating the cache.
+        if shouldInvalidateHighlights {
+            let newInvalidationTime = shouldInvalidateHighlights ? Int64(Date.now()) : lastInvalidationTime
+            self.profile.prefs.setLong(newInvalidationTime, forKey: PrefsKeys.ASLastInvalidation)
+        }
+
         self.delegate?.willInvalidateDataSources(forceHighlights: highlights, forceTopSites: topSites)
         self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(.main) { _ in
-            if shouldInvalidateTopSites {
-                self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
-            }
-            
-            if shouldInvalidateHighlights {
-                let newInvalidationTime = shouldInvalidateHighlights ? Date.now() : lastInvalidationTime
-                self.profile.prefs.setLong(newInvalidationTime, forKey: PrefsKeys.ASLastInvalidation)
-            }
-            
             self.delegate?.didInvalidateDataSources(refresh: highlights || topSites, highlightsRefreshed: shouldInvalidateHighlights, topSitesRefreshed: shouldInvalidateTopSites)
         }
     }

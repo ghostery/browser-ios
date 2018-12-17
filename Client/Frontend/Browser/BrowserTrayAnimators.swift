@@ -27,12 +27,16 @@ private extension TrayToBrowserAnimator {
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let expandFromIndex = displayedTabs.index(of: selectedTab) else { return }
 
+        //Disable toolbar until animation completes
+        tabTray.toolbar.isUserInteractionEnabled = false
+
         bvc.view.frame = transitionContext.finalFrame(for: bvc)
 
         // Hide browser components
         bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.homePanelController?.view.isHidden = true
+
         bvc.webViewContainerBackdrop.isHidden = true
         bvc.statusBarOverlay.isHidden = false
         if let url = selectedTab.url, !url.isReaderModeURL {
@@ -75,11 +79,13 @@ private extension TrayToBrowserAnimator {
             cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.height)
 
             bvc.tabTrayDidDismiss(tabTray)
-            UIApplication.shared.windows.first?.backgroundColor = UIConstants.AppBackgroundColor
+            UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.browser.background
             tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
             tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
             tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             tabCollectionViewSnapshot.alpha = 0
+            tabTray.statusBarBG.alpha = 0
+            tabTray.searchBarHolder.alpha = 0
         }, completion: { finished in
             // Remove any of the views we used for the animation
             cell.removeFromSuperview()
@@ -90,6 +96,7 @@ private extension TrayToBrowserAnimator {
             bvc.webViewContainerBackdrop.isHidden = false
             bvc.homePanelController?.view.isHidden = false
             bvc.urlBar.isTransitioning = false
+            tabTray.toolbar.isUserInteractionEnabled = true
             transitionContext.completeTransition(true)
         })
     }
@@ -118,6 +125,9 @@ private extension BrowserToTrayAnimator {
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let scrollToIndex = displayedTabs.index(of: selectedTab) else { return }
 
+        //Disable toolbar until animation completes
+        tabTray.toolbar.isUserInteractionEnabled = false
+
         tabTray.view.frame = transitionContext.finalFrame(for: tabTray)
 
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
@@ -125,8 +135,7 @@ private extension BrowserToTrayAnimator {
 
         // Force subview layout on the collection view so we can calculate the correct end frame for the animation
         tabTray.view.layoutSubviews()
-
-        tabTray.collectionView.scrollToItem(at: IndexPath(item: scrollToIndex, section: 0), at: .centeredVertically, animated: false)
+        tabTray.focusTab()
 
         // Build a tab cell that we will use to animate the scaling of the browser to the tab
         let expandedFrame = calculateExpandedCellFrameFromBVC(bvc)
@@ -155,6 +164,13 @@ private extension BrowserToTrayAnimator {
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.urlBar.isTransitioning = true
 
+        // On iPhone, fading these in produces a darkening at the top of the screen, and then
+        // it brightens back to full white as they fade in. Setting these to not fade in produces a better effect.
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            tabTray.statusBarBG.alpha = 1
+            tabTray.searchBarHolder.alpha = 1
+        }
+
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
         // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens.
         // To work around this, we dispatch the setting of collection view to hidden after the screen update is completed.
@@ -173,16 +189,18 @@ private extension BrowserToTrayAnimator {
                 cell.frame = finalFrame
                 cell.title.transform = .identity
                 cell.layoutIfNeeded()
-                
-                UIApplication.shared.windows.first?.backgroundColor = TabTrayControllerUX.BackgroundColor
+
+                UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.tabTray.background
                 tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
-                
+
                 transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
 
                 bvc.urlBar.updateAlphaForSubviews(0)
                 bvc.footer.alpha = 0
                 tabCollectionViewSnapshot.alpha = 1
 
+                tabTray.statusBarBG.alpha = 1
+                tabTray.searchBarHolder.alpha = 1
                 tabTray.toolbar.transform = .identity
                 resetTransformsForViews([tabCollectionViewSnapshot])
             }, completion: { finished in
@@ -197,6 +215,7 @@ private extension BrowserToTrayAnimator {
 
                 resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
                 bvc.urlBar.isTransitioning = false
+                tabTray.toolbar.isUserInteractionEnabled = true
                 transitionContext.completeTransition(true)
             })
         }
@@ -242,6 +261,9 @@ private func headerTransform(_ frame: CGRect, toFrame finalFrame: CGRect, contai
 
 //MARK: Private Helper Methods
 private func calculateCollapsedCellFrameUsingCollectionView(_ collectionView: UICollectionView, atIndex index: Int) -> CGRect {
+    guard index < collectionView.numberOfItems(inSection: 0) else {
+        return .zero
+    }
     if let attr = collectionView.collectionViewLayout.layoutAttributesForItem(at: IndexPath(item: index, section: 0)) {
         return collectionView.convert(attr.frame, to: collectionView.superview)
     } else {
@@ -287,26 +309,10 @@ private func resetTransformsForViews(_ views: [UIView?]) {
     }
 }
 
-private func transformToolbarsToFrame(_ toolbars: [UIView?], toRect endRect: CGRect) {
-    for toolbar in toolbars {
-        // Reset back to origin
-        toolbar?.transform = .identity
-
-        // Transform from origin to where we want them to end up
-        if let toolbarFrame = toolbar?.frame {
-            toolbar?.transform = CGAffineTransformMakeRectToRect(toolbarFrame, toFrame: endRect)
-        }
-    }
-}
-
 private func createTransitionCellFromTab(_ tab: Tab?, withFrame frame: CGRect) -> TabCell {
     let cell = TabCell(frame: frame)
     cell.screenshotView.image = tab?.screenshot
     cell.titleText.text = tab?.displayTitle
-
-    if let tab = tab, tab.isPrivate {
-        cell.style = .dark
-    }
 
     if let favIcon = tab?.displayFavicon {
         cell.favicon.sd_setImage(with: URL(string: favIcon.url)!)

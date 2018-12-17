@@ -23,7 +23,7 @@ open class MockSyncManager: SyncManager {
     private func completedWithStats(collection: String) -> Deferred<Maybe<SyncStatus>> {
         return deferMaybe(SyncStatus.completed(SyncEngineStatsSession(collection: collection)))
     }
-    
+
     open func syncClients() -> SyncResult { return completedWithStats(collection: "mock_clients") }
     open func syncClientsThenTabs() -> SyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
     open func syncHistory() -> SyncResult { return completedWithStats(collection: "mock_history") }
@@ -234,7 +234,7 @@ open class MockProfile: Profile {
         return deferMaybe(0)
     }
 
-    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
-        return deferMaybe(SyncStatus.notStarted(.offline))
+    public func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success {
+        return succeed()
     }
 }

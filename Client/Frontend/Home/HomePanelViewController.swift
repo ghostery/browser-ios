@@ -10,13 +10,11 @@ import Storage
 private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 40
-    static let ButtonContainerBorderColor = UIColor.Photon.Grey30
-    static let BackgroundColorPrivateMode = UIConstants.PrivateModeAssistantToolbarBackgroundColor
     static let ButtonHighlightLineHeight: CGFloat = 2
     static let ButtonSelectionAnimationDuration = 0.2
 }
 
-protocol HomePanelViewControllerDelegate: class {
+protocol HomePanelViewControllerDelegate: AnyObject {
     func homePanelViewController(_ homePanelViewController: HomePanelViewController, didSelectURL url: URL, visitType: VisitType)
     func homePanelViewController(_ HomePanelViewController: HomePanelViewController, didSelectPanel panel: Int)
     func homePanelViewControllerDidRequestToSignIn(_ homePanelViewController: HomePanelViewController)
@@ -24,15 +22,15 @@ protocol HomePanelViewControllerDelegate: class {
     func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
 }
 
-protocol HomePanel: class {
-    weak var homePanelDelegate: HomePanelDelegate? { get set }
+protocol HomePanel: AnyObject, Themeable {
+    var homePanelDelegate: HomePanelDelegate? { get set }
 }
 
 struct HomePanelUX {
     static let EmptyTabContentOffset = -180
 }
 
-protocol HomePanelDelegate: class {
+protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToSignIn(_ homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(_ homePanel: HomePanel)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
@@ -78,21 +76,21 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.AppBackgroundColor
-        
+        view.backgroundColor = UIColor.theme.browser.background
+
         buttonContainerView.axis = .horizontal
         buttonContainerView.alignment = .fill
         buttonContainerView.distribution = .fillEqually
         buttonContainerView.spacing = 14
         buttonContainerView.clipsToBounds = true
         buttonContainerView.accessibilityNavigationStyle = .combined
-        buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).")
+        buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarks, history, remote tabs, reading list).")
         view.addSubview(buttonContainerView)
         buttonContainerView.addSubview(highlightLine)
         
         self.buttonContainerBottomBorderView = UIView()
         self.view.addSubview(buttonContainerBottomBorderView)
-        buttonContainerBottomBorderView.backgroundColor = HomePanelViewControllerUX.ButtonContainerBorderColor
+        buttonContainerBottomBorderView.backgroundColor = UIColor.theme.homePanel.buttonContainerBorder
 
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
@@ -292,12 +290,26 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
 // MARK: UIAppearance
 extension HomePanelViewController: Themeable {
-    func applyTheme(_ theme: Theme) {
-        buttonContainerView.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
-        view.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
-        buttonTintColor = UIColor.HomePanel.ToolbarTint.colorFor(theme)
-        buttonSelectedTintColor = UIColor.HomePanel.ToolbarHighlight.colorFor(theme)
-        highlightLine.backgroundColor = UIColor.HomePanel.ToolbarHighlight.colorFor(theme)
+    func applyTheme() {
+        func apply(_ vc: UIViewController) -> Bool {
+            guard let vc = vc as? Themeable else { return false }
+            vc.applyTheme()
+            return true
+        }
+
+        childViewControllers.forEach {
+            if !apply($0) {
+                // BookmarksPanel is nested in a UINavigationController, go one layer deeper
+                $0.childViewControllers.forEach { _ = apply($0) }
+            }
+        }
+
+        buttonContainerView.backgroundColor = UIColor.theme.homePanel.toolbarBackground
+        view.backgroundColor = UIColor.theme.homePanel.toolbarBackground
+        buttonTintColor = UIColor.theme.homePanel.toolbarTint
+        buttonSelectedTintColor = UIColor.theme.homePanel.toolbarHighlight
+        highlightLine.backgroundColor = UIColor.theme.homePanel.toolbarHighlight
+        buttonContainerBottomBorderView.backgroundColor = UIColor.theme.homePanel.buttonContainerBorder
         updateButtonTints()
     }
 }
@@ -324,6 +336,9 @@ extension HomePanelContextMenu {
         let contextMenu = PhotonActionSheet(site: site, actions: actions)
         contextMenu.modalPresentationStyle = .overFullScreen
         contextMenu.modalTransitionStyle = .crossDissolve
+
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
 
         return contextMenu
     }

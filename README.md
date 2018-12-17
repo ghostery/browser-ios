@@ -6,15 +6,15 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch (master)
 -----------
 
-This branch is for mainline development that will ship in *v11.0*.
+This branch is for mainline development that will ship in *v14.0*.
 
-This branch only works with Xcode 9.3 and supports iOS 10, and 11.
+This branch only works with Xcode 9.4 and supports iOS 10.3, and 11.x.
 
 This branch is written in Swift 4
 
 Please make sure you aim your pull requests in the right direction.
 
-For bug fixes and features for the upcoming v12.0 release, please see the *v12.x* branch. (Which may not exist yet)
+For bug fixes and features for the upcoming v13.0 release, please see the *v13.x* branch.
 
 Getting involved
 ----------------
@@ -28,7 +28,6 @@ We encourage you to participate in this open source project. We love Pull Reques
 Want to contribute but don't know where to start? Here is a list of [Good First Bugs.](http://www.joshmatthews.net/bugsahoy/?mobileios=1&simple=1)
 
 Likewise, the design and UX is still in flux. Don't get attached to them. They will change tomorrow!
-https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScrollPosition=false
 
 *GitHub issues are enabled* on this repository, but we encourage you to file a bug (see above). We'll accept issues to track work items that don't yet have a pull request, and also as an early funnel for bug reports, but Bugzilla is the source of truth for lots of good reasons — issues will be shifted into Bugzilla, and pull requests need a bug number.
 

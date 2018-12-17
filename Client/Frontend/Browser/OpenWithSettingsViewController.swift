@@ -5,18 +5,16 @@
 import Foundation
 import Shared
 
-class OpenWithSettingsViewController: UITableViewController {
+class OpenWithSettingsViewController: ThemedTableViewController {
     typealias MailtoProviderEntry = (name: String, scheme: String, enabled: Bool)
     var mailProviderSource = [MailtoProviderEntry]()
 
     fileprivate let prefs: Prefs
     fileprivate var currentChoice: String = "mailto"
 
-    fileprivate let BasicCheckmarkCell = "BasicCheckmarkCell"
-
     init(prefs: Prefs) {
         self.prefs = prefs
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,17 +27,14 @@ class OpenWithSettingsViewController: UITableViewController {
 
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
-
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
-        let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
+        let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle.uppercased()
         headerView.showTopBorder = false
         headerView.showBottomBorder = true
 
-        let footerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
-        footerView.showTopBorder = true
+        let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
+        footerView.showTopBorder = false
         footerView.showBottomBorder = false
 
         tableView.tableHeaderView = headerView
@@ -101,8 +96,7 @@ class OpenWithSettingsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BasicCheckmarkCell, for: indexPath)
-
+        let cell = ThemedTableViewCell()
         let option = mailProviderSource[indexPath.row]
 
         cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.name, enabled: option.enabled)

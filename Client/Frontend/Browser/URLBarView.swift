@@ -7,7 +7,7 @@ import SnapKit
 
 private struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor.Photon.Grey40
-    static let TextFieldActiveBorderColor = UIColor.Defaults.PaleBlue
+    static let TextFieldActiveBorderColor = UIColor.Photon.Blue40
 
     static let LocationLeftPadding: CGFloat = 8
     static let Padding: CGFloat = 10
@@ -24,7 +24,7 @@ private struct URLBarViewUX {
     static let ToolbarButtonInsets = UIEdgeInsets(equalInset: Padding)
 }
 
-protocol URLBarDelegate: class {
+protocol URLBarDelegate: AnyObject {
     func urlBarDidPressTabs(_ urlBar: URLBarView)
     func urlBarDidPressReaderMode(_ urlBar: URLBarView)
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
@@ -76,8 +76,6 @@ class URLBarView: UIView {
             }
         }
     }
-
-    fileprivate var currentTheme: Theme = .Normal
 
     var toolbarIsShowing = false
     var topTabsIsShowing = false
@@ -172,6 +170,14 @@ class URLBarView: UIView {
         }
     }
 
+    private let privateModeBadge = ToolbarPrivateModeBadge()
+
+    func privateModeBadge(visible: Bool) {
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            privateModeBadge.isHidden = !visible
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -184,10 +190,14 @@ class URLBarView: UIView {
 
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
-    
-        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton].forEach { addSubview($0) }
-        [menuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach { addSubview($0) }
-        
+
+        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
+         menuButton, forwardButton, backButton, stopReloadButton, locationContainer, privateModeBadge].forEach {
+            addSubview($0)
+        }
+
+        privateModeBadge.isHidden = true
+
         helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
 
@@ -258,6 +268,8 @@ class URLBarView: UIView {
             make.centerY.equalTo(self.locationContainer)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
+
+        privateModeBadge.layout(forTabsButton: tabsButton)
     }
 
     override func updateConstraints() {
@@ -316,6 +328,7 @@ class URLBarView: UIView {
 
         guard let locationTextField = locationTextField else { return }
         
+        locationTextField.clipsToBounds = true
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.autocompleteDelegate = self
         locationTextField.keyboardType = .webSearch
@@ -332,8 +345,8 @@ class URLBarView: UIView {
         locationTextField.snp.remakeConstraints { make in
             make.edges.equalTo(self.locationView)
         }
-        
-        locationTextField.applyTheme(currentTheme)
+
+        locationTextField.applyTheme()
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -483,6 +496,9 @@ class URLBarView: UIView {
         backButton.isHidden = !toolbarIsShowing || inOverlayMode
         tabsButton.isHidden = !toolbarIsShowing || inOverlayMode || topTabsIsShowing
         stopReloadButton.isHidden = !toolbarIsShowing || inOverlayMode
+
+        // badge isHidden is tied to private mode on/off, use alpha to hide in this case
+        privateModeBadge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
     }
 
     func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
@@ -643,6 +659,12 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField) {
         leaveOverlayMode(didCancel: true)
     }
+
+    func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField) {
+        if let pasteboardContents = UIPasteboard.general.string {
+            self.delegate?.urlBar(self, didSubmitText: pasteboardContents)
+        }
+    }
 }
 
 // MARK: UIAppearance
@@ -661,22 +683,28 @@ extension URLBarView {
 }
 
 extension URLBarView: Themeable {
+    func applyTheme() {
+        locationView.applyTheme()
+        locationTextField?.applyTheme()
+        actionButtons.forEach { $0.applyTheme() }
+        tabsButton.applyTheme()
 
-    func applyTheme(_ theme: Theme) {
-        locationView.applyTheme(theme)
-        locationTextField?.applyTheme(theme)
-        actionButtons.forEach { $0.applyTheme(theme) }
-        tabsButton.applyTheme(theme)
+        cancelTintColor = UIColor.theme.browser.tint
+        showQRButtonTintColor = UIColor.theme.browser.tint
+        backgroundColor = UIColor.theme.browser.background
+        line.backgroundColor = UIColor.theme.browser.urlBarDivider
 
-        progressBar.setGradientColors(startColor: UIColor.LoadingBar.Start.colorFor(theme), endColor: UIColor.LoadingBar.End.colorFor(theme))
-        currentTheme = theme
-        locationBorderColor = UIColor.URLBar.Border.colorFor(theme).withAlphaComponent(0.3)
-        locationActiveBorderColor = UIColor.URLBar.ActiveBorder.colorFor(theme)
-        cancelTintColor = UIColor.Browser.Tint.colorFor(theme)
-        showQRButtonTintColor = UIColor.Browser.Tint.colorFor(theme)
-        backgroundColor = UIColor.Browser.Background.colorFor(theme)
-        line.backgroundColor = UIColor.Browser.URLBarDivider.colorFor(theme)
+        locationBorderColor = UIColor.theme.urlbar.border
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
+    }
+}
+
+extension URLBarView: PrivateModeUI {
+    func applyUIMode(isPrivate: Bool) {
+        privateModeBadge(visible: isPrivate)
+        locationActiveBorderColor = UIColor.theme.urlbar.activeBorder(isPrivate)
+        progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start(isPrivate), endColor: UIColor.theme.loadingBar.end(isPrivate))
+        ToolbarTextField.applyUIMode(isPrivate: isPrivate)
     }
 }
 
@@ -741,49 +769,34 @@ class ToolbarTextField: AutocompleteTextField {
         // Since we're unable to change the tint color of the clear image, we need to iterate through the
         // subviews, find the clear button, and tint it ourselves. Thanks to Mikael Hellman for the tip:
         // http://stackoverflow.com/questions/27944781/how-to-change-the-tint-color-of-the-clear-button-on-a-uitextfield
-        for view in subviews as [UIView] {
-            if let button = view as? UIButton {
-                if let image = button.image(for: []) {
-                    if tintedClearImage == nil {
-                        tintedClearImage = tintImage(image, color: clearButtonTintColor)
+       for case let button as UIButton in subviews {
+            if let image = UIImage.templateImageNamed("topTabs-closeTabs") {
+                if tintedClearImage == nil {
+                    if let clearButtonTintColor = clearButtonTintColor {
+                        tintedClearImage = image.tinted(withColor: clearButtonTintColor)
+                    } else {
+                        tintedClearImage = image
                     }
+                }
 
-                    if button.imageView?.image != tintedClearImage {
-                        button.setImage(tintedClearImage, for: [])
-                    }
+                if button.imageView?.image != tintedClearImage {
+                    button.setImage(tintedClearImage, for: [])
                 }
             }
         }
     }
-
-    fileprivate func tintImage(_ image: UIImage, color: UIColor?) -> UIImage {
-        guard let color = color else { return image }
-
-        let size = image.size
-
-        UIGraphicsBeginImageContextWithOptions(size, false, 2)
-        let context = UIGraphicsGetCurrentContext()!
-        image.draw(at: .zero, blendMode: .normal, alpha: 1.0)
-
-        context.setFillColor(color.cgColor)
-        context.setBlendMode(.sourceIn)
-        context.setAlpha(1.0)
-
-        let rect = CGRect(size: image.size)
-        context.fill(rect)
-        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        
-        return tintedImage
-    }
 }
 
 extension ToolbarTextField: Themeable {
-
-    func applyTheme(_ theme: Theme) {
-        backgroundColor = UIColor.TextField.Background.colorFor(theme)
-        textColor = UIColor.TextField.TextAndTint.colorFor(theme)
+    func applyTheme() {
+        backgroundColor = UIColor.theme.textField.background
+        textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
-        highlightColor = UIColor.TextField.Highlight.colorFor(theme)
+        tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
+    }
+
+    // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
+    static func applyUIMode(isPrivate: Bool) {
+       textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate)
     }
 }

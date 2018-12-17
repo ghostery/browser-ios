@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Account
 import Shared
 import SwiftyJSON
 @testable import Sync
@@ -114,7 +115,7 @@ extension SyncTelemetryTests {
         let uploadStats = synchronizer.statsSession.uploadStats
         XCTAssertEqual(uploadStats.sent, 1)
         XCTAssertEqual(uploadStats.sentFailed, 1)
-        
+
         XCTAssertEqual(uploadStats.asDictionary()["failed"] as? Int, 1)
     }
 

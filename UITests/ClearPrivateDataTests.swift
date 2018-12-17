@@ -32,6 +32,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
             EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
 
+            tester().waitForAnimationsToFinish()
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
             let dom = URL(string: url)!.normalizedHost!
             let index = dom.index(dom.startIndex, offsetBy: 7)
@@ -54,17 +55,17 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         }
        XCTFail("Couldn't find any domains in top sites.")
     }
-    
+
     private func checkDomains(domains: Set<String>) -> Bool {
         var errorOrNil: NSError?
-    
+
         for domain in domains {
             let withoutDot = domain.replacingOccurrences(of: ".", with: " ")
             let matcher = grey_allOf([grey_accessibilityLabel(withoutDot),
                                               grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")!),
                                               grey_sufficientlyVisible()])
             EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &errorOrNil)
-            
+
             if errorOrNil == nil {
                 return true
             }
@@ -92,7 +93,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
-        
+
         let url1 = urls[0].url
         let url2 = urls[1].url
         tester().waitForView(withAccessibilityIdentifier: "HomePanels.History")
@@ -133,9 +134,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsCookies() {
         let url = "\(webRoot!)/numberedPage.html?page=1"
-    
+
         EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        
+
         EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
         EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
@@ -199,12 +200,12 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         var cookie: (String, String?, String?)!
         var value: String!
         let expectation = self.expectation(description: "Got cookie")
-        
+
         webView.evaluateJavaScript("JSON.stringify([document.cookie, localStorage.cookie, sessionStorage.cookie])") { result, _ in
             value = result as! String
             expectation.fulfill()
         }
-        
+
         waitForExpectations(timeout: 10, handler: nil)
         value = value.replacingOccurrences(of: "[", with: "")
         value = value.replacingOccurrences(of: "]", with: "")

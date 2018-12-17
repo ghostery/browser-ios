@@ -18,6 +18,14 @@ class ScreenGraphTest: XCTestCase {
     }
 }
 
+extension XCTestCase {
+    func wait(forElement element: XCUIElement, timeout: TimeInterval) {
+        let predicate = NSPredicate(format: "exists == 1")
+        expectation(for: predicate, evaluatedWith: element)
+        waitForExpectations(timeout: timeout)
+    }
+}
+
 extension ScreenGraphTest {
     func testUserStateChanges() {
         XCTAssertNil(navigator.userState.url, "Current url is empty")
@@ -26,7 +34,8 @@ extension ScreenGraphTest {
         navigator.performAction(TestActions.LoadURLByTyping)
         // The UserState is mutated in BrowserTab.
         navigator.goto(BrowserTab)
-
+        navigator.nowAt(BrowserTab)
+        wait(forElement: app.webViews.links["Mozilla"], timeout: 5)
         XCTAssertTrue(navigator.userState.url?.starts(with: "www.mozilla.org") ?? false, "Current url recorded by from the url bar is \(navigator.userState.url ?? "nil")")
     }
 
@@ -176,8 +185,8 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.dismissOnUse = true
         // Would like to use app.otherElements.deviceStatusBars.networkLoadingIndicators.element
         // but this means exposing some of SnapshotHelper to another target.
-        screenState.onEnterWaitFor("exists != true",
-                                   element: app.progressIndicators.element(boundBy: 0))
+        // screenState.onEnterWaitFor("exists != true",
+                                   // element: app.progressIndicators.element(boundBy: 0))
         screenState.noop(to: BrowserTab)
     }
 

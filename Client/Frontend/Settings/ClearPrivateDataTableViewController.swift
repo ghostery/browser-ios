@@ -5,9 +5,10 @@
 import UIKit
 import Shared
 
-private let SectionToggles = 0
-private let SectionButton = 1
-private let NumberOfSections = 2
+private let SectionArrow = 0
+private let SectionToggles = 1
+private let SectionButton = 2
+private let NumberOfSections = 3
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 private let TogglesPrefKey = "clearprivatedata.toggles"
 
@@ -15,7 +16,7 @@ private let log = Logger.browserLogger
 
 private let HistoryClearableIndex = 0
 
-class ClearPrivateDataTableViewController: UITableViewController {
+class ClearPrivateDataTableViewController: ThemedTableViewController {
     fileprivate var clearButton: UITableViewCell?
 
     var profile: Profile!
@@ -53,31 +54,34 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
     fileprivate var clearButtonEnabled = true {
         didSet {
-            clearButton?.textLabel?.textColor = clearButtonEnabled ? UIConstants.DestructiveRed : UIColor.Photon.Grey40
+            clearButton?.textLabel?.textColor = clearButtonEnabled ? UIColor.theme.general.destructiveRed : UIColor.theme.tableView.disabledRowText
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = Strings.SettingsClearPrivateDataTitle
+        title = Strings.SettingsDataManagementTitle
 
-        tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
-        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
-        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
+        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
         footer.showBottomBorder = false
+        footer.showTopBorder = false
         tableView.tableFooterView = footer
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        let cell = ThemedTableViewCell()
 
-        if indexPath.section == SectionToggles {
+        if indexPath.section == SectionArrow {
+            cell.accessoryType = .disclosureIndicator
+            cell.textLabel?.text = Strings.SettingsWebsiteDataTitle
+            clearButton = cell
+        } else if indexPath.section == SectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
-            let control = UISwitch()
-            control.onTintColor = UIConstants.ControlTintColor
+            let control = UISwitchThemed()
+            control.onTintColor = UIColor.theme.tableView.controlTint
             control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
             control.isOn = toggles[indexPath.item]
             cell.accessoryView = control
@@ -87,7 +91,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             assert(indexPath.section == SectionButton)
             cell.textLabel?.text = Strings.SettingsClearPrivateDataClearButton
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = UIConstants.DestructiveRed
+            cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             cell.accessibilityTraits = UIAccessibilityTraitButton
             cell.accessibilityIdentifier = "ClearPrivateData"
             clearButton = cell
@@ -101,75 +105,91 @@ class ClearPrivateDataTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == SectionToggles {
+        if section == SectionArrow {
+            return 1
+        } else if section == SectionToggles {
             return clearables.count
         }
-
         assert(section == SectionButton)
         return 1
+
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        guard indexPath.section == SectionButton else { return false }
-
-        // Highlight the button only if it's enabled.
-        return clearButtonEnabled
+        if indexPath.section == SectionButton {
+            // Highlight the button only if it's enabled.
+            return clearButtonEnabled
+        }
+        if indexPath.section == SectionArrow {
+            return true
+        }
+        return false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == SectionButton else { return }
-
-        func clearPrivateData(_ action: UIAlertAction) {
-            let toggles = self.toggles
-            self.clearables
-                .enumerated()
-                .compactMap { (i, pair) in
-                    guard toggles[i] else {
-                        return nil
+        if indexPath.section == SectionArrow {
+            let view = WebsiteDataManagementViewController()
+            navigationController?.pushViewController(view, animated: true)
+        } else if indexPath.section == SectionButton {
+            // We have been asked to clear history and we have an account.
+            // (Whether or not it's in a good state is irrelevant.)
+            func clearPrivateData(_ action: UIAlertAction) {
+                let toggles = self.toggles
+                self.clearables
+                    .enumerated()
+                    .compactMap { (i, pair) in
+                        guard toggles[i] else {
+                            return nil
+                        }
+                        log.debug("Clearing \(pair.clearable).")
+                        return pair.clearable.clear()
                     }
-                    log.debug("Clearing \(pair.clearable).")
-                    return pair.clearable.clear()
+                    .allSucceed()
+                    .uponQueue(.main) { result in
+                        assert(result.isSuccess, "Private data cleared successfully")
+
+                        LeanPlumClient.shared.track(event: .clearPrivateData)
+
+                        self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
+
+                        // Disable the Clear Private Data button after it's clicked.
+                        self.clearButtonEnabled = false
+                        self.tableView.deselectRow(at: indexPath, animated: true)
                 }
-                .allSucceed()
-                .uponQueue(.main) { result in
-                    assert(result.isSuccess, "Private data cleared successfully")
-
-                    LeanPlumClient.shared.track(event: .clearPrivateData)
-
-                    self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
-
-                    // Disable the Clear Private Data button after it's clicked.
-                    self.clearButtonEnabled = false
-                    self.tableView.deselectRow(at: indexPath, animated: true)
-                }
-        }
-
-        // We have been asked to clear history and we have an account.
-        // (Whether or not it's in a good state is irrelevant.)
-        if self.toggles[HistoryClearableIndex] && profile.hasAccount() {
-            profile.syncManager.hasSyncedHistory().uponQueue(.main) { yes in
-                // Err on the side of warning, but this shouldn't fail.
-                let alert: UIAlertController
-                if yes.successValue ?? true {
-                    // Our local database contains some history items that have been synced.
-                    // Warn the user before clearing.
-                    alert = UIAlertController.clearSyncedHistoryAlert(okayCallback: clearPrivateData)
-                } else {
-                    alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
-                }
-                self.present(alert, animated: true, completion: nil)
-                return
             }
-        } else {
-            let alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
-            self.present(alert, animated: true, completion: nil)
+            if self.toggles[HistoryClearableIndex] && profile.hasAccount() {
+                profile.syncManager.hasSyncedHistory().uponQueue(.main) { yes in
+                    // Err on the side of warning, but this shouldn't fail.
+                    let alert: UIAlertController
+                    if yes.successValue ?? true {
+                        // Our local database contains some history items that have been synced.
+                        // Warn the user before clearing.
+                        alert = UIAlertController.clearSyncedHistoryAlert(okayCallback: clearPrivateData)
+                    } else {
+                        alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
+                    }
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }
+            } else {
+                let alert = UIAlertController.clearPrivateDataAlert(okayCallback: clearPrivateData)
+                self.present(alert, animated: true, completion: nil)
+            }
         }
-
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! SettingsTableSectionHeaderFooterView
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
+        headerView?.showTopBorder = false
+        var sectionTitle: String?
+        if section == SectionToggles {
+            sectionTitle = Strings.SettingsClearPrivateDataTitle
+        } else {
+            sectionTitle = nil
+        }
+        headerView?.titleLabel.text = sectionTitle
+        return headerView
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

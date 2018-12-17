@@ -130,7 +130,7 @@ class TabLocationView: UIView {
         let trackingProtectionButton = UIButton()
         trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
         trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
-        trackingProtectionButton.tintColor = .gray
+        trackingProtectionButton.tintColor = UIColor.Photon.Grey50
         trackingProtectionButton.imageView?.contentMode = .scaleAspectFill
         trackingProtectionButton.isHidden = true
         return trackingProtectionButton
@@ -338,16 +338,16 @@ extension TabLocationView: AccessibilityActionsSource {
 }
 
 extension TabLocationView: Themeable {
-    func applyTheme(_ theme: Theme) {
-        backgroundColor = UIColor.TextField.Background.colorFor(theme)
-        urlTextField.textColor = UIColor.Browser.Tint.colorFor(theme)
-        readerModeButton.selectedTintColor = UIColor.TextField.ReaderModeButtonSelected.colorFor(theme)
-        readerModeButton.unselectedTintColor = UIColor.TextField.ReaderModeButtonUnselected.colorFor(theme)
+    func applyTheme() {
+        backgroundColor = UIColor.theme.textField.background
+        urlTextField.textColor = UIColor.theme.textField.textAndTint
+        readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
+        readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
         
-        pageOptionsButton.selectedTintColor = UIColor.TextField.PageOptionsSelected.colorFor(theme)
-        pageOptionsButton.unselectedTintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
+        pageOptionsButton.selectedTintColor = UIColor.theme.urlbar.pageOptionsSelected
+        pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
-        separatorLine.backgroundColor = UIColor.TextField.Separator.colorFor(theme)
+        separatorLine.backgroundColor = UIColor.theme.textField.separator
     }
 }
 

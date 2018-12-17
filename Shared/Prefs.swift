@@ -32,13 +32,15 @@ public struct PrefsKeys {
     public static let KeyCustomSyncAuth = "customSyncAuthServer"
     public static let KeyCustomSyncWeb = "customSyncWebServer"
     public static let UseStageServer = "useStageSyncService"
+    public static let KeyFxALastCommandIndex = "FxALastCommandIndex"
+    public static let KeyFxAHandledCommands = "FxAHandledCommands"
 
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
 }
 
 public struct PrefsDefaults {
-    public static let ChineseHomePageURL = "http://mobile.firefoxchina.cn/"
+    public static let ChineseHomePageURL = "https://mobile.firefoxchina.cn/?ios"
     public static let ChineseNewTabDefault = "HomePage"
 }
 

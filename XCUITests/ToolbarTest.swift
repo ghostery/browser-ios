@@ -4,8 +4,8 @@
 
 import XCTest
 
-let website1: [String: String] = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
-let website2 = "example.com"
+let website1: [String: String] = ["url": path(forTestPage: "test-mozilla-org.html"), "label": "Internet for people, not profit — Mozilla", "value": "localhost", "longValue": "localhost:6571/test-fixture/test-mozilla-org.html"]
+let website2 = path(forTestPage: "test-example.html")
 
 let PDFWebsite = ["url": "http://www.pdf995.com/samples/pdf.pdf"]
 
@@ -36,7 +36,11 @@ class ToolbarTests: BaseTestCase {
 
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
         navigator.openURL(website1["url"]!)
-        waitForValueContains(app.textFields["url"], value: website1["value"]!)
+        waitUntilPageLoad()
+        waitforExistence(app.webViews.links["Mozilla"], timeout: 5)
+        let valueMozilla = app.textFields["url"].value as! String
+        XCTAssertEqual(valueMozilla, urlValueLong)
+
 
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
@@ -44,12 +48,13 @@ class ToolbarTests: BaseTestCase {
 
         navigator.openURL(website2)
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website2)
+        waitForValueContains(app.textFields["url"], value: "localhost:6571")
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
 
         app.buttons["URLBarView.backButton"].tap()
-        waitForValueContains(app.textFields["url"], value: website1["value"]!)
+        XCTAssertEqual(valueMozilla, urlValueLong)
+
         waitUntilPageLoad()
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertTrue(app.buttons["Forward"].isEnabled)
@@ -58,7 +63,7 @@ class ToolbarTests: BaseTestCase {
         navigator.goto(TabTray)
         waitforExistence(app.collectionViews.cells[website1["label"]!])
         app.collectionViews.cells[website1["label"]!].tap()
-        waitForValueContains(app.textFields["url"], value: website1["value"]!)
+        XCTAssertEqual(valueMozilla, urlValueLong)
 
         // Test to see if all the buttons are enabled then close tab.
         waitUntilPageLoad()
@@ -79,6 +84,8 @@ class ToolbarTests: BaseTestCase {
 
     func testClearURLTextUsingBackspace() {
         navigator.openURL(website1["url"]!)
+        waitUntilPageLoad()
+        waitforExistence(app.webViews.links["Mozilla"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: website1["value"]!)
 
         // Simulate pressing on backspace key should remove the text
