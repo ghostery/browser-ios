@@ -112,6 +112,11 @@ class VPN {
     @objc func VPNStatusDidChange(notification: Notification) {
         //keep button up to date.
         lastStatus = status
+        
+        if status == .connected {
+            VPN.shared.shouldTryToReconnect = true
+        }
+        
         if (status == .disconnected && shouldTryToReconnect) {
             VPN.connect2VPN()
         }
@@ -123,8 +128,6 @@ class VPN {
     }
     
     static func connect2VPN() {
-        
-        VPN.shared.shouldTryToReconnect = true
         
         let country = VPNEndPointManager.shared.selectedCountry
         guard let creds = VPNEndPointManager.shared.getCredentials(country: country) else { return }
