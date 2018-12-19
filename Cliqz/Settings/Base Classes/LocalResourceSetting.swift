@@ -10,7 +10,7 @@ import UIKit
 
 class LocalResourceSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: getTitle(), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: getTitle(), attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     override var url: URL? {
