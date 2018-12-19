@@ -190,13 +190,8 @@ class Tab: NSObject {
                 contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
             }
         }
-<<<<<<< HEAD
         */
-||||||| merged common ancestors
-=======
-
         debugTabCount += 1
->>>>>>> firefox-releases
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -306,6 +301,9 @@ class Tab: NSObject {
     deinit {
         debugTabCount -= 1
 
+        //Cliqz: Remove notification observer
+        NotificationCenter.default.removeObserver(self)
+
         #if DEBUG
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         func checkTabCount(failures: Int) {
@@ -330,15 +328,7 @@ class Tab: NSObject {
         if let webView = webView {
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
-<<<<<<< HEAD
 
-        //Cliqz: Remove notification observer
-        NotificationCenter.default.removeObserver(self)
-        
-||||||| merged common ancestors
-=======
-
->>>>>>> firefox-releases
         contentScriptManager.helpers.removeAll()
 
         if isPrivate {

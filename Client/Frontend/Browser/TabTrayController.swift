@@ -46,22 +46,14 @@ class TabTrayController: UIViewController {
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.Identifier
     var otherBrowsingModeOffset = CGPoint.zero
     var collectionView: UICollectionView!
-<<<<<<< HEAD
-    var draggedCell: TabCell?
-    var dragOffset: CGPoint = .zero
+
+    let statusBarBG = UIView()
+
     // Cliqz: backgroundView as container for background image
     var privateModeOverlay: UIView? = nil
     let backgroundView = UIImageView()
     //End Cliqz
     /* Cliqz: use CliqzTrayToolbar
-||||||| merged common ancestors
-    var draggedCell: TabCell?
-    var dragOffset: CGPoint = .zero
-=======
-
-    let statusBarBG = UIView()
-
->>>>>>> firefox-releases
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(openTab), for: .touchUpInside)
@@ -191,24 +183,6 @@ class TabTrayController: UIViewController {
         tabManager.addDelegate(self)
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
-<<<<<<< HEAD
-        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: UICollectionViewFlowLayout())
-
-        collectionView.dataSource = tabDataSource
-        collectionView.delegate = tabLayoutDelegate
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.BottomToolbarHeight, right: 0)
-        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
-        /* Cliqz: Chage for lumen
-        collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
-||||||| merged common ancestors
-        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: UICollectionViewFlowLayout())
-
-        collectionView.dataSource = tabDataSource
-        collectionView.delegate = tabLayoutDelegate
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.BottomToolbarHeight, right: 0)
-        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
-        collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
-=======
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = UIColor.theme.tabTray.background
         collectionView.keyboardDismissMode = .onDrag
@@ -225,56 +199,15 @@ class TabTrayController: UIViewController {
         searchBarHolder.backgroundColor = UIColor.theme.tabTray.toolbar
         [collectionView, toolbar, searchBarHolder, cancelButton].forEach { view.addSubview($0) }
         makeConstraints()
->>>>>>> firefox-releases
 
-<<<<<<< HEAD
-        */
-        #if !PAID
-        collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
-        #else
-        collectionView.backgroundColor = .clear
-        #endif
-        if #available(iOS 11.0, *) {
-            collectionView.dragInteractionEnabled = true
-            collectionView.dragDelegate = tabDataSource
-            collectionView.dropDelegate = tabDataSource
-||||||| merged common ancestors
-        if #available(iOS 11.0, *) {
-            collectionView.dragInteractionEnabled = true
-            collectionView.dragDelegate = tabDataSource
-            collectionView.dropDelegate = tabDataSource
-=======
         // The statusBar needs a background color
         statusBarBG.backgroundColor = UIColor.theme.tabTray.toolbar
         view.addSubview(statusBarBG)
         statusBarBG.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self.view)
             make.bottom.equalTo(self.topLayoutGuide.snp.bottom)
->>>>>>> firefox-releases
         }
 
-<<<<<<< HEAD
-        view.addSubview(collectionView)
-        view.addSubview(toolbar)
-
-        
-        //Cliqz: Add gradient
-        #if PAID
-        view.addSubview(gradient)
-        view.sendSubview(toBack: gradient)
-        #endif
-        //Cliqz: end
-        
-        makeConstraints()
-
-||||||| merged common ancestors
-        view.addSubview(collectionView)
-        view.addSubview(toolbar)
-
-        makeConstraints()
-
-=======
->>>>>>> firefox-releases
         view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
         emptyPrivateTabsView.snp.makeConstraints { make in
             make.top.left.right.equalTo(self.collectionView)
@@ -295,12 +228,16 @@ class TabTrayController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
 
-        // Cliqz: set background image
+        //Cliqz: Modifications
+        #if PAID
+        collectionView.backgroundColor = .clear
+        view.addSubview(gradient)
+        view.sendSubview(toBack: gradient)
+        #endif
         self.setBackgroundImage()
-        // Cliqz: lsiten to view orientation
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
-        // Cliqz: Update window backgroundColor
         self.updateBackgroundColor()
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+        //Cliqz: end
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -329,63 +266,10 @@ class TabTrayController: UIViewController {
             make.left.right.bottom.equalTo(view)
             make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
-<<<<<<< HEAD
-        //Cliqz: Add gradient
-        #if PAID
-        gradient.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
-        #endif
-        //Cliqz: end
-    }
-
-// MARK: Selectors
-    @objc func didClickDone() {
-        presentingViewController!.dismiss(animated: true, completion: nil)
-    }
-
-    @objc func didClickSettingsItem() {
-        assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
-        /* Cliqz: Change Settings
-        let settingsTableViewController = AppSettingsTableViewController()
-        */
-        let settingsTableViewController = CliqzAppSettingsTableViewController()
-        settingsTableViewController.profile = profile
-        settingsTableViewController.tabManager = tabManager
-        settingsTableViewController.settingsDelegate = self
-
-        let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
-        controller.popoverDelegate = self
-		controller.modalPresentationStyle = .formSheet
-        present(controller, animated: true, completion: nil)
-    }
-||||||| merged common ancestors
-    }
-
-// MARK: Selectors
-    @objc func didClickDone() {
-        presentingViewController!.dismiss(animated: true, completion: nil)
-    }
-
-    @objc func didClickSettingsItem() {
-        assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
-
-        let settingsTableViewController = AppSettingsTableViewController()
-        settingsTableViewController.profile = profile
-        settingsTableViewController.tabManager = tabManager
-        settingsTableViewController.settingsDelegate = self
-
-        let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
-        controller.popoverDelegate = self
-		controller.modalPresentationStyle = .formSheet
-        present(controller, animated: true, completion: nil)
-    }
-=======
         cancelButton.snp.makeConstraints { make in
             make.centerY.equalTo(self.roundedSearchBarHolder.snp.centerY)
             make.trailing.equalTo(self.roundedSearchBarHolder.snp.trailing).offset(-8)
         }
->>>>>>> firefox-releases
 
         searchBarHolder.snp.makeConstraints { make in
             make.leading.equalTo(view.safeArea.leading)
@@ -400,6 +284,14 @@ class TabTrayController: UIViewController {
         roundedSearchBarHolder.snp.makeConstraints { make in
             make.edges.equalTo(searchBarHolder).inset(UIEdgeInsetsMake(15, 10, 10, 10))
         }
+
+        //Cliqz: Add gradient
+        #if PAID
+        gradient.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        #endif
+        //Cliqz: end
     }
 
     @objc func didTogglePrivateMode() {
@@ -791,33 +683,6 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
         }
         previewingContext.sourceRect = self.view.convert(cell.frame, from: collectionView)
 
-<<<<<<< HEAD
-        if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
-            /* Cliqz: Changed favicon to Cliqz/Ghostery image
-            tabCell.favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
-            */
-            tabCell.favicon.sd_setImage(with: url, placeholderImage: UIImage.defaultFavicon(), options: [], completed: nil)
-        } else {
-			/* Cliqz: Changed favicon to Cliqz/Ghostery image
-            let defaultFavicon = UIImage(named: "defaultFavicon")
-			*/
-			let defaultFavicon = UIImage.defaultFavicon()
-            if tab.isPrivate {
-                tabCell.favicon.image = defaultFavicon
-                tabCell.favicon.tintColor = UIColor.Photon.White100
-            } else {
-                tabCell.favicon.image = defaultFavicon
-||||||| merged common ancestors
-        if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
-            tabCell.favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
-        } else {
-            let defaultFavicon = UIImage(named: "defaultFavicon")
-            if tab.isPrivate {
-                tabCell.favicon.image = defaultFavicon
-                tabCell.favicon.tintColor = UIColor.Photon.White100
-            } else {
-                tabCell.favicon.image = defaultFavicon
-=======
         return tabVC
     }
 
@@ -840,7 +705,6 @@ extension TabTrayController {
         self.tabDisplayManager.performTabUpdates {
             if isLastTab, !self.tabDisplayManager.isPrivate {
                 self.dismissTabTray()
->>>>>>> firefox-releases
             }
         }
     }

@@ -16,14 +16,6 @@ class SettingsNavigationController: UINavigationController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-<<<<<<< HEAD
-        /* Cliqz: prevent changing the statusbar style to default
-        return .default
-        */
-        return .lightContent
-||||||| merged common ancestors
-        return .default
-=======
         return ThemeManager.instance.statusBarStyle
     }
 
@@ -42,7 +34,6 @@ extension SettingsNavigationController: Themeable {
         viewControllers.forEach {
             ($0 as? Themeable)?.applyTheme()
         }
->>>>>>> firefox-releases
     }
 }
 

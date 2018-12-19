@@ -18,14 +18,8 @@ struct AboutHomeHandler {
 struct AboutLicenseHandler {
     
     static func register(_ webServer: WebServer) {
-<<<<<<< HEAD
-        webServer.registerHandlerForMethod("GET", module: "about", resource: "license") { (request: GCDWebServerRequest?) -> GCDWebServerResponse! in
-            /* Cliqz Changed Modied the path method for Licenses resource
-||||||| merged common ancestors
-        webServer.registerHandlerForMethod("GET", module: "about", resource: "license") { (request: GCDWebServerRequest?) -> GCDWebServerResponse! in
-=======
         webServer.registerHandlerForMethod("GET", module: "about", resource: "license") { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
->>>>>>> firefox-releases
+            /* Cliqz Changed Modied the path method for Licenses resource
             let path = Bundle.main.path(forResource: "Licenses", ofType: "html")
             */
             #if PAID

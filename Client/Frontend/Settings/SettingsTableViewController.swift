@@ -192,16 +192,9 @@ class BoolSetting: Setting {
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
 
-<<<<<<< HEAD
         let control = UISwitch()
+        // Cliqz: change the on tint color for UISwitch 
         control.onTintColor = UIConstants.ControlTintColor
-||||||| merged common ancestors
-        let control = UISwitch()
-        control.onTintColor = UIConstants.SystemBlueColor
-=======
-        let control = UISwitchThemed()
-        control.onTintColor = UIConstants.SystemBlueColor
->>>>>>> firefox-releases
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
 

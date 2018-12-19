@@ -170,16 +170,8 @@ extension AdjustIntegration {
     /// that we know we have done a single attribution ping to Adjust.
     ///
     /// Here we also disable Adjust based on the Send Anonymous Usage Data setting.
-<<<<<<< HEAD
     /* Cliqz: Disable Adjust Integration
     func adjustAttributionChanged(_ attribution: ADJAttribution!) {
-||||||| merged common ancestors
-
-    func adjustAttributionChanged(_ attribution: ADJAttribution!) {
-=======
-
-    func adjustAttributionChanged(_ attribution: ADJAttribution?) {
->>>>>>> firefox-releases
         do {
             if let attribution = attribution {
                 Logger.browserLogger.info("Adjust - Saving attribution info to disk")
@@ -211,20 +203,11 @@ extension AdjustIntegration {
     /// Store the deeplink url from Adjust SDK. Per Adjust documentation, any interstitial view launched could interfere
     /// with launching the deeplink. We let the interstial view decide what to do with deeplink.
     /// Ref: https://github.com/adjust/ios_sdk#deferred-deep-linking-scenario
-<<<<<<< HEAD
     /* Cliqz: Disable Adjust Integration
-    func adjustDeeplinkResponse(_ deeplink: URL!) -> Bool {
-        profile.prefs.setString("\(deeplink)", forKey: "AdjustDeeplinkKey")
-||||||| merged common ancestors
-    
-    func adjustDeeplinkResponse(_ deeplink: URL!) -> Bool {
-        profile.prefs.setString("\(deeplink)", forKey: "AdjustDeeplinkKey")
-=======
     func adjustDeeplinkResponse(_ deeplink: URL?) -> Bool {
         if let link = deeplink {
             profile.prefs.setString("\(link)", forKey: "AdjustDeeplinkKey")
         }
->>>>>>> firefox-releases
         return true
     }
     */

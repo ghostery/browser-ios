@@ -7,26 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 import Deferred
-<<<<<<< HEAD
-/* Cliqz
-private typealias SectionNumber = Int
-private typealias CategoryNumber = Int
-private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
-*/
 
-typealias SectionNumber = Int
-typealias CategoryNumber = Int
-typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
-
-||||||| merged common ancestors
-
-private typealias SectionNumber = Int
-private typealias CategoryNumber = Int
-private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
-
-=======
-
->>>>>>> firefox-releases
 private struct HistoryPanelUX {
     static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 170
@@ -71,33 +52,9 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     var homePanelDelegate: HomePanelDelegate?
 
-<<<<<<< HEAD
-    private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
-    private let QueryLimit = 100
-    private let NumSections = 5
-    private let Today = getDate(0)
-    private let Yesterday = getDate(-1)
-    private let ThisWeek = getDate(-7)
-    /* Cliqz
-    private var categories: [CategorySpec] = [CategorySpec]() // Category number (index) -> (UI section, row count, cursor offset).
-    private var sectionLookup = [SectionNumber: CategoryNumber]() // Reverse lookup from UI section to data category.
-    */
-    var categories: [CategorySpec] = [CategorySpec]() // Category number (index) -> (UI section, row count, cursor offset).
-    var sectionLookup = [SectionNumber: CategoryNumber]() // Reverse lookup from UI section to data category.
-||||||| merged common ancestors
-    private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
-    private let QueryLimit = 100
-    private let NumSections = 5
-    private let Today = getDate(0)
-    private let Yesterday = getDate(-1)
-    private let ThisWeek = getDate(-7)
-    private var categories: [CategorySpec] = [CategorySpec]() // Category number (index) -> (UI section, row count, cursor offset).
-    private var sectionLookup = [SectionNumber: CategoryNumber]() // Reverse lookup from UI section to data category.
-=======
     var groupedSites = DateGroupedTableData<Site>()
 
     var refreshControl: UIRefreshControl?
->>>>>>> firefox-releases
 
     var syncDetailText = ""
     var currentSyncedDevicesCount = 0
@@ -160,164 +117,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             syncDetailText = ""
         }
     }
-<<<<<<< HEAD
-    
-    /*Cliqz
-    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-    */
-    @objc func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == .began else { return }
-        let touchPoint = longPressGestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
 
-        if indexPath.section != 0 {
-            presentContextMenu(for: indexPath)
-        }
-    }
-    
-    // MARK: - History Data Store
-    func updateNumberOfSyncedDevices(_ count: Int?) {
-        if let count = count, count > 0 {
-            syncDetailText = String.localizedStringWithFormat(Strings.SyncedTabsTableViewCellDescription, count)
-        } else {
-            syncDetailText = ""
-        }
-        self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
-    }
-
-    func updateSyncedDevicesCount() -> Success {
-        return chainDeferred(self.profile.getCachedClientsAndTabs()) { tabsAndClients in
-            self.currentSyncedDevicesCount = tabsAndClients.count
-            return succeed()
-        }
-    }
-
-    @objc func notificationReceived(_ notification: Notification) {
-        reloadData()
-
-        switch notification.name {
-        case .FirefoxAccountChanged, .PrivateDataClearedHistory:
-            if self.profile.hasSyncableAccount() {
-                resyncHistory()
-            }
-            break
-        case .DynamicFontChanged:
-            if emptyStateOverlayView.superview != nil {
-                emptyStateOverlayView.removeFromSuperview()
-            }
-            emptyStateOverlayView = createEmptyStateOverlayView()
-            resyncHistory()
-            break
-        default:
-            // no need to do anything at all
-            print("Error: Received unexpected notification \(notification.name)")
-            break
-        }
-    }
-
-    private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
-        return profile.history.getSitesByLastVisit(QueryLimit)
-    }
-
-    private func setData(_ data: Cursor<Site>) {
-        self.data = data
-        self.computeSectionOffsets()
-    }
-
-    func resyncHistory() {
-        profile.syncManager.syncHistory().uponQueue(.main) { result in
-            if result.isSuccess {
-                self.reloadData()
-            } else {
-                self.endRefreshing()
-            }
-
-            self.updateSyncedDevicesCount().uponQueue(.main) { result in
-                self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
-            }
-        }
-    }
-
-||||||| merged common ancestors
-
-    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == .began else { return }
-        let touchPoint = longPressGestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
-
-        if indexPath.section != 0 {
-            presentContextMenu(for: indexPath)
-        }
-    }
-    
-    // MARK: - History Data Store
-    func updateNumberOfSyncedDevices(_ count: Int?) {
-        if let count = count, count > 0 {
-            syncDetailText = String.localizedStringWithFormat(Strings.SyncedTabsTableViewCellDescription, count)
-        } else {
-            syncDetailText = ""
-        }
-        self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
-    }
-
-    func updateSyncedDevicesCount() -> Success {
-        return chainDeferred(self.profile.getCachedClientsAndTabs()) { tabsAndClients in
-            self.currentSyncedDevicesCount = tabsAndClients.count
-            return succeed()
-        }
-    }
-
-    @objc func notificationReceived(_ notification: Notification) {
-        reloadData()
-
-        switch notification.name {
-        case .FirefoxAccountChanged, .PrivateDataClearedHistory:
-            if self.profile.hasSyncableAccount() {
-                resyncHistory()
-            }
-            break
-        case .DynamicFontChanged:
-            if emptyStateOverlayView.superview != nil {
-                emptyStateOverlayView.removeFromSuperview()
-            }
-            emptyStateOverlayView = createEmptyStateOverlayView()
-            resyncHistory()
-            break
-        default:
-            // no need to do anything at all
-            print("Error: Received unexpected notification \(notification.name)")
-            break
-        }
-    }
-
-    private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
-        return profile.history.getSitesByLastVisit(QueryLimit)
-    }
-
-    private func setData(_ data: Cursor<Site>) {
-        self.data = data
-        self.computeSectionOffsets()
-    }
-
-    func resyncHistory() {
-        profile.syncManager.syncHistory().uponQueue(.main) { result in
-            if result.isSuccess {
-                self.reloadData()
-            } else {
-                self.endRefreshing()
-            }
-
-            self.updateSyncedDevicesCount().uponQueue(.main) { result in
-                self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
-            }
-        }
-    }
-
-=======
-
->>>>>>> firefox-releases
     // MARK: - Refreshing TableView
-
     func addRefreshControl() {
         let control = UIRefreshControl()
         control.addTarget(self, action: #selector(onRefreshPulled), for: .valueChanged)
@@ -341,7 +142,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     // MARK: - Loading data
-
     override func reloadData() {
         groupedSites = DateGroupedTableData<Site>()
 
@@ -366,24 +166,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         guard !isFetchInProgress else {
             return deferMaybe(FetchInProgressError())
         }
-<<<<<<< HEAD
-    }
-    /*Cliqz
-    private func createEmptyStateOverlayView() -> UIView {
-    */
-    func createEmptyStateOverlayView() -> UIView {
-        let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.Photon.White100
-||||||| merged common ancestors
-    }
-
-    private func createEmptyStateOverlayView() -> UIView {
-        let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.Photon.White100
-=======
 
         isFetchInProgress = true
->>>>>>> firefox-releases
 
         return profile.history.getSitesByLastVisit(limit: QueryLimitPerFetch, offset: currentFetchOffset) >>== { result in
             // Force 100ms delay between resolution of the last batch of results
@@ -410,19 +194,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             }
         }
     }
-<<<<<<< HEAD
-    /* Cliqz
-    fileprivate func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
-    */
-    func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
-        let offset = self.categories[sectionLookup[indexPath.section]!].offset
-        return data[indexPath.row + offset]
-||||||| merged common ancestors
-
-    fileprivate func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
-        let offset = self.categories[sectionLookup[indexPath.section]!].offset
-        return data[indexPath.row + offset]
-=======
 
     func updateNumberOfSyncedDevices(_ count: Int) {
         if count > 0 {
@@ -432,7 +203,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
 
         tableView.reloadData()
->>>>>>> firefox-releases
     }
 
     func updateSyncedDevicesCount() -> Success {
@@ -448,7 +218,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     // MARK: - Actions
-
     func removeHistoryForURLAtIndexPath(indexPath: IndexPath) {
         guard let site = siteForIndexPath(indexPath) else {
             return
@@ -467,34 +236,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         _ = profile.history.addPinnedTopSite(site).value
     }
 
-<<<<<<< HEAD
-    // UI sections disappear as categories empty. We need to translate back and forth.
-    /* Cliqz
-    private func uiSectionToCategory(_ section: SectionNumber) -> CategoryNumber {
-    */
-    func uiSectionToCategory(_ section: SectionNumber) -> CategoryNumber {
-        for i in 0..<self.categories.count {
-            if let s = self.categories[i].section, s == section {
-                return i
-            }
-        }
-        return 0
-||||||| merged common ancestors
-    // UI sections disappear as categories empty. We need to translate back and forth.
-    private func uiSectionToCategory(_ section: SectionNumber) -> CategoryNumber {
-        for i in 0..<self.categories.count {
-            if let s = self.categories[i].section, s == section {
-                return i
-            }
-        }
-        return 0
-=======
     func navigateToSyncedTabs() {
         let nextController = RemoteTabsPanel(profile: profile)
         nextController.homePanelDelegate = homePanelDelegate
         refreshControl?.endRefreshing()
         navigationController?.pushViewController(nextController, animated: true)
->>>>>>> firefox-releases
     }
 
     func navigateToRecentlyClosed() {
@@ -509,7 +255,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     // MARK: - Cell configuration
-
     func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
         // First section is reserved for Sync.
         guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
@@ -563,7 +308,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     // MARK: - Selector callbacks
-
     @objc func onNotificationReceived(_ notification: Notification) {
         reloadData()
 
@@ -698,175 +442,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
-<<<<<<< HEAD
-    /* Cliqz
-    fileprivate func removeHistoryForURLAtIndexPath(indexPath: IndexPath) {
-    */
-    func removeHistoryForURLAtIndexPath(indexPath: IndexPath) {
-        if let site = self.siteForIndexPath(indexPath) {
-            // Why the dispatches? Because we call success and failure on the DB
-            // queue, and so calling anything else that calls through to the DB will
-            // deadlock. This problem will go away when the history API switches to
-            // Deferred instead of using callbacks.
-            self.profile.history.removeHistoryForURL(site.url)
-                .upon { res in
-                    self.fetchData().uponQueue(.main) { result in
-                        // If a section will be empty after removal, we must remove the section itself.
-                        if let data = result.successValue {
 
-                            let oldCategories = self.categories
-                            self.data = data
-                            self.computeSectionOffsets()
-
-                            let sectionsToDelete = NSMutableIndexSet()
-                            var rowsToDelete = [IndexPath]()
-                            let sectionsToAdd = NSMutableIndexSet()
-                            var rowsToAdd = [IndexPath]()
-
-                            for (index, category) in self.categories.enumerated() {
-                                let oldCategory = oldCategories[index]
-
-                                // don't bother if we're not displaying this category
-                                if oldCategory.section == nil && category.section == nil {
-                                    continue
-                                }
-
-                                // 1. add a new section if the section didn't previously exist
-                                if oldCategory.section == nil && category.section != oldCategory.section {
-                                    sectionsToAdd.add(category.section!)
-                                }
-
-                                // 2. add a new row if there are more rows now than there were before
-                                if oldCategory.rows < category.rows {
-                                    rowsToAdd.append(IndexPath(row: category.rows-1, section: category.section!))
-                                }
-
-                                // if we're dealing with the section where the row was deleted:
-                                // 1. if the category no longer has a section, then we need to delete the entire section
-                                // 2. delete a row if the number of rows has been reduced
-                                // 3. delete the selected row and add a new one on the bottom of the section if the number of rows has stayed the same
-                                if oldCategory.section == indexPath.section {
-                                    if category.section == nil {
-                                        sectionsToDelete.add(indexPath.section)
-                                    } else if oldCategory.section == category.section {
-                                        if oldCategory.rows > category.rows {
-                                            rowsToDelete.append(indexPath)
-                                        } else if category.rows == oldCategory.rows {
-                                            rowsToDelete.append(indexPath)
-                                            rowsToAdd.append(IndexPath(row: category.rows-1, section: indexPath.section))
-                                        }
-                                    }
-                                }
-                            }
-
-                            self.tableView.beginUpdates()
-                            if sectionsToAdd.count > 0 {
-                                self.tableView.insertSections(sectionsToAdd as IndexSet, with: .left)
-                            }
-                            if sectionsToDelete.count > 0 {
-                                self.tableView.deleteSections(sectionsToDelete as IndexSet, with: .right)
-                            }
-                            if !rowsToDelete.isEmpty {
-                                self.tableView.deleteRows(at: rowsToDelete, with: .right)
-                            }
-
-                            if !rowsToAdd.isEmpty {
-                                self.tableView.insertRows(at: rowsToAdd, with: .right)
-                            }
-                            
-                            self.tableView.endUpdates()
-                            self.updateEmptyPanelState()
-                        }
-                    }
-            }
-        }
-    }
-
-||||||| merged common ancestors
-
-    fileprivate func removeHistoryForURLAtIndexPath(indexPath: IndexPath) {
-        if let site = self.siteForIndexPath(indexPath) {
-            // Why the dispatches? Because we call success and failure on the DB
-            // queue, and so calling anything else that calls through to the DB will
-            // deadlock. This problem will go away when the history API switches to
-            // Deferred instead of using callbacks.
-            self.profile.history.removeHistoryForURL(site.url)
-                .upon { res in
-                    self.fetchData().uponQueue(.main) { result in
-                        // If a section will be empty after removal, we must remove the section itself.
-                        if let data = result.successValue {
-
-                            let oldCategories = self.categories
-                            self.data = data
-                            self.computeSectionOffsets()
-
-                            let sectionsToDelete = NSMutableIndexSet()
-                            var rowsToDelete = [IndexPath]()
-                            let sectionsToAdd = NSMutableIndexSet()
-                            var rowsToAdd = [IndexPath]()
-
-                            for (index, category) in self.categories.enumerated() {
-                                let oldCategory = oldCategories[index]
-
-                                // don't bother if we're not displaying this category
-                                if oldCategory.section == nil && category.section == nil {
-                                    continue
-                                }
-
-                                // 1. add a new section if the section didn't previously exist
-                                if oldCategory.section == nil && category.section != oldCategory.section {
-                                    sectionsToAdd.add(category.section!)
-                                }
-
-                                // 2. add a new row if there are more rows now than there were before
-                                if oldCategory.rows < category.rows {
-                                    rowsToAdd.append(IndexPath(row: category.rows-1, section: category.section!))
-                                }
-
-                                // if we're dealing with the section where the row was deleted:
-                                // 1. if the category no longer has a section, then we need to delete the entire section
-                                // 2. delete a row if the number of rows has been reduced
-                                // 3. delete the selected row and add a new one on the bottom of the section if the number of rows has stayed the same
-                                if oldCategory.section == indexPath.section {
-                                    if category.section == nil {
-                                        sectionsToDelete.add(indexPath.section)
-                                    } else if oldCategory.section == category.section {
-                                        if oldCategory.rows > category.rows {
-                                            rowsToDelete.append(indexPath)
-                                        } else if category.rows == oldCategory.rows {
-                                            rowsToDelete.append(indexPath)
-                                            rowsToAdd.append(IndexPath(row: category.rows-1, section: indexPath.section))
-                                        }
-                                    }
-                                }
-                            }
-
-                            self.tableView.beginUpdates()
-                            if sectionsToAdd.count > 0 {
-                                self.tableView.insertSections(sectionsToAdd as IndexSet, with: .left)
-                            }
-                            if sectionsToDelete.count > 0 {
-                                self.tableView.deleteSections(sectionsToDelete as IndexSet, with: .right)
-                            }
-                            if !rowsToDelete.isEmpty {
-                                self.tableView.deleteRows(at: rowsToDelete, with: .right)
-                            }
-
-                            if !rowsToAdd.isEmpty {
-                                self.tableView.insertRows(at: rowsToAdd, with: .right)
-                            }
-                            
-                            self.tableView.endUpdates()
-                            self.updateEmptyPanelState()
-                        }
-                    }
-            }
-        }
-    }
-
-=======
-
->>>>>>> firefox-releases
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         if indexPath.section == Section.syncAndRecentlyClosed.rawValue {
             return []

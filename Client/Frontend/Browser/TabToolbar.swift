@@ -6,17 +6,9 @@ import UIKit
 import SnapKit
 import Shared
 
-<<<<<<< HEAD
-protocol TabToolbarProtocol: class {
-    weak var tabToolbarDelegate: TabToolbarDelegate? { get set }
-    /* Cliqz: replaced TabsButton with CliqzTabsButton which has icon and no counter
-||||||| merged common ancestors
-protocol TabToolbarProtocol: class {
-    weak var tabToolbarDelegate: TabToolbarDelegate? { get set }
-=======
 protocol TabToolbarProtocol: AnyObject {
     var tabToolbarDelegate: TabToolbarDelegate? { get set }
->>>>>>> firefox-releases
+    /* Cliqz: replaced TabsButton with CliqzTabsButton which has icon and no counter
     var tabsButton: TabsButton { get }
     */
     var tabsButton: CliqzTabsButton { get }
@@ -218,28 +210,10 @@ class ToolbarButton: UIButton {
 }
 
 extension ToolbarButton: Themeable {
-<<<<<<< HEAD
-    func applyTheme(_ theme: Theme) {
-        /* Cliqz: Changed the tint colors for the toolbar button
-        selectedTintColor = UIColor.ToolbarButton.SelectedTint.colorFor(theme)
-        disabledTintColor = UIColor.ToolbarButton.DisabledTint.colorFor(theme)
-        unselectedTintColor = UIColor.Browser.Tint.colorFor(theme)
-        */
-        selectedTintColor = UIColor.CliqzToolbarButton.SelectedTint.colorFor(theme)
-        disabledTintColor = UIColor.CliqzToolbarButton.DisabledTint.colorFor(theme)
-        unselectedTintColor = UIColor.CliqzToolbarButton.Tint.colorFor(theme)
-        
-||||||| merged common ancestors
-    func applyTheme(_ theme: Theme) {
-        selectedTintColor = UIColor.ToolbarButton.SelectedTint.colorFor(theme)
-        disabledTintColor = UIColor.ToolbarButton.DisabledTint.colorFor(theme)
-        unselectedTintColor = UIColor.Browser.Tint.colorFor(theme)
-=======
     func applyTheme() {
         selectedTintColor = UIColor.theme.toolbarButton.selectedTint
         disabledTintColor = UIColor.theme.toolbarButton.disabledTint
         unselectedTintColor = UIColor.theme.browser.tint
->>>>>>> firefox-releases
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }
@@ -352,20 +326,6 @@ extension TabToolbar: TabToolbarProtocol {
     }
 }
 
-<<<<<<< HEAD
-extension TabToolbar: Themeable {
-    func applyTheme(_ theme: Theme) {
-        /* Cliqz: Changed the background color of the tab toolbar
-        backgroundColor = UIColor.Browser.Background.colorFor(theme)
-        */
-        backgroundColor = UIColor.CliqzToolbar.Background.colorFor(theme)
-        helper?.setTheme(theme: theme, forButtons: actionButtons)
-||||||| merged common ancestors
-extension TabToolbar: Themeable {
-    func applyTheme(_ theme: Theme) {
-        backgroundColor = UIColor.Browser.Background.colorFor(theme)
-        helper?.setTheme(theme: theme, forButtons: actionButtons)
-=======
 extension TabToolbar: Themeable, PrivateModeUI {
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background
@@ -374,6 +334,5 @@ extension TabToolbar: Themeable, PrivateModeUI {
 
     func applyUIMode(isPrivate: Bool) {
         privateModeBadge(visible: isPrivate)
->>>>>>> firefox-releases
     }
 }

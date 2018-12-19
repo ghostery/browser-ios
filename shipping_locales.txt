@@ -6,27 +6,6 @@ hu
 it
 ja
 ko
-<<<<<<< HEAD
-||||||| merged common ancestors
-lo
-lt
-lv
-ml
-ms
-my
-nb-NO
-ne-NP
-=======
-lo
-lt
-lv
-ml
-mr
-ms
-my
-nb-NO
-ne-NP
->>>>>>> firefox-releases
 nl
 pl
 pt-BR

@@ -256,15 +256,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
-<<<<<<< HEAD
         // Cliqz: customize Navigationbar Appearace
         customizeNnavigationBarAppearace()
-        
-||||||| merged common ancestors
-=======
+
+        // Cliqz: Disaple calling Firefox profiler
         Profiler.appDidFinishLaunching() // NimbleDroid lib setup, runs in non-release only
 
->>>>>>> firefox-releases
         adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
         
         // Cliqz: Handle Realm Migration

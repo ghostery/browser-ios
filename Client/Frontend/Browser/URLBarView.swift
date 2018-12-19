@@ -703,17 +703,12 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField) {
         leaveOverlayMode(didCancel: true)
     }
-<<<<<<< HEAD
-    
-||||||| merged common ancestors
-=======
 
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField) {
         if let pasteboardContents = UIPasteboard.general.string {
             self.delegate?.urlBar(self, didSubmitText: pasteboardContents)
         }
     }
->>>>>>> firefox-releases
 }
 
 // MARK: UIAppearance
@@ -732,59 +727,6 @@ extension URLBarView {
 }
 
 extension URLBarView: Themeable {
-<<<<<<< HEAD
-
-    func applyTheme(_ theme: Theme) {
-        locationView.applyTheme(theme)
-        locationTextField?.applyTheme(theme)
-        actionButtons.forEach { $0.applyTheme(theme) }
-        tabsButton.applyTheme(theme)
-
-        progressBar.setGradientColors(startColor: UIColor.LoadingBar.Start.colorFor(theme), endColor: UIColor.LoadingBar.End.colorFor(theme))
-        currentTheme = theme
-        #if !PAID
-        /* Cliqz
-        locationBorderColor = UIColor.URLBar.Border.colorFor(theme).withAlphaComponent(0.3)
-        locationActiveBorderColor = UIColor.URLBar.ActiveBorder.colorFor(theme)
-        */
-        locationBorderColor = UIColor.cliqzGrayOneSecondary
-        locationActiveBorderColor = UIColor.cliqzGrayOneSecondary
-        cancelTintColor = UIColor.Browser.Tint.colorFor(theme)
-        /* Cliqz
-        showQRButtonTintColor = UIColor.Browser.Tint.colorFor(theme)
-        backgroundColor = UIColor.Browser.Background.colorFor(theme)
-        */
-        showQRButtonTintColor = UIColor.white
-        backgroundColor = UIColor.CliqzURLBar.Background.colorFor(theme)
-        line.backgroundColor = UIColor.Browser.URLBarDivider.colorFor(theme)
-        locationContainer.layer.shadowColor = locationBorderColor.cgColor
-        // Cliqz - Override applyTheme workaround
-        didApplyTheme(theme)
-        #else
-        locationBorderColor = UIColor.URLBar.Border.colorFor(theme)
-        locationActiveBorderColor = UIColor.URLBar.ActiveBorder.colorFor(theme)
-        cancelTintColor = UIColor.Browser.Tint.colorFor(theme)
-        showQRButtonTintColor = UIColor.Browser.Tint.colorFor(theme)
-        backgroundColor = UIColor.Browser.Background.colorFor(theme)
-
-        line.backgroundColor = UIColor.Browser.URLBarDivider.colorFor(theme)
-||||||| merged common ancestors
-
-    func applyTheme(_ theme: Theme) {
-        locationView.applyTheme(theme)
-        locationTextField?.applyTheme(theme)
-        actionButtons.forEach { $0.applyTheme(theme) }
-        tabsButton.applyTheme(theme)
-
-        progressBar.setGradientColors(startColor: UIColor.LoadingBar.Start.colorFor(theme), endColor: UIColor.LoadingBar.End.colorFor(theme))
-        currentTheme = theme
-        locationBorderColor = UIColor.URLBar.Border.colorFor(theme).withAlphaComponent(0.3)
-        locationActiveBorderColor = UIColor.URLBar.ActiveBorder.colorFor(theme)
-        cancelTintColor = UIColor.Browser.Tint.colorFor(theme)
-        showQRButtonTintColor = UIColor.Browser.Tint.colorFor(theme)
-        backgroundColor = UIColor.Browser.Background.colorFor(theme)
-        line.backgroundColor = UIColor.Browser.URLBarDivider.colorFor(theme)
-=======
     func applyTheme() {
         locationView.applyTheme()
         locationTextField?.applyTheme()
@@ -797,11 +739,7 @@ extension URLBarView: Themeable {
         line.backgroundColor = UIColor.theme.browser.urlBarDivider
 
         locationBorderColor = UIColor.theme.urlbar.border
->>>>>>> firefox-releases
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
-        // Cliqz - Override applyTheme workaround
-        didApplyTheme(theme)
-        #endif
     }
 }
 
@@ -898,22 +836,11 @@ extension ToolbarTextField: Themeable {
         backgroundColor = UIColor.theme.textField.background
         textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
-<<<<<<< HEAD
-        highlightColor = UIColor.TextField.Highlight.colorFor(theme)
-        //Cliqz
-        #if PAID
-        tintColor = UIColor.TextField.Cursor.colorFor(theme)
-        #endif
-        //Cliqz: end
-||||||| merged common ancestors
-        highlightColor = UIColor.TextField.Highlight.colorFor(theme)
-=======
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
     }
 
     // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
     static func applyUIMode(isPrivate: Bool) {
        textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate)
->>>>>>> firefox-releases
     }
 }

@@ -15,8 +15,7 @@ extension UIColor {
     // Reader Mode Sepia
         static let LightBeige = UIColor(rgb: 0xf0e6dc)
     }
-<<<<<<< HEAD
-    
+
     struct Browser {
         #if !PAID
         static let Background = BrowserColor(normal: Photon.Grey10, pbm: Photon.Grey70)
@@ -137,63 +136,6 @@ extension UIColor {
         static let ToolbarHighlight = BrowserColor(normal: Photon.Blue50, pbm: Photon.Blue50)
         static let ToolbarTint = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey50)
     }
-||||||| merged common ancestors
-
-    struct Browser {
-        static let Background = BrowserColor(normal: Photon.Grey10, pbm: Photon.Grey70)
-        static let Text = BrowserColor(normal: .white, pbm: Photon.Grey60)
-        static let URLBarDivider = BrowserColor(normal: Photon.Grey90A10, pbm: Photon.Grey60)
-        static let LocationBarBackground = Photon.Grey30
-        static let Tint = BrowserColor(normal: Photon.Grey80, pbm: Photon.Grey30)
-    }
-
-    struct URLBar {
-        static let Border = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey80)
-        static let ActiveBorder = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Grey60)
-        static let Tint = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Grey10)
-    }
-
-    struct TextField {
-        static let Background = BrowserColor(normal: .white, pbm: Defaults.MobileGreyF)
-        static let TextAndTint = BrowserColor(normal: Photon.Grey80, pbm: .white)
-        static let Highlight = BrowserColor(normal: Defaults.iOSHighlightBlue, pbm: Defaults.Purple60A30)
-        static let ReaderModeButtonSelected = BrowserColor(normal: Photon.Blue40, pbm: Defaults.MobilePrivatePurple)
-        static let ReaderModeButtonUnselected = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey40)
-        static let PageOptionsSelected = ReaderModeButtonSelected
-        static let PageOptionsUnselected = UIColor.Browser.Tint
-        static let Separator = BrowserColor(normal: Photon.Grey30, pbm: Photon.Grey70)
-    }
-
-    // The back/forward/refresh/menu button (bottom toolbar)
-    struct ToolbarButton {
-        static let SelectedTint = BrowserColor(normal: Photon.Blue40, pbm: Photon.Purple50)
-        static let DisabledTint = BrowserColor(normal: Photon.Grey30, pbm: Photon.Grey50)
-    }
-
-    struct LoadingBar {
-        static let Start = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Purple50)
-        static let End = BrowserColor(normal: Photon.Blue50, pbm: Photon.Magenta50)
-    }
-
-    struct TabTray {
-        static let Background = Browser.Background
-    }
-
-    struct TopTabs {
-        static let PrivateModeTint = BrowserColor(normal: Photon.Grey10, pbm: Photon.Grey40)
-        static let Background = Photon.Grey80
-    }
-
-    struct HomePanel {
-        // These values are the same for both private/normal.
-        // The homepanel toolbar needed to be able to theme, not anymore.
-        // Keep this just in case someone decides they want it to theme again
-        static let ToolbarBackground = BrowserColor(normal: Photon.Grey10, pbm: Photon.Grey10)
-        static let ToolbarHighlight = BrowserColor(normal: Photon.Blue50, pbm: Photon.Blue50)
-        static let ToolbarTint = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey50)
-    }
-=======
->>>>>>> firefox-releases
 }
 
 public struct UIConstants {
@@ -218,12 +160,7 @@ public struct UIConstants {
 <<<<<<< HEAD
     static let AppBackgroundColor = UIColor.Photon.Grey10
     /* Cliqz: Changed the tint color for UIControl to Cliqz Blue color
-||||||| merged common ancestors
-    static let AppBackgroundColor = UIColor.Photon.Grey10
-=======
->>>>>>> firefox-releases
     static let SystemBlueColor = UIColor.Photon.Blue40
-<<<<<<< HEAD
     static let ControlTintColor = UIColor.Photon.Blue50
     */
     static let SystemBlueColor = UIColor.cliqzBluePrimary
@@ -237,14 +174,6 @@ public struct UIConstants {
     static let PrivateModeAssistantToolbarBackgroundColor = UIColor.Photon.Grey50
     static let PrivateModeTextHighlightColor = UIColor.Photon.Purple60
     static let PrivateModePurple = UIColor.Defaults.MobilePrivatePurple
-||||||| merged common ancestors
-    static let ControlTintColor = UIColor.Photon.Blue50
-    static let PasscodeDotColor = UIColor.Photon.Grey60
-    static let PrivateModeAssistantToolbarBackgroundColor = UIColor.Photon.Grey50
-    static let PrivateModeTextHighlightColor = UIColor.Photon.Purple60
-    static let PrivateModePurple = UIColor.Defaults.MobilePrivatePurple
-=======
->>>>>>> firefox-releases
 
     // Static fonts
     static let DefaultChromeSize: CGFloat = 16

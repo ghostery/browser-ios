@@ -55,17 +55,11 @@ class BrowserViewController: UIViewController {
     fileprivate(set) var toolbar: TabToolbar?
     /* Cliqz: Replace Search Controller with Firefox Search Controller
     var searchController: SearchViewController?
-<<<<<<< HEAD
     */
     var searchController: FirefoxSearchViewController?
     // Cliqz: Cliqz Search Controller
     var cliqzSearchController: CliqzSearchViewController?
-    fileprivate var screenshotHelper: ScreenshotHelper!
-||||||| merged common ancestors
-    fileprivate var screenshotHelper: ScreenshotHelper!
-=======
     var screenshotHelper: ScreenshotHelper!
->>>>>>> firefox-releases
     fileprivate var homePanelIsInline = false
     fileprivate var searchLoader: SearchLoader?
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
@@ -195,24 +189,11 @@ class BrowserViewController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-<<<<<<< HEAD
-        /* Cliqz: Change statusbar style to be always lightContent
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let isIpad = shouldShowTopTabsForTraitCollection(traitCollection)
-        return (isPrivate || isIpad) ? .lightContent : .default
-        */
-        return .lightContent
-||||||| merged common ancestors
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let isIpad = shouldShowTopTabsForTraitCollection(traitCollection)
-        return (isPrivate || isIpad) ? .lightContent : .default
-=======
         return ThemeManager.instance.statusBarStyle
     }
 
     @objc func displayThemeChanged(notification: Notification) {
         applyTheme()
->>>>>>> firefox-releases
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -876,14 +857,6 @@ class BrowserViewController: UIViewController {
         searchController = SearchViewController(profile: profile, isPrivate: isPrivate)
         searchController!.searchEngines = profile.searchEngines
         searchController!.searchDelegate = self
-<<<<<<< HEAD
-        
-||||||| merged common ancestors
-        searchController!.profile = self.profile
-
-=======
-
->>>>>>> firefox-releases
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
         searchLoader?.addListener(searchController!)
         
@@ -1276,81 +1249,7 @@ class BrowserViewController: UIViewController {
         LeanPlumClient.shared.track(event: .userSharedWebpage)
     }
 
-<<<<<<< HEAD
-    func updateFindInPageVisibility(visible: Bool, tab: Tab? = nil) {
-        if visible {
-            if findInPageBar == nil {
-                let findInPageBar = FindInPageBar()
-                self.findInPageBar = findInPageBar
-                findInPageBar.delegate = self
-                alertStackView.addArrangedSubview(findInPageBar)
-
-                findInPageBar.snp.makeConstraints { make in
-                    make.height.equalTo(UIConstants.ToolbarHeight)
-                    make.leading.trailing.equalTo(alertStackView)
-                }
-
-                updateViewConstraints()
-
-                // We make the find-in-page bar the first responder below, causing the keyboard delegates
-                // to fire. This, in turn, will animate the Find in Page container since we use the same
-                // delegate to slide the bar up and down with the keyboard. We don't want to animate the
-                // constraints added above, however, so force a layout now to prevent these constraints
-                // from being lumped in with the keyboard animation.
-                findInPageBar.layoutIfNeeded()
-            }
-
-            self.findInPageBar?.becomeFirstResponder()
-        } else if let findInPageBar = self.findInPageBar {
-            findInPageBar.endEditing(true)
-            let tab = tab ?? tabManager.selectedTab
-            guard let webView = tab?.webView else { return }
-            webView.evaluateJavaScript("__firefox__.findDone()", completionHandler: nil)
-            findInPageBar.removeFromSuperview()
-            self.findInPageBar = nil
-            updateViewConstraints()
-        }
-    }
-
     /* Cliqz: removed the fileprivate modifier
-||||||| merged common ancestors
-    func updateFindInPageVisibility(visible: Bool, tab: Tab? = nil) {
-        if visible {
-            if findInPageBar == nil {
-                let findInPageBar = FindInPageBar()
-                self.findInPageBar = findInPageBar
-                findInPageBar.delegate = self
-                alertStackView.addArrangedSubview(findInPageBar)
-
-                findInPageBar.snp.makeConstraints { make in
-                    make.height.equalTo(UIConstants.ToolbarHeight)
-                    make.leading.trailing.equalTo(alertStackView)
-                }
-
-                updateViewConstraints()
-
-                // We make the find-in-page bar the first responder below, causing the keyboard delegates
-                // to fire. This, in turn, will animate the Find in Page container since we use the same
-                // delegate to slide the bar up and down with the keyboard. We don't want to animate the
-                // constraints added above, however, so force a layout now to prevent these constraints
-                // from being lumped in with the keyboard animation.
-                findInPageBar.layoutIfNeeded()
-            }
-
-            self.findInPageBar?.becomeFirstResponder()
-        } else if let findInPageBar = self.findInPageBar {
-            findInPageBar.endEditing(true)
-            let tab = tab ?? tabManager.selectedTab
-            guard let webView = tab?.webView else { return }
-            webView.evaluateJavaScript("__firefox__.findDone()", completionHandler: nil)
-            findInPageBar.removeFromSuperview()
-            self.findInPageBar = nil
-            updateViewConstraints()
-        }
-    }
-
-=======
->>>>>>> firefox-releases
     @objc fileprivate func openSettings() {
     */
     @objc func openSettings() {
@@ -1764,14 +1663,8 @@ extension BrowserViewController: URLBarDelegate {
             // We couldn't find a matching search keyword, so do a search query.
             /* Cliqz: Disable FireFox Telemetry
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
-<<<<<<< HEAD
             */
-            finishEditingAndSubmit(searchURL, visitType: VisitType.typed)
-||||||| merged common ancestors
-            finishEditingAndSubmit(searchURL, visitType: VisitType.typed)
-=======
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
->>>>>>> firefox-releases
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
             print("Error handling URL entry: \"\(text)\".")
@@ -1922,15 +1815,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 focusLocationTextField(forTab: tabManager.selectedTab)
             }
         }
-<<<<<<< HEAD
-        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
-            // Cliqz: flag homePanelController to show keyboard next time it is displayed
-            self.homePanelController?.shouldShowKeyboard = true
-||||||| merged common ancestors
-        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
-=======
 
         let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _ in
                 action()
@@ -1947,25 +1831,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
         let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
->>>>>>> firefox-releases
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-<<<<<<< HEAD
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newTab")
-        /* Cliqz: Moved Firefox Strings to Cliqz table
-        controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
-        */
-        controller.addAction(UIAlertAction(title: CliqzStrings.NewForgetTabTitle, style: .default, handler: { _ in
             // Cliqz: flag homePanelController to show keyboard next time it is displayed
             self.homePanelController?.shouldShowKeyboard = true
-||||||| merged common ancestors
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newTab")
-        controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
-=======
+            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)}
+        /* Cliqz: Moved Firefox Strings to Cliqz table
         let newPrivateTab = PhotonActionSheetItem(title: Strings.NewPrivateTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
->>>>>>> firefox-releases
+        */
+        controller.addAction(UIAlertAction(title: CliqzStrings.NewForgetTabTitle, style: .default, handler: { _ in            
+        // Cliqz: flag homePanelController to show keyboard next time it is displayed
+            self.homePanelController?.shouldShowKeyboard = true
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)}
         let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "tab_close", iconType: .Image) { action in
@@ -1992,16 +1867,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-<<<<<<< HEAD
-        present(controller, animated: true, completion: nil)
-        // Cliqz: Close CC
-        self.hideControlCenter()
-||||||| merged common ancestors
-        present(controller, animated: true, completion: nil)
-=======
 
         presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
->>>>>>> firefox-releases
+        
+        // Cliqz: Close CC
+        self.hideControlCenter()
     }
 
     func showBackForwardList() {
@@ -2216,22 +2086,13 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
-<<<<<<< HEAD
-            if tab.isPrivate != previous?.isPrivate {
-                applyTheme(tab.isPrivate ? .Private : .Normal)
-                // Cliqz: update isPrivate var in homepanel
-                self.homePanelController?.isPrivate = tab.isPrivate
-||||||| merged common ancestors
-            if tab.isPrivate != previous?.isPrivate {
-                applyTheme(tab.isPrivate ? .Private : .Normal)
-=======
-
             if previous == nil || tab.isPrivate != previous?.isPrivate {
                 applyTheme()
+                // Cliqz: update isPrivate var in homepanel
+                self.homePanelController?.isPrivate = tab.isPrivate
 
                 let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
                 ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate) }
->>>>>>> firefox-releases
             }
 
             readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
@@ -2857,28 +2718,16 @@ extension BrowserViewController: TabTrayDelegate {
 
 // MARK: Browser Chrome Theming
 extension BrowserViewController: Themeable {
-<<<<<<< HEAD
-
-    func applyTheme(_ theme: Theme) {
-        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
-        ui.forEach { $0?.applyTheme(theme) }
-        /*Cliqz - change color of status bar overlay
-||||||| merged common ancestors
-
-    func applyTheme(_ theme: Theme) {
-        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
-        ui.forEach { $0?.applyTheme(theme) }
-=======
     func applyTheme() {
         let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, homePanelController, searchController]
         ui.forEach { $0?.applyTheme() }
->>>>>>> firefox-releases
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
-        */
-        statusBarOverlay.backgroundColor = urlBar.backgroundColor
         setNeedsStatusBarAppearanceUpdate()
 
         (presentedViewController as? Themeable)?.applyTheme()
+
+        // Cliqz - change color of status bar overlay
+        statusBarOverlay.backgroundColor = urlBar.backgroundColor
     }
 }
 

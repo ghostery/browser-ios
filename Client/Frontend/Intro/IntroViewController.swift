@@ -21,14 +21,8 @@ struct IntroUX {
     static let FadeDuration = 0.25
 }
 
-<<<<<<< HEAD
-protocol IntroViewControllerDelegate: class {
-    /*Cliqz: Change the type of introViewController to UIViewController
-||||||| merged common ancestors
-protocol IntroViewControllerDelegate: class {
-=======
 protocol IntroViewControllerDelegate: AnyObject {
->>>>>>> firefox-releases
+    /*Cliqz: Change the type of introViewController to UIViewController
     func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool)
     */
     func introViewControllerDidFinish(_ introViewController: UIViewController, requestToLogin: Bool)

@@ -506,33 +506,12 @@ extension SearchViewController {
 
 extension SearchViewController: SuggestionCellDelegate {
     fileprivate func suggestionCell(_ suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String) {
-        // Assume that only the default search engine can provide search suggestions.
         let engine = searchEngines.defaultEngine
 
-<<<<<<< HEAD
-        var url = URIFixup.getURL(suggestion)
-        if url == nil {
-            url = engine.searchURLForQuery(suggestion)
-        }
-
-        /* Cliqz: Disable FireFox Telemetry
-        Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
-         */
-
-        if let url = url {
-||||||| merged common ancestors
-        var url = URIFixup.getURL(suggestion)
-        if url == nil {
-            url = engine.searchURLForQuery(suggestion)
-        }
-
-        Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
-
-        if let url = url {
-=======
         if let url = engine.searchURLForQuery(suggestion) {
+            /* Cliqz: Disable FireFox Telemetry
             Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
->>>>>>> firefox-releases
+            */
             searchDelegate?.searchViewController(self, didSelectURL: url)
         }
     }

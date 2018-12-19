@@ -82,15 +82,9 @@ private extension TrayToBrowserAnimator {
             cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.height)
 
             bvc.tabTrayDidDismiss(tabTray)
-<<<<<<< HEAD
             /* Cliqz: Move this code to TabTrayController as the backgroundColor of the window differs between normal and forget mode
-            UIApplication.shared.windows.first?.backgroundColor = UIConstants.AppBackgroundColor
-            */
-||||||| merged common ancestors
-            UIApplication.shared.windows.first?.backgroundColor = UIConstants.AppBackgroundColor
-=======
             UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.browser.background
->>>>>>> firefox-releases
+            */
             tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
             tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
             tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
@@ -202,17 +196,9 @@ private extension BrowserToTrayAnimator {
                 cell.frame = finalFrame
                 cell.title.transform = .identity
                 cell.layoutIfNeeded()
-<<<<<<< HEAD
                 /* Cliqz: Move this code to TabTrayController as the backgroundColor of the window differs between normal and forget mode
-                UIApplication.shared.windows.first?.backgroundColor = .TabTrayControllerUX.BackgroundColor
-                */
-||||||| merged common ancestors
-                
-                UIApplication.shared.windows.first?.backgroundColor = TabTrayControllerUX.BackgroundColor
-=======
-
                 UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.tabTray.background
->>>>>>> firefox-releases
+                */
                 tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
 
                 transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
@@ -286,16 +272,12 @@ private func headerTransform(_ frame: CGRect, toFrame finalFrame: CGRect, contai
 
 //MARK: Private Helper Methods
 private func calculateCollapsedCellFrameUsingCollectionView(_ collectionView: UICollectionView, atIndex index: Int) -> CGRect {
-<<<<<<< HEAD
     // Cliqz: added check to prevent crashing the app when clicking done button after swtiching forget mode state
     guard collectionView.numberOfItems(inSection: 0) > index else { return .zero}
     
-||||||| merged common ancestors
-=======
     guard index < collectionView.numberOfItems(inSection: 0) else {
         return .zero
     }
->>>>>>> firefox-releases
     if let attr = collectionView.collectionViewLayout.layoutAttributesForItem(at: IndexPath(item: index, section: 0)) {
         return collectionView.convert(attr.frame, to: collectionView.superview)
     } else {

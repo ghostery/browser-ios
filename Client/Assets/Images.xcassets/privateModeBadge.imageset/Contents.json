@@ -7,44 +7,13 @@
     },
     {
       "idiom" : "universal",
-<<<<<<< HEAD:Client/Frontend/Menu/Menu.xcassets/menu-Toggle-Off.imageset/Contents.json
-      "scale" : "1x",
-      "language-direction" : "right-to-left"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : " Switch-Off@2x.png",
-      "language-direction" : "left-to-right",
-||||||| merged common ancestors
-      "filename" : " Switch-Off@2x.png",
-      "language-direction" : "left-to-right",
-=======
       "filename" : "pbm-badge@2x.png",
->>>>>>> firefox-releases:Client/Assets/Images.xcassets/privateModeBadge.imageset/Contents.json
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-<<<<<<< HEAD:Client/Frontend/Menu/Menu.xcassets/menu-Toggle-Off.imageset/Contents.json
-      "scale" : "2x",
-      "language-direction" : "right-to-left"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : " Switch-Off@3x.png",
-      "language-direction" : "left-to-right",
-||||||| merged common ancestors
-      "filename" : " Switch-Off@3x.png",
-      "language-direction" : "left-to-right",
-=======
       "filename" : "pbm-badge@3x.png",
->>>>>>> firefox-releases:Client/Assets/Images.xcassets/privateModeBadge.imageset/Contents.json
       "scale" : "3x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x",
-      "language-direction" : "right-to-left"
     }
   ],
   "info" : {

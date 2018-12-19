@@ -40,10 +40,7 @@ class TopTabsViewController: UIViewController {
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
-        /* Cliqz - register CliqzTopTabCell
         collectionView.register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
-        */
-        collectionView.register(CliqzTopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
@@ -71,16 +68,12 @@ class TopTabsViewController: UIViewController {
         let newTab = UIButton.newTabButton()
         newTab.semanticContentAttribute = .forceLeftToRight
         newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
-<<<<<<< HEAD
+        newTab.accessibilityIdentifier = "TopTabsViewController.newTabButton"
         // Cliqz: Make button white
         newTab.imageView?.tintColor = .white
-||||||| merged common ancestors
-=======
-        newTab.accessibilityIdentifier = "TopTabsViewController.newTabButton"
->>>>>>> firefox-releases
         return newTab
     }()
-    
+
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.semanticContentAttribute = .forceLeftToRight
@@ -244,41 +237,7 @@ class TopTabsViewController: UIViewController {
 
 }
 
-<<<<<<< HEAD
-extension TopTabsViewController: Themeable {
-    func applyTheme(_ theme: Theme) {
-        // Cliqz: Change bg color
-        view.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: theme == Theme.Private)
-        tabsButton.applyTheme(theme)
-        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Photon.Grey80
-        tabsButton.textColor = UIColor.Photon.Grey40
-        
-        isPrivate = (theme == Theme.Private)
-        privateModeButton.applyTheme(theme)
-        privateModeButton.tintColor = UIColor.TopTabs.PrivateModeTint.colorFor(theme)
-        privateModeButton.imageView?.tintColor = privateModeButton.tintColor
-        newTab.tintColor = UIColor.Photon.Grey40
-        collectionView.backgroundColor = view.backgroundColor
-    }
-}
-||||||| merged common ancestors
-extension TopTabsViewController: Themeable {
-    func applyTheme(_ theme: Theme) {
-        tabsButton.applyTheme(theme)
-        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Photon.Grey80
-        tabsButton.textColor = UIColor.Photon.Grey40
-
-        isPrivate = (theme == Theme.Private)
-        privateModeButton.applyTheme(theme)
-        privateModeButton.tintColor = UIColor.TopTabs.PrivateModeTint.colorFor(theme)
-        privateModeButton.imageView?.tintColor = privateModeButton.tintColor
-        newTab.tintColor = UIColor.Photon.Grey40
-        collectionView.backgroundColor = view.backgroundColor
-    }
-}
-=======
 extension TopTabsViewController: TabDisplayer {
->>>>>>> firefox-releases
 
     func focusSelectedTab() {
         self.scrollToCurrentTab(true)
@@ -287,84 +246,8 @@ extension TopTabsViewController: TabDisplayer {
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
         guard let tabCell = cell as? TopTabCell else { return UICollectionViewCell() }
         tabCell.delegate = self
-<<<<<<< HEAD
-        
-        let tab = tabStore[index]
-        tabCell.style = tab.isPrivate ? .dark : .light
-        tabCell.titleText.text = tab.displayTitle
-        
-        if tab.displayTitle.isEmpty {
-            if tab.webView?.url?.isLocalUtility ?? true {
-                /* Cliqz: Changed the tile of the tobTab
-                tabCell.titleText.text = Strings.AppMenuNewTabTitleString
-                */
-                tabCell.titleText.text = getTobTabEmptyTitle(tab)
-            } else {
-                tabCell.titleText.text = tab.webView?.url?.absoluteDisplayString
-            }
-            tabCell.accessibilityLabel = tab.url?.aboutComponent ?? ""
-            tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tabCell.titleText.text ?? "")
-        } else {
-            tabCell.accessibilityLabel = tab.displayTitle
-            tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
-        }
-
-        tabCell.selectedTab = (tab == tabManager.selectedTab)
-        if let siteURL = tab.url?.displayURL {
-            tabCell.favicon.setIcon(tab.displayFavicon, forURL: siteURL, completed: { (color, url) in
-                if siteURL == url {
-                    tabCell.favicon.image = tabCell.favicon.image?.createScaled(CGSize(width: 15, height: 15))
-                    tabCell.favicon.backgroundColor = color == .clear ? .white : color
-                    tabCell.favicon.contentMode = .center
-                }
-            })
-        } else {
-			/* Cliqz: Changed favicon to Cliqz/Ghostery image
-            tabCell.favicon.image = UIImage(named: "defaultFavicon")
-			*/
-			tabCell.favicon.image = UIImage.defaultFavicon()
-            tabCell.favicon.contentMode = .scaleAspectFit
-            tabCell.favicon.backgroundColor = .clear
-        }
-        
-||||||| merged common ancestors
-        
-        let tab = tabStore[index]
-        tabCell.style = tab.isPrivate ? .dark : .light
-        tabCell.titleText.text = tab.displayTitle
-        
-        if tab.displayTitle.isEmpty {
-            if tab.webView?.url?.isLocalUtility ?? true {
-                tabCell.titleText.text = Strings.AppMenuNewTabTitleString
-            } else {
-                tabCell.titleText.text = tab.webView?.url?.absoluteDisplayString
-            }
-            tabCell.accessibilityLabel = tab.url?.aboutComponent ?? ""
-            tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tabCell.titleText.text ?? "")
-        } else {
-            tabCell.accessibilityLabel = tab.displayTitle
-            tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
-        }
-
-        tabCell.selectedTab = (tab == tabManager.selectedTab)
-        if let siteURL = tab.url?.displayURL {
-            tabCell.favicon.setIcon(tab.displayFavicon, forURL: siteURL, completed: { (color, url) in
-                if siteURL == url {
-                    tabCell.favicon.image = tabCell.favicon.image?.createScaled(CGSize(width: 15, height: 15))
-                    tabCell.favicon.backgroundColor = color == .clear ? .white : color
-                    tabCell.favicon.contentMode = .center
-                }
-            })
-        } else {
-            tabCell.favicon.image = UIImage(named: "defaultFavicon")
-            tabCell.favicon.contentMode = .scaleAspectFit
-            tabCell.favicon.backgroundColor = .clear
-        }
-        
-=======
         let isSelected = (tab == tabManager.selectedTab)
         tabCell.configureWith(tab: tab, isSelected: isSelected)
->>>>>>> firefox-releases
         return tabCell
     }
 }

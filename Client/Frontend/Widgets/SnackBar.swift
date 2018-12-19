@@ -228,16 +228,10 @@ class TimerSnackBar: SnackBar {
     static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL) {
         /* Cliqz: Changed favicon to Cliqz/Ghostery image
         let bar = TimerSnackBar(text: Strings.ExternalLinkAppStoreConfirmationTitle, img: UIImage(named: "defaultFavicon"))
-<<<<<<< HEAD
         */
         let bar = TimerSnackBar(text: Strings.ExternalLinkAppStoreConfirmationTitle, img: UIImage.defaultFavicon())
         
-        let openAppStore = SnackButton(title: Strings.OKString, accessibilityIdentifier: "ConfirmOpenInAppStore") { bar in
-||||||| merged common ancestors
-        let openAppStore = SnackButton(title: Strings.OKString, accessibilityIdentifier: "ConfirmOpenInAppStore") { bar in
-=======
         let openAppStore = SnackButton(title: Strings.AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore", bold: true) { bar in
->>>>>>> firefox-releases
             tab.removeSnackbar(bar)
             UIApplication.shared.open(appStoreURL, options: [:])
         }
