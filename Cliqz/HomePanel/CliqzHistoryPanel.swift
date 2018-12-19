@@ -26,6 +26,7 @@ private func getDate(_ dayOffset: Int) -> Date {
 
 class CliqzHistoryPanel: HistoryPanel {
     
+    /*
     private let Today = getDate(0)
     private let Yesterday = getDate(-1)
     private let ThisWeek = getDate(-7)
@@ -257,6 +258,7 @@ class CliqzHistoryPanel: HistoryPanel {
         }
         return overlayView
     }
+ */
 }
 
 
