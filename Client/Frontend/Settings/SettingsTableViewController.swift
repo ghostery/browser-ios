@@ -623,15 +623,6 @@ class SettingsTableViewController: ThemedTableViewController {
             headerView.showTopBorder = true
         }
         
-        //TODO: FF14 Merge
-        /*
-        //Cliqz: Fix
-        let bgView = UIView()
-        bgView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
-        headerView.backgroundView = bgView
-        //End
-        */
-
         headerView.applyTheme()
         return headerView
     }

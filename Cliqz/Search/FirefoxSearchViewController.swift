@@ -31,9 +31,7 @@ private struct SearchViewControllerUX {
     static let SearchImageWidth: Float = 24
     
     static let SuggestionBackgroundColor = UIColor.Photon.White100
-    //TODO: FF14 Merge
-//    static let SuggestionBorderColor = UIConstants.HighlightBlue
-    static let SuggestionBorderColor = UIColor.red
+    static let SuggestionBorderColor = UIColor.theme.general.highlightBlue
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
     static let SuggestionInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -771,9 +769,7 @@ fileprivate class SuggestionButton: InsetButton {
     @objc
     override var isHighlighted: Bool {
         didSet {
-            //TODO: FF14 Merge
-//            backgroundColor = isHighlighted ? UIConstants.HighlightBlue : UIColor.clear
-            backgroundColor = UIColor.red
+            backgroundColor = isHighlighted ? UIColor.theme.general.highlightBlue : UIColor.clear
         }
     }
 }

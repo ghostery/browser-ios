@@ -35,12 +35,8 @@ class SubSettingsTableViewController : UITableViewController {
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
         
-        
-        //TODO: FF14 Merge
-        /*
-        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
-        */
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         
     }
     
