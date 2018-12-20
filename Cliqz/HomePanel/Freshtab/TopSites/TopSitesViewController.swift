@@ -24,7 +24,7 @@ struct TopSitesUX {
 }
 
 class TopSitesViewController: UIViewController, HomePanel {
-
+   
 	weak var homePanelDelegate: HomePanelDelegate?
     weak var freshTabDelegate: FreshTabDelegate?
 
@@ -101,6 +101,10 @@ class TopSitesViewController: UIViewController, HomePanel {
 		
 	}
 	
+    func applyTheme() {
+        
+    }
+    
 	@objc fileprivate func cancelActions(_ sender: UITapGestureRecognizer) {
 		self.removeDeletedTopSites()
 	}

@@ -15,7 +15,8 @@ extension UIColor {
     // Reader Mode Sepia
         static let LightBeige = UIColor(rgb: 0xf0e6dc)
     }
-
+    //TODO: FF14 Merge
+    /*
     struct Browser {
         #if !PAID
         static let Background = BrowserColor(normal: Photon.Grey10, pbm: Photon.Grey70)
@@ -136,6 +137,7 @@ extension UIColor {
         static let ToolbarHighlight = BrowserColor(normal: Photon.Blue50, pbm: Photon.Blue50)
         static let ToolbarTint = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey50)
     }
+    */
 }
 
 public struct UIConstants {
@@ -157,19 +159,20 @@ public struct UIConstants {
         }
     }
 
-<<<<<<< HEAD
     static let AppBackgroundColor = UIColor.Photon.Grey10
     /* Cliqz: Changed the tint color for UIControl to Cliqz Blue color
     static let SystemBlueColor = UIColor.Photon.Blue40
     static let ControlTintColor = UIColor.Photon.Blue50
     */
     static let SystemBlueColor = UIColor.cliqzBluePrimary
+    //TODO: FF14 Merge
+    /*
     #if PAID
     static let ControlTintColor: UIColor? = nil
     #else
     static let ControlTintColor = UIColor.cliqzBluePrimary
     #endif
-    
+    */
     static let PasscodeDotColor = UIColor.Photon.Grey60
     static let PrivateModeAssistantToolbarBackgroundColor = UIColor.Photon.Grey50
     static let PrivateModeTextHighlightColor = UIColor.Photon.Purple60

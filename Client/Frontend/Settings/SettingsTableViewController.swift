@@ -193,8 +193,10 @@ class BoolSetting: Setting {
         super.onConfigureCell(cell)
 
         let control = UISwitch()
-        // Cliqz: change the on tint color for UISwitch 
-        control.onTintColor = UIConstants.ControlTintColor
+        /* Cliqz: change the on tint color for UISwitch
+        control.onTintColor = UIConstants.SystemBlueColor
+        */
+        control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
 
@@ -621,11 +623,14 @@ class SettingsTableViewController: ThemedTableViewController {
             headerView.showTopBorder = true
         }
         
+        //TODO: FF14 Merge
+        /*
         //Cliqz: Fix
         let bgView = UIView()
         bgView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
         headerView.backgroundView = bgView
         //End
+        */
 
         headerView.applyTheme()
         return headerView

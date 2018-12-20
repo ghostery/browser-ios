@@ -26,6 +26,10 @@ extension URLBarView {
             view.updateCurrentQuery(text)
         }
     }
+    
+    @objc func didApplyTheme() {
+       
+    }
 }
 
 class CliqzURLBar: URLBarView {
@@ -290,13 +294,20 @@ class CliqzURLBar: URLBarView {
         }
     }
     
-    override func didApplyTheme(_ theme: Theme) {
-        ghosteryButton.applyTheme(theme)
+    override func didApplyTheme() {
+        ghosteryButton.applyTheme()
+        
         #if PAID
-        pageOptionsButton.tintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
+        //TODO: FF14 Merge
+//        pageOptionsButton.tintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
+        pageOptionsButton.tintColor = UIColor.red
         #else
-        pageOptionsButton.tintColor = UIColor.CliqzURLBar.Background.colorFor(theme)
+        //TODO: FF14 Merge
+//        pageOptionsButton.tintColor = UIColor.CliqzURLBar.Background.colorFor(theme)
+        pageOptionsButton.tintColor = UIColor.red
         #endif
+        
+        
     }
 }
 

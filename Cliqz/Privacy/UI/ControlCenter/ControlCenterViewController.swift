@@ -118,12 +118,17 @@ class ControlCenterViewController: UIViewController {
 		self.view.backgroundColor = UIColor.clear
 		
 		let bgView = UIView()
-		bgView.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: self.privateMode)
 		panelSwitchControl = UISegmentedControl(items: items)
 		panelSwitchControl.tintColor = UIColor.white
-		panelSwitchControl.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: self.privateMode)
 		panelSwitchControl.addTarget(self, action: #selector(switchPanel), for: .valueChanged)
-		bgView.addSubview(panelSwitchControl)
+        //TODO: FF14 Merge
+        /*
+        panelSwitchControl.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: self.privateMode)
+        bgView.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: self.privateMode)
+        */
+        panelSwitchControl.backgroundColor = UIColor.red
+        bgView.backgroundColor = UIColor.red
+        bgView.addSubview(panelSwitchControl)
 		self.view.addSubview(bgView)
 		
 		bgView.snp.makeConstraints { (make) in

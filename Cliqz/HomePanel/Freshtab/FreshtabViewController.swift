@@ -20,7 +20,7 @@ struct FreshtabViewUX {
 }
 
 class FreshtabViewController: UIViewController, HomePanel {
-	
+    
 	weak var homePanelDelegate: HomePanelDelegate?
 
 	private var profile: Profile!
@@ -137,6 +137,9 @@ class FreshtabViewController: UIViewController, HomePanel {
         }
     }
 
+    func applyTheme() {
+        
+    }
 	private func getInvisibleFreshTabHeight(topSitesHeight: CGFloat, newsHeight: CGFloat) -> CGFloat {
 		let viewHeight = self.view.bounds.height - FreshtabViewUX.bottomOffset
 		var freshTabHeight = topSitesHeight + newsHeight + 10.0

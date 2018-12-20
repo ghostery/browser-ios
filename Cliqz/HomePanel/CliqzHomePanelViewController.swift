@@ -277,8 +277,8 @@ extension CliqzHomePanelViewController: HomePanelDelegate {
 
 // MARK: UIAppearance
 extension CliqzHomePanelViewController: Themeable {
-    func applyTheme(_ theme: Theme) {
-        return
+    func applyTheme() {
+        
     }
 }
 

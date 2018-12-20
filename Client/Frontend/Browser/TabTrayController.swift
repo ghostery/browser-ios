@@ -64,7 +64,7 @@ class TabTrayController: UIViewController {
     */
     lazy var toolbar: CliqzTrayToolbar = {
         let toolbar = CliqzTrayToolbar()
-        toolbar.addTabButton.addTarget(self, action: #selector(didClickAddTab), for: .touchUpInside)
+        toolbar.addTabButton.addTarget(self, action: #selector(openTab), for: .touchUpInside)
         toolbar.forgetModeButton.addTarget(self, action: #selector(didTogglePrivateMode), for: .touchUpInside)
         toolbar.doneButton.addTarget(self, action: #selector(didTapDone), for: .touchUpInside)
         toolbar.doneButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(SELlongPressDoneButton)))
@@ -187,12 +187,14 @@ class TabTrayController: UIViewController {
         collectionView.backgroundColor = UIColor.theme.tabTray.background
         collectionView.keyboardDismissMode = .onDrag
 
+        /* Cliqz: Commented out LeanPlumClient
         // XXX: Bug 1485064 - Temporarily disable drag-and-drop in tabs tray
         if #available(iOS 11.0, *), LeanPlumClient.shared.enableDragDrop.boolValue() {
              collectionView.dragInteractionEnabled = true
              collectionView.dragDelegate = tabDisplayManager
              collectionView.dropDelegate = tabDisplayManager
          }
+        */
 
         searchBarHolder.addSubview(roundedSearchBarHolder)
         searchBarHolder.addSubview(searchBar)
@@ -1333,11 +1335,11 @@ class CliqzTrayToolbar : TrayToolbar {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override fileprivate func applyTheme(_ theme: Theme) {
-        super.applyTheme(theme)
-        doneButton.applyTheme(theme)
-        forgetModeButton.applyTheme(theme)
-        backgroundColor = UIColor.CliqzToolbar.Background.colorFor(theme)
-        addTabButton.tintColor = UIColor.CliqzToolbarButton.Tint.colorFor(theme)
+    override func applyTheme() {
+        super.applyTheme()
+        doneButton.applyTheme()
+        forgetModeButton.applyTheme()
+        backgroundColor = UIColor.red
+        addTabButton.tintColor = UIColor.red
     }
 }

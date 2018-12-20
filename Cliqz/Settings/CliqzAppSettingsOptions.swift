@@ -189,7 +189,9 @@ class RestoreTopSitesSetting: Setting {
         let hiddenTopsitesCount = self.profile.history.getHiddenTopSitesCount()
         var attributes: [NSAttributedStringKey : Any]?
         if hiddenTopsitesCount > 0 {
-            attributes = [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]
+            //TODO: FF14 Merge
+            //attributes = [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]
+            attributes = [NSAttributedStringKey.foregroundColor: UIColor.red]
         } else {
             attributes = [NSAttributedStringKey.foregroundColor: UIColor.lightGray]
         }
@@ -239,7 +241,9 @@ class RestoreTopSitesSetting: Setting {
 class FAQSetting: Setting {
     
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("FAQ", tableName: "Cliqz", comment: "[Settings] FAQ"), attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue])
+        //TODO: FF14 Merge
+//        return NSAttributedString(string: NSLocalizedString("FAQ", tableName: "Cliqz", comment: "[Settings] FAQ"), attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue])
+        return NSAttributedString(string: NSLocalizedString("FAQ", tableName: "Cliqz", comment: "[Settings] FAQ"), attributes: [NSAttributedStringKey.foregroundColor: UIColor.red])
     }
     
     override var url: URL? {
@@ -368,7 +372,9 @@ class MyOffrzSetting: ShowCliqzPageSetting {
 class RateUsSetting: Setting {
     
     init() {
-        super.init(title: NSAttributedString(string: NSLocalizedString("Rate Us", tableName: "Cliqz", comment: "[Settings] Rate Us"), attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]))
+        //TODO: FF14 Merge
+//        super.init(title: NSAttributedString(string: NSLocalizedString("Rate Us", tableName: "Cliqz", comment: "[Settings] Rate Us"), attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Rate Us", tableName: "Cliqz", comment: "[Settings] Rate Us"), attributes: [NSAttributedStringKey.foregroundColor: UIColor.red]))
     }
     
     override func onClick(_ navigationController: UINavigationController?) {

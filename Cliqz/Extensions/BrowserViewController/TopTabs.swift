@@ -29,7 +29,7 @@ class CliqziPadTabsButton: UIButton {
 }
 
 extension CliqziPadTabsButton: Themeable {
-    func applyTheme(_ theme: Theme) {
+    func applyTheme() {
         // not supported
     }
 }

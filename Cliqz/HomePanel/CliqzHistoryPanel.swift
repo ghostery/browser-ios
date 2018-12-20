@@ -26,6 +26,7 @@ private func getDate(_ dayOffset: Int) -> Date {
 
 class CliqzHistoryPanel: HistoryPanel {
     
+    //TODO: FF14 Merge
     /*
     private let Today = getDate(0)
     private let Yesterday = getDate(-1)

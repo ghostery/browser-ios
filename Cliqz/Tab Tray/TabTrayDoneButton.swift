@@ -21,7 +21,9 @@ class TabTrayDoneButton: UIButton, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func applyTheme(_ theme: Theme) {
-        setTitleColor(UIColor.CliqzTabTray.ButtonText.colorFor(theme), for: [])
+    func applyTheme() {
+        //TODO: FF14 Merge
+//        setTitleColor(UIColor.CliqzTabTray.ButtonText.colorFor(theme), for: [])
+        setTitleColor(UIColor.red, for: [])
     }
 }

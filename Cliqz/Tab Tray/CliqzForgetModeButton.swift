@@ -26,10 +26,13 @@ class CliqzForgetModeButton: UIButton, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func applyTheme(_ theme: Theme) {
-        setTitleColor(UIColor.CliqzTabTray.PrivateTabsButtonText.colorFor(theme), for: [])
-        isSelected = theme == .Private
+    func applyTheme() {
+        //TODO: FF14 Merge
+//        setTitleColor(UIColor.CliqzTabTray.PrivateTabsButtonText.colorFor(theme), for: [])
+        setTitleColor(UIColor.red, for: [])
+        isSelected = UIColor.theme.name == BuiltinThemeName.normal.rawValue
         accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+ 
     }
     
     func setSelected(_ selected: Bool, animated: Bool = true) {

@@ -765,7 +765,7 @@ class BrowserViewController: UIViewController {
             view.addSubview(homePanelController.view)
             homePanelController.didMove(toParentViewController: self)
             // Cliqz: Activate the keyboard if necessary
-            if self.tabTrayController == nil || self.tabTrayController.view.superview == nil {
+            if self.tabTrayController == nil || self.tabTrayController?.view.superview == nil {
                 self.showKeyboardIfNeeded()
             }
         }
@@ -912,10 +912,9 @@ class BrowserViewController: UIViewController {
         }
         else {
             let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-            searchController = FirefoxSearchViewController(isPrivate: isPrivate)
+            searchController = FirefoxSearchViewController(profile: self.profile, isPrivate: isPrivate)
             searchController!.searchEngines = profile.searchEngines
             searchController!.searchDelegate = self
-            searchController!.profile = self.profile
             
             HistoryListener.shared.firefoxSearchController = searchController
             
@@ -1830,6 +1829,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
+        //TODO: FF14 Merge
         let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
             // Cliqz: flag homePanelController to show keyboard next time it is displayed
             self.homePanelController?.shouldShowKeyboard = true
@@ -1838,8 +1838,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         /* Cliqz: Moved Firefox Strings to Cliqz table
         let newPrivateTab = PhotonActionSheetItem(title: Strings.NewPrivateTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
         */
-        controller.addAction(UIAlertAction(title: CliqzStrings.NewForgetTabTitle, style: .default, handler: { _ in            
-        // Cliqz: flag homePanelController to show keyboard next time it is displayed
+        let newPrivateTab = PhotonActionSheetItem(title: CliqzStrings.NewForgetTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
+            // Cliqz: flag homePanelController to show keyboard next time it is displayed
             self.homePanelController?.shouldShowKeyboard = true
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)}

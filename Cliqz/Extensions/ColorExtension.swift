@@ -394,11 +394,14 @@ extension UIColor {
     
     //Other
     static let cliqzURLBarColor = UIColor(colorString: "4EABEA")
-    
+    //TODO: FF14 Merge
+    /*
     struct CliqzTabTray {
         #if !PAID
         static let ButtonText = BrowserColor(normal: cliqzWhitePrimary, pbm: cliqzWhitePrimary)
         static let PrivateTabsButtonText = BrowserColor(normal: cliqzWhitePrimary, pbm: cliqzWhitePrimary)
+        static let ButtonText = BrowserColor(normal: UIColor.red, pbm: UIColor.red)
+        static let PrivateTabsButtonText = BrowserColor(normal: UIColor.red, pbm: UIColor.red)
         #else
         static let ButtonText = BrowserColor(normal: .lumenBrightBlue, pbm: .lumenBrightBlue)
         static let PrivateTabsButtonText = BrowserColor(normal: .lumenBrightBlue, pbm: .lumenDeepBlue)
@@ -431,7 +434,7 @@ extension UIColor {
         static let Background = BrowserColor(normal: UIColor.cliqzBluePrimary, pbm: UIColor.cliqzForgetPrimary)
         #endif
     }
-    
+    */
 	struct ControlCenter {
 		static let restrictedColorSet = [
 			UIColor(colorString: "E74055"),

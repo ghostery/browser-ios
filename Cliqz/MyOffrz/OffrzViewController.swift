@@ -10,8 +10,8 @@ import Foundation
 import RxSwift
 
 class OffrzViewController: UIViewController, HomePanel {
-
-	weak var homePanelDelegate: HomePanelDelegate?
+    
+    weak var homePanelDelegate: HomePanelDelegate?
 
     private var scrollView = UIScrollView()
     private var containerView = UIView()
@@ -62,7 +62,11 @@ class OffrzViewController: UIViewController, HomePanel {
 		// TODO: Refactor after Telemetry integration
 //		TelemetryLogger.sharedInstance.logEvent(.Toolbar("hide", nil, "offrz", nil, ["show_duration": Date().timeIntervalSince(self.startDate)]))
 	}
-
+    
+    func applyTheme() {
+        
+    }
+    
     private func setStyles() {
         self.view.backgroundColor = UIColor.clear
         containerView.backgroundColor = UIColor.clear

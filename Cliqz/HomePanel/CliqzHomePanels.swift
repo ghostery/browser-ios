@@ -20,8 +20,7 @@ class CliqzHomePanels {
     
     let historyPanel =  HomePanelDescriptor(
                         makeViewController: { profile in
-                            let history = CliqzHistoryPanel()
-                            history.profile = profile
+                            let history = CliqzHistoryPanel(profile: profile)
                             let controller = UINavigationController(rootViewController: history)
                             controller.setNavigationBarHidden(true, animated: false)
                             controller.interactivePopGestureRecognizer?.delegate = nil
@@ -56,8 +55,7 @@ class CliqzHomePanels {
     
     let favoritePanel = HomePanelDescriptor(
                         makeViewController: { profile in
-                            let bookmarks = CliqzBookmarksPanel()
-                            bookmarks.profile = profile
+                            let bookmarks = CliqzBookmarksPanel(profile: profile)
                             let controller = UINavigationController(rootViewController: bookmarks)
                             controller.setNavigationBarHidden(true, animated: false)
                             // this re-enables the native swipe to pop gesture on UINavigationController for embedded, navigation bar-less UINavigationControllers

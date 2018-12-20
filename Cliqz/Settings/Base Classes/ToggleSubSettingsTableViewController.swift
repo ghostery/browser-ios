@@ -26,7 +26,7 @@ class ToggleSubSettingsTableViewController: SubSettingsTableViewController {
         let cell = getUITableViewCell()
         
         let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
+        control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged(_:)), for: UIControlEvents.valueChanged)
         control.isOn = toggles[indexPath.section]
         control.isEnabled = true

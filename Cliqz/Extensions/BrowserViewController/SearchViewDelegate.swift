@@ -12,7 +12,8 @@ import Storage
 //Cliqz: Replace Search Controller
 extension BrowserViewController: SearchViewDelegate {
 	func didSelectURL(_ url: URL, searchQuery: String?) {
-		finishEditingAndSubmit(url, visitType: VisitType.typed)
+        guard let tab = tabManager.selectedTab else { return }
+        finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
 	}
 	
 	func autoCompeleteQuery(_ autoCompleteText: String) {

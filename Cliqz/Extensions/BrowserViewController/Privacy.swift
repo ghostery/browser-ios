@@ -215,8 +215,9 @@ extension BrowserViewController {
 extension BrowserViewController: ControlCenterViewControllerDelegate {
 
 	func controlCenter(didSelectURLString url: String) {
+        guard let tab = tabManager.selectedTab else { return }
 		if let u = URL(string: url) {
-			self.finishEditingAndSubmit(u, visitType: VisitType.link)
+            self.finishEditingAndSubmit(u, visitType: VisitType.link, forTab: tab)
 		}
 	}
 	

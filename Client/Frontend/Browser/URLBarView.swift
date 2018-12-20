@@ -562,11 +562,6 @@ class URLBarView: UIView {
     @objc func tappedScrollToTopArea() {
         delegate?.urlBarDidPressScrollToTop(self)
     }
-    
-    // Cliqz - Override applyTheme workaround
-    func didApplyTheme(_ theme: Theme) {
-        return
-    }
 }
 
 extension URLBarView: TabToolbarProtocol {
@@ -740,6 +735,9 @@ extension URLBarView: Themeable {
 
         locationBorderColor = UIColor.theme.urlbar.border
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
+        
+        // Cliqz: Call didApplyTheme as we can not override applyTheme() in the CliqzURLBar
+        self.didApplyTheme()
     }
 }
 

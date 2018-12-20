@@ -58,7 +58,10 @@ class SavedTab: NSObject, NSCoding {
             let forwardList = tab.webView?.backForwardList.forwardList ?? []
             let urls = (backList + [currentItem] + forwardList).map { $0.url }
             let currentPage = -forwardList.count
+            /* Cliqz: send isFreshtab flag in the constructor
             self.sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: tab.lastExecutedTime ?? Date.now())
+            */
+            self.sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: tab.lastExecutedTime ?? Date.now(), isFreshtab: tab.url?.isAboutURL ?? true)
         } else {
             self.sessionData = tab.sessionData
         }
