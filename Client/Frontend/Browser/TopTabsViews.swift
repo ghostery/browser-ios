@@ -190,7 +190,10 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
                 }
             })
         } else {
+            /* Cliqz: Changed favicon to Cliqz/Ghostery image
             self.favicon.image = UIImage(named: "defaultFavicon")
+            */
+            self.favicon.image = UIImage.defaultFavicon()
             self.favicon.contentMode = .scaleAspectFit
             self.favicon.backgroundColor = .clear
         }

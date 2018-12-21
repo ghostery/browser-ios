@@ -1193,9 +1193,15 @@ class TabCell: UICollectionViewCell {
         accessibilityHint = NSLocalizedString("Swipe right or left with three fingers to close the tab.", comment: "Accessibility hint for tab tray's displayed tab.")
 
         if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
+            /* Cliqz: Changed favicon to Cliqz/Ghostery image
             favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
+            */
+            favicon.sd_setImage(with: url, placeholderImage: UIImage.defaultFavicon(), options: [], completed: nil)
         } else {
+            /* Cliqz: Changed favicon to Cliqz/Ghostery image
             let defaultFavicon = UIImage(named: "defaultFavicon")
+            */
+            let defaultFavicon = UIImage.defaultFavicon()
             if tab.isPrivate {
                 favicon.image = defaultFavicon
                 favicon.tintColor = UIColor.theme.tabTray.faviconTint
