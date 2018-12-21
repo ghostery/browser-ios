@@ -59,6 +59,7 @@
 		1E2E551221187407003B50BE /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C75DF2207584C300BB8AD0 /* UIImageViewAligned.m */; };
 		1E351C3A21CA994800275941 /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C3821CA994800275941 /* BrowserViewController+ReaderMode.swift */; };
 		1E351C3B21CA994800275941 /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C3921CA994800275941 /* BrowserViewController+FindInPage.swift */; };
+		1E351C4321CC0F5E00275941 /* CliqzTrayToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C4221CC0F5D00275941 /* CliqzTrayToolbar.swift */; };
 		1E3B3F2320C1590600C96736 /* Cliqz.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 1E3B3F2520C1590600C96736 /* Cliqz.stringsdict */; };
 		1E3C5388209AFEDA00286CA4 /* TabTrayDoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */; };
 		1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3CBC142057D83700898B05 /* CliqzAppSettingsTableViewController.swift */; };
@@ -1449,6 +1450,7 @@
 		1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendUsageDataTableViewController.swift; sourceTree = "<group>"; };
 		1E351C3821CA994800275941 /* BrowserViewController+ReaderMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ReaderMode.swift"; sourceTree = "<group>"; };
 		1E351C3921CA994800275941 /* BrowserViewController+FindInPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+FindInPage.swift"; sourceTree = "<group>"; };
+		1E351C4221CC0F5D00275941 /* CliqzTrayToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTrayToolbar.swift; sourceTree = "<group>"; };
 		1E3B3F2420C1590600C96736 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
 		1E3B3F2820C15BA500C96736 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
 		1E3B3F2920C15BA700C96736 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fr; path = fr.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
@@ -2741,6 +2743,7 @@
 				1EDF91C4208A33C500200100 /* TabTrayControllerExtension.swift */,
 				1EDF91C8208DDC5400200100 /* CliqzForgetModeButton.swift */,
 				1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */,
+				1E351C4221CC0F5D00275941 /* CliqzTrayToolbar.swift */,
 			);
 			path = "Tab Tray";
 			sourceTree = "<group>";
@@ -6530,6 +6533,7 @@
 				4F0445E920334DC800E2C0C7 /* LocalDataStore.swift in Sources */,
 				39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */,
 				4FBBC14020359D3100445AD1 /* ForgetModeView.swift in Sources */,
+				1E351C4321CC0F5E00275941 /* CliqzTrayToolbar.swift in Sources */,
 				AF6FA98820652D4600D7F9F0 /* TrackerListApp.swift in Sources */,
 				1E2C227C20B4149000AA00B5 /* SendUsageDataTableViewController.swift in Sources */,
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,

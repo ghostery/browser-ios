@@ -65,7 +65,7 @@ class TabTrayController: UIViewController {
     lazy var toolbar: CliqzTrayToolbar = {
         let toolbar = CliqzTrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(openTab), for: .touchUpInside)
-        toolbar.forgetModeButton.addTarget(self, action: #selector(didTogglePrivateMode), for: .touchUpInside)
+        toolbar.maskButton.addTarget(self, action: #selector(didTogglePrivateMode), for: .touchUpInside)
         toolbar.doneButton.addTarget(self, action: #selector(didTapDone), for: .touchUpInside)
         toolbar.doneButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(SELlongPressDoneButton)))
         return toolbar
@@ -344,9 +344,6 @@ class TabTrayController: UIViewController {
         let exitingPrivateMode = !privateMode && tabManager.shouldClearPrivateTabs()
 
         toolbar.maskButton.setSelected(privateMode, animated: true)
-        
-        // Cliqz: togol forgetmode button
-        toolbar.forgetModeButton.setSelected(privateMode, animated: true)
         
         collectionView.layoutSubviews()
         // Cliqz: reset background image again due to switching between forget and rebular mode
@@ -970,7 +967,10 @@ extension TabTrayController: UIAdaptivePresentationControllerDelegate, UIPopover
 
 // MARK: - Toolbar
 class TrayToolbar: UIView, Themeable, PrivateModeUI {
+    /* Cliqz: Changed modifiers
     fileprivate let toolbarButtonSize = CGSize(width: 44, height: 44)
+    */
+    let toolbarButtonSize = CGSize(width: 44, height: 44)
 
     lazy var addTabButton: UIButton = {
         let button = UIButton()
@@ -989,9 +989,14 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
     }()
 
     lazy var maskButton: PrivateModeButton = PrivateModeButton()
+    /* Cliqz: Changed modifiers
     fileprivate let sideOffset: CGFloat = 32
 
     fileprivate override init(frame: CGRect) {
+    */
+    let sideOffset: CGFloat = 32
+    override init(frame: CGRect) {
+        
         super.init(frame: frame)
         addSubview(addTabButton)
 
@@ -1247,99 +1252,5 @@ class SearchBarTextField: UITextField {
 
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.insetBy(dx: SearchBarTextField.leftInset, dy: 0)
-    }
-}
-
-// Cliqz: customize TabTrayToolbar
-class CliqzTrayToolbar : TrayToolbar {
-    lazy var doneButton = TabTrayDoneButton()
-
-    lazy var forgetModeButton = CliqzForgetModeButton()
-    override lazy var addTabButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.templateImageNamed("cliqz-nav-add"), for: .normal)
-        button.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
-        button.accessibilityIdentifier = "TabTrayController.addTabButton"
-        return button
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        deleteButton.removeFromSuperview()
-        maskButton.removeFromSuperview()
-        
-        if UIDevice.current.getDeviceAndOrientation().0 == .iPad {
-            
-            addSubview(doneButton)
-            addSubview(forgetModeButton)
-            
-            doneButton.snp.makeConstraints { [unowned self] make in
-                make.centerY.equalTo(self.addTabButton.snp.centerY)
-                make.right.equalTo(self).offset(-sideOffset)
-            }
-            
-            addTabButton.snp.remakeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalToSuperview()
-                make.size.equalTo(toolbarButtonSize)
-            }
-            
-            forgetModeButton.snp.remakeConstraints { [unowned self] make in
-                make.centerY.equalTo(self.addTabButton.snp.centerY)
-                make.left.equalTo(self).offset(sideOffset)
-                make.width.equalTo(110)
-            }
-        }
-        else {
-            
-            let containerDone = UIView()
-            let containerForget = UIView()
-            
-            addSubview(containerDone)
-            addSubview(containerForget)
-            
-            containerDone.addSubview(doneButton)
-            containerForget.addSubview(forgetModeButton)
-            
-            containerDone.snp.makeConstraints { (make) in
-                make.right.top.equalToSuperview()
-                make.left.equalTo(addTabButton.snp.right)
-                make.height.equalTo(toolbarButtonSize)
-            }
-            
-            containerForget.snp.makeConstraints { (make) in
-                make.left.top.equalToSuperview()
-                make.right.equalTo(addTabButton.snp.left)
-                make.height.equalTo(toolbarButtonSize)
-            }
-            
-            doneButton.snp.makeConstraints { make in
-                make.center.equalToSuperview()
-            }
-            
-            addTabButton.snp.remakeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalToSuperview()
-                make.size.equalTo(toolbarButtonSize)
-            }
-            
-            forgetModeButton.snp.remakeConstraints { make in
-                make.center.equalToSuperview()
-                make.width.equalTo(110)
-            }
-        }
-        
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func applyTheme() {
-        super.applyTheme()
-        doneButton.applyTheme()
-        forgetModeButton.applyTheme()
-        backgroundColor = UIColor.red
-        addTabButton.tintColor = UIColor.red
     }
 }

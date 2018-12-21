@@ -8,7 +8,7 @@
 
 import UIKit
 import QuartzCore
-
+/*
 class CliqzForgetModeButton: UIButton, Themeable {
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,9 +27,6 @@ class CliqzForgetModeButton: UIButton, Themeable {
     }
     
     func applyTheme() {
-        //TODO: FF14 Merge
-//        setTitleColor(UIColor.CliqzTabTray.PrivateTabsButtonText.colorFor(theme), for: [])
-        setTitleColor(UIColor.red, for: [])
         isSelected = UIColor.theme.name == BuiltinThemeName.normal.rawValue
         accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
  
@@ -52,3 +49,4 @@ class CliqzForgetModeButton: UIButton, Themeable {
         self.setSelected(isSelected, animated: false)
     }
 }
+*/
