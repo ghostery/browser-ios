@@ -24,7 +24,10 @@ private class FetchInProgressError: MaybeErrorType {
 
 class HistoryPanel: SiteTableViewController, HomePanel {
     enum Section: Int {
+        /* Cliqz: discard syncAndRecentlyClosed section
         case syncAndRecentlyClosed
+        */
+        case syncAndRecentlyClosed = -1
         case today
         case yesterday
         case lastWeek
