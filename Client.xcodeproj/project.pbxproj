@@ -112,7 +112,6 @@
 		1EDF0B24207B86DA00856493 /* QuerySuggestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B23207B86DA00856493 /* QuerySuggestions.swift */; };
 		1EDF917820874DAA00200100 /* ShareExtensionActivities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF917720874DAA00200100 /* ShareExtensionActivities.swift */; };
 		1EDF91C5208A33C500200100 /* TabTrayControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF91C4208A33C500200100 /* TabTrayControllerExtension.swift */; };
-		1EDF91C9208DDC5400200100 /* CliqzForgetModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF91C8208DDC5400200100 /* CliqzForgetModeButton.swift */; };
 		1EEA368120613C17003B6AD5 /* SendCrashReportsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */; };
 		1EEA369520615725003B6AD5 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA369420615725003B6AD5 /* DownloadManager.swift */; };
 		1EEA36D52063E105003B6AD5 /* FileManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA36D42063E105003B6AD5 /* FileManagerExtension.swift */; };
@@ -1520,7 +1519,6 @@
 		1EDF0B23207B86DA00856493 /* QuerySuggestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuerySuggestions.swift; sourceTree = "<group>"; };
 		1EDF917720874DAA00200100 /* ShareExtensionActivities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionActivities.swift; sourceTree = "<group>"; };
 		1EDF91C4208A33C500200100 /* TabTrayControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayControllerExtension.swift; sourceTree = "<group>"; };
-		1EDF91C8208DDC5400200100 /* CliqzForgetModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzForgetModeButton.swift; sourceTree = "<group>"; };
 		1EEA368020613C17003B6AD5 /* SendCrashReportsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCrashReportsTableViewController.swift; sourceTree = "<group>"; };
 		1EEA369420615725003B6AD5 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		1EEA36D42063E105003B6AD5 /* FileManagerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtension.swift; sourceTree = "<group>"; };
@@ -2741,7 +2739,6 @@
 			isa = PBXGroup;
 			children = (
 				1EDF91C4208A33C500200100 /* TabTrayControllerExtension.swift */,
-				1EDF91C8208DDC5400200100 /* CliqzForgetModeButton.swift */,
 				1E3C5387209AFEDA00286CA4 /* TabTrayDoneButton.swift */,
 				1E351C4221CC0F5D00275941 /* CliqzTrayToolbar.swift */,
 			);
@@ -6509,7 +6506,6 @@
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				1E25A2D42121A7AA0038D8D7 /* LocaleConstants.swift in Sources */,
 				4F30F5172051670C0049E4F6 /* Telemetry.swift in Sources */,
-				1EDF91C9208DDC5400200100 /* CliqzForgetModeButton.swift in Sources */,
 				AF99C8A2206935F0009404FF /* GhosteryButton.swift in Sources */,
 				4F30F50F2051670C0049E4F6 /* JSBridgeBridge.m in Sources */,
 				396CDB55203C5B870034A3A3 /* TabTrayController+KeyCommands.swift in Sources */,
