@@ -722,7 +722,10 @@ extension URLBarView {
 }
 
 extension URLBarView: Themeable {
+    /* Cliqz: modified the method to be ObjectiveC so that it can be extented in the inherited class
     func applyTheme() {
+    */
+    @objc func applyTheme() {
         locationView.applyTheme()
         locationTextField?.applyTheme()
         actionButtons.forEach { $0.applyTheme() }
@@ -735,9 +738,6 @@ extension URLBarView: Themeable {
 
         locationBorderColor = UIColor.theme.urlbar.border
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
-        
-        // Cliqz: Call didApplyTheme as we can not override applyTheme() in the CliqzURLBar
-        self.didApplyTheme()
     }
 }
 
