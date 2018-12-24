@@ -47,13 +47,6 @@ class GhosteryButton: InsetButton {
     
     func setUpConstaints() {
         
-        if UIColor.theme.name == BuiltinThemeName.normal.rawValue {
-            ghosty.image = UIImage.controlCenterNormalIcon()
-        }
-        else {
-            ghosty.image = UIImage.controlCenterPrivateIcon()
-        }
-        
         #if !PAID
         let height: CGFloat = 25.0
         let width = (ghosty.image?.widthOverHeight() ?? 1.0) * height
@@ -129,6 +122,16 @@ extension GhosteryButton: GhosteryCountDelegate {
     func showHello() {
         self.count.text = "HELLO"
         self.lookDeactivated()
+    }
+}
+
+extension GhosteryButton : PrivateModeUI {
+    func applyUIMode(isPrivate: Bool) {
+        if isPrivate {
+            ghosty.image = UIImage.controlCenterPrivateIcon()
+        } else {
+            ghosty.image = UIImage.controlCenterNormalIcon()
+        }
     }
 }
 

@@ -193,6 +193,11 @@ class CliqzURLBar: URLBarView {
         setStyle()
     }
     
+    override func applyUIMode(isPrivate: Bool) {
+        super.applyUIMode(isPrivate: isPrivate)
+        ghosteryButton.applyUIMode(isPrivate: isPrivate)
+    }
+    
     func setStyle() {
         locationContainer.layer.cornerRadius = 10
         locationContainer.clipsToBounds = true

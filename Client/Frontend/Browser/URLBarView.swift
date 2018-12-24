@@ -742,7 +742,10 @@ extension URLBarView: Themeable {
 }
 
 extension URLBarView: PrivateModeUI {
+    /* Cliqz: modified the method to be ObjectiveC so that it can be extented in the inherited class
     func applyUIMode(isPrivate: Bool) {
+    */
+    @objc func applyUIMode(isPrivate: Bool) {
         privateModeBadge(visible: isPrivate)
         locationActiveBorderColor = UIColor.theme.urlbar.activeBorder(isPrivate)
         progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start(isPrivate), endColor: UIColor.theme.loadingBar.end(isPrivate))
