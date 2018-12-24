@@ -18,6 +18,7 @@ class GhosteryButton: InsetButton {
     private let ghosteryCount: GhosteryCount = GhosteryCount()
     fileprivate let ghosty = UIImageView()
     private let count = UILabel()
+    private var isPrivate = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,7 +52,7 @@ class GhosteryButton: InsetButton {
         let height: CGFloat = 25.0
         let width = (ghosty.image?.widthOverHeight() ?? 1.0) * height
         var centerDifference: CGFloat = 0.0
-        if UIColor.theme.name == BuiltinThemeName.dark.rawValue, let normalImage = UIImage.controlCenterNormalIcon(), let privImage = ghosty.image {
+        if isPrivate, let normalImage = UIImage.controlCenterNormalIcon(), let privImage = ghosty.image {
             let ratioNormal = normalImage.widthOverHeight()
             let ratioPrivate = privImage.widthOverHeight()
             let widthNormal = ratioNormal * height
@@ -109,6 +110,7 @@ class GhosteryButton: InsetButton {
 extension GhosteryButton: Themeable {
     func applyTheme() {
         setUpConstaints()
+        self.tintColor = UIColor.theme.browser.tint
     }
 }
 
@@ -127,11 +129,13 @@ extension GhosteryButton: GhosteryCountDelegate {
 
 extension GhosteryButton : PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
+        self.isPrivate = isPrivate
         if isPrivate {
             ghosty.image = UIImage.controlCenterPrivateIcon()
         } else {
             ghosty.image = UIImage.controlCenterNormalIcon()
         }
+        setUpConstaints()
     }
 }
 
