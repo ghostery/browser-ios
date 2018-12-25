@@ -121,13 +121,8 @@ class ControlCenterViewController: UIViewController {
 		panelSwitchControl = UISegmentedControl(items: items)
 		panelSwitchControl.tintColor = UIColor.white
 		panelSwitchControl.addTarget(self, action: #selector(switchPanel), for: .valueChanged)
-        //TODO: FF14 Merge
-        /*
-        panelSwitchControl.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: self.privateMode)
-        bgView.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: self.privateMode)
-        */
-        panelSwitchControl.backgroundColor = UIColor.red
-        bgView.backgroundColor = UIColor.red
+        panelSwitchControl.tintColor = UIColor.theme.browser.tint
+        bgView.backgroundColor = UIColor.theme.browser.background
         bgView.addSubview(panelSwitchControl)
 		self.view.addSubview(bgView)
 		
