@@ -195,6 +195,12 @@ class TabTrayController: UIViewController {
              collectionView.dropDelegate = tabDisplayManager
          }
         */
+        //Cliqz: Modifications
+        #if PAID
+        collectionView.backgroundColor = .clear
+        view.addSubview(gradient)
+        view.sendSubview(toBack: gradient)
+        #endif
 
         searchBarHolder.addSubview(roundedSearchBarHolder)
         searchBarHolder.addSubview(searchBar)
@@ -230,12 +236,7 @@ class TabTrayController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
 
-        //Cliqz: Modifications
-        #if PAID
-        collectionView.backgroundColor = .clear
-        view.addSubview(gradient)
-        view.sendSubview(toBack: gradient)
-        #endif
+        
         self.setBackgroundImage()
         self.updateBackgroundColor()
         NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
