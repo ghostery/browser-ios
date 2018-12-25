@@ -38,7 +38,6 @@ class GhosteryButton: InsetButton {
         count.backgroundColor = .clear
         
         count.text = "HELLO"
-        count.textColor = .white
         count.font = UIFont.systemFont(ofSize: 14)
         
         #if PAID
@@ -110,7 +109,8 @@ class GhosteryButton: InsetButton {
 extension GhosteryButton: Themeable {
     func applyTheme() {
         setUpConstaints()
-        self.tintColor = UIColor.theme.browser.tint
+        self.tintColor = UIColor.theme.urlbar.urlbarButtonTint
+        count.textColor = UIColor.theme.urlbar.urlbarButtonTitleText
     }
 }
 

@@ -27,8 +27,10 @@ fileprivate class DarkActionMenuColor: ActionMenuColor {
     override var closeButtonBackground: UIColor { return defaultBackground }
 
 }
-
+/* Cliqz: Changed the claa modifier, so that it can be overwritten
 fileprivate class DarkURLBarColor: URLBarColor {
+*/
+class DarkURLBarColor: URLBarColor {
     override func textSelectionHighlight(_ isPrivate: Bool) -> TextSelectionHighlight {
         let color = isPrivate ? UIColor.Defaults.MobilePrivatePurple : UIColor(rgb: 0x3d89cc)
         return (labelMode: color.withAlphaComponent(0.25), textFieldMode: color)
