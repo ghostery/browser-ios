@@ -293,7 +293,7 @@ class CliqzURLBar: URLBarView {
     override func applyTheme() {
         super.applyTheme()
         ghosteryButton.applyTheme()
-        pageOptionsButton.tintColor = UIColor.theme.urlbar.urlbarButtonTint
+        pageOptionsButton.tintColor = UIColor.theme.urlbar.pageOptionsUnselected
         cancelButton.setTitleColor(UIColor.theme.urlbar.urlbarButtonTitleText, for: [])
     }
 }

@@ -27,7 +27,10 @@ class SettingsNavigationController: UINavigationController {
 
 extension SettingsNavigationController: Themeable {
     func applyTheme() {
+        /* Cliqz: Changed the the settings navigation bar tint color
         navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
+        */
+        navigationBar.barTintColor = UIColor.theme.browser.background
         navigationBar.tintColor = UIColor.theme.general.controlTint
         navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerTextDark]
         setNeedsStatusBarAppearanceUpdate()
