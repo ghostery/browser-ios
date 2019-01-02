@@ -14,7 +14,7 @@ extension URLBarColor {
 }
 
 // Convenience reference to these normal mode colors which are used in a few color classes.
-fileprivate let defaultBackground = UIColor.cliqzBluePrimary//UIColor.Photon.Grey80
+fileprivate let defaultBackground = UIColor.cliqzBluePrimary
 fileprivate let defaultSeparator = UIColor.Photon.Grey60
 fileprivate let defaultTextAndTint = UIColor.Photon.Grey10
 
@@ -29,6 +29,10 @@ fileprivate class DarkActionMenuColor: ActionMenuColor {
     
 }
 fileprivate class DarkURLBarColor: URLBarColor {
+    override var border: UIColor { return defaultBackground }
+    override func activeBorder(_ isPrivate: Bool) -> UIColor {
+        return !isPrivate ? defaultBackground : defaultBackground
+    }
     override func textSelectionHighlight(_ isPrivate: Bool) -> TextSelectionHighlight {
         let color = isPrivate ? UIColor.Defaults.MobilePrivatePurple : UIColor(rgb: 0x3d89cc)
         return (labelMode: color.withAlphaComponent(0.25), textFieldMode: color)
