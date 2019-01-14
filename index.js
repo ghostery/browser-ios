@@ -4,7 +4,6 @@ import setup from './setup';
 import React from 'react';
 import { AppRegistry, StyleSheet, View } from 'react-native';
 import { startup, components } from 'browser-core';
-import 'babel-polyfill';
 
 // set app global for debugging
 const appStart = startup.then((app) => {

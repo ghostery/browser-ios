@@ -100,8 +100,8 @@ open class Engine {
     // MARK :- Youtube Downloader
     func findVideoLinks(url: String, callback: @escaping ([[String: Any]]) -> ()) {
         
-        let _ = self.getBridge().callAction("video-downloader:findVideoLinks", args: [url as AnyObject]) { (result) in
-            if let videoLinks = result["result"] as? [[String: Any]] {
+        let _ = self.getBridge().callAction("video-downloader:getVideoLinks", args: [url as AnyObject]) { (result) in
+            if let results = result["result"] as? [String: Any], let videoLinks = results["formats"] as? [[String: Any]] {
                 callback(videoLinks)
             }
         }

@@ -26,6 +26,7 @@ def project_pods
     pod 'RNViewShot', :path => './node_modules/react-native-view-shot/'
     pod 'CRToast'
     pod 'SVProgressHUD'
+    pod 'RNUserAgent', :path => './node_modules/react-native-user-agent/ios/'
 end
 
 target 'Client' do
