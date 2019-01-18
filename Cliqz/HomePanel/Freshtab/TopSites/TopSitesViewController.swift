@@ -59,6 +59,7 @@ class TopSitesViewController: UIViewController, HomePanel {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		self.updateViews()
 	}
 
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -89,10 +90,6 @@ class TopSitesViewController: UIViewController, HomePanel {
     }
 
 	func getTopSitesHeight() -> CGFloat {
-        guard SettingsPrefs.shared.getShowTopSitesPref() else {
-            return 0.0
-        }
-
 		if self.dataSource.topSitesCount() > TopSitesUX.TopSitesCountOnRow && !UIDevice.current.isSmallIphoneDevice() {
 			return TopSitesUX.TopSitesMaxHeight
 		}
@@ -136,20 +133,25 @@ extension TopSitesViewController {
 
 	fileprivate func updateViews() {
 		DispatchQueue.main.async {
-			if self.dataSource.topSitesCount() > 0 {
-				self.emptyTopSitesHint.isHidden = true
-			} else {
-				self.emptyTopSitesHint.isHidden = false
+			self.topSitesCollection.isHidden = !SettingsPrefs.shared.getShowTopSitesPref()
+			self.emptyTopSitesHint.isHidden = !SettingsPrefs.shared.getShowTopSitesPref()
+
+			if SettingsPrefs.shared.getShowTopSitesPref() {
+				if self.dataSource.topSitesCount() > 0 {
+					self.emptyTopSitesHint.isHidden = true
+				} else {
+					self.emptyTopSitesHint.isHidden = false
+				}
+				
+				let topSitesHeight = self.getTopSitesHeight()
+				
+				self.topSitesCollection.snp.updateConstraints { (make) in
+					make.height.equalTo(topSitesHeight)
+				}
+				
+				self.topSitesCollection.reloadData()
+				self.updateViewConstraints()
 			}
-            
-            let topSitesHeight = self.getTopSitesHeight()
-            
-            self.topSitesCollection.snp.updateConstraints { (make) in
-                make.height.equalTo(topSitesHeight)
-            }
-            
-			self.topSitesCollection.reloadData()
-			self.updateViewConstraints()
 		}
 	}
 
