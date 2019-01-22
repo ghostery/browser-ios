@@ -96,7 +96,7 @@ class FreshtabViewController: UIViewController, HomePanel {
 			self?.updateViewConstraints()
 		}
 	}
-    
+
     func setupConstraints() {
         if !isForgetMode {
             
@@ -138,8 +138,8 @@ class FreshtabViewController: UIViewController, HomePanel {
     }
 
     func applyTheme() {
-        
     }
+
 	private func getInvisibleFreshTabHeight(topSitesHeight: CGFloat, newsHeight: CGFloat) -> CGFloat {
 		let viewHeight = self.view.bounds.height - FreshtabViewUX.bottomOffset
 		var freshTabHeight = topSitesHeight + newsHeight + 10.0

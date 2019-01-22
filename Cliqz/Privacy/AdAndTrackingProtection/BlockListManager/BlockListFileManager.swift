@@ -34,7 +34,7 @@ final class BlockListFileManager {
         }
         
         if type == .antitracking {
-
+			// TODO: this Implementation should be improved to take into account all identifiers, and load json from all files instead of only first. I had to add 3rd party cookies blocking rules on top of antitracking list to make it work. Before this improvement if we change antiracking blocklist file we should be carefull to add 3rd party cookies as well
             if forIdentifier == AntitrackingJSONIdentifiers.antitrackingBlockAllIdentifiers().first, let path = Bundle.main.path(forResource: forIdentifier, ofType: "json") {
                 //then look in the bundle
                 completion(loadJson(path: path))
