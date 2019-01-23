@@ -84,6 +84,7 @@ class VPN {
     }
     
     func checkConnection() {
+        /* [IP-193] Remove Authentication
         guard AuthenticationService.shared.hasValidSubscription() == true else {
             VPN.disconnectVPN()
             NEVPNManager.shared().removeFromPreferences { (error) in
@@ -94,6 +95,7 @@ class VPN {
             return
         }
         
+        */
         if (lastStatus == .connected && status != .connected) {
             VPN.connect2VPN()
         }
@@ -245,20 +247,16 @@ class VPNEndPointManager {
     }
     
     private func getVPNCredentialsFromServer() {
-        if let userCred = AuthenticationService.shared.userCredentials() {
-            BondAPIManager.shared.currentBondHandler().getIPSecCreds(withRequest: userCred) { [weak self] (response, error) in
-                //TODO: write the credentials into the keychain
-                if let config = response?.config as? [String: IPSecConfig] {
-                    for (key, value) in config {
-                        if let country = self?.country(id: key) {
-                            self?.setCreds(country: country, username: value.username, password: value.password, sharedSecret: value.secret)
-                        }
+        let userCred = AuthenticationService.shared.generateNewCredentials("vpn@lumen.com")
+        BondAPIManager.shared.currentBondHandler().getIPSecCreds(withRequest: userCred) { [weak self] (response, error) in
+            //TODO: write the credentials into the keychain
+            if let config = response?.config as? [String: IPSecConfig] {
+                for (key, value) in config {
+                    if let country = self?.country(id: key) {
+                        self?.setCreds(country: country, username: value.username, password: value.password, sharedSecret: value.secret)
                     }
                 }
             }
-        }
-        else {
-            //TODO: What if there are no userCreds?
         }
     }
     
