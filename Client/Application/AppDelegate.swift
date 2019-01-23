@@ -171,20 +171,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 TelemetryHelper.sendFavoriteMigrationSignal(count: foldersCount, rootFolderCount: foldersCount, maxDepth: 1)
             })
         }
-
-        /* Cliqz: Initial VC changed for Lumen */
-        #if PAID
-			AuthenticationService.shared.isDeviceActivated({ (isActivated) in
-				if isActivated {
-					self.showBrowser()
-				} else {
-					self.showAuthentication()
-				}
-			})
-        #else
-            self.showBrowser()
-        #endif
-		/* Cliqz: End */
+        /* [IP-193] Remove Authentication
+            /* Cliqz: Initial VC changed for Lumen */
+            #if PAID
+                AuthenticationService.shared.isDeviceActivated({ (isActivated) in
+                    if isActivated {
+                        self.showBrowser()
+                    } else {
+                        self.showAuthentication()
+                    }
+                })
+            #else
+                self.showBrowser()
+            #endif
+            /* Cliqz: End */
+        */
+        //Cliqz: Show BrowerViewController
+        self.showBrowser()
 
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {

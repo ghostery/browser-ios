@@ -28,12 +28,14 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         #endif
 		
 		// Account Settings
+        /* [IP-193] Remove Authentication
 		#if PAID
 		let accountSettings = generateAccountSettings(prefs: prefs)
 		let accountSettingsTitle = NSLocalizedString("Lumen Account", tableName: "Cliqz" , comment: "[Settings] Account")
-//NSLocalizedString("", tableName: "Cliqz", comment: "[Settings] TBD")
 		settings += [SettingSection(title: NSAttributedString(string: accountSettingsTitle), children: accountSettings)]
 		#endif
+        */
+        
         // Search Settings
         let searchSettings = generateSearchSettings(prefs: prefs)
         let searchSettingsTitle = NSLocalizedString("Search", tableName: "Cliqz", comment: "[Settings] Search section title")
