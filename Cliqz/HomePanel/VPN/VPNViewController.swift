@@ -247,6 +247,14 @@ class VPNEndPointManager {
     }
     
     private func getVPNCredentialsFromServer() {
+		VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
+			for cred in credentials {
+				if let country = self?.country(id: cred.country) {
+					self?.setCreds(country: country, username: cred.username, password: cred.password, sharedSecret: cred.secret)
+				}
+			}
+		}
+		/*
         let userCred = AuthenticationService.shared.generateNewCredentials("vpn@lumen.com")
         BondAPIManager.shared.currentBondHandler().getIPSecCreds(withRequest: userCred) { [weak self] (response, error) in
             //TODO: write the credentials into the keychain
@@ -258,6 +266,7 @@ class VPNEndPointManager {
                 }
             }
         }
+		*/
     }
     
     func country(id: String) -> VPNCountry? {
@@ -468,13 +477,13 @@ class VPNViewController: UIViewController {
     @objc func connectButtonPressed(_ sender: Any) {
         //try to connect
         
-        guard AuthenticationService.shared.hasValidSubscription() == true else {
-            let text = NSLocalizedString("Your subscription has expired. Renew your subscription to continue to use the VPN.", tableName: "Lumen", comment: "[VPN] subscription expired alert text")
-            let alert = UIAlertController.alertWithOkay(text: text)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
+//        guard AuthenticationService.shared.hasValidSubscription() == true else {
+//            let text = NSLocalizedString("Your subscription has expired. Renew your subscription to continue to use the VPN.", tableName: "Lumen", comment: "[VPN] subscription expired alert text")
+//            let alert = UIAlertController.alertWithOkay(text: text)
+//            self.present(alert, animated: true, completion: nil)
+//            return
+//        }
+		
         if (NEVPNManager.shared().connection.status == .connected) {
             VPN.disconnectVPN()
         }

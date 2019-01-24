@@ -81,6 +81,8 @@
 	<string></string>
 	<key>LeanplumProductionKey</key>
 	<string></string>
+	<key>LumenAPIKey</key>
+	<string></string>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>MozWhatsNewTopic</key>

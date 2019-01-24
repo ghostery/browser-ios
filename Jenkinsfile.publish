@@ -93,7 +93,8 @@ node('mac-vm-host') {
                             string(credentialsId: '05be12cd-5177-4adf-9812-809f01451fa0', variable: 'FASTLANE_PASSWORD'),
                             string(credentialsId: 'ee93743c-b0be-46aa-b49a-ab3caaea4f67', variable: 'MATCH_PASSWORD'),
                             string(credentialsId: 'f206e880-e09a-4369-a3f6-f86ee94481f2', variable: 'SENTRY_AUTH_TOKEN'),
-                            string(credentialsId: 'ab91f92a-4588-4034-8d7f-c1a741fa31ab', variable: 'FASTLANE_ITC_TEAM_ID')])
+                            string(credentialsId: 'ab91f92a-4588-4034-8d7f-c1a741fa31ab', variable: 'FASTLANE_ITC_TEAM_ID'),
+                            string(credentialsId: 'cc9215e4-ca8f-41bd-9e0b-1c2ba1900949', variable: 'LumenAPIKey')])
                         {
                             sh '''#!/bin/bash -l
                                 set -x
@@ -123,7 +124,8 @@ node('mac-vm-host') {
                             string(credentialsId: '05be12cd-5177-4adf-9812-809f01451fa0', variable: 'FASTLANE_PASSWORD'),
                             string(credentialsId: 'ee93743c-b0be-46aa-b49a-ab3caaea4f67', variable: 'MATCH_PASSWORD'),
                             string(credentialsId: 'f206e880-e09a-4369-a3f6-f86ee94481f2', variable: 'SENTRY_AUTH_TOKEN'),
-                            string(credentialsId: 'ab91f92a-4588-4034-8d7f-c1a741fa31ab', variable: 'FASTLANE_ITC_TEAM_ID')])
+                            string(credentialsId: 'ab91f92a-4588-4034-8d7f-c1a741fa31ab', variable: 'FASTLANE_ITC_TEAM_ID'),
+                            string(credentialsId: 'cc9215e4-ca8f-41bd-9e0b-1c2ba1900949', variable: 'LumenAPIKey')])
                         {
                             sh '''#!/bin/bash -l
                                 set -x

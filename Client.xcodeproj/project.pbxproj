@@ -424,6 +424,7 @@
 		4FD0C7E7219B0E7F003A9B61 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0C7E6219B0E7F003A9B61 /* RegistrationViewController.swift */; };
 		4FD0C7EF219C65A7003A9B61 /* EmailVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0C7EE219C65A7003A9B61 /* EmailVerificationViewController.swift */; };
 		4FD19FC5205A9F7700547DD5 /* NativeContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */; };
+		4FDC331921F8BAAD001215EF /* VPNCredentialsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */; };
 		4FF07D852063C99E001385A8 /* OffrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D802063C99D001385A8 /* OffrView.swift */; };
 		4FF07D862063C99E001385A8 /* OffrzViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D812063C99D001385A8 /* OffrzViewController.swift */; };
 		4FF07D872063C99E001385A8 /* OffrzEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */; };
@@ -1824,6 +1825,7 @@
 		4FD0C7E6219B0E7F003A9B61 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		4FD0C7EE219C65A7003A9B61 /* EmailVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationViewController.swift; sourceTree = "<group>"; };
 		4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeContextMenu.swift; sourceTree = "<group>"; };
+		4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNCredentialsService.swift; sourceTree = "<group>"; };
 		4FF07D802063C99D001385A8 /* OffrView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrView.swift; sourceTree = "<group>"; };
 		4FF07D812063C99D001385A8 /* OffrzViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzViewController.swift; sourceTree = "<group>"; };
 		4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzEmptyView.swift; sourceTree = "<group>"; };
@@ -3631,6 +3633,7 @@
 				AF6C8AFC21873B5D006F8166 /* VPNButton.swift */,
 				AF6C8AF921873B5C006F8166 /* VPNCountryController.swift */,
 				AF6C8AFB21873B5D006F8166 /* VPNViewController.swift */,
+				4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */,
 			);
 			path = VPN;
 			sourceTree = "<group>";
@@ -6525,6 +6528,7 @@
 				D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */,
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
 				4F3045CB204FF0C500C99162 /* CliqzSearchViewController.swift in Sources */,
+				4FDC331921F8BAAD001215EF /* VPNCredentialsService.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
 				4F30F50C2051670C0049E4F6 /* Crypto.swift in Sources */,
 				F35B8D2F1D638408008E3D61 /* SessionRestoreHandler.swift in Sources */,
