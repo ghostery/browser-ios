@@ -99,7 +99,7 @@ class TopSitesViewController: UIViewController, HomePanel {
 	}
 	
     func applyTheme() {
-        
+        self.updateViews()
     }
     
 	@objc fileprivate func cancelActions(_ sender: UITapGestureRecognizer) {

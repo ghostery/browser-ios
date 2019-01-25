@@ -590,4 +590,13 @@ extension VPNViewController: VPNCountryControllerProtocol {
     }
 }
 
+extension VPNViewController: Themeable {
+    func applyTheme() {
+        self.updateMapView()
+        infoLabel.textColor = Lumen.VPN.infoLabelTextColor(lumenTheme, .Normal)
+        self.tableView.reloadData()
+    }
+    
+}
+
 #endif

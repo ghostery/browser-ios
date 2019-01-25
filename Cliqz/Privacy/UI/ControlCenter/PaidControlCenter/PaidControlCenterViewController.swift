@@ -13,10 +13,9 @@ extension Notification.Name {
     static let themeChanged = Notification.Name("LumenThemeChanged")
 }
 
-let lumenThemeKey = "LumenThemeKey"
 var lumenTheme: LumenThemeName {
     
-    if (SettingsPrefs.shared.getLumenTheme() == true) {
+    if (UIColor.theme.name == "dark") {
         return .Dark
     }
     

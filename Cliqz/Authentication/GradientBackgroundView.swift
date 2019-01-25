@@ -8,7 +8,7 @@
 
 import Foundation
 
-class GradientBackgroundView: UIView {
+class GradientBackgroundView: UIView, Themeable {
 
 	let gradient: CAGradientLayer = CAGradientLayer()
 
@@ -27,6 +27,15 @@ class GradientBackgroundView: UIView {
     override func layoutSubviews() {
         gradient.frame = self.bounds
         super.layoutSubviews()
+    }
+    
+    func refreshView(colors: [CGColor], locations: [NSNumber]){
+        gradient.colors = colors
+        gradient.locations = locations
+        self.layoutSubviews()
+    }
+    
+    func applyTheme() {
     }
 }
 
@@ -60,6 +69,11 @@ class BrowserGradientView: GradientBackgroundView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func applyTheme() {
+        let (colors, locations) = Lumen.Browser.backgroundGradient(lumenTheme)
+        self.refreshView(colors: colors, locations: locations)
     }
 }
 #endif

@@ -52,10 +52,7 @@ class ThemeManager {
         let screenLessThanPref = Float(UIScreen.main.brightness) < prefValue
 
         if screenLessThanPref, self.currentName == .normal {
-            /* Cliqz: replace DarkTheme with CliqzDarkTheme
             self.current = DarkTheme()
-            */
-            self.current = CliqzDarkTheme()
         } else if !screenLessThanPref, self.currentName == .dark {
             self.current = NormalTheme()
         }
@@ -66,23 +63,24 @@ class ThemeManager {
         updateCurrentThemeBasedOnScreenBrightness()
     }
 }
-
+/* Cliqz: used DarkTheme as default theme
 fileprivate func themeFrom(name: String?) -> Theme {
-    /* Cliqz: used CliqzDarkTheme as default theme
     guard let name = name, let theme = BuiltinThemeName(rawValue: name) else { return NormalTheme() }
-    */
-    guard let name = name, let theme = BuiltinThemeName(rawValue: name) else { return CliqzDarkTheme() }
-    
     switch theme {
     case .dark:
-        /* Cliqz: replace DarkTheme with CliqzDarkTheme
         return DarkTheme()
-        */
-        return CliqzDarkTheme()
     default:
-        /* Cliqz: used CliqzDarkTheme as default theme
         return NormalTheme()
-        */
-        return CliqzDarkTheme()
+    }
+ }
+ */
+
+fileprivate func themeFrom(name: String?) -> Theme {
+    guard let name = name, let theme = BuiltinThemeName(rawValue: name) else { return DarkTheme() }
+    switch theme {
+    case .normal:
+        return NormalTheme()
+    default:
+        return DarkTheme()
     }
 }

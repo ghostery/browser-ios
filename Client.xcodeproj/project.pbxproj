@@ -56,6 +56,10 @@
 		1E2720CB21788DD000A8ADD4 /* PaidControlCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2720CA21788DD000A8ADD4 /* PaidControlCenterViewController.swift */; };
 		1E2C202020AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */; };
 		1E2C227C20B4149000AA00B5 /* SendUsageDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */; };
+		1E2C434E21F89B2D00891FB2 /* GhosteryWhiteTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C434D21F89B2D00891FB2 /* GhosteryWhiteTheme.swift */; };
+		1E2C435821F89B4D00891FB2 /* GhosteryDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C435721F89B4D00891FB2 /* GhosteryDarkTheme.swift */; };
+		1E2C435A21F89E6500891FB2 /* LumenWhiteTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C435921F89E6500891FB2 /* LumenWhiteTheme.swift */; };
+		1E2C435C21F89E8100891FB2 /* LumenDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C435B21F89E8100891FB2 /* LumenDarkTheme.swift */; };
 		1E2E551221187407003B50BE /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C75DF2207584C300BB8AD0 /* UIImageViewAligned.m */; };
 		1E351C3A21CA994800275941 /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C3821CA994800275941 /* BrowserViewController+ReaderMode.swift */; };
 		1E351C3B21CA994800275941 /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C3921CA994800275941 /* BrowserViewController+FindInPage.swift */; };
@@ -1450,6 +1454,10 @@
 		1E2720CA21788DD000A8ADD4 /* PaidControlCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaidControlCenterViewController.swift; sourceTree = "<group>"; };
 		1E2C201120AEDFBA00AA00B5 /* CliqzSiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzSiteTableViewCell.swift; sourceTree = "<group>"; };
 		1E2C226D20B4149000AA00B5 /* SendUsageDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendUsageDataTableViewController.swift; sourceTree = "<group>"; };
+		1E2C434D21F89B2D00891FB2 /* GhosteryWhiteTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosteryWhiteTheme.swift; sourceTree = "<group>"; };
+		1E2C435721F89B4D00891FB2 /* GhosteryDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosteryDarkTheme.swift; sourceTree = "<group>"; };
+		1E2C435921F89E6500891FB2 /* LumenWhiteTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenWhiteTheme.swift; sourceTree = "<group>"; };
+		1E2C435B21F89E8100891FB2 /* LumenDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenDarkTheme.swift; sourceTree = "<group>"; };
 		1E351C3821CA994800275941 /* BrowserViewController+ReaderMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ReaderMode.swift"; sourceTree = "<group>"; };
 		1E351C3921CA994800275941 /* BrowserViewController+FindInPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+FindInPage.swift"; sourceTree = "<group>"; };
 		1E351C4221CC0F5D00275941 /* CliqzTrayToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTrayToolbar.swift; sourceTree = "<group>"; };
@@ -2694,6 +2702,17 @@
 			path = Connect;
 			sourceTree = "<group>";
 		};
+		1E8C403921F89A4F00873CB7 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				1E2C434D21F89B2D00891FB2 /* GhosteryWhiteTheme.swift */,
+				1E2C435721F89B4D00891FB2 /* GhosteryDarkTheme.swift */,
+				1E2C435921F89E6500891FB2 /* LumenWhiteTheme.swift */,
+				1E2C435B21F89E8100891FB2 /* LumenDarkTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
 		1EAFE54B205FFD9E006A36B4 /* Base Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -3433,6 +3452,7 @@
 		4F8F3C0D202CB39F001C1A0F /* Cliqz */ = {
 			isa = PBXGroup;
 			children = (
+				1E8C403921F89A4F00873CB7 /* Theme */,
 				4FD0C7DD219B0C63003A9B61 /* Authentication */,
 				4FB2BB9C20B702C8006FB03D /* WiFi Protection */,
 				AFAB305B20B83DFA00FE312E /* Telemetry */,
@@ -6490,12 +6510,14 @@
 				74821F8E1DAD8F1400EEEA72 /* ActivityStreamHighlightCell.swift in Sources */,
 				1E244CD92180A082004A73E9 /* CCViewController.swift in Sources */,
 				E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */,
+				1E2C435A21F89E6500891FB2 /* LumenWhiteTheme.swift in Sources */,
 				D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */,
 				1E7B7688206A8AC000FD0BA5 /* CliqzTabToolbar.swift in Sources */,
 				1EAFE55F205FFE21006A36B4 /* LocalResourceSetting.swift in Sources */,
 				4F0445DD203333F200E2C0C7 /* NewsViewController.swift in Sources */,
+				1E2C435821F89B4D00891FB2 /* GhosteryDarkTheme.swift in Sources */,
 				4FF07D8B2063CA46001385A8 /* OffrzDataService.swift in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
 				AFAB306B20B83E2800FE312E /* TelemetryHelper.swift in Sources */,
@@ -6647,6 +6669,7 @@
 				E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */,
 				AFA1DE0C2088BE0500B27B8A /* BlockListFileManager.swift in Sources */,
 				4F30F50A2051670C0049E4F6 /* BrowserActions.swift in Sources */,
+				1E2C435C21F89E8100891FB2 /* LumenDarkTheme.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				1EAFE560205FFE21006A36B4 /* SubSettingsTableViewController.swift in Sources */,
@@ -6676,6 +6699,7 @@
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
 				EB8A0A77206ABCE000A9859A /* WebPagesForTesting.swift in Sources */,
 				0BA1E02E1B046F1E007675AF /* ErrorPageHelper.swift in Sources */,
+				1E2C434E21F89B2D00891FB2 /* GhosteryWhiteTheme.swift in Sources */,
 				AF6FA98E20652D4600D7F9F0 /* TrackerListBug.swift in Sources */,
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
 				59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */,

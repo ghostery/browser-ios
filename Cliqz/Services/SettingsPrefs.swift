@@ -240,12 +240,6 @@ class SettingsPrefs {
         return defaultValue
     }
     
-    #if PAID
-    func getLumenTheme() -> Bool {
-         return self.getBoolPref(lumenThemeKey) ?? true
-    }
-    #endif
-    
     func updateSendUsageDataPref(_ newValue: Bool) {
         LocalDataStore.set(value: newValue, forKey: SettingsPrefs.SendUsageData)
         Engine.sharedInstance.setPref("modules.anolysis.enabled", prefValue: newValue)

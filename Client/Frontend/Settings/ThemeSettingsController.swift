@@ -187,10 +187,7 @@ class ThemeSettingsController: ThemedTableViewController {
         guard indexPath.section > 0 else { return }
 
         tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        /* Cliqz: replace DarkTheme with CliqzDarkTheme
         ThemeManager.instance.current = indexPath.row == 0 ? NormalTheme() : DarkTheme()
-        */
-        ThemeManager.instance.current = indexPath.row == 0 ? NormalTheme() : CliqzDarkTheme()
         applyTheme()
     }
 

@@ -138,6 +138,8 @@ class FreshtabViewController: UIViewController, HomePanel {
     }
 
     func applyTheme() {
+        topSitesViewController.applyTheme()
+        newsViewController.applyTheme()
     }
 
 	private func getInvisibleFreshTabHeight(topSitesHeight: CGFloat, newsHeight: CGFloat) -> CGFloat {

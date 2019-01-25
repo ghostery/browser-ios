@@ -83,14 +83,19 @@ class TopSiteViewCell: UICollectionViewCell {
 		}
 		self.logoHostLabel.textAlignment = .center
 		self.logoHostLabel.font = UIFont.systemFont(ofSize: 10)
-		self.logoHostLabel.textColor = UIColor.white
+		self.logoHostLabel.textColor = UIColor.theme.homePanel.topsitesLabel
         self.logoHostLabel.applyShadow()
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-	
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.logoHostLabel.textColor = UIColor.theme.homePanel.topsitesLabel
+    }
+    
 	override func prepareForReuse() {
 		super.prepareForReuse()
 		self.logoImageView.image = nil

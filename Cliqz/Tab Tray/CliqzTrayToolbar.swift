@@ -34,6 +34,6 @@ class CliqzTrayToolbar : TrayToolbar {
     
     override func applyTheme() {
         super.applyTheme()
-        doneButton.setTitleColor(UIColor.theme.tabTray.tabTitleText, for: [])
+        doneButton.setTitleColor(UIColor.theme.tabTray.toolbarButtonTint, for: [])
     }
 }

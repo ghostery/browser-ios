@@ -38,7 +38,7 @@ extension UIColor {
     //Enumerate lumen colors here
     static let lumenBrightBlue = UIColor(colorString: "3073DB")
     static let lumenDeepBlue = UIColor(colorString: "0D0F22")
-    static let lumenPurple = UIColor(colorString: "151834")
+    static let lumenPurple = UIColor(colorString: "1E2247")
     static let lumenDisabled = UIColor(colorString: "BDC0CE")
 }
 
