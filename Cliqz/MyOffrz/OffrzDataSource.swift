@@ -43,7 +43,11 @@ class OffrzDataSource {
 	}
 
 	func hasUnseenOffrz() -> Bool {
+        #if PAID
+        return false
+        #else
 		return !(self.currentOffr?.isSeen ?? true)
+        #endif
 	}
 
 	func markCurrentOffrSeen() {
