@@ -1005,7 +1005,10 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
         addSubview(deleteButton)
         buttonToCenter = deleteButton
 
+        /* Cliqz: Change the accessibilityIdentifier of maskButton
         maskButton.accessibilityIdentifier = "TabTrayController.maskButton"
+        */
+        maskButton.accessibilityIdentifier = "TabTrayController.forgetModeButton"
 
         buttonToCenter?.snp.makeConstraints { make in
             make.centerX.equalTo(self)
