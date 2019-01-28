@@ -85,7 +85,7 @@ extension KIFUITestActor {
                 }
                 return false
             }
-            
+
             return (element == nil) ? KIFTestStepResult.wait : KIFTestStepResult.success
         }
 
@@ -276,25 +276,25 @@ class BrowserUtils {
 
 	class func dismissFirstRunUI() {
 		var error: NSError?
-        
+
 		let matcher = grey_allOf([
 			grey_accessibilityID("IntroViewController.scrollView"), grey_sufficientlyVisible()])
-		
+
         EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &error)
-		
+
 		if error == nil {
             EarlGrey.selectElement(with: matcher).perform(grey_swipeFastInDirection(GREYDirection.left))
             let buttonMatcher = grey_allOf([
                 grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
-            
+
             EarlGrey.selectElement(with: buttonMatcher).assert(grey_notNil(), error: &error)
-        
+
             if error == nil {
                 EarlGrey.selectElement(with: buttonMatcher).perform(grey_tap())
             }
 		}
 	}
-    
+
     class func iPad() -> Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
@@ -328,11 +328,11 @@ class BrowserUtils {
                 .perform(grey_swipeFastInDirection(GREYDirection.left))
         }
         EarlGrey.selectElement(with: settings_button).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Clear Private Data"))
+        EarlGrey.selectElement(with: grey_accessibilityID("ClearPrivateData"))
             .using(searchAction: grey_scrollInDirection(.down, 200),
                    onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
             .assert(grey_notNil())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Clear Private Data")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("ClearPrivateData")).perform(grey_tap())
     }
 
     class func closeClearPrivateDataDialog() {
@@ -343,7 +343,7 @@ class BrowserUtils {
         EarlGrey.selectElement(with: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
             .perform(grey_tap())
     }
-    
+
     fileprivate class func acceptClearPrivateData() {
         EarlGrey.selectElement(with: grey_allOf([grey_accessibilityLabel("OK"), grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)])).perform(grey_tap())
     }
@@ -375,7 +375,7 @@ class BrowserUtils {
         acceptClearPrivateData()
         closeClearPrivateDataDialog()
     }
-    
+
     class func clearHistoryItems(_ tester: KIFUITestActor, numberOfTests: Int = -1) {
         resetToAboutHome()
         tester.tapView(withAccessibilityLabel: "History")
@@ -428,7 +428,7 @@ class SimplePageServer {
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
-        for page in ["findPage", "noTitle", "readablePage", "JSPrompt"] {
+        for page in ["findPage", "noTitle", "readablePage", "JSPrompt", "blobURL", "firefoxScheme"] {
             webServer.addHandler(forMethod: "GET", path: "/\(page).html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
                 return GCDWebServerDataResponse(html: self.getPageData(page))
             }
@@ -458,7 +458,7 @@ class SimplePageServer {
         webServer.addHandler(forMethod: "GET", path: "/loginForm.html", request: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(html: self.getPageData("loginForm"))
         }
-        
+
         webServer.addHandler(forMethod: "GET", path: "/navigationDelegate.html", request: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(html: self.getPageData("navigationDelegate"))
         }

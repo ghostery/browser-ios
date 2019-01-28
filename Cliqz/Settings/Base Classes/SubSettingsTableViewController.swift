@@ -29,13 +29,14 @@ class SubSettingsTableViewController : UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: SubSettingsTableViewController.DefaultCellIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
+        tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
+        tableView.estimatedRowHeight = 44
+        tableView.estimatedSectionHeaderHeight = 44
         
-        tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: SubSettingsTableViewController.DefaultCellIdentifier)
-        tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: SubSettingsTableViewController.DefaultCellIdentifier)
-        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         
     }
     
@@ -70,13 +71,13 @@ class SubSettingsTableViewController : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! SettingsTableSectionHeaderFooterView
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! ThemedTableSectionHeaderFooterView
         header.showTopBorder = false
         return header
     }
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! SettingsTableSectionHeaderFooterView
+        let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! ThemedTableSectionHeaderFooterView
         footer.showBottomBorder = false
         footer.showTopBorder = false
         footer.titleAlignment = .top

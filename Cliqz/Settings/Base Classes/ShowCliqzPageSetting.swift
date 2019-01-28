@@ -13,7 +13,7 @@ class ShowCliqzPageSetting: Setting {
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
     
     override var title: NSAttributedString? {
-        return NSAttributedString(string: getTitle(), attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor])
+        return NSAttributedString(string: getTitle(), attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     override func onClick(_ navigationController: UINavigationController?) {

@@ -277,8 +277,22 @@ extension CliqzHomePanelViewController: HomePanelDelegate {
 
 // MARK: UIAppearance
 extension CliqzHomePanelViewController: Themeable {
-    func applyTheme(_ theme: Theme) {
-        return
+    func applyTheme() {
+        #if PAID
+        gradient.applyTheme()
+        #endif
+        func apply(_ vc: UIViewController) -> Bool {
+            guard let vc = vc as? Themeable else { return false }
+            vc.applyTheme()
+            return true
+        }
+        
+        childViewControllers.forEach {
+            if !apply($0) {
+                // BookmarksPanel is nested in a UINavigationController, go one layer deeper
+                $0.childViewControllers.forEach { _ = apply($0) }
+            }
+        }
     }
 }
 

@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 /// Screen presented to the user when selecting the page that is displayed when the user goes to a new tab.
-class NewTabChoiceViewController: UITableViewController {
+class NewTabChoiceViewController: ThemedTableViewController {
 
     let newTabOptions: [NewTabPage] = [.blankPage, .topSites, .bookmarks, .history, .homePage]
 
@@ -14,12 +14,11 @@ class NewTabChoiceViewController: UITableViewController {
     var currentChoice: NewTabPage!
     var hasHomePage: Bool!
 
-    fileprivate let BasicCheckmarkCell = "BasicCheckmarkCell"
     fileprivate var authenticationInfo: AuthenticationKeychainInfo?
 
     init(prefs: Prefs) {
         self.prefs = prefs
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -32,15 +31,12 @@ class NewTabChoiceViewController: UITableViewController {
 
         tableView.accessibilityIdentifier = "NewTabPage.Setting.Options"
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
-
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
-        let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
+        let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.showTopBorder = false
         headerView.showBottomBorder = true
 
-        let footerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
+        let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
         footerView.showTopBorder = true
         footerView.showBottomBorder = false
 
@@ -61,7 +57,7 @@ class NewTabChoiceViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BasicCheckmarkCell, for: indexPath)
+        let cell = ThemedTableViewCell()
 
         let option = newTabOptions[indexPath.row]
         let enabled = (option != .homePage) || hasHomePage

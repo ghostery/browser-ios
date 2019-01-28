@@ -351,12 +351,12 @@ open class BookmarkPayload: BookmarkBasePayload {
     }
 
     lazy var tags: [String] = {
-        return self["tags"].arrayValue.compactMap { $0.string } 
+        return self["tags"].arrayValue.compactMap { $0.string }
     }()
 
     lazy var tagsString: String = {
         if self["tags"].isArray() {
-            return self["tags"].stringValue() ?? "[]"
+            return self["tags"].stringify() ?? "[]"
         }
         return "[]"
     }()

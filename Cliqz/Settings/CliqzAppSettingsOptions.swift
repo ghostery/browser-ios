@@ -20,7 +20,7 @@ class CliqzConnectSetting: Setting {
         self.profile = settings.profile
         
         let title = NSLocalizedString("Connect", tableName: "Cliqz", comment: "[Settings] Connect")
-        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
@@ -50,7 +50,7 @@ class RegionalSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         let title = NSLocalizedString("Search Results for", tableName: "Cliqz" , comment: "[Settings] Search Results for")
-        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
@@ -102,7 +102,7 @@ class ComplementarySearchSetting: Setting, SearchEnginePickerDelegate {
         #else
             let title  = NSLocalizedString("Complementary Search", tableName: "Cliqz", comment: "[Settings] Complementary Search")
         #endif
-        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
@@ -189,7 +189,7 @@ class RestoreTopSitesSetting: Setting {
         let hiddenTopsitesCount = self.profile.history.getHiddenTopSitesCount()
         var attributes: [NSAttributedStringKey : Any]?
         if hiddenTopsitesCount > 0 {
-            attributes = [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]
+            attributes = [NSAttributedStringKey.foregroundColor: UIColor.theme.general.highlightBlue]
         } else {
             attributes = [NSAttributedStringKey.foregroundColor: UIColor.lightGray]
         }
@@ -239,7 +239,7 @@ class RestoreTopSitesSetting: Setting {
 class FAQSetting: Setting {
     
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("FAQ", tableName: "Cliqz", comment: "[Settings] FAQ"), attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue])
+        return NSAttributedString(string: NSLocalizedString("FAQ", tableName: "Cliqz", comment: "[Settings] FAQ"), attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.general.highlightBlue])
     }
     
     override var url: URL? {
@@ -368,7 +368,7 @@ class MyOffrzSetting: ShowCliqzPageSetting {
 class RateUsSetting: Setting {
     
     init() {
-        super.init(title: NSAttributedString(string: NSLocalizedString("Rate Us", tableName: "Cliqz", comment: "[Settings] Rate Us"), attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Rate Us", tableName: "Cliqz", comment: "[Settings] Rate Us"), attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.general.highlightBlue]))
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
@@ -394,7 +394,7 @@ class AboutSetting: Setting {
     
     init() {
         let title = NSLocalizedString("About", tableName: "Cliqz", comment: "[Settings] About")
-        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
     }
     
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
@@ -463,7 +463,7 @@ class LumenAccountSetting: Setting {
     
     init() {
         let title =  AuthenticationService.shared.getRegisteredEmail() ?? "N/A"
-        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
     }
     
     override func onClick(_ navigationController: UINavigationController?) {

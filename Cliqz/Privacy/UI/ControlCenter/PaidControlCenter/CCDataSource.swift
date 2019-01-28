@@ -206,7 +206,7 @@ extension CCDataSource: CCCollectionDataSourceProtocol {
     }
     
     func cellFor(index: Int) -> UIView {
-        guard cellViews.isIndexValid(index) else { return UIView() }
+        guard cellViews.isIndexValid(index: index) else { return UIView() }
         return cellViews[index]
     }
     

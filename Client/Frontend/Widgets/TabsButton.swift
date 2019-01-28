@@ -7,8 +7,6 @@ import SnapKit
 import Shared
 
 private struct TabsButtonUX {
-    static let TitleColor: UIColor = UIColor.Photon.Grey80
-    static let TitleBackgroundColor: UIColor = UIColor.Photon.White100
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     /* Cliqz: Changed the stroke width of the TabsButton
@@ -18,14 +16,13 @@ private struct TabsButtonUX {
 }
 
 class TabsButton: UIButton {
-
-    var textColor = UIColor.Photon.White100 {
+    var textColor = UIColor.clear {
         didSet {
             countLabel.textColor = textColor
             borderView.color = textColor
         }
     }
-    var titleBackgroundColor  = UIColor.Photon.White100 {
+    var titleBackgroundColor = UIColor.clear {
         didSet {
             labelBackground.backgroundColor = titleBackgroundColor
         }
@@ -36,13 +33,9 @@ class TabsButton: UIButton {
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
-                countLabel.textColor = textColor
                 borderView.color = titleBackgroundColor
-                labelBackground.backgroundColor = titleBackgroundColor
             } else {
-                countLabel.textColor = textColor
                 borderView.color = textColor
-                labelBackground.backgroundColor = titleBackgroundColor
             }
         }
     }
@@ -217,12 +210,14 @@ class TabsButton: UIButton {
 }
 
 extension TabsButton: Themeable {
-    func applyTheme(_ theme: Theme) {
-        titleBackgroundColor = UIColor.Browser.Background.colorFor(theme)
-        textColor = UIColor.Browser.Tint.colorFor(theme)
-        countLabel.textColor = UIColor.Browser.Tint.colorFor(theme)
-        borderView.color = UIColor.Browser.Tint.colorFor(theme)
-        labelBackground.backgroundColor = UIColor.Browser.Background.colorFor(theme)
+    func applyTheme() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            titleBackgroundColor = UIColor.theme.topTabs.background
+            textColor = UIColor.theme.topTabs.buttonTint
+        } else {
+            titleBackgroundColor = UIColor.theme.browser.background
+            textColor = UIColor.theme.browser.tint
+        }
     }
 }
 

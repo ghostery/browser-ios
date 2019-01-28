@@ -92,7 +92,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
 /**
  * A Profile manages access to the user's data.
  */
-protocol Profile: class {
+protocol Profile: AnyObject {
     var bookmarks: BookmarksModelFactorySource & KeywordSearchSource & ShareToDestination & SyncableBookmarks & LocalItemSource & MirrorItemSource { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
@@ -142,10 +142,9 @@ protocol Profile: class {
 
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
-    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>>
+    func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success
 
     var syncManager: SyncManager! { get }
-    var isChinaEdition: Bool { get }
 }
 
 fileprivate let PrefKeyClientID = "PrefKeyClientID"
@@ -252,7 +251,7 @@ open class BrowserProfile: Profile {
         // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
-        if isChinaEdition {
+        if BrowserProfile.isChinaEdition {
             // Set the default homepage.
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
 
@@ -443,34 +442,74 @@ open class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
 
-    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
+    public func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success {
+        func clientForRemoteDevice(_ remoteDevice: RemoteDevice) -> RemoteClient? {
+            return clients.find({ $0.fxaDeviceId == remoteDevice.id })
+        }
+
+        guard let account = self.getAccount() else {
+            return deferMaybe(NoAccountError())
+        }
+
         let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
         let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
-        let commands = items.map { item in
-            SyncCommand.displayURIFromShareItem(item, asClient: id)
-        }
-        
-        func notifyClients() {
-            let deviceIDs = clients.compactMap { $0.fxaDeviceId }
-            guard let account = self.getAccount() else {
-                return
+        let command = SyncCommand.displayURIFromShareItem(item, asClient: id)
+        let fxaDeviceIds = clients.compactMap { $0.fxaDeviceId }
+
+        // If FxA Messages (Pushbox) is not enabled for this build, simply send the
+        // tabs using the old mechanism via Sync.
+        guard AppConstants.MOZ_FXA_MESSAGES else {
+            return self.remoteClientsAndTabs.insertCommands([command], forClients: clients) >>> {
+                self.syncManager.syncClients() >>> {
+                    account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
+                    return succeed()
+                }
             }
-            
-            account.notify(deviceIDs: deviceIDs, collectionsChanged: ["clients"], reason: "sendtab")
         }
-        
-        return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> {
-            let syncStatus = self.syncManager.syncClients()
-            syncStatus >>> notifyClients
-            return syncStatus
+
+        let result = Success()
+
+        self.remoteClientsAndTabs.getRemoteDevices() >>== { remoteDevices in
+            let newRemoteDevices = remoteDevices.filter({ fxaDeviceIds.contains($0.id ?? "") && account.commandsClient.sendTab.isDeviceCompatible($0) })
+            var oldRemoteClients = remoteDevices.filter({ fxaDeviceIds.contains($0.id ?? "") && !account.commandsClient.sendTab.isDeviceCompatible($0) }).compactMap({ clientForRemoteDevice($0) })
+
+            func sendViaSyncFallback() {
+                if oldRemoteClients.isEmpty {
+                    result.fill(Maybe(success: ()))
+                } else {
+                    self.remoteClientsAndTabs.insertCommands([command], forClients: oldRemoteClients) >>> {
+                        self.syncManager.syncClients() >>> {
+                            account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
+                            result.fill(Maybe(success: ()))
+                        }
+                    }
+                }
+            }
+
+            if !newRemoteDevices.isEmpty {
+                account.commandsClient.sendTab.send(to: newRemoteDevices, url: item.url, title: item.title ?? "") >>== { report in
+                    for failedRemoteDevice in report.failed {
+                        log.debug("Failed to send a tab with FxA commands for \(failedRemoteDevice.name). Falling back on the Sync back-end")
+                        if let oldRemoteClient = clientForRemoteDevice(failedRemoteDevice) {
+                            oldRemoteClients.append(oldRemoteClient)
+                        }
+                    }
+
+                    sendViaSyncFallback()
+                }
+            } else {
+                sendViaSyncFallback()
+            }
         }
+
+        return result
     }
 
     lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
         return SQLiteLogins(db: self.loginsDB)
     }()
 
-    lazy var isChinaEdition: Bool = {
+    static var isChinaEdition: Bool = {
         return Locale.current.identifier == "zh_CN"
     }()
 
@@ -478,7 +517,7 @@ open class BrowserProfile: Profile {
         if prefs.boolForKey("useCustomSyncService") ?? false {
             return CustomFirefoxAccountConfiguration(prefs: self.prefs)
         }
-        if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
+        if prefs.boolForKey("useChinaSyncService") ?? BrowserProfile.isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
         }
         if prefs.boolForKey("useStageSyncService") ?? false {
@@ -560,6 +599,10 @@ open class BrowserProfile: Profile {
         if let account = account {
             self.keychain.set(account.dictionary() as NSCoding, forKey: name + ".account", withAccessibility: .afterFirstUnlock)
         }
+    }
+
+    class NoAccountError: MaybeErrorType {
+        var description = "No account."
     }
 
     // Extends NSObject so we can use timers.
@@ -1051,6 +1094,9 @@ open class BrowserProfile: Profile {
                 return deferMaybe(statuses)
             }
 
+            // TODO: Invoke `account.commandsClient.fetchMissedRemoteCommands()` to
+            // catch any missed FxA commands at time of Sync?
+
             if !isSyncing {
                 // A sync isn't already going on, so start another one.
                 let statsSession = SyncOperationStatsSession(why: why, uid: account.uid, deviceID: account.deviceRegistration?.id)
@@ -1139,16 +1185,26 @@ open class BrowserProfile: Profile {
                 }
                 return accumulate(thunks)
             }
-            
-            return readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
-                let updateEnginePref: ((String, Bool) -> Void) = { engine, enabled in
-                    self.prefsForSync.setBool(enabled, forKey: "engine.\(engine).enabled")
-                }
-                ready.engineConfiguration?.enabled.forEach { updateEnginePref($0, true) }
-                ready.engineConfiguration?.declined.forEach { updateEnginePref($0, false) }
 
-                statsSession.start()
-                return function(delegate, self.prefsForSync, ready)
+            return readyDeferred.bind { readyResult in
+                guard let success = readyResult.successValue else {
+                    if let tokenServerError = readyResult.failureValue as? TokenServerError,
+                        case let TokenServerError.remote(code, _, _) = tokenServerError,
+                        code == 401 {
+                        self.profile.getAccount()?.makeSeparated()
+                    }
+                    return deferMaybe(readyResult.failureValue!)
+                }
+                return self.takeActionsOnEngineStateChanges(success) >>== { ready in
+                    let updateEnginePref: ((String, Bool) -> Void) = { engine, enabled in
+                        self.prefsForSync.setBool(enabled, forKey: "engine.\(engine).enabled")
+                    }
+                    ready.engineConfiguration?.enabled.forEach { updateEnginePref($0, true) }
+                    ready.engineConfiguration?.declined.forEach { updateEnginePref($0, false) }
+
+                    statsSession.start()
+                    return function(delegate, self.prefsForSync, ready)
+                }
             }
         }
 
@@ -1259,10 +1315,6 @@ open class BrowserProfile: Profile {
                 Date.now() < stopBy &&
                 self.profile.hasSyncableAccount()
             }
-        }
-
-        class NoAccountError: MaybeErrorType {
-            var description = "No account."
         }
 
         public func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success {

@@ -18,8 +18,8 @@ struct NewsViewUX {
 
 // TODO: Region is missing
 class NewsViewController: UIViewController, HomePanel {
-
-	weak var homePanelDelegate: HomePanelDelegate?
+    
+    weak var homePanelDelegate: HomePanelDelegate?
 
 	private var profile: Profile!
 	fileprivate weak var dataSource: NewsDataSource!
@@ -87,7 +87,11 @@ class NewsViewController: UIViewController, HomePanel {
         
 		return newsHeight
 	}
-
+    
+    func applyTheme() {
+        
+    }
+    
 	private func reloadData() {
         self.newsTableView.isHidden = self.dataSource.isEmpty() || !SettingsPrefs.shared.getShowNewsPref()
         self.newsTableView.reloadData()

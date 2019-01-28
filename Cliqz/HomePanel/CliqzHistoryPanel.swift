@@ -26,23 +26,23 @@ private func getDate(_ dayOffset: Int) -> Date {
 
 class CliqzHistoryPanel: HistoryPanel {
     
-    private let Today = getDate(0)
-    private let Yesterday = getDate(-1)
-    private let ThisWeek = getDate(-7)
+    let CliqzCellIdentifier = "CliqzCellIdentifier"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundColor = .clear
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.4)
-        tableView.register(CliqzSiteTableViewCell.self, forCellReuseIdentifier: "CliqzCellIdentifier")
+        tableView.register(CliqzSiteTableViewCell.self, forCellReuseIdentifier: CliqzCellIdentifier)
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        var count = 0
-        for category in self.categories where category.rows > 0 {
-            count += 1
-        }
-        return count
+    override func applyTheme() {
+        super.applyTheme()
+        /*
+        tableView.backgroundColor = UIColor.theme.tableView.rowBackground
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        */
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.4)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -75,55 +75,25 @@ class CliqzHistoryPanel: HistoryPanel {
             make.center.equalTo(bubble)
         }
         
-        
         return container
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return Section.count - 1
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        var title = String()
-        guard let sl = sectionLookup[section] else {return nil}
-        switch sl {
-        case 0: title = NSLocalizedString("Today", comment: "History tableview section header")
-        case 1: title = NSLocalizedString("Yesterday", comment: "History tableview section header")
-        case 2: title = NSLocalizedString("Last week", comment: "History tableview section header")
-        case 3: title = NSLocalizedString("Last month", comment: "History tableview section header")
-        default:
-            assertionFailure("Invalid history section \(section)")
-        }
-        return title
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let category = uiSectionToCategory(section)
-        if self.categories.isIndexValid(category) {
-            return self.categories[category].rows
-        }
-        return 0
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 74
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CliqzCellIdentifier", for: indexPath) //super.tableView(tableView, cellForRowAt: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: CliqzCellIdentifier, for: indexPath)
         cell.accessoryType = .none
         return configureSite(cell, for: indexPath)
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let site = self.siteForIndexPath(indexPath), let url = URL(string: site.url) {
-            let visitType = VisitType.typed    // Means History, too.
-            if let homePanelDelegate = homePanelDelegate {
-                homePanelDelegate.homePanel(self, didSelectURL: url, visitType: visitType)
-            }
-            return
-        }
-        print("Error: No site or no URL when selecting row.")
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 74
     }
     
     override func configureSite(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
@@ -153,74 +123,6 @@ class CliqzHistoryPanel: HistoryPanel {
         cell.detailTextLabel?.textColor = cell.textLabel?.textColor ?? .white
         #endif
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let title = NSLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
-        
-        let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
-            self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
-        })
-        return [delete]
-    }
-    
-    override func updateNumberOfSyncedDevices(_ count: Int?) {
-        return
-    }
-    
-    override func updateSyncedDevicesCount() -> Success {
-        return succeed()
-    }
-    
-    @objc override func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == .began else { return }
-        let touchPoint = longPressGestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
-        
-        presentContextMenu(for: indexPath)
-    }
-    
-    override func computeSectionOffsets() {
-        
-        let maxSections = 4
-        
-        var counts = [Int](repeating: 0, count: maxSections)
-        
-        // Loop over all the data. Record the start of each "section" of our list.
-        for i in 0..<data.count {
-            if let site = data[i] {
-                counts[categoryForDate(site.latestVisit!.date)] += 1
-            }
-        }
-        
-        var section = 0
-        var offset = 0
-        self.categories = [CategorySpec]()
-        for i in 0..<maxSections {
-            let count = counts[i]
-            if count > 0 {
-                self.categories.append((section: section, rows: count, offset: offset))
-                sectionLookup[section] = i
-                offset += count
-                section += 1
-            } else {
-                self.categories.append((section: nil, rows: 0, offset: offset))
-            }
-        }
-    }
-    
-    private func categoryForDate(_ date: MicrosecondTimestamp) -> Int {
-        let date = Double(date)
-        if date > (1000000 * Today.timeIntervalSince1970) {
-            return 0
-        }
-        if date > (1000000 * Yesterday.timeIntervalSince1970) {
-            return 1
-        }
-        if date > (1000000 * ThisWeek.timeIntervalSince1970) {
-            return 2
-        }
-        return 3
     }
     
     override func createEmptyStateOverlayView() -> UIView {
@@ -256,13 +158,5 @@ class CliqzHistoryPanel: HistoryPanel {
             make.width.equalTo(170)
         }
         return overlayView
-    }
-}
-
-
-
-extension Array {
-    func isIndexValid(_ index: Int) -> Bool {
-        return index >= 0 && index < self.count
     }
 }

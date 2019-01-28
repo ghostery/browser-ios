@@ -20,7 +20,7 @@ struct FreshtabViewUX {
 }
 
 class FreshtabViewController: UIViewController, HomePanel {
-	
+    
 	weak var homePanelDelegate: HomePanelDelegate?
 
 	private var profile: Profile!
@@ -96,7 +96,7 @@ class FreshtabViewController: UIViewController, HomePanel {
 			self?.updateViewConstraints()
 		}
 	}
-    
+
     func setupConstraints() {
         if !isForgetMode {
             
@@ -135,6 +135,11 @@ class FreshtabViewController: UIViewController, HomePanel {
                 make.left.height.width.equalTo(self.view)
             })
         }
+    }
+
+    func applyTheme() {
+        topSitesViewController.applyTheme()
+        newsViewController.applyTheme()
     }
 
 	private func getInvisibleFreshTabHeight(topSitesHeight: CGFloat, newsHeight: CGFloat) -> CGFloat {

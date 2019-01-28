@@ -8,8 +8,6 @@ import Account
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {
-    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -46,14 +44,19 @@ class AppSettingsTableViewController: SettingsTableViewController {
             NewTabPageSetting(settings: self),
             HomePageSetting(settings: self),
             OpenWithSetting(settings: self),
+            ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
                         titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
             ]        
         
+        if #available(iOS 12.0, *) {
+            generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        }
+
         let accountChinaSyncSetting: [Setting]
-        if !profile.isChinaEdition {
+        if !BrowserProfile.isChinaEdition {
             accountChinaSyncSetting = []
         } else {
             accountChinaSyncSetting = [
@@ -71,7 +74,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         statusText: Strings.SettingsOfferClipboardBarStatus)
         ]
 
-        var accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
+        let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
 
         let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
         settings += [
@@ -121,6 +124,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
+                ExportLogDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
                 EnableBookmarkMergingSetting(settings: self),
                 ForceCrashSetting(settings: self)
@@ -130,7 +134,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! SettingsTableSectionHeaderFooterView
+        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
         // Prevent the top border from showing for the General section.
         if !profile.hasAccount() {
             switch section {

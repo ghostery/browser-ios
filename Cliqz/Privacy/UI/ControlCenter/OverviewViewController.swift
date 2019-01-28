@@ -440,7 +440,7 @@ class NotchView: UIView {
         container.backgroundColor = .white
 		titleLabel.textColor = UIColor.cliqzBluePrimary
 		titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
-		switchControl.onTintColor = UIConstants.ControlTintColor
+		switchControl.onTintColor = UIColor.theme.tableView.controlTint
 		switchControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         switchControl.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
 		notchView.image = UIImage(named:"notch")

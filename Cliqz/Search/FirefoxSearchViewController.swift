@@ -31,7 +31,7 @@ private struct SearchViewControllerUX {
     static let SearchImageWidth: Float = 24
     
     static let SuggestionBackgroundColor = UIColor.Photon.White100
-    static let SuggestionBorderColor = UIConstants.HighlightBlue
+    static let SuggestionBorderColor = UIColor.theme.general.highlightBlue
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
     static let SuggestionInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -70,9 +70,9 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
     
     static var userAgent: String?
     
-    init(isPrivate: Bool) {
+    init(profile: Profile,isPrivate: Bool) {
         self.isPrivate = isPrivate
-        super.init(nibName: nil, bundle: nil)
+        super.init(profile: profile)
         
         NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.DeviceOrientationChanged, object: nil)
     }
@@ -295,7 +295,7 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
          Telemetry.default.recordSearch(location: .quickSearch, searchEngine: engine.engineID ?? "other")
          */
         
-        searchDelegate?.searchViewController(SearchViewController(isPrivate: false), didSelectURL: url)
+        searchDelegate?.searchViewController(SearchViewController(profile: self.profile, isPrivate: false), didSelectURL: url)
     }
     
     @objc func didClickSearchButton() {
@@ -379,7 +379,7 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
         if section == SearchListSection.bookmarksAndHistory {
             if let site = data[indexPath.row] {
                 if let url = URL(string: site.url) {
-                    searchDelegate?.searchViewController(SearchViewController(isPrivate: false), didSelectURL: url)
+                    searchDelegate?.searchViewController(SearchViewController(profile: self.profile, isPrivate: false), didSelectURL: url)
                     UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
                 }
             }
@@ -466,7 +466,7 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
         
         if section == .bookmarksAndHistory,
             let suggestion = data[indexPath.item] {
-            searchDelegate?.searchViewController(SearchViewController(isPrivate: false), didHighlightText: suggestion.url, search: false)
+            searchDelegate?.searchViewController(SearchViewController(profile: self.profile, isPrivate: false), didHighlightText: suggestion.url, search: false)
         }
     }
 }
@@ -494,7 +494,7 @@ extension FirefoxSearchViewController {
                 // We have, so check if we can decrement the section.
                 if current.section == initialSection {
                     // We've reached the first item in the first section.
-                    searchDelegate?.searchViewController(SearchViewController(isPrivate: false), didHighlightText: searchQuery, search: false)
+                    searchDelegate?.searchViewController(SearchViewController(profile: self.profile, isPrivate: false), didHighlightText: searchQuery, search: false)
                     return
                 } else {
                     nextSection = current.section - 1
@@ -546,12 +546,12 @@ extension FirefoxSearchViewController: SuggestionCellDelegate {
          */
         
         if let url = url {
-            searchDelegate?.searchViewController(SearchViewController(isPrivate: false), didSelectURL: url)
+            searchDelegate?.searchViewController(SearchViewController(profile: self.profile, isPrivate: false), didSelectURL: url)
         }
     }
     
     fileprivate func suggestionCell(_ suggestionCell: SuggestionCell, didLongPressSuggestion suggestion: String) {
-        searchDelegate?.searchViewController(SearchViewController(isPrivate: false), didLongPressSuggestion: suggestion)
+        searchDelegate?.searchViewController(SearchViewController(profile: self.profile, isPrivate: false), didLongPressSuggestion: suggestion)
     }
 }
 
@@ -769,7 +769,7 @@ fileprivate class SuggestionButton: InsetButton {
     @objc
     override var isHighlighted: Bool {
         didSet {
-            backgroundColor = isHighlighted ? UIConstants.HighlightBlue : UIColor.clear
+            backgroundColor = isHighlighted ? UIColor.theme.general.highlightBlue : UIColor.clear
         }
     }
 }

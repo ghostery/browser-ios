@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TabTrayDoneButton: UIButton, Themeable {
+class TabTrayDoneButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,9 +19,5 @@ class TabTrayDoneButton: UIButton, Themeable {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func applyTheme(_ theme: Theme) {
-        setTitleColor(UIColor.CliqzTabTray.ButtonText.colorFor(theme), for: [])
     }
 }

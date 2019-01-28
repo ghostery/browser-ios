@@ -8,7 +8,7 @@ import UIKit
 import WebKit
 import SwiftyJSON
 
-protocol FxAContentViewControllerDelegate: class {
+protocol FxAContentViewControllerDelegate: AnyObject {
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags: FxALoginFlags)
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController)
 }
@@ -26,6 +26,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         case canLinkAccount = "can_link_account"
         case loaded = "loaded"
         case login = "login"
+        case changePassword = "change_password"
         case sessionStatus = "session_status"
         case signOut = "sign_out"
     }
@@ -100,7 +101,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             "type": type,
             "content": content,
         ] as [String: Any]
-        let json = JSON(data).stringValue() ?? ""
+        let json = JSON(data).stringify() ?? ""
         let script = "window.postMessage(\(json), '\(self.url.absoluteString)');"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
@@ -158,7 +159,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     fileprivate func onLoaded() {
         self.timer?.invalidate()
         self.timer = nil
-        self.isLoaded = true        
+        self.isLoaded = true
     }
 
     // Handle a message coming from the content server.
@@ -172,7 +173,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             switch command {
             case .loaded:
                 onLoaded()
-            case .login:
+            case .login, .changePassword:
                 onLogin(data)
             case .canLinkAccount:
                 onCanLinkAccount(data)

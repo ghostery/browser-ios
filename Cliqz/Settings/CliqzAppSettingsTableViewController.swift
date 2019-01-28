@@ -28,12 +28,14 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         #endif
 		
 		// Account Settings
+        /* [IP-193] Remove Authentication
 		#if PAID
 		let accountSettings = generateAccountSettings(prefs: prefs)
 		let accountSettingsTitle = NSLocalizedString("Lumen Account", tableName: "Cliqz" , comment: "[Settings] Account")
-//NSLocalizedString("", tableName: "Cliqz", comment: "[Settings] TBD")
 		settings += [SettingSection(title: NSAttributedString(string: accountSettingsTitle), children: accountSettings)]
 		#endif
+        */
+        
         // Search Settings
         let searchSettings = generateSearchSettings(prefs: prefs)
         let searchSettingsTitle = NSLocalizedString("Search", tableName: "Cliqz", comment: "[Settings] Search section title")
@@ -122,7 +124,8 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
                         titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
-            LimitMobileDataUsageSetting(settings: self)
+            LimitMobileDataUsageSetting(settings: self),
+            ThemeSetting(settings: self),
             ]
         
         let statusText = NSLocalizedString("When Opening Ghostery", tableName: "Cliqz", comment: "Description displayed under the ”Offer to Open Copied Link” option.")

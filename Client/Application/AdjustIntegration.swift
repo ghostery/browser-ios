@@ -173,8 +173,10 @@ extension AdjustIntegration {
     /* Cliqz: Disable Adjust Integration
     func adjustAttributionChanged(_ attribution: ADJAttribution!) {
         do {
-            Logger.browserLogger.info("Adjust - Saving attribution info to disk")
-            try saveAttribution(attribution)
+            if let attribution = attribution {
+                Logger.browserLogger.info("Adjust - Saving attribution info to disk")
+                try saveAttribution(attribution)
+            }
         } catch let error {
             Logger.browserLogger.error("Adjust - Failed to save attribution: \(error)")
         }
@@ -202,8 +204,10 @@ extension AdjustIntegration {
     /// with launching the deeplink. We let the interstial view decide what to do with deeplink.
     /// Ref: https://github.com/adjust/ios_sdk#deferred-deep-linking-scenario
     /* Cliqz: Disable Adjust Integration
-    func adjustDeeplinkResponse(_ deeplink: URL!) -> Bool {
-        profile.prefs.setString("\(deeplink)", forKey: "AdjustDeeplinkKey")
+    func adjustDeeplinkResponse(_ deeplink: URL?) -> Bool {
+        if let link = deeplink {
+            profile.prefs.setString("\(link)", forKey: "AdjustDeeplinkKey")
+        }
         return true
     }
     */

@@ -84,6 +84,7 @@ class VPN {
     }
     
     func checkConnection() {
+        /* [IP-193] Remove Authentication
         guard AuthenticationService.shared.hasValidSubscription() == true else {
             VPN.disconnectVPN()
             NEVPNManager.shared().removeFromPreferences { (error) in
@@ -94,6 +95,7 @@ class VPN {
             return
         }
         
+        */
         if (lastStatus == .connected && status != .connected) {
             VPN.connect2VPN()
         }
@@ -245,21 +247,26 @@ class VPNEndPointManager {
     }
     
     private func getVPNCredentialsFromServer() {
-        if let userCred = AuthenticationService.shared.userCredentials() {
-            BondAPIManager.shared.currentBondHandler().getIPSecCreds(withRequest: userCred) { [weak self] (response, error) in
-                //TODO: write the credentials into the keychain
-                if let config = response?.config as? [String: IPSecConfig] {
-                    for (key, value) in config {
-                        if let country = self?.country(id: key) {
-                            self?.setCreds(country: country, username: value.username, password: value.password, sharedSecret: value.secret)
-                        }
+		VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
+			for cred in credentials {
+				if let country = self?.country(id: cred.country) {
+					self?.setCreds(country: country, username: cred.username, password: cred.password, sharedSecret: cred.secret)
+				}
+			}
+		}
+		/*
+        let userCred = AuthenticationService.shared.generateNewCredentials("vpn@lumen.com")
+        BondAPIManager.shared.currentBondHandler().getIPSecCreds(withRequest: userCred) { [weak self] (response, error) in
+            //TODO: write the credentials into the keychain
+            if let config = response?.config as? [String: IPSecConfig] {
+                for (key, value) in config {
+                    if let country = self?.country(id: key) {
+                        self?.setCreds(country: country, username: value.username, password: value.password, sharedSecret: value.secret)
                     }
                 }
             }
         }
-        else {
-            //TODO: What if there are no userCreds?
-        }
+		*/
     }
     
     func country(id: String) -> VPNCountry? {
@@ -470,13 +477,13 @@ class VPNViewController: UIViewController {
     @objc func connectButtonPressed(_ sender: Any) {
         //try to connect
         
-        guard AuthenticationService.shared.hasValidSubscription() == true else {
-            let text = NSLocalizedString("Your subscription has expired. Renew your subscription to continue to use the VPN.", tableName: "Lumen", comment: "[VPN] subscription expired alert text")
-            let alert = UIAlertController.alertWithOkay(text: text)
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-        
+//        guard AuthenticationService.shared.hasValidSubscription() == true else {
+//            let text = NSLocalizedString("Your subscription has expired. Renew your subscription to continue to use the VPN.", tableName: "Lumen", comment: "[VPN] subscription expired alert text")
+//            let alert = UIAlertController.alertWithOkay(text: text)
+//            self.present(alert, animated: true, completion: nil)
+//            return
+//        }
+		
         if (NEVPNManager.shared().connection.status == .connected) {
             VPN.disconnectVPN()
         }
@@ -581,6 +588,15 @@ extension VPNViewController: VPNCountryControllerProtocol {
         //change the name of the country in the button
         self.tableView.reloadData()
     }
+}
+
+extension VPNViewController: Themeable {
+    func applyTheme() {
+        self.updateMapView()
+        infoLabel.textColor = Lumen.VPN.infoLabelTextColor(lumenTheme, .Normal)
+        self.tableView.reloadData()
+    }
+    
 }
 
 #endif

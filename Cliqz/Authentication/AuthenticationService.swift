@@ -126,7 +126,7 @@ class AuthenticationService {
 	}
 	
 	func hasValidSubscription() -> Bool {
-		return self.subscriptionType != .basic
+		return true//self.subscriptionType != .basic
 	}
 
 	func signOut(completion: @escaping (_ isSignedOut: Bool, _ errorString: String?) -> Void) {

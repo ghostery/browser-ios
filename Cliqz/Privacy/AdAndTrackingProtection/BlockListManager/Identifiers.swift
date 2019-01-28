@@ -115,7 +115,8 @@ class AntitrackingJSONIdentifiers {
     }
     
     class func antitrackingBlockAllIdentifiers() -> [JSONIdentifier] {
-        return ["ghostery_content_blocker"]
+		// TODO: The second identifier will be ignored according to current implementation, so 3rd party cookies blocking rule is added to the full content blocker for now.
+        return ["ghostery_content_blocker", "3rd_party_cookies_blocker"]
     }
     
     class private func antitrackingBlockSelectedIdentifiers(forBlockListId: BlockListIdentifier, domain: String? = nil) -> Set<JSONIdentifier> {

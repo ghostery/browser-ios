@@ -1,4 +1,4 @@
-github "getsentry/sentry-cocoa"             "3.12.4"
+github "getsentry/sentry-cocoa"             "4.0.1"
 github "Alamofire/Alamofire"                ~> 4.0
 github "sleroux/Deferred"                   "Swift3.0"
 github "SnapKit/SnapKit"                    "3.1.2"
@@ -13,7 +13,7 @@ github "DaveWoodCom/XCGLogger"              "Version_4.0.0"
 github "cezheng/Fuzi"                       "2.0.2"
 github "SwiftyJSON/SwiftyJSON"              "3.1.4"
 github "farhanpatel/JSONSchema.swift"       "master"
-github "google/EarlGrey"                    "1.13.0"
-# Cliqz: Disable FireFox Telemetry
-#github "mozilla-mobile/telemetry-ios"       "v1.0.10"
+# Cliqz: Disable FireFox Telemetry & EarlyGray
+# github "st3fan/EarlGrey"                    "master"
+# github "mozilla-mobile/telemetry-ios"       "v1.1.0"
 github "mozilla-mobile/MappaMundi"          "master"

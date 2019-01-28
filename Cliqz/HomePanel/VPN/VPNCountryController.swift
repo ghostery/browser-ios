@@ -143,4 +143,12 @@ class CustomVPNCountryCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
 }
+
+extension VPNCountryController: Themeable {
+    func applyTheme() {
+        setStyling()
+        self.tableView.reloadData()
+    }
+    
+}
 #endif

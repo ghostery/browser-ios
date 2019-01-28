@@ -16,18 +16,16 @@ let didLeaveOverlayNotification = Notification.Name(rawValue: "didLeaveOverlayNo
 class GhosteryButton: InsetButton {
     
     private let ghosteryCount: GhosteryCount = GhosteryCount()
-    
-    fileprivate var currentTheme: Theme = .Normal
-    
     fileprivate let ghosty = UIImageView()
     private let count = UILabel()
+    private var isPrivate = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         ghosteryCount.delegate = self
         
         setUpComponent()
-        setUpConstaints(currentTheme)
+        setUpConstaints()
     }
     
     func setUpComponent() {
@@ -40,7 +38,6 @@ class GhosteryButton: InsetButton {
         count.backgroundColor = .clear
         
         count.text = "HELLO"
-        count.textColor = .white
         count.font = UIFont.systemFont(ofSize: 14)
         
         #if PAID
@@ -48,20 +45,13 @@ class GhosteryButton: InsetButton {
         #endif
     }
     
-    func setUpConstaints(_ theme: Theme) {
-        
-        if theme == .Normal {
-            ghosty.image = UIImage.controlCenterNormalIcon()
-        }
-        else {
-            ghosty.image = UIImage.controlCenterPrivateIcon()
-        }
+    func setUpConstaints() {
         
         #if !PAID
         let height: CGFloat = 25.0
         let width = (ghosty.image?.widthOverHeight() ?? 1.0) * height
         var centerDifference: CGFloat = 0.0
-        if theme == .Private, let normalImage = UIImage.controlCenterNormalIcon(), let privImage = ghosty.image {
+        if isPrivate, let normalImage = UIImage.controlCenterNormalIcon(), let privImage = ghosty.image {
             let ratioNormal = normalImage.widthOverHeight()
             let ratioPrivate = privImage.widthOverHeight()
             let widthNormal = ratioNormal * height
@@ -117,9 +107,10 @@ class GhosteryButton: InsetButton {
 }
 
 extension GhosteryButton: Themeable {
-    func applyTheme(_ theme: Theme) {
-        currentTheme = theme
-        setUpConstaints(theme)
+    func applyTheme() {
+        setUpConstaints()
+        self.tintColor = UIColor.theme.urlbar.urlbarButtonTint
+        count.textColor = UIColor.theme.urlbar.urlbarButtonTitleText
     }
 }
 
@@ -133,6 +124,18 @@ extension GhosteryButton: GhosteryCountDelegate {
     func showHello() {
         self.count.text = "HELLO"
         self.lookDeactivated()
+    }
+}
+
+extension GhosteryButton : PrivateModeUI {
+    func applyUIMode(isPrivate: Bool) {
+        self.isPrivate = isPrivate
+        if isPrivate {
+            ghosty.image = UIImage.controlCenterPrivateIcon()
+        } else {
+            ghosty.image = UIImage.controlCenterNormalIcon()
+        }
+        setUpConstaints()
     }
 }
 

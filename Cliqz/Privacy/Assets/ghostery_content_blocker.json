@@ -1,5 +1,14 @@
 [
   {
+	"action": {
+		"type": ["block-cookies"]
+	},
+	"trigger": {
+		"url-filter": ".*",
+		"load-type": ["third-party"]
+	}
+  },
+  {
     "action": {
       "type": "block"
     }, 

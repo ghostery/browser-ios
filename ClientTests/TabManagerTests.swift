@@ -19,13 +19,6 @@ open class TabManagerMockProfile: MockProfile {
     }
 }
 
-open class MockTabManagerStateDelegate: TabManagerStateDelegate {
-    var numberOfTabsStored = 0
-    public func tabManagerWillStoreTabs(_ tabs: [Tab]) {
-        numberOfTabsStored = tabs.count
-    }
-}
-
 struct MethodSpy {
     let functionName: String
     let method: ((_ tabs: [Tab?]) -> Void)?
@@ -41,8 +34,9 @@ struct MethodSpy {
     }
 }
 
-open class MockTabManagerDelegate: TabManagerDelegate {
+fileprivate let spyDidSelectedTabChange = "tabManager(_:didSelectedTabChange:previous:isRestoring:)"
 
+open class MockTabManagerDelegate: TabManagerDelegate {
     //this array represents the order in which delegate methods should be called.
     //each delegate method will pop the first struct from the array. If the method name doesn't match the struct then the order is incorrect
     //Then it evaluates the method closure which will return true/false depending on if the tabs are correct
@@ -68,15 +62,15 @@ open class MockTabManagerDelegate: TabManagerDelegate {
         methodCatchers.removeFirst()
     }
 
-    public func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
+    public func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
         testDelegateMethodWithName(#function, tabs: [selected, previous])
     }
 
-    public func tabManager(_ tabManager: TabManager, didAddTab tab: Tab) {
+    public func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
         testDelegateMethodWithName(#function, tabs: [tab])
     }
 
-    public func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab) {
+    public func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
         testDelegateMethodWithName(#function, tabs: [tab])
     }
 
@@ -104,97 +98,97 @@ open class MockTabManagerDelegate: TabManagerDelegate {
 class TabManagerTests: XCTestCase {
 
     let willRemove = MethodSpy(functionName: "tabManager(_:willRemoveTab:)")
-    let didRemove = MethodSpy(functionName: "tabManager(_:didRemoveTab:)")
+    let didRemove = MethodSpy(functionName: "tabManager(_:didRemoveTab:isRestoring:)")
     let willAdd = MethodSpy(functionName: "tabManager(_:willAddTab:)")
-    let didAdd = MethodSpy(functionName: "tabManager(_:didAddTab:)")
+    let didAdd = MethodSpy(functionName: "tabManager(_:didAddTab:isRestoring:)")
+
+    var profile: TabManagerMockProfile!
+    var manager: TabManager!
+    var delegate: MockTabManagerDelegate!
 
     override func setUp() {
         super.setUp()
+
+        profile = TabManagerMockProfile()
+        manager = TabManager(profile: profile, imageStore: nil)
+        delegate = MockTabManagerDelegate()
     }
 
     override func tearDown() {
+        manager.removeDelegate(delegate)
+        manager.removeAll()
+
         super.tearDown()
     }
 
-    func testTabManagerCallsTabManagerStateDelegateOnStoreChangesWithNormalTabs() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let stateDelegate = MockTabManagerStateDelegate()
-        manager.stateDelegate = stateDelegate
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-
-        // test that non-private tabs are saved to the db
-        // add some non-private tabs to the tab manager
-        for _ in 0..<3 {
-            let tab = Tab(configuration: configuration)
-            tab.url = URL(string: "http://yahoo.com")!
-            manager.configureTab(tab, request: URLRequest(url: tab.url!), flushToDisk: false, zombie: false)
-        }
-
-        manager.storeChanges()
-
-        XCTAssertEqual(stateDelegate.numberOfTabsStored, 3, "Expected state delegate to have been called with 3 tabs, but called with \(stateDelegate.numberOfTabsStored)")
-    }
-
-    func testTabManagerDoesNotCallTabManagerStateDelegateOnStoreChangesWithPrivateTabs() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let stateDelegate = MockTabManagerStateDelegate()
-        manager.stateDelegate = stateDelegate
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-
-        // test that non-private tabs are saved to the db
-        // add some non-private tabs to the tab manager
-        for _ in 0..<3 {
-            let tab = Tab(configuration: configuration, isPrivate: true)
-            tab.url = URL(string: "http://yahoo.com")!
-            manager.configureTab(tab, request: URLRequest(url: tab.url!), flushToDisk: false, zombie: false)
-        }
-
-        manager.storeChanges()
-
-        XCTAssertEqual(stateDelegate.numberOfTabsStored, 0, "Expected state delegate to have been called with 3 tabs, but called with \(stateDelegate.numberOfTabsStored)")
-    }
-
-    func testAddTab() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let delegate = MockTabManagerDelegate()
+    func testAddTabShouldAddOneNormalTab() {
         manager.addDelegate(delegate)
-
         delegate.expect([willAdd, didAdd])
         manager.addTab()
         delegate.verify("Not all delegate methods were called")
+        XCTAssertEqual(manager.normalTabs.count, 1, "There should be one normal tab")
+    }
+
+    func testAddTabShouldAddOnePrivateTab() {
+        manager.addDelegate(delegate)
+        delegate.expect([willAdd, didAdd])
+        manager.addTab(isPrivate: true)
+        delegate.verify("Not all delegate methods were called")
+        XCTAssertEqual(manager.privateTabs.count, 1, "There should be one private tab")
+    }
+
+    func testAddTabAndSelect() {
+        manager.selectTab(manager.addTab())
+        XCTAssertEqual(manager.selectedIndex, 0, "There should be selected first tab")
+    }
+
+    func testMoveTabFromLastToFirstPosition() {
+        // add two tabs, last one will be selected
+        manager.selectTab(manager.addTab())
+        manager.moveTab(isPrivate: false, fromIndex: 1, toIndex: 0)
+        XCTAssertEqual(manager.selectedIndex, 0, "There should be selected second tab")
     }
 
     func testDidDeleteLastTab() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let delegate = MockTabManagerDelegate()
+        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
+            XCTAssertNotNil(tabs[0])
+            XCTAssertNotNil(tabs[1])
+        }
 
-        //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        // create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
         let tab = manager.addTab()
         manager.selectTab(tab)
         manager.addDelegate(delegate)
-
-        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
-            let next = tabs[0]!
-            let previous = tabs[1]!
-            XCTAssertTrue(previous != next)
-            XCTAssertTrue(previous == tab)
-            XCTAssertFalse(next.isPrivate)
-        }
+        // it wont call didSelect because addTabAndSelect did not pass last removed tab
         delegate.expect([willRemove, didRemove, willAdd, didAdd, didSelect])
-        manager.removeTab(tab)
+        manager.removeTabAndUpdateSelectedIndex(tab)
         delegate.verify("Not all delegate methods were called")
     }
 
     func testDidDeleteLastPrivateTab() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let delegate = MockTabManagerDelegate()
+        //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
+        let tab = manager.addTab()
+        manager.selectTab(tab)
+        let privateTab = manager.addTab(isPrivate: true)
+        manager.selectTab(privateTab)
+        manager.addDelegate(delegate)
+
+        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
+            let next = tabs[0]!
+            let previous = tabs[1]!
+            XCTAssertTrue(previous != next)
+            XCTAssertTrue(previous == privateTab)
+            XCTAssertTrue(next == tab)
+            XCTAssertTrue(previous.isPrivate)
+            XCTAssertTrue(self.manager.selectedTab == next)
+        }
+        delegate.expect([willRemove, didRemove, didSelect])
+        manager.removeTabAndUpdateSelectedIndex(privateTab)
+        delegate.verify("Not all delegate methods were called")
+    }
+
+    func testDidCreateNormalTabWhenDeletingAll() {
+        let removeAllTabs = MethodSpy(functionName: "tabManagerDidRemoveAllTabs(_:toast:)")
 
         //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
         let tab = manager.addTab()
@@ -203,24 +197,14 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(privateTab)
         manager.addDelegate(delegate)
 
-        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
-            let next = tabs[0]!
-            let previous = tabs[1]!
-            XCTAssertTrue(previous != next)
-            XCTAssertTrue(previous == privateTab)
-            XCTAssertTrue(next == tab)
-            XCTAssertTrue(previous.isPrivate)
-            XCTAssertTrue(manager.selectedTab == next)
-        }
-        delegate.expect([willRemove, didRemove, didSelect])
-        manager.removeTab(privateTab)
+        // This test makes sure that a normal tab is always added even when a normal tab is not selected when calling removeAll
+        delegate.expect([willRemove, didRemove, willAdd, didAdd, removeAllTabs])
+
+        manager.removeTabsWithUndoToast(manager.normalTabs)
         delegate.verify("Not all delegate methods were called")
     }
 
     func testDeletePrivateTabsOnExit() {
-        //setup
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
         profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
 
         // create one private and one normal tab
@@ -255,8 +239,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testTogglePBMDelete() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
         profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
 
         let tab = manager.addTab()
@@ -268,32 +250,23 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be 1 private tab")
         manager.willSwitchTabMode(leavingPBM: true)
         XCTAssertEqual(manager.privateTabs.count, 0, "There should be 0 private tab")
-        manager.removeTab(tab)
+        manager.removeTabAndUpdateSelectedIndex(tab)
         XCTAssertEqual(manager.normalTabs.count, 1, "There should be 1 normal tab")
     }
 
-    func testDeleteNonSelectedTab() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let delegate = MockTabManagerDelegate()
+    func testRemoveNonSelectedTab() {
 
-        //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
         let tab = manager.addTab()
         manager.selectTab(tab)
         manager.addTab()
         let deleteTab = manager.addTab()
-        manager.addDelegate(delegate)
 
-        delegate.expect([willRemove, didRemove])
-        manager.removeTab(deleteTab)
-
-        delegate.verify("Not all delegate methods were called")
+        manager.removeTabAndUpdateSelectedIndex(deleteTab)
+        XCTAssertEqual(tab, manager.selectedTab)
+        XCTAssertFalse(manager.tabs.contains(deleteTab))
     }
 
     func testDeleteSelectedTab() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let delegate = MockTabManagerDelegate()
 
         func addTab(_ visit: Bool) -> Tab {
             let tab = manager.addTab()
@@ -314,27 +287,24 @@ class TabManagerTests: XCTestCase {
 
         manager.selectTab(tab1)
         tab1.parent = tab3
-        manager.removeTab(manager.selectedTab!)
+        manager.removeTabAndUpdateSelectedIndex(manager.selectedTab!)
         // Rule: parent tab if it was the most recently visited
         XCTAssertEqual(manager.selectedTab, tab3)
 
-        manager.removeTab(manager.selectedTab!)
+        manager.removeTabAndUpdateSelectedIndex(manager.selectedTab!)
         // Rule: next to the right.
         XCTAssertEqual(manager.selectedTab, tab4)
 
-        manager.removeTab(manager.selectedTab!)
+        manager.removeTabAndUpdateSelectedIndex(manager.selectedTab!)
         // Rule: next to the left, when none to the right
         XCTAssertEqual(manager.selectedTab, tab2)
 
-        manager.removeTab(manager.selectedTab!)
+        manager.removeTabAndUpdateSelectedIndex(manager.selectedTab!)
         // Rule: last one left.
         XCTAssertEqual(manager.selectedTab, tab0)
     }
 
     func testDeleteLastTab() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let delegate = MockTabManagerDelegate()
 
         //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
         (0..<10).forEach {_ in manager.addTab() }
@@ -343,23 +313,20 @@ class TabManagerTests: XCTestCase {
         let newSelectedTab = manager.tabs[8]
         manager.addDelegate(delegate)
 
-        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertEqual(deleteTab, previous)
             XCTAssertEqual(next, newSelectedTab)
         }
         delegate.expect([willRemove, didRemove, didSelect])
-        manager.removeTab(manager.tabs.last!)
+        manager.removeTabAndUpdateSelectedIndex(manager.tabs.last!)
 
         delegate.verify("Not all delegate methods were called")
     }
 
     func testDelegatesCalledWhenRemovingPrivateTabs() {
         //setup
-        let profile = TabManagerMockProfile()
-        let delegate = MockTabManagerDelegate()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
         profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
 
         // create one private and one normal tab
@@ -381,7 +348,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.selectedIndex, -1, "The selected index should have been reset")
 
         // didSelect should still be called when switching between a nil tab
-        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
             XCTAssertNil(tabs[1], "there should be no previous tab")
             let next = tabs[0]!
             XCTAssertFalse(next.isPrivate)
@@ -398,9 +365,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testDeleteFirstTab() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let delegate = MockTabManagerDelegate()
 
         //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
         (0..<10).forEach {_ in manager.addTab() }
@@ -409,23 +373,61 @@ class TabManagerTests: XCTestCase {
         let newSelectedTab = manager.tabs[1]
         manager.addDelegate(delegate)
 
-        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertEqual(deleteTab, previous)
             XCTAssertEqual(next, newSelectedTab)
         }
         delegate.expect([willRemove, didRemove, didSelect])
-        manager.removeTab(manager.tabs.first!)
+        manager.removeTabAndUpdateSelectedIndex(manager.tabs.first!)
         delegate.verify("Not all delegate methods were called")
+    }
+
+    func testRemoveTabSelectedTabShouldChangeIndex() {
+
+        let tab1 = manager.addTab()
+        manager.addTab()
+        let tab3 = manager.addTab()
+
+        manager.selectTab(tab3)
+        let beforeRemoveTabIndex = manager.selectedIndex
+        manager.removeTabAndUpdateSelectedIndex(tab1)
+
+        XCTAssertNotEqual(manager.selectedIndex, beforeRemoveTabIndex)
+        XCTAssertEqual(manager.selectedTab, tab3)
+        XCTAssertEqual(manager.tabs[manager.selectedIndex], tab3)
+    }
+
+    func testRemoveTabRemovingLastNormalTabShouldNotSwitchToPrivateTab() {
+
+        let tab0 = manager.addTab()
+        let tab1 = manager.addTab(isPrivate: true)
+
+        manager.selectTab(tab0)
+        // select private tab, so we are in privateMode
+        manager.selectTab(tab1, previous: tab0)
+        // if we are able to remove normal tab this means we are no longer in private mode
+        manager.removeTabAndUpdateSelectedIndex(tab0)
+
+        // manager should creat new tab and select it
+        XCTAssertNotEqual(manager.selectedTab, tab1)
+        XCTAssertNotEqual(manager.selectedIndex, manager.tabs.index(of: tab1))
+    }
+
+    func testRemoveAllShouldRemoveAllTabs() {
+
+        let tab0 = manager.addTab()
+        let tab1 = manager.addTab()
+
+        manager.removeAll()
+        XCTAssert(nil == manager.tabs.index(of: tab0))
+        XCTAssert(nil == manager.tabs.index(of: tab1))
     }
 
     // Private tabs and regular tabs are in the same tabs array.
     // Make sure that when a private tab is added inbetween regular tabs it isnt accidently selected when removing a regular tab
     func testTabsIndex() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let delegate = MockTabManagerDelegate()
 
         // We add 2 tabs. Then a private one before adding another normal tab and selecting it.
         // Make sure that when the last one is deleted we dont switch to the private tab
@@ -436,22 +438,41 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(manager.tabs.last)
         manager.addDelegate(delegate)
 
-        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertEqual(deleted, previous)
             XCTAssertEqual(next, newSelected)
         }
         delegate.expect([willRemove, didRemove, didSelect])
-        manager.removeTab(manager.tabs.last!)
+        manager.removeTabAndUpdateSelectedIndex(manager.tabs.last!)
 
         delegate.verify("Not all delegate methods were called")
     }
 
+    func testRemoveTabAndUpdateSelectedIndexIsSelectedParentTabAfterRemoval() {
+
+        func addTab(_ visit: Bool) -> Tab {
+            let tab = manager.addTab()
+            if visit {
+                tab.lastExecutedTime = Date.now()
+            }
+            return tab
+        }
+        let _ = addTab(false) // not visited
+        let tab1 = addTab(true)
+        let _ = addTab(true)
+        let tab3 = addTab(true)
+        let _ = addTab(false) // not visited
+
+        manager.selectTab(tab1)
+        tab1.parent = tab3
+        manager.removeTabAndUpdateSelectedIndex(tab1)
+
+        XCTAssertEqual(manager.selectedTab, tab3)
+    }
+
     func testTabsIndexClosingFirst() {
-        let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-        let delegate = MockTabManagerDelegate()
 
         // We add 2 tabs. Then a private one before adding another normal tab and selecting the first.
         // Make sure that when the last one is deleted we dont switch to the private tab
@@ -462,15 +483,27 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(manager.tabs.first)
         manager.addDelegate(delegate)
 
-        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
             XCTAssertEqual(deleted, previous)
             XCTAssertEqual(next, newSelected)
         }
         delegate.expect([willRemove, didRemove, didSelect])
-        manager.removeTab(manager.tabs.first!)
+        manager.removeTabAndUpdateSelectedIndex(manager.tabs.first!)
         delegate.verify("Not all delegate methods were called")
     }
 
+    func testUndoCloseTabsRemovesAutomaticallyCreatedNonPrivateTab() {
+
+        let tab = manager.addTab()
+        let tabToSave = Tab(configuration: WKWebViewConfiguration())
+        tabToSave.sessionData = SessionData(currentPage: 0, urls: [URL(string: "url")!], lastUsedTime: Date.now())
+        if let savedTab = SavedTab(tab: tabToSave, isSelected: false) {
+            manager.recentlyClosedForUndo = [savedTab]
+        }
+
+        manager.undoCloseTabs()
+        XCTAssertNotEqual(manager.tabs.first, tab)
+    }
 }

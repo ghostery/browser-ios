@@ -9,11 +9,11 @@ properties([
 
 def jobStatus = 'FAIL'
 
-node('mac-vm-host') {
+node('gideon') {
 
     writeFile file: 'Vagrantfile', text: '''
     Vagrant.configure("2") do |config|
-        config.vm.box = "browser-f-ios10.12.6-305"
+        config.vm.box = "browser-ios-10.13.6"
         
         config.vm.synced_folder ".", "/vagrant", disabled: true
         config.vm.define "nightlyios" do |nightlyios|
@@ -54,7 +54,6 @@ node('mac-vm-host') {
                 }
                 stage('Prepare') {
                     sh '''#!/bin/bash -l
-                        brew install getsentry/tools/sentry-cli
                         set -e
                         set -x
                         java -version
@@ -64,10 +63,8 @@ node('mac-vm-host') {
                         xcodebuild -version
                         pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
                         sudo xcodebuild -license accept
-                        gem install fastlane --no-document
                         fastlane clearCache
                         fastlane prepare
-                        pip install --user virtualenv
                     '''
                 }
                 stage('Build & Upload') {

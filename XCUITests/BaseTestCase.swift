@@ -5,14 +5,21 @@
 import MappaMundi
 import XCTest
 
+func path(forTestPage page: String) -> String {
+    return "http://localhost:6571/test-fixture/\(page)"
+}
+
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
     let app =  XCUIApplication()
     var userState: FxUserState!
 
+    // leave empty for non-specific tests
+    var specificForPlatform: UIUserInterfaceIdiom?
+
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.
-    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew]
+    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer, LaunchArguments.DeviceName]
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
@@ -36,6 +43,11 @@ class BaseTestCase: XCTestCase {
         super.tearDown()
     }
 
+    var skipPlatform: Bool {
+        guard let platform = specificForPlatform else { return false }
+        return UIDevice.current.userInterfaceIdiom != platform
+    }
+
     func restart(_ app: XCUIApplication, args: [String] = []) {
         XCUIDevice.shared.press(.home)
         var launchArguments = [LaunchArguments.Test]
@@ -56,8 +68,8 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func waitforExistence(_ element: XCUIElement, file: String = #file, line: UInt = #line) {
-        waitFor(element, with: "exists == true", file: file, line: line)
+    func waitforExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
     func waitforNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
@@ -110,6 +122,24 @@ class BaseTestCase: XCTestCase {
     }
 }
 
+class IpadOnlyTestCase: BaseTestCase {
+    override func setUp() {
+        specificForPlatform = .pad
+        if iPad() {
+            super.setUp()
+        }
+    }
+}
+
+class IphoneOnlyTestCase: BaseTestCase {
+    override func setUp() {
+        specificForPlatform = .phone
+        if !iPad() {
+            super.setUp()
+        }
+    }
+}
+
 extension BaseTestCase {
     func tabTrayButton(forApp app: XCUIApplication) -> XCUIElement {
         return app.buttons["TopTabsViewController.tabsButton"].exists ? app.buttons["TopTabsViewController.tabsButton"] : app.buttons["TabToolbar.tabsButton"]
@@ -127,4 +157,3 @@ extension XCUIElement {
         }
     }
 }
-

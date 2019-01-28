@@ -8,20 +8,26 @@ import UIKit
 extension TabTrayController {
     override var keyCommands: [UIKeyCommand]? {
         let toggleText = privateMode ? Strings.SwitchToNonPBMKeyCodeTitle: Strings.SwitchToPBMKeyCodeTitle
-        return [
+        var commands = [
             UIKeyCommand(input: "`", modifierFlags: .command, action: #selector(didTogglePrivateModeKeyCommand), discoverabilityTitle: toggleText),
             UIKeyCommand(input: "w", modifierFlags: .command, action: #selector(didCloseTabKeyCommand)),
-            UIKeyCommand(input: "\u{8}", modifierFlags: [], action: #selector(didCloseTabKeyCommand), discoverabilityTitle: Strings.CloseTabFromTabTrayKeyCodeTitle),
             UIKeyCommand(input: "w", modifierFlags: [.command, .shift], action: #selector(didCloseAllTabsKeyCommand), discoverabilityTitle: Strings.CloseAllTabsFromTabTrayKeyCodeTitle),
-            UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(didEnterTabKeyCommand), discoverabilityTitle: Strings.OpenSelectedTabFromTabTrayKeyCodeTitle),
             UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(didEnterTabKeyCommand)),
             UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(didEnterTabKeyCommand)),
             UIKeyCommand(input: "t", modifierFlags: .command, action: #selector(didOpenNewTabKeyCommand), discoverabilityTitle: Strings.OpenNewTabFromTabTrayKeyCodeTitle),
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
         ]
+        if !searchBar.isFirstResponder {
+            let extraCommands = [
+                UIKeyCommand(input: "\u{8}", modifierFlags: [], action: #selector(didCloseTabKeyCommand), discoverabilityTitle: Strings.CloseTabFromTabTrayKeyCodeTitle),
+                UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
+                UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(didEnterTabKeyCommand), discoverabilityTitle: Strings.OpenSelectedTabFromTabTrayKeyCodeTitle),
+                UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
+            ]
+            commands.append(contentsOf: extraCommands)
+        }
+        return commands
     }
 
     @objc func didTogglePrivateModeKeyCommand() {
@@ -32,7 +38,7 @@ extension TabTrayController {
     @objc func didCloseTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-tab"])
         if let tab = tabManager.selectedTab {
-            tabManager.removeTab(tab)
+            tabManager.removeTabAndUpdateSelectedIndex(tab)
         }
     }
 
@@ -68,7 +74,7 @@ extension TabTrayController {
             step = 0
         }
 
-        let tabs = self.tabs
+        let tabs = tabDisplayManager.tabStore
         let currentIndex: Int
         if let selected = tabManager.selectedTab {
             currentIndex = tabs.index(of: selected) ?? 0
@@ -77,7 +83,8 @@ extension TabTrayController {
         }
 
         let nextIndex = max(0, min(currentIndex + step, tabs.count - 1))
-        let nextTab = tabs[nextIndex]
-        tabManager.selectTab(nextTab)
+        if let nextTab = tabs[safe: nextIndex] {
+            tabManager.selectTab(nextTab)
+        }
     }
 }

@@ -11,29 +11,35 @@ class FindInPageTests: BaseTestCase {
         navigator.goto(PageOptionsMenu)
         navigator.goto(FindInPage)
 
-        waitforExistence(app.buttons["FindInPage.find_next"])
-        waitforExistence(app.buttons["FindInPage.find_previous"])
-        XCTAssertTrue(app.textFields[""].exists)
+        waitforExistence(app.buttons["FindInPage.find_next"], timeout: 5)
+        waitforExistence(app.buttons["FindInPage.find_previous"], timeout: 5)
+        XCTAssertTrue(app.textFields["FindInPage.searchField"].exists)
     }
 
     func testFindInLargeDoc() {
-        userState.url = "http://localhost:6571/find-in-page-test.html"
-        openFindInPageFromMenu()
+        navigator.openURL("http://localhost:6571/find-in-page-test.html")
+        waitUntilPageLoad()
+        // Workaround until FxSGraph is fixed to allow the previos way with goto
+        navigator.nowAt(BrowserTab)
+
+        waitforExistence(app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/, timeout: 15)
+        app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        waitforExistence(app.tables["Context Menu"].cells["menu-FindInPage"], timeout: 10)
+        app.tables["Context Menu"].cells["menu-FindInPage"].tap()
 
         // Enter some text to start finding
-        app.textFields[""].typeText("Book")
-        var i = 0
-        repeat {
-            i = i+1
-        } while (app.textFields["Book"].exists == false && i < 5)
+        app.textFields["FindInPage.searchField"].typeText("Book")
+        waitforExistence(app.textFields["Book"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
     }
 
+    // Smoketest
     func testFindFromMenu() {
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
 
         // Enter some text to start finding
-        app.textFields[""].typeText("Book")
+        app.textFields["FindInPage.searchField"].typeText("Book")
 
         // Once there are matches, test previous/next buttons
         waitforExistence(app.staticTexts["1/6"])
@@ -64,9 +70,10 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testFindInPageTwoWordsSearch() {
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
         // Enter some text to start finding
-        app.textFields[""].typeText("The Book of")
+        app.textFields["FindInPage.searchField"].typeText("The Book of")
 
         // Once there are matches, test previous/next buttons
         waitforExistence(app.staticTexts["1/6"])
@@ -74,16 +81,16 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testFindInPageTwoWordsSearchLargeDoc() {
-        userState.url = "http://localhost:6571/find-in-page-test.html"
-        openFindInPageFromMenu()
-
+        navigator.openURL("http://localhost:6571/find-in-page-test.html")
+        waitUntilPageLoad()
+        // Workaround until FxSGraph is fixed to allow the previos way with goto
+        navigator.nowAt(BrowserTab)
+        waitforExistence(app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/, timeout: 15)
+        app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         // Enter some text to start finding
-        app.textFields[""].typeText("The Book of")
-        var i = 0
-        repeat {
-            i = i+1
-        } while (app.textFields["The Book of"].exists == false && i < 5)
-
+        app.tables["Context Menu"].cells["menu-FindInPage"].tap()
+        app.textFields["FindInPage.searchField"].typeText("The Book of")
+        waitforExistence(app.textFields["The Book of"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
     }
 
@@ -91,7 +98,7 @@ class FindInPageTests: BaseTestCase {
         userState.url = "lorem2.com"
         openFindInPageFromMenu()
         // Enter some text to start finding
-        app.textFields[""].typeText("lorem")
+        app.textFields["FindInPage.searchField"].typeText("lorem")
 
         // There should be matches
         waitforExistence(app.staticTexts["1/5"])
@@ -99,6 +106,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testQueryWithNoMatches() {
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
 
         // Try to find text which does not match and check that there are not results
@@ -108,6 +116,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testBarDissapearsWhenReloading() {
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
 
         // Before reloading, it is necessary to hide the keyboard
@@ -120,6 +129,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testBarDissapearsWhenOpeningTabsTray() {
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
 
         // Dismiss keyboard
@@ -137,6 +147,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testFindFromSelection() {
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         let textToFind = "from"
 
@@ -146,11 +157,16 @@ class FindInPageTests: BaseTestCase {
         let stringToFind = app.webViews.staticTexts.matching(identifier: textToFind)
         let firstStringToFind = stringToFind.element(boundBy: 0)
         firstStringToFind.press(forDuration: 3)
-
+        waitforExistence(app.menuItems["Copy"])
         // Find in page is correctly launched, bar with text pre-filled and
         // the buttons to find next and previous
-        waitforExistence(app.menuItems["Find in Page"])
-        app.menuItems["Find in Page"].tap()
+        if (app.menuItems["Find in Page"].exists) {
+            app.menuItems["Find in Page"].tap()
+        } else {
+            app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
+            waitforExistence(app.menuItems["Find in Page"])
+            app.menuItems["Find in Page"].tap()
+        }
         waitforExistence(app.textFields[textToFind])
         XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")
         XCTAssertTrue(app.buttons["FindInPage.find_previous"].exists, "Find previous button exists")

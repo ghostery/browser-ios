@@ -118,12 +118,12 @@ class ControlCenterViewController: UIViewController {
 		self.view.backgroundColor = UIColor.clear
 		
 		let bgView = UIView()
-		bgView.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: self.privateMode)
 		panelSwitchControl = UISegmentedControl(items: items)
 		panelSwitchControl.tintColor = UIColor.white
-		panelSwitchControl.backgroundColor = UIColor.CliqzURLBar.Background.color(isPBM: self.privateMode)
 		panelSwitchControl.addTarget(self, action: #selector(switchPanel), for: .valueChanged)
-		bgView.addSubview(panelSwitchControl)
+        panelSwitchControl.tintColor = UIColor.theme.browser.tint
+        bgView.backgroundColor = UIColor.theme.browser.background
+        bgView.addSubview(panelSwitchControl)
 		self.view.addSubview(bgView)
 		
 		bgView.snp.makeConstraints { (make) in
