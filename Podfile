@@ -27,6 +27,7 @@ def project_pods
     pod 'CRToast'
     pod 'SVProgressHUD'
     pod 'RNUserAgent', :path => './node_modules/react-native-user-agent/ios/'
+    pod 'Purchases'
 end
 
 target 'Client' do
