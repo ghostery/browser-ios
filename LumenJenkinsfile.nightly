@@ -1,0 +1,207 @@
+#!/bin/env groovy
+
+@Library('cliqz-shared-library@vagrant') _
+
+properties([
+    disableConcurrentBuilds(), 
+    [$class: 'JobRestrictionProperty']
+])
+
+def jobStatus = 'FAIL'
+
+node('gideon') {
+
+    writeFile file: 'Vagrantfile', text: '''
+    Vagrant.configure("2") do |config|
+        config.vm.box = "browser-ios-10.13.6"
+        
+        config.vm.synced_folder ".", "/vagrant", disabled: true
+        config.vm.define "nightlylumen" do |nightlylumen|
+            nightlylumen.vm.hostname ="nightlylumen"
+            
+            nightlylumen.vm.network "public_network", :bridge => "en0: Ethernet 1", auto_config: false
+            nightlylumen.vm.boot_timeout = 900
+            nightlylumen.vm.provider "virtualbox" do |v|
+                v.name = "nightlylumen"
+                v.gui = false
+                v.memory = ENV["NODE_MEMORY"]
+            end
+            nightlylumen.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
+                set -e
+                set -x
+                rm -f agent.jar
+                curl -LO #{ENV['JENKINS_URL']}/jnlpJars/agent.jar
+                ls .
+                java -version
+                java -jar agent.jar -jnlpUrl #{ENV['JENKINS_URL']}/computer/#{ENV['NODE_ID']}/slave-agent.jnlp -secret #{ENV["NODE_SECRET"]} &
+            SHELL
+        end
+    end
+    '''
+
+    vagrant.inside(
+        'Vagrantfile',
+        '/jenkins',
+        4, // CPU
+        8000, // MEMORY
+        12000, // VNC port
+        false, // rebuild image
+    ) { nodeId ->
+        node(nodeId) {
+            try {
+                stage('Checkout') {
+                    checkout scm
+                }
+                stage('Prepare') {
+                    sh '''#!/bin/bash -l
+                        set -e
+                        set -x
+                        java -version
+                        node -v
+                        npm -v
+                        brew -v
+                        xcodebuild -version
+                        pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
+                        sudo xcodebuild -license accept
+                        fastlane clearCache
+                        fastlane prepare
+                    '''
+                }
+                stage('Build & Upload') {
+                    withCredentials([
+                        [
+                            $class          : 'UsernamePasswordMultiBinding',
+                            credentialsId   : '85859bba-4927-4b14-bfdf-aca726009962',
+                            passwordVariable: 'GITHUB_PASSWORD',
+                            usernameVariable: 'GITHUB_USERNAME',
+                        ],
+                        string(credentialsId: '8b4f7459-c446-4058-be61-3c3d98fe72e2', variable: 'ITUNES_USER'),
+                        string(credentialsId: '05be12cd-5177-4adf-9812-809f01451fa0', variable: 'FASTLANE_PASSWORD'),
+                        string(credentialsId: 'ab91f92a-4588-4034-8d7f-c1a741fa31ab', variable: 'FASTLANE_ITC_TEAM_ID')
+                        string(credentialsId: 'ee93743c-b0be-46aa-b49a-ab3caaea4f67', variable: 'MATCH_PASSWORD'),
+                        string(credentialsId: 'c454a3e9-83af-480a-82fe-08c858512140', variable: 'SentryDSN'),
+                        string(credentialsId: 'f206e880-e09a-4369-a3f6-f86ee94481f2', variable: 'SENTRY_AUTH_TOKEN'),,
+                        string(credentialsId: 'cc9215e4-ca8f-41bd-9e0b-1c2ba1900949', variable: 'LumenAPIKey')])
+                    {
+                        sh '''#!/bin/bash -l
+                            set -x
+                            set -e
+                            rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
+                            export MATCH_KEYCHAIN_NAME=ios-build.keychain
+                            rm -rf ../build-tools
+                            export app_name=Lumen
+                            echo de > shipping_locales.txt && echo en-US >> shipping_locales.txt
+                            fastlane importLocalizations
+                            fastlane lumenBeta
+                        '''
+                    }
+                }
+                jobStatus = 'PASS'
+            }
+            catch(all) {
+                jobStatus = 'FAIL'
+                print "Something Failed. Check the above logs."
+                currentBuild.result = 'FAILURE'
+            }
+            finally {
+                stage("Clean Up"){
+                    sh '''#!/bin/bash -l
+                        set -x
+                        set -e
+                        fastlane clearCache
+                    '''
+                }
+            }
+        }
+    }
+}
+if (jobStatus == 'PASS') {
+    stage('Update Jira') {
+        withEnv(['JIRA_SITE=cliqztix']) {
+            passedBuilds = listOfFailedBuilds(currentBuild)
+            def issueIds = getIssueList()
+            def transitionInput = [
+                transition: [
+                    id: '121',
+                ],
+            ]
+            for (id in issueIds) {
+                try {
+                    def issue = jiraGetIssue idOrKey: id
+                    if (issue.data.fields.status.name == "Resolved") {
+                        jiraTransitionIssue idOrKey: id, input: transitionInput
+                     echo "Transistioned ${id}"
+                    } else{
+                        echo """Element with id ${id} was not transitioned\nIts status is: """+issue.data.fields.status.name
+                    }
+                } catch (Error e) {
+                    echo e
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Return the list of failed builds up to the latest successfull one or the 
+ * first build if there is not such build
+ *
+ * @param build the current build
+ */
+def listOfFailedBuilds(build) {
+    def results = []
+    while (build != null && build.result != 'SUCCESS') {
+        println("Found unsuccessfull build ${build.number}")
+        results.add(build)
+        build = build.getPreviousBuild()
+    }
+    if (build != null) {
+        println("Found successfull build ${build.number}")
+        results.add(build)
+    } else {
+        println("Found EOL")
+    }
+    results
+}
+
+@NonCPS
+def getChangeString(passedBuilds) {
+    def changeString = ""
+    echo "Gathering Changes Since Last Successful Build"
+    for (int x = 0; x < passedBuilds.size(); x++) {
+        def currentBuild = passedBuilds[x];
+        def buildNumber = currentBuild.number
+        echo "Changes for Build ${buildNumber}"
+        def changeLogSets = currentBuild.rawBuild.changeSets
+        for (int i = 0; i < changeLogSets.size(); i++) {
+            def entries = changeLogSets[i].items
+            for (int j = 0; j < entries.length; j++) {
+                def entry = entries[j]
+                changeString += "* ${entry.msg} by ${entry.author} \n"
+            }
+        }
+    }
+    if (!changeString) {
+        changeString = " - No new changes"
+    }
+    echo changeString
+    return changeString;
+}
+
+@NonCPS
+def getIssueList(){
+    def list = []
+    def changes = getChangeString(passedBuilds)
+    def re = /IB2-([0-9])*/
+    def y = changes =~ re
+    while (y){
+        list.add(y.group().toString())
+    }
+    if (list.size() > 0) {
+        echo 'Detected JIRA tickets'
+        echo list.toString()
+    } else {
+       echo 'No JIRA tickets detected'
+    }
+    return list
+}
