@@ -93,6 +93,7 @@
 		1E7B76AF206B9CB500FD0BA5 /* ConnectDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */; };
 		1E9B707A22009551005350A5 /* PremiumType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B707922009551005350A5 /* PremiumType.swift */; };
 		1E9B70842200BF5D005350A5 /* LumenPurchaseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B70832200BF5D005350A5 /* LumenPurchaseInfo.swift */; };
+		1E9B70862200C9FC005350A5 /* UpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B70852200C9FC005350A5 /* UpgradeView.swift */; };
 		1EA51579212D54E5008DEF0D /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA51578212D54E5008DEF0D /* UIViewExtension.swift */; };
 		1EA949EA20EF6B6D008D32A6 /* UIAlertControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA949E920EF6B6C008D32A6 /* UIAlertControllerExtension.swift */; };
 		1EA94A0620EFB956008D32A6 /* TopTabsViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA949F720EFB956008D32A6 /* TopTabsViewControllerExtension.swift */; };
@@ -1514,6 +1515,7 @@
 		1E7B76AE206B9CB500FD0BA5 /* ConnectDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectDataSource.swift; sourceTree = "<group>"; };
 		1E9B707922009551005350A5 /* PremiumType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumType.swift; sourceTree = "<group>"; };
 		1E9B70832200BF5D005350A5 /* LumenPurchaseInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenPurchaseInfo.swift; sourceTree = "<group>"; };
+		1E9B70852200C9FC005350A5 /* UpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeView.swift; sourceTree = "<group>"; };
 		1EA51578212D54E5008DEF0D /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		1EA949E920EF6B6C008D32A6 /* UIAlertControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtension.swift; sourceTree = "<group>"; };
 		1EA949F720EFB956008D32A6 /* TopTabsViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTabsViewControllerExtension.swift; sourceTree = "<group>"; };
@@ -2808,6 +2810,7 @@
 		1EF1B4BB220064AE00D334E7 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1E9B70852200C9FC005350A5 /* UpgradeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -6757,6 +6760,7 @@
 				3B6889C51D66950E002AC85E /* UIImageColors.swift in Sources */,
 				1EEA369520615725003B6AD5 /* DownloadManager.swift in Sources */,
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
+				1E9B70862200C9FC005350A5 /* UpgradeView.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
 				AFA1DE0A2088BDDB00B27B8A /* Identifiers.swift in Sources */,
 				EB11A1042044A90E0018F749 /* ContentBlockerHelper+Whitelist.swift in Sources */,
