@@ -307,6 +307,8 @@ class VPNViewController: UIViewController {
     
     let countryButtonHeight: CGFloat = 50.0
     
+    var upgradeView: UpgradeView?
+    
     var VPNStatus: NEVPNStatus {
         return VPN.shared.status;
     }
@@ -319,41 +321,67 @@ class VPNViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.addSubview(tableView)
-        view.addSubview(mapView)
-        view.addSubview(infoLabel)
-        view.addSubview(connectButton)
-        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(VPNStatusDidChange(notification:)),
                                                name: .NEVPNStatusDidChange,
                                                object: nil)
         
-        // Do any additional setup after loading the view, typically from a nib.
+        setupComponents()
+        setConstraints()
+        setStyling()
+        
+        updateMapView()
+        updateConnectButton()
+        updateInfoLabel()
+    }
+    
+    private func setupComponents() {
         tableView.register(CustomVPNCell.self, forCellReuseIdentifier: "VPNCell")
         tableView.delegate = self
         tableView.dataSource = self
-        
-        tableView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view.snp.topMargin)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(countryButtonHeight)
-        }
-        
         tableView.isScrollEnabled = false
         
-        updateMapView()
+        connectButton.setTitleColor(.blue, for: .normal)
+        connectButton.tintColor = .blue
+        connectButton.addTarget(self, action: #selector(connectButtonPressed), for: .touchUpInside)
+        
+        view.addSubview(tableView)
+        view.addSubview(mapView)
+        view.addSubview(infoLabel)
+        view.addSubview(connectButton)
+        #if PAID
+        if let trialRemainingDays = SubscriptionController.shared.getCurrentSubscription().trialRemainingDays() {
+            //TODO: add condition `trialRemainingDays < 8`
+            //TODO: Implement UpgradeView
+            self.upgradeView = UpgradeView()
+            view.addSubview(upgradeView!)
+        }
+        #endif
+    }
+    
+    private func setConstraints() {
+        if let upgradeView = self.upgradeView {
+            upgradeView.snp.makeConstraints { (make) in
+                make.top.leading.trailing.equalToSuperview().inset(10)
+                make.height.equalTo(UpgradeViewUX.height)
+            }
+            tableView.snp.makeConstraints { (make) in
+                make.top.equalTo(upgradeView.snp.bottom)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(countryButtonHeight)
+            }
+        } else {
+            tableView.snp.makeConstraints { (make) in
+                make.top.leading.trailing.equalToSuperview()
+                make.height.equalTo(countryButtonHeight)
+            }
+        }
+        
         mapView.snp.makeConstraints { (make) in
             make.trailing.equalToSuperview().offset(-20)
             make.leading.equalToSuperview().offset(20)
             make.top.equalTo(tableView.snp.bottom).offset(20)
         }
-        
-        updateConnectButton()
-        connectButton.setTitleColor(.blue, for: .normal)
-        connectButton.tintColor = .blue
-        connectButton.addTarget(self, action: #selector(connectButtonPressed), for: .touchUpInside)
         
         connectButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -364,17 +392,12 @@ class VPNViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-26)
             make.width.equalToSuperview().dividedBy(1.25)
             make.centerX.equalToSuperview()
-            //I should not set the height. Quick fix. 
+            //I should not set the height. Quick fix.
             make.height.equalTo(40)
         }
-        
-        //infoLabel.text = "Turn on VPN protection to browse safely on the Internet."
-        updateInfoLabel()
-        
-        setStyling()
     }
     
-    func setStyling() {
+    private func setStyling() {
         self.view.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
         self.tableView.separatorColor = .clear
@@ -594,6 +617,7 @@ extension VPNViewController: Themeable {
     func applyTheme() {
         self.updateMapView()
         infoLabel.textColor = Lumen.VPN.infoLabelTextColor(lumenTheme, .Normal)
+        upgradeView?.applyTheme()
         self.tableView.reloadData()
     }
     
