@@ -136,8 +136,8 @@ fileprivate class DarkGeneralColor: GeneralColor {
     override var controlTint: UIColor { return UIColor.lumenBrightBlue }
 }
 
-fileprivate class DarkerLumenUpgradeColor: LumenUpgradeColor {
-    override var label: UIColor { return UIColor.white }
+fileprivate class DarkerLumenSubscriptionColor: LumenSubscriptionColor {
+    override var upgradeLabel: UIColor { return UIColor.white }
 }
 
 class DarkTheme: NormalTheme {
@@ -153,7 +153,7 @@ class DarkTheme: NormalTheme {
     override var snackbar: SnackBarColor { return DarkSnackBarColor() }
     override var general: GeneralColor { return DarkGeneralColor() }
     override var actionMenu: ActionMenuColor { return DarkActionMenuColor() }
-    override var lumenUpgrade: LumenUpgradeColor { return DarkerLumenUpgradeColor() }
+    override var lumenSubscription: LumenSubscriptionColor { return DarkerLumenSubscriptionColor() }
 }
 
 #endif

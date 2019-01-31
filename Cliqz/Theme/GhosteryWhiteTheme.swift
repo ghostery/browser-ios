@@ -185,10 +185,6 @@ class GeneralColor {
     var controlTint: UIColor { return UIColor.Photon.Blue40 }
 }
 
-class LumenUpgradeColor {
-    var label: UIColor { return UIColor.black }
-}
-
 protocol Theme {
     var name: String { get }
     var tableView: TableViewColor { get }
@@ -203,7 +199,6 @@ protocol Theme {
     var snackbar: SnackBarColor { get }
     var general: GeneralColor { get }
     var actionMenu: ActionMenuColor { get }
-    var lumenUpgrade: LumenUpgradeColor { get }
 }
 
 class NormalTheme: Theme {
@@ -220,7 +215,6 @@ class NormalTheme: Theme {
     var snackbar: SnackBarColor { return SnackBarColor() }
     var general: GeneralColor { return GeneralColor() }
     var actionMenu: ActionMenuColor { return ActionMenuColor() }
-    var lumenUpgrade: LumenUpgradeColor { return LumenUpgradeColor() }
 }
 
 #endif
