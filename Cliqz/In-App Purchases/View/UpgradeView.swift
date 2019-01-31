@@ -11,7 +11,7 @@ import QuartzCore
 
 
 protocol UpgradeLumenDelegate: class {
-    func showUpgradeView()
+    func showUpgradeViewController()
 }
 
 struct UpgradeViewUX {
@@ -39,12 +39,17 @@ class UpgradeView: UIView {
     }
     
     fileprivate func setupComponents() {
-        let trialRemainingDays = SubscriptionController.shared.getCurrentSubscription().trialRemainingDays() ?? 0
-        
-        titleLabel.text = NSLocalizedString("Stay with us", tableName: "Lumen", comment: "Upgrade lumen view title")
-        subtitleLabel1.text = String(format: NSLocalizedString("Only %d days left in trial.", tableName: "Lumen", comment: "Upgrade lumen view subtitle1"), trialRemainingDays)
-        subtitleLabel2.text = NSLocalizedString("Keep ultimate protection and VPN.", tableName: "Lumen", comment: "Upgrade lumen view subtitle2")
-        upgradeButton.setTitle(NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Upgrade lumen view button text"), for: .normal)
+        if let trialRemainingDays = SubscriptionController.shared.getCurrentSubscription().trialRemainingDays() {
+            titleLabel.text = NSLocalizedString("Stay with us", tableName: "Lumen", comment: "Upgrade lumen view title")
+            subtitleLabel1.text = String(format: NSLocalizedString("Only %d days left in trial.", tableName: "Lumen", comment: "Upgrade lumen view subtitle1"), trialRemainingDays)
+            subtitleLabel2.text = NSLocalizedString("Keep ultimate protection and VPN.", tableName: "Lumen", comment: "Upgrade lumen view subtitle2")
+            upgradeButton.setTitle(NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Upgrade lumen view button text"), for: .normal)
+        } else {
+            titleLabel.text = NSLocalizedString("Ad-Blocker: OFF", tableName: "Lumen", comment: "Upgrade lumen view title")
+            subtitleLabel1.text = NSLocalizedString("You are browsing without ultimate protection.", tableName: "Lumen", comment: "Upgrade lumen view subtitle")
+            subtitleLabel1.numberOfLines = 2
+            upgradeButton.setTitle(NSLocalizedString("Learn More", tableName: "Lumen", comment: "Upgrade lumen view Learn more text"), for: .normal)
+        }
         
         titleLabel.font = UIFont.boldSystemFont(ofSize: 14)
         subtitleLabel1.font = UIFont.systemFont(ofSize: 12)
@@ -78,6 +83,7 @@ class UpgradeView: UIView {
         subtitleLabel1.snp.makeConstraints { (make) in
             make.top.equalTo(titleLabel.snp.bottom)
             make.leading.equalToSuperview()
+            make.trailing.equalTo(upgradeButton.snp.leading).offset(-25)
         }
         
         subtitleLabel2.snp.makeConstraints { (make) in
@@ -86,14 +92,15 @@ class UpgradeView: UIView {
         }
         
         upgradeButton.snp.makeConstraints { (make) in
-            make.bottom.trailing.equalToSuperview()
-            make.width.equalTo(100.0)
+            make.trailing.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.equalTo(110.0)
             make.height.equalTo(30.0)
         }
     }
     
     @objc func upgradeToPremium() {
-        delegate?.showUpgradeView()
+        delegate?.showUpgradeViewController()
     }
 }
 

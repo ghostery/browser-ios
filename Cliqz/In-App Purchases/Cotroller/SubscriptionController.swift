@@ -28,11 +28,13 @@ public class SubscriptionController {
             guard let self = self else { return }
             self.savePurchasedProduct(productIdentifier: lumenPurchaseInfo.productIdentifier)
             self.saveExpirationDate(lumenPurchaseInfo.expirationDate)
+            self.updateUltimateProtectionStatus()
         }).disposed(by: disposeBag)
         
         if getExpirationDate() == nil {
             saveExpirationDate(Date().addingTimeInterval(TrialPeriod))
         }
+        self.updateUltimateProtectionStatus()
     }
     
     private func saveExpirationDate(_ date: Date) {
@@ -45,6 +47,17 @@ public class SubscriptionController {
     
     private func savePurchasedProduct(productIdentifier: String) {
         UserDefaults.standard.set(productIdentifier, forKey: purchasedProductIdentifierKey)
+    }
+    
+    private func updateUltimateProtectionStatus() {
+        #if PAID
+        switch getCurrentSubscription() {
+        case .limited:
+            UserPreferences.instance.isProtectionOn = false
+        default:
+            return
+        }
+        #endif
     }
     
     //MARK:- Subscriptions

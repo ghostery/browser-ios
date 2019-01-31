@@ -39,9 +39,10 @@ class PaidControlCenterViewController: ControlCenterViewController {
     let protectionOff = NSLocalizedString("Ultimate Protection: OFF", tableName: "Lumen", comment:"[Lumen->Dashboard] Security Status OFF")
     
     let protectionOnColor = Lumen.Dashboard.protectionLabelColor(lumenTheme, lumenDashboardMode)
-    let protectionOffColor = Lumen.Dashboard.protectionLabelColor(lumenTheme, lumenDashboardMode)
+    var protectionOffColor = Lumen.Dashboard.protectionLabelColor(lumenTheme, lumenDashboardMode)
     
     var currentPeriod: Period = .Today
+    static let dimmedColor = UIColor(colorString: "BDC0CE")
     
     override func setupComponents() {
         
@@ -61,17 +62,11 @@ class PaidControlCenterViewController: ControlCenterViewController {
         
         tabs.selectedSegmentIndex = 0
         tabs.addTarget(self, action: #selector(tabChanged), for: .valueChanged)
-        #if PAID
-        if let trialRemainingDays = SubscriptionController.shared.getCurrentSubscription().trialRemainingDays() {
-            //TODO: add condition `trialRemainingDays < 8`
-            //TODO: Implement UpgradeViewDelegate
-            self.upgradeView = UpgradeView()
-            view.addSubview(upgradeView!)
-        }
-        #endif
-        setConstraints()
-        setStyle()
         
+        
+        setStyle()
+        self.addUpgradeViewIfRequired()
+        setConstraints()
         updateProtectionLabel(isOn: UserPreferences.instance.isProtectionOn)
         updateVPNButton()
         
@@ -243,9 +238,7 @@ class CCControlsView: UIView {
         stackView.addArrangedSubview(vpnContainer)
         stackView.addArrangedSubview(clearContainer)
         
-        stackView.axis = .horizontal
-        stackView.distribution = .equalCentering
-        stackView.alignment = .center
+       
         
         stackView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -254,35 +247,17 @@ class CCControlsView: UIView {
         setUpContainer(container: startContainer, button: startButton, label: startLabel)
         setUpContainer(container: vpnContainer, button: vpnButton, label: vpnLabel)
         setUpContainer(container: clearContainer, button: clearButton, label: clearLabel)
+        startButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis(rawValue: 1000)!)
+        
         
         startLabel.text = startLabelTitle(isSelected: !UserPreferences.instance.isProtectionOn)
         vpnLabel.text = NSLocalizedString("VPN", tableName: "Lumen", comment:"[Lumen->Dashboard] VPN button")
         clearLabel.text = NSLocalizedString("Clear", tableName: "Lumen", comment:"[Lumen->Dashboard] Clear button")
-        
-        startLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
-        vpnLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
-        clearLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
-        
-        startLabel.textAlignment = .center
-        vpnLabel.textAlignment = .center
-        clearLabel.textAlignment = .center
-        
-        startButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis(rawValue: 1000)!)
-        
-        vpnButton.setImage(Lumen.Dashboard.VPNButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
-        vpnButton.setImage(Lumen.Dashboard.VPNButtonImageSelected(lumenTheme, lumenDashboardMode), for: .selected)
-        
-        startButton.setImage(Lumen.Dashboard.startButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
-        startButton.setImage(Lumen.Dashboard.startButtonImageSelected(lumenTheme, lumenDashboardMode), for: .selected)
-        
-        clearButton.setImage(Lumen.Dashboard.clearButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
-        
         vpnButton.addTarget(self, action: #selector(vpnPressed), for: .touchUpInside)
         startButton.addTarget(self, action: #selector(startPressed), for: .touchUpInside)
         clearButton.addTarget(self, action: #selector(clearPressed), for: .touchUpInside)
         
-        startButton.isSelected = !UserPreferences.instance.isProtectionOn
-        vpnButton.isSelected = VPN.shared.status == .connected
+        setStyles()
     }
     
     func setUpContainer(container: UIView, button: UIButton, label: UILabel) {
@@ -321,8 +296,92 @@ class CCControlsView: UIView {
         delegate?.clearButtonPressed()
     }
     
+    func setStyles() {
+        
+        startLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
+        vpnLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
+        clearLabel.textColor = Lumen.Dashboard.buttonTitleColor(lumenTheme, lumenDashboardMode)
+        
+        startLabel.textAlignment = .center
+        vpnLabel.textAlignment = .center
+        clearLabel.textAlignment = .center
+        
+        
+        vpnButton.setImage(Lumen.Dashboard.VPNButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
+        vpnButton.setImage(Lumen.Dashboard.VPNButtonImageSelected(lumenTheme, lumenDashboardMode), for: .selected)
+        
+        startButton.setImage(Lumen.Dashboard.startButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
+        startButton.setImage(Lumen.Dashboard.startButtonImageSelected(lumenTheme, lumenDashboardMode), for: .selected)
+        
+        clearButton.setImage(Lumen.Dashboard.clearButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
+        
+        startButton.isSelected = !UserPreferences.instance.isProtectionOn
+        vpnButton.isSelected = VPN.shared.status == .connected
+        
+        stackView.axis = .horizontal
+        stackView.distribution = .equalCentering
+        stackView.alignment = .center
+        
+    }
+    
+    fileprivate func disableView() {
+        self.isUserInteractionEnabled = false
+        startLabel.textColor = PaidControlCenterViewController.dimmedColor
+        vpnLabel.textColor = PaidControlCenterViewController.dimmedColor
+        clearLabel.textColor = PaidControlCenterViewController.dimmedColor
+        
+        startButton.setImage(Lumen.Dashboard.disabledStartButtonImage(lumenTheme, lumenDashboardMode), for: .selected)
+        vpnButton.setImage(Lumen.Dashboard.disabledVPNButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
+        clearButton.setImage(Lumen.Dashboard.disabledClearButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
+    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension PaidControlCenterViewController : UpgradeLumenDelegate {
+    func showUpgradeViewController() {
+        //TODO: Display Upgrade View as modal view
+    }
+    
+    fileprivate func addUpgradeViewIfRequired() {
+        let currentSubscription = SubscriptionController.shared.getCurrentSubscription()
+        switch currentSubscription {
+        case .trial(_):
+            //TODO: add condition `trialRemainingDays < 8`
+            self.addUpgradeView()
+        case .limited:
+            self.addUpgradeView()
+            self.disableView()
+        default:
+            print("Premium User")
+        }
+    }
+    
+    fileprivate func addUpgradeView() {
+        self.upgradeView = UpgradeView()
+        self.upgradeView?.delegate = self
+        view.addSubview(upgradeView!)
+    }
+    
+    fileprivate func disableView() {
+        self.controls.disableView()
+        tabs.tintColor = PaidControlCenterViewController.dimmedColor
+        tabs.isUserInteractionEnabled = false
+        protectionOffColor = PaidControlCenterViewController.dimmedColor
+        
+        let overlay = UIView()
+        overlay.backgroundColor = UIColor.black
+        overlay.alpha = 0.5
+        self.view.addSubview(overlay)
+        overlay.snp.makeConstraints { (make) in
+            make.leading.trailing.bottom.equalToSuperview()
+            if let upgradeView = self.upgradeView {
+                make.top.equalTo(upgradeView.snp.bottom)
+            } else {
+                make.top.equalToSuperview()
+            }
+        }
     }
 }
 #endif

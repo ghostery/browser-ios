@@ -334,6 +334,26 @@ struct Lumen {
             return combo[name]?[mode] ?? nil
         }
         
+        
+        static let disabledStartButtonImage: LumenImage = { name, mode in
+            let bright = UIImage(named: "CCPause_disabled_Bright")
+            let dark   = UIImage(named: "CCPause_disabled_Dark")
+            let combo: LumenImageCombo  = [.Light: [.Normal: bright, .Disabled: bright], .Dark: [.Normal: dark, .Disabled: dark]]
+            return combo[name]?[mode] ?? nil
+        }
+        static let disabledVPNButtonImage: LumenImage = { name, mode in
+            let bright = UIImage(named: "CCVPNOff_disabled_Bright")
+            let dark   = UIImage(named: "CCVPNOff_disabled_Dark")
+            let combo: LumenImageCombo  = [.Light: [.Normal: bright, .Disabled: bright], .Dark: [.Normal: dark, .Disabled: dark]]
+            return combo[name]?[mode] ?? nil
+        }
+        static let disabledClearButtonImage: LumenImage = { name, mode in
+            let bright = UIImage(named: "CCClear_disabled_Bright")
+            let dark   = UIImage(named: "CCClear_disabled_Dark")
+            let combo: LumenImageCombo  = [.Light: [.Normal: bright, .Disabled: bright], .Dark: [.Normal: dark, .Disabled: dark]]
+            return combo[name]?[mode] ?? nil
+        }
+        
         static let adsBlockedImage: LumenImage = { name, mode in
             let enabled  = UIImage(named: "CCAdBlocking_Normal")
             let disabled = UIImage(named: "CCAdBlocking_Disabled")
