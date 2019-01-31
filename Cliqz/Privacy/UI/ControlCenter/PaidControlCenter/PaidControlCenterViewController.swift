@@ -26,6 +26,7 @@ var lumenDashboardMode: LumenThemeMode = UserPreferences.instance.isProtectionOn
 
 class PaidControlCenterViewController: ControlCenterViewController {
     
+    var upgradeView: UpgradeView?
     let controls = CCControlsView()
     let tabs = UISegmentedControl(items: [NSLocalizedString("Today", tableName: "Lumen", comment:"[Lumen->Dashboard] Today tab"),
                                           NSLocalizedString("Last 7 days", tableName: "Lumen", comment:"[Lumen->Dashboard] Last 7 days tab")])
@@ -60,9 +61,37 @@ class PaidControlCenterViewController: ControlCenterViewController {
         
         tabs.selectedSegmentIndex = 0
         tabs.addTarget(self, action: #selector(tabChanged), for: .valueChanged)
+        #if PAID
+        if let trialRemainingDays = SubscriptionController.shared.getCurrentSubscription().trialRemainingDays() {
+            //TODO: add condition `trialRemainingDays < 8`
+            //TODO: Implement UpgradeViewDelegate
+            self.upgradeView = UpgradeView()
+            view.addSubview(upgradeView!)
+        }
+        #endif
+        setConstraints()
+        setStyle()
         
+        updateProtectionLabel(isOn: UserPreferences.instance.isProtectionOn)
+        updateVPNButton()
+        
+        CCWidgetManager.shared.update(period: currentPeriod)
+    }
+    
+    private func setConstraints() {
+        if let upgradeView = self.upgradeView {
+            upgradeView.snp.makeConstraints { (make) in
+                make.top.leading.trailing.equalToSuperview().inset(10)
+                make.height.equalTo(UpgradeViewUX.height)
+            }
+        }
         controls.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(10)
+            if let upgradeView = self.upgradeView {
+                make.top.equalTo(upgradeView.snp.bottom).offset(10)
+            } else {
+                make.top.equalToSuperview().offset(10)
+            }
+            
             make.trailing.equalToSuperview().offset(-20)
             make.leading.equalToSuperview().offset(20)
             make.height.equalTo(100)
@@ -83,15 +112,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
             make.top.equalTo(protectionLabel.snp.bottom).offset(10)
             make.trailing.leading.bottom.equalToSuperview()
         }
-        
-        setStyle()
-        
-        updateProtectionLabel(isOn: UserPreferences.instance.isProtectionOn)
-        updateVPNButton()
-        
-        CCWidgetManager.shared.update(period: currentPeriod)
     }
-    
     func setStyle() {
         protectionLabel.textAlignment = .center
         protectionLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
