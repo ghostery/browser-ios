@@ -60,12 +60,14 @@ class UpgradeView: UIView {
     }
     
     fileprivate func setStyles() {
-        titleLabel.textColor = UIColor.theme.lumenUpgrade.label
-        subtitleLabel1.textColor = UIColor.theme.lumenUpgrade.label
-        subtitleLabel2.textColor = UIColor.theme.lumenUpgrade.label
+        #if PAID
+        titleLabel.textColor = UIColor.theme.lumenSubscription.upgradeLabel
+        subtitleLabel1.textColor = UIColor.theme.lumenSubscription.upgradeLabel
+        subtitleLabel2.textColor = UIColor.theme.lumenSubscription.upgradeLabel
         upgradeButton.setTitleColor(UIColor.white, for: .normal)
         upgradeButton.backgroundColor = UIColor.lumenBrightBlue
         upgradeButton.layer.cornerRadius = 15
+        #endif
     }
     
     fileprivate func setConstraints() {
