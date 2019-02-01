@@ -429,6 +429,7 @@
 		4FD0C7EF219C65A7003A9B61 /* EmailVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0C7EE219C65A7003A9B61 /* EmailVerificationViewController.swift */; };
 		4FD19FC5205A9F7700547DD5 /* NativeContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */; };
 		4FDC331921F8BAAD001215EF /* VPNCredentialsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */; };
+		4FDC334022005AA6001215EF /* ButtonWithUnderlinedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDC333F22005AA6001215EF /* ButtonWithUnderlinedText.swift */; };
 		4FF07D852063C99E001385A8 /* OffrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D802063C99D001385A8 /* OffrView.swift */; };
 		4FF07D862063C99E001385A8 /* OffrzViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D812063C99D001385A8 /* OffrzViewController.swift */; };
 		4FF07D872063C99E001385A8 /* OffrzEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */; };
@@ -1834,6 +1835,7 @@
 		4FD0C7EE219C65A7003A9B61 /* EmailVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationViewController.swift; sourceTree = "<group>"; };
 		4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeContextMenu.swift; sourceTree = "<group>"; };
 		4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNCredentialsService.swift; sourceTree = "<group>"; };
+		4FDC333F22005AA6001215EF /* ButtonWithUnderlinedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithUnderlinedText.swift; sourceTree = "<group>"; };
 		4FF07D802063C99D001385A8 /* OffrView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrView.swift; sourceTree = "<group>"; };
 		4FF07D812063C99D001385A8 /* OffrzViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzViewController.swift; sourceTree = "<group>"; };
 		4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzEmptyView.swift; sourceTree = "<group>"; };
@@ -3452,6 +3454,7 @@
 		4F8F3C0D202CB39F001C1A0F /* Cliqz */ = {
 			isa = PBXGroup;
 			children = (
+				4FDC333621FF618E001215EF /* Upgrade&Payment */,
 				1E8C403921F89A4F00873CB7 /* Theme */,
 				4FD0C7DD219B0C63003A9B61 /* Authentication */,
 				4FB2BB9C20B702C8006FB03D /* WiFi Protection */,
@@ -3519,6 +3522,14 @@
 				4FFD424421A44F9300EABF87 /* AuthenticationUX.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		4FDC333621FF618E001215EF /* Upgrade&Payment */ = {
+			isa = PBXGroup;
+			children = (
+				4FDC333F22005AA6001215EF /* ButtonWithUnderlinedText.swift */,
+			);
+			path = "Upgrade&Payment";
 			sourceTree = "<group>";
 		};
 		4FF07D712063C754001385A8 /* MyOffrz */ = {
@@ -6499,6 +6510,7 @@
 				D87F84AC20B891160091F2DA /* TabDisplayManager.swift in Sources */,
 				D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */,
 				D31CF65C1CC1959A001D0BD0 /* PrivilegedRequest.swift in Sources */,
+				4FDC334022005AA6001215EF /* ButtonWithUnderlinedText.swift in Sources */,
 				1E3FBF59207763FE00FAE3FD /* BrowserViewController+Connect.swift in Sources */,
 				D8D33A7D1FBD080300A20A28 /* SnapKitExtensions.swift in Sources */,
 				4FF07D862063C99E001385A8 /* OffrzViewController.swift in Sources */,
