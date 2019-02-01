@@ -12,7 +12,7 @@ import StoreKit
 import RxSwift
 
 class RevenueCatService: NSObject, IAPService {
-    private var purchases: RCPurchases?
+    private var purchases: Purchases?
     
     let observable = PublishSubject<LumenPurchaseInfo>()
     
@@ -22,7 +22,7 @@ class RevenueCatService: NSObject, IAPService {
             print("RevenuecatAPIKey is not available in Info.plist")
             return
         }
-        purchases = RCPurchases.configure(withAPIKey: apiKey)
+        purchases = Purchases.configure(withAPIKey: apiKey)
         purchases?.delegate = self
     }
     
@@ -31,34 +31,56 @@ class RevenueCatService: NSObject, IAPService {
             completionHandler(false, [SKProduct]())
             return
         }
+		purchases.entitlements { (entitlements, error) in
+			guard let entitlements = entitlements else {
+				completionHandler(false, nil)
+				return
+			}
+			print("Loaded list of products...")
+			var products = [SKProduct]()
+			for entitlement in entitlements.values {
+				for offering in entitlement.offerings.values {
+					if let product = offering.activeProduct {
+						products.append(product)
+					}
+				}
+			}
+			completionHandler(true, products)
+		}
         
-        purchases.entitlements({ (entitlements) in
-            guard let entitlements = entitlements else {
-                completionHandler(false, nil)
-                return
-            }
-            print("Loaded list of products...")
-            var products = [SKProduct]()
-            for entitlement in entitlements.values {
-                for offering in entitlement.offerings.values {
-                    if let product = offering.activeProduct {
-                        products.append(product)
-                    }
-                }
-            }
-            completionHandler(true, products)
-        })
+//        purchases.entitlements({ (entitlements) in
+//            guard let entitlements = entitlements else {
+//                completionHandler(false, nil)
+//                return
+//            }
+//            print("Loaded list of products...")
+//            var products = [SKProduct]()
+//            for entitlement in entitlements.values {
+//                for offering in entitlement.offerings.values {
+//                    if let product = offering.activeProduct {
+//                        products.append(product)
+//                    }
+//                }
+//            }
+//            completionHandler(true, products)
+//        })
     }
     
     
     public func buyProduct(_ product: SKProduct) {
         print("Buying \(product.productIdentifier)...")
-        purchases?.makePurchase(product)
+		purchases?.makePurchase(product, { (translation, info, error) in
+			// TODO:
+		})
+//        purchases?.makePurchase(product)
     }
     
     
     public func restorePurchases() {
-        purchases?.restoreTransactionsForAppStoreAccount()
+		purchases?.restoreTransactions({ (info, error) in
+			// TODO:
+		})
+//        purchases?.restoreTransactionsForAppStoreAccount()
     }
     
     public func getSubscriptionUserId() -> String? {
@@ -70,35 +92,35 @@ class RevenueCatService: NSObject, IAPService {
     }
 }
 
-extension RevenueCatService: RCPurchasesDelegate {
-    func purchases(_ purchases: RCPurchases, receivedUpdatedPurchaserInfo purchaserInfo: RCPurchaserInfo) {
+extension RevenueCatService: PurchasesDelegate {
+    func purchases(_ purchases: Purchases, receivedUpdatedPurchaserInfo purchaserInfo: PurchaserInfo) {
         print("receivedUpdatedPurchaserInfo: \(purchaserInfo.activeSubscriptions)")
         processPurchaseInfo(purchaserInfo)
     }
     
-    func purchases(_ purchases: RCPurchases, failedToUpdatePurchaserInfoWithError error: Error) {
+    func purchases(_ purchases: Purchases, failedToUpdatePurchaserInfoWithError error: Error) {
         print("failedToUpdatePurchaserInfoWithError: \(error.localizedDescription)")
     }
     
-    func purchases(_ purchases: RCPurchases, completedTransaction transaction: SKPaymentTransaction, withUpdatedInfo purchaserInfo: RCPurchaserInfo) {
+    func purchases(_ purchases: Purchases, completedTransaction transaction: SKPaymentTransaction, withUpdatedInfo purchaserInfo: PurchaserInfo) {
         print("completedTransaction")
         processPurchaseInfo(purchaserInfo)
     }
     
-    func purchases(_ purchases: RCPurchases, failedTransaction transaction: SKPaymentTransaction, withReason failureReason: Error) {
+    func purchases(_ purchases: Purchases, failedTransaction transaction: SKPaymentTransaction, withReason failureReason: Error) {
         print("failedTransaction: \(failureReason.localizedDescription)")
     }
     
-    func purchases(_ purchases: RCPurchases, restoredTransactionsWith purchaserInfo: RCPurchaserInfo) {
+    func purchases(_ purchases: Purchases, restoredTransactionsWith purchaserInfo: PurchaserInfo) {
         print("restoredTransactionsWith")
         processPurchaseInfo(purchaserInfo)
     }
     
-    func purchases(_ purchases: RCPurchases, failedToRestoreTransactionsWithError error: Error) {
+    func purchases(_ purchases: Purchases, failedToRestoreTransactionsWithError error: Error) {
         print("failedToRestoreTransactionsWithError: \(error.localizedDescription)")
     }
     
-    private func processPurchaseInfo(_ purchaserInfo: RCPurchaserInfo) {
+    private func processPurchaseInfo(_ purchaserInfo: PurchaserInfo) {
         guard let identifier = purchaserInfo.activeSubscriptions.first,
             let expirationDate = purchaserInfo.expirationDate(forProductIdentifier: identifier) else {
             return
