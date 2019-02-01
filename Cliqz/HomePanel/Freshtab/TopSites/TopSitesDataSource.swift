@@ -27,13 +27,15 @@ class TopSitesDataSource {
         if let delegate = UIApplication.shared.delegate as? AppDelegate, let profile = delegate.profile {
             self.profile = profile
         }
-		self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
-		self.loadTopSites()
+        self.refresh()
 	}
 
 	func refresh() {
 		self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: true, forceTopSites: true)
-		self.loadTopSites()
+        // Refresh is Async and consumes time to finish, we need to delay calling `loadTopSites` for few moments
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.loadTopSites()
+        }
 	}
 
 	func topSitesCount() -> Int {
