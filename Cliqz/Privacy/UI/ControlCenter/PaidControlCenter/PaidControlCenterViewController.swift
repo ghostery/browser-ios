@@ -341,15 +341,17 @@ class CCControlsView: UIView {
 
 extension PaidControlCenterViewController : UpgradeLumenDelegate {
     func showUpgradeViewController() {
-        //TODO: Display Upgrade View as modal view
+        let upgradLumenViewController = UpgradLumenViewController()
+        self.present(upgradLumenViewController, animated: true, completion: nil)
     }
     
     fileprivate func addUpgradeViewIfRequired() {
         let currentSubscription = SubscriptionController.shared.getCurrentSubscription()
         switch currentSubscription {
         case .trial(_):
-            //TODO: add condition `trialRemainingDays < 8`
-            self.addUpgradeView()
+            if let trialRemainingDays = currentSubscription.trialRemainingDays(), trialRemainingDays < 8 {
+                self.addUpgradeView()
+            }
         case .limited:
             self.addUpgradeView()
             self.disableView()

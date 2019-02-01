@@ -350,10 +350,9 @@ class VPNViewController: UIViewController {
         view.addSubview(infoLabel)
         view.addSubview(connectButton)
         #if PAID
-        if let trialRemainingDays = SubscriptionController.shared.getCurrentSubscription().trialRemainingDays() {
-            //TODO: add condition `trialRemainingDays < 8`
-            //TODO: Implement UpgradeView
+        if let trialRemainingDays = SubscriptionController.shared.getCurrentSubscription().trialRemainingDays(), trialRemainingDays < 8 {
             self.upgradeView = UpgradeView()
+            self.upgradeView?.delegate = self
             view.addSubview(upgradeView!)
         }
         #endif
@@ -621,6 +620,13 @@ extension VPNViewController: Themeable {
         self.tableView.reloadData()
     }
     
+}
+
+extension VPNViewController : UpgradeLumenDelegate {
+    func showUpgradeViewController() {
+        let upgradLumenViewController = UpgradLumenViewController()
+        self.present(upgradLumenViewController, animated: true, completion: nil)
+    }
 }
 
 #endif
