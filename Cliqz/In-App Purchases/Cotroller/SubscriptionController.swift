@@ -18,6 +18,7 @@ public class SubscriptionController {
     private let TrialPeriod: TimeInterval = 14 * 24 * 60 * 60
     private let purchasedProductIdentifierKey = "Lumen.PurchasedProductIdentifier"
     private let expirationDateKey = "Lumen.ExpirationDate"
+    private let trialExpiredViewLastDismissedKey = "Lumen.TrialExpiredView.lastDismissed"
     private let disposeBag = DisposeBag()
     
     //MARK:- initialization
@@ -93,6 +94,27 @@ public class SubscriptionController {
             
         }
         return .limited
+    }
+    
+    public func shouldShowTrialExpiredView() -> Bool {
+        switch getCurrentSubscription() {
+        case .limited:
+            guard let lastDismissedDate = UserDefaults.standard.object(forKey: trialExpiredViewLastDismissedKey) as? Date,
+                let daysCount = lastDismissedDate.daysUntil(Date()) else {
+                return true
+            }
+            return daysCount > 7
+        default:
+            return false
+        }
+    }
+    
+    public func trialExpiredViewDisplayed() {
+        UserDefaults.standard.set(nil, forKey: trialExpiredViewLastDismissedKey)
+    }
+    
+    public func trialExpiredViewDismissed() {
+        UserDefaults.standard.set(Date(), forKey: trialExpiredViewLastDismissedKey)
     }
 }
 
