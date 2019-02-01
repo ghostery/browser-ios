@@ -115,6 +115,7 @@
 		1EBB08B92068FC9700C6DFFE /* Eula.html in Resources */ = {isa = PBXBuildFile; fileRef = 1EBB08AA2068FC9600C6DFFE /* Eula.html */; };
 		1EC9C75420CFF6F200082652 /* BrowserViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC9C74520CFF6F200082652 /* BrowserViewControllerHelper.swift */; };
 		1EC9C7AE20D1342D00082652 /* Ghostery.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1EC9C7AD20D1342C00082652 /* Ghostery.xcconfig */; };
+		1ED525AF220333DE0017AB0B /* TrialExpiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED525AE220333DE0017AB0B /* TrialExpiredView.swift */; };
 		1EDF0B1F207B837F00856493 /* KeyboardAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */; };
 		1EDF0B22207B86A200856493 /* QuerySuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B21207B86A200856493 /* QuerySuggestionView.swift */; };
 		1EDF0B24207B86DA00856493 /* QuerySuggestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF0B23207B86DA00856493 /* QuerySuggestions.swift */; };
@@ -1537,6 +1538,7 @@
 		1EC92DAE2109EFB600D49C7D /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = it; path = it.lproj/Cliqz.stringsdict; sourceTree = "<group>"; };
 		1EC9C74520CFF6F200082652 /* BrowserViewControllerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerHelper.swift; sourceTree = "<group>"; };
 		1EC9C7AD20D1342C00082652 /* Ghostery.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Ghostery.xcconfig; path = Configuration/Ghostery.xcconfig; sourceTree = "<group>"; };
+		1ED525AE220333DE0017AB0B /* TrialExpiredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialExpiredView.swift; sourceTree = "<group>"; };
 		1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
 		1EDF0B21207B86A200856493 /* QuerySuggestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuerySuggestionView.swift; sourceTree = "<group>"; };
 		1EDF0B23207B86DA00856493 /* QuerySuggestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuerySuggestions.swift; sourceTree = "<group>"; };
@@ -2811,6 +2813,7 @@
 			isa = PBXGroup;
 			children = (
 				1E9B70852200C9FC005350A5 /* UpgradeView.swift */,
+				1ED525AE220333DE0017AB0B /* TrialExpiredView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -6644,6 +6647,7 @@
 				AF6FA98820652D4600D7F9F0 /* TrackerListApp.swift in Sources */,
 				1E2C227C20B4149000AA00B5 /* SendUsageDataTableViewController.swift in Sources */,
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
+				1ED525AF220333DE0017AB0B /* TrialExpiredView.swift in Sources */,
 				1EDF0B24207B86DA00856493 /* QuerySuggestions.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
 				1E2720CB21788DD000A8ADD4 /* PaidControlCenterViewController.swift in Sources */,
