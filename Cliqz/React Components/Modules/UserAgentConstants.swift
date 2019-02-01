@@ -19,7 +19,7 @@ open class UserAgentConstants : RCTEventEmitter {
             return "MI\(product)\(type)"
         }
     }
-    
+
     fileprivate var appVersion: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     }

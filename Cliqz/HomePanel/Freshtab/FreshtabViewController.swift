@@ -190,7 +190,7 @@ class FreshtabViewController: UIViewController, HomePanel {
         self.scrollView.delegate = self
         self.view.addSubview(self.scrollView)
         self.normalModeView.backgroundColor = UIColor.clear
-        
+
         self.scrollView.delegate = self
         self.scrollView.addSubview(self.normalModeView)
         
