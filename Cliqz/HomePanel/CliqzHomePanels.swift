@@ -12,8 +12,12 @@ class CliqzHomePanels {
 
     let topSitesPanel = HomePanelDescriptor(
                         makeViewController: { profile in
-                                                return FreshtabViewController(profile: profile)
-                                            },
+							#if PAID
+								return LumenFreshtabViewController(profile: profile)
+							#else
+								return FreshtabViewController(profile: profile)
+							#endif
+						},
                         imageName: "panelIconFreshtab",
                         accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label"),
                         accessibilityIdentifier: "HomePanels.TopSites")
