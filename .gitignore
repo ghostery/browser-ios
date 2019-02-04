@@ -90,5 +90,4 @@ node_modules
 #Cliqz
 Cliqz/JSEngine/*
 Pods/
-Podfile.lock
 artifacts/
