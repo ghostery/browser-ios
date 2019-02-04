@@ -423,6 +423,7 @@
 		4F934B3C22048ACD005D438C /* UpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B3222048ACD005D438C /* UpgradeView.swift */; };
 		4F934B3D22048ACD005D438C /* SubscriptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B3422048ACD005D438C /* SubscriptionController.swift */; };
 		4F934B3F22048AE9005D438C /* ButtonWithUnderlinedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B3E22048AE8005D438C /* ButtonWithUnderlinedText.swift */; };
+		4F934B4C220840E2005D438C /* LumenFreshtabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B4B220840E2005D438C /* LumenFreshtabViewController.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
 		4F989018219DC8A7003BC800 /* RegistrationConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F989017219DC8A7003BC800 /* RegistrationConfirmationViewController.swift */; };
 		4F9DD64320BD562B00107976 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8752028CE4000018880 /* disconnect-social.json */; };
@@ -1839,6 +1840,7 @@
 		4F934B3222048ACD005D438C /* UpgradeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpgradeView.swift; sourceTree = "<group>"; };
 		4F934B3422048ACD005D438C /* SubscriptionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionController.swift; sourceTree = "<group>"; };
 		4F934B3E22048AE8005D438C /* ButtonWithUnderlinedText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonWithUnderlinedText.swift; sourceTree = "<group>"; };
+		4F934B4B220840E2005D438C /* LumenFreshtabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenFreshtabViewController.swift; sourceTree = "<group>"; };
 		4F9757391AFA6F37006ECC24 /* readerContent.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readerContent.html; sourceTree = "<group>"; };
 		4F989017219DC8A7003BC800 /* RegistrationConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationConfirmationViewController.swift; sourceTree = "<group>"; };
 		4FAA4EC521AFEF8000CD41A7 /* LumenAccountTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenAccountTableViewController.swift; sourceTree = "<group>"; };
@@ -3532,6 +3534,7 @@
 			isa = PBXGroup;
 			children = (
 				4F934B3422048ACD005D438C /* SubscriptionController.swift */,
+				4F934B4B220840E2005D438C /* LumenFreshtabViewController.swift */,
 			);
 			path = Cotroller;
 			sourceTree = "<group>";
@@ -6508,6 +6511,7 @@
 				1EDF0B1F207B837F00856493 /* KeyboardAccessoryView.swift in Sources */,
 				AF03AA1A20BC117600A9D097 /* LoadTrackerListOperation.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
+				4F934B4C220840E2005D438C /* LumenFreshtabViewController.swift in Sources */,
 				C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */,
 				1E4E772D214F927F007AFA60 /* SearchEnginesModule.swift in Sources */,
 				4FF07D882063C99E001385A8 /* OffrzDataSource.swift in Sources */,

@@ -31,13 +31,13 @@ class FreshtabViewController: UIViewController, HomePanel {
 		}
 	}
 
-	fileprivate let scrollView: UIScrollView = UIScrollView()
+	internal let scrollView: UIScrollView = UIScrollView()
 	fileprivate let normalModeView: UIView = UIView()
 	// TODO: Finialize need of forgetModeView and hopefully remove
 	fileprivate var forgetModeView: ForgetModeView?
 
 	fileprivate let topSitesViewController = TopSitesViewController(dataSource: TopSitesDataSource.instance)
-	fileprivate let newsViewController = NewsViewController(dataSource: NewsDataSource.instance)
+	internal let newsViewController = NewsViewController(dataSource: NewsDataSource.instance)
     
     fileprivate let topSitesEditModeOverlay = UIView()
     
@@ -71,10 +71,6 @@ class FreshtabViewController: UIViewController, HomePanel {
 		restoreToInitialState()
 		
 		updateViews()
-        
-        #if PAID
-        newsViewController.view.isHidden = true
-        #endif
 	}
     
     override func viewDidAppear(_ animated: Bool) {
@@ -97,7 +93,7 @@ class FreshtabViewController: UIViewController, HomePanel {
 		}
 	}
 
-    func setupConstraints() {
+    private func setupConstraints() {
         if !isForgetMode {
             
             self.scrollView.snp.makeConstraints({ (make) in
@@ -193,9 +189,9 @@ class FreshtabViewController: UIViewController, HomePanel {
 
         self.scrollView.delegate = self
         self.scrollView.addSubview(self.normalModeView)
-        
+
         self.normalModeView.addSubview(container)
-        
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         tap.delegate = self
