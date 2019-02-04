@@ -43,7 +43,10 @@ class LumenFreshtabViewController: FreshtabViewController {
 				infoView = btn
 				self.view.addSubview(btn)
 			} else if days >= 0 {
-				
+				let upgradeView = UpgradeView()
+				upgradeView.delegate = self
+				infoView = upgradeView
+				view.addSubview(upgradeView)
 			} else {
 				// TODO: invalid state
 			}
@@ -54,19 +57,40 @@ class LumenFreshtabViewController: FreshtabViewController {
 
 	@objc
 	private func upgrade() {
-		
+		self.showUpgradeOptionsViewController()
 	}
 
 	private func setupConstraints() {
-		if let view1st7Days = self.infoView as? UIButton {
-			view1st7Days.snp.makeConstraints { (make) in
+		if let view1stWeek = self.infoView as? UIButton {
+			view1stWeek.snp.makeConstraints { (make) in
 				make.left.right.bottom.equalToSuperview()
 				make.height.equalTo(50)
 			}
 			self.scrollView.snp.remakeConstraints({ (make) in
 				make.top.left.right.equalToSuperview()
-				make.bottom.equalTo(view1st7Days.snp.top)
+				make.bottom.equalTo(view1stWeek.snp.top)
+			})
+		} else if let view2ndWeek = self.infoView as? UpgradeView {
+			view2ndWeek.snp.makeConstraints { (make) in
+				make.left.right.top.equalToSuperview()
+				make.height.equalTo(UpgradeViewUX.height)
+			}
+			self.scrollView.snp.remakeConstraints({ (make) in
+				make.bottom.left.right.equalToSuperview()
+				make.top.equalTo(view2ndWeek.snp.bottom)
 			})
 		}
+	}
+
+	fileprivate func showUpgradeOptionsViewController() {
+		let upgradLumenViewController = UpgradLumenViewController()
+		self.present(upgradLumenViewController, animated: true, completion: nil)
+	}
+}
+
+extension LumenFreshtabViewController : UpgradeLumenDelegate {
+
+	func showUpgradeViewController() {
+		self.showUpgradeOptionsViewController()
 	}
 }
