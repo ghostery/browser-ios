@@ -93,6 +93,18 @@ public class SubscriptionController {
         return storeService.getSubscriptionUserId()
     }
     
+    public func isVPNEnabled() -> Bool {
+        let currentSubscription = getCurrentSubscription()
+        switch currentSubscription {
+        case .trial(_):
+            return true
+        case .premium(let premiumType, _):
+            return premiumType.hasVPN()
+        default:
+            return false
+        }
+    }
+
     public func getCurrentSubscription() -> LumenSubscriptionType {
         
         if let expirationDate = getExpirationDate(), Date().timeIntervalSince(expirationDate) < 0 {
