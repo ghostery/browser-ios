@@ -47,40 +47,25 @@ class RevenueCatService: NSObject, IAPService {
 			}
 			completionHandler(true, products)
 		}
-        
-//        purchases.entitlements({ (entitlements) in
-//            guard let entitlements = entitlements else {
-//                completionHandler(false, nil)
-//                return
-//            }
-//            print("Loaded list of products...")
-//            var products = [SKProduct]()
-//            for entitlement in entitlements.values {
-//                for offering in entitlement.offerings.values {
-//                    if let product = offering.activeProduct {
-//                        products.append(product)
-//                    }
-//                }
-//            }
-//            completionHandler(true, products)
-//        })
     }
     
     
     public func buyProduct(_ product: SKProduct) {
         print("Buying \(product.productIdentifier)...")
-		purchases?.makePurchase(product, { (translation, info, error) in
-			// TODO:
+		purchases?.makePurchase(product, { (transaction, purchaserInfo, error) in
+            if error == nil, let purchaserInfo = purchaserInfo {
+                self.processPurchaseInfo(purchaserInfo)
+            }
 		})
-//        purchases?.makePurchase(product)
     }
     
     
     public func restorePurchases() {
-		purchases?.restoreTransactions({ (info, error) in
-			// TODO:
+		purchases?.restoreTransactions({ (purchaserInfo, error) in
+            if error == nil, let purchaserInfo = purchaserInfo {
+                self.processPurchaseInfo(purchaserInfo)
+            }
 		})
-//        purchases?.restoreTransactionsForAppStoreAccount()
     }
     
     public func getSubscriptionUserId() -> String? {
