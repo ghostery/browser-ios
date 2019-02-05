@@ -133,6 +133,17 @@ class VPN {
 
         NEVPNManager.shared().loadFromPreferences { (error) in
             if NEVPNManager.shared().protocolConfiguration == nil || NEVPNManager.shared().protocolConfiguration?.serverAddress != country.endpoint {
+				
+				let a = NEVPNProtocolIKEv2()
+				a.useExtendedAuthentication = true
+				a.authenticationMethod = .sharedSecret
+				a.sharedSecretReference = creds.sharedSecret
+				a.username = creds.username
+				a.passwordReference = creds.password
+				a.serverAddress = country.endpoint
+				a.disconnectOnSleep = false
+				
+				
                 let newIPSec = NEVPNProtocolIPSec()
                 //setUp the protocol
                 newIPSec.useExtendedAuthentication = true
@@ -142,7 +153,7 @@ class VPN {
                 
                 newIPSec.username = creds.username
                 newIPSec.passwordReference = creds.password
-                newIPSec.serverAddress = country.endpoint;
+                newIPSec.serverAddress = country.endpoint
                 newIPSec.disconnectOnSleep = false
                 
                 //Need to figure out how to do this properly. If we do it like this it will say that the configuration is invalid.
@@ -150,7 +161,7 @@ class VPN {
 //                alwaysConnected.interfaceTypeMatch = .any
 //                NEVPNManager.shared().onDemandRules = [alwaysConnected]
                 
-                NEVPNManager.shared().protocolConfiguration = newIPSec
+                NEVPNManager.shared().protocolConfiguration = a
                 NEVPNManager.shared().isOnDemandEnabled = true
                 NEVPNManager.shared().isEnabled = true
 
