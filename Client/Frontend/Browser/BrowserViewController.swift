@@ -1362,6 +1362,11 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
 
 extension BrowserViewController: SettingsDelegate {
     func settingsOpenURLInNewTab(_ url: URL) {
+        //Cliqz: dismiss control center if it is present
+        if let cc = self.childViewControllers.last, let _ = cc as? ControlCenterViewController {
+            hideControlCenter()
+        }
+        
         self.openURLInNewTab(url, isPrivileged: false)
     }
 }

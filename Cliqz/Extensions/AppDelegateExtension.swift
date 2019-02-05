@@ -44,6 +44,8 @@ extension AppDelegate {
 		navigationController.delegate = self
 		navigationController.isNavigationBarHidden = true
 		navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
+        
+        SubscriptionController.shared.requestProducts()
 	}
 
 	func showAuthentication() {

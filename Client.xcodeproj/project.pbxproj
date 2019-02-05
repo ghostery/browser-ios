@@ -44,6 +44,7 @@
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
 		1E0B0B78217485BB0088C520 /* Paid.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1E0B0B77217485BB0088C520 /* Paid.xcconfig */; };
 		1E0B0B872174C20E0088C520 /* PaidLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E0B0B862174C20D0088C520 /* PaidLaunchScreen.xib */; };
+		1E0EC3E72209A95400EC3A38 /* SubscriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0EC3E62209A95300EC3A38 /* SubscriptionTableViewCell.swift */; };
 		1E138D7F20A2E4F400B82C13 /* BookmarksModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */; };
 		1E138E1420A5983D00B82C13 /* CliqzBookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */; };
 		1E244CD72180A082004A73E9 /* CCAbstractCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E244CCB2180A081004A73E9 /* CCAbstractCell.swift */; };
@@ -1453,6 +1454,7 @@
 		1E0B0B77217485BB0088C520 /* Paid.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Paid.xcconfig; path = Configuration/Paid.xcconfig; sourceTree = "<group>"; };
 		1E0B0B8421748A2A0088C520 /* PaidClient.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = PaidClient.entitlements; sourceTree = "<group>"; };
 		1E0B0B862174C20D0088C520 /* PaidLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PaidLaunchScreen.xib; sourceTree = "<group>"; };
+		1E0EC3E62209A95300EC3A38 /* SubscriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTableViewCell.swift; sourceTree = "<group>"; };
 		1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksModelExtensions.swift; sourceTree = "<group>"; };
 		1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzBookmarksPanel.swift; sourceTree = "<group>"; };
 		1E244CCB2180A081004A73E9 /* CCAbstractCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCAbstractCell.swift; sourceTree = "<group>"; };
@@ -3524,6 +3526,7 @@
 			children = (
 				4F934B3E22048AE8005D438C /* ButtonWithUnderlinedText.swift */,
 				4F934B3022048ACD005D438C /* UpgradLumenViewController.swift */,
+				1E0EC3E62209A95300EC3A38 /* SubscriptionTableViewCell.swift */,
 				4F934B3122048ACD005D438C /* TrialExpiredView.swift */,
 				4F934B3222048ACD005D438C /* UpgradeView.swift */,
 			);
@@ -6650,6 +6653,7 @@
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
 				1E2720CB21788DD000A8ADD4 /* PaidControlCenterViewController.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
+				1E0EC3E72209A95400EC3A38 /* SubscriptionTableViewCell.swift in Sources */,
 				E65075521E37F6D1006961AC /* UIViewExtensions.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */,
 				E6927EC01C7B6FB800D03F75 /* ErrorToast.swift in Sources */,

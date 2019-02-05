@@ -20,6 +20,7 @@ public class SubscriptionController {
     private let expirationDateKey = "Lumen.ExpirationDate"
     private let trialExpiredViewLastDismissedKey = "Lumen.TrialExpiredView.lastDismissed"
     private let disposeBag = DisposeBag()
+    var availableSubscriptions = [PremiumType : SKProduct]()
     
     //MARK:- initialization
     init() {
@@ -62,12 +63,22 @@ public class SubscriptionController {
     }
     
     //MARK:- Subscriptions
-    public func requestProducts(completionHandler: @escaping ProductsRequestCompletionHandler) {
-        storeService.requestProducts(completionHandler: completionHandler)
+    public func requestProducts() {
+        storeService.requestProducts {[weak self] (success, products) in
+            guard let self = self, let products = products, success else { return }
+            self.availableSubscriptions.removeAll()
+            for product in products {
+                if let premiumType = PremiumType.init(rawValue: product.productIdentifier) {
+                    self.availableSubscriptions[premiumType] = product
+                }
+            }
+        }
     }
     
-    public func buyProduct(_ product: SKProduct) {
-        storeService.buyProduct(product)
+    public func buyProduct(_ premiumType: PremiumType) {
+        if let product = availableSubscriptions[premiumType] {
+            storeService.buyProduct(product)
+        }
     }
     
     public class func canMakePayments() -> Bool {

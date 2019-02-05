@@ -110,6 +110,8 @@
 	</array>
 	<key>PocketEnvironmentAPIKey</key>
 	<string>$(POCKET_API_KEY)</string>
+	<key>RevenuecatAPIKey</key>
+	<string></string>
 	<key>SentryDSN</key>
 	<string></string>
 	<key>UIAppFonts</key>

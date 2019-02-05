@@ -498,22 +498,39 @@ class VPNViewController: UIViewController {
     
     @objc func connectButtonPressed(_ sender: Any) {
         //try to connect
-        
-//        guard AuthenticationService.shared.hasValidSubscription() == true else {
-//            let text = NSLocalizedString("Your subscription has expired. Renew your subscription to continue to use the VPN.", tableName: "Lumen", comment: "[VPN] subscription expired alert text")
-//            let alert = UIAlertController.alertWithOkay(text: text)
-//            self.present(alert, animated: true, completion: nil)
-//            return
-//        }
+        guard SubscriptionController.shared.isVPNEnabled() else {
+            displayUnlockVPNAlert()
+            return
+        }
 		
         if (NEVPNManager.shared().connection.status == .connected) {
             VPN.disconnectVPN()
-        }
-        else {
+        } else {
             VPN.connect2VPN()
         }
     }
-    
+    private func displayUnlockVPNAlert () {
+        let title = NSLocalizedString("VPN Protection.", tableName: "Lumen", comment: "[VPN] subscription expired alert title")
+        let text = NSLocalizedString("Unlock the VPN feature to get the best out of Lumen.", tableName: "Lumen", comment: "[VPN] subscription expired alert text")
+        let alert = UIAlertController(
+            title: title,
+            message: text,
+            preferredStyle: .alert
+        )
+        
+        //Learn More
+        let cancelAction = UIAlertAction(title: NSLocalizedString("No, Thanks", tableName: "Lumen", comment: "`No, Thanks` alert button"), style: .default, handler: nil)
+        alert.addAction(cancelAction)
+        
+        
+        let okAction = UIAlertAction(title: NSLocalizedString("Learn More", tableName: "Lumen", comment: "`Learn More` alert button"), style: .default) { [weak self](action) in
+            self?.showUpgradeViewController()
+        }
+        alert.addAction(okAction)
+        
+        
+        self.present(alert, animated: true, completion: nil)
+    }
     @objc func timerFired(_ sender: Timer) {
         
         func convert(num: Int?) -> String {
