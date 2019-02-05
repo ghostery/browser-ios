@@ -306,6 +306,12 @@ platform :ios do
     # Configuring Sentry DSN
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
 
+    # Configuring Revenuecat APIs
+    sh("cd .. && plutil -replace RevenuecatAPIKey -string $RevenuecatAPIKey Client/Info.plist")
+
+    # Configuring Lumen APIs
+    sh("cd .. && plutil -replace LumenAPIKey -string $LumenAPIKey Client/Info.plist")
+
     # Building ReactNative Entension
     sh("cd .. && npm run bundle")
 
