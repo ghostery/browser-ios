@@ -32,7 +32,9 @@ steps:
     command: 'install'
 
 - task: CocoaPods@0
-  displayName: 'pod install'
+  displayName: 'pod install --repo-update'
+  inputs:
+    forceRepoUpdate: true
 
 - task: Npm@1
   displayName: 'npm run bundle'
