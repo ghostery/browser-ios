@@ -455,7 +455,7 @@ class CliqzPrivacyPolicySetting: ShowCliqzPageSetting {
         return URL(string: "https://lumenbrowser.com/dse.html")
     }
 }
-
+/* [IP-193] Remove Authentication
 class LumenAccountSetting: Setting {
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
     override var style: UITableViewCellStyle { return .value1 }
@@ -472,7 +472,7 @@ class LumenAccountSetting: Setting {
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
-
+*/
 #elseif GHOSTERY
 class CliqzTipsAndTricksSetting: ShowCliqzPageSetting {
     

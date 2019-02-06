@@ -426,7 +426,6 @@
 		4F934B3F22048AE9005D438C /* ButtonWithUnderlinedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B3E22048AE8005D438C /* ButtonWithUnderlinedText.swift */; };
 		4F934B4C220840E2005D438C /* LumenFreshtabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B4B220840E2005D438C /* LumenFreshtabViewController.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
-		4F989018219DC8A7003BC800 /* RegistrationConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F989017219DC8A7003BC800 /* RegistrationConfirmationViewController.swift */; };
 		4F9DD64320BD562B00107976 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8752028CE4000018880 /* disconnect-social.json */; };
 		4FAA4EC621AFEF8000CD41A7 /* LumenAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAA4EC521AFEF8000CD41A7 /* LumenAccountTableViewController.swift */; };
 		4FAA4ED021B051F400CD41A7 /* ConfirmDeletionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAA4ECF21B051F400CD41A7 /* ConfirmDeletionViewController.swift */; };
@@ -437,8 +436,6 @@
 		4FBBC14020359D3100445AD1 /* ForgetModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBBC13F20359D3100445AD1 /* ForgetModeView.swift */; };
 		4FBBC1502035E02900445AD1 /* NewsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBBC14F2035E02900445AD1 /* NewsViewCell.swift */; };
 		4FBBC1522035E5C400445AD1 /* NewsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBBC1512035E5C400445AD1 /* NewsDataSource.swift */; };
-		4FD0C7E7219B0E7F003A9B61 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0C7E6219B0E7F003A9B61 /* RegistrationViewController.swift */; };
-		4FD0C7EF219C65A7003A9B61 /* EmailVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0C7EE219C65A7003A9B61 /* EmailVerificationViewController.swift */; };
 		4FD19FC5205A9F7700547DD5 /* NativeContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */; };
 		4FDC331921F8BAAD001215EF /* VPNCredentialsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */; };
 		4FF07D852063C99E001385A8 /* OffrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D802063C99D001385A8 /* OffrView.swift */; };
@@ -447,11 +444,9 @@
 		4FF07D882063C99E001385A8 /* OffrzDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D832063C99E001385A8 /* OffrzDataSource.swift */; };
 		4FF07D892063C99E001385A8 /* OffrzOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D842063C99E001385A8 /* OffrzOnboardingView.swift */; };
 		4FF07D8B2063CA46001385A8 /* OffrzDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D8A2063CA46001385A8 /* OffrzDataService.swift */; };
-		4FFD423721A2F12B00EABF87 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD423621A2F12B00EABF87 /* AuthenticationService.swift */; };
 		4FFD424121A318D300EABF87 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD424021A318D300EABF87 /* EmailTextField.swift */; };
 		4FFD424321A44EC600EABF87 /* GradientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD424221A44EC600EABF87 /* GradientBackgroundView.swift */; };
 		4FFD424521A44F9300EABF87 /* AuthenticationUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD424421A44F9300EABF87 /* AuthenticationUX.swift */; };
-		4FFD424A21A5767800EABF87 /* BondAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFD424921A5767800EABF87 /* BondAPIManager.swift */; };
 		4FFD428221ADA29100EABF87 /* Cliqz.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FFD428121ADA29100EABF87 /* Cliqz.xcassets */; };
 		5002717C41BC7C50F67F1CAD /* StateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50027345B49B967409DDA348 /* StateTests.swift */; };
 		554867231DC3935A00183DAA /* HomePageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554867221DC3935A00183DAA /* HomePageTests.swift */; };
@@ -1844,7 +1839,6 @@
 		4F934B3E22048AE8005D438C /* ButtonWithUnderlinedText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonWithUnderlinedText.swift; sourceTree = "<group>"; };
 		4F934B4B220840E2005D438C /* LumenFreshtabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenFreshtabViewController.swift; sourceTree = "<group>"; };
 		4F9757391AFA6F37006ECC24 /* readerContent.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readerContent.html; sourceTree = "<group>"; };
-		4F989017219DC8A7003BC800 /* RegistrationConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationConfirmationViewController.swift; sourceTree = "<group>"; };
 		4FAA4EC521AFEF8000CD41A7 /* LumenAccountTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenAccountTableViewController.swift; sourceTree = "<group>"; };
 		4FAA4ECF21B051F400CD41A7 /* ConfirmDeletionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmDeletionViewController.swift; sourceTree = "<group>"; };
 		4FB2BBAE20B70680006FB03D /* DeviceInfoExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoExtension.swift; sourceTree = "<group>"; };
@@ -1854,8 +1848,6 @@
 		4FBBC13F20359D3100445AD1 /* ForgetModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetModeView.swift; sourceTree = "<group>"; };
 		4FBBC14F2035E02900445AD1 /* NewsViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsViewCell.swift; sourceTree = "<group>"; };
 		4FBBC1512035E5C400445AD1 /* NewsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDataSource.swift; sourceTree = "<group>"; };
-		4FD0C7E6219B0E7F003A9B61 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
-		4FD0C7EE219C65A7003A9B61 /* EmailVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationViewController.swift; sourceTree = "<group>"; };
 		4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeContextMenu.swift; sourceTree = "<group>"; };
 		4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNCredentialsService.swift; sourceTree = "<group>"; };
 		4FF07D802063C99D001385A8 /* OffrView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrView.swift; sourceTree = "<group>"; };
@@ -1864,11 +1856,9 @@
 		4FF07D832063C99E001385A8 /* OffrzDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzDataSource.swift; sourceTree = "<group>"; };
 		4FF07D842063C99E001385A8 /* OffrzOnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzOnboardingView.swift; sourceTree = "<group>"; };
 		4FF07D8A2063CA46001385A8 /* OffrzDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzDataService.swift; sourceTree = "<group>"; };
-		4FFD423621A2F12B00EABF87 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		4FFD424021A318D300EABF87 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
 		4FFD424221A44EC600EABF87 /* GradientBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackgroundView.swift; sourceTree = "<group>"; };
 		4FFD424421A44F9300EABF87 /* AuthenticationUX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationUX.swift; sourceTree = "<group>"; };
-		4FFD424921A5767800EABF87 /* BondAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BondAPIManager.swift; sourceTree = "<group>"; };
 		4FFD428121ADA29100EABF87 /* Cliqz.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Cliqz.xcassets; sourceTree = "<group>"; };
 		50027345B49B967409DDA348 /* StateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StateTests.swift; path = SyncTests/StateTests.swift; sourceTree = "<group>"; };
 		52E513DEB09CCDAA858D5CDE /* Pods_Client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3341,7 +3331,6 @@
 				4F0445E1203344E300E2C0C7 /* LogoLoader.swift */,
 				1EEA369420615725003B6AD5 /* DownloadManager.swift */,
 				AF7DD43F20F785D30090956F /* CustomSimpleToast.swift */,
-				4FFD424921A5767800EABF87 /* BondAPIManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -3576,10 +3565,6 @@
 			isa = PBXGroup;
 			children = (
 				4FFD424021A318D300EABF87 /* EmailTextField.swift */,
-				4FD0C7E6219B0E7F003A9B61 /* RegistrationViewController.swift */,
-				4FD0C7EE219C65A7003A9B61 /* EmailVerificationViewController.swift */,
-				4F989017219DC8A7003BC800 /* RegistrationConfirmationViewController.swift */,
-				4FFD423621A2F12B00EABF87 /* AuthenticationService.swift */,
 				4FFD424221A44EC600EABF87 /* GradientBackgroundView.swift */,
 				4FFD424421A44F9300EABF87 /* AuthenticationUX.swift */,
 			);
@@ -5915,14 +5900,11 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Client/Pods-Client-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AWSCore/AWSCore.framework",
 				"${BUILT_PRODUCTS_DIR}/AWSSNS/AWSSNS.framework",
-				"${BUILT_PRODUCTS_DIR}/BondAPI/BondAPI.framework",
-				"${BUILT_PRODUCTS_DIR}/BoringSSL-GRPC/openssl_grpc.framework",
 				"${BUILT_PRODUCTS_DIR}/CRToast/CRToast.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
 				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
 				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
 				"${BUILT_PRODUCTS_DIR}/KKDomain/KKDomain.framework",
-				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/Purchases/Purchases.framework",
 				"${BUILT_PRODUCTS_DIR}/RNDeviceInfo/RNDeviceInfo.framework",
 				"${BUILT_PRODUCTS_DIR}/RNFS/RNFS.framework",
@@ -5935,12 +5917,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC/ProtoRPC.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary/RxLibrary.framework",
 				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
-				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 				"${PODS_ROOT}/../node_modules/react-native-webrtc/ios/WebRTC.framework",
 				"${BUILT_PRODUCTS_DIR}/react-native-webrtc/react_native_webrtc.framework",
 				"${BUILT_PRODUCTS_DIR}/yoga/yoga.framework",
@@ -5949,14 +5926,11 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSSNS.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BondAPI.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl_grpc.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CRToast.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KKDomain.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Purchases.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNDeviceInfo.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNFS.framework",
@@ -5969,12 +5943,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxLibrary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/react_native_webrtc.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
@@ -6659,7 +6628,6 @@
 				E6927EC01C7B6FB800D03F75 /* ErrorToast.swift in Sources */,
 				D30B101E1AA7F9C600C01CA3 /* HomePanels.swift in Sources */,
 				1EAFE561205FFE21006A36B4 /* ToggleSubSettingsTableViewController.swift in Sources */,
-				4FFD423721A2F12B00EABF87 /* AuthenticationService.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
 				4F30F5142051670C0049E4F6 /* ShareCardModuleBridge.m in Sources */,
 				4F3046B9204FF65800C99162 /* AWSSNSManager.swift in Sources */,
@@ -6673,7 +6641,6 @@
 				4F30F5102051670C0049E4F6 /* NativeDrawable.m in Sources */,
 				AFA9FB0D208E135E0028CA1B /* ControlCenterDelegate.swift in Sources */,
 				AFA9FB0B208E04FA0028CA1B /* DictionaryExtensions.swift in Sources */,
-				4FD0C7E7219B0E7F003A9B61 /* RegistrationViewController.swift in Sources */,
 				4FB2BBB420B70BC8006FB03D /* WifiProtectionViewController.swift in Sources */,
 				4F30F52120517A070049E4F6 /* FeedbackUI.swift in Sources */,
 				AF6FA98920652D4600D7F9F0 /* TrackerListRegex.swift in Sources */,
@@ -6712,7 +6679,6 @@
 				AF28D3D8207E32250065FF86 /* PermissionManagerModule.swift in Sources */,
 				AFAB304020B80EC200FE312E /* AppDelegateExtension.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
-				4FD0C7EF219C65A7003A9B61 /* EmailVerificationViewController.swift in Sources */,
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
 				D821E90E2141B71C00452C55 /* SiriSettingsViewController.swift in Sources */,
 				D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */,
@@ -6742,7 +6708,6 @@
 				1EAFE570205FFE82006A36B4 /* RegionalSettingsTableViewController.swift in Sources */,
 				E65075541E37F6FC006961AC /* DynamicFontHelper.swift in Sources */,
 				C4E3984C1D21F2FD004E89BA /* TabTrayButtonExtensions.swift in Sources */,
-				4FFD424A21A5767800EABF87 /* BondAPIManager.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
 				4F934B3A22048ACD005D438C /* UpgradLumenViewController.swift in Sources */,
@@ -6823,7 +6788,6 @@
 				4F30F5132051670C0049E4F6 /* ShareCardModule.swift in Sources */,
 				4F30F5162051670C0049E4F6 /* SubscriptionModuleBridge.m in Sources */,
 				4F30F51B2051670C0049E4F6 /* Engine.swift in Sources */,
-				4F989018219DC8A7003BC800 /* RegistrationConfirmationViewController.swift in Sources */,
 				F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
 				4FF07D852063C99E001385A8 /* OffrView.swift in Sources */,

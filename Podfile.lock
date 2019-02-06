@@ -1,30 +1,8 @@
 PODS:
-  - "!ProtoCompiler (3.6.0)":
-    - Protobuf (~> 3.0)
-  - "!ProtoCompiler-gRPCPlugin (1.18.0)":
-    - "!ProtoCompiler (= 3.6.0)"
-    - gRPC-ProtoRPC (= 1.18.0)
   - AWSCore (2.8.4)
   - AWSSNS (2.8.4):
     - AWSCore (= 2.8.4)
-  - BondAPI (0.0.1):
-    - "!ProtoCompiler-gRPCPlugin (~> 1.0)"
-    - BondAPI/Messages (= 0.0.1)
-    - BondAPI/Services (= 0.0.1)
-  - BondAPI/Messages (0.0.1):
-    - "!ProtoCompiler-gRPCPlugin (~> 1.0)"
-    - Protobuf
-  - BondAPI/Services (0.0.1):
-    - "!ProtoCompiler-gRPCPlugin (~> 1.0)"
-    - BondAPI/Messages
-    - gRPC-ProtoRPC
   - boost-for-react-native (1.63.0)
-  - BoringSSL-GRPC (0.0.2):
-    - BoringSSL-GRPC/Implementation (= 0.0.2)
-    - BoringSSL-GRPC/Interface (= 0.0.2)
-  - BoringSSL-GRPC/Implementation (0.0.2):
-    - BoringSSL-GRPC/Interface (= 0.0.2)
-  - BoringSSL-GRPC/Interface (0.0.2)
   - Charts (3.0.5):
     - Charts/Core (= 3.0.5)
   - Charts/Core (3.0.5)
@@ -35,34 +13,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.4)
-  - gRPC (1.18.0):
-    - gRPC-RxLibrary (= 1.18.0)
-    - gRPC/Main (= 1.18.0)
-  - gRPC-Core (1.18.0):
-    - gRPC-Core/Implementation (= 1.18.0)
-    - gRPC-Core/Interface (= 1.18.0)
-  - gRPC-Core/Implementation (1.18.0):
-    - BoringSSL-GRPC (= 0.0.2)
-    - gRPC-Core/Interface (= 1.18.0)
-    - nanopb (~> 0.3)
-  - gRPC-Core/Interface (1.18.0)
-  - gRPC-ProtoRPC (1.18.0):
-    - gRPC-ProtoRPC/Main (= 1.18.0)
-  - gRPC-ProtoRPC/Main (1.18.0):
-    - gRPC (= 1.18.0)
-    - gRPC-RxLibrary (= 1.18.0)
-    - Protobuf (~> 3.0)
-  - gRPC-RxLibrary (1.18.0)
-  - gRPC/Main (1.18.0):
-    - gRPC-Core (= 1.18.0)
-    - gRPC-RxLibrary (= 1.18.0)
   - KKDomain (0.0.1)
-  - nanopb (0.3.901):
-    - nanopb/decode (= 0.3.901)
-    - nanopb/encode (= 0.3.901)
-  - nanopb/decode (0.3.901)
-  - nanopb/encode (0.3.901)
-  - Protobuf (3.6.1)
   - Purchases (2.0.0)
   - React (0.56.1):
     - React/Core (= 0.56.1)
@@ -127,7 +78,6 @@ PODS:
 DEPENDENCIES:
   - AWSCore (~> 2.6)
   - AWSSNS (~> 2.6)
-  - BondAPI (from `.`)
   - Charts (~> 3.0.1)
   - CRToast
   - Folly (from `./node_modules/react-native/third-party-podspecs/Folly.podspec`)
@@ -154,22 +104,13 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - "!ProtoCompiler"
-    - "!ProtoCompiler-gRPCPlugin"
     - AWSCore
     - AWSSNS
     - boost-for-react-native
-    - BoringSSL-GRPC
     - Charts
     - CRToast
     - DoubleConversion
     - glog
-    - gRPC
-    - gRPC-Core
-    - gRPC-ProtoRPC
-    - gRPC-RxLibrary
-    - nanopb
-    - Protobuf
     - Purchases
     - Realm
     - RealmSwift
@@ -178,8 +119,6 @@ SPEC REPOS:
     - SVProgressHUD
 
 EXTERNAL SOURCES:
-  BondAPI:
-    :path: "."
   Folly:
     :podspec: "./node_modules/react-native/third-party-podspecs/Folly.podspec"
   KKDomain:
@@ -207,25 +146,15 @@ CHECKOUT OPTIONS:
     :git: https://github.com/kejinlu/KKDomain.git
 
 SPEC CHECKSUMS:
-  "!ProtoCompiler": c9526df99fafd398a393def617ae18d3774b7232
-  "!ProtoCompiler-gRPCPlugin": 93f91aef21d112abda50a5c592d8716254ec44dc
   AWSCore: 734b0d67c2c77f6edae9e5520431a37310ea4193
   AWSSNS: 42b39d6628bfb40bf5f9e3c6e4738ce68a323235
-  BondAPI: e0c45a7259d02db7c527075215eb5dd2ee97cafc
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  BoringSSL-GRPC: 2a230d9cd93e7ce39916044f645cebb31f37dde6
   Charts: 45cdc985b764c838b35ee47eb1365d15735f6d1a
   CRToast: 5a78c22b921c5ed3487488af605bc403a9c92fed
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
-  gRPC: f0d45d7bfd5f220e405df5a9f672315ab963440c
-  gRPC-Core: 901572a0099a453a79eb58bdb29e381ede0787bd
-  gRPC-ProtoRPC: 8e49c501c166d221cf9e44076b20580171f8ecd0
-  gRPC-RxLibrary: bf23bc3bfde06674a794bb63f458f8d67d4038bb
   KKDomain: 6883615bda1dfc6a6257f399ee85a02618837757
-  nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   Purchases: 17496bdab0d0fb678f5f647c4c7039bca3b8263c
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-webrtc: 31b6d3f1e3e2ce373aa43fd682b04367250f807d
@@ -241,6 +170,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 16c310c44b121883f6ee382879ce16f574803b1d
+PODFILE CHECKSUM: df231df0ab5e58bc32b854bf16d4312eb238e7b4
 
 COCOAPODS: 1.5.3

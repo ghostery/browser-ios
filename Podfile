@@ -32,7 +32,6 @@ end
 
 target 'Client' do
     project_pods
-    pod 'BondAPI', :path => '.'
     pod 'KKDomain', :git => 'https://github.com/kejinlu/KKDomain.git'
     pod 'AWSCore', '~> 2.6'
     pod 'AWSSNS', '~> 2.6'

@@ -202,8 +202,10 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
     }
 	
 	#if PAID
+    /* [IP-193] Remove Authentication
 	private func generateAccountSettings(prefs: Prefs) -> [Setting] {
 		return [LumenAccountSetting()]
 	}
+    */
 	#endif
 }
