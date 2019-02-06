@@ -305,6 +305,7 @@ class VPNViewController: UIViewController {
     let countryButtonHeight: CGFloat = 50.0
     
     var upgradeView: UpgradeView?
+    var upgradeButton: ButtonWithUnderlinedText?
     
     var VPNStatus: NEVPNStatus {
         return VPN.shared.status;
@@ -347,10 +348,23 @@ class VPNViewController: UIViewController {
         view.addSubview(infoLabel)
         view.addSubview(connectButton)
         #if PAID
-        if let trialRemainingDays = SubscriptionController.shared.getCurrentSubscription().trialRemainingDays(), trialRemainingDays < 8 {
-            self.upgradeView = UpgradeView()
-            self.upgradeView?.delegate = self
-            view.addSubview(upgradeView!)
+        let currentSubscription = SubscriptionController.shared.getCurrentSubscription()
+        switch currentSubscription {
+        case .trial(_):
+            if let trialRemainingDays = currentSubscription.trialRemainingDays(), trialRemainingDays < 8 {
+                self.upgradeView = UpgradeView()
+                self.upgradeView?.delegate = self
+                view.addSubview(upgradeView!)
+            }
+        case .limited:
+            infoLabel.removeFromSuperview()
+            let title = NSLocalizedString("Unlock the VPN feature to get the best out of Lumen.", tableName: "Lumen", comment: "Unlock the VPN feature text")
+            let action = NSLocalizedString("LEARN MORE", tableName: "Lumen", comment: "LEARN MORE action")
+            upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel), underlinedText: (action, UIColor.lumenBrightBlue), position: .next)
+            upgradeButton?.addTarget(self, action: #selector(showUpgradeViewController), for: .touchUpInside)
+            self.view.addSubview(upgradeButton!)
+        default:
+            break
         }
         #endif
     }
@@ -379,18 +393,33 @@ class VPNViewController: UIViewController {
             make.top.equalTo(tableView.snp.bottom).offset(20)
         }
         
-        connectButton.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(infoLabel.snp.top).offset(-16)
+        
+        if let upgradeButton = self.upgradeButton {
+            connectButton.snp.makeConstraints { (make) in
+                make.centerX.equalToSuperview()
+                make.bottom.equalTo(upgradeButton.snp.top).offset(-16)
+            }
+            upgradeButton.snp.makeConstraints { (make) in
+                make.bottom.equalToSuperview().offset(-26)
+                make.width.equalToSuperview().dividedBy(1.25)
+                make.centerX.equalToSuperview()
+                //I should not set the height. Quick fix.
+                make.height.equalTo(40)
+            }
+        } else {
+            connectButton.snp.makeConstraints { (make) in
+                make.centerX.equalToSuperview()
+                make.bottom.equalTo(infoLabel.snp.top).offset(-16)
+            }
+            infoLabel.snp.makeConstraints { (make) in
+                make.bottom.equalToSuperview().offset(-26)
+                make.width.equalToSuperview().dividedBy(1.25)
+                make.centerX.equalToSuperview()
+                //I should not set the height. Quick fix.
+                make.height.equalTo(40)
+            }
         }
         
-        infoLabel.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview().offset(-26)
-            make.width.equalToSuperview().dividedBy(1.25)
-            make.centerX.equalToSuperview()
-            //I should not set the height. Quick fix.
-            make.height.equalTo(40)
-        }
     }
     
     private func setStyling() {
@@ -637,7 +666,7 @@ extension VPNViewController: Themeable {
 }
 
 extension VPNViewController : UpgradeLumenDelegate {
-    func showUpgradeViewController() {
+    @objc func showUpgradeViewController() {
         let upgradLumenViewController = UpgradLumenViewController()
         self.present(upgradLumenViewController, animated: true, completion: nil)
     }
