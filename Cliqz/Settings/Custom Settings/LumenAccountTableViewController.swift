@@ -75,6 +75,7 @@ class LumenAccountTableViewController: SubSettingsTableViewController {
 	}
 
 	private func deleteAccount() {
+        /* [IP-193] Remove Authentication
 		AuthenticationService.shared.deleteAccount { [weak self] (isDeleteSent, errorMsg) in
 			if isDeleteSent {
 				let next = ConfirmDeletionViewController()
@@ -83,9 +84,11 @@ class LumenAccountTableViewController: SubSettingsTableViewController {
 				self?.showErrorMsg(msg)
 			}
 		}
+        */
 	}
 
 	private func signOut() {
+        /* [IP-193] Remove Authentication
 		AuthenticationService.shared.signOut { [weak self] (isSignedOut, errorMsg) in
 			if isSignedOut {
 				DispatchQueue.main.async {
@@ -99,6 +102,7 @@ class LumenAccountTableViewController: SubSettingsTableViewController {
 				self?.showErrorMsg(msg)
 			}
 		}
+        */
 	}
 
 	private func showErrorMsg(_ message: String) {

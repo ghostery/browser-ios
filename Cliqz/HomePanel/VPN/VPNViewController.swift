@@ -9,7 +9,6 @@
 
 import UIKit
 import NetworkExtension
-import BondAPI
 
 struct VPNUX {
     static let bgColor = UIColor(red:0.08, green:0.10, blue:0.11, alpha:1.00)
@@ -84,18 +83,16 @@ class VPN {
     }
     
     func checkConnection() {
-        /* [IP-193] Remove Authentication
-        guard AuthenticationService.shared.hasValidSubscription() == true else {
+        guard SubscriptionController.shared.isVPNEnabled() else {
             VPN.disconnectVPN()
             NEVPNManager.shared().removeFromPreferences { (error) in
-//                if let e = error {
-//                    //there was an error taking this out of the preferences.
-//                }
+                if let e = error {
+                    print("Could not remove VPN configurations, with the following error: \(e.localizedDescription)")
+                }
             }
             return
         }
         
-        */
         if (lastStatus == .connected && status != .connected) {
             VPN.connect2VPN()
         }

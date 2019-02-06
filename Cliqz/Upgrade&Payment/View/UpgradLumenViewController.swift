@@ -277,7 +277,7 @@ class UpgradLumenViewController: UIViewController {
     #endif
 }
 
-
+#if PAID
 extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.premiumTypes.count
@@ -298,3 +298,4 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
 }
+#endif

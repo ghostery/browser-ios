@@ -49,11 +49,13 @@ extension AppDelegate {
 	}
 
 	func showAuthentication() {
+        /* Commented out Authentication
 		let registrationViewController = RegistrationViewController()
 		registrationViewController.profile = self.profile
 		registrationViewController.tabManager = self.tabManager
 		let navigationController = UINavigationController(rootViewController: registrationViewController)
 		self.rootViewController = navigationController
 		self.window!.rootViewController = rootViewController
+        */
 	}
 }
