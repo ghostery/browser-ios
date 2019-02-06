@@ -31,8 +31,12 @@ class LumenFreshtabViewController: FreshtabViewController {
 		let type = SubscriptionController.shared.getCurrentSubscription()
 		switch (type) {
 		case .limited:
-			break
-				// do something
+            if SubscriptionController.shared.shouldShowTrialExpiredView() {
+                let trialExpiredView = TrialExpiredView()
+                trialExpiredView.delegate = self
+                infoView = trialExpiredView
+                view.addSubview(trialExpiredView)
+            }
 		case .trial:
 			let days = type.trialRemainingDays() ?? -1
 			if days > 7 {
@@ -79,7 +83,17 @@ class LumenFreshtabViewController: FreshtabViewController {
 				make.bottom.left.right.equalToSuperview()
 				make.top.equalTo(view2ndWeek.snp.bottom)
 			})
-		}
+        } else if let trialExpiredView = self.infoView as? TrialExpiredView {
+            trialExpiredView.snp.makeConstraints { (make) in
+                make.left.right.bottom.equalToSuperview().inset(10)
+                make.height.equalTo(TrialExpiredViewUX.height)
+            }
+            self.scrollView.snp.remakeConstraints({ (make) in
+                make.top.left.right.equalToSuperview()
+                make.bottom.equalTo(trialExpiredView.snp.top)
+            })
+        }
+        
 	}
 
 	fileprivate func showUpgradeOptionsViewController() {
