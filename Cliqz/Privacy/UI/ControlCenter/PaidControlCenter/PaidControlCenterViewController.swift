@@ -27,6 +27,7 @@ var lumenDashboardMode: LumenThemeMode = UserPreferences.instance.isProtectionOn
 class PaidControlCenterViewController: ControlCenterViewController {
     
     var upgradeView: UpgradeView?
+    var upgradeButton: ButtonWithUnderlinedText?
     let controls = CCControlsView()
     let tabs = UISegmentedControl(items: [NSLocalizedString("Today", tableName: "Lumen", comment:"[Lumen->Dashboard] Today tab"),
                                           NSLocalizedString("Last 7 days", tableName: "Lumen", comment:"[Lumen->Dashboard] Last 7 days tab")])
@@ -102,9 +103,18 @@ class PaidControlCenterViewController: ControlCenterViewController {
             make.top.equalTo(tabs.snp.bottom).offset(12)
             make.trailing.leading.equalToSuperview()
         }
-        
+        if let upgradeButton = upgradeButton {
+            upgradeButton.snp.makeConstraints { (make) in
+                make.top.equalTo(protectionLabel.snp.bottom)
+                make.centerX.equalToSuperview()
+            }
+        }
         dashboard.view.snp.makeConstraints { (make) in
-            make.top.equalTo(protectionLabel.snp.bottom).offset(10)
+            if let upgradeButton = upgradeButton {
+                make.top.equalTo(upgradeButton.snp.bottom).offset(10)
+            } else {
+                make.top.equalTo(protectionLabel.snp.bottom).offset(10)
+            }
             make.trailing.leading.bottom.equalToSuperview()
         }
     }
@@ -340,7 +350,7 @@ class CCControlsView: UIView {
 }
 
 extension PaidControlCenterViewController : UpgradeLumenDelegate {
-    func showUpgradeViewController() {
+    @objc func showUpgradeViewController() {
         let upgradLumenViewController = UpgradLumenViewController()
         self.present(upgradLumenViewController, animated: true, completion: nil)
     }
@@ -349,9 +359,19 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
         let currentSubscription = SubscriptionController.shared.getCurrentSubscription()
         switch currentSubscription {
         case .trial(_):
-            if let trialRemainingDays = currentSubscription.trialRemainingDays(), trialRemainingDays < 8 {
-                self.addUpgradeView()
+            let trialRemainingDays = currentSubscription.trialRemainingDays() ?? -1
+            if trialRemainingDays > 7 {
+                let title = String(format: NSLocalizedString("%d more days left in trial", tableName: "Lumen", comment: "Trial days left title"), trialRemainingDays)
+                let action = NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Upgrade action")
+                upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel), underlinedText: (action, UIColor.lumenBrightBlue), position: .next)
+                upgradeButton?.addTarget(self, action: #selector(showUpgradeViewController), for: .touchUpInside)
+                self.view.addSubview(upgradeButton!)
+            } else if trialRemainingDays >= 0 {
+                 self.addUpgradeView()
+            } else {
+                // TODO: invalid state
             }
+            
         case .limited:
             self.addUpgradeView()
             self.disableView()
