@@ -161,7 +161,7 @@ class VPN {
 //                alwaysConnected.interfaceTypeMatch = .any
 //                NEVPNManager.shared().onDemandRules = [alwaysConnected]
                 
-                NEVPNManager.shared().protocolConfiguration = a
+                NEVPNManager.shared().protocolConfiguration = newIPSec
                 NEVPNManager.shared().isOnDemandEnabled = true
                 NEVPNManager.shared().isEnabled = true
 
