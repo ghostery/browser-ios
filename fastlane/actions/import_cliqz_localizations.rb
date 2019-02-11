@@ -21,7 +21,7 @@ module Fastlane
 
           command_line = "xcodebuild -importLocalizations -localizationPath #{filePath} -project Client.xcodeproj"
           UI.message("import xliff file at #{directory}/#{language}/#{xliff_name}")
-          Actions.sh(command_line)
+          Actions.sh(command_line, log:false)
         end
       end
 
