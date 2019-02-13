@@ -6,25 +6,25 @@ properties([
     disableConcurrentBuilds(),
     [$class: 'JobRestrictionProperty']
 ])
-node('mac-vm-host') {
+node('gideon') {
     def branchName = "${BRANCH_NAME}"
 
     writeFile file: 'Vagrantfile', text: '''
     Vagrant.configure("2") do |config|
-        config.vm.box = "browser-f-ios10.12.6-305"
+        config.vm.box = "browser-ios-10.13.6"
 
         config.vm.synced_folder ".", "/vagrant", disabled: true
         config.vm.define "publishios" do |publishios|
             publishios.vm.hostname ="publishios"
             
-            config.ssh.private_key_path = "/Users/jenkins/publishiosmobile/.vagrant/machines/publishios/virtualbox/private_key"
+            config.ssh.private_key_path = "/Users/jenkins/reusable-VMs/publishios/.vagrant/machines/publishios/virtualbox/private_key"
             publishios.vm.network "public_network", :bridge => "en0: Ethernet 1", auto_config: false
             publishios.vm.boot_timeout = 900
+            publishios.ssh.forward_agent = true
             publishios.vm.provider "virtualbox" do |v|
                 v.name = "publishios"
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
-                v.cpus = ENV["NODE_CPU_COUNT"]
             end
             publishios.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                 set -e
@@ -43,7 +43,7 @@ node('mac-vm-host') {
         set -x
         mkdir -p .vagrant/machines/publishios/virtualbox
         cd .vagrant/machines/publishios/virtualbox/
-        if [ ! -f id ]; then touch id && echo "d2fc4bdc-ee6e-432d-8be4-25cad07672bd" >> id; fi
+        if [ ! -f id ]; then touch id && echo "a089a286-2483-4af0-9754-ecb5bb2d06be" >> id; fi
     '''
 
     vagrant.inside(
