@@ -29,7 +29,7 @@ class UpgradLumenViewController: UIViewController {
         NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue]
     
     private var isConditionsHidden = true
-    private let premiumTypes: [PremiumType] = [.Pro, .Plus, .Basic]
+    private let premiumTypes: [PremiumType] = [.Plus, .Pro, .Basic]
     
     override func viewDidLoad() {
         super.viewDidLoad()
