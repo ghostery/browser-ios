@@ -76,7 +76,7 @@ class LumenFreshtabViewController: FreshtabViewController {
 			})
 		} else if let view2ndWeek = self.infoView as? UpgradeView {
 			view2ndWeek.snp.makeConstraints { (make) in
-				make.left.right.top.equalToSuperview()
+				make.left.right.top.equalToSuperview().inset(10)
 				make.height.equalTo(UpgradeViewUX.height)
 			}
 			self.scrollView.snp.remakeConstraints({ (make) in
