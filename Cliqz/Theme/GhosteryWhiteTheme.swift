@@ -79,13 +79,14 @@ class ToolbarButtonColor {
     var disabledTint: UIColor { return UIColor(colorString: "B7CEF2") }
 }
 
+// For both modes private vs normal it shoudl be the same color according to Inci's requirements
 class LoadingBarColor {
     func start(_ isPrivate: Bool) -> UIColor {
-        return !isPrivate ? UIColor.Photon.Blue40A30 : UIColor.Photon.Magenta60A30
-    }
-    
-    func end(_ isPrivate: Bool) -> UIColor {
-        return !isPrivate ? UIColor.Photon.Teal60 : UIColor.Photon.Purple60
+		return UIColor.Photon.Magenta60A30
+	}
+
+	func end(_ isPrivate: Bool) -> UIColor {
+		return UIColor.Photon.Purple60
     }
 }
 
