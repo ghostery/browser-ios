@@ -36,11 +36,11 @@ public enum PremiumType: String {
     func getDescription() -> String {
         switch self {
         case .Basic:
-            return NSLocalizedString("ULTIMATE PROTECTION: AD-BLOCKER · ANTI-TRACKING · ANTI-PHISHING", tableName: "Lumen", comment: "BASIC Subscription Description")
+            return NSLocalizedString("ULTIMATE PROTECTION: AD-BLOCKER_ANTI-TRACKING_ANTI-PHISHING", tableName: "Lumen", comment: "BASIC Subscription Description")
         case .Plus:
-            return NSLocalizedString("VPN · ULTIMATE PROTECTION: DASHBOARD · AD-BLOCKER · ANTI-TRACKING · ANTI-PHISHING", tableName: "Lumen", comment: "PLUS Subscription Description")
+            return NSLocalizedString("VPN_ULTIMATE PROTECTION: DASHBOARD_AD-BLOCKER_ANTI-TRACKING_ANTI-PHISHING", tableName: "Lumen", comment: "PLUS Subscription Description")
         case .Pro:
-            return NSLocalizedString("VPN · ULTIMATE PROTECTION: DASHBOARD · AD-BLOCKER · ANTI-TRACKING · ANTI-PHISHING", tableName: "Lumen", comment: "PRO Subscription Description")
+            return NSLocalizedString("VPN_ULTIMATE PROTECTION: DASHBOARD_AD-BLOCKER_ANTI-TRACKING_ANTI-PHISHING", tableName: "Lumen", comment: "PRO Subscription Description")
         }
     }
     
