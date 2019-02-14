@@ -199,6 +199,7 @@ class RestoreTopSitesSetting: Setting {
     
     override func onClick(_ navigationController: UINavigationController?) {
         guard self.profile.history.getHiddenTopSitesCount() > 0 else {
+			self.settingsViewController?.reloadSettings()
             return
         }
         
