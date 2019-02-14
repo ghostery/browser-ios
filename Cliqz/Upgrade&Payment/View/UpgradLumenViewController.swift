@@ -41,6 +41,9 @@ class UpgradLumenViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return ThemeManager.instance.statusBarStyle
     }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
     
     private func setupComponents() {
         self.view.addSubview(containerView)
