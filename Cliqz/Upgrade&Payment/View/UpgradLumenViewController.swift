@@ -62,7 +62,7 @@ class UpgradLumenViewController: UIViewController {
         restoreButton.addTarget(self, action: #selector(restoreSubscription), for: .touchUpInside)
         restoreButton.setTitle(NSLocalizedString("Restore Subscription", tableName: "Lumen", comment: "[Upgrade Flow] Restore Subscription button"), for: .normal)
         restoreButton.layer.borderWidth = 1.0
-        restoreButton.layer.cornerRadius = 20
+        restoreButton.layer.cornerRadius = UIDevice.current.isSmallIphoneDevice() ? 15 : 20
         containerView.addSubview(restoreButton)
         
         conditionButton.addTarget(self, action: #selector(toggleConditions), for: .touchUpInside)
@@ -99,7 +99,7 @@ class UpgradLumenViewController: UIViewController {
     
     private func setupBundlesView() {
         bundlesView.register(SubscriptionTableViewCell.self, forCellReuseIdentifier: "ProductCell")
-        bundlesView.separatorColor = UIColor(colorString: "BDC0CE")
+        bundlesView.separatorColor = UIColor.clear
         bundlesView.allowsSelection = false
         bundlesView.isScrollEnabled = false
         bundlesView.delegate = self
@@ -141,22 +141,38 @@ class UpgradLumenViewController: UIViewController {
         }
         
         logoImage.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(10.0)
+            if UIDevice.current.isSmallIphoneDevice() {
+                make.top.equalToSuperview()
+            } else {
+                make.top.equalToSuperview().inset(10.0)
+            }
             make.centerX.equalToSuperview()
         }
         
         
         bundlesView.snp.makeConstraints { (make) in
-            make.top.equalTo(logoImage.snp.bottom).offset(10.0)
+            if UIDevice.current.isSmallIphoneDevice() {
+                make.top.equalTo(logoImage.snp.bottom)
+            } else {
+                make.top.equalTo(logoImage.snp.bottom).offset(10.0)
+            }
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(370.0)
+            make.height.equalTo(415.0)
         }
         
         restoreButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(conditionButton.snp.top).offset(-10.0)
-            make.width.equalTo(230.0)
-            make.height.equalTo(40.0)
+            
+            if UIDevice.current.isSmallIphoneDevice() {
+                make.bottom.equalTo(conditionButton.snp.top)
+                make.width.equalTo(200.0)
+                make.height.equalTo(30.0)
+            } else {
+                make.bottom.equalTo(conditionButton.snp.top).offset(-10.0)
+                make.width.equalTo(230.0)
+                make.height.equalTo(40.0)
+            }
+            
         }
         
         conditionButton.snp.makeConstraints { (make) in
@@ -287,7 +303,11 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 125.0
+        let premiumType = self.premiumTypes[indexPath.row]
+        if premiumType == .Pro {
+            return 150
+        }
+        return 135.0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
