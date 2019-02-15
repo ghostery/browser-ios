@@ -45,8 +45,8 @@ class UpgradeView: UIView {
             subtitleLabel2.text = NSLocalizedString("Keep ultimate protection and VPN.", tableName: "Lumen", comment: "Upgrade lumen view subtitle2")
             upgradeButton.setTitle(NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Upgrade lumen view button text"), for: .normal)
         } else {
-            titleLabel.text = NSLocalizedString("Ad-Blocker: OFF", tableName: "Lumen", comment: "Upgrade lumen view title")
-            subtitleLabel1.text = NSLocalizedString("You are browsing without ultimate protection.", tableName: "Lumen", comment: "Upgrade lumen view subtitle")
+            titleLabel.text = NSLocalizedString("Ultimate Protection: OFF", tableName: "Lumen", comment: "Upgrade lumen view title")
+            subtitleLabel1.text = NSLocalizedString("Ads are not blocked and you are not protected.", tableName: "Lumen", comment: "Upgrade lumen view subtitle")
             subtitleLabel1.numberOfLines = 2
             upgradeButton.setTitle(NSLocalizedString("Learn More", tableName: "Lumen", comment: "Upgrade lumen view Learn more text"), for: .normal)
         }
