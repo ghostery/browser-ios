@@ -72,6 +72,9 @@ class OffrzDataSource {
     }
     
 	func loadOffrz() {
+        #if PAID
+            return
+        #endif
         guard shouldRefreshOffers() else { return }
         
         self.region = SettingsPrefs.shared.getRegionPref()
