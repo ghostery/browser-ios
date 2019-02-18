@@ -69,6 +69,14 @@ class UpgradLumenViewController: UIViewController {
         conditionButton.setTitle(NSLocalizedString("Conditions", tableName: "Lumen", comment: "[Upgrade Flow] Conditions button"), for: .normal)
         containerView.addSubview(conditionButton)
         
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(toggleConditions))
+        swipeUp.direction = .up
+        conditionButton.addGestureRecognizer(swipeUp)
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(toggleConditions))
+        swipeDown.direction = .down
+        conditionButton.addGestureRecognizer(swipeDown)
+
+        
         arrowImage.image = UIImage(named: "Conditions_Arrow_Up")
         containerView.addSubview(arrowImage)
         
