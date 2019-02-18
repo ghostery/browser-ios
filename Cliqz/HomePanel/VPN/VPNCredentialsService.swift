@@ -14,9 +14,9 @@ struct VPNData {
 	let country: String
 	let username: String
 	let password: String
-	let secret: String
+	let remoteID: String
 	let serverIP: String
-	let port: String
+	let port: Int
 }
 
 class VPNCredentialsService {
@@ -24,53 +24,41 @@ class VPNCredentialsService {
 	private static let APIKey = "LumenAPIKey"
 
 	class func getVPNCredentials(completion: @escaping ([VPNData]) -> Void) {
-		guard let apiKey = Bundle.main.object(forInfoDictionaryKey: APIKey) as? String, !apiKey.isEmpty else {
+		guard let apiKey = Bundle.main.object(forInfoDictionaryKey: APIKey) as? String, !apiKey.isEmpty,
+				let subscriptionUserId = SubscriptionController.shared.getSubscriptionUserId() else {
 			print("API Key is not available in Info.plist")
 			return
 		}
-
-		let params = ["user": "lumen@cliqz.com",
-					  "password": "123pass",
-					  "token": "token"]
-		let header = ["x-api-key": apiKey]
-		var result = [VPNData]()
-		Alamofire.request("https://nae1kxj155.execute-api.eu-central-1.amazonaws.com/default/bond-vpn", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).responseJSON { (response) in
-			if response.result.isSuccess {
-				let json = JSON(response.result.value ?? "")
-				if let vpnCreds = json.array {
-					for cred in vpnCreds {
-						if let c = cred.dictionary,
-							let country = c.keys.first,
-							let data = c[country]?.dictionary,
-							let username = data["Username"]?.string,
-							let password = data["Password"]?.string,
-							let secret = data["IPSecSecret"]?.string,
-							let ip = data["ServerIP"]?.string,
-							let port = data["ServerPort"]?.string {
-							result.append(VPNData(country: country, username: username, password: password, secret: secret, serverIP: ip, port: port))
+		if let udid = UIDevice.current.identifierForVendor {
+			let params: Parameters = ["device_id": udid.uuidString,
+					  	"revenue_cat_token": subscriptionUserId]
+			let header = ["x-api-key": apiKey]
+			var result = [VPNData]()
+			Alamofire.request("https://ic4t94ok9b.execute-api.us-east-1.amazonaws.com/staging/get_credentials", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).responseJSON { (response) in
+				if response.result.isSuccess {
+					let json = JSON(response.result.value ?? "")
+					if let fullResponse = json.dictionary,
+						let body = fullResponse["body"]?.dictionary,
+						let nodes = body["nodes"]?.array,
+						let credentials = body["credentials"]?.dictionary,
+						let username = credentials["username"]?.string,
+						let password = credentials["password"]?.string {
+						for node in nodes {
+							if let data = node.dictionary,
+								let ip = data["ipAddress"]?.string,
+								let country = data["countryCode"]?.string,
+								let name = data["name"]?.string {
+								result.append(VPNData(country: country, username: username, password: password, remoteID: name, serverIP: ip, port: 0))
+							}
 						}
 					}
+				} else {
+					print(response.error ?? "No Error from response") // TODO proper Error
 				}
-			} else {
-				print(response.error) // TODO proper Error
+				completion(result)
 			}
-			completion(result)
+		} else {
+			completion([VPNData]())
 		}
-
-		/*
-		Alamofire.request("http://c.betrad.com/mobile/ghostery-ios-can-access").responseData { (response) in
-			if response.value?.count == 0 {
-				DispatchQueue.main.async {
-					self.updateImageStatus(self.WifiProtectedStatusImage, isOn: true)
-					self.updateImageStatus(self.configStatusImage, isOn: true)
-				}
-			} else {
-				DispatchQueue.main.async {
-					self.updateImageStatus(self.WifiProtectedStatusImage, isOn: false)
-					self.updateImageStatus(self.configStatusImage, isOn: false)
-				}
-			}
-		}*/
-
 	}
 }
