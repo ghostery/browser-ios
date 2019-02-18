@@ -58,9 +58,9 @@ public enum PremiumType: String {
     func getPrice() -> String {
         switch self {
         case .Basic:
-            return NSLocalizedString("4€/month", tableName: "Lumen", comment: "BASIC Subscription price")
+            return NSLocalizedString("47.99€/year", tableName: "Lumen", comment: "BASIC Subscription price")
         case .Pro:
-            return NSLocalizedString("8€/month", tableName: "Lumen", comment: "PRO Subscription price")
+            return NSLocalizedString("95.99€/year", tableName: "Lumen", comment: "PRO Subscription price")
         case .Plus:
             return NSLocalizedString("9.99€/month", tableName: "Lumen", comment: "PLUS Subscription price")
         }
@@ -70,11 +70,11 @@ public enum PremiumType: String {
     func getBilling() -> String {
         switch self {
         case .Basic:
-            return NSLocalizedString("Billed annually: 47.99€", tableName: "Lumen", comment: "BASIC Subscription billing")
+            return NSLocalizedString("Corresponds to 4€/month", tableName: "Lumen", comment: "BASIC Subscription billing")
         case .Pro:
-            return NSLocalizedString("Billed annually: 95.99€", tableName: "Lumen", comment: "PRO Subscription billing")
+            return NSLocalizedString("Corresponds to 8€/month", tableName: "Lumen", comment: "PRO Subscription billing")
         case .Plus:
-            return NSLocalizedString("Billed monthly", tableName: "Lumen", comment: "PLUS Subscription billing")
+            return NSLocalizedString("Corresponds to 119.88€/year", tableName: "Lumen", comment: "PLUS Subscription billing")
         }
     }
     
