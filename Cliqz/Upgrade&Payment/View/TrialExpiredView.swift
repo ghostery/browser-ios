@@ -9,7 +9,7 @@
 import UIKit
 
 struct TrialExpiredViewUX {
-    static let height: CGFloat = 185.0
+    static let height: CGFloat = 200.0
 }
 
 class TrialExpiredView: UIView {
@@ -36,7 +36,7 @@ class TrialExpiredView: UIView {
     fileprivate func setupComponents() {
         titleLabel.text = NSLocalizedString("Your trial is over", tableName: "Lumen", comment: "Trial Expired view title")
         subtitleLabel.text = NSLocalizedString("You can still use Lumen, but without ultimate protection and VPN. Or go premium.", tableName: "Lumen", comment: "Trial Expired view subtitle")
-        subtitleLabel.numberOfLines = 2
+        subtitleLabel.numberOfLines = 0
         upgradeButton.setTitle(NSLocalizedString("Learn More", tableName: "Lumen", comment: "Trial Expired view Learn more button text"), for: .normal)
         clsoeButton.setTitle(NSLocalizedString("No, Thanks", tableName: "Lumen", comment: "Close Trial Expired button text"), for: .normal)
         
