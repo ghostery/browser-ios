@@ -19,7 +19,7 @@ struct VPNUX {
 class VPN {
     
     static let shared = VPN()
-    
+
     let shouldTryToReconnectKey = "VPNShouldTryToReconnectKey"
     var shouldTryToReconnect: Bool {
         set {
@@ -79,9 +79,8 @@ class VPN {
                                                selector: #selector(VPNStatusDidChange(notification:)),
                                                name: .NEVPNStatusDidChange,
                                                object: nil)
-        
     }
-    
+
     func checkConnection() {
         guard SubscriptionController.shared.isVPNEnabled() else {
             VPN.disconnectVPN()
@@ -97,16 +96,15 @@ class VPN {
             VPN.connect2VPN()
         }
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
     var status: NEVPNStatus {
         return NEVPNManager.shared().connection.status;
     }
-    
-    
+
     //TODO: Tries to reconnect without end. Maybe this is not a good idea.
     @objc func VPNStatusDidChange(notification: Notification) {
         //keep button up to date.
@@ -127,62 +125,38 @@ class VPN {
     }
     
     static func connect2VPN() {
-        
         let country = VPNEndPointManager.shared.selectedCountry
         guard let creds = VPNEndPointManager.shared.getCredentials(country: country) else { return }
 
         NEVPNManager.shared().loadFromPreferences { (error) in
-            if NEVPNManager.shared().protocolConfiguration == nil || NEVPNManager.shared().protocolConfiguration?.serverAddress != country.endpoint {
-				
-				let a = NEVPNProtocolIKEv2()
-				a.useExtendedAuthentication = true
-				a.authenticationMethod = .sharedSecret
-				a.sharedSecretReference = creds.sharedSecret
-				a.username = creds.username
-				a.passwordReference = creds.password
-				a.serverAddress = country.endpoint
-				a.disconnectOnSleep = false
-				
-				
-                let newIPSec = NEVPNProtocolIPSec()
-                //setUp the protocol
-                newIPSec.useExtendedAuthentication = true
-                
-                newIPSec.authenticationMethod = .sharedSecret
-                newIPSec.sharedSecretReference = creds.sharedSecret
-                
-                newIPSec.username = creds.username
-                newIPSec.passwordReference = creds.password
-                newIPSec.serverAddress = country.endpoint
-                newIPSec.disconnectOnSleep = false
-                
-                //Need to figure out how to do this properly. If we do it like this it will say that the configuration is invalid.
+			let ikeProtocol = NEVPNProtocolIKEv2()
+			ikeProtocol.authenticationMethod = .none
+			ikeProtocol.username = creds.username
+			ikeProtocol.passwordReference = creds.password
+			ikeProtocol.serverAddress = country.endpoint
+			ikeProtocol.remoteIdentifier = country.remoteID
+			ikeProtocol.useExtendedAuthentication = true
+			ikeProtocol.childSecurityAssociationParameters.encryptionAlgorithm = .algorithmAES256
+			ikeProtocol.childSecurityAssociationParameters.integrityAlgorithm = .SHA256
+			ikeProtocol.disconnectOnSleep = false
+
+			//Need to figure out how to do this properly. If we do it like this it will say that the configuration is invalid.
 //                let alwaysConnected = NEOnDemandRule()
 //                alwaysConnected.interfaceTypeMatch = .any
 //                NEVPNManager.shared().onDemandRules = [alwaysConnected]
-                
-                NEVPNManager.shared().protocolConfiguration = newIPSec
-                NEVPNManager.shared().isOnDemandEnabled = true
-                NEVPNManager.shared().isEnabled = true
+			NEVPNManager.shared().protocolConfiguration = ikeProtocol
+			NEVPNManager.shared().isOnDemandEnabled = true
+			NEVPNManager.shared().isEnabled = true
 
-                NEVPNManager.shared().saveToPreferences(completionHandler: { (error) in
-                    do {
-                        try NEVPNManager.shared().connection.startVPNTunnel()
-                    }
-                    catch {
-                        VPN.shared.shouldTryToReconnect = false
-                    }
-                })
-            }
-            else {
-                NEVPNManager.shared().isEnabled = true;
-                do {
-                    try NEVPNManager.shared().connection.startVPNTunnel()
-                }
-                catch {
-                    VPN.shared.shouldTryToReconnect = false
-                }
-            }
+			NEVPNManager.shared().saveToPreferences(completionHandler: { (error) in
+				do {
+					try NEVPNManager.shared().connection.startVPNTunnel()
+				}
+				catch (let error) {
+					print("VPN Connecttion failed --- \(error)")
+					VPN.shared.shouldTryToReconnect = false
+				}
+			})
         }
     }
 }
@@ -193,16 +167,24 @@ class VPNEndPointManager {
     struct Credentials {
         let username: String
         let password: Data
-        let sharedSecret: Data
+//        let sharedSecret: Data
     }
     
-    struct VPNCountry: Codable, Equatable {
+    class VPNCountry: Codable, Equatable {
         let id: String //id from the server
         let name: String //display name
-        let endpoint: String //endpoint address
-        
-        static func != (lhs: VPNCountry, rhs: VPNCountry) -> Bool {
-            return lhs.id != rhs.id
+        var endpoint: String //endpoint address
+		var remoteID: String //endpoint address
+
+		init(id: String, name: String, endpoint: String, remoteID: String) {
+			self.id = id
+			self.name = name
+			self.endpoint = endpoint
+			self.remoteID = remoteID
+		}
+
+        static func == (lhs: VPNCountry, rhs: VPNCountry) -> Bool {
+            return lhs.id == rhs.id
         }
         
         var hashPrefix: String {
@@ -217,17 +199,14 @@ class VPNEndPointManager {
             return "\(self.hashPrefix)|password"
         }
         
-        var sharedSecretHash: String {
-            return "\(self.hashPrefix)|sharedSecret"
-        }
     }
     
-    static let defaultCountry = VPNCountry(id: "de", name: NSLocalizedString("Germany", tableName: "Lumen", comment: "VPN country name for Germany"), endpoint: "195.181.170.100")
+    static let defaultCountryIndex = 1
     
     //list of possible countries. Each country has its own credentials and endpoints
     var countries: [VPNCountry] = [
-        VPNCountry(id: "us", name: NSLocalizedString("USA", tableName: "Lumen", comment: "VPN country name for USA"), endpoint: "195.181.168.14"),
-        defaultCountry
+		VPNCountry(id: "us", name: NSLocalizedString("USA", tableName: "Lumen", comment: "VPN country name for USA"), endpoint: "", remoteID: ""),
+		VPNCountry(id: "de", name: NSLocalizedString("Germany", tableName: "Lumen", comment: "VPN country name for Germany"), endpoint: "", remoteID: "")
     ]
     
     let selectedCountryKey = "VPNSelectedCountry"
@@ -238,12 +217,10 @@ class VPNEndPointManager {
             UserDefaults.standard.synchronize()
         }
         get {
-            
             if let data = UserDefaults.standard.value(forKey: selectedCountryKey) as? Data, let country = try? PropertyListDecoder().decode(VPNCountry.self, from: data) {
                 return country
             }
-            
-            return VPNEndPointManager.defaultCountry //default
+            return countries[VPNEndPointManager.defaultCountryIndex] // VPNEndPointManager.defaultCountry //default
         }
     }
     
@@ -257,24 +234,13 @@ class VPNEndPointManager {
     private func getVPNCredentialsFromServer() {
 		VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
 			for cred in credentials {
-				if let country = self?.country(id: cred.country) {
-					self?.setCreds(country: country, username: cred.username, password: cred.password, sharedSecret: cred.secret)
+				if let country = self?.country(id: cred.country.lowercased()) {
+					self?.setCreds(country: country, username: cred.username, password: cred.password)
+					country.endpoint = cred.serverIP
+					country.remoteID = cred.remoteID
 				}
 			}
 		}
-		/*
-        let userCred = AuthenticationService.shared.generateNewCredentials("vpn@lumen.com")
-        BondAPIManager.shared.currentBondHandler().getIPSecCreds(withRequest: userCred) { [weak self] (response, error) in
-            //TODO: write the credentials into the keychain
-            if let config = response?.config as? [String: IPSecConfig] {
-                for (key, value) in config {
-                    if let country = self?.country(id: key) {
-                        self?.setCreds(country: country, username: value.username, password: value.password, sharedSecret: value.secret)
-                    }
-                }
-            }
-        }
-		*/
     }
     
     func country(id: String) -> VPNCountry? {
@@ -284,21 +250,19 @@ class VPNEndPointManager {
     func getCredentials(country: VPNCountry) -> Credentials? {
         let keychain = DAKeychain.shared
         if let username = keychain[country.usernameHash],
-            let pass = keychain.load(withKey: country.passwordHash),
-            let sharedS = keychain.load(withKey: country.sharedSecretHash)
+            let pass = keychain.load(withKey: country.passwordHash)
         {
-            return Credentials(username: username, password: pass, sharedSecret: sharedS)
+            return Credentials(username: username, password: pass)
         }
         //initiate a call to get the credentials?
         getVPNCredentialsFromServer()
         return nil
     }
     
-    private func setCreds(country: VPNCountry, username: String, password: String, sharedSecret: String) {
+    private func setCreds(country: VPNCountry, username: String, password: String) {
         let keychain = DAKeychain.shared
         keychain[country.usernameHash] = username
         keychain[country.passwordHash] = password
-        keychain[country.sharedSecretHash] = sharedSecret
     }
 }
 
@@ -343,7 +307,21 @@ class VPNViewController: UIViewController {
         updateConnectButton()
         updateInfoLabel()
     }
-    
+
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		self.navigationController?.setNavigationBarHidden(true, animated: true)
+		self.view.alpha = 1.0
+		updateMapView()
+		updateConnectButton()
+		updateInfoLabel()
+	}
+	
+	override func didReceiveMemoryWarning() {
+		super.didReceiveMemoryWarning()
+		// Dispose of any resources that can be recreated.
+	}
+
     private func setupComponents() {
         tableView.register(CustomVPNCell.self, forCellReuseIdentifier: "VPNCell")
         tableView.delegate = self
@@ -446,20 +424,6 @@ class VPNViewController: UIViewController {
         mapView.contentMode = .scaleAspectFill
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        self.view.alpha = 1.0
-        updateMapView()
-        updateConnectButton()
-        updateInfoLabel()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     func updateConnectButton() {
         
         if VPNStatus == .connected {
@@ -504,16 +468,15 @@ class VPNViewController: UIViewController {
     }
     
     func updateInfoLabel() {
-        
         let connectedText = NSLocalizedString("You are safely connected to the Internet.", tableName: "Lumen", comment: "VPN connected text")
-        let retryText = NSLocalizedString("You are safely connected to the Internet.", tableName: "Lumen", comment: "VPN retry text")
+        let retryText = NSLocalizedString("Oh, something went wrong. Please try again.", tableName: "Lumen", comment: "VPN retry text")
         let defaultText = NSLocalizedString("Tap 'connect' to browse the Internet with VPN protection.", tableName: "Lumen", comment: "VPN default text")
-        
+
         if VPNStatus == .connected {
             self.infoLabel.text = connectedText
         }
         else if VPNStatus == .disconnected && (self.connectButton.currentState == .Connecting || self.connectButton.currentState == .Connect) {
-                self.infoLabel.text = retryText
+			self.infoLabel.text = retryText
         }
         else {
             self.infoLabel.text = defaultText
@@ -543,6 +506,7 @@ class VPNViewController: UIViewController {
         if (NEVPNManager.shared().connection.status == .connected) {
             VPN.disconnectVPN()
         } else {
+			shouldVPNReconnect = true
             VPN.connect2VPN()
         }
     }
