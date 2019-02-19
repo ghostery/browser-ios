@@ -83,6 +83,7 @@
 		1E51104C2170A22C0092B038 /* SQLiteHistoryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E51104A2170A2250092B038 /* SQLiteHistoryExtension.swift */; };
 		1E51104E2170A97E0092B038 /* SettingsTableViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E51104D2170A97E0092B038 /* SettingsTableViewControllerExtension.swift */; };
 		1E521A66213EAF820043416C /* Cliqz.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E521A68213EAF820043416C /* Cliqz.strings */; };
+		1E542350221AFBE50021020F /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E54234F221AFBE50021020F /* StoreKit.framework */; };
 		1E5CEA5121BA7CEE00EC0226 /* Lumen.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 1E5CEA5321BA7CEE00EC0226 /* Lumen.stringsdict */; };
 		1E60134B21AC43E300392E80 /* LumenIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */; };
 		1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */; };
@@ -1490,6 +1491,7 @@
 		1E51104A2170A2250092B038 /* SQLiteHistoryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteHistoryExtension.swift; sourceTree = "<group>"; };
 		1E51104D2170A97E0092B038 /* SettingsTableViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerExtension.swift; sourceTree = "<group>"; };
 		1E521A67213EAF820043416C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Cliqz.strings; sourceTree = "<group>"; };
+		1E54234F221AFBE50021020F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		1E5CEA5221BA7CEE00EC0226 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Lumen.stringsdict; sourceTree = "<group>"; };
 		1E5CEA5C21BA7CFE00EC0226 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Lumen.stringsdict; sourceTree = "<group>"; };
 		1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenIntroViewController.swift; sourceTree = "<group>"; };
@@ -2442,6 +2444,7 @@
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				7B604F861C494983006EEEC3 /* Alamofire.framework in Frameworks */,
 				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
+				1E542350221AFBE50021020F /* StoreKit.framework in Frameworks */,
 				7BA4A9471C4CED900091D032 /* GCDWebServers.framework in Frameworks */,
 				E4B334881BBF23F3004E2BFF /* iAd.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
@@ -3630,6 +3633,7 @@
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E54234F221AFBE50021020F /* StoreKit.framework */,
 				AF2B90D6217F208B00550C57 /* NetworkExtension.framework */,
 				392E18021FEC4D7B00EBA79C /* MappaMundi.framework */,
 				E46175F21EBB73A10021AE8A /* Sentry.framework */,
@@ -5380,6 +5384,9 @@
 								enabled = 1;
 							};
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
 								enabled = 1;
 							};
 							com.apple.Keychain = {

@@ -20,8 +20,20 @@ class LumenFreshtabViewController: FreshtabViewController {
 		super.viewDidLoad()
 		setupViews()
 		setupConstraints()
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseSuccessNotification(_:)),
+                                               name: .ProductPurchaseSuccessNotification,
+                                               object: nil)
 	}
-
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
+        infoView?.removeFromSuperview()
+        infoView = nil
+        setupConstraints()
+    }
+    
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		newsViewController.view.isHidden = true
@@ -91,6 +103,10 @@ class LumenFreshtabViewController: FreshtabViewController {
             self.scrollView.snp.remakeConstraints({ (make) in
                 make.top.left.right.equalToSuperview()
                 make.bottom.equalTo(trialExpiredView.snp.top)
+            })
+        } else {
+            self.scrollView.snp.remakeConstraints({ (make) in
+                make.top.bottom.left.right.equalToSuperview()
             })
         }
         

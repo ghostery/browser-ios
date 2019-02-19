@@ -298,6 +298,9 @@ class VPNViewController: UIViewController {
                                                selector: #selector(VPNStatusDidChange(notification:)),
                                                name: .NEVPNStatusDidChange,
                                                object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseSuccessNotification(_:)),
+                                               name: .ProductPurchaseSuccessNotification,
+                                               object: nil)
         
         setupComponents()
         setConstraints()
@@ -307,7 +310,15 @@ class VPNViewController: UIViewController {
         updateConnectButton()
         updateInfoLabel()
     }
-
+    
+    @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
+        upgradeView?.removeFromSuperview()
+        upgradeView = nil
+        upgradeButton?.removeFromSuperview()
+        upgradeButton = nil
+        setConstraints()
+    }
+    
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -360,23 +371,23 @@ class VPNViewController: UIViewController {
     
     private func setConstraints() {
         if let upgradeView = self.upgradeView {
-            upgradeView.snp.makeConstraints { (make) in
+            upgradeView.snp.remakeConstraints { (make) in
                 make.top.leading.trailing.equalToSuperview().inset(10)
                 make.height.equalTo(UpgradeViewUX.height)
             }
-            tableView.snp.makeConstraints { (make) in
+            tableView.snp.remakeConstraints { (make) in
                 make.top.equalTo(upgradeView.snp.bottom)
                 make.leading.trailing.equalToSuperview()
                 make.height.equalTo(countryButtonHeight)
             }
         } else {
-            tableView.snp.makeConstraints { (make) in
+            tableView.snp.remakeConstraints { (make) in
                 make.top.leading.trailing.equalToSuperview()
                 make.height.equalTo(countryButtonHeight)
             }
         }
         
-        mapView.snp.makeConstraints { (make) in
+        mapView.snp.remakeConstraints { (make) in
             make.trailing.equalToSuperview().offset(-20)
             make.leading.equalToSuperview().offset(20)
             make.top.equalTo(tableView.snp.bottom).offset(20)
@@ -384,11 +395,11 @@ class VPNViewController: UIViewController {
         
         
         if let upgradeButton = self.upgradeButton {
-            connectButton.snp.makeConstraints { (make) in
+            connectButton.snp.remakeConstraints { (make) in
                 make.centerX.equalToSuperview()
                 make.bottom.equalTo(upgradeButton.snp.top).offset(-16)
             }
-            upgradeButton.snp.makeConstraints { (make) in
+            upgradeButton.snp.remakeConstraints { (make) in
                 make.bottom.equalToSuperview().offset(-26)
                 make.width.equalToSuperview().dividedBy(1.25)
                 make.centerX.equalToSuperview()
@@ -396,11 +407,11 @@ class VPNViewController: UIViewController {
                 make.height.equalTo(40)
             }
         } else {
-            connectButton.snp.makeConstraints { (make) in
+            connectButton.snp.remakeConstraints { (make) in
                 make.centerX.equalToSuperview()
                 make.bottom.equalTo(infoLabel.snp.top).offset(-16)
             }
-            infoLabel.snp.makeConstraints { (make) in
+            infoLabel.snp.remakeConstraints { (make) in
                 make.bottom.equalToSuperview().offset(-26)
                 make.width.equalToSuperview().dividedBy(1.25)
                 make.centerX.equalToSuperview()

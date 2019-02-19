@@ -13,6 +13,11 @@ import RxSwift
 public typealias ProductIdentifier = String
 public typealias ProductsRequestCompletionHandler = (_ success: Bool, _ products: [SKProduct]?) -> Void
 
+extension Notification.Name {
+    static let ProductPurchaseSuccessNotification = Notification.Name("ProductPurchaseSuccessNotification")
+    static let ProductPurchaseErrorNotification = Notification.Name("ProductPurchaseErrorNotification")
+}
+
 protocol IAPService {
     func requestProducts(completionHandler: @escaping ProductsRequestCompletionHandler)
     func buyProduct(_ product: SKProduct)
@@ -20,3 +25,4 @@ protocol IAPService {
     func getSubscriptionUserId() -> String?
     func asObserver() -> PublishSubject<LumenPurchaseInfo>
 }
+

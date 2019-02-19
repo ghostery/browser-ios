@@ -118,6 +118,15 @@ public class SubscriptionController {
         }
         return .limited
     }
+    public func hasBasicSubscription() -> Bool {
+        let currentSubscription = getCurrentSubscription()
+        switch currentSubscription {
+        case .premium(let premiumType, _):
+            return premiumType == .Basic
+        default:
+            return false
+        }
+    }
     
     public func shouldShowTrialExpiredView() -> Bool {
         switch getCurrentSubscription() {
