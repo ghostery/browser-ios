@@ -29,7 +29,7 @@ class UpgradLumenViewController: UIViewController {
         NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue]
     
     private var isConditionsHidden = true
-    private let premiumTypes: [PremiumType] = [.Plus, .Pro, .Basic]
+    private let premiumTypes: [PremiumType] = SubscriptionController.shared.hasBasicSubscription() ? [.Pro, .Basic] : [.Plus, .Pro, .Basic]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,17 @@ class UpgradLumenViewController: UIViewController {
         self.setupComponents()
         self.setStyles()
         self.setConstraints()
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseSuccessNotification(_:)),
+                                               name: .ProductPurchaseSuccessNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseErrorNotification(_:)),
+                                               name: .ProductPurchaseErrorNotification,
+                                               object: nil)
     }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return ThemeManager.instance.statusBarStyle
     }
@@ -218,7 +228,7 @@ class UpgradLumenViewController: UIViewController {
     }
     
     @objc func restoreSubscription() {
-        
+        SubscriptionController.shared.restorePurchases()
     }
     
     @objc func showEula() {
@@ -230,6 +240,18 @@ class UpgradLumenViewController: UIViewController {
     @objc func showPrivacyPolicy() {
         self.dismiss(animated: false) {[weak self] in
             self?.navigateToUrl("https://lumenbrowser.com/dse.html")
+        }
+    }
+    
+    @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
+        self.closeView()
+    }
+    
+    @objc func handlePurchaseErrorNotification(_ notification: Notification) {
+        if let errorDescirption = notification.object as? String {
+            let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Ok", tableName: "Cliqz", comment: "Ok"), style: .default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
         }
     }
     

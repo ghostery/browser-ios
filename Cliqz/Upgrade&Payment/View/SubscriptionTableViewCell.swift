@@ -182,6 +182,15 @@ class SubscriptionTableViewCell: UITableViewCell {
             
         isProCell = premiumType == .Pro
         isBasicCell = premiumType == .Basic
+        if SubscriptionController.shared.hasBasicSubscription() {
+            if isBasicCell {
+                subscribeButton.setTitle(NSLocalizedString("SUBSCRIBED", tableName: "Lumen", comment: "Subscribe Button"), for: .normal)
+                subscribeButton.isUserInteractionEnabled = false
+            } else if isProCell {
+                subscribeButton.setTitle(NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Subscribe Button"), for: .normal)
+                subscribeButton.isUserInteractionEnabled = true
+            }
+        }
         self.setStyles()
         self.setConstraints()
     }

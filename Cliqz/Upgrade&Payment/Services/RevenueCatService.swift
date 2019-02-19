@@ -53,7 +53,9 @@ class RevenueCatService: NSObject, IAPService {
     public func buyProduct(_ product: SKProduct) {
         print("Buying \(product.productIdentifier)...")
 		purchases?.makePurchase(product, { (transaction, purchaserInfo, error) in
-            if error == nil, let purchaserInfo = purchaserInfo {
+            if let error = error {
+                NotificationCenter.default.post(name: .ProductPurchaseErrorNotification, object: error.localizedDescription)
+            } else if let purchaserInfo = purchaserInfo {
                 self.processPurchaseInfo(purchaserInfo)
             }
 		})
@@ -62,7 +64,9 @@ class RevenueCatService: NSObject, IAPService {
     
     public func restorePurchases() {
 		purchases?.restoreTransactions({ (purchaserInfo, error) in
-            if error == nil, let purchaserInfo = purchaserInfo {
+            if let error = error {
+                NotificationCenter.default.post(name: .ProductPurchaseErrorNotification, object: error.localizedDescription)
+            } else if let purchaserInfo = purchaserInfo {
                 self.processPurchaseInfo(purchaserInfo)
             }
 		})
@@ -78,42 +82,35 @@ class RevenueCatService: NSObject, IAPService {
 }
 
 extension RevenueCatService: PurchasesDelegate {
-    func purchases(_ purchases: Purchases, receivedUpdatedPurchaserInfo purchaserInfo: PurchaserInfo) {
-        print("receivedUpdatedPurchaserInfo: \(purchaserInfo.activeSubscriptions)")
-        processPurchaseInfo(purchaserInfo)
-    }
-    
-    func purchases(_ purchases: Purchases, failedToUpdatePurchaserInfoWithError error: Error) {
-        print("failedToUpdatePurchaserInfoWithError: \(error.localizedDescription)")
-    }
-    
-    func purchases(_ purchases: Purchases, completedTransaction transaction: SKPaymentTransaction, withUpdatedInfo purchaserInfo: PurchaserInfo) {
-        print("completedTransaction")
-        processPurchaseInfo(purchaserInfo)
-    }
-    
-    func purchases(_ purchases: Purchases, failedTransaction transaction: SKPaymentTransaction, withReason failureReason: Error) {
-        print("failedTransaction: \(failureReason.localizedDescription)")
-    }
-    
-    func purchases(_ purchases: Purchases, restoredTransactionsWith purchaserInfo: PurchaserInfo) {
-        print("restoredTransactionsWith")
-        processPurchaseInfo(purchaserInfo)
-    }
-    
-    func purchases(_ purchases: Purchases, failedToRestoreTransactionsWithError error: Error) {
-        print("failedToRestoreTransactionsWithError: \(error.localizedDescription)")
+    func purchases(_ purchases: Purchases, didReceiveUpdated purchaserInfo: PurchaserInfo) {
+        self.processPurchaseInfo(purchaserInfo)
     }
     
     private func processPurchaseInfo(_ purchaserInfo: PurchaserInfo) {
-        guard let identifier = purchaserInfo.activeSubscriptions.first,
+        guard let identifier = getLastestIdentifier(purchaserInfo),
             let expirationDate = purchaserInfo.expirationDate(forProductIdentifier: identifier) else {
             return
         }
         let lumenPurchaseInfo = LumenPurchaseInfo(productIdentifier: identifier, expirationDate: expirationDate)
         print("processPurchaseInfo -> identifier: \(identifier), expirationDate: \(expirationDate)")
         observable.onNext(lumenPurchaseInfo)
+        NotificationCenter.default.post(name: .ProductPurchaseSuccessNotification, object: identifier)
     }
     
+    fileprivate func getLastestIdentifier(_ purchaserInfo: PurchaserInfo) -> String? {
+        guard var latestIdentifier = purchaserInfo.activeSubscriptions.first,
+            var latestExpirationDate = purchaserInfo.expirationDate(forProductIdentifier:latestIdentifier) else {
+            return nil
+        }
+        
+        for identifier in purchaserInfo.activeSubscriptions {
+            if let expirationDate = purchaserInfo.expirationDate(forProductIdentifier:identifier),
+                expirationDate > latestExpirationDate {
+                latestIdentifier = identifier
+                latestExpirationDate = expirationDate
+            }
+        }
+        return latestIdentifier
+    }
     
 }

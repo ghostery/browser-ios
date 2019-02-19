@@ -44,6 +44,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
     
     var currentPeriod: Period = .Today
     static let dimmedColor = UIColor(colorString: "BDC0CE")
+    private let overlay = UIView()
     
     override func setupComponents() {
         
@@ -72,6 +73,22 @@ class PaidControlCenterViewController: ControlCenterViewController {
         updateVPNButton()
         
         CCWidgetManager.shared.update(period: currentPeriod)
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseSuccessNotification(_:)),
+                                               name: .ProductPurchaseSuccessNotification,
+                                               object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
+        if !UserPreferences.instance.isProtectionOn {
+            startButtonPressed()
+        }
+        self.enableView()
     }
     
     private func setConstraints() {
@@ -344,6 +361,10 @@ class CCControlsView: UIView {
         vpnButton.setImage(Lumen.Dashboard.disabledVPNButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
         clearButton.setImage(Lumen.Dashboard.disabledClearButtonImage(lumenTheme, lumenDashboardMode), for: .normal)
     }
+    fileprivate func enableView() {
+        self.isUserInteractionEnabled = true
+        self.setStyles()
+    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -392,7 +413,6 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
         tabs.isUserInteractionEnabled = false
         protectionOffColor = PaidControlCenterViewController.dimmedColor
         
-        let overlay = UIView()
         overlay.backgroundColor = UIColor.black
         overlay.alpha = 0.5
         self.view.addSubview(overlay)
@@ -404,6 +424,18 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
                 make.top.equalToSuperview()
             }
         }
+    }
+    fileprivate func enableView() {
+        self.controls.enableView()
+        tabs.isUserInteractionEnabled = true
+        overlay.removeFromSuperview()
+        
+        upgradeView?.removeFromSuperview()
+        upgradeView = nil
+        upgradeButton?.removeFromSuperview()
+        upgradeButton = nil
+        self.setStyle()
+        self.setConstraints()
     }
 }
 #endif
