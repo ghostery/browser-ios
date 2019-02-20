@@ -30,6 +30,7 @@ class UpgradLumenViewController: UIViewController {
     
     private var isConditionsHidden = true
     private let premiumTypes: [PremiumType] = SubscriptionController.shared.hasBasicSubscription() ? [.Pro, .Basic] : [.Plus, .Pro, .Basic]
+    private var lastShosenPremiumType: PremiumType?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -248,11 +249,16 @@ class UpgradLumenViewController: UIViewController {
     }
     
     @objc func handlePurchaseErrorNotification(_ notification: Notification) {
-        if let errorDescirption = notification.object as? String {
-            let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: NSLocalizedString("Ok", tableName: "Cliqz", comment: "Ok"), style: .default, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-        }
+        let errorDescirption = NSLocalizedString("We are sorry, but something went wrong. The payment was not successful, please try again.", tableName: "Lumen", comment: "Error message when there is failing payment transaction")
+        let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Retry", tableName: "Lumen", comment: "Retry button title in payment failing transaction alert"), style: .default) {[weak self] (action) in
+            if let premiumType = self?.lastShosenPremiumType {
+                SubscriptionController.shared.buyProduct(premiumType)
+            }
+        })
+        
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Lumen", comment: "Cancel button title in payment failing transaction alert"), style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
     }
     
     private func navigateToUrl(_ urlString: String) {
@@ -343,8 +349,9 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath) as! SubscriptionTableViewCell
         cell.premiumType = self.premiumTypes[indexPath.row]
-        cell.buyButtonHandler = { premiumType in
+        cell.buyButtonHandler = { [weak self] premiumType in
             SubscriptionController.shared.buyProduct(premiumType)
+            self?.lastShosenPremiumType = premiumType
         }
         
         return cell

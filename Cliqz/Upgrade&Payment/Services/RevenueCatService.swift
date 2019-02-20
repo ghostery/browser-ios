@@ -53,7 +53,7 @@ class RevenueCatService: NSObject, IAPService {
     public func buyProduct(_ product: SKProduct) {
         print("Buying \(product.productIdentifier)...")
 		purchases?.makePurchase(product, { (transaction, purchaserInfo, error) in
-            if let error = error {
+            if let error = error as? SKError, error.code != .paymentCancelled {
                 NotificationCenter.default.post(name: .ProductPurchaseErrorNotification, object: error.localizedDescription)
             } else if let purchaserInfo = purchaserInfo {
                 self.processPurchaseInfo(purchaserInfo)
@@ -61,10 +61,9 @@ class RevenueCatService: NSObject, IAPService {
 		})
     }
     
-    
     public func restorePurchases() {
 		purchases?.restoreTransactions({ (purchaserInfo, error) in
-            if let error = error {
+            if let error = error as? SKError, error.code != .paymentCancelled {
                 NotificationCenter.default.post(name: .ProductPurchaseErrorNotification, object: error.localizedDescription)
             } else if let purchaserInfo = purchaserInfo {
                 self.processPurchaseInfo(purchaserInfo)
