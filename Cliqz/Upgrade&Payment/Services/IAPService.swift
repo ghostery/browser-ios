@@ -16,6 +16,7 @@ public typealias ProductsRequestCompletionHandler = (_ success: Bool, _ products
 extension Notification.Name {
     static let ProductPurchaseSuccessNotification = Notification.Name("ProductPurchaseSuccessNotification")
     static let ProductPurchaseErrorNotification = Notification.Name("ProductPurchaseErrorNotification")
+    static let SubscriptionRefreshNotification = Notification.Name("SubscriptionRefreshNotification")
 }
 
 protocol IAPService {
