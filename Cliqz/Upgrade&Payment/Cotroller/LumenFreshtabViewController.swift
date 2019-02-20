@@ -20,17 +20,21 @@ class LumenFreshtabViewController: FreshtabViewController {
 		super.viewDidLoad()
 		setupViews()
 		setupConstraints()
-        NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseSuccessNotification(_:)),
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshView(_:)),
                                                name: .ProductPurchaseSuccessNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshView(_:)),
+                                               name: .SubscriptionRefreshNotification,
                                                object: nil)
 	}
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
+    @objc func refreshView(_ notification: Notification) {
         infoView?.removeFromSuperview()
         infoView = nil
+        setupViews()
         setupConstraints()
     }
     

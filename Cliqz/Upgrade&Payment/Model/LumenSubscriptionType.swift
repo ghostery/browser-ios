@@ -10,13 +10,13 @@ import Foundation
 
 public enum LumenSubscriptionType {
     case limited
-    case trial(Date)
+    case trial(Int)
     case premium(PremiumType, Date)
     
     func trialRemainingDays() -> Int? {
         switch self {
-        case .trial(let expirationDate):
-            return expirationDate.daysSince(Date())
+        case .trial(let remainingDays):
+            return remainingDays
         default:
             return nil
         }

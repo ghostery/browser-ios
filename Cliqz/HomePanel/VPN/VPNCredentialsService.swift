@@ -34,25 +34,32 @@ class VPNCredentialsService {
 					  	"revenue_cat_token": subscriptionUserId]
 			let header = ["x-api-key": apiKey]
 			var result = [VPNData]()
-			Alamofire.request("https://ic4t94ok9b.execute-api.us-east-1.amazonaws.com/staging/get_credentials", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).responseJSON { (response) in
+			Alamofire.request("https://auth-staging.lumenbrowser.com/get_credentials", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).responseJSON { (response) in
 				if response.result.isSuccess {
 					let json = JSON(response.result.value ?? "")
-					if let fullResponse = json.dictionary,
-						let body = fullResponse["body"]?.dictionary,
-						let nodes = body["nodes"]?.array,
-						let credentials = body["credentials"]?.dictionary,
-						let username = credentials["username"]?.string,
-						let password = credentials["password"]?.string {
-						for node in nodes {
-							if let data = node.dictionary,
-								let ip = data["ipAddress"]?.string,
-								let country = data["countryCode"]?.string,
-								let name = data["name"]?.string {
-								result.append(VPNData(country: country, username: username, password: password, remoteID: name, serverIP: ip, port: 0))
-							}
-						}
-					}
-				} else {
+                    if response.response?.statusCode == 480 {
+                        updateTrialRemainingDays(-1)
+                    } else if let fullResponse = json.dictionary,
+						let body = fullResponse["body"]?.dictionary {
+                        if let remainingDays = body["trial_days_left"]?.int {
+                            updateTrialRemainingDays(remainingDays)
+                        }
+                        
+                        if let nodes = body["nodes"]?.array,
+                            let credentials = body["credentials"]?.dictionary,
+                            let username = credentials["username"]?.string,
+                            let password = credentials["password"]?.string {
+                            for node in nodes {
+                                if let data = node.dictionary,
+                                    let ip = data["ipAddress"]?.string,
+                                    let country = data["countryCode"]?.string,
+                                    let name = data["name"]?.string {
+                                    result.append(VPNData(country: country, username: username, password: password, remoteID: name, serverIP: ip, port: 0))
+                                }
+                            }
+                        }
+                    }
+                } else {
 					print(response.error ?? "No Error from response") // TODO proper Error
 				}
 				completion(result)
@@ -61,4 +68,20 @@ class VPNCredentialsService {
 			completion([VPNData]())
 		}
 	}
+    
+    private class func updateTrialRemainingDays(_ remainingDays: Int?) {
+        guard let remainingDays = remainingDays else {
+            return
+        }
+        
+        let currentSubscription = SubscriptionController.shared.getCurrentSubscription()
+        switch currentSubscription {
+        case .trial(let currentRemainingDays):
+            if remainingDays != currentRemainingDays {
+                SubscriptionController.shared.saveTrialRemainingDays(remainingDays)
+            }
+        default:
+            return
+        }
+    }
 }

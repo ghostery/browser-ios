@@ -15,9 +15,10 @@ public class SubscriptionController {
     
     //MARK:- Private variables
     private let storeService: IAPService
-    private let TrialPeriod: TimeInterval = 14 * 24 * 60 * 60
+    private let TrialPeriod: Int = 14
     private let purchasedProductIdentifierKey = "Lumen.PurchasedProductIdentifier"
     private let expirationDateKey = "Lumen.ExpirationDate"
+    private let trialRemainingDaysKey = "Lumen.TrialRemainingDays"
     private let trialExpiredViewLastDismissedKey = "Lumen.TrialExpiredView.lastDismissed"
     private let disposeBag = DisposeBag()
     var availableSubscriptions = [PremiumType : SKProduct]()
@@ -33,8 +34,8 @@ public class SubscriptionController {
             self.updateUltimateProtectionStatus()
         }).disposed(by: disposeBag)
         
-        if getExpirationDate() == nil {
-            saveExpirationDate(Date().addingTimeInterval(TrialPeriod))
+        if getTrialRemainingDays() == nil {
+            saveTrialRemainingDays(TrialPeriod)
         }
         self.updateUltimateProtectionStatus()
     }
@@ -45,6 +46,15 @@ public class SubscriptionController {
     
     private func getExpirationDate() -> Date? {
         return UserDefaults.standard.object(forKey: expirationDateKey) as? Date
+    }
+    
+    func saveTrialRemainingDays(_ remainingDays: Int) {
+        UserDefaults.standard.set(remainingDays, forKey: trialRemainingDaysKey)
+        NotificationCenter.default.post(name: .SubscriptionRefreshNotification, object: nil)
+    }
+    
+    private func getTrialRemainingDays() -> Int? {
+        return UserDefaults.standard.object(forKey: trialRemainingDaysKey) as? Int
     }
     
     private func savePurchasedProduct(productIdentifier: String) {
@@ -106,18 +116,22 @@ public class SubscriptionController {
     }
 
     public func getCurrentSubscription() -> LumenSubscriptionType {
-        
-        if let expirationDate = getExpirationDate(), Date().timeIntervalSince(expirationDate) < 0 {
-            if let purchasedProductIdentifier = UserDefaults.standard.string(forKey: purchasedProductIdentifierKey),
-                let permiumType = PremiumType.init(rawValue: purchasedProductIdentifier) {
-                
-                return .premium(permiumType, expirationDate)
-            }
-            return .trial(expirationDate)
-            
+        // Check if premium
+        if let purchasedProductIdentifier = UserDefaults.standard.string(forKey: purchasedProductIdentifierKey),
+            let permiumType = PremiumType.init(rawValue: purchasedProductIdentifier),
+            let expirationDate = getExpirationDate(), Date().timeIntervalSince(expirationDate) < 0 {
+            return .premium(permiumType, expirationDate)
         }
+    
+        // check if trial still valid
+        if let trialRemainingDays = getTrialRemainingDays(), trialRemainingDays > 0 {
+            return .trial(trialRemainingDays)
+        }
+        
+        // if nothing above succeeded then user has limited subscription
         return .limited
     }
+    
     public func hasBasicSubscription() -> Bool {
         let currentSubscription = getCurrentSubscription()
         switch currentSubscription {
