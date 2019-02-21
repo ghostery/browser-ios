@@ -2254,13 +2254,15 @@ extension BrowserViewController: IntroViewControllerDelegate {
             self.launchFxAFromDeeplinkURL(url)
             return true
         }
-        
+
         if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
-            /* Cliqz: Change to CliqzIntroViewController
+		#if PAID
+			let introViewController = LumenIntroViewController()
+		#else
+            /* Cliqz: Change to CliqzIntroViewController */
             let introViewController = IntroViewController()
-            */
-            let introViewController = CliqzIntroViewController()
-            
+		#endif
+
             introViewController.delegate = self
             // On iPad we present it modally in a controller
             if topTabsVisible {
@@ -2276,7 +2278,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
             return true
         }
-        #endif
         return false
     }
     

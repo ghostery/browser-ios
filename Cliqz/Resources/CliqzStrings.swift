@@ -100,10 +100,10 @@ extension CliqzStrings {
     public struct LumenOnboarding {
         
         public var introTitle: String {
-            return NSLocalizedString("LUMEN", tableName: "Lumen", comment: "[Onboarding] Intro Title")
+            return NSLocalizedString("Ultimate Protection Online", tableName: "Lumen", comment: "[Onboarding] Intro Title")
         }
         public var introText: String {
-            return NSLocalizedString("See the Web in a whole new light!", tableName: "Lumen", comment: "[Onboarding] Intro text")
+            return NSLocalizedString("Blocks ads and trackers. Saves data volume and time.", tableName: "Lumen", comment: "[Onboarding] Intro text")
         }
         
         
@@ -115,11 +115,11 @@ extension CliqzStrings {
         }
         
         public var vpnTitle: String {
-            return NSLocalizedString("Be always carefree on the Web", tableName: "Lumen", comment: "[Onboarding] VPN title")
+            return NSLocalizedString("Safe and Sound on the Go", tableName: "Lumen", comment: "[Onboarding] VPN title")
         }
         
         public var vpnText: String {
-            return NSLocalizedString("Additional protection whenever and wherever you need it.", tableName: "Lumen", comment: "[Onboarding] VPN text")
+            return NSLocalizedString("Integrated VPN protects you on public Wi-Fi.", tableName: "Lumen", comment: "[Onboarding] VPN text")
         }
         
         
@@ -130,10 +130,18 @@ extension CliqzStrings {
             return NSLocalizedString("Lumen brings to light what happens in the shadows and protects you.", tableName: "Lumen", comment: "[Onboarding] Dashboard text")
         }
         
-        public var getStartedButtonText: String {
-            return NSLocalizedString("GET STARTED", tableName: "Lumen", comment: "[Onboarding] Get Started button text")
+        public var getNextButtonText: String {
+            return NSLocalizedString("NEXT", tableName: "Lumen", comment: "[Onboarding] Get Started button text")
         }
-        
+
+		public var getLetsGoButtonText: String {
+			return NSLocalizedString("LET'S GO", tableName: "Lumen", comment: "[Onboarding] Get Started button text")
+		}
+
+		public var getSkipIntroButtonText: String {
+			return NSLocalizedString("SKIP", tableName: "Lumen", comment: "[Onboarding] Get Started button text")
+		}
+		
         public var telemetryText: String {
             return NSLocalizedString("I agree to share strictly anonymous analytics data to improve Lumen's performance.", tableName: "Lumen", comment: "[Onboarding] Telemetry")
         }
