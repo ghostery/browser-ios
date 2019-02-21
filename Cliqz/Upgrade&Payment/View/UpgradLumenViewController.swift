@@ -52,6 +52,9 @@ class UpgradLumenViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return ThemeManager.instance.statusBarStyle
     }
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
