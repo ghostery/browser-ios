@@ -35,25 +35,38 @@ class LumenIntroViewController: UIViewController {
         if isIphoneX { return 25 }
         return self.view.frame.width <= 320 ? 10 : 20
     }
-    
+
     var isIphoneX: Bool {
          return UIDevice.current.isiPhoneXDevice()
     }
     
     private let backgroundView = LoginGradientView()
     
-    lazy fileprivate var startBrowsingButton: UIButton = {
+    lazy fileprivate var nextButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = AuthenticationUX.blue
-        button.layer.cornerRadius = 15.0
-        button.setTitle(CliqzStrings.LumenOnboarding().getStartedButtonText, for: UIControlState())
+        button.backgroundColor = UIColor.lumenBrightBlue
+        button.layer.cornerRadius = 18.0
+        button.setTitle(CliqzStrings.LumenOnboarding().getNextButtonText, for: UIControlState())
         button.setTitleColor(.white, for: UIControlState())
-        button.addTarget(self, action: #selector(startBrowsing), for: UIControlEvents.touchUpInside)
+		button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        button.addTarget(self, action: #selector(moveNext), for: UIControlEvents.touchUpInside)
         button.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
         button.isHidden = true
         return button
     }()
-    
+
+	lazy fileprivate var skipIntroButton: UIButton = {
+		let button = UIButton()
+		button.backgroundColor = UIColor.clear
+		button.setTitle(CliqzStrings.LumenOnboarding().getSkipIntroButtonText, for: UIControlState())
+		button.setTitleColor(UIColor.lumenBrightBlue, for: UIControlState())
+		button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+		button.addTarget(self, action: #selector(startBrowsing), for: UIControlEvents.touchUpInside)
+		button.accessibilityIdentifier = "IntroViewController.skipIntroButton"
+		button.isHidden = true
+		return button
+	}()
+
     lazy var pageControl: UIPageControl = {
         let pc = UIPageControl()
         pc.pageIndicatorTintColor = UIColor.cliqzBlueOneSecondary.withAlphaComponent(0.3)
@@ -76,20 +89,20 @@ class LumenIntroViewController: UIViewController {
         return sc
     }()
     
-    lazy var optInView: OptInView = {
-        let optInView = OptInView()
-        optInView.setCustomIcons(normalIcon: "blank-lumen-toggle", selectedIcon: "selected-lumen-toggle")
-        optInView.clipsToBounds = false
-        optInView.textLabel.numberOfLines = 0
-        optInView.textLabel.adjustsFontSizeToFitWidth = true
-        optInView.textLabel.minimumScaleFactor = 0.2
-        optInView.textLabel.textAlignment = .left
-        optInView.textLabel.textColor = UIColor.white
-        optInView.textLabel.text = CliqzStrings.LumenOnboarding().telemetryText
-        optInView.toggle.isSelected = true
-        return optInView
-    }()
-    
+//    lazy var optInView: OptInView = {
+//        let optInView = OptInView()
+//        optInView.setCustomIcons(normalIcon: "blank-lumen-toggle", selectedIcon: "selected-lumen-toggle")
+//        optInView.clipsToBounds = false
+//        optInView.textLabel.numberOfLines = 0
+//        optInView.textLabel.adjustsFontSizeToFitWidth = true
+//        optInView.textLabel.minimumScaleFactor = 0.2
+//        optInView.textLabel.textAlignment = .left
+//        optInView.textLabel.textColor = UIColor.white
+//        optInView.textLabel.text = CliqzStrings.LumenOnboarding().telemetryText
+//        optInView.toggle.isSelected = true
+//        return optInView
+//    }()
+	
     lazy fileprivate var imageViewContainer: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
@@ -106,35 +119,42 @@ class LumenIntroViewController: UIViewController {
         view.addSubview(backgroundView)
         view.addSubview(scrollView)
         view.addSubview(pageControl)
-        view.addSubview(startBrowsingButton)
-        view.addSubview(optInView)
+        view.addSubview(nextButton)
+		view.addSubview(skipIntroButton)
+
+//        view.addSubview(optInView)
         scrollView.addSubview(imageViewContainer)
         
-        optInView.delegate = self
-        optInView.snp.makeConstraints { make in
-            make.trailing.leading.equalToSuperview()
-            make.height.equalTo(44)
-            make.bottom.equalToSuperview().inset(bottomOffset)
-        }
-        
+//        optInView.delegate = self
+//        optInView.snp.makeConstraints { make in
+//            make.trailing.leading.equalToSuperview()
+//            make.height.equalTo(44)
+//            make.bottom.equalToSuperview().inset(bottomOffset)
+//        }
+		
         // Setup constraints
         imageViewContainer.snp.makeConstraints { make in
             make.top.equalTo(self.view).offset(topOffset)
             make.height.equalTo(LumenIntroUX.imageHeight)
         }
-        startBrowsingButton.snp.makeConstraints { make in
+        nextButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(30)
-            make.bottom.equalTo(optInView.snp.top).offset(-verticalPadding)
-            make.height.equalTo(30)
+            make.bottom.equalToSuperview().inset(bottomOffset)
+            make.height.equalTo(33)
         }
+		skipIntroButton.snp.makeConstraints { make in
+			make.leading.trailing.equalToSuperview().inset(30)
+			make.bottom.equalTo(nextButton.snp.top).offset(-10)
+			make.height.equalTo(30)
+		}
         scrollView.snp.makeConstraints { make in
             make.left.right.top.equalTo(self.view)
-            make.bottom.equalTo(startBrowsingButton.snp.top)
+            make.bottom.equalTo(skipIntroButton.snp.top)
         }
         
         pageControl.snp.makeConstraints { make in
             make.centerX.equalTo(self.scrollView)
-            make.bottom.equalTo(self.startBrowsingButton.snp.top).offset(-10)
+            make.bottom.equalTo(self.skipIntroButton.snp.top).offset(-10)
         }
         
         createSlides()
@@ -178,7 +198,8 @@ class LumenIntroViewController: UIViewController {
         }
         imageViewContainer.layoutSubviews()
         scrollView.contentSize = imageContainerSize()
-        startBrowsingButton.isHidden = false
+        nextButton.isHidden = false
+		skipIntroButton.isHidden = false
     }
     
     func addIntro(card: LumenIntroCard) -> LumenCardView? {
@@ -198,7 +219,7 @@ class LumenIntroViewController: UIViewController {
         self.view.addSubview(cardView)
         cardView.snp.makeConstraints { make in
             make.top.equalTo(self.imageViewContainer.snp.bottom).offset(-10)
-            make.bottom.equalTo(self.startBrowsingButton.snp.top)
+            make.bottom.equalTo(self.nextButton.snp.top)
             make.left.right.equalTo(self.view).inset(10)
         }
         return cardView
@@ -208,7 +229,13 @@ class LumenIntroViewController: UIViewController {
         // Start the necessary stuff for antitracking
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
     }
-    
+
+	@objc func moveNext() {
+		self.pageControl.currentPage = self.pageControl.currentPage + 1
+		self.pageControl.updateCurrentPageDisplay()
+		self.changePage()
+	}
+
     func login() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: true)
     }
@@ -216,13 +243,14 @@ class LumenIntroViewController: UIViewController {
     @objc func changePage() {
         let swipeCoordinate = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
         scrollView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: true)
+		updateButtonsStates()
     }
     
     fileprivate func setActive(_ introView: UIView, forPage page: Int) {
         guard introView.alpha != 1 else {
             return
         }
-        
+
         UIView.animate(withDuration: IntroUX.FadeDuration, animations: {
             self.cardViews.forEach { $0.alpha = 0.0 }
             introView.alpha = 1.0
@@ -231,7 +259,16 @@ class LumenIntroViewController: UIViewController {
             self.pageControl.currentPage = page
         }, completion: nil)
     }
-    
+
+	fileprivate func updateButtonsStates() {
+		if (self.pageControl.currentPage == self.cards.count - 1) {
+			self.skipIntroButton.isHidden = true
+			self.nextButton.setTitle(CliqzStrings.LumenOnboarding().getLetsGoButtonText, for: .normal)
+		} else {
+			self.skipIntroButton.isHidden = false
+			self.nextButton.setTitle(CliqzStrings.LumenOnboarding().getNextButtonText, for: .normal)
+		}
+	}
     func imageContainerSize() -> CGSize {
         return CGSize(width: self.view.frame.width * CGFloat(cards.count), height: LumenIntroUX.imageHeight)
     }
@@ -286,11 +323,10 @@ extension LumenIntroViewController {
     }
     
     fileprivate func setupDynamicFonts() {
-        
-        startBrowsingButton.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .light)
+        nextButton.titleLabel?.font = UIFont.systemFont(ofSize: 16.0, weight: .regular)
         cardViews.forEach { cardView in
             cardView.titleLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .regular)
-            cardView.textLabel.font = UIFont.systemFont(ofSize: 16.0, weight: .light)
+            cardView.textLabel.font = UIFont.systemFont(ofSize: 16.0, weight: .regular)
         }
     }
 }
@@ -316,7 +352,7 @@ extension LumenIntroViewController: UIScrollViewDelegate {
         if let cardView = cardViews[safe: page] {
             setActive(cardView, forPage: page)
         }
-        startBrowsingButton.isHidden = false
+		self.updateButtonsStates()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -403,12 +439,13 @@ struct LumenIntroCard: Codable, Equatable {
        
         
         let onboardingStrings = CliqzStrings.LumenOnboarding()
-        
-        let welcome = LumenIntroCard(title: onboardingStrings.introTitle, text: onboardingStrings.introText, imageName: "lumen-Logo")
-        let adblock = LumenIntroCard(title: onboardingStrings.adblockerTitle, text: onboardingStrings.adblockerText, imageName: "lumen-Adblock")
+		let langCode = Locale.current.languageCode ?? "en"
+		let dashboardImageName = "lumen-Dashboard_\(langCode)"
+        let welcome = LumenIntroCard(title: onboardingStrings.introTitle, text: onboardingStrings.introText, imageName: dashboardImageName)
+//        let adblock = LumenIntroCard(title: onboardingStrings.adblockerTitle, text: onboardingStrings.adblockerText, imageName: "lumen-Adblock")
         let vpn = LumenIntroCard(title: onboardingStrings.vpnTitle, text: onboardingStrings.vpnText, imageName: "lumen-VPN")
-        let dashboard = LumenIntroCard(title: onboardingStrings.dashboardTitle, text: onboardingStrings.dashboardText, imageName: "lumen-Dashboard")
-        return [welcome, adblock, vpn, dashboard]
+//        let dashboard = LumenIntroCard(title: onboardingStrings.dashboardTitle, text: onboardingStrings.dashboardText, imageName: "lumen-Dashboard")
+        return [welcome, vpn]
     }
     
     
