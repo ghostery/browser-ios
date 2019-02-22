@@ -15,6 +15,9 @@ struct LumenFreshtabUI {
 class LumenFreshtabViewController: FreshtabViewController {
 
 	private var infoView: UIView?
+	private var welcomeView: UIView?
+
+	private static let welcomeViewShown = "welcomeViewShown"
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -73,6 +76,11 @@ class LumenFreshtabViewController: FreshtabViewController {
 		default:
 			break
 		}
+		if LocalDataStore.value(forKey: LumenFreshtabViewController.welcomeViewShown) == nil {
+			self.welcomeView = WelcomeView()
+			self.container.addSubview(self.welcomeView!)
+			LocalDataStore.set(value: true, forKey: LumenFreshtabViewController.welcomeViewShown)
+		}
 	}
 
 	@objc
@@ -113,7 +121,13 @@ class LumenFreshtabViewController: FreshtabViewController {
                 make.top.bottom.left.right.equalToSuperview()
             })
         }
-        
+		if let w = self.welcomeView {
+			w.snp.makeConstraints { (make) in
+				make.top.equalTo(self.topSitesViewController.view.snp.bottom).offset(20)	
+				make.left.right.equalToSuperview()
+//				make.top.equalTo()
+			}
+		}
 	}
 
 	fileprivate func showUpgradeOptionsViewController() {

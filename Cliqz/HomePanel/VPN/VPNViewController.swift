@@ -223,14 +223,14 @@ class VPNEndPointManager {
             return countries[VPNEndPointManager.defaultCountryIndex] // VPNEndPointManager.defaultCountry //default
         }
     }
-    
+
     static let shared = VPNEndPointManager()
-    
+
     init() {
         //get credential for each country
         getVPNCredentialsFromServer()
     }
-    
+
     private func getVPNCredentialsFromServer() {
 		VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
 			for cred in credentials {
@@ -242,7 +242,7 @@ class VPNEndPointManager {
 			}
 		}
     }
-    
+
     func country(id: String) -> VPNCountry? {
         return countries.filter{$0.id == id}.first
     }
