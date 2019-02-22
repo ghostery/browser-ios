@@ -36,12 +36,12 @@ class FreshtabViewController: UIViewController, HomePanel {
 	// TODO: Finialize need of forgetModeView and hopefully remove
 	fileprivate var forgetModeView: ForgetModeView?
 
-	fileprivate let topSitesViewController = TopSitesViewController(dataSource: TopSitesDataSource.instance)
+	internal let topSitesViewController = TopSitesViewController(dataSource: TopSitesDataSource.instance)
 	internal let newsViewController = NewsViewController(dataSource: NewsDataSource.instance)
     
     fileprivate let topSitesEditModeOverlay = UIView()
     
-    fileprivate let container = UIView()
+    internal let container = UIView()
 
 	fileprivate var scrollCount = 0
 	fileprivate var startTime : Timestamp = Date.now()

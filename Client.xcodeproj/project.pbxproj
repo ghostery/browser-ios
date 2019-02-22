@@ -439,6 +439,7 @@
 		4FBBC1522035E5C400445AD1 /* NewsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBBC1512035E5C400445AD1 /* NewsDataSource.swift */; };
 		4FD19FC5205A9F7700547DD5 /* NativeContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */; };
 		4FDC331921F8BAAD001215EF /* VPNCredentialsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */; };
+		4FE43F5B221EE96D00045527 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE43F5A221EE96D00045527 /* WelcomeView.swift */; };
 		4FF07D852063C99E001385A8 /* OffrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D802063C99D001385A8 /* OffrView.swift */; };
 		4FF07D862063C99E001385A8 /* OffrzViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D812063C99D001385A8 /* OffrzViewController.swift */; };
 		4FF07D872063C99E001385A8 /* OffrzEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */; };
@@ -1852,6 +1853,7 @@
 		4FBBC1512035E5C400445AD1 /* NewsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDataSource.swift; sourceTree = "<group>"; };
 		4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeContextMenu.swift; sourceTree = "<group>"; };
 		4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNCredentialsService.swift; sourceTree = "<group>"; };
+		4FE43F5A221EE96D00045527 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		4FF07D802063C99D001385A8 /* OffrView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrView.swift; sourceTree = "<group>"; };
 		4FF07D812063C99D001385A8 /* OffrzViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzViewController.swift; sourceTree = "<group>"; };
 		4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzEmptyView.swift; sourceTree = "<group>"; };
@@ -3314,6 +3316,7 @@
 		4F0445D52033321D00E2C0C7 /* Freshtab */ = {
 			isa = PBXGroup;
 			children = (
+				4FE43F51221EE91700045527 /* Lumen */,
 				4FBBC1542035E5DC00445AD1 /* TopSites */,
 				4FBBC1532035E5D000445AD1 /* News */,
 				4F0445D82033326F00E2C0C7 /* FreshtabViewController.swift */,
@@ -3583,6 +3586,14 @@
 				4F934B2F22048ACD005D438C /* View */,
 			);
 			path = "Upgrade&Payment";
+			sourceTree = "<group>";
+		};
+		4FE43F51221EE91700045527 /* Lumen */ = {
+			isa = PBXGroup;
+			children = (
+				4FE43F5A221EE96D00045527 /* WelcomeView.swift */,
+			);
+			path = Lumen;
 			sourceTree = "<group>";
 		};
 		4FF07D712063C754001385A8 /* MyOffrz */ = {
@@ -6826,6 +6837,7 @@
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */,
 				4FFD424321A44EC600EABF87 /* GradientBackgroundView.swift in Sources */,
+				4FE43F5B221EE96D00045527 /* WelcomeView.swift in Sources */,
 				1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */,
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
 				D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */,
