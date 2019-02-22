@@ -425,7 +425,6 @@
 		4F934B3C22048ACD005D438C /* UpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B3222048ACD005D438C /* UpgradeView.swift */; };
 		4F934B3D22048ACD005D438C /* SubscriptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B3422048ACD005D438C /* SubscriptionController.swift */; };
 		4F934B3F22048AE9005D438C /* ButtonWithUnderlinedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B3E22048AE8005D438C /* ButtonWithUnderlinedText.swift */; };
-		4F934B4C220840E2005D438C /* LumenFreshtabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B4B220840E2005D438C /* LumenFreshtabViewController.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
 		4F9DD64320BD562B00107976 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8752028CE4000018880 /* disconnect-social.json */; };
 		4FAA4EC621AFEF8000CD41A7 /* LumenAccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAA4EC521AFEF8000CD41A7 /* LumenAccountTableViewController.swift */; };
@@ -440,6 +439,7 @@
 		4FD19FC5205A9F7700547DD5 /* NativeContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */; };
 		4FDC331921F8BAAD001215EF /* VPNCredentialsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */; };
 		4FE43F5B221EE96D00045527 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE43F5A221EE96D00045527 /* WelcomeView.swift */; };
+		4FE43F5D22202C1300045527 /* LumenFreshtabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE43F5C22202C1200045527 /* LumenFreshtabViewController.swift */; };
 		4FF07D852063C99E001385A8 /* OffrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D802063C99D001385A8 /* OffrView.swift */; };
 		4FF07D862063C99E001385A8 /* OffrzViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D812063C99D001385A8 /* OffrzViewController.swift */; };
 		4FF07D872063C99E001385A8 /* OffrzEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */; };
@@ -1840,7 +1840,6 @@
 		4F934B3222048ACD005D438C /* UpgradeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpgradeView.swift; sourceTree = "<group>"; };
 		4F934B3422048ACD005D438C /* SubscriptionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionController.swift; sourceTree = "<group>"; };
 		4F934B3E22048AE8005D438C /* ButtonWithUnderlinedText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonWithUnderlinedText.swift; sourceTree = "<group>"; };
-		4F934B4B220840E2005D438C /* LumenFreshtabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenFreshtabViewController.swift; sourceTree = "<group>"; };
 		4F9757391AFA6F37006ECC24 /* readerContent.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readerContent.html; sourceTree = "<group>"; };
 		4FAA4EC521AFEF8000CD41A7 /* LumenAccountTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenAccountTableViewController.swift; sourceTree = "<group>"; };
 		4FAA4ECF21B051F400CD41A7 /* ConfirmDeletionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmDeletionViewController.swift; sourceTree = "<group>"; };
@@ -1854,6 +1853,7 @@
 		4FD19FC4205A9F7700547DD5 /* NativeContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeContextMenu.swift; sourceTree = "<group>"; };
 		4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNCredentialsService.swift; sourceTree = "<group>"; };
 		4FE43F5A221EE96D00045527 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		4FE43F5C22202C1200045527 /* LumenFreshtabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LumenFreshtabViewController.swift; sourceTree = "<group>"; };
 		4FF07D802063C99D001385A8 /* OffrView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrView.swift; sourceTree = "<group>"; };
 		4FF07D812063C99D001385A8 /* OffrzViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzViewController.swift; sourceTree = "<group>"; };
 		4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzEmptyView.swift; sourceTree = "<group>"; };
@@ -3532,7 +3532,6 @@
 			isa = PBXGroup;
 			children = (
 				4F934B3422048ACD005D438C /* SubscriptionController.swift */,
-				4F934B4B220840E2005D438C /* LumenFreshtabViewController.swift */,
 			);
 			path = Cotroller;
 			sourceTree = "<group>";
@@ -3591,6 +3590,7 @@
 		4FE43F51221EE91700045527 /* Lumen */ = {
 			isa = PBXGroup;
 			children = (
+				4FE43F5C22202C1200045527 /* LumenFreshtabViewController.swift */,
 				4FE43F5A221EE96D00045527 /* WelcomeView.swift */,
 			);
 			path = Lumen;
@@ -6501,7 +6501,6 @@
 				1EDF0B1F207B837F00856493 /* KeyboardAccessoryView.swift in Sources */,
 				AF03AA1A20BC117600A9D097 /* LoadTrackerListOperation.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
-				4F934B4C220840E2005D438C /* LumenFreshtabViewController.swift in Sources */,
 				C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */,
 				1E4E772D214F927F007AFA60 /* SearchEnginesModule.swift in Sources */,
 				4FF07D882063C99E001385A8 /* OffrzDataSource.swift in Sources */,
@@ -6748,6 +6747,7 @@
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
 				E650755F1E37F756006961AC /* Try.m in Sources */,
 				3B6889C51D66950E002AC85E /* UIImageColors.swift in Sources */,
+				4FE43F5D22202C1300045527 /* LumenFreshtabViewController.swift in Sources */,
 				1EEA369520615725003B6AD5 /* DownloadManager.swift in Sources */,
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
