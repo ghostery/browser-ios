@@ -231,21 +231,29 @@ class LumenIntroViewController: UIViewController {
     }
 
 	@objc func moveNext() {
-		self.pageControl.currentPage = self.pageControl.currentPage + 1
-		self.pageControl.updateCurrentPageDisplay()
-		self.changePage()
+		if self.isLastPage() {
+			self.startBrowsing()
+		} else {
+			self.pageControl.currentPage = self.pageControl.currentPage + 1
+			self.pageControl.updateCurrentPageDisplay()
+			self.changePage()
+		}
 	}
 
     func login() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: true)
     }
     
-    @objc func changePage() {
+    @objc private func changePage() {
         let swipeCoordinate = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
         scrollView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: true)
 		updateButtonsStates()
     }
-    
+
+	private func isLastPage() -> Bool {
+		return self.pageControl.currentPage == self.cards.count - 1
+	}
+
     fileprivate func setActive(_ introView: UIView, forPage page: Int) {
         guard introView.alpha != 1 else {
             return
@@ -261,7 +269,7 @@ class LumenIntroViewController: UIViewController {
     }
 
 	fileprivate func updateButtonsStates() {
-		if (self.pageControl.currentPage == self.cards.count - 1) {
+		if self.isLastPage() {
 			self.skipIntroButton.isHidden = true
 			self.nextButton.setTitle(CliqzStrings.LumenOnboarding().getLetsGoButtonText, for: .normal)
 		} else {
