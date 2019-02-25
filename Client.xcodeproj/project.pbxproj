@@ -84,6 +84,7 @@
 		1E51104E2170A97E0092B038 /* SettingsTableViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E51104D2170A97E0092B038 /* SettingsTableViewControllerExtension.swift */; };
 		1E521A66213EAF820043416C /* Cliqz.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E521A68213EAF820043416C /* Cliqz.strings */; };
 		1E542350221AFBE50021020F /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E54234F221AFBE50021020F /* StoreKit.framework */; };
+		1E5423742220083F0021020F /* ContextualMessagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5423732220083E0021020F /* ContextualMessagesViewModel.swift */; };
 		1E5CEA5121BA7CEE00EC0226 /* Lumen.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 1E5CEA5321BA7CEE00EC0226 /* Lumen.stringsdict */; };
 		1E60134B21AC43E300392E80 /* LumenIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */; };
 		1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */; };
@@ -1508,6 +1509,7 @@
 		1E51104D2170A97E0092B038 /* SettingsTableViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewControllerExtension.swift; sourceTree = "<group>"; };
 		1E521A67213EAF820043416C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Cliqz.strings; sourceTree = "<group>"; };
 		1E54234F221AFBE50021020F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		1E5423732220083E0021020F /* ContextualMessagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualMessagesViewModel.swift; sourceTree = "<group>"; };
 		1E5CEA5221BA7CEE00EC0226 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Lumen.stringsdict; sourceTree = "<group>"; };
 		1E5CEA5C21BA7CFE00EC0226 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Lumen.stringsdict; sourceTree = "<group>"; };
 		1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenIntroViewController.swift; sourceTree = "<group>"; };
@@ -2719,6 +2721,14 @@
 			path = Topsites;
 			sourceTree = "<group>";
 		};
+		1E54236A222008200021020F /* Contextual Messages */ = {
+			isa = PBXGroup;
+			children = (
+				1E5423732220083E0021020F /* ContextualMessagesViewModel.swift */,
+			);
+			path = "Contextual Messages";
+			sourceTree = "<group>";
+		};
 		1E5E5D5A21809B1700148A2B /* PaidControlCenter */ = {
 			isa = PBXGroup;
 			children = (
@@ -3520,6 +3530,7 @@
 		4F8F3C0D202CB39F001C1A0F /* Cliqz */ = {
 			isa = PBXGroup;
 			children = (
+				1E54236A222008200021020F /* Contextual Messages */,
 				4FDC333621FF618E001215EF /* Upgrade&Payment */,
 				1E8C403921F89A4F00873CB7 /* Theme */,
 				4FD0C7DD219B0C63003A9B61 /* Authentication */,
@@ -6766,6 +6777,7 @@
 				D83822001FC7961D00303C12 /* DispatchQueueExtensions.swift in Sources */,
 				D03F8EB22004014E003C2224 /* FaviconHandler.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
+				1E5423742220083F0021020F /* ContextualMessagesViewModel.swift in Sources */,
 				A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				4F4033DA2086577D00AD2A8D /* GlobalTrackersViewController.swift in Sources */,

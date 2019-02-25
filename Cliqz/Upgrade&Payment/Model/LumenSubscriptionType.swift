@@ -21,4 +21,12 @@ public enum LumenSubscriptionType {
             return nil
         }
     }
+    func isLimitedSubscription() -> Bool {
+        switch self {
+        case .limited:
+            return true
+        default:
+            return false
+        }
+    }
 }
