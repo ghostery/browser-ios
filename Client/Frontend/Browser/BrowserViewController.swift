@@ -2257,8 +2257,10 @@ extension BrowserViewController: IntroViewControllerDelegate {
 		#if PAID
 			let introViewController = LumenIntroViewController()
 		#else
-            /* Cliqz: Change to CliqzIntroViewController */
-            let introViewController = IntroViewController()
+			/* Cliqz: Change to CliqzIntroViewController
+			let introViewController = IntroViewController()
+			*/
+			let introViewController = CliqzIntroViewController()
 		#endif
 
             introViewController.delegate = self
