@@ -154,7 +154,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
         }
     }
     
-    
+     
     func updateVPNButton() {
         controls.vpnButton.isSelected = VPN.shared.status == .connected
     }
