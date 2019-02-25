@@ -440,6 +440,10 @@
 		4FDC331921F8BAAD001215EF /* VPNCredentialsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */; };
 		4FE43F5B221EE96D00045527 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE43F5A221EE96D00045527 /* WelcomeView.swift */; };
 		4FE43F5D22202C1300045527 /* LumenFreshtabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE43F5C22202C1200045527 /* LumenFreshtabViewController.swift */; };
+		4FE43F5F22202E1C00045527 /* DashboardContextualOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE43F5E22202E1C00045527 /* DashboardContextualOnboardingView.swift */; };
+		4FE43F6122202ECA00045527 /* AdblokingContextualOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE43F6022202ECA00045527 /* AdblokingContextualOnboardingView.swift */; };
+		4FE43F6322202F0C00045527 /* AntitrackingContextualOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE43F6222202F0C00045527 /* AntitrackingContextualOnboardingView.swift */; };
+		4FE43F6522203AEB00045527 /* PrivacyContextualOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE43F6422203AEB00045527 /* PrivacyContextualOnboardingView.swift */; };
 		4FF07D852063C99E001385A8 /* OffrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D802063C99D001385A8 /* OffrView.swift */; };
 		4FF07D862063C99E001385A8 /* OffrzViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D812063C99D001385A8 /* OffrzViewController.swift */; };
 		4FF07D872063C99E001385A8 /* OffrzEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */; };
@@ -1854,6 +1858,10 @@
 		4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNCredentialsService.swift; sourceTree = "<group>"; };
 		4FE43F5A221EE96D00045527 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		4FE43F5C22202C1200045527 /* LumenFreshtabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LumenFreshtabViewController.swift; sourceTree = "<group>"; };
+		4FE43F5E22202E1C00045527 /* DashboardContextualOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardContextualOnboardingView.swift; sourceTree = "<group>"; };
+		4FE43F6022202ECA00045527 /* AdblokingContextualOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdblokingContextualOnboardingView.swift; sourceTree = "<group>"; };
+		4FE43F6222202F0C00045527 /* AntitrackingContextualOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AntitrackingContextualOnboardingView.swift; sourceTree = "<group>"; };
+		4FE43F6422203AEB00045527 /* PrivacyContextualOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyContextualOnboardingView.swift; sourceTree = "<group>"; };
 		4FF07D802063C99D001385A8 /* OffrView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrView.swift; sourceTree = "<group>"; };
 		4FF07D812063C99D001385A8 /* OffrzViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzViewController.swift; sourceTree = "<group>"; };
 		4FF07D822063C99E001385A8 /* OffrzEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OffrzEmptyView.swift; sourceTree = "<group>"; };
@@ -3870,6 +3878,10 @@
 			children = (
 				AFBAC1BE20AEBB78007F02CC /* CliqzIntroViewController.swift */,
 				1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */,
+				4FE43F5E22202E1C00045527 /* DashboardContextualOnboardingView.swift */,
+				4FE43F6022202ECA00045527 /* AdblokingContextualOnboardingView.swift */,
+				4FE43F6222202F0C00045527 /* AntitrackingContextualOnboardingView.swift */,
+				4FE43F6422203AEB00045527 /* PrivacyContextualOnboardingView.swift */,
 			);
 			path = Intro;
 			sourceTree = "<group>";
@@ -6561,6 +6573,7 @@
 				AF77B890209A05E200E7A0C4 /* ConnectionManager.swift in Sources */,
 				4F0445D72033324500E2C0C7 /* NewsDataService.swift in Sources */,
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,
+				4FE43F6522203AEB00045527 /* PrivacyContextualOnboardingView.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				AF7DD43020F77B790090956F /* LoadingNotificationManager.swift in Sources */,
 				1E244CD72180A082004A73E9 /* CCAbstractCell.swift in Sources */,
@@ -6600,6 +6613,7 @@
 				4F4033D82086575500AD2A8D /* OverviewViewController.swift in Sources */,
 				4F30F5152051670C0049E4F6 /* SubscriptionModule.swift in Sources */,
 				AFA1DE0E2088BE5700B27B8A /* CompileOperation.swift in Sources */,
+				4FE43F6122202ECA00045527 /* AdblokingContextualOnboardingView.swift in Sources */,
 				AFBAC1BF20AEBB78007F02CC /* CliqzIntroViewController.swift in Sources */,
 				4FD19FC5205A9F7700547DD5 /* NativeContextMenu.swift in Sources */,
 				1E4CFBFB2073A5CC00B26E85 /* EditConnectionViewController.swift in Sources */,
@@ -6635,6 +6649,7 @@
 				AF6FA98820652D4600D7F9F0 /* TrackerListApp.swift in Sources */,
 				1E2C227C20B4149000AA00B5 /* SendUsageDataTableViewController.swift in Sources */,
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
+				4FE43F5F22202E1C00045527 /* DashboardContextualOnboardingView.swift in Sources */,
 				1EDF0B24207B86DA00856493 /* QuerySuggestions.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
 				1E2720CB21788DD000A8ADD4 /* PaidControlCenterViewController.swift in Sources */,
@@ -6763,6 +6778,7 @@
 				4FFD424121A318D300EABF87 /* EmailTextField.swift in Sources */,
 				EB9A178E20E525DF00B12184 /* ThemeSettingsController.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
+				4FE43F6322202F0C00045527 /* AntitrackingContextualOnboardingView.swift in Sources */,
 				4F1860332088F3DC00A86D4C /* Privacy.swift in Sources */,
 				4F934B3922048ACD005D438C /* PremiumType.swift in Sources */,
 				39AC591A1CC574AB0042C2F5 /* HomePageSettingsViewController.swift in Sources */,
