@@ -76,7 +76,7 @@ platform :ios do
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
 
     # Building ReactNative Entension
-    sh("cd .. && npm run bundle")
+    sh("cd .. && npm run bundle-ghostery")
 
     create_keychain(
       name: ENV["MATCH_KEYCHAIN_NAME"],
@@ -135,7 +135,7 @@ platform :ios do
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
 
     # Building ReactNative Entension
-    sh("cd .. && npm run bundle")
+    sh("cd .. && npm run bundle-ghostery")
 
     create_keychain(
       name: ENV["MATCH_KEYCHAIN_NAME"],
@@ -190,7 +190,7 @@ platform :ios do
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
 
     # Building ReactNative Entension
-    sh("cd .. && npm run bundle")
+    sh("cd .. && npm run bundle-ghostery")
 
     create_keychain(
       name: ENV["MATCH_KEYCHAIN_NAME"],
@@ -246,7 +246,7 @@ platform :ios do
     sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
 
     # Building ReactNative Entension
-    sh("cd .. && npm run bundle")
+    sh("cd .. && npm run bundle-lumen")
 
     create_keychain(
       name: ENV["MATCH_KEYCHAIN_NAME"],
@@ -313,7 +313,7 @@ platform :ios do
     sh("cd .. && plutil -replace LumenAPIKey -string $LumenAPIKey Client/Info.plist")
 
     # Building ReactNative Entension
-    sh("cd .. && npm run bundle")
+    sh("cd .. && npm run bundle-lumen")
 
     create_keychain(
       name: ENV["MATCH_KEYCHAIN_NAME"],

@@ -8,7 +8,8 @@
     "debug-channel": "sed -i '' 's/\"channel\": \".*\",$/\"channel\": \"MI99\",/' node_modules/browser-core/build/modules/core/config.js",
     "dev-server": "node node_modules/react-native/local-cli/cli.js start",
     "dev-bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
-    "bundle": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ --dev false && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
+    "bundle-ghostery": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ --dev false && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
+    "bundle-lumen": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file lumen.js --bundle-output ./Cliqz/JSEngine/jsengine.bundle.js --assets-dest ./Cliqz/JSEngine/ --dev false && cp -R ./node_modules/browser-core/build/assets/ ./Cliqz/JSEngine/assets/",
     "fix-websocket": "sed -i '' 's#<fishhook/fishhook.h>#\"fishhook.h\"#g' ./node_modules/react-native/Libraries/WebSocket/RCTReconnectingWebSocket.m",
     "fix-animation": "sed -i '' 's/#import <RCTAnimation\\/RCTValueAnimatedNode.h>/#import \"RCTValueAnimatedNode.h\"/' ./node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h",
     "postinstall": "npm run fix-websocket && npm run fix-animation"
@@ -23,6 +24,7 @@
     "@cliqz/indexeddbshim": "^4.1.1",
     "appium": "1.9.0",
     "browser-core": "https://s3.amazonaws.com/cdncliqz/update/edge/ghostery-ios/master/1.35.0.1b39.826c07b.tgz",
+    "browser-core-lumen-ios": "https://s3.amazonaws.com/cdncliqz/update/edge/lumen-ios/master/13.35.0.78.3654793.tgz",
     "buffer": "5.0.7",
     "https-browserify": "1.0.0",
     "page-metadata-parser": "^1.1.2",
