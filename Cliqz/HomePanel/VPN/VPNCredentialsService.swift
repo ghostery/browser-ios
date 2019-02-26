@@ -24,7 +24,7 @@ class VPNCredentialsService {
 	private static let APIKey = "LumenAPIKey"
 
 	class func getVPNCredentials(completion: @escaping ([VPNData]) -> Void) {
-		guard let apiKey = Bundle.main.object(forInfoDictionaryKey: APIKey) as? String, !apiKey.isEmpty,
+		guard let apiKey = Bundle.main.object(forInfoDictionaryKey: VPNCredentialsService.APIKey) as? String, !apiKey.isEmpty,
 				let subscriptionUserId = SubscriptionController.shared.getSubscriptionUserId() else {
 			print("API Key is not available in Info.plist")
 			return

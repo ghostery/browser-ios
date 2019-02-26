@@ -126,7 +126,8 @@ class VPN {
     
     static func connect2VPN() {
         let country = VPNEndPointManager.shared.selectedCountry
-        guard let creds = VPNEndPointManager.shared.getCredentials(country: country) else { return }
+        guard let creds = VPNEndPointManager.shared.getCredentials(country: country),
+			!country.endpoint.isEmpty else { return }
 
         NEVPNManager.shared().loadFromPreferences { (error) in
 			let ikeProtocol = NEVPNProtocolIKEv2()
@@ -238,6 +239,10 @@ class VPNEndPointManager {
 					self?.setCreds(country: country, username: cred.username, password: cred.password)
 					country.endpoint = cred.serverIP
 					country.remoteID = cred.remoteID
+					// TODO: Selected country logic also whole countries data should be refactored, the first implementation was quite weak
+					if country.id == self?.selectedCountry.id {
+						self?.selectedCountry = country
+					}
 				}
 			}
 		}
@@ -342,7 +347,7 @@ class VPNViewController: UIViewController {
         connectButton.setTitleColor(.blue, for: .normal)
         connectButton.tintColor = .blue
         connectButton.addTarget(self, action: #selector(connectButtonPressed), for: .touchUpInside)
-        
+
         view.addSubview(tableView)
         view.addSubview(mapView)
         view.addSubview(infoLabel)
@@ -465,7 +470,7 @@ class VPNViewController: UIViewController {
             self.connectButton.set(state: .Connect)
         }
     }
-    
+
     func updateMapView() {
         
         if VPNStatus == .connected {
@@ -500,11 +505,11 @@ class VPNViewController: UIViewController {
         updateConnectButton()
         updateMapView()
         
-        //reconnect when changing countries
-        if (VPNStatus == .disconnected && shouldVPNReconnect == true) {
-            shouldVPNReconnect = false
-            VPN.connect2VPN()
-        }
+//        //reconnect when changing countries
+//        if (VPNStatus == .disconnected && shouldVPNReconnect == true) {
+//            shouldVPNReconnect = false
+////            VPN.connect2VPN()
+//        }
     }
     
     @objc func connectButtonPressed(_ sender: Any) {
@@ -543,6 +548,7 @@ class VPNViewController: UIViewController {
         
         self.present(alert, animated: true, completion: nil)
     }
+
     @objc func timerFired(_ sender: Timer) {
         
         func convert(num: Int?) -> String {
