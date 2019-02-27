@@ -226,13 +226,14 @@ class LumenIntroViewController: UIViewController {
     }
     
     @objc func startBrowsing() {
-        // Start the necessary stuff for antitracking
+        LegacyTelemetryHelper.logOnboarding(action: "click", page: pageControl.currentPage, target: "skip")
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
     }
 
 	@objc func moveNext() {
+        LegacyTelemetryHelper.logOnboarding(action: "click", page: pageControl.currentPage, target: "next")
 		if self.isLastPage() {
-			self.startBrowsing()
+			delegate?.introViewControllerDidFinish(self, requestToLogin: false)
 		} else {
 			self.pageControl.currentPage = self.pageControl.currentPage + 1
 			self.pageControl.updateCurrentPageDisplay()
@@ -258,7 +259,8 @@ class LumenIntroViewController: UIViewController {
         guard introView.alpha != 1 else {
             return
         }
-
+        LegacyTelemetryHelper.logOnboarding(action: "show", page: page)
+        
         UIView.animate(withDuration: IntroUX.FadeDuration, animations: {
             self.cardViews.forEach { $0.alpha = 0.0 }
             introView.alpha = 1.0
@@ -357,8 +359,11 @@ extension LumenIntroViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
+        guard page != pageControl.currentPage else { return }
+        
         if let cardView = cardViews[safe: page] {
             setActive(cardView, forPage: page)
+            LegacyTelemetryHelper.logOnboarding(action: "swipe", page: page)
         }
 		self.updateButtonsStates()
     }

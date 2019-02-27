@@ -47,6 +47,7 @@
 		1E0EC3E72209A95400EC3A38 /* SubscriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0EC3E62209A95300EC3A38 /* SubscriptionTableViewCell.swift */; };
 		1E138D7F20A2E4F400B82C13 /* BookmarksModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */; };
 		1E138E1420A5983D00B82C13 /* CliqzBookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */; };
+		1E23E61D22258D0B0004FAAF /* LegacyTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E23E61C22258D0B0004FAAF /* LegacyTelemetryHelper.swift */; };
 		1E244CD72180A082004A73E9 /* CCAbstractCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E244CCB2180A081004A73E9 /* CCAbstractCell.swift */; };
 		1E244CD82180A082004A73E9 /* CCDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E244CD42180A082004A73E9 /* CCDataSource.swift */; };
 		1E244CD92180A082004A73E9 /* CCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E244CD52180A082004A73E9 /* CCViewController.swift */; };
@@ -1470,6 +1471,7 @@
 		1E0EC3E62209A95300EC3A38 /* SubscriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTableViewCell.swift; sourceTree = "<group>"; };
 		1E138D7E20A2E4F400B82C13 /* BookmarksModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksModelExtensions.swift; sourceTree = "<group>"; };
 		1E138E1320A5983D00B82C13 /* CliqzBookmarksPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzBookmarksPanel.swift; sourceTree = "<group>"; };
+		1E23E61C22258D0B0004FAAF /* LegacyTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTelemetryHelper.swift; sourceTree = "<group>"; };
 		1E244CCB2180A081004A73E9 /* CCAbstractCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCAbstractCell.swift; sourceTree = "<group>"; };
 		1E244CD42180A082004A73E9 /* CCDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCDataSource.swift; sourceTree = "<group>"; };
 		1E244CD52180A082004A73E9 /* CCViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCViewController.swift; sourceTree = "<group>"; };
@@ -3921,6 +3923,7 @@
 			isa = PBXGroup;
 			children = (
 				AFAB306A20B83E2800FE312E /* TelemetryHelper.swift */,
+				1E23E61C22258D0B0004FAAF /* LegacyTelemetryHelper.swift */,
 			);
 			path = Telemetry;
 			sourceTree = "<group>";
@@ -6811,6 +6814,7 @@
 				AF28D3DD207E378E0065FF86 /* GeoLocationBridge.m in Sources */,
 				E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */,
 				AFA1DE0C2088BE0500B27B8A /* BlockListFileManager.swift in Sources */,
+				1E23E61D22258D0B0004FAAF /* LegacyTelemetryHelper.swift in Sources */,
 				4F30F50A2051670C0049E4F6 /* BrowserActions.swift in Sources */,
 				1E2C435C21F89E8100891FB2 /* LumenDarkTheme.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
