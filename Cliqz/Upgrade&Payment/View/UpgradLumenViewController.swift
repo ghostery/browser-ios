@@ -22,6 +22,7 @@ class UpgradLumenViewController: UIViewController {
     private let privacyPolicyButton = UIButton()
     private let gradient = BrowserGradientView()
     private let notchOffset = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+    private var telemetryTarget: String?
     
     private let buttonAttributes : [NSAttributedStringKey: Any] = [
         NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0, weight: .medium),
@@ -44,6 +45,8 @@ class UpgradLumenViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseErrorNotification(_:)),
                                                name: .ProductPurchaseErrorNotification,
                                                object: nil)
+        
+        LegacyTelemetryHelper.logPayment(action: "show")
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -228,10 +231,13 @@ class UpgradLumenViewController: UIViewController {
     }
     
     @objc func closeView() {
+        LegacyTelemetryHelper.logPayment(action: "click", target: "close")
         self.dismiss(animated: true)
     }
     
     @objc func restoreSubscription() {
+        telemetryTarget = "restore"
+        LegacyTelemetryHelper.logPayment(action: "click", target: telemetryTarget)
         SubscriptionController.shared.restorePurchases()
     }
     
@@ -248,10 +254,12 @@ class UpgradLumenViewController: UIViewController {
     }
     
     @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
-        self.closeView()
+        LegacyTelemetryHelper.logPayment(action: "success", target: telemetryTarget)
+        self.dismiss(animated: true)
     }
     
     @objc func handlePurchaseErrorNotification(_ notification: Notification) {
+        LegacyTelemetryHelper.logPayment(action: "error", target: telemetryTarget)
         let errorDescirption = NSLocalizedString("We are sorry, but something went wrong. The payment was not successful, please try again.", tableName: "Lumen", comment: "Error message when there is failing payment transaction")
         let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("Retry", tableName: "Lumen", comment: "Retry button title in payment failing transaction alert"), style: .default) {[weak self] (action) in
@@ -274,7 +282,7 @@ class UpgradLumenViewController: UIViewController {
     }
     
     @objc func toggleConditions() {
-        
+        LegacyTelemetryHelper.logPayment(action: "click", target: "conditions")
         if isConditionsHidden {
             UIView.animate(withDuration: 0.5) {
                 let conditionsOffset = -1.0 * self.getContidionOffet()
@@ -355,6 +363,8 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
         cell.buyButtonHandler = { [weak self] premiumType in
             SubscriptionController.shared.buyProduct(premiumType)
             self?.lastShosenPremiumType = premiumType
+            self?.telemetryTarget = premiumType.getTelemeteryTarget()
+            LegacyTelemetryHelper.logPayment(action: "click", target: self?.telemetryTarget)
         }
         
         return cell
