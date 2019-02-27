@@ -16,7 +16,16 @@ class LegacyTelemetryHelper: NSObject {
         sendSignal(signal)
     }
     
+    class func logPayment(action: String, target: String? = nil) {
+        var signal: [String : Any] = ["type": "payment", "action": action, "version": 1]
+        if let target = target { signal["target"] = target }
+        
+        sendSignal(signal)
+    }
+    
     private class func sendSignal(_ signal: [String: Any]) {
-        Engine.sharedInstance.getBridge().callAction("core:sendTelemetry", args: [signal])
+        DispatchQueue.global(qos: .utility).async {
+            Engine.sharedInstance.getBridge().callAction("core:sendTelemetry", args: [signal])
+        }
     }
 }

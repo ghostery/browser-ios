@@ -78,4 +78,14 @@ public enum PremiumType: String {
         }
     }
     
+    func getTelemeteryTarget() -> String {
+        switch self {
+        case .Basic:
+            return "subscribe_basic"
+        case .Pro:
+            return "subscribe_plus_monthly"
+        case .Plus:
+            return "subscribe_plus_annually"
+        }
+    }
 }
