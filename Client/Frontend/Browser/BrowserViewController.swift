@@ -1281,6 +1281,8 @@ class BrowserViewController: UIViewController {
         }
         info["isPrivate"] = tab.isPrivate
         notificationCenter.post(name: .OnLocationChange, object: self, userInfo: info)
+        // Cliqz: log page load telemetry form lumen
+        LegacyTelemetryHelper.logPageLoad()
     }
 
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
