@@ -122,6 +122,7 @@ class VPN {
     static func disconnectVPN() {
         VPN.shared.shouldTryToReconnect = false
         NEVPNManager.shared().connection.stopVPNTunnel()
+        
     }
     
     static func connect2VPN() {
@@ -314,6 +315,8 @@ class VPNViewController: UIViewController {
         updateMapView()
         updateConnectButton()
         updateInfoLabel()
+        
+        LegacyTelemetryHelper.logVPN(action: "show")
     }
     
     @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
@@ -450,6 +453,8 @@ class VPNViewController: UIViewController {
             if VPN.shared.connectDate == nil {
                 VPN.shared.connectDate = Date()
             }
+            LegacyTelemetryHelper.logVPN(action: "connect",
+                                         location: VPNEndPointManager.shared.selectedCountry.id)
         }
         else if VPNStatus == .disconnected {
             if self.connectButton.currentState == .Connecting || self.connectButton.currentState == .Connect {
@@ -510,6 +515,12 @@ class VPNViewController: UIViewController {
 //            shouldVPNReconnect = false
 ////            VPN.connect2VPN()
 //        }
+        
+        if (VPNStatus == .disconnected) {
+            LegacyTelemetryHelper.logVPN(action: "error",
+                                         location: VPNEndPointManager.shared.selectedCountry.id,
+                                         connectionTime: getConnectionTime())
+        }
     }
     
     @objc func connectButtonPressed(_ sender: Any) {
@@ -521,11 +532,23 @@ class VPNViewController: UIViewController {
 		
         if (NEVPNManager.shared().connection.status == .connected) {
             VPN.disconnectVPN()
+            LegacyTelemetryHelper.logVPN(action: "click", target: "toggle", state: "off")
+            
+            LegacyTelemetryHelper.logVPN(action: "disconnect",
+                                         location: VPNEndPointManager.shared.selectedCountry.id,
+                                         connectionTime: getConnectionTime())
         } else {
 			shouldVPNReconnect = true
             VPN.connect2VPN()
+            LegacyTelemetryHelper.logVPN(action: "click", target: "toggle", state: "on")
         }
     }
+
+    private func getConnectionTime() -> Int? {
+        guard let connectDate = VPN.shared.connectDate else { return nil }
+        return Int(Date().timeIntervalSince(connectDate))
+    }
+
     private func displayUnlockVPNAlert () {
         let title = NSLocalizedString("VPN Protection.", tableName: "Lumen", comment: "[VPN] subscription expired alert title")
         let text = NSLocalizedString("Unlock the VPN feature to get the best out of Lumen.", tableName: "Lumen", comment: "[VPN] subscription expired alert text")
@@ -636,6 +659,10 @@ extension VPNViewController: UITableViewDelegate {
 
 extension VPNViewController: VPNCountryControllerProtocol {
     func didSelectCountry(shouldReconnect: Bool) {
+        LegacyTelemetryHelper.logVPN(action: "click",
+                                     target: "location",
+                                     location: VPNEndPointManager.shared.selectedCountry.id)
+
         if (VPN.shared.status == .connected && shouldReconnect) {
             //country changed
             //reconnect if necessary
