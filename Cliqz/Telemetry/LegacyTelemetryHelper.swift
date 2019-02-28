@@ -33,6 +33,11 @@ class LegacyTelemetryHelper: NSObject {
         sendSignal(signal)
     }
     
+    class func logPageLoad() {
+        let signal: [String : Any] = ["type": "navigation", "action": "pageLoad", "version": 1]
+        sendSignal(signal)
+    }
+    
     private class func sendSignal(_ signal: [String: Any]) {
         DispatchQueue.global(qos: .utility).async {
             Engine.sharedInstance.getBridge().callAction("core:sendTelemetry", args: [signal])
