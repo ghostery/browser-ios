@@ -29,4 +29,15 @@ public enum LumenSubscriptionType {
             return false
         }
     }
+    
+    func getTelegetryState() -> String {
+        switch self {
+        case .limited:
+            return "free"
+        case .trial(_):
+            return "trial"
+        case .premium(let premiumType, _):
+            return premiumType.hasVPN() ? "plus" : "basic"
+        }
+    }
 }

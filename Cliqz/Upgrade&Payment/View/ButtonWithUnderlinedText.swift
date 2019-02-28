@@ -18,15 +18,19 @@ class ButtonWithUnderlinedText: UIButton {
 	private let startText: (String, UIColor)
 	private let underlinedText: (String, UIColor)
 	private let position: PositionType
+    private let view: String
 
-	init(startText: (String, UIColor), underlinedText: (String, UIColor), position: PositionType = .next) {
+    init(startText: (String, UIColor), underlinedText: (String, UIColor), position: PositionType = .next, view: String) {
 		self.startText = startText
 		self.underlinedText = underlinedText
 		self.position = position
+        self.view = view
 		super.init(frame: .zero)
 		self.titleLabel?.numberOfLines = 0
 		self.titleLabel?.textAlignment = .center
 		self.setAttributedTitle(self.generateTitle(), for: .normal)
+        self.addTarget(self, action: #selector(logClickAction), for: .touchUpInside)
+        LegacyTelemetryHelper.logMessage(action: "show", topic: "upgrade", style: "footer", view: view)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -61,4 +65,8 @@ class ButtonWithUnderlinedText: UIButton {
 		}
 		return title
 	}
+    
+    @objc func logClickAction() {
+        LegacyTelemetryHelper.logMessage(action: "click", topic: "upgrade", style: "footer", view: view, target: "upgrade")
+    }
 }

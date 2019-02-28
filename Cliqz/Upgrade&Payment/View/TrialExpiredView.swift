@@ -27,6 +27,7 @@ class TrialExpiredView: UIView {
         self.setStyles()
         self.setConstraints()
         SubscriptionController.shared.trialExpiredViewDisplayed()
+        LegacyTelemetryHelper.logMessage(action: "show", topic: "upgrade", style: "reminder", view: "start_tab")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -99,11 +100,13 @@ class TrialExpiredView: UIView {
     
     @objc func upgradeToPremium() {
         delegate?.showUpgradeViewController()
+        LegacyTelemetryHelper.logMessage(action: "click", topic: "upgrade", style: "reminder", view: "start_tab", target: "upgrade")
     }
     
     @objc func hideView() {
         self.isHidden = true
         SubscriptionController.shared.trialExpiredViewDismissed()
+        LegacyTelemetryHelper.logMessage(action: "click", topic: "upgrade", style: "reminder", view: "start_tab", target: "cancel")
     }
 }
 

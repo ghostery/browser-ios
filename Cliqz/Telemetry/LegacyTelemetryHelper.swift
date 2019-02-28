@@ -38,6 +38,17 @@ class LegacyTelemetryHelper: NSObject {
         sendSignal(signal)
     }
     
+    class func logMessage(action: String, topic: String, style: String, view: String, target: String? = nil) {
+        var signal: [String : Any] = ["type": "message", "action": action, "topic": topic, "style": style, "version": 1]
+        if let target = target { signal["target"] = target }
+        
+        let currentSubscription = SubscriptionController.shared.getCurrentSubscription()
+        signal["state"] = currentSubscription.getTelegetryState()
+        if let daysLeft = currentSubscription.trialRemainingDays() { signal["days_left"] = daysLeft }
+        
+        sendSignal(signal)
+    }
+    
     private class func sendSignal(_ signal: [String: Any]) {
         DispatchQueue.global(qos: .utility).async {
             Engine.sharedInstance.getBridge().callAction("core:sendTelemetry", args: [signal])
