@@ -23,6 +23,16 @@ class LegacyTelemetryHelper: NSObject {
         sendSignal(signal)
     }
     
+    class func logVPN(action: String, target: String? = nil, state: String? = nil, location: String? = nil, connectionTime: Int? = nil) {
+        var signal: [String : Any] = ["type": "vpn", "action": action, "version": 1]
+        if let target = target { signal["target"] = target }
+        if let state = state { signal["state"] = state }
+        if let location = location { signal["location"] = location }
+        if let connectionTime = connectionTime { signal["connection_time"] = connectionTime }
+        
+        sendSignal(signal)
+    }
+    
     private class func sendSignal(_ signal: [String: Any]) {
         DispatchQueue.global(qos: .utility).async {
             Engine.sharedInstance.getBridge().callAction("core:sendTelemetry", args: [signal])
