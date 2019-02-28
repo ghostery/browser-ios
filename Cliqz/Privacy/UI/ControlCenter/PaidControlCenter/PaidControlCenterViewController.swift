@@ -201,7 +201,10 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
             if trialRemainingDays > 7 {
                 let title = String(format: NSLocalizedString("%d more days left in trial", tableName: "Lumen", comment: "Trial days left title"), trialRemainingDays)
                 let action = NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Upgrade action")
-                upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel), underlinedText: (action, UIColor.lumenBrightBlue), position: .next)
+                upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel),
+                                                         underlinedText: (action, UIColor.lumenBrightBlue),
+                                                         position: .next,
+                                                         view: "dashboard")
                 upgradeButton?.addTarget(self, action: #selector(showUpgradeViewController), for: .touchUpInside)
                 self.view.addSubview(upgradeButton!)
             } else if trialRemainingDays >= 0 {
@@ -219,7 +222,7 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
     }
     
     fileprivate func addUpgradeView() {
-        self.upgradeView = UpgradeView()
+        self.upgradeView = UpgradeView(view: "dashboard")
         self.upgradeView?.delegate = self
         view.addSubview(upgradeView!)
     }

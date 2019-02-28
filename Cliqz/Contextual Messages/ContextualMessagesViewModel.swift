@@ -52,17 +52,21 @@ class ContextualMessagesViewModel: NSObject {
         switch type {
         case .onboarding:
             UserDefaults.standard.set(true, forKey: ContextualMessagesViewModel.ShowOnboardingMessageKey)
+            LegacyTelemetryHelper.logMessage(action: "show", topic: "onboarding_dashboard", style: "notification", view: "web")
         
         case .expiredTrial:
             UserDefaults.standard.set(Date(), forKey: ContextualMessagesViewModel.LastExpiredTrailsMessageDateKey)
+            LegacyTelemetryHelper.logMessage(action: "show", topic: "upgrade", style: "notification", view: "web")
         
         case .adBlocking:
             let count = UserDefaults.standard.integer(forKey: ContextualMessagesViewModel.adBlockingMessageCountKey)
             UserDefaults.standard.set(count + 1, forKey: ContextualMessagesViewModel.adBlockingMessageCountKey)
+            LegacyTelemetryHelper.logMessage(action: "show", topic: "onboarding_ad_blocking", style: "notification", view: "web")
             
         case .antiTracking:
             let count = UserDefaults.standard.integer(forKey: ContextualMessagesViewModel.antiTrackingMessageCountKey)
             UserDefaults.standard.set(count + 1, forKey: ContextualMessagesViewModel.antiTrackingMessageCountKey)
+            LegacyTelemetryHelper.logMessage(action: "show", topic: "onboarding_anti_tracking", style: "notification", view: "web")
             
         }
     }

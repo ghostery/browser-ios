@@ -360,7 +360,7 @@ class VPNViewController: UIViewController {
         switch currentSubscription {
         case .trial(_):
             if let trialRemainingDays = currentSubscription.trialRemainingDays(), trialRemainingDays < 8 {
-                self.upgradeView = UpgradeView()
+                self.upgradeView = UpgradeView(view: "vpn")
                 self.upgradeView?.delegate = self
                 view.addSubview(upgradeView!)
             }
@@ -368,7 +368,10 @@ class VPNViewController: UIViewController {
             infoLabel.removeFromSuperview()
             let title = NSLocalizedString("Unlock the VPN feature to get the best out of Lumen.", tableName: "Lumen", comment: "Unlock the VPN feature text")
             let action = NSLocalizedString("LEARN MORE", tableName: "Lumen", comment: "LEARN MORE action")
-            upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel), underlinedText: (action, UIColor.lumenBrightBlue), position: .next)
+            upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel),
+                                                     underlinedText: (action, UIColor.lumenBrightBlue),
+                                                     position: .next,
+                                                     view: "vpn")
             upgradeButton?.addTarget(self, action: #selector(showUpgradeViewController), for: .touchUpInside)
             self.view.addSubview(upgradeButton!)
         default:
@@ -559,17 +562,21 @@ class VPNViewController: UIViewController {
         )
         
         //Learn More
-        let cancelAction = UIAlertAction(title: NSLocalizedString("No, Thanks", tableName: "Lumen", comment: "`No, Thanks` alert button"), style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("No, Thanks", tableName: "Lumen", comment: "`No, Thanks` alert button"), style: .default) { (action) in
+            LegacyTelemetryHelper.logMessage(action: "click", topic: "upgrade", style: "dialogue", view: "vpn", target: "cancel")
+        }
         alert.addAction(cancelAction)
         
         
         let okAction = UIAlertAction(title: NSLocalizedString("Learn More", tableName: "Lumen", comment: "`Learn More` alert button"), style: .default) { [weak self](action) in
             self?.showUpgradeViewController()
+            LegacyTelemetryHelper.logMessage(action: "click", topic: "upgrade", style: "dialogue", view: "vpn", target: "upgrade")
         }
         alert.addAction(okAction)
         
         
         self.present(alert, animated: true, completion: nil)
+        LegacyTelemetryHelper.logMessage(action: "show", topic: "upgrade", style: "dialogue", view: "vpn")
     }
 
     @objc func timerFired(_ sender: Timer) {

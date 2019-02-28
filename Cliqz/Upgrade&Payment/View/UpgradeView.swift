@@ -26,12 +26,15 @@ class UpgradeView: UIView {
     private let upgradeButton = UIButton()
     
     weak var delegate: UpgradeLumenDelegate?
+    private let view: String
     
-    init() {
+    init(view: String) {
+        self.view = view
         super.init(frame: CGRect.zero)
         self.setupComponents()
         self.setStyles()
         self.setConstraints()
+        LegacyTelemetryHelper.logMessage(action: "show", topic: "upgrade", style: "notification", view: view)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -119,6 +122,7 @@ class UpgradeView: UIView {
     
     @objc func upgradeToPremium() {
         delegate?.showUpgradeViewController()
+        LegacyTelemetryHelper.logMessage(action: "click", topic: "upgrade", style: "notification", view: view, target: "upgrade")
     }
 }
 

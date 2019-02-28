@@ -61,12 +61,15 @@ class LumenFreshtabViewController: FreshtabViewController {
 			if days > 7 {
 				let title = String(format: NSLocalizedString("%d more days left in trial", tableName: "Lumen", comment: "Trial days left title"), days)
 				let action = NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Upgrade action")
-				let btn = ButtonWithUnderlinedText(startText: (title, LumenFreshtabUI.mainTextColor), underlinedText: (action, UIColor.lumenBrightBlue), position: .bottom)
+				let btn = ButtonWithUnderlinedText(startText: (title, LumenFreshtabUI.mainTextColor),
+                                                   underlinedText: (action, UIColor.lumenBrightBlue),
+                                                   position: .bottom,
+                                                   view: "start_tab")
 				btn.addTarget(self, action: #selector(upgrade), for: .touchUpInside)
 				infoView = btn
 				self.view.addSubview(btn)
 			} else if days >= 0 {
-				let upgradeView = UpgradeView()
+				let upgradeView = UpgradeView(view: "start_tab")
 				upgradeView.delegate = self
 				infoView = upgradeView
 				view.addSubview(upgradeView)
