@@ -162,7 +162,7 @@ class CCWidgetManager {
     }
     
     func updateAppearance() {
-        
+        self.update(period: currentPeriod)
     }
     
     //period changed
@@ -311,10 +311,10 @@ class CCTimeSavedWidget: CCWidget {
         imageView = UIImageView()
         mainLabel = UILabel()
         mainLabel?.textAlignment = .center
-        mainLabel?.font = UIFont.systemFont(ofSize: 36, weight: .regular)
+        mainLabel?.font = UIFont.systemFont(ofSize: 30, weight: .regular)
         auxLabel = UILabel()
         auxLabel?.textAlignment = .center
-        auxLabel?.font = UIFont.systemFont(ofSize: 36, weight: .ultraLight)
+        auxLabel?.font = UIFont.systemFont(ofSize: 30, weight: .regular)
         
         mainLabel?.adjustsFontSizeToFitWidth = true
         auxLabel?.adjustsFontSizeToFitWidth = true
@@ -324,27 +324,27 @@ class CCTimeSavedWidget: CCWidget {
         stackView.spacing = 0.0
         stackView.addArrangedSubview(mainLabel!)
         stackView.addArrangedSubview(auxLabel!)
-        
+
         self.addSubview(stackView)
         self.addSubview(imageView!)
-        
+
         imageView!.snp.makeConstraints({ (make) in
             make.center.equalToSuperview()
         })
-        
+
         stackView.snp.makeConstraints { (make) in
             make.center.equalTo(imageView!.snp.center)
             make.width.lessThanOrEqualTo(imageView!.snp.width).multipliedBy(0.7)
             make.height.equalTo(70)
         }
-        
+
         update()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func update() {
         super.update()
         imageView?.image = Lumen.Dashboard.timeSavedImage(lumenTheme, lumenDashboardMode)
@@ -394,18 +394,20 @@ class CCAdsBlockedWidget: CCWidget {
 
 class CCDataSavedWidget: CCWidget {
     var QuantityFontAttributes: [NSAttributedStringKey: Any] {
-        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 50, weight: .ultraLight),
+        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 30, weight: .regular),
                 NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
     }
     
     var ScaleFontAttributes: [NSAttributedStringKey: Any] {
-        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 50, weight: .medium),
+        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 30, weight: .regular),
                 NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
     }
     
     init() {
         super.init(frame: CGRect.zero)
-        
+		
+		imageView = UIImageView()
+
         mainLabel = UILabel()
         mainLabel?.textAlignment = .center
         mainLabel?.sizeToFit()
@@ -419,18 +421,22 @@ class CCDataSavedWidget: CCWidget {
         
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = -32.0
+		stackView.spacing = 0.0
         stackView.addArrangedSubview(mainLabel!)
         stackView.addArrangedSubview(auxLabel!)
         
-        self.addSubview(stackView)
-        
-        stackView.snp.makeConstraints { (make) in
-            make.height.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().dividedBy(1.2)
-        }
-        
+		self.addSubview(imageView!)
+		self.addSubview(stackView)
+
+		imageView!.snp.makeConstraints({ (make) in
+			make.center.equalToSuperview()
+		})
+
+		stackView.snp.makeConstraints { (make) in
+			make.center.equalTo(imageView!.snp.center)
+			make.width.lessThanOrEqualTo(imageView!.snp.width).multipliedBy(0.7)
+			make.height.equalTo(70)
+		}
         update()
     }
     
@@ -445,6 +451,7 @@ class CCDataSavedWidget: CCWidget {
     
     override func update() {
         super.update()
+		imageView?.image = Lumen.Dashboard.dataSavedImage(lumenTheme, lumenDashboardMode)
         let (quantity, scale) = CCWidgetManager.shared.dataSaved()
         updateView(quanitity: quantity, scale: scale)
     }
@@ -511,16 +518,25 @@ class CCAntiPhishingWidget: CCWidget {
         super.init(frame: CGRect.zero)
         
         imageView = UIImageView()
-        
+
+		mainLabel = UILabel()
+		mainLabel?.textAlignment = .center
+		mainLabel?.sizeToFit()
+
         mainLabel?.adjustsFontSizeToFitWidth = true
         auxLabel?.adjustsFontSizeToFitWidth = true
         
         self.addSubview(imageView!)
-        
+		self.addSubview(mainLabel!)
+
         imageView!.snp.makeConstraints({ (make) in
-            make.center.equalToSuperview()
+            make.centerX.equalToSuperview()
+			make.centerY.equalToSuperview().dividedBy(1.4)
         })
-        
+		mainLabel!.snp.makeConstraints { (make) in
+			make.top.equalTo(imageView!.snp.bottom).offset(5)
+			make.centerX.equalTo(imageView!.snp.centerX)
+		}
         update()
     }
     
@@ -531,12 +547,18 @@ class CCAntiPhishingWidget: CCWidget {
     override func update() {
         super.update()
         imageView?.image = Lumen.Dashboard.antiphisingImage(lumenTheme, lumenDashboardMode)
+		var QuantityFontAttributes: [NSAttributedStringKey: Any] {
+			return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14, weight: .medium), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.darkBlueTitleColor(lumenTheme, lumenDashboardMode)]
+		}
+		let attributedText = NSMutableAttributedString(string:NSLocalizedString("Phishing Protection", tableName: "Lumen", comment: "[Luemn -> Dashboard] Anti-Phishing"), attributes: QuantityFontAttributes)
+		mainLabel?.attributedText = attributedText
+
     }
 }
 
 class CCCompaniesWidget: CCWidget {
     var QuantityFontAttributes: [NSAttributedStringKey: Any] {
-        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 36, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
+        return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 30, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
     }
     var ScaleFontAttributes: [NSAttributedStringKey: Any] {
         return [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .regular), NSAttributedStringKey.foregroundColor: Lumen.Dashboard.widgetTextColor(lumenTheme, lumenDashboardMode)]
@@ -553,23 +575,17 @@ class CCCompaniesWidget: CCWidget {
         mainLabel?.textAlignment = .center
         mainLabel?.sizeToFit()
         
-        auxLabel = UILabel()
-        auxLabel?.textAlignment = .center
-        auxLabel?.sizeToFit()
-        
         mainLabel?.adjustsFontSizeToFitWidth = true
-        auxLabel?.adjustsFontSizeToFitWidth = true
-        
+
         self.addSubview(container)
         container.addSubview(imageView!)
         container.addSubview(mainLabel!)
-        container.addSubview(auxLabel!)
-        
+
         container.snp.makeConstraints { (make) in
             make.trailing.leading.equalToSuperview()
             make.centerY.equalToSuperview()
             make.top.equalTo(imageView!.snp.top)
-            make.bottom.equalTo(auxLabel!.snp.bottom)
+            make.bottom.equalTo(mainLabel!.snp.bottom)
         }
         
         imageView!.snp.makeConstraints({ (make) in
@@ -582,11 +598,6 @@ class CCCompaniesWidget: CCWidget {
             make.centerX.equalToSuperview()
         }
         
-        auxLabel!.snp.makeConstraints { (make) in
-            make.top.equalTo(mainLabel!.snp.bottom).offset(-6)
-            make.centerX.equalToSuperview()
-        }
-        
         update()
     }
     
@@ -596,10 +607,7 @@ class CCCompaniesWidget: CCWidget {
     
     func updateView(quanitity: Int) {
         let attributedText = NSMutableAttributedString(string: String(quanitity), attributes: QuantityFontAttributes)
-        let auxTitle = NSLocalizedString("Companies", tableName: "Lumen", comment: "[Luemn -> Dashboard] Companies")
-        let auxText = NSAttributedString(string: auxTitle, attributes: ScaleFontAttributes)
         mainLabel?.attributedText = attributedText
-        auxLabel?.attributedText = auxText
     }
     
     override func update() {

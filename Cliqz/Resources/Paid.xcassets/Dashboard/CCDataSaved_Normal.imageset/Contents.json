@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Time-Saved.png",
+      "filename" : "Data-Saved.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Time-Saved@2x.png",
+      "filename" : "Data-Saved@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Time-Saved@3x.png",
+      "filename" : "Data-Saved@3x.png",
       "scale" : "3x"
     }
   ],

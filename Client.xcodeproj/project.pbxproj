@@ -414,6 +414,7 @@
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
 		4F53287521F7579F00FC7F12 /* 3rd_party_cookies_blocker.json in Resources */ = {isa = PBXBuildFile; fileRef = 4F53287421F7579F00FC7F12 /* 3rd_party_cookies_blocker.json */; };
 		4F69309A2048185600FB0B2E /* TopSitesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6930992048185600FB0B2E /* TopSitesDataSource.swift */; };
+		4F70E0CB22258F8B00412270 /* LumenPrivacyStateControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70E0CA22258F8B00412270 /* LumenPrivacyStateControl.swift */; };
 		4F82FDC5208F2D3E002CED25 /* TrackersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F82FDB6208F2D3E002CED25 /* TrackersController.swift */; };
 		4F934B3522048ACD005D438C /* RevenueCatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B2922048ACD005D438C /* RevenueCatService.swift */; };
 		4F934B3622048ACD005D438C /* IAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B2A22048ACD005D438C /* IAPService.swift */; };
@@ -1833,6 +1834,7 @@
 		4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		4F53287421F7579F00FC7F12 /* 3rd_party_cookies_blocker.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 3rd_party_cookies_blocker.json; sourceTree = "<group>"; };
 		4F6930992048185600FB0B2E /* TopSitesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDataSource.swift; sourceTree = "<group>"; };
+		4F70E0CA22258F8B00412270 /* LumenPrivacyStateControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenPrivacyStateControl.swift; sourceTree = "<group>"; };
 		4F82FDB6208F2D3E002CED25 /* TrackersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackersController.swift; sourceTree = "<group>"; };
 		4F934B2922048ACD005D438C /* RevenueCatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RevenueCatService.swift; sourceTree = "<group>"; };
 		4F934B2A22048ACD005D438C /* IAPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPService.swift; sourceTree = "<group>"; };
@@ -2705,6 +2707,7 @@
 				1E244CD42180A082004A73E9 /* CCDataSource.swift */,
 				1E244CD62180A082004A73E9 /* CCWidget.swift */,
 				1E244CCB2180A081004A73E9 /* CCAbstractCell.swift */,
+				4F70E0CA22258F8B00412270 /* LumenPrivacyStateControl.swift */,
 			);
 			path = PaidControlCenter;
 			sourceTree = "<group>";
@@ -6527,6 +6530,7 @@
 				D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */,
 				1E244CDA2180A082004A73E9 /* CCWidget.swift in Sources */,
 				4F30F50D2051670C0049E4F6 /* CryptoBridge.m in Sources */,
+				4F70E0CB22258F8B00412270 /* LumenPrivacyStateControl.swift in Sources */,
 				AF7DD44020F785D30090956F /* CustomSimpleToast.swift in Sources */,
 				EB9A179B20E69A7F00B12184 /* ThemeManager.swift in Sources */,
 				0B3E7D951B27A7CE00E2E84D /* AboutHomeHandler.swift in Sources */,

@@ -17,8 +17,8 @@ protocol CCCollectionDataSourceProtocol: class {
 }
 
 struct CCUX {
-    static let HorizontalContentWigetRatio: CGFloat = 272 / 777
-    static let VerticalContentWidgetRatio: CGFloat = 378 / 583
+    static let HorizontalContentWigetRatio: CGFloat = 300 / 777
+    static let VerticalContentWidgetRatio: CGFloat = 130 / 175
     static let CliqzBlueGlow: UIColor = UIColor.init(colorString: "07E6FE")
 }
 
@@ -26,7 +26,8 @@ class CCCollectionViewController: UIViewController {
     
     let scrollView = UIScrollView()
     let stackView = UIStackView()
-    
+	let resetStatsButtons = UIButton(type: .custom)
+
     weak var dataSource: CCCollectionDataSourceProtocol? = nil
 
     override func viewDidLoad() {
@@ -44,12 +45,26 @@ class CCCollectionViewController: UIViewController {
         scrollView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
+		
+		resetStatsButtons.setTitle(NSLocalizedString("Reset statistics", tableName: "Lumen", comment: "[Lumen->Dashboard] Reset statistics button title"), for: .normal)
+		resetStatsButtons.setTitleColor(Lumen.Dashboard.darkBlueTitleColor(lumenTheme, lumenDashboardMode), for: .normal)
+		resetStatsButtons.titleLabel?.textAlignment = .center
+		resetStatsButtons.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+		scrollView.addSubview(resetStatsButtons)
+		resetStatsButtons.addTarget(self, action: #selector(clearPressed), for: .touchUpInside)
+
+		resetStatsButtons.snp.makeConstraints { (make) in
+			make.bottom.equalToSuperview()
+			make.width.equalTo(self.scrollView.snp.width)
+			make.height.equalTo(62)
+		}
+
         stackView.snp.makeConstraints { (make) in
-            make.top.bottom.equalToSuperview().inset(10)
+            make.top.equalToSuperview().inset(20)
+			make.bottom.equalToSuperview().inset(70)
             make.centerX.equalToSuperview()
         }
-        
+
         self.addCells()
     }
     
@@ -85,13 +100,37 @@ class CCCollectionViewController: UIViewController {
                 }
             }
         }
-    }
+		resetStatsButtons.setTitleColor(Lumen.Dashboard.darkBlueTitleColor(lumenTheme, lumenDashboardMode), for: .normal)
+	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
+	@objc func clearPressed(_ button: UIButton) {
+		func clearDashboardData(_ action: UIAlertAction) {
+			DispatchQueue.global(qos: .utility).async { [weak self] in
+				//print("Will send data for tab = \(tabID) and page = \(String(describing: currentP))")
+				Engine.sharedInstance.getBridge().callAction(JSBridge.Action.cleanData.rawValue, args: [], callback: { (result) in
+					if let error = result["error"] as? [[String: Any]] {
+						debugPrint("Error calling action insights:clearData: \(error)")
+						//TODO: What should I do in this case?
+					}
+					else {
+						CCWidgetManager.shared.updateAppearance()
+					}
+				})
+			}
+		}
+		
+		let alertText = NSLocalizedString("This will delete all your dashboard data and cannot be undone.", tableName: "Lumen", comment: "Lumen Clear Dashboard Data Popup Text")
+		let actionTitle = NSLocalizedString("Clear", tableName: "Lumen", comment: "Lumen Clear Dashboard Data Popup Clear Button Text")
+		let alert = UIAlertController.alertWithCancelAndAction(text: alertText, actionButtonTitle: actionTitle, isActionDestructive: true,actionCallback: clearDashboardData)
+		if let appDel = UIApplication.shared.delegate as? AppDelegate {
+			appDel.presentContollerOnTop(controller: alert)
+		}
+	}
 
     /*
     // MARK: - Navigation

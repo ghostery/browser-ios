@@ -22,7 +22,6 @@ struct CCCellUX {
 class CCAbstractCell: UIView, UpdateViewProtocol {
 
     var titleLabel: UILabel = UILabel()
-    var descriptionLabel: UILabel = UILabel()
     private var _widget: CCWidget? = nil
     
     var widget: CCWidget? {
@@ -56,8 +55,6 @@ class CCAbstractCell: UIView, UpdateViewProtocol {
         stackView.addArrangedSubview(widgetContainer)
         stackView.addArrangedSubview(descriptionContainer)
         descriptionContainer.addSubview(titleLabel)
-        descriptionContainer.addSubview(descriptionLabel)
-        
         contentView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
@@ -83,15 +80,10 @@ class CCAbstractCell: UIView, UpdateViewProtocol {
         
         titleLabel.textAlignment = .center
         titleLabel.textColor = Lumen.Dashboard.titleColor(lumenTheme, lumenDashboardMode)
-        titleLabel.font = UIFont.systemFont(ofSize: 19, weight: .medium)
+        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         titleLabel.numberOfLines = 0
         titleLabel.adjustsFontSizeToFitWidth = true
-        
-        descriptionLabel.numberOfLines = 0
-        descriptionLabel.textAlignment = .center
-        descriptionLabel.textColor = Lumen.Dashboard.descriptionColor(lumenTheme, lumenDashboardMode)
-        descriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        descriptionLabel.adjustsFontSizeToFitWidth = true
+
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -103,7 +95,6 @@ class CCAbstractCell: UIView, UpdateViewProtocol {
         self.backgroundColor = Lumen.Dashboard.widgetBackgroundColor(lumenTheme, lumenDashboardMode)
         self.layer.shadowColor = Lumen.Dashboard.shadowColor(lumenTheme, lumenDashboardMode).cgColor
         titleLabel.textColor = Lumen.Dashboard.titleColor(lumenTheme, lumenDashboardMode)
-        descriptionLabel.textColor = Lumen.Dashboard.descriptionColor(lumenTheme, lumenDashboardMode)
         widget?.update()
     }
 }
@@ -130,11 +121,6 @@ class CCVerticalCell: CCAbstractCell {
         titleLabel.snp.makeConstraints { (make) in
             make.top.leading.trailing.equalToSuperview()
         }
-        descriptionLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(5)
-            make.bottom.lessThanOrEqualToSuperview()
-        }
     }
     
     override init(frame: CGRect) {
@@ -158,8 +144,7 @@ class CCHorizontalCell: CCAbstractCell {
         super.init(frame: CGRect.zero)
         
         titleLabel.textAlignment = .left
-        descriptionLabel.textAlignment = .left
-        
+
         stackView.axis = .horizontal
         
         widgetContainer.snp.makeConstraints { (make) in
@@ -177,12 +162,6 @@ class CCHorizontalCell: CCAbstractCell {
             make.leading.trailing.equalToSuperview().inset(5)
         }
 
-        descriptionLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(5)
-            make.bottom.lessThanOrEqualToSuperview()
-        }
-        
         if let optView = optionalView, let h = optionalViewHeight {
             extraContainer = UIView()
             contentView.addSubview(extraContainer!)

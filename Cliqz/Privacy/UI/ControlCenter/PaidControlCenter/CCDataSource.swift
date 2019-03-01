@@ -14,7 +14,6 @@ class OptionalView: UIView {
 
 protocol CCDataSourceProtocol {
     func titleFor(index: Int) -> String
-    func descriptionFor(index: Int, period: Period) -> String
     func cellViewHeight(index: Int) -> CGFloat
     func widgetFor(index: Int) -> CCWidget
     func optionalView(index: Int) -> OptionalView?
@@ -106,45 +105,42 @@ class CCDataSource {
         let timeSaved = CCCell(title: NSLocalizedString("Time Saved", tableName: "Lumen", comment:"[Lumen->Dashboard] Time Saved widget title"),
                                description: timeSavedDesc,
                                widget: CCTimeSavedWidget(),
-                               cellHeight: 250)
+                               cellHeight: 175)
         
         let adsBlocked = CCCell(title: NSLocalizedString("Ads Blocked", tableName: "Lumen", comment:"[Lumen->Dashboard] Ads Blocked widget title"),
                                 description: adsBlockedDesc,
                                 widget: CCAdsBlockedWidget(),
-                                cellHeight: 250)
+                                cellHeight: 175)
         
         let dataSaved = CCCell(title: NSLocalizedString("Data Volume Saved", tableName: "Lumen", comment:"[Lumen->Dashboard] Data Volume Saved widget title"),
                                description: dataSavedDesc,
                                widget: CCDataSavedWidget(),
-                               cellHeight: 120)
-        
-//        let batterySaved = CCCell(title: NSLocalizedString("Battery Life Saved", tableName: "Lumen", comment:"[Lumen->Dashboard] Battery Life Saved widget title"),
-//                                  description: batterySavedDesc,
-//                                  widget: CCBatterySavedWidget(),
-//                                  cellHeight: 120)
+                               cellHeight: 175)
         
         let companies = CCCell(title: NSLocalizedString("Data Collectors Detained", tableName: "Lumen", comment:"[Lumen->Dashboard]  widget title"),
                                description: companiesDesc,
                                widget: CCCompaniesWidget(),
-                               cellHeight: 120)
+                               cellHeight: 175)
         
         let phishingProtection = CCCell(title: NSLocalizedString("Phishing Protection", tableName: "Lumen", comment:"[Lumen->Dashboard] Phishing Protection widget title"),
                                         description: phishingDesc,
                                         widget: CCAntiPhishingWidget(),
                                         cellHeight: 120)
         
-        cells = [timeSaved, adsBlocked, dataSaved, companies, phishingProtection]
+        cells = [adsBlocked, companies, dataSaved, timeSaved, phishingProtection]
         createCellViews()
     }
     
     func createCellViews() {
         
         //first group time saved and adsblocked
-        let group = createTimeSaveAdsBlockedGroup()
-        cellViews.append(group)
-        
+        let group1 = createCellGroup(of: (0, 1))
+        cellViews.append(group1)
+		let group2 = createCellGroup(of: (2, 3))
+		cellViews.append(group2)
+		
         //add the rest
-        for i in 2..<cells.count {
+        for i in 4..<cells.count {
             let cell = CCHorizontalCell(widgetRatio: CCUX.HorizontalContentWigetRatio,
                                         descriptionRatio: 1 - CCUX.HorizontalContentWigetRatio,
                                         optionalView: self.optionalView(index: i),
@@ -156,7 +152,7 @@ class CCDataSource {
         }
     }
     
-    func createTimeSaveAdsBlockedGroup() -> UIView {
+	func createCellGroup(of indexPair: (Int, Int)) -> UIView {
         let v = CellGroupView()
         
         v.axis = .horizontal
@@ -170,23 +166,22 @@ class CCDataSource {
         v.addArrangedSubview(c2)
         
         c1.snp.makeConstraints { (make) in
-            make.width.equalToSuperview().dividedBy(2).offset(-5)
+            make.width.equalToSuperview().dividedBy(2).offset(-10)
             make.height.equalToSuperview()
         }
         
         c2.snp.makeConstraints { (make) in
-            make.width.equalToSuperview().dividedBy(2).offset(-5)
+            make.width.equalToSuperview().dividedBy(2).offset(-10)
             make.height.equalToSuperview()
         }
         
-        self.configureCell(cell: c1, index: 0, period: currentPeriod)
-        self.configureCell(cell: c2, index: 1, period: currentPeriod)
+        self.configureCell(cell: c1, index: indexPair.0, period: currentPeriod)
+        self.configureCell(cell: c2, index: indexPair.1, period: currentPeriod)
         
         return v
     }
     
     func configureCell(cell: CCAbstractCell, index: Int, period: Period) {
-        cell.descriptionLabel.text = self.descriptionFor(index: index, period: period)
         cell.titleLabel.text = self.titleFor(index: index)
         cell.widget = self.widgetFor(index: index)
     }
@@ -199,10 +194,10 @@ extension CCDataSource: CCCollectionDataSourceProtocol {
     
     func heightFor(index: Int) -> CGFloat {
         //special case because of the group
-        if index == 0 {
-            return self.cellViewHeight(index: 0)
+        if index < 2 {
+            return self.cellViewHeight(index: index * 2)
         }
-        return self.cellViewHeight(index: index + 1)
+        return self.cellViewHeight(index: index * 2)
     }
     
     func cellFor(index: Int) -> UIView {
@@ -211,11 +206,11 @@ extension CCDataSource: CCCollectionDataSourceProtocol {
     }
     
     func cellSpacing() -> CGFloat {
-        return 10.0
+        return 20.0
     }
     
     func horizontalPadding() -> CGFloat {
-        return 20
+        return 10
     }
 }
 
@@ -226,14 +221,7 @@ extension CCDataSource: CCDataSourceProtocol {
         }
         return cells[index].title
     }
-    
-    func descriptionFor(index: Int, period: Period) -> String {
-        guard cells.isIndexValid(index: index) else {
-            return ""
-        }
-        return cells[index].description(period)
-    }
-    
+
     func widgetFor(index: Int) -> CCWidget {
         guard cells.isIndexValid(index: index) else {
             return CCWidget()
