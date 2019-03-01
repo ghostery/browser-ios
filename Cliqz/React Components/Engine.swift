@@ -71,6 +71,23 @@ open class Engine {
         }
     }
     
+    class func updateExtensionPreferences(privateMode: Bool? = nil) {
+        let isBlocked = SettingsPrefs.shared.getBlockExplicitContentPref()
+        let subscriptions = SubscriptionsHandler.sharedInstance.getSubscriptions()
+        var params = ["adultContentFilter" : isBlocked ? "conservative" : "liberal",
+                      "backend_country" : SettingsPrefs.shared.getRegionPref(),
+                      "suggestionsEnabled"  : QuerySuggestions.isEnabled(),
+                      "subscriptions" : subscriptions,
+                      "share_location": LocationManager.sharedInstance.isLocationAcessEnabled() ? "yes" : "ask"] as [String : Any]
+        if let privateMode = privateMode {
+            params["incognito"] = privateMode
+        }
+        #if PAID
+            params["lumen.protection.isEnabled"] = UserPreferences.instance.isProtectionOn
+        #endif
+        Engine.sharedInstance.getBridge().publishEvent("mobile-browser:notify-preferences", args: [params])
+    }
+    
     open func parseJSON(_ dictionary: [String: AnyObject]) -> String {
         if JSONSerialization.isValidJSONObject(dictionary) {
             do {
