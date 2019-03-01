@@ -153,6 +153,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
+        #if PAID
+            LegacyTelemetryHelper.tabManager = tabManager
+        #endif
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
