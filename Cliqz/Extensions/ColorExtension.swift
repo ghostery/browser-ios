@@ -266,7 +266,12 @@ struct Lumen {
             let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .lumenDisabled], .Dark: [.Normal: .white, .Disabled: .lumenDisabled]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
-        
+		
+		static let darkBlueTitleColor: LumenColor = { name, mode in
+			let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .lumenDisabled], .Dark: [.Normal: UIColor(rgb: 0x3987FF), .Disabled: .lumenDisabled]]
+			return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+		}
+
         static let titleColor: LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .black, .Disabled: .lumenDisabled], .Dark: [.Normal: .white, .Disabled: .lumenDisabled]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
@@ -367,7 +372,14 @@ struct Lumen {
             let combo: LumenImageCombo  = [.Light: [.Normal: enabled, .Disabled: disabled], .Dark: [.Normal: enabled, .Disabled: disabled]]
             return combo[name]?[mode] ?? nil
         }
-        
+		
+		static let dataSavedImage: LumenImage = { name, mode in
+			let enabled  = UIImage(named: "CCDataSaved_Normal")
+			let disabled = UIImage(named: "CCDataSaved_Disabled")
+			let combo: LumenImageCombo  = [.Light: [.Normal: enabled, .Disabled: disabled], .Dark: [.Normal: enabled, .Disabled: disabled]]
+			return combo[name]?[mode] ?? nil
+		}
+
         static let companiesBlockedImage: LumenImage = { name, mode in
             let enabled  = UIImage(named: "CCCompanies_Normal")
             let disabled = UIImage(named: "CCCompanies_Disabled")
