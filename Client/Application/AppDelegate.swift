@@ -80,6 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         #if PAID
         self.window!.backgroundColor = UIColor.white
         _ = VPNEndPointManager.shared
+        Engine.updateExtensionPreferences()
         #endif
         //Cliqz: end
 

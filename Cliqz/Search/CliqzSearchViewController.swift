@@ -157,7 +157,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.updateExtensionPreferences()
+        Engine.updateExtensionPreferences(privateMode: self.privateMode)
         self.updateExtensionSearchEngine()
 	}
     
@@ -182,7 +182,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
     func updatePrivateMode(_ privateMode: Bool) {
         if privateMode != self.privateMode {
             self.privateMode = privateMode
-			self.updateExtensionPreferences()
+            Engine.updateExtensionPreferences(privateMode: privateMode)
             if privateMode && privateModeOverlay.superview == nil {
                 backgroundImage.addSubview(privateModeOverlay)
                 privateModeOverlay.snp.makeConstraints { (make) in
@@ -208,20 +208,6 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 		animateSearchEnginesWithKeyboard(state)
 	}
 	
-	fileprivate func updateExtensionPreferences() {
-		let isBlocked = SettingsPrefs.shared.getBlockExplicitContentPref()
-        let subscriptions = SubscriptionsHandler.sharedInstance.getSubscriptions()
-		let params = ["adultContentFilter" : isBlocked ? "conservative" : "liberal",
-		              "incognito" : self.privateMode,
-                      "backend_country" : SettingsPrefs.shared.getRegionPref(),
-                      "suggestionsEnabled"  : QuerySuggestions.isEnabled(),
-                      "subscriptions" : subscriptions,
-                      "share_location": LocationManager.sharedInstance.isLocationAcessEnabled() ? "yes" : "ask"] as [String : Any]
-        
-        //javaScriptBridge.publishEvent("notify-preferences", parameters: params)
-        Engine.sharedInstance.getBridge().publishEvent("mobile-browser:notify-preferences", args: [params])
-	}
-    
     fileprivate func updateExtensionSearchEngine() {
             
         if let profile = (UIApplication.shared.delegate as? AppDelegate)?.profile {
