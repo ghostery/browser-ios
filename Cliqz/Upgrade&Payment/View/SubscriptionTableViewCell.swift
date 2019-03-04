@@ -134,13 +134,13 @@ class SubscriptionTableViewCell: UITableViewCell {
         
         billingLabel.snp.remakeConstraints { (make) in
             make.leading.equalTo(nameLabel.snp.leading)
-            make.top.equalTo(priceLabel.snp.bottom).offset(5.0)
+            make.top.equalTo(priceLabel.snp.bottom)
         }
         
         descriptionLabel.snp.remakeConstraints { (make) in
             make.leading.equalTo(nameLabel.snp.leading)
-            make.trailing.equalToSuperview().inset(20.0)
-            make.bottom.equalToSuperview().inset(15.0)
+            make.trailing.equalToSuperview().inset(25.0)
+            make.bottom.equalToSuperview().inset(10.0)
         }
         
         subscribeButton.snp.remakeConstraints { (make) in
