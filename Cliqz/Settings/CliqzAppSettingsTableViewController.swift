@@ -125,7 +125,8 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
                         titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
             LimitMobileDataUsageSetting(settings: self),
-            ThemeSetting(settings: self),
+            // [IP-315] Disable theme switching: remove from settings
+            //ThemeSetting(settings: self),
             ]
         
         let statusText = NSLocalizedString("When Opening Ghostery", tableName: "Cliqz", comment: "Description displayed under the ”Offer to Open Copied Link” option.")
