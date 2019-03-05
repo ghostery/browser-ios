@@ -11,7 +11,7 @@ node('gideon') {
 
     writeFile file: 'Vagrantfile', text: '''
     Vagrant.configure("2") do |config|
-        config.vm.box = "browser-ios-10.13.6"
+        config.vm.box = "xcode-10.1"
 
         config.vm.synced_folder ".", "/vagrant", disabled: true
         config.vm.define "publishios" do |publishios|
