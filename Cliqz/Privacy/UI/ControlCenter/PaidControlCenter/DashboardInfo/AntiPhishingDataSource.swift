@@ -6,6 +6,8 @@
 //  Copyright © 2019 Cliqz. All rights reserved.
 //
 
+#if PAID
+
 import Foundation
 
 class AntiPhishingDataSource: DashboardGeneralInfoDataSource {
@@ -31,3 +33,5 @@ class AntiPhishingDataSource: DashboardGeneralInfoDataSource {
 	}
 
 }
+
+#endif

@@ -6,6 +6,8 @@
 //  Copyright © 2019 Cliqz. All rights reserved.
 //
 
+#if PAID
+
 import Foundation
 
 class SavedTimeDataSource: DashboardGeneralInfoDataSource {
@@ -30,3 +32,5 @@ class SavedTimeDataSource: DashboardGeneralInfoDataSource {
 	}
 	
 }
+
+#endif

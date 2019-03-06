@@ -24,7 +24,8 @@ class ButtonWithUnderlinedText: UIButton {
 		self.underlinedText = underlinedText
 		self.position = position
 		super.init(frame: .zero)
-		
+		self.titleLabel?.numberOfLines = 0
+		self.titleLabel?.textAlignment = .center
 		self.setAttributedTitle(self.generateTitle(), for: .normal)
 	}
 	
@@ -32,15 +33,23 @@ class ButtonWithUnderlinedText: UIButton {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	private func generateTitle() -> NSAttributedString {
-		self.titleLabel?.numberOfLines = 0
-		self.titleLabel?.textAlignment = .center
+	func updateViewState(isEnabled: Bool) {
+		if isEnabled {
+			self.setAttributedTitle(self.generateTitle(), for: .normal)
+			self.isEnabled = true
+		} else {
+			self.setAttributedTitle(self.generateTitle(isEnabled: false), for: .normal)
+			self.isEnabled = false
+		}
+	}
+
+	private func generateTitle(isEnabled state: Bool = true) -> NSAttributedString {
 		var title: NSMutableAttributedString!
 		let underlinedFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14, weight: .medium),
 										NSAttributedStringKey.underlineStyle: NSNumber(value: 1),
-										NSAttributedStringKey.foregroundColor: self.underlinedText.1]
+										NSAttributedStringKey.foregroundColor: state ? self.underlinedText.1 : UIColor.lumenDisabled]
 		if let range = startText.0.range(of: startText.0), range.lowerBound == startText.0.startIndex {
-			let normalFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14), NSAttributedStringKey.foregroundColor: startText.1]
+			let normalFontAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14), NSAttributedStringKey.foregroundColor: state ? startText.1 : UIColor.lumenDisabled]
 			if position == .next {
 				title = NSMutableAttributedString(string:startText.0 + " ", attributes:normalFontAttributes)
 			} else {

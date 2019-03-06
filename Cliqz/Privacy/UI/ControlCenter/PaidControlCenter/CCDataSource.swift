@@ -93,7 +93,7 @@ class CCDataSource {
         let cellHeight: CGFloat //cell total height
         let optionalView: OptionalView?
         let optionalViewHeight: CGFloat? //optional view height
-        
+
         init(title: String, description: @escaping CellDescription, widget: CCWidget, cellHeight: CGFloat, optionalView: OptionalView? = nil, optionalViewHeight: CGFloat? = nil) {
             self.title = title
             self.description = description
@@ -103,14 +103,14 @@ class CCDataSource {
             self.optionalViewHeight = optionalViewHeight
         }
     }
-    
+
     var currentPeriod: Period = .Today
     var cells: [CCCell] = []
     var cellViews: [UIView] = []
 
 	typealias TapHandler = (_ type: WidgetType) -> Void
 	public var tapHandler: TapHandler?
-	
+
 	init(tapHandler: TapHandler? = nil) {
 		self.tapHandler = tapHandler
         //create the cells here
@@ -142,7 +142,7 @@ class CCDataSource {
         cells = [adsBlocked, companies, dataSaved, timeSaved, phishingProtection]
         createCellViews()
     }
-    
+
     func createCellViews() {
         
         //first group time saved and adsblocked
@@ -207,6 +207,9 @@ class CCDataSource {
     }
 
 	@objc private func cellTapped(sender: UITapGestureRecognizer) {
+		guard lumenDashboardMode == .Normal else {
+			return
+		}
 		if let indx = sender.view?.tag {
 			var widgetType: WidgetType?
 			switch (indx) {

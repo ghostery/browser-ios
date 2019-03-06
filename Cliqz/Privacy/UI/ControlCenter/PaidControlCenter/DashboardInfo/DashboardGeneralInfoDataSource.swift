@@ -6,6 +6,8 @@
 //  Copyright © 2019 Cliqz. All rights reserved.
 //
 
+#if PAID
+
 import Foundation
 
 protocol DashboardGeneralInfoDataSource: class {
@@ -16,3 +18,5 @@ protocol DashboardGeneralInfoDataSource: class {
 	var title: String { get }
 	var description: String { get }
 }
+
+#endif
