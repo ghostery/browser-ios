@@ -117,6 +117,8 @@ class CCWidgetManager {
         let dataSaved: Int?
         let batterySaved: Int?
         let trackersDetected: Int?
+		let trackersList: [String]?
+		let pagesChecked: Int?
         
         func merge(info: Info) -> Info {
             let timeSaved = self.timeSaved?.add(num: info.timeSaved)
@@ -124,12 +126,13 @@ class CCWidgetManager {
             let dataSaved = self.dataSaved?.add(num: info.dataSaved)
             let batterySaved = self.dataSaved?.add(num: info.dataSaved)
             let trackersDetected = self.trackersDetected?.add(num: info.trackersDetected)
-            
-            return Info(timeSaved: timeSaved, adsBlocked: adsBlocked, dataSaved: dataSaved, batterySaved: batterySaved, trackersDetected: trackersDetected)
+            let trackersList = (self.trackersList ?? [String]()) + (info.trackersList ?? [String]())
+			let pagesChecked = self.pagesChecked?.add(num: info.pagesChecked)
+			return Info(timeSaved: timeSaved, adsBlocked: adsBlocked, dataSaved: dataSaved, batterySaved: batterySaved, trackersDetected: trackersDetected, trackersList: trackersList, pagesChecked: pagesChecked)
         }
         
         static var zero: Info {
-            return Info(timeSaved: 0, adsBlocked: 0, dataSaved: 0, batterySaved: 0, trackersDetected: 0)
+			return Info(timeSaved: 0, adsBlocked: 0, dataSaved: 0, batterySaved: 0, trackersDetected: 0, trackersList: [String](), pagesChecked: 0)
         }
 
         func timeSavedStrings() -> (String, String) {
@@ -198,13 +201,15 @@ class CCWidgetManager {
             return Info.zero
         }
         
-        if let result = response.value(forKey: "result") as? [String: Any] {
+	        if let result = response.value(forKey: "result") as? NSDictionary {
             var timeSaved: Int? = nil
             var adsBlocked: Int? = nil
             var dataSaved: Int? = nil
             var batterySaved: Int? = nil
             var trackersDetected: Int? = nil
-            
+			var trackersList: [String]? = nil
+			var pagesChecked: Int? = nil
+
             if let v = result["timeSaved"] as? Int {
                 timeSaved = v
                 //Battery saved in time = C / T * TimeSaved, where C is the rate at which Cliqz is consuming battery, and T the rate at which the system is consuming battery with all apps running.
@@ -219,13 +224,24 @@ class CCWidgetManager {
             if let v = result["dataSaved"] as? Int {
                 dataSaved = v
             }
-            
-            if let v = result["trackersDetected"] as? Int {
-                trackersDetected = v
-            }
-            
-            return Info(timeSaved: timeSaved, adsBlocked: adsBlocked, dataSaved: dataSaved, batterySaved: batterySaved, trackersDetected: trackersDetected)
-            
+			
+			if let v = result["pages"] as? Int {
+				pagesChecked = v
+			}
+
+//            if let v = result["trackersDetected"] as? Int {
+//                trackersDetected = v
+//            }
+//
+			if let trackers = result["trackers"] as? NSArray {
+				// ;TODO this should be changed to filter trackers from ads and then set counts
+				for item in trackers {
+					print (item)
+				}
+				trackersDetected = trackers.count
+				trackersList = trackers as? [String]
+			}
+			return Info(timeSaved: timeSaved, adsBlocked: adsBlocked, dataSaved: dataSaved, batterySaved: batterySaved, trackersDetected: trackersDetected, trackersList: trackersList, pagesChecked: pagesChecked)
         }
         
         return nil;
@@ -278,6 +294,15 @@ class CCWidgetManager {
         
         return ("16,01", "EUR")
     }
+
+	func pagesChecked() -> String {
+		var pagesChecked = 0
+		if currentPeriod == .Today {
+			pagesChecked = todayInfo.pagesChecked ?? 0
+		}
+		pagesChecked = last7DaysInfo.pagesChecked ?? 0
+		return String(format: "%d", pagesChecked)
+	}
 }
 
 class CCWidget: UIView {

@@ -229,6 +229,7 @@ class FreshtabViewController: UIViewController, HomePanel {
     @objc fileprivate func cancelActions(_ sender: UITapGestureRecognizer) {
         topSitesViewController.removeDeletedTopSites()
     }
+
     @objc func dismissKeyboard(_ sender: Any? = nil) {
         view.window?.rootViewController?.view.endEditing(true)
     }
