@@ -25,6 +25,7 @@ node('gideon') {
                 v.name = "publishios"
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
+                v.cpu = ENV["NODE_CPU_COUNT"]
             end
             publishios.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                 set -e
@@ -49,7 +50,7 @@ node('gideon') {
     vagrant.inside(
         'Vagrantfile',
         '/jenkins',
-        4, // CPU
+        2, // CPU
         8000, // MEMORY
         12000, // VNC port
         false, // rebuild image
