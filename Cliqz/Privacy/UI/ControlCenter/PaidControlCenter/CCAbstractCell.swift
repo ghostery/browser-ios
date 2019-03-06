@@ -137,12 +137,15 @@ class CCVerticalCell: CCAbstractCell {
 }
 
 class CCHorizontalCell: CCAbstractCell {
-    
+	
+	let countLabel = UILabel()
     //widgetRatio is the width of the widget over the height of the cell
     //descrRatio is the width of the description over the height of the cell
     init(widgetRatio: CGFloat, descriptionRatio: CGFloat, optionalView: UIView? = nil, optionalViewHeight: CGFloat? = nil) {
         super.init(frame: CGRect.zero)
-        
+		
+		self.descriptionContainer.addSubview(countLabel)
+
         titleLabel.textAlignment = .left
 
         stackView.axis = .horizontal
@@ -156,12 +159,19 @@ class CCHorizontalCell: CCAbstractCell {
             make.height.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(descriptionRatio)
         }
-        
+		
+		countLabel.snp.makeConstraints { (make) in
+			make.top.equalToSuperview().offset(10)
+			make.leading.equalToSuperview().inset(25)
+		}
         titleLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(20)
-            make.leading.trailing.equalToSuperview().inset(5)
+            make.top.equalTo(countLabel.snp.bottom).offset(0)
+            make.trailing.equalToSuperview().inset(5)
+			make.leading.equalToSuperview().inset(25)
         }
-
+		
+		countLabel.textColor = UIColor.white
+		countLabel.font = UIFont.systemFont(ofSize: 35, weight: .medium)
         if let optView = optionalView, let h = optionalViewHeight {
             extraContainer = UIView()
             contentView.addSubview(extraContainer!)
@@ -194,6 +204,7 @@ class CCHorizontalCell: CCAbstractCell {
     
     override func update() {
         super.update()
+		self.countLabel.text = CCWidgetManager.shared.pagesChecked()
     }
 }
 

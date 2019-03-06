@@ -40,6 +40,7 @@ extension UIColor {
     static let lumenDeepBlue = UIColor(colorString: "0D0F22")
     static let lumenPurple = UIColor(colorString: "1E2247")
     static let lumenDisabled = UIColor(colorString: "BDC0CE")
+	static let lumenTextBlue = UIColor(rgb: 0x3987FF)
 }
 
 struct Lumen {

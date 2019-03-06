@@ -33,7 +33,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
                                           NSLocalizedString("Last 7 days", tableName: "Lumen", comment:"[Lumen->Dashboard] Last 7 days tab")])
 
     let dashboard = CCCollectionViewController()
-    let cellDataSource = CCDataSource()
+	let cellDataSource = CCDataSource()
     
     var currentPeriod: Period = .Today
     static let dimmedColor = UIColor(colorString: "BDC0CE")
@@ -62,6 +62,34 @@ class PaidControlCenterViewController: ControlCenterViewController {
         setConstraints()
 
 		CCWidgetManager.shared.update(period: currentPeriod)
+		cellDataSource.tapHandler = { [weak self] (widget) in
+			var vc: UIViewController?
+			switch widget {
+			case .savedTime:
+				let timeVC = SavedTimeWidgetInfoViewController()
+				timeVC.dataSource = SavedTimeDataSource()
+				vc = timeVC
+			case .savedData:
+				let dataVC = WidgetGeneralInfoViewController()
+				dataVC.dataSource = SavedDataDataSource()
+				vc = dataVC
+			case .blockedPhishingSites:
+				let phishingVC = AntiPhishingWidgetInfoViewController()
+				phishingVC.dataSource = AntiPhishingDataSource()
+				vc = phishingVC
+			case .blockedTrackers:
+				let trackersVC = WidgetListInfoViewController()
+				trackersVC.dataSource = BlockedTrackersDataSource()
+				vc = trackersVC
+			case .blockedAds:
+				let adsVC = WidgetListInfoViewController()
+				adsVC.dataSource = BlockedAdsDataSource()
+				vc = adsVC
+			}
+			if let vc = vc {
+				self?.present(vc, animated: true, completion: nil)
+			}
+		}
     }
 
     override func viewDidLoad() {
@@ -130,6 +158,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
         }
         
         CCWidgetManager.shared.update(period: currentPeriod)
+		dashboard.update()
     }
     
     @objc func VPNStatusDidChange(notification: Notification) {
@@ -150,7 +179,7 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
         let upgradLumenViewController = UpgradLumenViewController()
         self.present(upgradLumenViewController, animated: true, completion: nil)
     }
-    
+	
     fileprivate func addUpgradeViewIfRequired() {
         let currentSubscription = SubscriptionController.shared.getCurrentSubscription()
         switch currentSubscription {

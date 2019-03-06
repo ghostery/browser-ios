@@ -72,6 +72,14 @@ extension CellGroupView: UpdateViewProtocol {
     }
 }
 
+enum WidgetType {
+	case blockedTrackers
+	case blockedAds
+	case savedTime
+	case savedData
+	case blockedPhishingSites
+}
+
 class CCDataSource {
     
     //struct and mapping
@@ -99,8 +107,12 @@ class CCDataSource {
     var currentPeriod: Period = .Today
     var cells: [CCCell] = []
     var cellViews: [UIView] = []
-    
-    init() {
+
+	typealias TapHandler = (_ type: WidgetType) -> Void
+	public var tapHandler: TapHandler?
+	
+	init(tapHandler: TapHandler? = nil) {
+		self.tapHandler = tapHandler
         //create the cells here
         let timeSaved = CCCell(title: NSLocalizedString("Time Saved", tableName: "Lumen", comment:"[Lumen->Dashboard] Time Saved widget title"),
                                description: timeSavedDesc,
@@ -126,7 +138,7 @@ class CCDataSource {
                                         description: phishingDesc,
                                         widget: CCAntiPhishingWidget(),
                                         cellHeight: 120)
-        
+
         cells = [adsBlocked, companies, dataSaved, timeSaved, phishingProtection]
         createCellViews()
     }
@@ -184,7 +196,38 @@ class CCDataSource {
     func configureCell(cell: CCAbstractCell, index: Int, period: Period) {
         cell.titleLabel.text = self.titleFor(index: index)
         cell.widget = self.widgetFor(index: index)
+		cell.tag = index
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped))
+		cell.addGestureRecognizer(tapGesture)
+		// Extremely bad solution but with current messy design of widgets, cells and datasources no better way.
+		// ALL THESE WIDGETS/CELLS LOGIC SHOULD BE REFACTORED AND REDESIGNED. THIS IS AWEFUL
+		if let c = cell as? CCHorizontalCell {
+			c.countLabel.text = CCWidgetManager.shared.pagesChecked()
+		}
     }
+
+	@objc private func cellTapped(sender: UITapGestureRecognizer) {
+		if let indx = sender.view?.tag {
+			var widgetType: WidgetType?
+			switch (indx) {
+			case 0:
+				widgetType = .blockedAds
+			case 1:
+				widgetType = .blockedTrackers
+			case 2:
+				widgetType = .savedData
+			case 3:
+				widgetType = .savedTime
+			case 4:
+				widgetType = .blockedPhishingSites
+			default:
+				break
+			}
+			if let type = widgetType {
+				self.tapHandler?(type)
+			}
+		}
+	}
 }
 
 extension CCDataSource: CCCollectionDataSourceProtocol {
