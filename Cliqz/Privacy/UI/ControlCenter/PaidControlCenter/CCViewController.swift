@@ -110,6 +110,7 @@ class CCCollectionViewController: UIViewController {
 
 	@objc func clearPressed(_ button: UIButton) {
 		func clearDashboardData(_ action: UIAlertAction) {
+            LegacyTelemetryHelper.logDashboard(action: "click", target: "reset")
 			DispatchQueue.global(qos: .utility).async { [weak self] in
 				//print("Will send data for tab = \(tabID) and page = \(String(describing: currentP))")
 				Engine.sharedInstance.getBridge().callAction(JSBridge.Action.cleanData.rawValue, args: [], callback: { (result) in
