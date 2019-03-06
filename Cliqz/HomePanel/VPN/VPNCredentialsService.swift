@@ -22,6 +22,7 @@ struct VPNData {
 class VPNCredentialsService {
 	
 	private static let APIKey = "LumenAPIKey"
+    private static let DeviceIDKey = "Lumen.DeviceID"
 
 	class func getVPNCredentials(completion: @escaping ([VPNData]) -> Void) {
 		guard let apiKey = Bundle.main.object(forInfoDictionaryKey: VPNCredentialsService.APIKey) as? String, !apiKey.isEmpty,
@@ -29,8 +30,8 @@ class VPNCredentialsService {
 			print("API Key is not available in Info.plist")
 			return
 		}
-		if let udid = UIDevice.current.identifierForVendor {
-			let params: Parameters = ["device_id": udid.uuidString,
+		if let deviceId = getDeviceId() {
+			let params: Parameters = ["device_id": deviceId,
 					  	"revenue_cat_token": subscriptionUserId]
 			let header = ["x-api-key": apiKey]
 			var result = [VPNData]()
@@ -83,5 +84,19 @@ class VPNCredentialsService {
         default:
             return
         }
+    }
+    
+    private class func getDeviceId() -> String? {
+        let keychain = DAKeychain.shared
+        if let deviceId = keychain[DeviceIDKey] {
+            return deviceId
+        }
+        // use identifierForVendor as deviceID
+        if let deviceId = UIDevice.current.identifierForVendor?.uuidString {
+            keychain[DeviceIDKey] = deviceId
+            return deviceId
+        }
+        // could not gerenate deviceId
+        return nil
     }
 }
