@@ -36,7 +36,6 @@ class PaidControlCenterViewController: ControlCenterViewController {
 	let cellDataSource = CCDataSource()
     
     var currentPeriod: Period = .Today
-    static let dimmedColor = UIColor(colorString: "BDC0CE")
     private let overlay = UIView()
     
     override func setupComponents() {
@@ -54,11 +53,12 @@ class PaidControlCenterViewController: ControlCenterViewController {
 		
 		self.privacyControl.setState(isOn: UserPreferences.instance.isProtectionOn)
 		self.privacyControl.addTarget(self, action: #selector(privacyStatuChanged(control:)), for: .valueChanged)
-        tabs.selectedSegmentIndex = 0
+
+		tabs.selectedSegmentIndex = 0
         tabs.addTarget(self, action: #selector(tabChanged), for: .valueChanged)
-		
+
+		self.addUpgradeViewIfRequired()
         setStyle()
-        self.addUpgradeViewIfRequired()
         setConstraints()
 
 		CCWidgetManager.shared.update(period: currentPeriod)
@@ -113,7 +113,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
     private func setConstraints() {
         if let upgradeView = self.upgradeView {
             upgradeView.snp.makeConstraints { (make) in
-                make.top.leading.trailing.equalToSuperview().inset(15)
+                make.top.leading.trailing.equalToSuperview().inset(20)
                 make.height.equalTo(UpgradeViewUX.height)
             }
         }
@@ -146,7 +146,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
 
     func setStyle() {
         self.view.backgroundColor = Lumen.Dashboard.backgroundColor(lumenTheme, lumenDashboardMode).withAlphaComponent(Lumen.Dashboard.backgroundColorAlpha(lumenTheme))
-        tabs.tintColor = Lumen.Dashboard.segmentedControlColor(lumenTheme, lumenDashboardMode)
+		updateUIState(isEnabled: UserPreferences.instance.isProtectionOn)
     }
 
     @objc func tabChanged(_ segmentedControl: UISegmentedControl) {
@@ -168,8 +168,21 @@ class PaidControlCenterViewController: ControlCenterViewController {
 
 	@objc func privacyStatuChanged(control: UISwitch) {
 		UserPreferences.instance.isProtectionOn = control.isOn
-		lumenDashboardMode = control.isOn ? .Normal : .Disabled
-		
+//		lumenDashboardMode = control.isOn ? .Normal : .Disabled
+		updateUIState(isEnabled: control.isOn)
+	}
+
+	private func updateUIState(isEnabled: Bool) {
+		lumenDashboardMode = isEnabled ? .Normal : .Disabled
+		if isEnabled {
+			tabs.tintColor = Lumen.Dashboard.segmentedControlColor(lumenTheme, lumenDashboardMode)
+			tabs.isUserInteractionEnabled = true
+		} else {
+			tabs.tintColor = UIColor.lumenDisabled
+			tabs.isUserInteractionEnabled = false
+		}
+		self.upgradeView?.updateViewState(isEnabled: isEnabled)
+		self.upgradeButton?.updateViewState(isEnabled: isEnabled)
 		dashboard.update()
 	}
 }
@@ -212,7 +225,7 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
     }
     
     fileprivate func disableView() {
-        tabs.tintColor = PaidControlCenterViewController.dimmedColor
+        tabs.tintColor = UIColor.lumenDisabled
         tabs.isUserInteractionEnabled = false
 
         overlay.backgroundColor = UIColor.black
@@ -227,6 +240,7 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
             }
         }
     }
+
     fileprivate func enableView() {
         tabs.isUserInteractionEnabled = true
         overlay.removeFromSuperview()

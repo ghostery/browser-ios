@@ -37,7 +37,25 @@ class UpgradeView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+	func updateViewState(isEnabled: Bool) {
+		#if PAID
+		if isEnabled {
+			titleLabel.textColor = UIColor.theme.lumenSubscription.upgradeLabel
+			subtitleLabel1.textColor = UIColor.theme.lumenSubscription.upgradeLabel
+			subtitleLabel2.textColor = UIColor.theme.lumenSubscription.upgradeLabel
+			upgradeButton.setTitleColor(UIColor.white, for: .normal)
+			upgradeButton.isEnabled = true
+		} else {
+			titleLabel.textColor = UIColor.lumenDisabled
+			subtitleLabel1.textColor = UIColor.lumenDisabled
+			subtitleLabel2.textColor = UIColor.lumenDisabled
+			upgradeButton.setTitleColor(UIColor.lumenDisabled, for: .normal)
+			upgradeButton.isEnabled = false
+		}
+		#endif
+	}
+
     fileprivate func setupComponents() {
         if let trialRemainingDays = SubscriptionController.shared.getCurrentSubscription().trialRemainingDays() {
             titleLabel.text = NSLocalizedString("Stay with us", tableName: "Lumen", comment: "Upgrade lumen view title")

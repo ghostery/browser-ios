@@ -5,6 +5,7 @@
 //  Created by Sahakyan on 3/4/19.
 //  Copyright © 2019 Cliqz. All rights reserved.
 //
+#if PAID
 
 import Foundation
 
@@ -31,3 +32,5 @@ class SavedDataDataSource: DashboardGeneralInfoDataSource {
 	}
 	
 }
+
+#endif

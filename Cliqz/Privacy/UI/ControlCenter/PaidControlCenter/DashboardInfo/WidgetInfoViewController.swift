@@ -6,6 +6,8 @@
 //  Copyright © 2019 Cliqz. All rights reserved.
 //
 
+#if PAID
+
 import Foundation
 
 class WidgetInfoViewController: UIViewController {
@@ -52,3 +54,5 @@ class WidgetInfoViewController: UIViewController {
 		self.dismiss(animated: true, completion: nil)
 	}
 }
+
+#endif

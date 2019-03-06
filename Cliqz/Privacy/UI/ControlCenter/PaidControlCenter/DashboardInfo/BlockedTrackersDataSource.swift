@@ -6,6 +6,8 @@
 //  Copyright © 2019 Cliqz. All rights reserved.
 //
 
+#if PAID
+
 import Foundation
 
 class BlockedTrackersDataSource: DashboardListInfoDataSource {
@@ -37,3 +39,5 @@ class BlockedTrackersDataSource: DashboardListInfoDataSource {
 		return ""
 	}
 }
+
+#endif
