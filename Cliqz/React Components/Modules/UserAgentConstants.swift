@@ -70,7 +70,9 @@ open class UserAgentConstants : RCTEventEmitter {
     }
 
     static var appName: String {
-        #if GHOSTERY
+        #if PAID
+            return "Lumen"
+        #elseif GHOSTERY
             return "Ghostery"
         #else
             return "Cliqz"
@@ -78,7 +80,9 @@ open class UserAgentConstants : RCTEventEmitter {
     }
     
     static var storeURL: URL? {
-        #if GHOSTERY
+        #if PAID
+        return URL(string:"https://itunes.apple.com/de/app/lumen-browser/id1444118792?mt=8")
+        #elseif GHOSTERY
         return URL(string:"https://itunes.apple.com/de/app/ghostery/id472789016?mt=8")
         #else
         return URL(string:"https://itunes.apple.com/de/app/cliqz-browser/id1065837334?mt=8")
