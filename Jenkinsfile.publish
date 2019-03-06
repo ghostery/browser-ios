@@ -25,7 +25,7 @@ node('gideon') {
                 v.name = "publishios"
                 v.gui = false
                 v.memory = ENV["NODE_MEMORY"]
-                v.cpu = ENV["NODE_CPU_COUNT"]
+                v.cpus = ENV["NODE_CPU_COUNT"]
             end
             publishios.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                 set -e
