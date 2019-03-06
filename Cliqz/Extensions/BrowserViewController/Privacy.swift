@@ -46,6 +46,7 @@ extension BrowserViewController {
         if let cc = self.childViewControllers.last,
             let _ = cc as? ControlCenterViewController {
             hideControlCenter()
+            LegacyTelemetryHelper.logDashboard(action: "click", target: "close")
         }
         else {
             //show it

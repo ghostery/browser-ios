@@ -69,22 +69,27 @@ class PaidControlCenterViewController: ControlCenterViewController {
 				let timeVC = SavedTimeWidgetInfoViewController()
 				timeVC.dataSource = SavedTimeDataSource()
 				vc = timeVC
+                LegacyTelemetryHelper.logDashboard(action: "click", target: "time")
 			case .savedData:
 				let dataVC = WidgetGeneralInfoViewController()
 				dataVC.dataSource = SavedDataDataSource()
 				vc = dataVC
+                LegacyTelemetryHelper.logDashboard(action: "click", target: "data")
 			case .blockedPhishingSites:
 				let phishingVC = AntiPhishingWidgetInfoViewController()
 				phishingVC.dataSource = AntiPhishingDataSource()
 				vc = phishingVC
+                LegacyTelemetryHelper.logDashboard(action: "click", target: "phishing")
 			case .blockedTrackers:
 				let trackersVC = WidgetListInfoViewController()
 				trackersVC.dataSource = BlockedTrackersDataSource()
 				vc = trackersVC
+                LegacyTelemetryHelper.logDashboard(action: "click", target: "trakcers")
 			case .blockedAds:
 				let adsVC = WidgetListInfoViewController()
 				adsVC.dataSource = BlockedAdsDataSource()
 				vc = adsVC
+                LegacyTelemetryHelper.logDashboard(action: "click", target: "ads")
 			}
 			if let vc = vc {
 				self?.present(vc, animated: true, completion: nil)
@@ -97,6 +102,8 @@ class PaidControlCenterViewController: ControlCenterViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseSuccessNotification(_:)),
                                                name: .ProductPurchaseSuccessNotification,
                                                object: nil)
+        
+        LegacyTelemetryHelper.logDashboard(action: "show")
     }
     
     deinit {
@@ -152,9 +159,11 @@ class PaidControlCenterViewController: ControlCenterViewController {
     @objc func tabChanged(_ segmentedControl: UISegmentedControl) {
         if segmentedControl.selectedSegmentIndex == 0 {
             currentPeriod = .Today
+            LegacyTelemetryHelper.logDashboard(action: "click", target: "today")
         }
         else if segmentedControl.selectedSegmentIndex == 1 {
             currentPeriod = .Last7Days
+            LegacyTelemetryHelper.logDashboard(action: "click", target: "past")
         }
         
         CCWidgetManager.shared.update(period: currentPeriod)
@@ -170,6 +179,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
 		UserPreferences.instance.isProtectionOn = control.isOn
 //		lumenDashboardMode = control.isOn ? .Normal : .Disabled
 		updateUIState(isEnabled: control.isOn)
+        LegacyTelemetryHelper.logDashboard(action: "click", target: "toggle", state: control.isOn ? "on" : "off")
 	}
 
 	private func updateUIState(isEnabled: Bool) {

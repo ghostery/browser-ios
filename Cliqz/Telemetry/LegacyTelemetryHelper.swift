@@ -51,13 +51,23 @@ class LegacyTelemetryHelper: NSObject {
         sendSignal(signal)
     }
     
+    class func logDashboard(action: String, target: String? = nil, state: String? = nil) {
+        var signal: [String : Any] = ["type": "dashboard", "action": action, "version": 1]
+        if let target = target { signal["target"] = target }
+        if let state = state { signal["state"] = state }
+        
+        sendSignal(signal)
+    }
+    
     private class func sendSignal(_ signal: [String: Any]) {
         guard let selectedTab = self.tabManager?.selectedTab, selectedTab.isPrivate == false else {
             return
         }
         
+        #if PAID
         DispatchQueue.global(qos: .utility).async {
             Engine.sharedInstance.getBridge().callAction("core:sendTelemetry", args: [signal])
         }
+        #endif
     }
 }
