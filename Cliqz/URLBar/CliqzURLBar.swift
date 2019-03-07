@@ -37,7 +37,7 @@ class CliqzURLBar: URLBarView {
         get {
             return locationView.url as URL?
         }
-        
+
         set(newURL) {
             locationView.url = newURL
             line.isHidden = newURL?.isAboutHomeURL ?? true
@@ -159,45 +159,45 @@ class CliqzURLBar: URLBarView {
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-        
+
         menuButton.snp.remakeConstraints { make in
             make.trailing.equalTo(self.tabsButton.snp.leading)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-        
+
         ghosteryButton.snp.makeConstraints { (make) in
             make.width.equalTo(ghostyWidth)
             make.height.equalTo(ghostyHeight)
             make.centerY.equalTo(self)
             make.trailing.equalTo(self.safeArea.trailing)//.offset(-URLBarViewUX.Padding)
         }
-        
+
         pageOptionsButton.snp.makeConstraints { (make) in
             make.size.equalTo(TabLocationViewUX.ButtonSize)
             make.centerY.equalTo(self)
             make.trailing.equalTo(self.ghosteryButton.snp.leading)
         }
-        
+
         setStyle()
     }
-    
+
     override func applyUIMode(isPrivate: Bool) {
         super.applyUIMode(isPrivate: isPrivate)
         ghosteryButton.applyUIMode(isPrivate: isPrivate)
     }
-    
+
     func setStyle() {
         locationContainer.layer.cornerRadius = 10
         locationContainer.clipsToBounds = true
     }
-    
+
     override func prepareOverlayAnimation() {
         super.prepareOverlayAnimation()
         bringSubview(toFront: ghosteryButton)
         bringSubview(toFront: pageOptionsButton)
     }
-    
+
     override func transitionToOverlay(_ didCancel: Bool = false) {
         super.transitionToOverlay()
         ghosteryButton.alpha = inOverlayMode ? 0 : 1
