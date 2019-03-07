@@ -287,6 +287,7 @@ class VPNViewController: UIViewController {
     
     var upgradeView: UpgradeView?
     var upgradeButton: ButtonWithUnderlinedText?
+    let gradient = BrowserGradientView()
     
     var VPNStatus: NEVPNStatus {
         return VPN.shared.status;
@@ -351,6 +352,8 @@ class VPNViewController: UIViewController {
         connectButton.tintColor = .blue
         connectButton.addTarget(self, action: #selector(connectButtonPressed), for: .touchUpInside)
 
+        
+        view.addSubview(gradient)
         view.addSubview(tableView)
         view.addSubview(mapView)
         view.addSubview(infoLabel)
@@ -431,10 +434,13 @@ class VPNViewController: UIViewController {
             }
         }
         
+        gradient.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
     }
     
     private func setStyling() {
-        self.view.backgroundColor = .clear
+//        self.view.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
         self.tableView.separatorColor = .clear
         
@@ -657,10 +663,7 @@ extension VPNViewController: UITableViewDelegate {
         //push new view controller
         let countryVC = VPNCountryController()
         countryVC.delegate = self
-        UIView.animate(withDuration: 0.1, animations: {
-            self.view.alpha = 0.0
-            self.navigationController?.pushViewController(countryVC, animated: true)
-        })
+        self.navigationController?.pushViewController(countryVC, animated: true)
     }
 }
 

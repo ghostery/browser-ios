@@ -40,6 +40,39 @@ class OrientationManager {
 }
 
 extension BrowserViewController {
+    func showVpnPanel() {
+        hideControlCenter()
+        #if PAID
+        let controller = UINavigationController(rootViewController: VPNViewController())
+        controller.setNavigationBarHidden(true, animated: false)
+        
+        self.addChildViewController(controller)
+        self.view.addSubview(controller.view)
+        
+        controller.view.snp.makeConstraints({ (make) in
+            make.top.equalTo(self.urlBar.snp.bottom)
+            make.bottom.equalToSuperview()
+            make.left.right.equalToSuperview()
+        })
+        #endif
+    }
+    
+    func hideVpnPanel() {
+        
+        if let c = self.childViewControllers.last as? UINavigationController {
+            c.willMove(toParentViewController: nil)
+            c.beginAppearanceTransition(true, animated: false)
+            c.view.removeFromSuperview()
+            c.endAppearanceTransition()
+            c.removeFromParentViewController()
+        }
+    }
+    
+    
+    func hidePrivacyPanel() {
+        hideControlCenter()
+        hideVpnPanel()
+    }
     
     @objc func ghosteryButtonPressed(notification: Notification) {
         
@@ -61,6 +94,7 @@ extension BrowserViewController {
     }
 	
     func showControlCenter(pageUrl: String?) {
+        hideVpnPanel()
         
         func applyShadow(view: UIView) {
             view.layer.shadowColor = UIColor.black.cgColor
@@ -120,18 +154,17 @@ extension BrowserViewController {
 	}
 
 	func hideControlCenter() {
-        for cc in self.childViewControllers {
-            if let c = cc as? ControlCenterViewController {
-                c.willMove(toParentViewController: nil)
-                c.beginAppearanceTransition(true, animated: false)
-                c.view.removeFromSuperview()
-                c.endAppearanceTransition()
-                c.removeFromParentViewController()
-                NotificationCenter.default.post(name: controlCenterDismissedNotification, object: nil)
-                LoadingNotificationManager.shared.controlCenterClosed()
-                break
-            }
+        
+        if let c = self.childViewControllers.last as? ControlCenterViewController {
+            c.willMove(toParentViewController: nil)
+            c.beginAppearanceTransition(true, animated: false)
+            c.view.removeFromSuperview()
+            c.endAppearanceTransition()
+            c.removeFromParentViewController()
+            NotificationCenter.default.post(name: controlCenterDismissedNotification, object: nil)
+            LoadingNotificationManager.shared.controlCenterClosed()
         }
+        
 	}
     
     #if PAID

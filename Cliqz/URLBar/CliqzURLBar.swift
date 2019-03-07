@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 
-
 let URLBarDidPressPageOptionsNotification = Notification.Name(rawValue: "NotificationURLBarDidPressPageOptions")
 
 extension URLBarDelegate {
@@ -17,7 +16,6 @@ extension URLBarDelegate {
 	func urlBarDidPressCliqzPageOptions(_ urlBar: URLBarView, from button: UIButton) {
 		NotificationCenter.default.post(name: URLBarDidPressPageOptionsNotification, object: button)
 	}
-
 }
 
 extension URLBarView {
@@ -87,19 +85,19 @@ class CliqzURLBar: URLBarView {
         return pageOptionsButton
     }()
     
-    @objc func SELdidClickGhosty(button: UIButton) {
-        debugPrint("pressed ghosty")
-		NotificationCenter.default.post(name: Notification.Name.GhosteryButtonPressed, object: self.currentURL?.absoluteString)
-    }
-    
-    
-    @objc func SELDidPressPageOptionsButton(button: UIButton) {
-        self.delegate?.urlBarDidPressCliqzPageOptions(self, from: button)
-    }
     
     override func commonInit() {
         super.commonInit()
         helper = CliqzTabToolbarHelper(toolbar: self)
+    }
+    
+    @objc func SELdidClickGhosty(button: UIButton) {
+        debugPrint("pressed ghosty")
+        NotificationCenter.default.post(name: Notification.Name.GhosteryButtonPressed, object: self.currentURL?.absoluteString)
+    }
+    
+    @objc func SELDidPressPageOptionsButton(button: UIButton) {
+        self.delegate?.urlBarDidPressCliqzPageOptions(self, from: button)
     }
     
     override func setupConstraints() {
@@ -245,20 +243,11 @@ class CliqzURLBar: URLBarView {
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
                     make.leading.equalTo(self.stopReloadButton.snp.trailing).offset(URLBarViewUX.Padding)
-//                    if self.topTabsIsShowing {
-//                        make.trailing.equalTo(self.menuButton.snp.leading).offset(-URLBarViewUX.Padding)
-//                    } else {
-//                        make.trailing.equalTo(self.tabsButton.snp.leading).offset(-URLBarViewUX.Padding)
-//                    }
-                    //make.trailing.equalTo(self.ghosteryButton.snp.leading).offset(-URLBarViewUX.Padding)
-                    
                 } else {
                     // Otherwise, left align the location view
-                    make.leading/*.trailing*/.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
+                    make.leading.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
                 }
-                
                 make.trailing.equalTo(self.ghosteryButton.snp.leading)//.offset(-URLBarViewUX.Padding)
-                
                 make.height.equalTo(URLBarViewUX.LocationHeight+2)
                 make.centerY.equalTo(self)
             }

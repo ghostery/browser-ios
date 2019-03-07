@@ -90,6 +90,7 @@
 		1E60134B21AC43E300392E80 /* LumenIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E60134A21AC43E300392E80 /* LumenIntroViewController.swift */; };
 		1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */; };
 		1E650C9C2091E35D0070C670 /* BrowserViewController+GhosteryMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */; };
+		1E65E3D422326C7C0069E1B7 /* LumenURLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E65E3D322326C7C0069E1B7 /* LumenURLBar.swift */; };
 		1E78A3A4214BBB02005E2539 /* LogoLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78A389214BB0EB005E2539 /* LogoLoaderTests.swift */; };
 		1E79A98E21A6F89C00EAC6E6 /* Lumen.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1E79A98D21A6F89C00EAC6E6 /* Lumen.xcconfig */; };
 		1E7A3DC22085FCCA00F53E90 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A3DC12085FCCA00F53E90 /* assets */; };
@@ -1527,6 +1528,7 @@
 		1E64051E210095CE00B02901 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-TW"; path = "zh-TW.lproj/Cliqz.stringsdict"; sourceTree = "<group>"; };
 		1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "Ghostery-Licenses.html"; sourceTree = "<group>"; };
 		1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+GhosteryMigration.swift"; sourceTree = "<group>"; };
+		1E65E3D322326C7C0069E1B7 /* LumenURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenURLBar.swift; sourceTree = "<group>"; };
 		1E78A389214BB0EB005E2539 /* LogoLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoLoaderTests.swift; sourceTree = "<group>"; };
 		1E78A397214BBAF5005E2539 /* UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E78A39B214BBAF5005E2539 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -3958,6 +3960,7 @@
 			isa = PBXGroup;
 			children = (
 				AFE484D22056838500554B2E /* CliqzURLBar.swift */,
+				1E65E3D322326C7C0069E1B7 /* LumenURLBar.swift */,
 				1EEA36DC206401EB003B6AD5 /* CliqzTabLocationView.swift */,
 				1E7B7687206A8AC000FD0BA5 /* CliqzTabToolbar.swift */,
 				1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */,
@@ -6772,6 +6775,7 @@
 				AFAB304020B80EC200FE312E /* AppDelegateExtension.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
+				1E65E3D422326C7C0069E1B7 /* LumenURLBar.swift in Sources */,
 				D821E90E2141B71C00452C55 /* SiriSettingsViewController.swift in Sources */,
 				D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */,
 				E65075511E37F6D1006961AC /* NSURLExtensionsMailTo.swift in Sources */,
