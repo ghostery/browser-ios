@@ -110,7 +110,7 @@ class CCWidgetManager {
             }
         }
     }
-    
+
     struct Info: Codable {
         let timeSaved: Int?
         let adsBlocked: Int?
@@ -119,7 +119,7 @@ class CCWidgetManager {
         let trackersDetected: Int?
 		let trackersList: [String]?
 		let pagesChecked: Int?
-        
+
         func merge(info: Info) -> Info {
             let timeSaved = self.timeSaved?.add(num: info.timeSaved)
             let adsBlocked = self.adsBlocked?.add(num: info.adsBlocked)
@@ -164,20 +164,20 @@ class CCWidgetManager {
         registeredWidgets.insert(widget)
     }
     
-    func updateAppearance() {
-        self.update(period: currentPeriod)
+    func updateAppearance(dashboard: CCCollectionViewController?) {
+        self.update(period: currentPeriod, dashboard: dashboard)
     }
     
     //period changed
-    func update(period: Period) {
+	func update(period: Period, dashboard: CCCollectionViewController?) {
         currentPeriod = period
         //push update
         
         Engine.sharedInstance.getBridge().callAction("insights:getDashboardStats", args: [currentPeriod.toString()]) { [weak self] (response) in
             //print("getDashboardStats = \(response)")
-            if let info = self?.parseResponse(response: response),
-                let widgets = self?.registeredWidgets {
-                
+			if let info = self?.parseResponse(response: response) {
+//                let widgets = self?.registeredWidgets {
+			
                 if period == .Today {
                     self?.todayInfo = info
                 }
@@ -186,9 +186,10 @@ class CCWidgetManager {
                 }
                 
                 DispatchQueue.main.async {
-                    for widget in widgets {
-                        widget.update()
-                    }
+					dashboard?.update()
+//                    for widget in widgets {
+//                        widget.update()
+//                    }
                 }
                 
             }
@@ -196,8 +197,8 @@ class CCWidgetManager {
     }
     
     private func parseResponse(response: NSDictionary) -> Info? {
-        
-        if response.allKeys.count == 0 {
+
+		if response.allKeys.count == 0 {
             return Info.zero
         }
         

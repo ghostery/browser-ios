@@ -119,7 +119,7 @@ class CCCollectionViewController: UIViewController {
 						//TODO: What should I do in this case?
 					}
 					else {
-						CCWidgetManager.shared.updateAppearance()
+						CCWidgetManager.shared.updateAppearance(dashboard: self)
 					}
 				})
 			}
