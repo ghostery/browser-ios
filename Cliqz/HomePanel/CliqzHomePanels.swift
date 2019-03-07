@@ -34,19 +34,6 @@ class CliqzHomePanels {
                         accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label"),
                         accessibilityIdentifier: "HomePanels.History")
     
-    #if PAID
-    let VPNPanel =  HomePanelDescriptor(
-                        makeViewController: { profile in
-                            let controller = UINavigationController(rootViewController: VPNViewController())
-                            controller.setNavigationBarHidden(true, animated: false)
-                            controller.interactivePopGestureRecognizer?.delegate = nil
-                            return controller
-                        },
-                        imageName: "panelVPN",
-                        accessibilityLabel: NSLocalizedString("VPN", comment: "Panel accessibility label"),
-                        accessibilityIdentifier: "HomePanels.VPN")
-    #endif
-
     let offrzPanel = HomePanelDescriptor(
                         makeViewController: { profile in
                             let controller = OffrzViewController(dataSource: OffrzDataSource.shared)
@@ -76,11 +63,9 @@ class CliqzHomePanels {
     
     func getEnabledPanels() -> [HomePanelDescriptor] {
         #if PAID
-            return [topSitesPanel, VPNPanel , historyPanel, favoritePanel]
+            return [topSitesPanel , historyPanel, favoritePanel]
         #else
             return [topSitesPanel, historyPanel, offrzPanel, favoritePanel]
         #endif
     }
-    
-    
 }
