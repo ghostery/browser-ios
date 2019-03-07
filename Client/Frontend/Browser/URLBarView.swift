@@ -48,6 +48,8 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
     func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton)
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
+    //Cliqz: added method to handle clicking vpn Access button
+    func urlBarDidPressVpnAccessButton()
 }
 
 class URLBarView: UIView {

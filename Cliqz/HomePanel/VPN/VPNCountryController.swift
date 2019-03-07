@@ -17,6 +17,7 @@ class VPNCountryController: UIViewController {
     weak var delegate: VPNCountryControllerProtocol? = nil
     
     let tableView = UITableView()
+    let gradient = BrowserGradientView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +26,12 @@ class VPNCountryController: UIViewController {
         tableView.dataSource = self
         tableView.register(CustomVPNCountryCell.self, forCellReuseIdentifier: "CountryCell")
         
+        view.addSubview(gradient)
         view.addSubview(tableView)
+        
+        gradient.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
         
         tableView.snp.makeConstraints { (make) in
             make.bottom.leading.trailing.equalToSuperview()
@@ -38,13 +44,13 @@ class VPNCountryController: UIViewController {
     }
     
     func setStyling() {
-        //this fixes the animation for the light theme
-        if lumenTheme == .Light {
-            self.view.backgroundColor = .white
-        }
-        else {
-            self.view.backgroundColor = .clear
-        }
+//        //this fixes the animation for the light theme
+//        if lumenTheme == .Light {
+//            self.view.backgroundColor = .white
+//        }
+//        else {
+//            self.view.backgroundColor = .clear
+//        }
         self.navigationController?.navigationBar.tintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
         self.navigationController?.navigationBar.barTintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
         self.navigationController?.navigationBar.backgroundColor = .clear

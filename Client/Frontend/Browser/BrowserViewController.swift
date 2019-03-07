@@ -379,7 +379,12 @@ class BrowserViewController: UIViewController {
         /* Cliqz
         urlBar = URLBarView()
         */
+        #if PAID
+        urlBar = LumenURLBar()
+        #else
         urlBar = CliqzURLBar()
+        #endif
+        
         NotificationCenter.default.addObserver(self, selector: #selector(urlBarDidPressPageCliqzOptions), name: URLBarDidPressPageOptionsNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(urlBarDidPressVideoDownload), name: URLBarDidPressVideoDownloadNotification, object: nil)
         // Cliqz: Add observers for Connection features
@@ -1364,10 +1369,8 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
 
 extension BrowserViewController: SettingsDelegate {
     func settingsOpenURLInNewTab(_ url: URL) {
-        //Cliqz: dismiss control center if it is present
-        if let cc = self.childViewControllers.last, let _ = cc as? ControlCenterViewController {
-            hideControlCenter()
-        }
+        //Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
         
         self.openURLInNewTab(url, isPrivileged: false)
     }
@@ -1423,13 +1426,13 @@ extension BrowserViewController: URLBarDelegate {
         
         navigationController?.pushViewController(tabTrayController, animated: true)
         self.tabTrayController = tabTrayController
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
         tabManager.selectedTab?.reload()
     }
     
@@ -1438,8 +1441,8 @@ extension BrowserViewController: URLBarDelegate {
         qrCodeViewController.qrCodeDelegate = self
         let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
         self.present(controller, animated: true, completion: nil)
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
 
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
@@ -1469,8 +1472,8 @@ extension BrowserViewController: URLBarDelegate {
                                                  isPinned: isPinned, success: successCallback)
             self.presentSheetWith(title: Strings.PageActionMenuTitle, actions: pageActions, on: self, from: button)
         }
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
     
     func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
@@ -1482,8 +1485,8 @@ extension BrowserViewController: URLBarDelegate {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         presentActivityViewController(url, tab: tab, sourceView: button, sourceRect: button.bounds, arrowDirection: .up)
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView, from button: UIButton) {
@@ -1496,14 +1499,14 @@ extension BrowserViewController: URLBarDelegate {
     
     func urlBarDidPressStop(_ urlBar: URLBarView) {
         tabManager.selectedTab?.stop()
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
 
     func urlBarDidPressTabs(_ urlBar: URLBarView) {
         showTabTray()
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
@@ -1522,13 +1525,13 @@ extension BrowserViewController: URLBarDelegate {
                 }
             }
         }
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
 
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool {
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
         guard let tab = tabManager.selectedTab,
                let url = tab.url?.displayURL
             else {
@@ -1580,8 +1583,8 @@ extension BrowserViewController: URLBarDelegate {
         } else {
             self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
         }
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
@@ -1693,14 +1696,14 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         LeanPlumClient.shared.track(event: .interactWithURLBar)
-        // Cliqz: Close CC and send notification
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel and send notification
+        self.hidePrivacyPanel()
         // Cliqz: end
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
-		// Cliqz: Close CC
-		self.hideControlCenter()
+		// Cliqz: Close control center or vpn panel
+		self.hidePrivacyPanel()
         BackgroundImageManager.shared.reset()
         if let url = tabManager.selectedTab?.webView?.url {
             NotificationCenter.default.post(name: didLeaveOverlayNotification, object: nil, userInfo: ["url": url])
@@ -1713,29 +1716,42 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
         dismissVisibleMenus()
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
+    }
+    
+    //Cliqz: added method to handle clicking vpn Access button
+    func urlBarDidPressVpnAccessButton() {
+        #if PAID
+        if let _ = self.childViewControllers.last as? UINavigationController {
+            hideVpnPanel()
+            LegacyTelemetryHelper.logVPN(action: "click", target: "close")
+        }
+        else {
+            showVpnPanel()
+        }
+        #endif
     }
 }
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
         tabManager.selectedTab?.goBack()
     }
 
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         showBackForwardList()
     }
 
     func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
         tabManager.selectedTab?.reload()
     }
 
@@ -1751,19 +1767,19 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         generator.impactOccurred()
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
         presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
 
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
         tabManager.selectedTab?.stop()
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
         //Cliqz: dismiss overlay when going forward from home panel
         if let url = self.tabManager.selectedTab?.url, url.isAboutURL {
             self.urlBar.leaveOverlayMode()
@@ -1772,8 +1788,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         showBackForwardList()
@@ -1797,14 +1813,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         if let tab = tabManager.selectedTab, let url = tab.url {
             presentActivityViewController(url, tab: tab, sourceView: button.superview, sourceRect: button.frame, arrowDirection: .up)
         }
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
 		self.homePanelController?.shouldShowKeyboard = true
 		// Cliqz: End
     }
@@ -1877,8 +1893,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
         
-        // Cliqz: Close CC
-        self.hideControlCenter()
+        // Cliqz: Close control center or vpn panel
+        self.hidePrivacyPanel()
     }
 
     func showBackForwardList() {
