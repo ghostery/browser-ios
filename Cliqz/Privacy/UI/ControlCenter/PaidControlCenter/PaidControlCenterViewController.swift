@@ -61,7 +61,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
         setStyle()
         setConstraints()
 
-		CCWidgetManager.shared.update(period: currentPeriod)
+		CCWidgetManager.shared.update(period: currentPeriod, dashboard: self.dashboard)
 		cellDataSource.tapHandler = { [weak self] (widget) in
 			var vc: UIViewController?
 			switch widget {
@@ -166,8 +166,8 @@ class PaidControlCenterViewController: ControlCenterViewController {
             LegacyTelemetryHelper.logDashboard(action: "click", target: "past")
         }
         
-        CCWidgetManager.shared.update(period: currentPeriod)
-		dashboard.update()
+		CCWidgetManager.shared.update(period: currentPeriod, dashboard: dashboard)
+//		dashboard.update()
     }
     
     @objc func VPNStatusDidChange(notification: Notification) {
