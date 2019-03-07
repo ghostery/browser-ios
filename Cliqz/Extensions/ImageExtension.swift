@@ -59,7 +59,7 @@ extension UIImage {
     
     static func controlCenterNormalIcon() -> UIImage? {
         #if PAID
-        return UIImage(named: "dashboard")
+        return UIImage(named: "dashboard_button_freshtab")
         #else
         return UIImage(named: "ghosty")
         #endif
@@ -67,7 +67,7 @@ extension UIImage {
     
     static func controlCenterPrivateIcon() -> UIImage? {
         #if PAID
-        return UIImage(named: "dashboard")
+        return UIImage(named: "dashboard_button_freshtab")
         #else
         return UIImage(named: "ghostyPrivate")
         #endif
