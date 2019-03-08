@@ -117,8 +117,9 @@ class CCWidgetManager {
         let dataSaved: Int?
         let batterySaved: Int?
         let trackersDetected: Int?
-		let trackersList: [String]?
 		let pagesChecked: Int?
+		let trackersList: [String]?
+		let adsList: [String]?
 
         func merge(info: Info) -> Info {
             let timeSaved = self.timeSaved?.add(num: info.timeSaved)
@@ -128,11 +129,12 @@ class CCWidgetManager {
             let trackersDetected = self.trackersDetected?.add(num: info.trackersDetected)
             let trackersList = (self.trackersList ?? [String]()) + (info.trackersList ?? [String]())
 			let pagesChecked = self.pagesChecked?.add(num: info.pagesChecked)
-			return Info(timeSaved: timeSaved, adsBlocked: adsBlocked, dataSaved: dataSaved, batterySaved: batterySaved, trackersDetected: trackersDetected, trackersList: trackersList, pagesChecked: pagesChecked)
+			let adsList = (self.adsList ?? [String]()) + (info.adsList ?? [String]())
+			return Info(timeSaved: timeSaved, adsBlocked: adsBlocked, dataSaved: dataSaved, batterySaved: batterySaved, trackersDetected: trackersDetected, pagesChecked: pagesChecked, trackersList: trackersList, adsList: adsList)
         }
         
         static var zero: Info {
-			return Info(timeSaved: 0, adsBlocked: 0, dataSaved: 0, batterySaved: 0, trackersDetected: 0, trackersList: [String](), pagesChecked: 0)
+			return Info(timeSaved: 0, adsBlocked: 0, dataSaved: 0, batterySaved: 0, trackersDetected: 0,  pagesChecked: 0, trackersList: [String](), adsList: [String]())
         }
 
         func timeSavedStrings() -> (String, String) {
@@ -197,7 +199,7 @@ class CCWidgetManager {
     }
     
     private func parseResponse(response: NSDictionary) -> Info? {
-
+		// TODO: Should be processed in separate thread
 		if response.allKeys.count == 0 {
             return Info.zero
         }
@@ -207,8 +209,6 @@ class CCWidgetManager {
             var adsBlocked: Int? = nil
             var dataSaved: Int? = nil
             var batterySaved: Int? = nil
-            var trackersDetected: Int? = nil
-			var trackersList: [String]? = nil
 			var pagesChecked: Int? = nil
 
             if let v = result["timeSaved"] as? Int {
@@ -234,17 +234,31 @@ class CCWidgetManager {
 //                trackersDetected = v
 //            }
 //
-			if let trackers = result["trackers"] as? NSArray {
-				// ;TODO this should be changed to filter trackers from ads and then set counts
-				for item in trackers {
-					print (item)
+//			if let trackers = result["trackers"] as? NSArray {
+//				// ;TODO this should be changed to filter trackers from ads and then set counts
+//				for item in trackers {
+//					print (item)
+//				}
+//				trackersDetected = trackers.count
+//				trackersList = trackers as? [String]
+//			}
+			var trackers = [String]()
+			var ads = [String]()
+			if let trackersDetails = result["trackersDetailed"] as? NSArray {
+				for trackerData in trackersDetails {
+					if let data = trackerData as? NSDictionary,
+						let category = data["cat"] as? String,
+						let name = data["name"] as? String {
+						if category == "advertising" {
+							ads.append(name)
+						} else {
+							trackers.append(name)
+						}
+					}
 				}
-				trackersDetected = trackers.count
-				trackersList = trackers as? [String]
 			}
-			return Info(timeSaved: timeSaved, adsBlocked: adsBlocked, dataSaved: dataSaved, batterySaved: batterySaved, trackersDetected: trackersDetected, trackersList: trackersList, pagesChecked: pagesChecked)
+			return Info(timeSaved: timeSaved, adsBlocked: adsBlocked, dataSaved: dataSaved, batterySaved: batterySaved, trackersDetected: trackers.count, pagesChecked: pagesChecked, trackersList: trackers, adsList: ads)
         }
-        
         return nil;
     }
     
@@ -300,9 +314,24 @@ class CCWidgetManager {
 		var pagesChecked = 0
 		if currentPeriod == .Today {
 			pagesChecked = todayInfo.pagesChecked ?? 0
+		}  else {
+			pagesChecked = last7DaysInfo.pagesChecked ?? 0
 		}
-		pagesChecked = last7DaysInfo.pagesChecked ?? 0
 		return String(format: "%d", pagesChecked)
+	}
+
+	func trackersList() -> [String] {
+		if currentPeriod == .Today {
+			return todayInfo.trackersList ?? [String]()
+		}
+		return last7DaysInfo.trackersList ?? [String]()
+	}
+
+	func adsList() -> [String] {
+		if currentPeriod == .Today {
+			return todayInfo.adsList ?? [String]()
+		}
+		return last7DaysInfo.adsList ?? [String]()
 	}
 }
 

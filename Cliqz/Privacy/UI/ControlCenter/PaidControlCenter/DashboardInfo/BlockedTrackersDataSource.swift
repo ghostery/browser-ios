@@ -16,7 +16,7 @@ class BlockedTrackersDataSource: DashboardListInfoDataSource {
 	}
 	
 	var count: String {
-		return CCWidgetManager.shared.dataSaved().0
+		return String(CCWidgetManager.shared.companies())
 	}
 	
 	var headerTitle: String {
@@ -24,7 +24,7 @@ class BlockedTrackersDataSource: DashboardListInfoDataSource {
 	}
 	
 	var headerDescription: String {
-		return NSLocalizedString("Lumen prevented these company from collecting data about you.", tableName: "Lumen", comment:"[Lumen->Dashboard] Data Volume Saved widget title")
+		return NSLocalizedString("Lumen prevented these companies from collecting data about you.", tableName: "Lumen", comment:"[Lumen->Dashboard] Data Volume Saved widget title")
 	}
 
 	var sectionHeaderTitle: String {
@@ -32,12 +32,15 @@ class BlockedTrackersDataSource: DashboardListInfoDataSource {
 	}
 
 	var listCount: Int {
-		return 0
+		return trackersList.count
 	}
 	
-	var listItemTitle: String {
-		return ""
+	func listItemTitle(forIndex index: Int) -> String {
+		return trackersList[index]
 	}
+
+	private var trackersList = CCWidgetManager.shared.trackersList()
+
 }
 
 #endif

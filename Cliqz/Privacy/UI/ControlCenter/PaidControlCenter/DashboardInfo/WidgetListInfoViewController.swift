@@ -70,6 +70,7 @@ class WidgetDetailHeaderView: UIView {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		setupConstraints()
+		descriptionLabel.sizeToFit()
 	}
 
 	private func setupSubviews() {
@@ -106,6 +107,7 @@ class WidgetDetailHeaderView: UIView {
 			make.left.equalTo(titleLabel.snp.left)
 			make.top.equalTo(titleLabel.snp.bottom).offset(4)
 			make.right.equalToSuperview()
+			make.height.greaterThanOrEqualTo(20).priority(1000)
 		}
 	}
 }
@@ -156,7 +158,7 @@ class WidgetListInfoViewController: WidgetInfoViewController {
 extension WidgetListInfoViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 10 //self.dataSource?.listCount ?? 10
+		return self.dataSource?.listCount ?? 0
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -169,7 +171,7 @@ extension WidgetListInfoViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		if let cell = tableView.dequeueReusableCell(withIdentifier: "DashboardInfoCell", for: indexPath) as? BlockedItemCell {
-			cell.nameLabel.text = "Hello"
+			cell.nameLabel.text = dataSource?.listItemTitle(forIndex: indexPath.row)
 			cell.selectionStyle = .none
 			return cell
 		}
@@ -235,7 +237,7 @@ class BlockedItemCell: UITableViewCell {
 
 	private func setConstraints() {
 		nameLabel.snp.makeConstraints { (make) in
-			make.left.equalToSuperview().offset(5)
+			make.left.equalToSuperview().offset(15)
 			make.centerY.equalToSuperview()
 		}
 	}

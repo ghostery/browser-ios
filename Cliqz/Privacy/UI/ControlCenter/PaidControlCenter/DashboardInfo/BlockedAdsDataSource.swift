@@ -11,12 +11,13 @@
 import Foundation
 
 class BlockedAdsDataSource: DashboardListInfoDataSource {
+
 	var imageName: String {
 		return "BlockedAds_WidgetDetails"
 	}
 
 	var count: String {
-		return CCWidgetManager.shared.dataSaved().0
+		return String(CCWidgetManager.shared.adsBlocked())
 	}
 
 	var headerTitle: String {
@@ -32,12 +33,14 @@ class BlockedAdsDataSource: DashboardListInfoDataSource {
 	}
 
 	var listCount: Int {
-		return 0
+		return adsList.count
 	}
 
-	var listItemTitle: String {
-		return ""
+	func listItemTitle(forIndex index: Int) -> String {
+		return adsList[index]
 	}
+
+	private var adsList = CCWidgetManager.shared.adsList()
 }
 
 #endif

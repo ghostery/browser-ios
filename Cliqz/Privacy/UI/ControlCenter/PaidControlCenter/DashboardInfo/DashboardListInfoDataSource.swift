@@ -18,7 +18,7 @@ protocol DashboardListInfoDataSource: class {
 	var headerDescription: String { get }
 	var sectionHeaderTitle: String { get }
 	var listCount: Int { get }
-	var listItemTitle: String { get }
+	func listItemTitle(forIndex index: Int) -> String
 
 }
 
