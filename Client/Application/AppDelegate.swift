@@ -238,6 +238,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.tabManager = nil
         self.browserViewController = nil
         self.rootViewController = nil
+		#if PAID
+		VPNEndPointManager.shared.clearCredentials()
+		#endif
+
     }
 
     /**
