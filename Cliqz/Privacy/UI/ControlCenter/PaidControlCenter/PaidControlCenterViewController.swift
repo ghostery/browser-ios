@@ -191,7 +191,6 @@ class PaidControlCenterViewController: ControlCenterViewController {
 			tabs.tintColor = UIColor.lumenDisabled
 			tabs.isUserInteractionEnabled = false
 		}
-		self.upgradeView?.updateViewState(isEnabled: isEnabled)
 		self.upgradeButton?.updateViewState(isEnabled: isEnabled)
 		dashboard.update()
 	}
