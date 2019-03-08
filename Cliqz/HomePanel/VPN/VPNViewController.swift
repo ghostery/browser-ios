@@ -237,13 +237,13 @@ class VPNEndPointManager {
 		VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
 			for cred in credentials {
 				if let country = self?.country(id: cred.country.lowercased()) {
-					self?.setCreds(country: country, username: cred.username, password: cred.password)
 					country.endpoint = cred.serverIP
 					country.remoteID = cred.remoteID
 					// TODO: Selected country logic also whole countries data should be refactored, the first implementation was quite weak
 					if country.id == self?.selectedCountry.id {
 						self?.selectedCountry = country
 					}
+					self?.setCreds(country: country, username: cred.username, password: cred.password)
 				}
 			}
 		}
@@ -264,7 +264,14 @@ class VPNEndPointManager {
         getVPNCredentialsFromServer()
         return nil
     }
-    
+	
+	func clearCredentials() {
+		for c in self.countries {
+			DAKeychain.shared[c.usernameHash] = nil
+			DAKeychain.shared[c.passwordHash] = nil
+		}
+	}
+
     private func setCreds(country: VPNCountry, username: String, password: String) {
         let keychain = DAKeychain.shared
         keychain[country.usernameHash] = username
