@@ -204,7 +204,8 @@ class CCHorizontalCell: CCAbstractCell {
     
     override func update() {
         super.update()
-		self.countLabel.text = CCWidgetManager.shared.pagesChecked()
+		countLabel.textColor = Lumen.Dashboard.titleColor(lumenTheme, lumenDashboardMode)
+		countLabel.text = CCWidgetManager.shared.pagesChecked()
     }
 }
 
