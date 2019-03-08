@@ -24,7 +24,7 @@
     "@cliqz/indexeddbshim": "^4.1.1",
     "appium": "1.9.0",
     "browser-core": "https://s3.amazonaws.com/cdncliqz/update/edge/ghostery-ios/master/1.35.0.1b127.4560332.tgz",
-    "browser-core-lumen-ios": "https://s3.amazonaws.com/cdncliqz/update/edge/lumen-ios/master/1.35.0.1b127.4560332.tgz",
+    "browser-core-lumen-ios": "https://s3.amazonaws.com/cdncliqz/update/edge/lumen-ios/master/13.35.0.127.4560332.tgz",
     "buffer": "5.0.7",
     "https-browserify": "1.0.0",
     "page-metadata-parser": "^1.1.2",
