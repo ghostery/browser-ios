@@ -45,8 +45,8 @@ steps:
 - script: xcodebuild -workspace Client.xcworkspace -scheme "Fennec" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=Test-iPhone6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
   displayName: 'Xcode Build Fennec on Test iPhone 6s Simulator'
 
-- script: xcodebuild -workspace Client.xcworkspace -scheme "Lumen" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=Test-iPhone6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
-  displayName: 'Xcode Build Lumen on Test iPhone 6s Simulator'
+- script: xcodebuild -workspace Client.xcworkspace -scheme "Lumen" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=iPhone 6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build
+  displayName: 'Xcode Build Lumen on Base iPhone 6s Simulator'
 
 - bash: |
       set -x
@@ -60,10 +60,13 @@ steps:
       source scripts/azure-scripts/appium.sh
       python testRunner.py || true
       cat *-testreport.log
-      cd ../performance
+      cd ..
+      ios-sim launch clean/Build/Products/Lumen-iphonesimulator/Client.app/ --devicetypeid "iPhone-6s, 12.1"
+      cd performance
       source run.sh
       cd ../cliqz-mobile-tests
       source scripts/azure-scripts/cleanup.sh ios
+      xcrun simctl shutdown all
   displayName: 'Setup and Run Tests'
 
 - bash: |
