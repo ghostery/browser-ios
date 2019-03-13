@@ -9,7 +9,10 @@ pool:
 steps:
 
 - script: git clone https://github.com/cliqz-oss/cliqz-mobile-tests.git --branch azure-pipelines --single-branch
-  displayName: Clone Tests
+  displayName: Clone Mobile Tests
+
+- script: git clone https://github.com/cliqz-oss/cliqz-mobile-tests.git --branch web-performance --single-branch performance
+  displayName: Clone Web Performance
 
 - bash: |
       set -x
@@ -40,7 +43,10 @@ steps:
     forceRepoUpdate: true
 
 - script: xcodebuild -workspace Client.xcworkspace -scheme "Fennec" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=Test-iPhone6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
-  displayName: 'Xcode Build on Test iPhone 6s Simulator'
+  displayName: 'Xcode Build Fennec on Test iPhone 6s Simulator'
+
+- script: xcodebuild -workspace Client.xcworkspace -scheme "Lumen" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=Test-iPhone6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
+  displayName: 'Xcode Build Lumen on Test iPhone 6s Simulator'
 
 - bash: |
       set -x
@@ -53,9 +59,19 @@ steps:
       source scripts/azure-scripts/envs.sh ios
       source scripts/azure-scripts/appium.sh
       python testRunner.py || true
-      source scripts/azure-scripts/cleanup.sh ios
       cat *-testreport.log
+      cd ../performance
+      source run.sh
+      cd ../cliqz-mobile-tests
+      source scripts/azure-scripts/cleanup.sh ios
   displayName: 'Setup and Run Tests'
+
+- bash: |
+    echo "*** Appium Test Reports ***"
+    cat cliqz-mobile-tests/*-testreport.log
+    echo "*** Performance Test Results ***"
+    cat performance/performance.txt
+  displayName: 'Print Results/Reports'
 
 - task: PublishTestResults@2
   condition: always()
@@ -90,6 +106,15 @@ steps:
     archiveType: 'zip'
     tarCompression: 'none'
     archiveFile: '$(Build.ArtifactStagingDirectory)/reports.zip'
+
+- task: ArchiveFiles@2
+  condition: always()
+  displayName: 'Archive Performance Result'
+  inputs:
+    rootFolderOrFile: 'performance/performance.txt'
+    archiveType: 'zip'
+    tarCompression: 'none'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/performance.zip'
 
 - task: PublishBuildArtifacts@1
   condition: always()
