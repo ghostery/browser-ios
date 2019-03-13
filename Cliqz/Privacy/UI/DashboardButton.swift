@@ -80,7 +80,7 @@ class DashboardButton: InsetButton {
 		let height: CGFloat = 25.0
 		let width = (dashboardIcon.image?.widthOverHeight() ?? 1.0) * height
 		var centerDifference: CGFloat = 0.0
-		if isPrivate, let normalImage = UIImage.controlCenterNormalIcon(), let privImage = ghosty.image {
+		if isPrivate, let normalImage = UIImage.controlCenterNormalIcon(), let privImage = dashboardIcon.image {
 			let ratioNormal = normalImage.widthOverHeight()
 			let ratioPrivate = privImage.widthOverHeight()
 			let widthNormal = ratioNormal * height
