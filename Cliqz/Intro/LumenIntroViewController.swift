@@ -22,7 +22,7 @@ class LumenIntroViewController: UIViewController {
     }
     
     var topOffset : CGFloat {
-        if isIphoneX { return 50 }
+        if isIphoneX { return 70 }
         return self.view.frame.width <= 320 ? -30 : 20
     }
     
