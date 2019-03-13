@@ -806,6 +806,10 @@ class BrowserViewController: UIViewController {
             self.hideWebview()
             #endif
             //end
+			// Cliqz: update URLBar State
+			#if PAID
+			self.urlBar.updateDashboardButtonState(.empty)
+			#endif
         })
         view.setNeedsUpdateConstraints()
         
@@ -832,6 +836,10 @@ class BrowserViewController: UIViewController {
                 if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
                     self.showReaderModeBar(animated: false)
                 }
+				// Cliqz: update URLBar State
+				#if PAID
+				self.urlBar.updateDashboardButtonState(.full)
+				#endif
             })
         }
     }

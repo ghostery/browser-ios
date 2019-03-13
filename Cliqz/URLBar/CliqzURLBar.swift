@@ -44,10 +44,9 @@ class CliqzURLBar: URLBarView {
             if newURL != nil {
                 pageOptionsButton.alpha = 0
             }
-            
         }
     }
-    
+
     let ghostyHeight = 54.0
     let ghostyWidth = 54.0
     
@@ -74,7 +73,7 @@ class CliqzURLBar: URLBarView {
         button.alpha = 1
         return button
     }()
-    
+
     lazy var pageOptionsButton: UIButton = {
         let pageOptionsButton = UIButton(frame: .zero)
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
@@ -84,12 +83,21 @@ class CliqzURLBar: URLBarView {
         pageOptionsButton.accessibilityIdentifier = "UrlBar.pageOptionsButton"
         return pageOptionsButton
     }()
-    
-    
+
     override func commonInit() {
         super.commonInit()
         helper = CliqzTabToolbarHelper(toolbar: self)
+		#if PAID
+		NotificationCenter.default.addObserver(self, selector: #selector(privacyChanged), name: Notification.Name.privacyStatusChanged, object: nil)
+		self.dashboardButton.isDisabled = !UserPreferences.instance.isProtectionOn
+		#endif
     }
+
+	deinit {
+		#if PAID
+		NotificationCenter.default.removeObserver(self)
+		#endif
+	}
     
     @objc func SELdidClickGhosty(button: UIButton) {
         debugPrint("pressed ghosty")
@@ -285,6 +293,27 @@ class CliqzURLBar: URLBarView {
         pageOptionsButton.tintColor = UIColor.theme.urlbar.pageOptionsUnselected
         cancelButton.setTitleColor(UIColor.theme.urlbar.urlbarButtonTitleText, for: [])
     }
+
+	
+	#if PAID
+
+	func updateDashboardButtonState(_ state: DashboardButtonState) {
+		self.dashboardButton.currentState = state
+	}
+
+	@objc private func privacyChanged(_ notification: Notification) {
+		if let value = notification.userInfo?["newValue"] as? Bool {
+			self.dashboardButton.isDisabled = !value
+		}
+	}
+
+	func startAnimating() {
+		
+	}
+	func stopAnimating() {
+	}
+
+	#endif
 }
 
 // Cliqz: hide keyboard

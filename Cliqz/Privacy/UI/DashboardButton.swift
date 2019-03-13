@@ -15,13 +15,38 @@ let didChangeTabNotification = Notification.Name(rawValue: "didChangeTab")
 let didShowFreshTabNotification = Notification.Name(rawValue: "didShowFreshTabNotification")
 let didLeaveOverlayNotification = Notification.Name(rawValue: "didLeaveOverlayNotification")
 
+#if PAID
+
+enum DashboardButtonState {
+	case empty
+	case full
+}
+
+#endif
+
 class DashboardButton: InsetButton {
 	
 	private let trackersCount = TrackersCount()
 	fileprivate let dashboardIcon = UIImageView()
+	
 	private let count = UILabel()
 	private var isPrivate = false
 	
+	#if PAID
+	private var checkIcon = UIImageView()
+
+	var currentState = DashboardButtonState.full {
+		didSet {
+			updateDashboardIcon()
+		}
+	}
+	var isDisabled = false {
+		didSet {
+			updateDashboardIcon()
+		}
+	}
+	#endif
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		trackersCount.delegate = self
@@ -44,6 +69,8 @@ class DashboardButton: InsetButton {
 		
 		#if PAID
 		count.isHidden = true
+		addSubview(checkIcon)
+		checkIcon.image = UIImage(named: "dashboard_button_page")
 		#endif
 	}
 	
@@ -79,6 +106,9 @@ class DashboardButton: InsetButton {
 			make.height.equalTo(height)
 			make.width.equalTo(width)
 		}
+		checkIcon.snp.remakeConstraints { (make) in
+			make.center.equalTo(dashboardIcon.snp.center)
+		}
 		#endif
 	}
 	
@@ -106,6 +136,24 @@ class DashboardButton: InsetButton {
 		self.dashboardIcon.alpha = 1.0
 		self.count.alpha = 1.0
 	}
+
+	private func updateDashboardIcon() {
+		#if PAID
+		if self.isDisabled {
+			checkIcon.isHidden = true
+			dashboardIcon.image = UIImage.controlCenterDisabledIcon()
+		} else {
+			dashboardIcon.image = UIImage.controlCenterNormalIcon()
+			checkIcon.isHidden = self.currentState != .full
+		}
+		#else
+		if isPrivate {
+			dashboardIcon.image = UIImage.controlCenterPrivateIcon()
+		} else {
+			dashboardIcon.image = UIImage.controlCenterNormalIcon()
+		}
+		#endif
+	}
 }
 
 extension DashboardButton: Themeable {
@@ -132,11 +180,7 @@ extension DashboardButton: TrackersCountDelegate {
 extension DashboardButton : PrivateModeUI {
 	func applyUIMode(isPrivate: Bool) {
 		self.isPrivate = isPrivate
-		if isPrivate {
-			dashboardIcon.image = UIImage.controlCenterPrivateIcon()
-		} else {
-			dashboardIcon.image = UIImage.controlCenterNormalIcon()
-		}
+		updateDashboardIcon()
 		setUpConstaints()
 	}
 }
