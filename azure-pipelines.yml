@@ -3,131 +3,150 @@
 # Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
-pool:
-  vmImage: 'macOS 10.13'
 
-steps:
+jobs:
+- job: Cliqz_Mobile_Tests_CI
+  timeoutInMinutes: 60
+  strategy:
+    matrix:
+      Ghostery:
+        brand: 'ghostery'
+        scheme: 'Fennec'
+        testbranch: 'azure-pipelines'
+      Lumen:
+        brand: 'lumen'
+        scheme: 'Lumen'
+        testbranch: 'web-performance'
+  pool:
+    vmImage: 'macOS 10.13'
 
-- script: git clone https://github.com/cliqz-oss/cliqz-mobile-tests.git --branch azure-pipelines --single-branch
-  displayName: Clone Mobile Tests
+  steps:
 
-- script: git clone https://github.com/cliqz-oss/cliqz-mobile-tests.git --branch web-performance --single-branch performance
-  displayName: Clone Web Performance
+  - script: git clone https://github.com/cliqz-oss/cliqz-mobile-tests.git --branch $(testbranch) --single-branch
+    displayName: Clone Tests Repo
 
-- bash: |
-      set -x
-      sudo xcode-select --switch /Applications/Xcode_10.1.app
-      xcrun simctl create Test-iPhone6s com.apple.CoreSimulator.SimDeviceType.iPhone-6s com.apple.CoreSimulator.SimRuntime.iOS-12-1 > cliqz-mobile-tests/dev.id
-      xcrun simctl boot $(cat cliqz-mobile-tests/dev.id)
-      sleep 10
-      xcrun simctl list
-  displayName: 'Create a Test Simulator'
+  - script: sudo xcode-select --switch /Applications/Xcode_10.1.app
+    displayName: Define XCode Version
 
-- task: NodeTool@0
-  inputs:
-    versionSpec: '9.11.2'
-    
-- bash: |
-      set -x
-      npm i -g npm@6.5
-      /usr/local/bin/npm ci
-      /usr/local/bin/npm run bundle-ghostery
-  displayName: 'install and build react native'
+  - script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
+    displayName: 'Carthage Bootstrap'
 
-- script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
-  displayName: 'carthage bootstrap'
+  - task: NodeTool@0
+    displayName: 'Define Node to v9.11.2'
+    inputs:
+      versionSpec: '9.11.2'
 
-- task: CocoaPods@0
-  displayName: 'pod install --repo-update'
-  inputs:
-    forceRepoUpdate: true
+  - bash: |
+        set -x
+        npm i -g npm@6.5
+        /usr/local/bin/npm ci
+        /usr/local/bin/npm run bundle-ghostery
+    displayName: 'Install and Build React Native'
 
-- script: xcodebuild -workspace Client.xcworkspace -scheme "Fennec" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=Test-iPhone6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
-  displayName: 'Xcode Build Fennec on Test iPhone 6s Simulator'
+  - task: CocoaPods@0
+    displayName: 'POD install with repo-update'
+    inputs:
+      forceRepoUpdate: true
 
-- script: xcodebuild -workspace Client.xcworkspace -scheme "Lumen" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=iPhone 6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build
-  displayName: 'Xcode Build Lumen on Base iPhone 6s Simulator'
+  - script: xcodebuild -workspace Client.xcworkspace -scheme $(scheme) -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=iPhone 6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
+    displayName: 'Xcode Build Fennec on iPhone 6s Simulator'
 
-- bash: |
-      set -x
+  - ${{ if eq(parameters.brand, 'lumen') }}:
+    - bash: |
+          cd cliqz-mobile-tests
+          ios-sim launch clean/Build/Products/Lumen-iphonesimulator/Client.app/ --devicetypeid "iPhone-6s, 12.1" &
+          sleep 30
+          source scripts/azure-scripts/appium.sh
+          source run.sh
+          kill $(cat appium.pid)
+          sleep 5
+          xcrun simctl shutdown all
+      displayName: 'Setup and Run Tests'
+
+    - bash: |
+        echo "*** Performance Test Results ***"
+        cat cliqz-mobile-tests/performance.txt
+      displayName: 'Print Results/Reports'
+
+    - task: ArchiveFiles@2
+      condition: always()
+      displayName: 'Archive Performance Result'
+      inputs:
+        rootFolderOrFile: 'cliqz-mobile-tests/performance.txt'
+        archiveType: 'zip'
+        tarCompression: 'none'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/performance.zip'
+
+    - task: PublishBuildArtifacts@1
+      condition: always()
+      displayName: 'Publish Artifacts'
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: '$(Build.BuildId)'
+        publishLocation: 'Container'
+
+  - ${{ if neq(parameters.brand, 'lumen') }}:
+    - bash: |
+          cd cliqz-mobile-tests
+          export DEV_NAME="Test-iPhone6s"
+          export DEV_UDID=$(cat dev.id)
+          xcrun simctl boot $(cat dev.id)
+          sleep 10
+          source scripts/azure-scripts/setup.sh ios
+          source scripts/azure-scripts/envs.sh ios
+          source scripts/azure-scripts/appium.sh
+          python testRunner.py || true
+          source scripts/azure-scripts/cleanup.sh ios
+      displayName: 'Setup and Run Tests'
+
+  - bash: |
+      echo "*** Appium Test Reports ***"
+      cat cliqz-mobile-tests/*-testreport.log
+    displayName: 'Print Results/Reports'
+
+  - task: PublishTestResults@2
+    condition: always()
+    displayName: 'Publish JUnit Test'
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'cliqz-mobile-tests/test-reports/*.xml'
+
+  - task: ArchiveFiles@2
+    condition: always()
+    displayName: 'Archive Screenshots'
+    inputs:
+      rootFolderOrFile: 'cliqz-mobile-tests/screenshots'
+      archiveType: 'zip'
+      tarCompression: 'none'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/screenshots.zip'
+
+  - task: ArchiveFiles@2
+    condition: always()
+    displayName: 'Archive Logs'
+    inputs:
+      rootFolderOrFile: 'cliqz-mobile-tests/logs'
+      archiveType: 'zip'
+      tarCompression: 'none'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/logs.zip'
+
+  - task: ArchiveFiles@2
+    condition: always()
+    displayName: 'Archive Reports Folder'
+    inputs:
+      rootFolderOrFile: 'cliqz-mobile-tests/test-reports'
+      archiveType: 'zip'
+      tarCompression: 'none'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/reports.zip'
+
+  - task: PublishBuildArtifacts@1
+    condition: always()
+    displayName: 'Publish Artifacts'
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: '$(Build.BuildId)'
+      publishLocation: 'Container'
+
+  - bash: |
       cd cliqz-mobile-tests
-      export DEV_NAME="Test-iPhone6s"
-      export DEV_UDID=$(cat dev.id)
-      xcrun simctl boot $(cat dev.id)
-      sleep 10
-      source scripts/azure-scripts/setup.sh ios
-      source scripts/azure-scripts/envs.sh ios
-      source scripts/azure-scripts/appium.sh
-      python testRunner.py || true
-      cat *-testreport.log
-      cd ..
-      ios-sim launch clean/Build/Products/Lumen-iphonesimulator/Client.app/ --devicetypeid "iPhone-6s, 12.1"
-      cd performance
-      source run.sh
-      cd ../cliqz-mobile-tests
-      source scripts/azure-scripts/cleanup.sh ios
-      xcrun simctl shutdown all
-  displayName: 'Setup and Run Tests'
-
-- bash: |
-    echo "*** Appium Test Reports ***"
-    cat cliqz-mobile-tests/*-testreport.log
-    echo "*** Performance Test Results ***"
-    cat performance/performance.txt
-  displayName: 'Print Results/Reports'
-
-- task: PublishTestResults@2
-  condition: always()
-  displayName: 'Publish JUnit Test'
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: 'cliqz-mobile-tests/test-reports/*.xml'
-
-- task: ArchiveFiles@2
-  condition: always()
-  displayName: 'Archive Screenshots'
-  inputs:
-    rootFolderOrFile: 'cliqz-mobile-tests/screenshots'
-    archiveType: 'zip'
-    tarCompression: 'none'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/screenshots.zip'
-
-- task: ArchiveFiles@2
-  condition: always()
-  displayName: 'Archive Logs'
-  inputs:
-    rootFolderOrFile: 'cliqz-mobile-tests/logs'
-    archiveType: 'zip'
-    tarCompression: 'none'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/logs.zip'
-
-- task: ArchiveFiles@2
-  condition: always()
-  displayName: 'Archive Reports Folder'
-  inputs:
-    rootFolderOrFile: 'cliqz-mobile-tests/test-reports'
-    archiveType: 'zip'
-    tarCompression: 'none'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/reports.zip'
-
-- task: ArchiveFiles@2
-  condition: always()
-  displayName: 'Archive Performance Result'
-  inputs:
-    rootFolderOrFile: 'performance/performance.txt'
-    archiveType: 'zip'
-    tarCompression: 'none'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/performance.zip'
-
-- task: PublishBuildArtifacts@1
-  condition: always()
-  displayName: 'Publish Artifacts'
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: '$(Build.BuildId)'
-    publishLocation: 'Container'
-
-- bash: |
-    cd cliqz-mobile-tests
-    source scripts/azure-scripts/parseReports.sh
-  displayName: 'Parse Reports'
+      source scripts/azure-scripts/parseReports.sh
+    displayName: 'Parse Reports'
