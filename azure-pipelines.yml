@@ -21,6 +21,9 @@ jobs:
     vmImage: 'macOS 10.13'
 
   steps:
+  
+  - ${{ if eq(brand, 'lumen') }}:
+    - script: echo $(brand)
 
   - script: git clone https://github.com/cliqz-oss/cliqz-mobile-tests.git --branch $(testbranch) --single-branch
     displayName: Clone Tests Repo
@@ -51,7 +54,7 @@ jobs:
   - script: xcodebuild -workspace Client.xcworkspace -scheme $(scheme) -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=iPhone 6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
     displayName: 'Xcode Build Fennec on iPhone 6s Simulator'
 
-  - ${{ if eq(variables['brand'], 'lumen') }}:
+  - ${{ if eq(brand, 'lumen') }}:
     - bash: |
           cd cliqz-mobile-tests
           ios-sim launch clean/Build/Products/Lumen-iphonesimulator/Client.app/ --devicetypeid "iPhone-6s, 12.1" &
@@ -85,12 +88,12 @@ jobs:
         artifactName: '$(Build.BuildId)'
         publishLocation: 'Container'
 
-  - ${{ if eq(variables['brand'], 'ghostery') }}:
+  - ${{ if eq(brand, 'ghostery') }}:
     - bash: |
           cd cliqz-mobile-tests
-          export DEV_NAME="Test-iPhone6s"
-          export DEV_UDID=$(cat dev.id)
-          xcrun simctl boot $(cat dev.id)
+          export DEV_NAME="iPhone 6s"
+          export DEV_UDID="auto"
+          xcrun simctl boot $DEV_NAME
           sleep 10
           source scripts/azure-scripts/setup.sh ios
           source scripts/azure-scripts/envs.sh ios
@@ -99,54 +102,54 @@ jobs:
           source scripts/azure-scripts/cleanup.sh ios
       displayName: 'Setup and Run Tests'
 
-  - bash: |
-      echo "*** Appium Test Reports ***"
-      cat cliqz-mobile-tests/*-testreport.log
-    displayName: 'Print Results/Reports'
+    - bash: |
+        echo "*** Appium Test Reports ***"
+        cat cliqz-mobile-tests/*-testreport.log
+      displayName: 'Print Results/Reports'
 
-  - task: PublishTestResults@2
-    condition: always()
-    displayName: 'Publish JUnit Test'
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'cliqz-mobile-tests/test-reports/*.xml'
+    - task: PublishTestResults@2
+      condition: always()
+      displayName: 'Publish JUnit Test'
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'cliqz-mobile-tests/test-reports/*.xml'
 
-  - task: ArchiveFiles@2
-    condition: always()
-    displayName: 'Archive Screenshots'
-    inputs:
-      rootFolderOrFile: 'cliqz-mobile-tests/screenshots'
-      archiveType: 'zip'
-      tarCompression: 'none'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/screenshots.zip'
+    - task: ArchiveFiles@2
+      condition: always()
+      displayName: 'Archive Screenshots'
+      inputs:
+        rootFolderOrFile: 'cliqz-mobile-tests/screenshots'
+        archiveType: 'zip'
+        tarCompression: 'none'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/screenshots.zip'
 
-  - task: ArchiveFiles@2
-    condition: always()
-    displayName: 'Archive Logs'
-    inputs:
-      rootFolderOrFile: 'cliqz-mobile-tests/logs'
-      archiveType: 'zip'
-      tarCompression: 'none'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/logs.zip'
+    - task: ArchiveFiles@2
+      condition: always()
+      displayName: 'Archive Logs'
+      inputs:
+        rootFolderOrFile: 'cliqz-mobile-tests/logs'
+        archiveType: 'zip'
+        tarCompression: 'none'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/logs.zip'
 
-  - task: ArchiveFiles@2
-    condition: always()
-    displayName: 'Archive Reports Folder'
-    inputs:
-      rootFolderOrFile: 'cliqz-mobile-tests/test-reports'
-      archiveType: 'zip'
-      tarCompression: 'none'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/reports.zip'
+    - task: ArchiveFiles@2
+      condition: always()
+      displayName: 'Archive Reports Folder'
+      inputs:
+        rootFolderOrFile: 'cliqz-mobile-tests/test-reports'
+        archiveType: 'zip'
+        tarCompression: 'none'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/reports.zip'
 
-  - task: PublishBuildArtifacts@1
-    condition: always()
-    displayName: 'Publish Artifacts'
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: '$(Build.BuildId)'
-      publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      condition: always()
+      displayName: 'Publish Artifacts'
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: '$(Build.BuildId)'
+        publishLocation: 'Container'
 
-  - bash: |
-      cd cliqz-mobile-tests
-      source scripts/azure-scripts/parseReports.sh
-    displayName: 'Parse Reports'
+    - bash: |
+        cd cliqz-mobile-tests
+        source scripts/azure-scripts/parseReports.sh
+      displayName: 'Parse Reports'
