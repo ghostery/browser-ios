@@ -51,7 +51,7 @@ jobs:
   - script: xcodebuild -workspace Client.xcworkspace -scheme $(scheme) -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=iPhone 6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
     displayName: 'Xcode Build Fennec on iPhone 6s Simulator'
 
-  - ${{ if eq(parameters.brand, 'lumen') }}:
+  - ${{ if eq(variables['brand'], 'lumen') }}:
     - bash: |
           cd cliqz-mobile-tests
           ios-sim launch clean/Build/Products/Lumen-iphonesimulator/Client.app/ --devicetypeid "iPhone-6s, 12.1" &
@@ -85,7 +85,7 @@ jobs:
         artifactName: '$(Build.BuildId)'
         publishLocation: 'Container'
 
-  - ${{ if neq(parameters.brand, 'lumen') }}:
+  - ${{ if neq(variables['brand'], 'lumen') }}:
     - bash: |
           cd cliqz-mobile-tests
           export DEV_NAME="Test-iPhone6s"
