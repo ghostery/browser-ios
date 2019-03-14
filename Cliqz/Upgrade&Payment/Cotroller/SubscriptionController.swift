@@ -14,7 +14,7 @@ public class SubscriptionController {
     public static let shared = SubscriptionController()
     
     //MARK:- Private variables
-    private let storeService: IAPService
+//    private let storeService: IAPService
     private let TrialPeriod: Int = 14
     private let purchasedProductIdentifierKey = "Lumen.PurchasedProductIdentifier"
     private let expirationDateKey = "Lumen.ExpirationDate"
@@ -25,7 +25,9 @@ public class SubscriptionController {
     
     //MARK:- initialization
     init() {
-        
+/*
+//Removed RevenueCatService temporary. The file is still in the project
+
         storeService = RevenueCatService()
         storeService.asObserver().subscribe(onNext: { [weak self] (lumenPurchaseInfo) in
             guard let self = self else { return }
@@ -33,11 +35,12 @@ public class SubscriptionController {
             self.saveExpirationDate(lumenPurchaseInfo.expirationDate)
             self.updateUltimateProtectionStatus()
         }).disposed(by: disposeBag)
-        
+
         if getTrialRemainingDays() == nil {
             saveTrialRemainingDays(TrialPeriod)
         }
         self.updateUltimateProtectionStatus()
+*/
     }
     
     private func saveExpirationDate(_ date: Date) {
@@ -74,6 +77,7 @@ public class SubscriptionController {
     
     //MARK:- Subscriptions
     public func requestProducts() {
+		/* Removed RevenueCatService temporary. The file is still in the project
         storeService.requestProducts {[weak self] (success, products) in
             guard let self = self, let products = products, success else { return }
             self.availableSubscriptions.removeAll()
@@ -83,11 +87,13 @@ public class SubscriptionController {
                 }
             }
         }
+	*/
     }
     
     public func buyProduct(_ premiumType: PremiumType) {
         if let product = availableSubscriptions[premiumType] {
-            storeService.buyProduct(product)
+// Removed RevenueCatService temporary. The file is still in the project
+//            storeService.buyProduct(product)
         }
     }
     
@@ -96,11 +102,14 @@ public class SubscriptionController {
     }
     
     public func restorePurchases() {
-        storeService.restorePurchases()
+		// Removed RevenueCatService temporary. The file is still in the project
+//        storeService.restorePurchases()
     }
     
     public func getSubscriptionUserId() -> String? {
-        return storeService.getSubscriptionUserId()
+		// Removed RevenueCatService temporary. The file is still in the project
+//        return storeService.getSubscriptionUserId()
+		return ""
     }
     
     public func isVPNEnabled() -> Bool {

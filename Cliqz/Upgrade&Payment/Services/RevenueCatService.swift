@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Purchases
 import StoreKit
 import RxSwift
 
