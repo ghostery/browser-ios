@@ -430,7 +430,6 @@
 		4F70E11F222D6AEE00412270 /* WidgetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70E11C222D6AEE00412270 /* WidgetInfoViewController.swift */; };
 		4F70E121222D6CA200412270 /* DashboardListInfoDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70E120222D6CA100412270 /* DashboardListInfoDataSource.swift */; };
 		4F82FDC5208F2D3E002CED25 /* TrackersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F82FDB6208F2D3E002CED25 /* TrackersController.swift */; };
-		4F934B3522048ACD005D438C /* RevenueCatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B2922048ACD005D438C /* RevenueCatService.swift */; };
 		4F934B3622048ACD005D438C /* IAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B2A22048ACD005D438C /* IAPService.swift */; };
 		4F934B3722048ACD005D438C /* LumenPurchaseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B2C22048ACD005D438C /* LumenPurchaseInfo.swift */; };
 		4F934B3822048ACD005D438C /* LumenSubscriptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B2D22048ACD005D438C /* LumenSubscriptionType.swift */; };
@@ -1863,7 +1862,6 @@
 		4F70E11C222D6AEE00412270 /* WidgetInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WidgetInfoViewController.swift; sourceTree = "<group>"; };
 		4F70E120222D6CA100412270 /* DashboardListInfoDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardListInfoDataSource.swift; sourceTree = "<group>"; };
 		4F82FDB6208F2D3E002CED25 /* TrackersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackersController.swift; sourceTree = "<group>"; };
-		4F934B2922048ACD005D438C /* RevenueCatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RevenueCatService.swift; sourceTree = "<group>"; };
 		4F934B2A22048ACD005D438C /* IAPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPService.swift; sourceTree = "<group>"; };
 		4F934B2C22048ACD005D438C /* LumenPurchaseInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LumenPurchaseInfo.swift; sourceTree = "<group>"; };
 		4F934B2D22048ACD005D438C /* LumenSubscriptionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LumenSubscriptionType.swift; sourceTree = "<group>"; };
@@ -3564,7 +3562,6 @@
 		4F934B2822048ACD005D438C /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				4F934B2922048ACD005D438C /* RevenueCatService.swift */,
 				4F934B2A22048ACD005D438C /* IAPService.swift */,
 			);
 			path = Services;
@@ -6526,7 +6523,6 @@
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
 				1EEA36DD206401EB003B6AD5 /* CliqzTabLocationView.swift in Sources */,
 				D029A04920A62DB0001DB72F /* TemporaryDocument.swift in Sources */,
-				4F934B3522048ACD005D438C /* RevenueCatService.swift in Sources */,
 				E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
 				E68E7ADC1CAC208200FDCA76 /* SetupPasscodeViewController.swift in Sources */,
@@ -13138,7 +13134,7 @@
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE = "729c6cdf-bb27-4d79-ab1c-ec6caff5e4be";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Lumen AppStore Distribution";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
