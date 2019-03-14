@@ -25,10 +25,6 @@ jobs:
   - script: git clone https://github.com/cliqz-oss/cliqz-mobile-tests.git --branch $(testbranch) --single-branch
     displayName: Clone Tests Repo
 
-  - script: sudo xcode-select --switch /Applications/Xcode_10.1.app
-    displayName: Define XCode Version
-    condition: eq(variables['brand'], 'lumen')
-
   - bash: |
       sudo xcode-select --switch /Applications/Xcode_10.1.app
       xcrun simctl create Test-iPhone6s com.apple.CoreSimulator.SimDeviceType.iPhone-6s com.apple.CoreSimulator.SimRuntime.iOS-12-1 > cliqz-mobile-tests/dev.id
@@ -36,7 +32,6 @@ jobs:
       sleep 10
       xcrun simctl list
     displayName: 'Create a Test Simulator'
-    condition: ne(variables['brand'], 'lumen')
 
   - script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
     displayName: 'Carthage Bootstrap'
@@ -62,19 +57,19 @@ jobs:
     displayName: 'Xcode Build Fennec on iPhone 6s Simulator'
     condition: eq(variables['brand'], 'lumen')
   
-  - script: xcodebuild -workspace Client.xcworkspace -scheme "Fennec" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=iPhone 6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
+  - script: xcodebuild -workspace Client.xcworkspace -scheme "Fennec" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=Test-iPhone6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
     displayName: 'Xcode Build Fennec on iPhone 6s Simulator'
     condition: ne(variables['brand'], 'lumen')
 
   - bash: |
         cd cliqz-mobile-tests
-        ios-sim launch clean/Build/Products/Lumen-iphonesimulator/Client.app/ --devicetypeid "iPhone-6s, 12.1" &
-        sleep 30
-        source scripts/azure-scripts/appium.sh
+        source azure-scripts/setup.sh ios
+        xcrun simctl boot $(cat dev.id)
+        xcrun simctl install booted clean/Build/Products/Lumen-iphonesimulator/Client.app/
+        sleep 10
+        source azure-scripts/appium.sh
         source run.sh
-        kill $(cat appium.pid)
-        sleep 5
-        xcrun simctl shutdown all
+        source azure-scripts/cleanup.sh ios
     condition: eq(variables['brand'], 'lumen')
     displayName: 'Setup and Run Tests'
 
