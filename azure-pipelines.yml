@@ -22,7 +22,10 @@ jobs:
 
   steps:
   
-  - ${{ if eq(variables['brand'], 'lumen') }}:
+  parameters:
+    brandname: $[ variables['brand'] ]
+  
+  - ${{ if eq(parameters['brandname'], 'lumen') }}:
     - bash: |
           echo $(brand)
 
