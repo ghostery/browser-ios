@@ -85,7 +85,7 @@ jobs:
         artifactName: '$(Build.BuildId)'
         publishLocation: 'Container'
 
-  - ${{ if neq(variables['brand'], 'lumen') }}:
+  - ${{ if eq(variables['brand'], 'ghostery') }}:
     - bash: |
           cd cliqz-mobile-tests
           export DEV_NAME="Test-iPhone6s"
