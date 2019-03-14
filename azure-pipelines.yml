@@ -36,7 +36,7 @@ jobs:
       sleep 10
       xcrun simctl list
     displayName: 'Create a Test Simulator'
-    condition: ne(variables['brand'], "lumen")
+    condition: ne(variables['brand'], 'lumen')
 
   - script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
     displayName: 'Carthage Bootstrap'
