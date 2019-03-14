@@ -27,6 +27,16 @@ jobs:
 
   - script: sudo xcode-select --switch /Applications/Xcode_10.1.app
     displayName: Define XCode Version
+    condition: eq(variables['brand'], 'lumen')
+
+  - bash: |
+      sudo xcode-select --switch /Applications/Xcode_10.1.app
+      xcrun simctl create Test-iPhone6s com.apple.CoreSimulator.SimDeviceType.iPhone-6s com.apple.CoreSimulator.SimRuntime.iOS-12-1 > cliqz-mobile-tests/dev.id
+      xcrun simctl boot $(cat cliqz-mobile-tests/dev.id)
+      sleep 10
+      xcrun simctl list
+    displayName: 'Create a Test Simulator'
+    condition: ne(variables['brand'], "lumen")
 
   - script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
     displayName: 'Carthage Bootstrap'
@@ -93,9 +103,9 @@ jobs:
 
   - bash: |
         cd cliqz-mobile-tests
-        export DEV_NAME="iPhone 6s"
-        export DEV_UDID="auto"
-        xcrun simctl boot $DEV_NAME
+        export DEV_NAME="Test-iPhone6s"
+        export DEV_UDID=$(cat dev.id)
+        xcrun simctl boot $(cat dev.id)
         sleep 10
         source scripts/azure-scripts/setup.sh ios
         source scripts/azure-scripts/envs.sh ios
