@@ -23,7 +23,8 @@ jobs:
   steps:
   
   - ${{ if eq(variables['brand'], 'lumen') }}:
-    - script: echo $(brand)
+    - bash: |
+          echo $(brand)
 
   - script: git clone https://github.com/cliqz-oss/cliqz-mobile-tests.git --branch $(testbranch) --single-branch
     displayName: Clone Tests Repo
