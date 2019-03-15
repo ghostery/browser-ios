@@ -41,6 +41,9 @@ public class SubscriptionController {
         }
         self.updateUltimateProtectionStatus()
 */
+		if getTrialRemainingDays() == nil {
+			saveTrialRemainingDays(TrialPeriod)
+		}
     }
     
     private func saveExpirationDate(_ date: Date) {
@@ -125,13 +128,16 @@ public class SubscriptionController {
     }
 
     public func getCurrentSubscription() -> LumenSubscriptionType {
+
+		// TODO: Temporary blocking subscription flow till we finalize revcat option
         // Check if premium
+		/*
         if let purchasedProductIdentifier = UserDefaults.standard.string(forKey: purchasedProductIdentifierKey),
             let permiumType = PremiumType.init(rawValue: purchasedProductIdentifier),
             let expirationDate = getExpirationDate(), Date().timeIntervalSince(expirationDate) < 0 {
             return .premium(permiumType, expirationDate)
         }
-    
+    	*/
         // check if trial still valid
         if let trialRemainingDays = getTrialRemainingDays(), trialRemainingDays > 0 {
             return .trial(trialRemainingDays)
