@@ -102,7 +102,7 @@ class VPN {
     }
 
     var status: NEVPNStatus {
-        return NEVPNManager.shared().connection.status;
+        return NEVPNManager.shared().connection.status
     }
 
     //TODO: Tries to reconnect without end. Maybe this is not a good idea.
@@ -264,7 +264,7 @@ class VPNEndPointManager {
         getVPNCredentialsFromServer()
         return nil
     }
-	
+
 	func clearCredentials() {
 		for c in self.countries {
 			DAKeychain.shared[c.usernameHash] = nil
@@ -280,10 +280,10 @@ class VPNEndPointManager {
 }
 
 class VPNViewController: UIViewController {
-    
+
     //used to reconnect when changing countries
     var shouldVPNReconnect = false
-    
+
     let tableView = UITableView()
     let mapView = UIImageView()
     
@@ -297,7 +297,7 @@ class VPNViewController: UIViewController {
     let gradient = BrowserGradientView()
     
     var VPNStatus: NEVPNStatus {
-        return VPN.shared.status;
+        return VPN.shared.status
     }
     
     var timer: Timer? = nil
@@ -308,6 +308,14 @@ class VPNViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+		// This is a trick to make VPN status update notifications work on the cold start
+		NEVPNManager.shared().loadFromPreferences { (error) in
+			if let e = error {
+				print("Loading VPN Config failed: \(e.localizedDescription)")
+			} else {
+				print("Loading VPN Config Succeeded")
+			}
+		}
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(VPNStatusDidChange(notification:)),
                                                name: .NEVPNStatusDidChange,
@@ -526,12 +534,12 @@ class VPNViewController: UIViewController {
         updateConnectButton()
         updateMapView()
         
-//        //reconnect when changing countries
-//        if (VPNStatus == .disconnected && shouldVPNReconnect == true) {
-//            shouldVPNReconnect = false
-////            VPN.connect2VPN()
-//        }
-        
+        //reconnect when changing countries
+        if (VPNStatus == .disconnected && shouldVPNReconnect == true) {
+            shouldVPNReconnect = false
+            VPN.connect2VPN()
+        }
+		
         if (VPNStatus == .disconnected) {
             LegacyTelemetryHelper.logVPN(action: "error",
                                          location: VPNEndPointManager.shared.selectedCountry.id,
