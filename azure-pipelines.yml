@@ -64,10 +64,11 @@ jobs:
   - task: NodeTool@0
     displayName: 'Define Node to v11.11'
     inputs:
-      versionSpec: '11.11'
+      versionSpec: '11.10'
 
   - bash: |
         cd cliqz-mobile-tests
+        npm install --global npm json-stringify-safe
         source azure-scripts/setup.sh ios
         xcrun simctl boot $(cat dev.id)
         xcrun simctl install booted clean/Build/Products/Lumen-iphonesimulator/Client.app/
