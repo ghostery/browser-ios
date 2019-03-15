@@ -61,6 +61,11 @@ jobs:
     displayName: 'Xcode Build Fennec on iPhone 6s Simulator'
     condition: ne(variables['brand'], 'lumen')
 
+  - task: NodeTool@0
+    displayName: 'Define Node to v11.11'
+    inputs:
+      versionSpec: '11.11'
+
   - bash: |
         cd cliqz-mobile-tests
         source azure-scripts/setup.sh ios
