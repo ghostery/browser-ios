@@ -67,11 +67,11 @@ jobs:
       versionSpec: '11.10'
 
   - bash: |
+        xcrun simctl boot $(cat dev.id)
+        xcrun simctl install booted clean/Build/Products/Lumen-iphonesimulator/Client.app/
         cd cliqz-mobile-tests
         npm install --global npm json-stringify-safe
         source azure-scripts/setup.sh ios
-        xcrun simctl boot $(cat dev.id)
-        xcrun simctl install booted clean/Build/Products/Lumen-iphonesimulator/Client.app/
         sleep 10
         source azure-scripts/appium.sh
         source run.sh
