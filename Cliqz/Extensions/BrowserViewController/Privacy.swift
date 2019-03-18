@@ -58,14 +58,16 @@ extension BrowserViewController {
     }
     
     func hideVpnPanel() {
-        
-        if let c = self.childViewControllers.last as? UINavigationController {
-            c.willMove(toParentViewController: nil)
-            c.beginAppearanceTransition(true, animated: false)
-            c.view.removeFromSuperview()
-            c.endAppearanceTransition()
-            c.removeFromParentViewController()
+        for childViewController in self.childViewControllers {
+            if let c = childViewController as? UINavigationController {
+                c.willMove(toParentViewController: nil)
+                c.beginAppearanceTransition(true, animated: false)
+                c.view.removeFromSuperview()
+                c.endAppearanceTransition()
+                c.removeFromParentViewController()
+            }
         }
+        
     }
     
     
@@ -154,17 +156,17 @@ extension BrowserViewController {
 	}
 
 	func hideControlCenter() {
-        
-        if let c = self.childViewControllers.last as? ControlCenterViewController {
-            c.willMove(toParentViewController: nil)
-            c.beginAppearanceTransition(true, animated: false)
-            c.view.removeFromSuperview()
-            c.endAppearanceTransition()
-            c.removeFromParentViewController()
-            NotificationCenter.default.post(name: controlCenterDismissedNotification, object: nil)
-            LoadingNotificationManager.shared.controlCenterClosed()
+        for childViewController in self.childViewControllers {
+            if let c = childViewController as? ControlCenterViewController {
+                c.willMove(toParentViewController: nil)
+                c.beginAppearanceTransition(true, animated: false)
+                c.view.removeFromSuperview()
+                c.endAppearanceTransition()
+                c.removeFromParentViewController()
+                NotificationCenter.default.post(name: controlCenterDismissedNotification, object: nil)
+                LoadingNotificationManager.shared.controlCenterClosed()
+            }
         }
-        
 	}
     
     #if PAID
