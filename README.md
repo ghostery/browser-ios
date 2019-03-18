@@ -33,7 +33,7 @@ Building the code
     ```
 1. Install [cocoadpods](https://cocoapods.org/)
     ```shell
-    sudo gem install cocoapods
+    bundle install
     ```
 1. Fork the repository https://github.com/ghostery/browser-ios
 1. Clone the forked repository:
@@ -46,7 +46,7 @@ Building the code
     sh ./bootstrap.sh
     npm install
     npm run bundle
-    pod install
+    bundle exec pod install
     ```
 1. Open `Client.xcworkspace` in Xcode.
 1. Build the `Fennec` scheme in Xcode.
