@@ -123,10 +123,16 @@ class PaidControlCenterViewController: ControlCenterViewController {
                 make.top.leading.trailing.equalToSuperview().inset(20)
                 make.height.equalTo(UpgradeViewUX.height)
             }
-        }
-		privacyControl.snp.makeConstraints { (make) in
-			make.top.left.right.equalToSuperview()
-			make.height.equalTo(40)
+			privacyControl.snp.makeConstraints { (make) in
+				make.top.equalTo(upgradeView.snp.bottom)
+				make.left.right.equalToSuperview()
+				make.height.equalTo(40)
+			}
+		} else {
+			privacyControl.snp.makeConstraints { (make) in
+				make.top.left.right.equalToSuperview()
+				make.height.equalTo(40)
+			}
 		}
 
         tabs.snp.makeConstraints { (make) in
