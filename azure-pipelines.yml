@@ -25,10 +25,9 @@ steps:
     
 - bash: |
       npm i -g npm@6.5
-      which npm
-      npm -v
-      npm ci
-  displayName: 'install node dependencies'
+      /usr/local/bin/npm ci
+      /usr/local/bin/npm run bundle-ghostery
+  displayName: 'install and build react native'
 
 - script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
   displayName: 'carthage bootstrap'
@@ -37,12 +36,6 @@ steps:
   displayName: 'pod install --repo-update'
   inputs:
     forceRepoUpdate: true
-
-- task: Npm@1
-  displayName: 'npm run bundle-ghostery'
-  inputs:
-    command: 'custom'
-    customCommand: 'run bundle-ghostery'
 
 - script: xcodebuild -workspace Client.xcworkspace -scheme "Fennec" -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=Test-iPhone6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath clean build test
   displayName: 'Xcode Build on Test iPhone 6s Simulator'
