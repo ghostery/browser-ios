@@ -19,17 +19,20 @@ steps:
       xcrun simctl list
   displayName: 'Create a Test Simulator'
 
-- script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
-  displayName: 'carthage bootstrap'
-
 - task: NodeTool@0
   inputs:
     versionSpec: '9.11.2'
-- script: npm i -g npm@6.5
+    
+- bash: |
+      npm i -g npm@6.5
+      which npm
+      npm -v
+      npm ci
+  displayName: 'install node dependencies'
 
-- script: npm ci
-  displayName: 'npm install'
-  
+- script: $(which carthage) bootstrap --verbose --platform ios --color auto --cache-builds
+  displayName: 'carthage bootstrap'
+
 - task: CocoaPods@0
   displayName: 'pod install --repo-update'
   inputs:
