@@ -56,13 +56,17 @@ public enum PremiumType: String {
     }
     
     func getPrice() -> String {
+		// TODO: Commented strings might be needed in future, when we put back payment flow. Prices are removed for BETA testing
         switch self {
         case .Basic:
-            return NSLocalizedString("47.99€/year", tableName: "Lumen", comment: "BASIC Subscription price")
+//            return NSLocalizedString("47.99€/year", tableName: "Lumen", comment: "BASIC Subscription price")
+			return NSLocalizedString("Yearly", tableName: "Lumen", comment: "BASIC Subscription price")
         case .Pro:
-            return NSLocalizedString("95.99€/year", tableName: "Lumen", comment: "PRO Subscription price")
+//            return NSLocalizedString("95.99€/year", tableName: "Lumen", comment: "PRO Subscription price")
+			return NSLocalizedString("Yearly", tableName: "Lumen", comment: "PRO Subscription price")
         case .Plus:
-            return NSLocalizedString("9.99€/month", tableName: "Lumen", comment: "PLUS Subscription price")
+//            return NSLocalizedString("9.99€/month", tableName: "Lumen", comment: "PLUS Subscription price")
+			return NSLocalizedString("Monthly", tableName: "Lumen", comment: "PLUS Subscription price")
         }
     }
     
