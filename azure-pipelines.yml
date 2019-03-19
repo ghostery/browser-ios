@@ -12,6 +12,7 @@ steps:
   displayName: Clone Tests
 
 - bash: |
+      set -x
       sudo xcode-select --switch /Applications/Xcode_10.1.app
       xcrun simctl create Test-iPhone6s com.apple.CoreSimulator.SimDeviceType.iPhone-6s com.apple.CoreSimulator.SimRuntime.iOS-12-1 > cliqz-mobile-tests/dev.id
       xcrun simctl boot $(cat cliqz-mobile-tests/dev.id)
@@ -24,6 +25,7 @@ steps:
     versionSpec: '9.11.2'
     
 - bash: |
+      set -x
       npm i -g npm@6.5
       /usr/local/bin/npm ci
       /usr/local/bin/npm run bundle-ghostery
@@ -41,6 +43,7 @@ steps:
   displayName: 'Xcode Build on Test iPhone 6s Simulator'
 
 - bash: |
+      set -x
       cd cliqz-mobile-tests
       export DEV_NAME="Test-iPhone6s"
       export DEV_UDID=$(cat dev.id)
