@@ -29,7 +29,9 @@ steps:
 - task: Npm@1
   displayName: 'npm install'
   inputs:
-    command: 'install'
+    command: custom
+    verbose: false
+    customCommand: ci
 
 - task: CocoaPods@0
   displayName: 'pod install --repo-update'
