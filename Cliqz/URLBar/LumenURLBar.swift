@@ -63,7 +63,7 @@ class LumenURLBar: CliqzURLBar {
             make.width.equalTo(ghostyWidth)
             make.height.equalTo(ghostyHeight)
             make.centerY.equalTo(self)
-            make.trailing.equalTo(self.ghosteryButton.snp.leading)
+            make.trailing.equalTo(self.dashboardButton.snp.leading)
         }
         
         pageOptionsButton.snp.remakeConstraints { (make) in

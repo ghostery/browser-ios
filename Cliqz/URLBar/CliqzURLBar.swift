@@ -44,10 +44,9 @@ class CliqzURLBar: URLBarView {
             if newURL != nil {
                 pageOptionsButton.alpha = 0
             }
-            
         }
     }
-    
+
     let ghostyHeight = 54.0
     let ghostyWidth = 54.0
     
@@ -67,14 +66,14 @@ class CliqzURLBar: URLBarView {
         set { _cancelButton = newValue }
     }
     
-    lazy var ghosteryButton: GhosteryButton = {
-        let button = GhosteryButton()
+    lazy var dashboardButton: DashboardButton = {
+        let button = DashboardButton()
         button.accessibilityIdentifier = "ghosty"
         button.addTarget(self, action: #selector(SELdidClickGhosty), for: .touchDown)
         button.alpha = 1
         return button
     }()
-    
+
     lazy var pageOptionsButton: UIButton = {
         let pageOptionsButton = UIButton(frame: .zero)
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
@@ -84,12 +83,21 @@ class CliqzURLBar: URLBarView {
         pageOptionsButton.accessibilityIdentifier = "UrlBar.pageOptionsButton"
         return pageOptionsButton
     }()
-    
-    
+
     override func commonInit() {
         super.commonInit()
         helper = CliqzTabToolbarHelper(toolbar: self)
+		#if PAID
+		NotificationCenter.default.addObserver(self, selector: #selector(privacyChanged), name: Notification.Name.privacyStatusChanged, object: nil)
+		self.dashboardButton.isDisabled = !UserPreferences.instance.isProtectionOn
+		#endif
     }
+
+	deinit {
+		#if PAID
+		NotificationCenter.default.removeObserver(self)
+		#endif
+	}
     
     @objc func SELdidClickGhosty(button: UIButton) {
         debugPrint("pressed ghosty")
@@ -102,8 +110,8 @@ class CliqzURLBar: URLBarView {
     
     override func setupConstraints() {
         
-        if ghosteryButton.superview == nil {
-            addSubview(ghosteryButton)
+        if dashboardButton.superview == nil {
+            addSubview(dashboardButton)
         }
         if pageOptionsButton.superview == nil {
             addSubview(pageOptionsButton)
@@ -166,7 +174,7 @@ class CliqzURLBar: URLBarView {
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
-        ghosteryButton.snp.makeConstraints { (make) in
+        dashboardButton.snp.makeConstraints { (make) in
             make.width.equalTo(ghostyWidth)
             make.height.equalTo(ghostyHeight)
             make.centerY.equalTo(self)
@@ -176,7 +184,7 @@ class CliqzURLBar: URLBarView {
         pageOptionsButton.snp.makeConstraints { (make) in
             make.size.equalTo(TabLocationViewUX.ButtonSize)
             make.centerY.equalTo(self)
-            make.trailing.equalTo(self.ghosteryButton.snp.leading)
+            make.trailing.equalTo(self.dashboardButton.snp.leading)
         }
 
         setStyle()
@@ -184,7 +192,7 @@ class CliqzURLBar: URLBarView {
 
     override func applyUIMode(isPrivate: Bool) {
         super.applyUIMode(isPrivate: isPrivate)
-        ghosteryButton.applyUIMode(isPrivate: isPrivate)
+        dashboardButton.applyUIMode(isPrivate: isPrivate)
     }
 
     func setStyle() {
@@ -194,13 +202,13 @@ class CliqzURLBar: URLBarView {
 
     override func prepareOverlayAnimation() {
         super.prepareOverlayAnimation()
-        bringSubview(toFront: ghosteryButton)
+        bringSubview(toFront: dashboardButton)
         bringSubview(toFront: pageOptionsButton)
     }
 
     override func transitionToOverlay(_ didCancel: Bool = false) {
         super.transitionToOverlay()
-        ghosteryButton.alpha = inOverlayMode ? 0 : 1
+        dashboardButton.alpha = inOverlayMode ? 0 : 1
         if inOverlayMode {
             pageOptionsButton.alpha = 0
         } else {
@@ -227,7 +235,7 @@ class CliqzURLBar: URLBarView {
                 make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
             }
         } else {
-            self.ghosteryButton.snp.remakeConstraints { (make) in
+            self.dashboardButton.snp.remakeConstraints { (make) in
                 if self.toolbarIsShowing {
                     make.trailing.equalTo(self.menuButton.snp.leading)
                 }
@@ -247,7 +255,7 @@ class CliqzURLBar: URLBarView {
                     // Otherwise, left align the location view
                     make.leading.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
                 }
-                make.trailing.equalTo(self.ghosteryButton.snp.leading)//.offset(-URLBarViewUX.Padding)
+                make.trailing.equalTo(self.dashboardButton.snp.leading)//.offset(-URLBarViewUX.Padding)
                 make.height.equalTo(URLBarViewUX.LocationHeight+2)
                 make.centerY.equalTo(self)
             }
@@ -281,10 +289,31 @@ class CliqzURLBar: URLBarView {
     
     override func applyTheme() {
         super.applyTheme()
-        ghosteryButton.applyTheme()
+        dashboardButton.applyTheme()
         pageOptionsButton.tintColor = UIColor.theme.urlbar.pageOptionsUnselected
         cancelButton.setTitleColor(UIColor.theme.urlbar.urlbarButtonTitleText, for: [])
     }
+
+	
+	#if PAID
+
+	func updateDashboardButtonState(_ state: DashboardButtonState) {
+		self.dashboardButton.currentState = state
+	}
+
+	@objc private func privacyChanged(_ notification: Notification) {
+		if let value = notification.userInfo?["newValue"] as? Bool {
+			self.dashboardButton.isDisabled = !value
+		}
+	}
+
+	func startAnimating() {
+		
+	}
+	func stopAnimating() {
+	}
+
+	#endif
 }
 
 // Cliqz: hide keyboard

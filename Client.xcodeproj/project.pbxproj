@@ -416,6 +416,7 @@
 		4F4033DA2086577D00AD2A8D /* GlobalTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4033D92086577D00AD2A8D /* GlobalTrackersViewController.swift */; };
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
 		4F53287521F7579F00FC7F12 /* 3rd_party_cookies_blocker.json in Resources */ = {isa = PBXBuildFile; fileRef = 4F53287421F7579F00FC7F12 /* 3rd_party_cookies_blocker.json */; };
+		4F5F851322380B6400F2565B /* DashboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5F851222380B6300F2565B /* DashboardButton.swift */; };
 		4F69309A2048185600FB0B2E /* TopSitesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6930992048185600FB0B2E /* TopSitesDataSource.swift */; };
 		4F70E0CB22258F8B00412270 /* LumenPrivacyStateControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70E0CA22258F8B00412270 /* LumenPrivacyStateControl.swift */; };
 		4F70E10F222D26D700412270 /* SavedTimeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70E10E222D26D700412270 /* SavedTimeDataSource.swift */; };
@@ -429,7 +430,6 @@
 		4F70E11F222D6AEE00412270 /* WidgetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70E11C222D6AEE00412270 /* WidgetInfoViewController.swift */; };
 		4F70E121222D6CA200412270 /* DashboardListInfoDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70E120222D6CA100412270 /* DashboardListInfoDataSource.swift */; };
 		4F82FDC5208F2D3E002CED25 /* TrackersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F82FDB6208F2D3E002CED25 /* TrackersController.swift */; };
-		4F934B3522048ACD005D438C /* RevenueCatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B2922048ACD005D438C /* RevenueCatService.swift */; };
 		4F934B3622048ACD005D438C /* IAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B2A22048ACD005D438C /* IAPService.swift */; };
 		4F934B3722048ACD005D438C /* LumenPurchaseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B2C22048ACD005D438C /* LumenPurchaseInfo.swift */; };
 		4F934B3822048ACD005D438C /* LumenSubscriptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934B2D22048ACD005D438C /* LumenSubscriptionType.swift */; };
@@ -587,7 +587,6 @@
 		AF77B8C5209B132700E7A0C4 /* CliqzHomePanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */; };
 		AF7DD43020F77B790090956F /* LoadingNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7DD42F20F77B790090956F /* LoadingNotificationManager.swift */; };
 		AF7DD44020F785D30090956F /* CustomSimpleToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7DD43F20F785D30090956F /* CustomSimpleToast.swift */; };
-		AF99C8A2206935F0009404FF /* GhosteryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF99C8A1206935F0009404FF /* GhosteryButton.swift */; };
 		AF9C111220A051FB003253D3 /* CliqzHistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */; };
 		AFA1DE072088AF9600B27B8A /* AdBlocker in Resources */ = {isa = PBXBuildFile; fileRef = AFA1DDF82088AF9600B27B8A /* AdBlocker */; };
 		AFA1DE0A2088BDDB00B27B8A /* Identifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DE092088BDDB00B27B8A /* Identifiers.swift */; };
@@ -1849,6 +1848,7 @@
 		4F4033D92086577D00AD2A8D /* GlobalTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTrackersViewController.swift; sourceTree = "<group>"; };
 		4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		4F53287421F7579F00FC7F12 /* 3rd_party_cookies_blocker.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 3rd_party_cookies_blocker.json; sourceTree = "<group>"; };
+		4F5F851222380B6300F2565B /* DashboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardButton.swift; sourceTree = "<group>"; };
 		4F6930992048185600FB0B2E /* TopSitesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDataSource.swift; sourceTree = "<group>"; };
 		4F70E0CA22258F8B00412270 /* LumenPrivacyStateControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenPrivacyStateControl.swift; sourceTree = "<group>"; };
 		4F70E10E222D26D700412270 /* SavedTimeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedTimeDataSource.swift; sourceTree = "<group>"; };
@@ -1862,7 +1862,6 @@
 		4F70E11C222D6AEE00412270 /* WidgetInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WidgetInfoViewController.swift; sourceTree = "<group>"; };
 		4F70E120222D6CA100412270 /* DashboardListInfoDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardListInfoDataSource.swift; sourceTree = "<group>"; };
 		4F82FDB6208F2D3E002CED25 /* TrackersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackersController.swift; sourceTree = "<group>"; };
-		4F934B2922048ACD005D438C /* RevenueCatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RevenueCatService.swift; sourceTree = "<group>"; };
 		4F934B2A22048ACD005D438C /* IAPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPService.swift; sourceTree = "<group>"; };
 		4F934B2C22048ACD005D438C /* LumenPurchaseInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LumenPurchaseInfo.swift; sourceTree = "<group>"; };
 		4F934B2D22048ACD005D438C /* LumenSubscriptionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LumenSubscriptionType.swift; sourceTree = "<group>"; };
@@ -2014,7 +2013,6 @@
 		AF77B8C4209B132700E7A0C4 /* CliqzHomePanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHomePanelViewController.swift; sourceTree = "<group>"; };
 		AF7DD42F20F77B790090956F /* LoadingNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingNotificationManager.swift; sourceTree = "<group>"; };
 		AF7DD43F20F785D30090956F /* CustomSimpleToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSimpleToast.swift; sourceTree = "<group>"; };
-		AF99C8A1206935F0009404FF /* GhosteryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosteryButton.swift; sourceTree = "<group>"; };
 		AF9C111120A051FB003253D3 /* CliqzHistoryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzHistoryPanel.swift; sourceTree = "<group>"; };
 		AFA1DDF82088AF9600B27B8A /* AdBlocker */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AdBlocker; sourceTree = "<group>"; };
 		AFA1DE092088BDDB00B27B8A /* Identifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiers.swift; sourceTree = "<group>"; };
@@ -3564,7 +3562,6 @@
 		4F934B2822048ACD005D438C /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				4F934B2922048ACD005D438C /* RevenueCatService.swift */,
 				4F934B2A22048ACD005D438C /* IAPService.swift */,
 			);
 			path = Services;
@@ -3896,7 +3893,7 @@
 			isa = PBXGroup;
 			children = (
 				AF7DFEE020C13A2200FDC3A0 /* ControlCenter */,
-				AF99C8A1206935F0009404FF /* GhosteryButton.swift */,
+				4F5F851222380B6300F2565B /* DashboardButton.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -5384,9 +5381,8 @@
 					};
 					390527491C874D35007E0BB7 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 2UYYSSHVUH;
 						LastSwiftMigration = 0820;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
@@ -5495,7 +5491,6 @@
 					};
 					F84B22481A0920C600AAB793 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 2UYYSSHVUH;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
@@ -6529,7 +6524,6 @@
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
 				1EEA36DD206401EB003B6AD5 /* CliqzTabLocationView.swift in Sources */,
 				D029A04920A62DB0001DB72F /* TemporaryDocument.swift in Sources */,
-				4F934B3522048ACD005D438C /* RevenueCatService.swift in Sources */,
 				E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
 				E68E7ADC1CAC208200FDCA76 /* SetupPasscodeViewController.swift in Sources */,
@@ -6683,7 +6677,7 @@
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				1E25A2D42121A7AA0038D8D7 /* LocaleConstants.swift in Sources */,
 				4F30F5172051670C0049E4F6 /* Telemetry.swift in Sources */,
-				AF99C8A2206935F0009404FF /* GhosteryButton.swift in Sources */,
+				4F5F851322380B6400F2565B /* DashboardButton.swift in Sources */,
 				4F30F50F2051670C0049E4F6 /* JSBridgeBridge.m in Sources */,
 				396CDB55203C5B870034A3A3 /* TabTrayController+KeyCommands.swift in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
@@ -7364,8 +7358,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Paid;
 				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 2UYYSSHVUH;
 				ENABLE_BITCODE = NO;
@@ -7404,8 +7398,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
-				PROVISIONING_PROFILE = "dc6f62cb-14ee-46ee-89c4-747919ee8806";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.cliqz.ios.cliqzPaid";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -7479,10 +7473,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 2UYYSSHVUH;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7496,7 +7490,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_SHARETO_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "935b5ee9-781d-4d43-81f1-2016ca4bf8a4";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.cliqz.ios.cliqzPaid.ShareTo";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -7511,7 +7505,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -8566,8 +8560,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
-				PROVISIONING_PROFILE = "d429996d-ee74-44c5-988d-8681bb4c5453";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.cliqz.ios.lumen";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -8641,10 +8635,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 2UYYSSHVUH;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8658,7 +8652,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_SHARETO_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "af6da778-5024-40cf-8c85-67d00d5d9b06";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.cliqz.ios.lumen.ShareTo";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -8673,7 +8667,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -9367,10 +9361,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Ghostery;
 				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 2UYYSSHVUH;
 				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -9479,10 +9473,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = HPY23A294X;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9496,7 +9490,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_SHARETO_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "6a9a6ff5-9c28-454c-a5a4-bd542eff9a4b";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.evidon.Ghostery.ShareTo";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -9511,7 +9505,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -10244,7 +10238,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -10266,7 +10260,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -10288,7 +10282,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -11199,7 +11193,7 @@
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE = "a6da668a-0207-4e12-872b-a679ce75d464";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.cliqz.ios.newCliqz";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -11235,7 +11229,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 2UYYSSHVUH;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -11249,7 +11243,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_SHARETO_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.cliqz.ios.newCliqz.ShareTo";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -12101,7 +12095,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 2UYYSSHVUH;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -12195,7 +12189,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
@@ -12691,7 +12685,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 2UYYSSHVUH;
 				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -13141,7 +13135,7 @@
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE = "729c6cdf-bb27-4d79-ab1c-ec6caff5e4be";
-				PROVISIONING_PROFILE_SPECIFIER = "New Cliqz Dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
@@ -13177,7 +13171,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 2UYYSSHVUH;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -13191,7 +13185,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_SHARETO_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "763a2c72-bb80-419b-9a3e-07e178a87ddb";
-				PROVISIONING_PROFILE_SPECIFIER = "New Cliqz ShareTo";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;

@@ -64,7 +64,15 @@ extension UIImage {
         return UIImage(named: "ghosty")
         #endif
     }
-    
+
+	static func controlCenterDisabledIcon() -> UIImage? {
+		#if PAID
+		return UIImage(named: "dashboard_button_disabled")
+		#else
+		return nil
+		#endif
+	}
+
     static func controlCenterPrivateIcon() -> UIImage? {
         #if PAID
         return UIImage(named: "dashboard_button_freshtab")

@@ -34,9 +34,9 @@ class ContextualMessagesViewModel: NSObject {
         }
         
         var type: ContextualMessageType?
-        if shouldShowExpiredTrialMesage() {
+        if shouldShowExpiredTrialMessage() {
             type = .expiredTrial
-        } else if shouldShowAdBlockingMesage(blockedAds) {
+        } else if shouldShowAdBlockingMessage(blockedAds) {
             type = .adBlocking(blockedAds)
         } else if let trackingCompany = getFamousTrackingCompany(trackerCompanies) {
             type = .antiTracking(trackingCompany)
@@ -86,7 +86,7 @@ class ContextualMessagesViewModel: NSObject {
      * Keep showing until user dismisses or tab is closed.
      * Show every 3 days.
      */
-    private func shouldShowExpiredTrialMesage() -> Bool {
+    private func shouldShowExpiredTrialMessage() -> Bool {
         guard SubscriptionController.shared.getCurrentSubscription().isLimitedSubscription() else { return false }
         
         guard let lastShowDate = UserDefaults.standard.value(forKey: ContextualMessagesViewModel.LastExpiredTrailsMessageDateKey) as? Date,
@@ -101,7 +101,7 @@ class ContextualMessagesViewModel: NSObject {
      * No other message (as defined in this ticket) was shown today (i.e., show only one message per day).
      * This message was shown < 2 times before on any day (i.e., show this message only 2 times in total).
      */
-    private func shouldShowAdBlockingMesage(_ blockedAds: Int) -> Bool {
+    private func shouldShowAdBlockingMessage(_ blockedAds: Int) -> Bool {
         let count = UserDefaults.standard.integer(forKey: ContextualMessagesViewModel.adBlockingMessageCountKey)
         guard count < 2 else { return false }
         
