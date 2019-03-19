@@ -360,15 +360,27 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath) as! SubscriptionTableViewCell
         cell.premiumType = self.premiumTypes[indexPath.row]
+		/* TODO: Temporary disabling Subscription flow for BETA
         cell.buyButtonHandler = { [weak self] premiumType in
             SubscriptionController.shared.buyProduct(premiumType)
             self?.lastShosenPremiumType = premiumType
             self?.telemetryTarget = premiumType.getTelemeteryTarget()
             LegacyTelemetryHelper.logPayment(action: "click", target: self?.telemetryTarget)
         }
-        
+        */
+		cell.buyButtonHandler = { [weak self] _ in
+			self?.subscriptionsComingSoon()
+		}
         return cell
     }
-    
+
+	private func subscriptionsComingSoon() {
+		let title = NSLocalizedString("Coming Soon!", tableName: "Lumen", comment: "Temporary message title instead of Subscriptions")
+		let message = NSLocalizedString("Subscriptions will be available soon.", tableName: "Lumen", comment: "Temporary message instead of Subscriptions")
+		let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+		alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Lumen", comment: "Cancel button title in payment failing transaction alert"), style: .default, handler: nil))
+		self.present(alertController, animated: true, completion: nil)
+	}
 }
+
 #endif
