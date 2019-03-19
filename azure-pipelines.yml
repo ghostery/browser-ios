@@ -27,13 +27,9 @@ steps:
     versionSpec: '9.11.2'
 - script: npm i -g npm@6.5
 
-- task: Npm@1
+- script: npm ci
   displayName: 'npm install'
-  inputs:
-    command: custom
-    verbose: false
-    customCommand: ci
-
+  
 - task: CocoaPods@0
   displayName: 'pod install --repo-update'
   inputs:
