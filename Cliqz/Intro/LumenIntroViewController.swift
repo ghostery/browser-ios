@@ -59,7 +59,7 @@ class LumenIntroViewController: UIViewController {
 		let button = UIButton()
 		button.backgroundColor = UIColor.clear
 		button.setTitle(CliqzStrings.LumenOnboarding().getSkipIntroButtonText, for: UIControlState())
-		button.setTitleColor(UIColor.lumenBrightBlue, for: UIControlState())
+		button.setTitleColor(UIColor.lumenTextBlue, for: UIControlState())
 		button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
 		button.addTarget(self, action: #selector(startBrowsing), for: UIControlEvents.touchUpInside)
 		button.accessibilityIdentifier = "IntroViewController.skipIntroButton"
