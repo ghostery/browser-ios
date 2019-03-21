@@ -11,14 +11,17 @@ import UIKit
 extension BrowserViewController {
     
     @objc func handleContextualMessage(notification: Notification) {
+        #if PAID
         if let messageType = notification.object as? ContextualMessageType {
             DispatchQueue.main.async { [weak self] in
                 self?.showContextualMessage(messageType: messageType)
             }
         }
+        #endif
     }
     
     func showContextualMessage(messageType: ContextualMessageType) {
+        #if PAID
         self.contextualMessageView?.removeFromSuperview()
         self.contextualMessageView = nil
         
@@ -55,15 +58,19 @@ extension BrowserViewController {
             scrollController.contextualMessageView = contextualMessageView
            
         }
+        #endif
     }
     
     func hideContextualMessageViewAfterDelay() {
+        #if PAID
         DispatchQueue.main.asyncAfter(deadline: .now() + 20.0) {[weak self] in
             self?.hideContextualMessageView()
         }
+        #endif
     }
     
     func hideContextualMessageView() {
+        #if PAID
         if let messageView = self.contextualMessageView {
             UIView.animate(withDuration: 1.0, animations: {
                 messageView.alpha = 0
@@ -74,5 +81,6 @@ extension BrowserViewController {
                 }
             })
         }
+        #endif
     }
 }
