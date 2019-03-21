@@ -134,11 +134,11 @@ class UpgradLumenViewController: UIViewController {
     private func setStyles() {
         bundlesView.backgroundColor = UIColor.clear
         
-        restoreButton.setTitleColor(UIColor.lumenBrightBlue, for: .normal)
+        restoreButton.setTitleColor(UIColor.lumenTextBlue, for: .normal)
         restoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 16.0, weight: .regular)
-        restoreButton.layer.borderColor = UIColor.lumenBrightBlue.cgColor
+        restoreButton.layer.borderColor = UIColor.lumenTextBlue.cgColor
         
-        conditionButton.setTitleColor(UIColor.lumenBrightBlue, for: .normal)
+        conditionButton.setTitleColor(UIColor.lumenTextBlue, for: .normal)
         conditionButton.titleLabel?.font = UIFont.systemFont(ofSize: 12.0, weight: .medium)
         
         conditionsLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .regular)
