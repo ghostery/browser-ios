@@ -63,8 +63,8 @@ class TrialExpiredView: UIView {
         upgradeButton.backgroundColor = UIColor.lumenBrightBlue
         upgradeButton.layer.cornerRadius = 20
         
-        closeButton.setTitleColor(UIColor.lumenBrightBlue, for: .normal)
-        closeButton.layer.borderColor = UIColor.lumenBrightBlue.cgColor
+        closeButton.setTitleColor(UIColor.lumenTextBlue, for: .normal)
+        closeButton.layer.borderColor = UIColor.lumenTextBlue.cgColor
         closeButton.layer.borderWidth = 1.0
         closeButton.layer.cornerRadius = 20
         

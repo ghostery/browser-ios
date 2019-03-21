@@ -71,7 +71,7 @@ class LumenFreshtabViewController: FreshtabViewController {
 				let title = String(format: NSLocalizedString("%d more days left in trial", tableName: "Lumen", comment: "Trial days left title"), days)
 				let action = NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Upgrade action")
 				let btn = ButtonWithUnderlinedText(startText: (title, LumenFreshtabUI.mainTextColor),
-                                                   underlinedText: (action, UIColor.lumenBrightBlue),
+                                                   underlinedText: (action, UIColor.lumenTextBlue),
                                                    position: .bottom,
                                                    view: "start_tab")
 				btn.addTarget(self, action: #selector(upgrade), for: .touchUpInside)
