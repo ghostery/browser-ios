@@ -74,7 +74,7 @@ struct Lumen {
         }
         
         static let homePanelSegmentedControlTint : LumenColor = { name, mode in
-            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue]]
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Private: .lumenBrightBlue], .Dark: [.Normal: .lumenTextBlue, .Private: .lumenBrightBlue]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
@@ -196,7 +196,7 @@ struct Lumen {
         }
         
         static let selectDetailTextColor : LumenColor = { name, mode in
-            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue]]
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue], .Dark: [.Normal: .lumenTextBlue]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
@@ -289,7 +289,7 @@ struct Lumen {
         }
         
         static let segmentedControlColor: LumenColor = { name, mode in
-            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue], .Dark: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue]]
+            let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue, .Disabled: .lumenBrightBlue], .Dark: [.Normal: .lumenTextBlue, .Disabled: .lumenDisabled]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
