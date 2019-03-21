@@ -16,11 +16,20 @@ class LumenFreshtabViewController: FreshtabViewController {
 
 	private var infoView: UIView?
 	private var welcomeView: UIView?
+    private var madeIndGermany = UILabel()
 
 	private static let welcomeViewShown = "welcomeViewShown"
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
+        madeIndGermany.text = "MADE IN GERMANY"
+        madeIndGermany.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        madeIndGermany.textColor = UIColor.lumenBrightBlue
+        madeIndGermany.textAlignment = .center
+        madeIndGermany.alpha = 0.4
+        madeIndGermany.addCharacterSpacing(kernValue: 4.0)
+        view.addSubview(madeIndGermany)
+        
 		setupViews()
 		setupConstraints()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshView(_:)),
@@ -92,9 +101,15 @@ class LumenFreshtabViewController: FreshtabViewController {
 	}
 
 	private func setupConstraints() {
+        madeIndGermany.snp.remakeConstraints { (make) in
+            make.bottom.equalToSuperview().inset(25)
+            make.centerX.equalToSuperview()
+        }
+        
 		if let view1stWeek = self.infoView as? UIButton {
 			view1stWeek.snp.makeConstraints { (make) in
-				make.left.right.bottom.equalToSuperview()
+				make.left.right.equalToSuperview()
+                make.bottom.equalTo(self.madeIndGermany.snp.top).offset(-25)
 				make.height.equalTo(50)
 			}
 			self.scrollView.snp.remakeConstraints({ (make) in
@@ -112,7 +127,8 @@ class LumenFreshtabViewController: FreshtabViewController {
 			})
         } else if let trialExpiredView = self.infoView as? TrialExpiredView {
             trialExpiredView.snp.makeConstraints { (make) in
-                make.left.right.bottom.equalToSuperview().inset(10)
+                make.left.right.equalToSuperview()
+                make.bottom.equalTo(self.madeIndGermany.snp.top).offset(-25)
                 make.height.equalTo(TrialExpiredViewUX.height)
             }
             self.scrollView.snp.remakeConstraints({ (make) in
@@ -121,7 +137,8 @@ class LumenFreshtabViewController: FreshtabViewController {
             })
         } else {
             self.scrollView.snp.remakeConstraints({ (make) in
-                make.top.bottom.left.right.equalToSuperview()
+                make.top.left.right.equalToSuperview()
+                make.bottom.equalTo(self.madeIndGermany.snp.top)
             })
         }
 		if let w = self.welcomeView {
