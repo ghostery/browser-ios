@@ -46,9 +46,13 @@ class CliqzURLBar: URLBarView {
             }
         }
     }
-
+    #if PAID
+    let ghostyHeight = 38.0
+    let ghostyWidth = 38.0
+    #else
     let ghostyHeight = 54.0
     let ghostyWidth = 54.0
+    #endif
     
     private lazy var _cancelButton: UIButton = {
         let cancelButton = InsetButton()

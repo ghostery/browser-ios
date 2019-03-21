@@ -60,8 +60,8 @@ class LumenURLBar: CliqzURLBar {
         }
         
         vpnAccessButton.snp.makeConstraints { (make) in
-            make.width.equalTo(ghostyWidth)
-            make.height.equalTo(ghostyHeight)
+            make.width.equalTo(50.0)
+            make.height.equalTo(34.0)
             make.centerY.equalTo(self)
             make.trailing.equalTo(self.dashboardButton.snp.leading)
         }
