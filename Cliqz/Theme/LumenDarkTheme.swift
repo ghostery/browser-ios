@@ -45,19 +45,19 @@ fileprivate class DarkURLBarColor: URLBarColor {
         return (labelMode: color.withAlphaComponent(1), textFieldMode: color)
         
     }
-    override var urlbarButtonTitleText: UIColor { return UIColor.lumenBrightBlue }
+    override var urlbarButtonTitleText: UIColor { return UIColor.lumenTextBlue }
     override var urlbarButtonTint: UIColor { return UIColor.Photon.Grey10 }
     override var pageOptionsUnselected: UIColor { return UIColor.white }
 }
 
 fileprivate class DarkBrowserColor: BrowserColor {
     override var background: UIColor { return defaultBackground }
-    override var tint: UIColor { return UIColor.lumenBrightBlue }
+    override var tint: UIColor { return UIColor.lumenTextBlue }
 }
 
 // The back/forward/refresh/menu button (bottom toolbar)
 fileprivate class DarkToolbarButtonColor: ToolbarButtonColor {
-    override var selectedTint: UIColor { return UIColor.lumenBrightBlue }
+    override var selectedTint: UIColor { return UIColor.lumenTextBlue }
     override var disabledTint: UIColor { return UIColor(colorString: "1F4280") }
 }
 
