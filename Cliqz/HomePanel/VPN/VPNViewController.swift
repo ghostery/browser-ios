@@ -387,7 +387,7 @@ class VPNViewController: UIViewController {
             let title = NSLocalizedString("Unlock the VPN feature to get the best out of Lumen.", tableName: "Lumen", comment: "Unlock the VPN feature text")
             let action = NSLocalizedString("LEARN MORE", tableName: "Lumen", comment: "LEARN MORE action")
             upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel),
-                                                     underlinedText: (action, UIColor.lumenBrightBlue),
+                                                     underlinedText: (action, UIColor.lumenTextBlue),
                                                      position: .next,
                                                      view: "vpn")
             upgradeButton?.addTarget(self, action: #selector(showUpgradeViewController), for: .touchUpInside)
