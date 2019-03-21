@@ -190,13 +190,8 @@ class PaidControlCenterViewController: ControlCenterViewController {
 
 	private func updateUIState(isEnabled: Bool) {
 		lumenDashboardMode = isEnabled ? .Normal : .Disabled
-		if isEnabled {
-			tabs.tintColor = Lumen.Dashboard.segmentedControlColor(lumenTheme, lumenDashboardMode)
-			tabs.isUserInteractionEnabled = true
-		} else {
-			tabs.tintColor = UIColor.lumenDisabled
-			tabs.isUserInteractionEnabled = false
-		}
+		tabs.tintColor = Lumen.Dashboard.segmentedControlColor(lumenTheme, lumenDashboardMode)
+		tabs.isUserInteractionEnabled = isEnabled
 		self.upgradeButton?.updateViewState(isEnabled: isEnabled)
 		dashboard.update()
 	}
@@ -217,7 +212,7 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
                 let title = String(format: NSLocalizedString("%d more days left in trial", tableName: "Lumen", comment: "Trial days left title"), trialRemainingDays)
                 let action = NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Upgrade action")
                 upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel),
-                                                         underlinedText: (action, UIColor.lumenBrightBlue),
+                                                         underlinedText: (action, UIColor.lumenTextBlue),
                                                          position: .next,
                                                          view: "dashboard")
                 upgradeButton?.addTarget(self, action: #selector(showUpgradeViewController), for: .touchUpInside)
