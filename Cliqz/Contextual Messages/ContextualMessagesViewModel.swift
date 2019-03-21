@@ -14,6 +14,11 @@ enum ContextualMessageType {
     case antiTracking(String)
 }
 
+extension Notification.Name {
+    static let ContextualMessageNotification = Notification.Name("ContextualMessageNotification")
+}
+
+
 class ContextualMessagesViewModel: NSObject {
     
     private static let LastShowMessageDateKey = "contextualMessage.any.show.date"
@@ -22,9 +27,9 @@ class ContextualMessagesViewModel: NSObject {
     private static let adBlockingMessageCountKey = "contextualMessage.adBlocking.show.count"
     private static let antiTrackingMessageCountKey = "contextualMessage.antiTracking.show.count"
     
-    let shared = ContextualMessagesViewModel()
+    static let shared = ContextualMessagesViewModel()
     
-    func getContextualMessageType(blockedAds: Int, trackerCompanies: [String]) -> ContextualMessageType? {
+    func getContextualMessageType(blockedAds: Int = 0, trackerCompanies: [String] = [String]()) -> ContextualMessageType? {
         if shouldShowOnboardingMesage() {
             return .onboarding
         }
@@ -34,9 +39,11 @@ class ContextualMessagesViewModel: NSObject {
         }
         
         var type: ContextualMessageType?
-        if shouldShowExpiredTrialMessage() {
-            type = .expiredTrial
-        } else if shouldShowAdBlockingMessage(blockedAds) {
+        // NotYetImplemented
+//        if shouldShowExpiredTrialMessage() {
+//            type = .expiredTrial
+//        } else
+        if shouldShowAdBlockingMessage(blockedAds) {
             type = .adBlocking(blockedAds)
         } else if let trackingCompany = getFamousTrackingCompany(trackerCompanies) {
             type = .antiTracking(trackingCompany)
@@ -78,7 +85,7 @@ class ContextualMessagesViewModel: NSObject {
      * Keep showing on all web pages, but not on start tab, VPN view, etc. until user has clicked on the dashboard icon, thus opening the dashboard for the first time
      */
     private func shouldShowOnboardingMesage() -> Bool {
-        return !UserDefaults.standard.bool(forKey: ContextualMessagesViewModel.LastShowMessageDateKey)
+        return !UserDefaults.standard.bool(forKey: ContextualMessagesViewModel.ShowOnboardingMessageKey)
     }
     
     /*
@@ -103,8 +110,10 @@ class ContextualMessagesViewModel: NSObject {
      */
     private func shouldShowAdBlockingMessage(_ blockedAds: Int) -> Bool {
         let count = UserDefaults.standard.integer(forKey: ContextualMessagesViewModel.adBlockingMessageCountKey)
-        guard count < 2 else { return false }
-        
+        guard count < 2 else {
+            return false
+        }
+
         return blockedAds > 3
     }
     
@@ -116,12 +125,15 @@ class ContextualMessagesViewModel: NSObject {
     private func getFamousTrackingCompany(_ trackerCompanies: [String]) -> String? {
         let count = UserDefaults.standard.integer(forKey: ContextualMessagesViewModel.antiTrackingMessageCountKey)
         guard count < 3 else { return nil }
-        
-        if trackerCompanies.contains("facebook") { return "Facebook" }
-        if trackerCompanies.contains("google") { return "Google" }
-        if trackerCompanies.contains("twitter") { return "Twitter" }
-        if trackerCompanies.contains("linkedIn") { return "LinkedIn" }
-        
+        let regex = try! NSRegularExpression(pattern: "facebook|google|twitter|linkedin")
+
+        for tracker in trackerCompanies {
+            let range = NSRange(location: 0, length: tracker.lowercased().utf16.count)
+            if regex.firstMatch(in: tracker, options: [], range: range) != nil {
+                return tracker
+            }
+        }
+
         return nil
     }
     

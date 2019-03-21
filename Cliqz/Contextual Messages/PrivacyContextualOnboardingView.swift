@@ -15,7 +15,7 @@ class PrivacyContextualOnboardingView: UIView {
 		titleLabel.numberOfLines = 1
 		titleLabel.textAlignment = .center
 		titleLabel.textColor = UIColor.white
-		titleLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+		titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
 		titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
 		return titleLabel
 	}()
@@ -58,7 +58,7 @@ class PrivacyContextualOnboardingView: UIView {
 
 	private func setupConstraints() {
 		titleLabel.snp.makeConstraints { make in
-			make.top.equalToSuperview().offset(3)
+			make.top.equalToSuperview().offset(13)
 			make.left.right.equalToSuperview()
 			make.height.equalTo(15)
 		}

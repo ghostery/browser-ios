@@ -21,5 +21,6 @@ class AdblokingContextualOnboardingView: PrivacyContextualOnboardingView {
 		let title = NSLocalizedString("Did you know?", tableName: "Lumen", comment: "[Contextual onboarding] For Adblocker")
 		let info = String(format: NSLocalizedString("Lumen just blocked %d ads", tableName: "Lumen", comment: "[Contextual onboarding] Adblocker details"), blockedAdsCount)
 		super.init(title: title, info: info)
+        ContextualMessagesViewModel.shared.contextualMessageShown(.adBlocking(blockedAdsCount))
 	}
 }

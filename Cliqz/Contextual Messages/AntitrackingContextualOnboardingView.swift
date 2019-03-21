@@ -19,7 +19,8 @@ class AntitrackingContextualOnboardingView: PrivacyContextualOnboardingView {
 	
 	init(trackerName: String) {
 		let title = NSLocalizedString("Well protected!", tableName: "Lumen", comment: "[Contextual onboarding] For Antitracking")
-		let info = String(format: NSLocalizedString("Lumen just blocked %@ from accessing your data.Get it from ", tableName: "Lumen", comment: "[Contextual onboarding] Antitracking details"), trackerName)
+		let info = String(format: NSLocalizedString("Lumen just blocked %@ from accessing your data.", tableName: "Lumen", comment: "[Contextual onboarding] Antitracking details"), trackerName)
 		super.init(title: title, info: info)
+        ContextualMessagesViewModel.shared.contextualMessageShown(.antiTracking(trackerName))
 	}
 }

@@ -239,12 +239,39 @@ class CurrentPageInfo: NSObject {
     }
     
     func pageChanged() {
+        checkTabStats()
         //send data: Make sure data is sent once for a page - Done using a flag (dataSentForCurrentPage)
+        //TODO: call sendData() to send stats for current page only when navigating to next page or when closing the current tab
         sendData()
         //reset
         reset()
     }
-    
+    private func checkTabStats() {
+        guard UserPreferences.instance.isProtectionOn == true else { return }
+        guard bugIDs.count > 0 else { return }
+
+        let tabID = self.tab.tabID
+        let apps = convertAppIds()
+        let bugs = convertBugIds()
+        
+        let timeStamp = Int((self.startLoadTime?.timeIntervalSince1970 ?? 0.0) * 1000.0)
+        let pageInfo: [String: Any] = ["timestamp": timeStamp, "host": self.host ?? ""]
+        let currentHost = self.host
+        DispatchQueue.global(qos: .utility).async {
+            Engine.sharedInstance.getBridge().callAction("insights:getGhosteryPageStats", args: [tabID, pageInfo, apps, bugs], callback: { (tabDashboardStats) in
+                if currentHost == self.host {
+                    if let result = tabDashboardStats["result"] as? [String: Any],
+                        let blockedAds = result["adsBlocked"] as? Int,
+                        let trackerCompanies  = result["trackers"] as? [String] {
+                        if let messageType = ContextualMessagesViewModel.shared.getContextualMessageType(blockedAds: blockedAds, trackerCompanies: trackerCompanies) {
+                            NotificationCenter.default.post(name: Notification.Name.ContextualMessageNotification, object: messageType)
+                        }
+                    }
+                    
+                }
+            })
+        }
+    }
     private func reset() {
         self.host = nil
         self.startLoadTime = nil
