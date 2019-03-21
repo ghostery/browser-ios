@@ -87,6 +87,8 @@ extension BrowserViewController {
             //show it
             #if PAID
                 showControlCenter(pageUrl: nil)
+                hideContextualMessageView()
+                ContextualMessagesViewModel.shared.contextualMessageShown(.onboarding)
             #else
                 if let pageUrl = notification.object as? String {
                     showControlCenter(pageUrl: pageUrl)

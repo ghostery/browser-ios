@@ -41,6 +41,10 @@ class TabScrollingController: NSObject {
     weak var urlBar: URLBarView?
     weak var readerModeBar: ReaderModeBarView?
     weak var snackBars: UIView?
+    #if PAID
+    //Cliqz: added ContexualMessageView so that it can be shown & hidden with the urlBar
+    weak var contextualMessageView: UIView?
+    #endif
 
     var footerBottomConstraint: Constraint?
     var headerTopConstraint: Constraint?
@@ -111,6 +115,10 @@ class TabScrollingController: NSObject {
     func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
         if toolbarState == .collapsed {
             completion?(true)
+            #if PAID
+            //Cliqz: show/hide ContexualMessageView with the urlBar
+            self.contextualMessageView?.alpha = 0
+            #endif
             return
         }
         toolbarState = .collapsed
@@ -265,6 +273,10 @@ private extension TabScrollingController {
             self.urlBar?.updateAlphaForSubviews(alpha)
             self.readerModeBar?.updateAlphaForSubviews(alpha)
             self.header?.superview?.layoutIfNeeded()
+            #if PAID
+            //Cliqz: show/hide ContexualMessageView with the urlBar
+            self.contextualMessageView?.alpha = alpha
+            #endif
         }
 
         if animated {

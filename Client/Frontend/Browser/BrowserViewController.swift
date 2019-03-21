@@ -132,9 +132,10 @@ class BrowserViewController: UIViewController {
 
     let downloadQueue = DownloadQueue()
     
-    //Cliqz: Add gradient
+    //Cliqz: Add gradient & contexual message view
     #if PAID
     let gradient = BrowserGradientView()
+    var contextualMessageView: UIView?
     #endif
     //Cliqz: end
 
@@ -393,6 +394,7 @@ class BrowserViewController: UIViewController {
 		NotificationCenter.default.addObserver(self, selector: #selector(showWifiProtection), name: ShowWifiProtectionNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(ghosteryButtonPressed(notification:)), name: Notification.Name.GhosteryButtonPressed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.DeviceOrientationChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleContextualMessage), name: Notification.Name.ContextualMessageNotification, object: nil)
 
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
@@ -440,7 +442,7 @@ class BrowserViewController: UIViewController {
         scrollController.header = header
         scrollController.footer = footer
         scrollController.snackBars = alertStackView
-
+        
         self.updateToolbarStateForTraitCollection(self.traitCollection)
         
         //Cliqz: Add gradient
@@ -628,6 +630,13 @@ class BrowserViewController: UIViewController {
         }
         showQueuedAlertIfAvailable()
         
+        #if PAID
+        //Cliqz: add Contextual Message if needed (mainly for Dashboard)
+        if let messageType = ContextualMessagesViewModel.shared.getContextualMessageType() {
+            self.showContextualMessage(messageType: messageType)
+        }
+
+        #endif
     }
 
     // THe logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in
@@ -2140,7 +2149,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
-            
+                        
             //Cliqz: Update Ghostery Count
             NotificationCenter.default.post(name: didChangeTabNotification, object: nil, userInfo: ["url": webView.url as Any])
 

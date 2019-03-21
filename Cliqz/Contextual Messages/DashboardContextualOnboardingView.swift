@@ -16,7 +16,7 @@ class DashboardContextualOnboardingView: UIView {
 		titleLabel.numberOfLines = 1
 		titleLabel.textAlignment = .left
 		titleLabel.textColor = UIColor.white
-		titleLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+		titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
 		titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
 		return titleLabel
 	}()
@@ -53,22 +53,48 @@ class DashboardContextualOnboardingView: UIView {
 		self.addSubview(titleLabel)
 		self.addSubview(descriptionLabel)
 		self.addSubview(imageView)
-		imageView.snp.makeConstraints { make in
-			make.top.equalToSuperview()
-			make.right.equalToSuperview().inset(-10)
-		}
 		titleLabel.snp.makeConstraints { make in
-			make.top.equalToSuperview().offset(3)
-			make.left.equalToSuperview()
+			make.top.equalToSuperview().offset(10)
+			make.left.equalToSuperview().inset(10)
 			make.right.equalTo(imageView.snp.left)
-			make.height.equalTo(15)
 		}
 		descriptionLabel.snp.makeConstraints { make in
-			make.top.equalTo(titleLabel.snp.bottom)
-			make.left.right.equalToSuperview()
-			make.height.equalTo(50)
+			make.top.equalTo(titleLabel.snp.bottom).offset(5)
+            make.left.equalToSuperview().inset(10)
+            make.right.equalTo(imageView.snp.left)
 		}
 		self.backgroundColor = UIColor.lumenDeepBlue
 		self.isUserInteractionEnabled = false
-	}
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.DeviceOrientationChanged, object: nil)
+        self.animateArrow()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func animateArrow() {
+        
+        imageView.layer.removeAllAnimations()
+        imageView.snp.remakeConstraints { make in
+            make.top.equalToSuperview()
+            let orientation = UIDevice.current.getDeviceAndOrientation().1
+            if orientation == .portrait {
+                make.right.equalToSuperview().inset(20)
+            } else {
+                make.right.equalToSuperview().inset(117)
+            }
+            make.width.equalTo(14)
+            make.height.equalTo(17)
+        }
+        
+        UIView.animateKeyframes(withDuration: 0.5, delay: 0.1, options: [.repeat,.autoreverse], animations: {
+            self.imageView.frame.origin.y -= 10
+        })
+    }
+    
+    @objc func orientationDidChange(_ notification: Notification) {
+        self.animateArrow()
+    }
 }
