@@ -41,12 +41,12 @@ class CCWidgetManager {
             // Minutes : Seconds
             let minutes = seconds / 60
             let seconds = seconds % 60
-            return (String(format: "%d:%d", minutes, seconds), TimeUnit.Minutes.toString())
+            return (String(format: "%d:%02d", minutes, seconds), TimeUnit.Minutes.toString())
         } else if seconds < 86400 {
             // Hours : Minutes
             let hours = seconds / 3600
             let minutes = (seconds / 60) % 60
-            return (String(format: "%d:%d", hours, minutes), TimeUnit.Hours.toString())
+            return (String(format: "%d:%02d", hours, minutes), TimeUnit.Hours.toString())
         } else {
             // Days
             let days = seconds / 86400
@@ -57,19 +57,19 @@ class CCWidgetManager {
     static func dataSavedTuple(kiloBytes: Int) -> (String, String) {
         if kiloBytes < 1000 {
             // Kilobytes
-            return (String(format: "%d", kiloBytes), DataUnit.Kilobytes.toString())
+            return (String.localizedStringWithFormat("%d", kiloBytes), DataUnit.Kilobytes.toString())
         } else if kiloBytes < 1000000 {
             // Megabytes
             let megabytes = Float(kiloBytes) / 1000.0
             if megabytes < 100 {
-                return (String(format: "%.1f", megabytes), DataUnit.Megabytes.toString())
+                return (String.localizedStringWithFormat("%.1f", megabytes), DataUnit.Megabytes.toString())
             } else {
-                return (String(format: "%.0f", megabytes), DataUnit.Megabytes.toString())
+                return (String.localizedStringWithFormat("%.0f", megabytes), DataUnit.Megabytes.toString())
             }
         } else {
             // Gigabytes
             let gigabytes = Float(kiloBytes) / 1000000.0
-            return (String(format: "%.2f", gigabytes), DataUnit.Gigabytes.toString())
+            return (String.localizedStringWithFormat("%.2f", gigabytes), DataUnit.Gigabytes.toString())
         }
     }
     
