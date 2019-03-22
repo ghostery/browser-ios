@@ -72,6 +72,9 @@ public enum PremiumType: String {
     
     
     func getBilling() -> String {
+		// TODO: Commented strings might be needed in future, when we put back payment flow. Prices are removed for BETA testing
+		return ""
+		/*
         switch self {
         case .Basic:
             return NSLocalizedString("Corresponds to 4€/month", tableName: "Lumen", comment: "BASIC Subscription billing")
@@ -80,6 +83,7 @@ public enum PremiumType: String {
         case .Plus:
             return NSLocalizedString("Corresponds to 119.88€/year", tableName: "Lumen", comment: "PLUS Subscription billing")
         }
+		*/
     }
     
     func getTelemeteryTarget() -> String {
