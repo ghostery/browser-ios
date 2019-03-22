@@ -44,7 +44,12 @@ class CliqzHistoryPanel: HistoryPanel {
         tableView.backgroundColor = .clear
         tableView.separatorColor = UIColor.white.withAlphaComponent(0.4)
     }
-    
+	
+	override func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+		let newIndexPaths = indexPaths.map {IndexPath( row: $0.row, section: $0.section + 1)}
+		super.tableView(tableView, prefetchRowsAt: newIndexPaths)
+	}
+	
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let container = UIView()
@@ -52,7 +57,7 @@ class CliqzHistoryPanel: HistoryPanel {
         let label = UILabel()
         
         //setup
-        label.text = self.tableView(tableView, titleForHeaderInSection: section)
+        label.text = self.tableView(tableView, titleForHeaderInSection: section + 1)
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = UIColor.darkText
         
@@ -81,7 +86,11 @@ class CliqzHistoryPanel: HistoryPanel {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return Section.count - 1
     }
-    
+
+	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return super.tableView(tableView, numberOfRowsInSection: section + 1)
+	}
+
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30
     }
@@ -97,7 +106,7 @@ class CliqzHistoryPanel: HistoryPanel {
     }
     
     override func configureSite(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        if let site = siteForIndexPath(indexPath), let cell = cell as? CliqzSiteTableViewCell {
+		if let site = siteForIndexPath(IndexPath(row: indexPath.row, section: indexPath.section + 1)), let cell = cell as? CliqzSiteTableViewCell {
             cell.setLines(site.title, detailText: site.url)
             cell.tag = indexPath.row
             cell.imageShadowView.alpha = 0.0

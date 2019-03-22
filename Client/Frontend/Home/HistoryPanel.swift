@@ -373,8 +373,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         guard groupedSites.numberOfItemsForSection(section - 1) > 0 else {
             return nil
         }
-
-        return Section(rawValue: section)?.title
+        return Section(rawValue: section - 1)?.title
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
