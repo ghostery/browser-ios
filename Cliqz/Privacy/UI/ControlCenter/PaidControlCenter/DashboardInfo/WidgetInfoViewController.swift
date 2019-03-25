@@ -41,8 +41,9 @@ class WidgetInfoViewController: UIViewController {
 
 	private func setupConstraints() {
 		closeButton.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().offset(16)
+			make.top.equalTo(self.view.safeArea.top)
 			make.right.equalToSuperview().offset(-7)
+			make.height.equalTo(30)
 		}
 		containerView.snp.makeConstraints { (make) in
 			make.left.right.bottom.equalToSuperview()
