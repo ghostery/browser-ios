@@ -81,9 +81,9 @@ class DashboardContextualOnboardingView: UIView {
             make.top.equalToSuperview()
             let orientation = UIDevice.current.getDeviceAndOrientation().1
             if orientation == .portrait {
-                make.right.equalToSuperview().inset(20)
+                make.right.equalToSuperview().inset(12)
             } else {
-                make.right.equalToSuperview().inset(117)
+                make.right.equalToSuperview().inset(110)
             }
             make.width.equalTo(14)
             make.height.equalTo(17)
