@@ -41,9 +41,6 @@ class CliqzURLBar: URLBarView {
         set(newURL) {
             locationView.url = newURL
             line.isHidden = newURL?.isAboutHomeURL ?? true
-            if newURL != nil {
-                pageOptionsButton.alpha = 0
-            }
         }
     }
     #if PAID
@@ -78,16 +75,6 @@ class CliqzURLBar: URLBarView {
         return button
     }()
 
-    lazy var pageOptionsButton: UIButton = {
-        let pageOptionsButton = UIButton(frame: .zero)
-        pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
-        pageOptionsButton.addTarget(self, action: #selector(SELDidPressPageOptionsButton), for: .touchUpInside)
-        pageOptionsButton.isAccessibilityElement = true
-        pageOptionsButton.imageView?.contentMode = .left
-        pageOptionsButton.accessibilityIdentifier = "UrlBar.pageOptionsButton"
-        return pageOptionsButton
-    }()
-
     override func commonInit() {
         super.commonInit()
         helper = CliqzTabToolbarHelper(toolbar: self)
@@ -108,17 +95,10 @@ class CliqzURLBar: URLBarView {
         NotificationCenter.default.post(name: Notification.Name.GhosteryButtonPressed, object: self.currentURL?.absoluteString)
     }
     
-    @objc func SELDidPressPageOptionsButton(button: UIButton) {
-        self.delegate?.urlBarDidPressCliqzPageOptions(self, from: button)
-    }
-    
     override func setupConstraints() {
         
         if dashboardButton.superview == nil {
             addSubview(dashboardButton)
-        }
-        if pageOptionsButton.superview == nil {
-            addSubview(pageOptionsButton)
         }
         
         line.snp.makeConstraints { make in
@@ -185,12 +165,6 @@ class CliqzURLBar: URLBarView {
             make.trailing.equalTo(self.safeArea.trailing)//.offset(-URLBarViewUX.Padding)
         }
 
-        pageOptionsButton.snp.makeConstraints { (make) in
-            make.size.equalTo(TabLocationViewUX.ButtonSize)
-            make.centerY.equalTo(self)
-            make.trailing.equalTo(self.dashboardButton.snp.leading)
-        }
-
         setStyle()
     }
 
@@ -207,17 +181,11 @@ class CliqzURLBar: URLBarView {
     override func prepareOverlayAnimation() {
         super.prepareOverlayAnimation()
         bringSubview(toFront: dashboardButton)
-        bringSubview(toFront: pageOptionsButton)
     }
 
     override func transitionToOverlay(_ didCancel: Bool = false) {
         super.transitionToOverlay()
         dashboardButton.alpha = inOverlayMode ? 0 : 1
-        if inOverlayMode {
-            pageOptionsButton.alpha = 0
-        } else {
-            pageOptionsButton.alpha = self.currentURL == nil ? 1 : 0
-        }
     }
     
     override func updateConstraints() {
@@ -294,7 +262,6 @@ class CliqzURLBar: URLBarView {
     override func applyTheme() {
         super.applyTheme()
         dashboardButton.applyTheme()
-        pageOptionsButton.tintColor = UIColor.theme.urlbar.pageOptionsUnselected
         cancelButton.setTitleColor(UIColor.theme.urlbar.urlbarButtonTitleText, for: [])
     }
 
