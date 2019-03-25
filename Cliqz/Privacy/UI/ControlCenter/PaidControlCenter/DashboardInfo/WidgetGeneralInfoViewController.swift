@@ -44,7 +44,7 @@ class WidgetGeneralInfoViewController: WidgetInfoViewController {
 		self.descriptionLabel.textColor = UIColor.lumenTextBlue
 		self.descriptionLabel.textAlignment = .center
 		self.descriptionLabel.numberOfLines = 0
-	}
+  	}
 
 	fileprivate func setConstraints() {
 		self.imageView.snp.makeConstraints { (make) in
@@ -53,11 +53,13 @@ class WidgetGeneralInfoViewController: WidgetInfoViewController {
 		}
 		self.countLabel.snp.makeConstraints { (make) in
 			make.centerX.equalTo(self.imageView.snp.centerX)
-			make.top.equalTo(self.imageView.snp.top).offset(20)
+			make.top.equalTo(self.imageView.snp.top).offset(38)
+			make.height.equalTo(60)
 		}
 		self.unitLabel.snp.makeConstraints { (make) in
 			make.centerX.equalTo(self.imageView.snp.centerX)
 			make.top.equalTo(self.countLabel.snp.bottom)
+			make.height.equalTo(55)
 		}
 		self.titleLabel.snp.makeConstraints { (make) in
 			make.top.equalTo(self.imageView.snp.bottom).offset(10)
@@ -92,7 +94,13 @@ class SavedTimeWidgetInfoViewController: WidgetGeneralInfoViewController {
 		super.setConstraints()
 		self.countLabel.snp.remakeConstraints { (make) in
 			make.centerX.equalTo(self.imageView.snp.centerX)
-			make.top.equalTo(self.imageView.snp.top).offset(30)
+			make.top.equalTo(self.imageView.snp.top).offset(42)
+			make.height.equalTo(40)
+		}
+		self.unitLabel.snp.remakeConstraints { (make) in
+			make.centerX.equalTo(self.imageView.snp.centerX)
+			make.top.equalTo(self.countLabel.snp.bottom)
+			make.height.equalTo(40)
 		}
 	}
 }
