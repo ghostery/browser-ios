@@ -180,6 +180,7 @@ extension WidgetListInfoViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		let sectionHeader = UIView()
+		sectionHeader.backgroundColor = UIColor.lumenPurple
 		let title = UILabel()
 		title.textColor = UIColor.lumenTextBlue
 		title.font = UIFont.systemFont(ofSize: 12, weight: .regular)
