@@ -65,12 +65,6 @@ class LumenURLBar: CliqzURLBar {
             make.centerY.equalTo(self)
             make.trailing.equalTo(self.dashboardButton.snp.leading)
         }
-        
-        pageOptionsButton.snp.remakeConstraints { (make) in
-            make.size.equalTo(TabLocationViewUX.ButtonSize)
-            make.centerY.equalTo(self)
-            make.trailing.equalTo(self.vpnAccessButton.snp.leading)
-        }
     }
     
     

@@ -58,7 +58,9 @@ class TabLocationView: UIView {
                 UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
             }
             updateTextWithURL()
+            /* Cliqz: Always display pageOptionsButton
             pageOptionsButton.isHidden = (url == nil)
+             */
 
             // Cliqz: Update VideoDownloadButton visibility
             updateVideoDownloadButton()
@@ -177,7 +179,9 @@ class TabLocationView: UIView {
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
         pageOptionsButton.addTarget(self, action: #selector(didPressPageOptionsButton), for: .touchUpInside)
         pageOptionsButton.isAccessibilityElement = true
+        /* Cliqz: Always display pageOptionsButton
         pageOptionsButton.isHidden = true
+         */
         pageOptionsButton.imageView?.contentMode = .left
         pageOptionsButton.accessibilityLabel = NSLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
         pageOptionsButton.accessibilityIdentifier = "TabLocationView.pageOptionsButton"
