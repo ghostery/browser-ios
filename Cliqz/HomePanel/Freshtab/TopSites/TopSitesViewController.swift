@@ -189,15 +189,11 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
 			LogoLoader.loadLogo(url, completionBlock: { (img, logoInfo, error) in
 				if cell.tag == indexPath.row {
 					if let img = img {
-						cell.logoImageView.image = img
+						cell.setLogo(img)
 					}
 					else if let info = logoInfo {
 						let placeholder = LogoPlaceholder(logoInfo: info)
-						cell.fakeLogoView = placeholder
-						cell.logoContainerView.addSubview(placeholder)
-						placeholder.snp.makeConstraints({ (make) in
-							make.top.left.right.bottom.equalTo(cell.logoContainerView)
-						})
+						cell.setLogoPlaceholder(placeholder)
 					}
 					cell.logoHostLabel.text = logoInfo?.hostName
 				}
