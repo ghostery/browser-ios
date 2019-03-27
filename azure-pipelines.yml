@@ -25,7 +25,7 @@ jobs:
 
   steps:
 
-  - script: pip install aws-cli
+  - script: pip3 install aws-cli
     displayName: "Install AWS CLI"
 
   - bash: |
