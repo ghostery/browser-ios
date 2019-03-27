@@ -125,11 +125,11 @@ jobs:
         source azure-scripts/appium.sh
         source run.sh
         source azure-scripts/cleanup.sh ios
-    condition: and(eq(variables['brand'], 'lumen'), eq($(Build.SourceBranchName), 'master'))
+    condition: and(eq(variables['brand'], 'lumen'), eq(variables['Build.SourceBranchName'], 'master'))
     displayName: 'Setup and Run Tests'
 
   - script: pip install awscli
-    condition: and(eq(variables['brand'], 'lumen'), eq($(Build.SourceBranchName), 'master'))
+    condition: and(eq(variables['brand'], 'lumen'), eq(variables['Build.SourceBranchName'], 'master'))
     displayName: 'Install AWS CLI'
 
   - bash: |
@@ -141,17 +141,17 @@ jobs:
       AWS_SECRET_ACCESS_KEY: $(aws.secret)
       AWS_DEFAULT_REGION: $(aws.region)
       AWS_DEFAULT_OUTPUT: text
-    condition: and(eq(variables['brand'], 'lumen'), eq($(Build.SourceBranchName), 'master'))
+    condition: and(eq(variables['brand'], 'lumen'), eq(variables['Build.SourceBranchName'], 'master'))
     displayName: 'Copy to AWS S3'
 
   - bash: |
       echo "*** Performance Test Results ***"
       cat cliqz-mobile-tests/reports/performance.txt
-    condition: and(eq(variables['brand'], 'lumen'), eq($(Build.SourceBranchName), 'master'))
+    condition: and(eq(variables['brand'], 'lumen'), eq(variables['Build.SourceBranchName'], 'master'))
     displayName: 'Print Results/Reports'
 
   - task: ArchiveFiles@2
-    condition: and(always(), eq(variables['brand'], 'lumen'), eq($(Build.SourceBranchName), 'master'))
+    condition: and(always(), eq(variables['brand'], 'lumen'), eq(variables['Build.SourceBranchName'], 'master'))
     displayName: 'Archive Performance Result'
     inputs:
       rootFolderOrFile: 'cliqz-mobile-tests/reports/'
@@ -160,7 +160,7 @@ jobs:
       archiveFile: '$(Build.ArtifactStagingDirectory)/performance.zip'
 
   - task: PublishBuildArtifacts@1
-    condition: and(always(), eq(variables['brand'], 'lumen'), eq($(Build.SourceBranchName), 'master'))
+    condition: and(always(), eq(variables['brand'], 'lumen'), eq(variables['Build.SourceBranchName'], 'master'))
     displayName: 'Publish Artifacts'
     inputs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)'
