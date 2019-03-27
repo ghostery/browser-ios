@@ -171,6 +171,7 @@ class CliqzURLBar: URLBarView {
     override func applyUIMode(isPrivate: Bool) {
         super.applyUIMode(isPrivate: isPrivate)
         dashboardButton.applyUIMode(isPrivate: isPrivate)
+        locationView.applyUIMode(isPrivate: isPrivate)
     }
 
     func setStyle() {
