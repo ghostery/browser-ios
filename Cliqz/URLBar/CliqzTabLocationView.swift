@@ -95,3 +95,10 @@ class CliqzTabLocationView: TabLocationView {
         separatorLine.isHidden = readerModeButton.isHidden
     }
 }
+
+
+extension TabLocationView: PrivateModeUI {
+    func applyUIMode(isPrivate: Bool) {
+        backgroundColor = UIColor.theme.textField.background(isPrivate)
+    }
+}

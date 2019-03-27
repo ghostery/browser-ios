@@ -41,7 +41,7 @@ fileprivate class DarkURLBarColor: URLBarColor {
         return !isPrivate ? UIColor.lumenBrightBlue : defaultBackground
     }
     override func textSelectionHighlight(_ isPrivate: Bool) -> TextSelectionHighlight {
-        let color = isPrivate ? defaultTextSelectionColor : defaultTextSelectionColor
+        let color = isPrivate ? UIColor.lumenPurple : UIColor.lumenPurple
         return (labelMode: color.withAlphaComponent(1), textFieldMode: color)
         
     }
@@ -85,7 +85,9 @@ fileprivate class DarkTopTabsColor: TopTabsColor {
 }
 
 fileprivate class DarkTextFieldColor: TextFieldColor {
-    override var background: UIColor { return UIColor.lumenBrightBlue }
+    override func background(_ isPrivate: Bool) -> UIColor {
+        return isPrivate ?  UIColor(colorString: "3D3F4E") : UIColor.lumenBrightBlue
+    }
     override var textAndTint: UIColor { return defaultTextAndTint }
     
 }

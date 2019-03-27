@@ -836,7 +836,10 @@ class ToolbarTextField: AutocompleteTextField {
 
 extension ToolbarTextField: Themeable {
     func applyTheme() {
+        /* Cliqz: Changed background color
         backgroundColor = UIColor.theme.textField.background
+         */
+        backgroundColor = AutocompleteTextField.customBackgroundColor
         textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
@@ -844,6 +847,8 @@ extension ToolbarTextField: Themeable {
 
     // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
     static func applyUIMode(isPrivate: Bool) {
-       textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate)
+        textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate)
+        // Cliqz: set the customBackgroundColor
+        customBackgroundColor = UIColor.theme.textField.background(isPrivate)
     }
 }

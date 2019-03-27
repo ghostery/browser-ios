@@ -125,7 +125,9 @@ class TopTabsColor {
 }
 
 class TextFieldColor {
-    var background: UIColor { return UIColor.lumenBrightBlue }
+    func background(_ isPrivate: Bool) -> UIColor {
+        return isPrivate ?  UIColor(colorString: "3D3F4E") : UIColor.lumenBrightBlue
+    }
     var textAndTint: UIColor { return UIColor.Photon.Grey10 }
     var separator: UIColor { return defaultSeparator }
 }
