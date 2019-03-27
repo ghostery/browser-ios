@@ -108,7 +108,7 @@ class LumenFreshtabViewController: FreshtabViewController {
         
 		if let view1stWeek = self.infoView as? UIButton {
 			view1stWeek.snp.makeConstraints { (make) in
-				make.left.right.equalToSuperview()
+				make.centerX.equalToSuperview()
                 make.bottom.equalTo(self.madeIndGermany.snp.top).offset(-25)
 				make.height.equalTo(50)
 			}

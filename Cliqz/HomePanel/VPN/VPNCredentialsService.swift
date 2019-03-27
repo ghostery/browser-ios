@@ -24,6 +24,11 @@ class VPNCredentialsService {
 	private static let APIKey = "LumenAPIKey"
     private static let DeviceIDKey = "Lumen.DeviceID"
 
+	#if BETA
+	private static let vpnAPIURL = "https://auth-staging.lumenbrowser.com/get_credentials"
+	#else
+	private static let vpnAPIURL = "https://auth.lumenbrowser.com/get_credentials"
+	#endif
 	class func getVPNCredentials(completion: @escaping ([VPNData]) -> Void) {
 		guard let apiKey = Bundle.main.object(forInfoDictionaryKey: VPNCredentialsService.APIKey) as? String, !apiKey.isEmpty,
 				let subscriptionUserId = SubscriptionController.shared.getSubscriptionUserId() else {
@@ -35,7 +40,7 @@ class VPNCredentialsService {
 					  	"revenue_cat_token": subscriptionUserId]
 			let header = ["x-api-key": apiKey]
 			var result = [VPNData]()
-			Alamofire.request("https://auth-staging.lumenbrowser.com/get_credentials", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).responseJSON { (response) in
+			Alamofire.request(vpnAPIURL, method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).responseJSON { (response) in
 				if response.result.isSuccess {
 					let json = JSON(response.result.value ?? "")
                     if response.response?.statusCode == 480 {

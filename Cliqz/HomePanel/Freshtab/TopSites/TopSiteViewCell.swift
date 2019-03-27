@@ -21,6 +21,7 @@ class TopSiteViewCell: UICollectionViewCell {
 	lazy var logoImageView: UIImageView = UIImageView()
 	var fakeLogoView: UIView?
 	lazy var logoHostLabel = UILabel()
+	lazy var emptyView = UIImageView()
 
 	lazy var deleteButton: UIButton = {
 		let b = UIButton(type: .custom)
@@ -48,7 +49,7 @@ class TopSiteViewCell: UICollectionViewCell {
 	fileprivate func isEmptyContent() -> Bool {
 		return self.logoContainerView.subviews.count == 0 || (self.logoImageView.image == nil && self.fakeLogoView?.superview == nil)
 	}
-	
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		self.backgroundColor = UIColor.clear
@@ -68,7 +69,9 @@ class TopSiteViewCell: UICollectionViewCell {
         #if !PAID
 		self.logoContainerView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         #else
-        self.logoContainerView.backgroundColor = UIColor(colorString:"BDC0CE").withAlphaComponent(0.4)
+		self.logoContainerView.backgroundColor = UIColor.clear
+		self.emptyView.image = UIImage(named: "topSiteEmptyView")
+		self.updateEmptyViewState(isVisible: true)
         #endif
 		self.logoContainerView.layer.cornerRadius = 12
         self.logoContainerView.layer.borderWidth = 2
@@ -103,8 +106,41 @@ class TopSiteViewCell: UICollectionViewCell {
 		self.fakeLogoView = nil
 		self.deleteButton.removeFromSuperview()
 		self.logoHostLabel.text = ""
+		#if PAID
+		self.updateEmptyViewState(isVisible: true)
+		#endif
 	}
-	
+
+	func setLogo(_ image: UIImage) {
+		self.logoImageView.image = image
+		#if PAID
+		self.updateEmptyViewState(isVisible: false)
+		#endif
+	}
+
+	func setLogoPlaceholder(_ placeholder: UIView) {
+		self.fakeLogoView = placeholder
+		self.logoContainerView.addSubview(placeholder)
+		placeholder.snp.makeConstraints({ (make) in
+			make.top.left.right.bottom.equalTo(self.logoContainerView)
+		})
+		#if PAID
+		self.updateEmptyViewState(isVisible: false)
+		#endif
+	}
+
+	private func updateEmptyViewState(isVisible: Bool) {
+		if isVisible {
+			self.logoContainerView.addSubview(self.emptyView)
+			self.logoContainerView.addSubview(emptyView)
+			emptyView.snp.makeConstraints { (make) in
+				make.top.left.equalToSuperview()
+			}
+		} else {
+			emptyView.removeFromSuperview()
+		}
+	}
+
 	fileprivate func startWobbling() {
 		let startAngle = -Double.pi/40
 		let endAngle = Double.pi/40
@@ -131,5 +167,8 @@ class TopSiteViewCell: UICollectionViewCell {
         self.isDeleteMode = false
 		self.logoHostLabel.text = ""
 		self.delegate?.hideTopSite(self.tag)
+		#if PAID
+		self.updateEmptyViewState(isVisible: true)
+		#endif
 	}
 }
