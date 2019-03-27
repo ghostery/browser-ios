@@ -989,7 +989,11 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
         return button
     }()
 
+    /* Cliqz: Changed maskButton
     lazy var maskButton: PrivateModeButton = PrivateModeButton()
+     */
+    lazy var maskButton: CliqzPrivateModeButton = CliqzPrivateModeButton()
+    
     /* Cliqz: Changed modifiers
     fileprivate let sideOffset: CGFloat = 32
 
@@ -1023,11 +1027,20 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
         }
 
         addSubview(maskButton)
+        /* Cliqz: Change the constraints of the mask button
         maskButton.snp.makeConstraints { make in
             make.top.equalTo(self)
             make.leading.equalTo(self).offset(sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
+         */
+        maskButton.snp.makeConstraints { make in
+            make.leading.equalTo(self).offset(sideOffset)
+            make.centerY.equalTo(self)
+            make.height.equalTo(30)
+            make.width.equalTo(65)
+        }
+        
 
         applyTheme()
         applyUIMode(isPrivate: false)

@@ -235,7 +235,10 @@ class TabToolbar: UIView {
     private let privateModeBadge = ToolbarPrivateModeBadge()
     
     func privateModeBadge(visible: Bool) {
+        /*Cliqz: Always hide privateModeBadge
         privateModeBadge.isHidden = !visible
+         */
+        privateModeBadge.isHidden = true
     }
 
     var helper: TabToolbarHelper?
