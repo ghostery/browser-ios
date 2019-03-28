@@ -32,9 +32,7 @@ node('gideon') {
                 set -x
                 rm -f agent.jar
                 curl -LO #{ENV['JENKINS_URL']}/jnlpJars/agent.jar
-                ls .
-                java -version
-                java -jar agent.jar -jnlpUrl #{ENV['JENKINS_URL']}/computer/#{ENV['NODE_ID']}/slave-agent.jnlp -secret #{ENV["NODE_SECRET"]} &
+                nohup java -jar agent.jar -jnlpUrl #{ENV['JENKINS_URL']}/computer/#{ENV['NODE_ID']}/slave-agent.jnlp -secret #{ENV["NODE_SECRET"]} &
             SHELL
         end
     end
