@@ -178,7 +178,7 @@ class SubscriptionTableViewCell: UITableViewCell {
         priceLabel.text = premiumType.getPrice()
         billingLabel.text = premiumType.getBilling()
         descriptionLabel.text = premiumType.getDescription()
-        bestOfferLabel.text = NSLocalizedString("BEST VALUE: SAVE 20%", tableName: "Lumen", comment: "BEST VALUE: SAVE 20%")
+        bestOfferLabel.text = ""//NSLocalizedString("BEST VALUE: SAVE 20%", tableName: "Lumen", comment: "BEST VALUE: SAVE 20%")
             
         isProCell = premiumType == .Pro
         isBasicCell = premiumType == .Basic
