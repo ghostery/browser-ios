@@ -374,6 +374,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         #if PAID
         VPN.shared.checkConnection()
         #endif
+        // Cliqz: log state changed
+        LegacyTelemetryHelper.logStateChanged(state: "Active")
 
         let defaults = UserDefaults()
         defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
@@ -423,6 +425,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         syncOnDidEnterBackground(application: application)
 
         UnifiedTelemetry.recordEvent(category: .action, method: .background, object: .app)
+        
+        // Cliqz: log state changed
+        LegacyTelemetryHelper.logStateChanged(state: "Background")
     }
 
     fileprivate func syncOnDidEnterBackground(application: UIApplication) {
@@ -464,6 +469,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // is that this method is only invoked whenever the application is entering the foreground where as
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
+        
+        // Cliqz: log state changed
+        LegacyTelemetryHelper.logStateChanged(state: "Inactive")
     }
 
     fileprivate func updateAuthenticationInfo() {
