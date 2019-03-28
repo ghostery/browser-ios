@@ -44,10 +44,10 @@ jobs:
         /usr/local/bin/npm run bundle-ghostery
     displayName: 'Install and Build React Native'
 
-  - task: CocoaPods@0
-    displayName: 'POD install with repo-update'
-    inputs:
-      forceRepoUpdate: true
+  - bash: |
+        gem install cocoapods -v 1.5.3
+        pod _1.5.3_ install
+    displayName: 'POD install'
 
   - script: xcodebuild -workspace Client.xcworkspace -scheme $(scheme) -sdk iphonesimulator -destination "platform=iOS Simulator,OS=12.1,name=iPhone 6s" OTHER_SWIFT_FLAGS='$(value) -DAUTOMATION' ONLY_ACTIVE_ARCH=NO -derivedDataPath $(actions)
     displayName: 'Xcode Build for Simulator'

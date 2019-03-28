@@ -9,8 +9,11 @@
 import UIKit
 
 class AboutSettingsTableViewController: SubSettingsTableViewController {
-    
+    #if PAID
+    private let settings = [CliqzPrivacyPolicySetting(), EulaSetting(), CliqzLicenseAndAcknowledgementsSetting()]
+    #else
     private let settings = [CliqzPrivacyPolicySetting(), EulaSetting(), CliqzLicenseAndAcknowledgementsSetting(), imprintSetting()]
+    #endif
     private let info = [(NSLocalizedString("Version", tableName: "Cliqz", comment: "Application Version number"), AppStatus.distVersion()),
                         (NSLocalizedString("Extension", tableName: "Cliqz", comment: "Extension version number"), AppStatus.extensionVersion())]
     
@@ -40,7 +43,7 @@ class AboutSettingsTableViewController: SubSettingsTableViewController {
             cell.textLabel?.attributedText = setting.title
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         } else {
-            cell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: nil)
+            cell = getUITableViewCell(style: UITableViewCellStyle.value1)
             cell.accessoryType = .none
             cell.selectionStyle = .none
             let infoTuple = info[indexPath.row]

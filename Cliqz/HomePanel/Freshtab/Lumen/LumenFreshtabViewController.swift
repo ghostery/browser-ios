@@ -144,7 +144,7 @@ class LumenFreshtabViewController: FreshtabViewController {
 		if let w = self.welcomeView {
 			w.snp.makeConstraints { (make) in
 				make.top.equalTo(self.topSitesViewController.view.snp.bottom).offset(20)	
-				make.left.right.equalToSuperview()
+				make.left.right.equalToSuperview().inset(10)
 //				make.top.equalTo()
 			}
 		}

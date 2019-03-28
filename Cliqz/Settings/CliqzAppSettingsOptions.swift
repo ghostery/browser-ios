@@ -244,7 +244,9 @@ class FAQSetting: Setting {
     }
     
     override var url: URL? {
-        #if GHOSTERY
+        #if PAID
+        return URL(string: "https://lumenbrowser.com/faq.html")
+        #elseif GHOSTERY
         return URL(string: "https://ghostery.zendesk.com/hc/en-us/categories/115000106334-iOS-Mobile-FAQ")
         #else
         return URL(string: "https://cliqz.com/support")

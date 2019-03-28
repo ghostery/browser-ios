@@ -112,9 +112,9 @@ class ShareViewController: UIViewController {
 
         // Cliqz: Add strings localized strings
         //start
-        let ShareOpenInCliqz = NSLocalizedString("ShareExtension.OpenInCliqzAction.Title", tableName: "Cliqz", value: "Open in Ghostery", comment: "Action label on share extension to immediately open page in Ghostery.")
+        let ShareOpenInCliqz = CliqzStrings.ShareOpenInCliqz
         let AppMenuAddFavoriteTitleString = NSLocalizedString("Menu.AddFavoriteAction.Title", tableName: "Cliqz", value: "Add to Favorites", comment: "Label for the button, displayed in the menu, used to create a favorite for the current website.")
-        let ShareSearchInCliqz = NSLocalizedString("ShareExtension.SeachInCliqzAction.Title", tableName: "Cliqz", value: "Search in Ghostery", comment: "Action label on share extension to search for the selected text in Ghostery.")
+        let ShareSearchInCliqz = CliqzStrings.ShareSearchInCliqz
         //end
  
         if shareItem?.isUrlType() ?? true {
@@ -338,7 +338,10 @@ extension ShareViewController {
     @objc func actionLoadInBackground(gesture: UIGestureRecognizer) {
         // To avoid re-rentry from double tap, each action function disables the gesture
         gesture.isEnabled = false
+        /* Cliqz: [IP-312] Change the localized string to cliqz one
         animateToActionDoneView(withTitle: Strings.ShareLoadInBackgroundDone)
+         */
+        animateToActionDoneView(withTitle: CliqzStrings.ShareLoadInBackgroundDone)
         
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")

@@ -84,7 +84,9 @@ fileprivate class DarkTopTabsColor: TopTabsColor {
 }
 
 fileprivate class DarkTextFieldColor: TextFieldColor {
-    override var background: UIColor { return UIColor.lumenBrightBlue }
+    override func background(_ isPrivate: Bool) -> UIColor {
+        return isPrivate ?  UIColor(colorString: "3D3F4E") : UIColor.lumenBrightBlue
+    }
     override var textAndTint: UIColor { return defaultTextAndTint }
     
 }

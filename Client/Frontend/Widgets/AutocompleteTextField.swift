@@ -43,6 +43,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private var lastReplacement: String?
 
     static var textSelectionColor = URLBarColor.TextSelectionHighlight(labelMode: UIColor(), textFieldMode: nil)
+    static var customBackgroundColor = UIColor.lumenBrightBlue
 
     override var text: String? {
         didSet {

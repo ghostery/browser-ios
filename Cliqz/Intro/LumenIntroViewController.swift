@@ -235,9 +235,12 @@ class LumenIntroViewController: UIViewController {
 		if self.isLastPage() {
 			delegate?.introViewControllerDidFinish(self, requestToLogin: false)
 		} else {
-			self.pageControl.currentPage = self.pageControl.currentPage + 1
-			self.pageControl.updateCurrentPageDisplay()
-			self.changePage()
+            let newPage = self.pageControl.currentPage + 1
+            if let cardView = cardViews[safe: newPage] {
+                setActive(cardView, forPage: newPage)
+            }
+            changePage()
+            self.updateButtonsStates()
 		}
 	}
 
