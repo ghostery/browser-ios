@@ -9,7 +9,6 @@
 import UIKit
 
 class LegacyTelemetryHelper: NSObject {
-    static weak var tabManager: TabManager?
     
     class func logOnboarding(action: String, page: Int, target: String? = nil) {
         var signal: [String : Any] = ["type": "onboarding", "action": action, "page": page, "version": 1]
@@ -60,10 +59,6 @@ class LegacyTelemetryHelper: NSObject {
     }
     
     private class func sendSignal(_ signal: [String: Any]) {
-        guard let selectedTab = self.tabManager?.selectedTab, selectedTab.isPrivate == false else {
-            return
-        }
-        
         #if PAID
         DispatchQueue.global(qos: .utility).async {
             Engine.sharedInstance.getBridge().callAction("core:sendTelemetry", args: [signal])
