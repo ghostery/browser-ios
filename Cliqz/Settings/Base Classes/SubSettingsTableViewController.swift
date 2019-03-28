@@ -9,7 +9,7 @@
 import UIKit
 
 
-class SubSettingsTableViewController : UITableViewController {
+class SubSettingsTableViewController : ThemedTableViewController {
     
     private let HeaderHeight: CGFloat = 40
     private let FooterMargin: CGFloat = 44
@@ -86,12 +86,7 @@ class SubSettingsTableViewController : UITableViewController {
     }
     
     func getUITableViewCell(_ cellIdentifier: String = SubSettingsTableViewController.DefaultCellIdentifier, style: UITableViewCellStyle = UITableViewCellStyle.default) -> UITableViewCell {
-        var cell: UITableViewCell!
-        cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)
-        if cell == nil {
-            cell = UITableViewCell(style: style, reuseIdentifier: cellIdentifier)
-        }
-        return cell
+        return ThemedTableViewCell(style: style, reuseIdentifier: cellIdentifier)
     }
     
     func logHideTelemetrySignal() {

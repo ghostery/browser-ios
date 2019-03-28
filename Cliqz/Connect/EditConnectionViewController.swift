@@ -18,7 +18,7 @@ class EditConnectionViewController: SubSettingsTableViewController {
     init(_ dataSource: ConnectDataSource, connection: Connection) {
         self.dataSource = dataSource
         self.connection = connection
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder aDecoder: NSCoder) {

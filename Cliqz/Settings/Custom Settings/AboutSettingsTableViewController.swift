@@ -40,7 +40,7 @@ class AboutSettingsTableViewController: SubSettingsTableViewController {
             cell.textLabel?.attributedText = setting.title
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         } else {
-            cell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: nil)
+            cell = getUITableViewCell(style: UITableViewCellStyle.value1)
             cell.accessoryType = .none
             cell.selectionStyle = .none
             let infoTuple = info[indexPath.row]

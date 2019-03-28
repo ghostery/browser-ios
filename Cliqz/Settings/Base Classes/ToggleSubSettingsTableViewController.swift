@@ -36,7 +36,6 @@ class ToggleSubSettingsTableViewController: SubSettingsTableViewController {
         cell.accessoryView = control
         cell.selectionStyle = .none
         cell.isUserInteractionEnabled = true
-        cell.textLabel?.textColor = UIColor.black
         
         return cell
     }
