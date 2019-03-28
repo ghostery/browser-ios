@@ -93,6 +93,7 @@
 		1E65E3D422326C7C0069E1B7 /* LumenURLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E65E3D322326C7C0069E1B7 /* LumenURLBar.swift */; };
 		1E72FE7B22415CC8004FEB68 /* BrowserViewController+ContextualMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E72FE7A22415CC8004FEB68 /* BrowserViewController+ContextualMessages.swift */; };
 		1E72FE8D224A6924004FEB68 /* CliqzPrivateModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E72FE8C224A6924004FEB68 /* CliqzPrivateModeButton.swift */; };
+		1E72FEF2224D03BC004FEB68 /* CliqzStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6F247C20AF0749009C3D0D /* CliqzStrings.swift */; };
 		1E78A3A4214BBB02005E2539 /* LogoLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78A389214BB0EB005E2539 /* LogoLoaderTests.swift */; };
 		1E79A98E21A6F89C00EAC6E6 /* Lumen.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1E79A98D21A6F89C00EAC6E6 /* Lumen.xcconfig */; };
 		1E7A3DC22085FCCA00F53E90 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A3DC12085FCCA00F53E90 /* assets */; };
@@ -6997,6 +6998,7 @@
 				E68F36AD1EA698650048CF44 /* PanelDataObservers.swift in Sources */,
 				28CDA55C1A43C37C005C318C /* NSUserDefaultsPrefs.swift in Sources */,
 				E60D03271D511554002FE3F6 /* SyncStatusResolver.swift in Sources */,
+				1E72FEF2224D03BC004FEB68 /* CliqzStrings.swift in Sources */,
 				D04CD74E216CF86F004FF5B0 /* InstructionsViewController.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
 			);
