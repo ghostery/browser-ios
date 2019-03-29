@@ -60,7 +60,6 @@ node('gideon') {
             try {
                 stage('Prepare') {
                     sh '''#!/bin/bash -l
-                        brew install getsentry/tools/sentry-cli
                         set -e
                         set -x
                         java -version
@@ -73,7 +72,6 @@ node('gideon') {
                         gem install fastlane --no-document
                         fastlane clearCache
                         fastlane prepare
-                        pip install --user virtualenv
                     '''
                 }
 
