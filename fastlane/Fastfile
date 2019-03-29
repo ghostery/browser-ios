@@ -50,7 +50,7 @@ platform :ios do
   lane :clearCache do
 
     # Remove the Cache
-    sh("cd .. && npm cache clean --force && rm -rf Cartfile.resolved Carthage node_modules Pods && rm -rf ~/Library/Caches/org.carthage.CarthageKit")
+    sh("cd .. && npm cache clean --force && rm -rf Cartfile.resolved Carthage node_modules Podfile.lock Pods && rm -rf ~/Library/Caches/org.carthage.CarthageKit")
 
   end
 
@@ -68,12 +68,12 @@ platform :ios do
     sh("cd .. && pod install --repo-update")
     sh("cd .. && npm run build")
 
-    # Configuring Sentry DSN
-    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
-
   end
 
   lane :nightly do
+
+    # Configuring Sentry DSN
+    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
 
     # Building ReactNative Entension
     sh("cd .. && npm run bundle-ghostery")
@@ -131,6 +131,9 @@ platform :ios do
 
   lane :beta do
 
+    # Configuring Sentry DSN
+    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
+
     # Building ReactNative Entension
     sh("cd .. && npm run bundle-ghostery")
 
@@ -182,6 +185,9 @@ platform :ios do
   end
 
   lane :release do
+
+    # Configuring Sentry DSN
+    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
 
     # Building ReactNative Entension
     sh("cd .. && npm run bundle-ghostery")
@@ -235,6 +241,9 @@ platform :ios do
 
 
   lane :lumenBeta do
+
+    # Configuring Sentry DSN
+    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
 
     # Building ReactNative Entension
     sh("cd .. && npm run bundle-lumen")
@@ -293,6 +302,9 @@ platform :ios do
 
 
   lane :lumenRelease do
+
+    # Configuring Sentry DSN
+    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
 
     # Configuring Revenuecat APIs
     sh("cd .. && plutil -replace RevenuecatAPIKey -string $RevenuecatAPIKey Client/Info.plist")
