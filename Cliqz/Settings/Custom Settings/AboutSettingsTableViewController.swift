@@ -15,13 +15,28 @@ class AboutSettingsTableViewController: SubSettingsTableViewController {
     private let settings = [CliqzPrivacyPolicySetting(), EulaSetting(), CliqzLicenseAndAcknowledgementsSetting(), imprintSetting()]
     #endif
     private let info = [(NSLocalizedString("Version", tableName: "Cliqz", comment: "Application Version number"), AppStatus.distVersion()),
-                        (NSLocalizedString("Extension", tableName: "Cliqz", comment: "Extension version number"), AppStatus.extensionVersion())]
+                        (NSLocalizedString("Extension", tableName: "Cliqz", comment: "Extension version number"), AppStatus.extensionVersion()),
+                        (NSLocalizedString("Device Id", tableName: "Cliqz", comment: "Device Id"), VPNCredentialsService.getDeviceId())]
+    
+    private var showExtraInfo = !AppStatus.isRelease()
     
     override func getViewName() -> String {
         return "about"
     }
     
     // MARK: - Table view data source
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longPressGesture.minimumPressDuration = 2
+        longPressGesture.numberOfTouchesRequired = 2
+        self.tableView.addGestureRecognizer(longPressGesture)
+    }
+    
+    @objc func handleLongPress() {
+        showExtraInfo = true
+        self.tableView.reloadData()
+    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -31,8 +46,7 @@ class AboutSettingsTableViewController: SubSettingsTableViewController {
         if section == 0 {
             return settings.count
         }
-        if AppStatus.isRelease() { return 1 }
-        return 2
+        return showExtraInfo ? info.count : 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -43,7 +57,7 @@ class AboutSettingsTableViewController: SubSettingsTableViewController {
             cell.textLabel?.attributedText = setting.title
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         } else {
-            cell = getUITableViewCell(style: UITableViewCellStyle.value1)
+            cell = getUITableViewCell(style: showExtraInfo ? UITableViewCellStyle.subtitle :  UITableViewCellStyle.value1)
             cell.accessoryType = .none
             cell.selectionStyle = .none
             let infoTuple = info[indexPath.row]

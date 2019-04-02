@@ -18,11 +18,11 @@ class AppStatus {
     #endif
     
     class func isRelease() -> Bool {
-//        #if BETA
+        #if BETA
             return false
-//        #else
-//            return true
-//        #endif
+        #else
+            return true
+        #endif
     }
     
     class func isDebug() -> Bool {

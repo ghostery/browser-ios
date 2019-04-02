@@ -278,7 +278,10 @@ class VPNEndPointManager {
         keychain[country.passwordHash] = password
     }
 }
-
+protocol VPNViewControllerDelegate: class {
+    func vpnOpenURLInNewTab(_ url: URL)
+}
+    
 class VPNViewController: UIViewController {
 
     //used to reconnect when changing countries
@@ -286,11 +289,23 @@ class VPNViewController: UIViewController {
 
     let tableView = UITableView()
     let mapView = UIImageView()
+    weak var delegate: VPNViewControllerDelegate?
     
     let connectButton = VPNButton()
-    let infoLabel = UILabel()
+    lazy var vpnDefinitionButton: ButtonWithUnderlinedText = {
+        let title = NSLocalizedString("VPN is short for Virtual Private Network", tableName: "Lumen", comment: "VPN definition")
+        let action = NSLocalizedString("LEARN MORE", tableName: "Lumen", comment: "LEARN MORE action")
+        let vpnDefinitionButton = ButtonWithUnderlinedText(startText: (title, UIColor.lumenTextBlue),
+                                                           underlinedText: (action, UIColor.lumenTextBlue),
+                                                           position: .bottom)
+        vpnDefinitionButton.addTarget(self, action: #selector(openVPNLearnMore), for: .touchUpInside)
+        return vpnDefinitionButton
+    }()
+    
+    
     
     let countryButtonHeight: CGFloat = 50.0
+    let vpnInfoView = VPNInfoView()
     
     var upgradeView: UpgradeView?
     var upgradeButton: ButtonWithUnderlinedText?
@@ -330,7 +345,7 @@ class VPNViewController: UIViewController {
         
         updateMapView()
         updateConnectButton()
-        updateInfoLabel()
+        updateVPNInfoView()
         
         LegacyTelemetryHelper.logVPN(action: "show")
     }
@@ -349,14 +364,20 @@ class VPNViewController: UIViewController {
 		self.view.alpha = 1.0
 		updateMapView()
 		updateConnectButton()
-		updateInfoLabel()
+		updateVPNInfoView()
 	}
 	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
 	}
-
+    
+    @objc func openVPNLearnMore() {
+        if let url = URL(string: "https://lumenbrowser.com/faq.html#vpn") {
+            self.delegate?.vpnOpenURLInNewTab(url)
+        }
+    }
+    
     private func setupComponents() {
         tableView.register(CustomVPNCell.self, forCellReuseIdentifier: "VPNCell")
         tableView.delegate = self
@@ -371,8 +392,10 @@ class VPNViewController: UIViewController {
         view.addSubview(gradient)
         view.addSubview(tableView)
         view.addSubview(mapView)
-        view.addSubview(infoLabel)
+        view.addSubview(vpnDefinitionButton)
         view.addSubview(connectButton)
+        view.addSubview(vpnInfoView)
+        
         #if PAID
         let currentSubscription = SubscriptionController.shared.getCurrentSubscription()
         switch currentSubscription {
@@ -383,7 +406,7 @@ class VPNViewController: UIViewController {
                 view.addSubview(upgradeView!)
             }
         case .limited:
-            infoLabel.removeFromSuperview()
+            vpnDefinitionButton.removeFromSuperview()
             let title = NSLocalizedString("Unlock the VPN feature to get the best out of Lumen.", tableName: "Lumen", comment: "Unlock the VPN feature text")
             let action = NSLocalizedString("LEARN MORE", tableName: "Lumen", comment: "LEARN MORE action")
             upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel),
@@ -415,6 +438,11 @@ class VPNViewController: UIViewController {
                 make.height.equalTo(countryButtonHeight)
             }
         }
+        vpnInfoView.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(25)
+            make.height.equalTo(60)
+        }
         
         mapView.snp.remakeConstraints { (make) in
             make.trailing.equalToSuperview().offset(-20)
@@ -438,9 +466,9 @@ class VPNViewController: UIViewController {
         } else {
             connectButton.snp.remakeConstraints { (make) in
                 make.centerX.equalToSuperview()
-                make.bottom.equalTo(infoLabel.snp.top).offset(-16)
+                make.bottom.equalTo(vpnDefinitionButton.snp.top).offset(-16)
             }
-            infoLabel.snp.remakeConstraints { (make) in
+            vpnDefinitionButton.snp.remakeConstraints { (make) in
                 make.bottom.equalToSuperview().offset(-26)
                 make.width.equalToSuperview().dividedBy(1.25)
                 make.centerX.equalToSuperview()
@@ -458,12 +486,6 @@ class VPNViewController: UIViewController {
 //        self.view.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
         self.tableView.separatorColor = .clear
-        
-        infoLabel.textAlignment = .center
-        infoLabel.numberOfLines = 0
-        infoLabel.textColor = Lumen.VPN.infoLabelTextColor(lumenTheme, .Normal)
-        infoLabel.font = UIFont.systemFont(ofSize: 14)
-        
         mapView.contentMode = .scaleAspectFill
     }
     
@@ -512,25 +534,13 @@ class VPNViewController: UIViewController {
         }
     }
     
-    func updateInfoLabel() {
-        let connectedText = NSLocalizedString("You are safely connected to the Internet.", tableName: "Lumen", comment: "VPN connected text")
-        let retryText = NSLocalizedString("Oh, something went wrong. Please try again.", tableName: "Lumen", comment: "VPN retry text")
-        let defaultText = NSLocalizedString("Tap 'connect' to browse the Internet with VPN protection.", tableName: "Lumen", comment: "VPN default text")
-
-        if VPNStatus == .connected {
-            self.infoLabel.text = connectedText
-        }
-        else if VPNStatus == .disconnected && (self.connectButton.currentState == .Connecting || self.connectButton.currentState == .Connect) {
-			self.infoLabel.text = retryText
-        }
-        else {
-            self.infoLabel.text = defaultText
-        }
+    func updateVPNInfoView() {
+        self.vpnInfoView.updateView(VPNStatus == .connected)
     }
     
     @objc func VPNStatusDidChange(notification: Notification) {
         //keep button up to date.
-        updateInfoLabel()
+        updateVPNInfoView()
         updateConnectButton()
         updateMapView()
         
@@ -702,7 +712,6 @@ extension VPNViewController: VPNCountryControllerProtocol {
 extension VPNViewController: Themeable {
     func applyTheme() {
         self.updateMapView()
-        infoLabel.textColor = Lumen.VPN.infoLabelTextColor(lumenTheme, .Normal)
         upgradeView?.applyTheme()
         self.tableView.reloadData()
     }

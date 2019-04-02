@@ -44,6 +44,12 @@ extension String {
         return boundingRect.height
     }
     
+    func width(usingFont font: UIFont) -> CGFloat {
+        let fontAttributes = [NSAttributedString.Key.font: font]
+        let size = self.size(withAttributes: fontAttributes)
+        return size.width
+    }
+    
     func md5() -> String {
         var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
         if let data = self.data(using: String.Encoding.utf8) {
