@@ -91,7 +91,7 @@ class VPNCredentialsService {
         }
     }
     
-    private class func getDeviceId() -> String? {
+    class func getDeviceId() -> String? {
         let keychain = DAKeychain.shared
         if let deviceId = keychain[DeviceIDKey] {
             return deviceId
