@@ -38,13 +38,14 @@ class OrientationManager {
         }
     }
 }
+#if PAID
 extension BrowserViewController: VPNViewControllerDelegate{
     func vpnOpenURLInNewTab(_ url: URL) {
         self.hidePrivacyPanel()
         self.openURLInNewTab(url, isPrivileged: false)
     }
 }
-
+#endif
 extension BrowserViewController {
     func showVpnPanel() {
         hideControlCenter()
