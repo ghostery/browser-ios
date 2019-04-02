@@ -99,6 +99,23 @@ extension VPNCountryController: UITableViewDataSource {
             tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
         }
     }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        let headerLabel = UILabel()
+        headerLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        headerLabel.textColor = UIColor.lumenBrightBlue
+        headerLabel.numberOfLines = 0
+        headerLabel.text = NSLocalizedString("Choose your virtual location. Protection from hackers is on for any location while the VPN is active.", tableName: "Lumen", comment:"VPN locations selection header")
+        
+        headerView.addSubview(headerLabel)
+        headerLabel.snp.makeConstraints { (make) in
+            make.leading.trailing.equalToSuperview().inset(15)
+            make.top.bottom.equalToSuperview()
+        }
+        
+        return headerView
+    }
 }
 
 extension VPNCountryController: UITableViewDelegate {

@@ -38,12 +38,20 @@ class OrientationManager {
         }
     }
 }
+extension BrowserViewController: VPNViewControllerDelegate{
+    func vpnOpenURLInNewTab(_ url: URL) {
+        self.hidePrivacyPanel()
+        self.openURLInNewTab(url, isPrivileged: false)
+    }
+}
 
 extension BrowserViewController {
     func showVpnPanel() {
         hideControlCenter()
         #if PAID
-        let controller = UINavigationController(rootViewController: VPNViewController())
+        let vPNViewController = VPNViewController()
+        vPNViewController.delegate = self
+        let controller = UINavigationController(rootViewController: vPNViewController)
         controller.setNavigationBarHidden(true, animated: false)
         
         self.addChildViewController(controller)

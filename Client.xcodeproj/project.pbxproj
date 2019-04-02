@@ -63,6 +63,7 @@
 		1E2C435A21F89E6500891FB2 /* LumenWhiteTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C435921F89E6500891FB2 /* LumenWhiteTheme.swift */; };
 		1E2C435C21F89E8100891FB2 /* LumenDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C435B21F89E8100891FB2 /* LumenDarkTheme.swift */; };
 		1E2E551221187407003B50BE /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C75DF2207584C300BB8AD0 /* UIImageViewAligned.m */; };
+		1E2F488B225256C400B717B7 /* VPNInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2F488A225256C400B717B7 /* VPNInfoView.swift */; };
 		1E351C3A21CA994800275941 /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C3821CA994800275941 /* BrowserViewController+ReaderMode.swift */; };
 		1E351C3B21CA994800275941 /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C3921CA994800275941 /* BrowserViewController+FindInPage.swift */; };
 		1E351C4321CC0F5E00275941 /* CliqzTrayToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C4221CC0F5D00275941 /* CliqzTrayToolbar.swift */; };
@@ -1489,6 +1490,7 @@
 		1E2C435721F89B4D00891FB2 /* GhosteryDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosteryDarkTheme.swift; sourceTree = "<group>"; };
 		1E2C435921F89E6500891FB2 /* LumenWhiteTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenWhiteTheme.swift; sourceTree = "<group>"; };
 		1E2C435B21F89E8100891FB2 /* LumenDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenDarkTheme.swift; sourceTree = "<group>"; };
+		1E2F488A225256C400B717B7 /* VPNInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNInfoView.swift; sourceTree = "<group>"; };
 		1E351C3821CA994800275941 /* BrowserViewController+ReaderMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ReaderMode.swift"; sourceTree = "<group>"; };
 		1E351C3921CA994800275941 /* BrowserViewController+FindInPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+FindInPage.swift"; sourceTree = "<group>"; };
 		1E351C4221CC0F5D00275941 /* CliqzTrayToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTrayToolbar.swift; sourceTree = "<group>"; };
@@ -3802,6 +3804,7 @@
 				AF6C8AF921873B5C006F8166 /* VPNCountryController.swift */,
 				AF6C8AFB21873B5D006F8166 /* VPNViewController.swift */,
 				4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */,
+				1E2F488A225256C400B717B7 /* VPNInfoView.swift */,
 			);
 			path = VPN;
 			sourceTree = "<group>";
@@ -6622,6 +6625,7 @@
 				EB11A1062044A90E0018F749 /* ContentBlockerHelper+TabContentScript.swift in Sources */,
 				E689C6FA1E0C6E98008BAADB /* FxAContentViewController.swift in Sources */,
 				1E4CFBF92073A5BD00B26E85 /* AddConnectionViewController.swift in Sources */,
+				1E2F488B225256C400B717B7 /* VPNInfoView.swift in Sources */,
 				C4E3983D1D21F1E7004E89BA /* TopTabsViews.swift in Sources */,
 				3B0943811D6CC4FC004F24E1 /* FilledPageControl.swift in Sources */,
 				FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */,
