@@ -11,6 +11,10 @@ MOZ_BUNDLE_SHARETO_ID = com.cliqz.ios.cliqzPaid.ShareTo
 
 CLIENT_ENTITLEMENT = Cliqz/Resources/PaidClient.entitlements
 
+MOZ_INTERNAL_URL_ID = group.com.cliqz.ios.lumen
+
+MOZ_INTERNAL_URL_SCHEME = lumen
+
 LAUNCH_SCREEN = PaidLaunchScreen
 
 SHORTCUT_PRIVATE_TAB_TITLE = ShortcutItemTitleNewPrivateTab

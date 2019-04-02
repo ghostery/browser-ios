@@ -11,6 +11,10 @@ MOZ_BUNDLE_SHARETO_ID = com.cliqz.ios.newCliqz.ShareTo
 
 CLIENT_ENTITLEMENT = Client/Client.entitlements
 
+MOZ_INTERNAL_URL_ID = com.cliqz.ios.newCliqz
+
+MOZ_INTERNAL_URL_SCHEME = ghostery
+
 LAUNCH_SCREEN = GhosteryLaunchScreen
 
 SHORTCUT_PRIVATE_TAB_TITLE = ShortcutItemTitleNewGhostTab
