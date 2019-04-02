@@ -106,7 +106,7 @@ class CliqzHistoryPanel: HistoryPanel {
     }
     
     override func configureSite(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-		if let site = siteForIndexPath(IndexPath(row: indexPath.row, section: indexPath.section + 1)), let cell = cell as? CliqzSiteTableViewCell {
+		if let site = siteForIndexPath(indexPath), let cell = cell as? CliqzSiteTableViewCell {
             cell.setLines(site.title, detailText: site.url)
             cell.tag = indexPath.row
             cell.imageShadowView.alpha = 0.0

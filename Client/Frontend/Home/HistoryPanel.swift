@@ -264,7 +264,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             return nil
         }
 
-        let sitesInSection = groupedSites.itemsForSection(indexPath.section - 1)
+        let sitesInSection = groupedSites.itemsForSection(indexPath.section)
         return sitesInSection[safe: indexPath.row]
     }
 
