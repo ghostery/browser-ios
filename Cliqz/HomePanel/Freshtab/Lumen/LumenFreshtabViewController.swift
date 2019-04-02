@@ -32,6 +32,7 @@ class LumenFreshtabViewController: FreshtabViewController {
         
 		setupViews()
 		setupConstraints()
+        scrollView.isScrollEnabled = false
         NotificationCenter.default.addObserver(self, selector: #selector(refreshView(_:)),
                                                name: .ProductPurchaseSuccessNotification,
                                                object: nil)
