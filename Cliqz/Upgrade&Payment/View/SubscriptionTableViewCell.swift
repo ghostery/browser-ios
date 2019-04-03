@@ -7,6 +7,13 @@
 //
 
 import UIKit
+class SubscribeButton: UIButton {
+    override open var isHighlighted: Bool {
+        didSet {
+            backgroundColor = isHighlighted ? UIColor(colorString: "2557A5") : UIColor.lumenBrightBlue
+        }
+    }
+}
 
 class SubscriptionTableViewCell: UITableViewCell {
     let nameLabel = UILabel()
@@ -17,7 +24,7 @@ class SubscriptionTableViewCell: UITableViewCell {
     let billingLabel = UILabel()
     let descriptionLabel = UILabel()
     let bestOfferLabel = UILabel()
-    let subscribeButton = UIButton()
+    let subscribeButton = SubscribeButton()
     let frameView = UIImageView()
     var isProCell: Bool = false
     var isBasicCell: Bool = false
