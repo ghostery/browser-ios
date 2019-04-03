@@ -572,12 +572,19 @@ class VPNViewController: UIViewController {
                                          location: VPNEndPointManager.shared.selectedCountry.id,
                                          connectionTime: getConnectionTime())
         } else {
-			shouldVPNReconnect = true
+            shouldVPNReconnect = isFirstConnection()
             VPN.connect2VPN()
             LegacyTelemetryHelper.logVPN(action: "click", target: "toggle", state: "on")
         }
     }
-
+    
+    private func isFirstConnection() -> Bool {
+        let alreadyConnectedBeforeKey = "VPN.Connection.first"
+        let alreadyConnectedBefore = UserDefaults.standard.bool(forKey: alreadyConnectedBeforeKey)
+        UserDefaults.standard.set(true, forKey: alreadyConnectedBeforeKey)
+        return !alreadyConnectedBefore
+    }
+    
     private func getConnectionTime() -> Int? {
         guard let connectDate = VPN.shared.connectDate else { return nil }
         return Int(Date().timeIntervalSince(connectDate))
