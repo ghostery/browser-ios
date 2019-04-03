@@ -22,7 +22,8 @@ extension Notification.Name {
 class ContextualMessagesViewModel: NSObject {
     
     private static let LastShowMessageDateKey = "contextualMessage.any.show.date"
-    private static let ShowOnboardingMessageKey = "contextualMessage.onboarding.show"
+    private static let OnboardingMessageDismissedKey = "contextualMessage.onboarding.show"
+    private static let OnboardingDataSyncedKey = "contextualMessage.onboarding.synced"
     private static let LastExpiredTrailsMessageDateKey = "contextualMessage.expiredTrial.show.date"
     private static let adBlockingMessageCountKey = "contextualMessage.adBlocking.show.count"
     private static let antiTrackingMessageCountKey = "contextualMessage.antiTracking.show.count"
@@ -58,7 +59,7 @@ class ContextualMessagesViewModel: NSObject {
     func contextualMessageShown(_ type: ContextualMessageType) {
         switch type {
         case .onboarding:
-            UserDefaults.standard.set(true, forKey: ContextualMessagesViewModel.ShowOnboardingMessageKey)
+            UserDefaults.standard.set(true, forKey: ContextualMessagesViewModel.OnboardingMessageDismissedKey)
             LegacyTelemetryHelper.logMessage(action: "show", topic: "onboarding_dashboard", style: "notification", view: "web")
         
         case .expiredTrial:
@@ -78,6 +79,9 @@ class ContextualMessagesViewModel: NSObject {
         }
     }
     
+    func onboardingDataSynced() {
+        UserDefaults.standard.set(true, forKey: ContextualMessagesViewModel.OnboardingDataSyncedKey)
+    }
     
     //MARK:- private helper methods
     /*
@@ -85,7 +89,9 @@ class ContextualMessagesViewModel: NSObject {
      * Keep showing on all web pages, but not on start tab, VPN view, etc. until user has clicked on the dashboard icon, thus opening the dashboard for the first time
      */
     private func shouldShowOnboardingMesage() -> Bool {
-        return !UserDefaults.standard.bool(forKey: ContextualMessagesViewModel.ShowOnboardingMessageKey)
+        let onboardingDataSynced = UserDefaults.standard.bool(forKey: ContextualMessagesViewModel.OnboardingDataSyncedKey)
+        let onboardingMessageDismissed = UserDefaults.standard.bool(forKey: ContextualMessagesViewModel.OnboardingMessageDismissedKey)
+        return onboardingDataSynced && !onboardingMessageDismissed
     }
     
     /*
