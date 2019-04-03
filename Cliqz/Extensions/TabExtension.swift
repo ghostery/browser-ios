@@ -234,6 +234,7 @@ class CurrentPageInfo: NSObject {
         DispatchQueue.global(qos: .utility).async {
             //print("Will send data for tab = \(tabID) and page = \(String(describing: currentP))")
             Engine.sharedInstance.getBridge().callAction("insights:pushGhosteryPageStats", args: [tabID, pageInfo, apps, bugs])
+            ContextualMessagesViewModel.shared.onboardingDataSynced()
         }
         
     }
