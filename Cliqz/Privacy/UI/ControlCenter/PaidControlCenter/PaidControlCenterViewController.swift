@@ -208,7 +208,7 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
         switch currentSubscription {
         case .trial(_):
             let trialRemainingDays = currentSubscription.trialRemainingDays() ?? -1
-            if trialRemainingDays > 7 {
+            if trialRemainingDays > 3 {
                 let title = String(format: NSLocalizedString("%d more days left in trial", tableName: "Lumen", comment: "Trial days left title"), trialRemainingDays)
                 let action = NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Upgrade action")
                 upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel),

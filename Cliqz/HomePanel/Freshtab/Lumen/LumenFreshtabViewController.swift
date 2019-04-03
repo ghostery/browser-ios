@@ -68,7 +68,7 @@ class LumenFreshtabViewController: FreshtabViewController {
             }
 		case .trial:
 			let days = type.trialRemainingDays() ?? -1
-			if days > 7 {
+			if days > 3 {
 				let title = String(format: NSLocalizedString("%d more days left in trial", tableName: "Lumen", comment: "Trial days left title"), days)
 				let action = NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Upgrade action")
 				let btn = ButtonWithUnderlinedText(startText: (title, LumenFreshtabUI.mainTextColor),
