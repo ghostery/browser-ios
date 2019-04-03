@@ -65,7 +65,7 @@ class LegacyTelemetryHelper: NSObject {
     private class func sendSignal(_ signal: [String: Any]) {
         #if PAID
         DispatchQueue.global(qos: .utility).async {
-            Engine.sharedInstance.getBridge().callAction("core:sendTelemetry", args: [signal])
+            Engine.sharedInstance.getBridge().callAction("core:sendTelemetry", args: [signal, true])
         }
         #endif
     }
