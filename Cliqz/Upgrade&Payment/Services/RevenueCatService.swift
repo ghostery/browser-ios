@@ -9,6 +9,7 @@
 import UIKit
 import StoreKit
 import RxSwift
+import Purchases
 
 class RevenueCatService: NSObject, IAPService {
     private var purchases: Purchases?
