@@ -15,7 +15,7 @@ public class SubscriptionController {
     
     //MARK:- Private variables
     private let storeService: IAPService
-    private let TrialPeriod: Int = 14
+    private let TrialPeriod: Int = 7
     private let purchasedProductIdentifierKey = "Lumen.PurchasedProductIdentifier"
     private let expirationDateKey = "Lumen.ExpirationDate"
     private let trialRemainingDaysKey = "Lumen.TrialRemainingDays"

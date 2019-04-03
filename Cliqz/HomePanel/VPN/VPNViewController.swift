@@ -400,7 +400,7 @@ class VPNViewController: UIViewController {
         let currentSubscription = SubscriptionController.shared.getCurrentSubscription()
         switch currentSubscription {
         case .trial(_):
-            if let trialRemainingDays = currentSubscription.trialRemainingDays(), trialRemainingDays < 8 {
+            if let trialRemainingDays = currentSubscription.trialRemainingDays(), trialRemainingDays < 4 {
                 self.upgradeView = UpgradeView(view: "vpn")
                 self.upgradeView?.delegate = self
                 view.addSubview(upgradeView!)
