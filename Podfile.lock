@@ -14,6 +14,7 @@ PODS:
     - glog
   - glog (0.3.4)
   - KKDomain (0.0.1)
+  - Purchases (2.0.0)
   - React (0.56.1):
     - React/Core (= 0.56.1)
   - react-native-webrtc (1.58.3):
@@ -81,6 +82,7 @@ DEPENDENCIES:
   - CRToast
   - Folly (from `./node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - KKDomain (from `https://github.com/kejinlu/KKDomain.git`)
+  - Purchases
   - react-native-webrtc (from `./node_modules/react-native-webrtc`)
   - React/Core (from `./node_modules/react-native`)
   - React/CxxBridge (from `./node_modules/react-native`)
@@ -109,6 +111,7 @@ SPEC REPOS:
     - CRToast
     - DoubleConversion
     - glog
+    - Purchases
     - Realm
     - RealmSwift
     - RxAtomic
@@ -152,6 +155,7 @@ SPEC CHECKSUMS:
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   KKDomain: 6883615bda1dfc6a6257f399ee85a02618837757
+  Purchases: 17496bdab0d0fb678f5f647c4c7039bca3b8263c
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-webrtc: 31b6d3f1e3e2ce373aa43fd682b04367250f807d
   Realm: 9eaecad54712d6246d08ba34c10f354e4715d7d3
@@ -166,6 +170,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: d8c070c513a718357839f467c5e0e58b548990da
+PODFILE CHECKSUM: 0d7d3bafbb96f227eaa54ba4ae98de503f3d9bbb
 
 COCOAPODS: 1.5.3

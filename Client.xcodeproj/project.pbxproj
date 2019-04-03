@@ -64,6 +64,7 @@
 		1E2C435C21F89E8100891FB2 /* LumenDarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C435B21F89E8100891FB2 /* LumenDarkTheme.swift */; };
 		1E2E551221187407003B50BE /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C75DF2207584C300BB8AD0 /* UIImageViewAligned.m */; };
 		1E2F488B225256C400B717B7 /* VPNInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2F488A225256C400B717B7 /* VPNInfoView.swift */; };
+		1E2F48EE2254EF6300B717B7 /* RevenueCatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2F48E52254EF6300B717B7 /* RevenueCatService.swift */; };
 		1E351C3A21CA994800275941 /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C3821CA994800275941 /* BrowserViewController+ReaderMode.swift */; };
 		1E351C3B21CA994800275941 /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C3921CA994800275941 /* BrowserViewController+FindInPage.swift */; };
 		1E351C4321CC0F5E00275941 /* CliqzTrayToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E351C4221CC0F5D00275941 /* CliqzTrayToolbar.swift */; };
@@ -1491,6 +1492,7 @@
 		1E2C435921F89E6500891FB2 /* LumenWhiteTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenWhiteTheme.swift; sourceTree = "<group>"; };
 		1E2C435B21F89E8100891FB2 /* LumenDarkTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenDarkTheme.swift; sourceTree = "<group>"; };
 		1E2F488A225256C400B717B7 /* VPNInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNInfoView.swift; sourceTree = "<group>"; };
+		1E2F48E52254EF6300B717B7 /* RevenueCatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RevenueCatService.swift; sourceTree = "<group>"; };
 		1E351C3821CA994800275941 /* BrowserViewController+ReaderMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ReaderMode.swift"; sourceTree = "<group>"; };
 		1E351C3921CA994800275941 /* BrowserViewController+FindInPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+FindInPage.swift"; sourceTree = "<group>"; };
 		1E351C4221CC0F5D00275941 /* CliqzTrayToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzTrayToolbar.swift; sourceTree = "<group>"; };
@@ -3575,6 +3577,7 @@
 		4F934B2822048ACD005D438C /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				1E2F48E52254EF6300B717B7 /* RevenueCatService.swift */,
 				4F934B2A22048ACD005D438C /* IAPService.swift */,
 			);
 			path = Services;
@@ -5999,6 +6002,7 @@
 				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
 				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
 				"${BUILT_PRODUCTS_DIR}/KKDomain/KKDomain.framework",
+				"${BUILT_PRODUCTS_DIR}/Purchases/Purchases.framework",
 				"${BUILT_PRODUCTS_DIR}/RNDeviceInfo/RNDeviceInfo.framework",
 				"${BUILT_PRODUCTS_DIR}/RNFS/RNFS.framework",
 				"${BUILT_PRODUCTS_DIR}/RNSqlite2/RNSqlite2.framework",
@@ -6024,6 +6028,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoubleConversion.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/folly.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KKDomain.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Purchases.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNDeviceInfo.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNFS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNSqlite2.framework",
@@ -6590,6 +6595,7 @@
 				D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */,
 				1E244CDA2180A082004A73E9 /* CCWidget.swift in Sources */,
 				4F30F50D2051670C0049E4F6 /* CryptoBridge.m in Sources */,
+				1E2F48EE2254EF6300B717B7 /* RevenueCatService.swift in Sources */,
 				4F70E0CB22258F8B00412270 /* LumenPrivacyStateControl.swift in Sources */,
 				AF7DD44020F785D30090956F /* CustomSimpleToast.swift in Sources */,
 				EB9A179B20E69A7F00B12184 /* ThemeManager.swift in Sources */,

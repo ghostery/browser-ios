@@ -14,7 +14,7 @@ public class SubscriptionController {
     public static let shared = SubscriptionController()
     
     //MARK:- Private variables
-//    private let storeService: IAPService
+    private let storeService: IAPService
     private let TrialPeriod: Int = 14
     private let purchasedProductIdentifierKey = "Lumen.PurchasedProductIdentifier"
     private let expirationDateKey = "Lumen.ExpirationDate"
@@ -25,9 +25,6 @@ public class SubscriptionController {
     
     //MARK:- initialization
     init() {
-/*
-//Removed RevenueCatService temporary. The file is still in the project
-
         storeService = RevenueCatService()
         storeService.asObserver().subscribe(onNext: { [weak self] (lumenPurchaseInfo) in
             guard let self = self else { return }
@@ -40,10 +37,6 @@ public class SubscriptionController {
             saveTrialRemainingDays(TrialPeriod)
         }
         self.updateUltimateProtectionStatus()
-*/
-		if getTrialRemainingDays() == nil {
-			saveTrialRemainingDays(TrialPeriod)
-		}
     }
     
     private func saveExpirationDate(_ date: Date) {
@@ -80,7 +73,6 @@ public class SubscriptionController {
     
     //MARK:- Subscriptions
     public func requestProducts() {
-		/* Removed RevenueCatService temporary. The file is still in the project
         storeService.requestProducts {[weak self] (success, products) in
             guard let self = self, let products = products, success else { return }
             self.availableSubscriptions.removeAll()
@@ -90,13 +82,11 @@ public class SubscriptionController {
                 }
             }
         }
-	*/
     }
     
     public func buyProduct(_ premiumType: PremiumType) {
         if let product = availableSubscriptions[premiumType] {
-// Removed RevenueCatService temporary. The file is still in the project
-//            storeService.buyProduct(product)
+            storeService.buyProduct(product)
         }
     }
     
@@ -105,14 +95,11 @@ public class SubscriptionController {
     }
     
     public func restorePurchases() {
-		// Removed RevenueCatService temporary. The file is still in the project
-//        storeService.restorePurchases()
+        storeService.restorePurchases()
     }
     
     public func getSubscriptionUserId() -> String? {
-		// Removed RevenueCatService temporary. The file is still in the project
-//        return storeService.getSubscriptionUserId()
-		return ""
+        return storeService.getSubscriptionUserId()
     }
     
     public func isVPNEnabled() -> Bool {
@@ -129,15 +116,11 @@ public class SubscriptionController {
 
     public func getCurrentSubscription() -> LumenSubscriptionType {
 
-		// TODO: Temporary blocking subscription flow till we finalize revcat option
-        // Check if premium
-		/*
         if let purchasedProductIdentifier = UserDefaults.standard.string(forKey: purchasedProductIdentifierKey),
             let permiumType = PremiumType.init(rawValue: purchasedProductIdentifier),
             let expirationDate = getExpirationDate(), Date().timeIntervalSince(expirationDate) < 0 {
             return .premium(permiumType, expirationDate)
         }
-    	*/
         // check if trial still valid
         if let trialRemainingDays = getTrialRemainingDays(), trialRemainingDays > 0 {
             return .trial(trialRemainingDays)

@@ -360,17 +360,12 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath) as! SubscriptionTableViewCell
         cell.premiumType = self.premiumTypes[indexPath.row]
-		/* TODO: Temporary disabling Subscription flow for BETA
         cell.buyButtonHandler = { [weak self] premiumType in
             SubscriptionController.shared.buyProduct(premiumType)
             self?.lastShosenPremiumType = premiumType
             self?.telemetryTarget = premiumType.getTelemeteryTarget()
             LegacyTelemetryHelper.logPayment(action: "click", target: self?.telemetryTarget)
         }
-        */
-		cell.buyButtonHandler = { [weak self] _ in
-			self?.subscriptionsComingSoon()
-		}
         return cell
     }
 
