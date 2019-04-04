@@ -263,7 +263,8 @@ class CurrentPageInfo: NSObject {
                 if currentHost == self.host {
                     if let result = tabDashboardStats["result"] as? [String: Any],
                         let blockedAds = result["adsBlocked"] as? Int,
-                        let trackerCompanies  = result["trackers"] as? [String] {
+                        let trackerCompanies  = self.getTrackers(result) {
+                        print(result)
                         if let messageType = ContextualMessagesViewModel.shared.getContextualMessageType(blockedAds: blockedAds, trackerCompanies: trackerCompanies) {
                             NotificationCenter.default.post(name: Notification.Name.ContextualMessageNotification, object: messageType)
                         }
@@ -273,6 +274,23 @@ class CurrentPageInfo: NSObject {
             })
         }
     }
+    
+    private func getTrackers(_ dashboardStats: [String: Any]) -> [String]? {
+        var trackers = [String]()
+        if let trackersDetails = dashboardStats["trackersDetailed"] as? NSArray {
+            for trackerData in trackersDetails {
+                if let data = trackerData as? NSDictionary,
+                    let category = data["cat"] as? String,
+                    let name = data["name"] as? String,
+                    category != "advertising" {
+                    
+                    trackers.append(name)
+                }
+            }
+        }
+        return trackers.count > 0 ? trackers : nil
+    }
+    
     private func reset() {
         self.host = nil
         self.startLoadTime = nil
