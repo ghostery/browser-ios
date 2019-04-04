@@ -134,8 +134,9 @@ class ContextualMessagesViewModel: NSObject {
         let regex = try! NSRegularExpression(pattern: "facebook|google|twitter|linkedin")
 
         for tracker in trackerCompanies {
-            let range = NSRange(location: 0, length: tracker.lowercased().utf16.count)
-            if regex.firstMatch(in: tracker, options: [], range: range) != nil {
+            let trakcerLowercased = tracker.lowercased()
+            let range = NSRange(location: 0, length: trakcerLowercased.utf16.count)
+            if regex.firstMatch(in: trakcerLowercased, options: [], range: range) != nil {
                 return tracker
             }
         }
