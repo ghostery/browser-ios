@@ -80,10 +80,10 @@ class VPNInfoView: UIView {
             vpnInfoLabel2.updateIcon(UIImage(named: "VPN_Checkmark"))
             
         } else {
-            vpnInfoLabel1.updateTextColor(UIColor.gray)
+            vpnInfoLabel1.updateTextColor(UIColor(colorString: "BDC0CE"))
             vpnInfoLabel1.updateIcon(UIImage(named: "Protection_X"))
             
-            vpnInfoLabel2.updateTextColor(UIColor.gray)
+            vpnInfoLabel2.updateTextColor(UIColor(colorString: "BDC0CE"))
             vpnInfoLabel2.updateIcon(UIImage(named: "Protection_X"))
         }
     }

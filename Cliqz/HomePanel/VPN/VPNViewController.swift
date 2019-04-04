@@ -289,6 +289,7 @@ class VPNViewController: UIViewController {
 
     let tableView = UITableView()
     let mapView = UIImageView()
+    let mapLabel = UILabel()
     weak var delegate: VPNViewControllerDelegate?
     
     let connectButton = VPNButton()
@@ -388,10 +389,17 @@ class VPNViewController: UIViewController {
         connectButton.tintColor = .blue
         connectButton.addTarget(self, action: #selector(connectButtonPressed), for: .touchUpInside)
 
+        mapLabel.text = NSLocalizedString("Active for all apps on this iPhone", tableName: "Lumen", comment: "VPN map label when it is ON")
+        mapLabel.textColor = UIColor.white
+        mapLabel.backgroundColor = UIColor.lumenDeepBlue
+        mapLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        
+        mapView.image = Lumen.VPN.mapImageActive(lumenTheme, .Normal)
         
         view.addSubview(gradient)
         view.addSubview(tableView)
         view.addSubview(mapView)
+        view.addSubview(mapLabel)
         view.addSubview(vpnDefinitionButton)
         view.addSubview(connectButton)
         view.addSubview(vpnInfoView)
@@ -439,7 +447,7 @@ class VPNViewController: UIViewController {
             }
         }
         vpnInfoView.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
+            make.centerY.equalToSuperview().offset(UIDevice.current.isSmallIphoneDevice() ? -10 : 0)
             make.leading.trailing.equalToSuperview().inset(25)
             make.height.equalTo(60)
         }
@@ -447,14 +455,18 @@ class VPNViewController: UIViewController {
         mapView.snp.remakeConstraints { (make) in
             make.trailing.equalToSuperview().offset(-20)
             make.leading.equalToSuperview().offset(20)
-            make.top.equalTo(tableView.snp.bottom).offset(20)
+            make.top.equalTo(tableView.snp.bottom)
+        }
+        
+        mapLabel.snp.remakeConstraints { (make) in
+            make.centerY.centerX.equalTo(mapView)
         }
         
         
         if let upgradeButton = self.upgradeButton {
             connectButton.snp.remakeConstraints { (make) in
                 make.centerX.equalToSuperview()
-                make.bottom.equalTo(upgradeButton.snp.top).offset(-16)
+                make.bottom.equalTo(upgradeButton.snp.top).offset(UIDevice.current.isSmallIphoneDevice() ? -6 : -16)
             }
             upgradeButton.snp.remakeConstraints { (make) in
                 make.bottom.equalToSuperview().offset(-26)
@@ -466,7 +478,7 @@ class VPNViewController: UIViewController {
         } else {
             connectButton.snp.remakeConstraints { (make) in
                 make.centerX.equalToSuperview()
-                make.bottom.equalTo(vpnDefinitionButton.snp.top).offset(-16)
+                make.bottom.equalTo(vpnDefinitionButton.snp.top).offset(UIDevice.current.isSmallIphoneDevice() ? -6: -16)
             }
             vpnDefinitionButton.snp.remakeConstraints { (make) in
                 make.bottom.equalToSuperview().offset(-26)
@@ -526,11 +538,13 @@ class VPNViewController: UIViewController {
         
         if VPNStatus == .connected {
             //active image
-            mapView.image = Lumen.VPN.mapImageActive(lumenTheme, .Normal)
+            mapView.alpha = 1
+            mapLabel.isHidden = false
         }
         else {
             //inactive image
-            mapView.image = Lumen.VPN.mapImageInactive(lumenTheme, .Normal)
+            mapView.alpha = 0.3
+            mapLabel.isHidden = true
         }
     }
     
