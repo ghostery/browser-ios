@@ -57,7 +57,7 @@ class UILabelWithIcon: UIView {
 class VPNInfoView: UIView {
 
     let vpnInfoLabel1 = UILabelWithIcon(text: NSLocalizedString("Protection from hackers", tableName: "Lumen", comment: "[VPN] Protection from hackers"))
-    let vpnInfoLabel2 = UILabelWithIcon(text: NSLocalizedString("Video streaming from other countries", tableName: "Lumen", comment: "[VPN] Video streaming from other countries"))
+    let vpnInfoLabel2 = UILabelWithIcon(text: NSLocalizedString("Hide your location", tableName: "Lumen", comment: "[VPN] Hide your location"))
     
 
     init() {

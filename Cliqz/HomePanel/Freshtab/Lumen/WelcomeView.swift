@@ -28,7 +28,7 @@ class WelcomeView: UIView {
 	
 	lazy var descriptionLabel: UILabel = {
 		let textLabel = UILabel()
-		textLabel.text = NSLocalizedString("Ultimate protection online. Integrated VPN for protection on public Wi-Fi.", tableName: "Lumen", comment: "[Start Page] Welcome view description")
+        textLabel.text = NSLocalizedString("Ultimate protection online.\nIntegrated VPN for protection on public Wi-Fi.", tableName: "Lumen", comment: "[Start Page] Welcome view description")
 		textLabel.numberOfLines = 2
 		textLabel.adjustsFontSizeToFitWidth = true
 		textLabel.minimumScaleFactor = 0.5

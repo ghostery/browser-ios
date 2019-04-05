@@ -124,7 +124,7 @@ extension CliqzStrings {
         }
         
         public var vpnText: String {
-            return NSLocalizedString("Integrated VPN protects you on public Wi-Fi.", tableName: "Lumen", comment: "[Onboarding] VPN text")
+            return NSLocalizedString("Hide your location", tableName: "Lumen", comment: "[VPN] Hide your location")
         }
         
         

@@ -23,7 +23,11 @@ class SendUsageDataTableViewController: ToggleSubSettingsTableViewController {
     }
     
     override func getSectionFooters() -> [String] {
-        return [NSLocalizedString("Help us improve your browsing experience. Ghostery collects strictly anonymous usage data. At no occasion is any personal data collected.", tableName: "Cliqz", comment: "[Settings -> Send Telemetry] Footer text")]
+        #if PAID
+        return [NSLocalizedString("Help us improve your browsing experience. Lumen collects strictly anonymous usage data. At no occasion is any personal data collected.", tableName: "Lumen", comment: "Restore Tabs Prompt Description")]
+        #else
+        return [NSLocalizedString("Help us improve your browsing experience. Ghostery collects strictly anonymous usage data. At no occasion is any personal data collected.", tableName: "Ghostery", comment: "Restore Tabs Prompt Description")]
+        #endif
     }
     
     override func saveToggles(isOn: Bool, atIndex: Int) {
