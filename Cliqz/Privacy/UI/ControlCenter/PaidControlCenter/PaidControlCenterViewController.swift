@@ -226,8 +226,11 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
         case .limited:
             self.addUpgradeView()
             self.disableView()
-        default:
-            print("Premium User")
+        case .premium(let premiumType, _):
+            if !premiumType.hasDashboard() {
+                self.addUpgradeView()
+                self.disableView()
+            }
         }
     }
     

@@ -9,13 +9,22 @@
 import UIKit
 
 public enum PremiumType: String {
-    case Basic  = "com.cliqz.ios.lumen.basic"
-    case Plus   = "com.cliqz.ios.lumen.plus"
-    case Pro    = "com.cliqz.ios.lumen.pro"
+    case Basic  = "com.cliqz.ios.lumen.sale.basic"
+    case Vpn   = "com.cliqz.ios.lumen.sale.vpn"
+    case BasicAndVpn    = "com.cliqz.ios.lumen.sale.basic_vpn"
     
     func hasVPN() -> Bool {
         switch self {
-        case .Plus, .Pro:
+        case .Vpn, .BasicAndVpn:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    func hasDashboard() -> Bool {
+        switch self {
+        case .Basic, .BasicAndVpn:
             return true
         default:
             return false
@@ -26,74 +35,43 @@ public enum PremiumType: String {
         switch self {
         case .Basic:
             return NSLocalizedString("BASIC", tableName: "Lumen", comment: "BASIC Subscription name")
-        case .Pro:
-            return NSLocalizedString("PRO", tableName: "Lumen", comment: "PRO Subscription name")
-        case .Plus:
-            return NSLocalizedString("PLUS", tableName: "Lumen", comment: "PLUS Subscription name")
+        case .Vpn:
+            return NSLocalizedString("VPN", tableName: "Lumen", comment: "VPN Subscription name")
+        case .BasicAndVpn:
+            return NSLocalizedString("Basic + VPN", tableName: "Lumen", comment: "Basic + VPN Subscription name")
         }
     }
     
     func getDescription() -> String {
         switch self {
         case .Basic:
-            return NSLocalizedString("ULTIMATE PROTECTION: AD-BLOCKER_ANTI-TRACKING_ANTI-PHISHING", tableName: "Lumen", comment: "BASIC Subscription Description")
-        case .Pro:
-            return NSLocalizedString("VPN_ULTIMATE PROTECTION: DASHBOARD_AD-BLOCKER_ANTI-TRACKING_ANTI-PHISHING", tableName: "Lumen", comment: "PRO Subscription Description")
-        case .Plus:
-            return NSLocalizedString("VPN_ULTIMATE PROTECTION: DASHBOARD_AD-BLOCKER_ANTI-TRACKING_ANTI-PHISHING", tableName: "Lumen", comment: "PLUS Subscription Description")
-        }
-    }
-    
-    func getDuration() -> String {
-        switch self {
-        case .Basic:
-            return NSLocalizedString("12 MONTHS", tableName: "Lumen", comment: "BASIC Subscription duration")
-        case .Pro:
-            return NSLocalizedString("12 MONTHS", tableName: "Lumen", comment: "PRO Subscription duration")
-        case .Plus:
-            return NSLocalizedString("1 MONTH", tableName: "Lumen", comment: "PLUS Subscription duration")
+            return NSLocalizedString("ULTIMATE PROTECTION ONLINE", tableName: "Lumen", comment: "BASIC Subscription Description")
+        case .Vpn:
+            return NSLocalizedString("PROTECTION FROM HACKERS WITH VPN", tableName: "Lumen", comment: "VPN Subscription Description")
+        case .BasicAndVpn:
+            return NSLocalizedString("ULTIMATE PROTECTION ONLINE +\nPROTECTION FROM HACKERS WITH VPN", tableName: "Lumen", comment: "Basic + VPN Subscription Description")
         }
     }
     
     func getPrice() -> String {
-		// TODO: Commented strings might be needed in future, when we put back payment flow. Prices are removed for BETA testing
         switch self {
         case .Basic:
-//            return NSLocalizedString("47.99€/year", tableName: "Lumen", comment: "BASIC Subscription price")
-			return NSLocalizedString("Yearly", tableName: "Lumen", comment: "BASIC Subscription price")
-        case .Pro:
-//            return NSLocalizedString("95.99€/year", tableName: "Lumen", comment: "PRO Subscription price")
-			return NSLocalizedString("Yearly", tableName: "Lumen", comment: "PRO Subscription price")
-        case .Plus:
-//            return NSLocalizedString("9.99€/month", tableName: "Lumen", comment: "PLUS Subscription price")
-			return NSLocalizedString("Monthly", tableName: "Lumen", comment: "PLUS Subscription price")
+			return NSLocalizedString("1,99 €/MONTH", tableName: "Lumen", comment: "BASIC Subscription price")
+        case .Vpn:
+			return NSLocalizedString("4,99 €/MONAT", tableName: "Lumen", comment: "VPN Subscription price")
+        case .BasicAndVpn:
+			return NSLocalizedString("4,99 €/MONTH", tableName: "Lumen", comment: "Basic + VPN Subscription price")
         }
-    }
-    
-    
-    func getBilling() -> String {
-		// TODO: Commented strings might be needed in future, when we put back payment flow. Prices are removed for BETA testing
-		return ""
-		/*
-        switch self {
-        case .Basic:
-            return NSLocalizedString("Corresponds to 4€/month", tableName: "Lumen", comment: "BASIC Subscription billing")
-        case .Pro:
-            return NSLocalizedString("Corresponds to 8€/month", tableName: "Lumen", comment: "PRO Subscription billing")
-        case .Plus:
-            return NSLocalizedString("Corresponds to 119.88€/year", tableName: "Lumen", comment: "PLUS Subscription billing")
-        }
-		*/
     }
     
     func getTelemeteryTarget() -> String {
         switch self {
         case .Basic:
             return "subscribe_basic"
-        case .Pro:
-            return "subscribe_plus_monthly"
-        case .Plus:
-            return "subscribe_plus_annually"
+        case .Vpn:
+            return "subscribe_vpn"
+        case .BasicAndVpn:
+            return "subscribe_basic_vpn"
         }
     }
 }
