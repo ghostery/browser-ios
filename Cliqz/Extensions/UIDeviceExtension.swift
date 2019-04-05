@@ -55,7 +55,7 @@ public extension UIDevice {
         case "iPhone8,4":                               deviceIdentifier = "iPhone SE"
 		case "iPhone10,1", "iPhone10,4": 				deviceIdentifier = "iPhone 8"
 		case "iPhone10,2", "iPhone10,5": 				deviceIdentifier = "iPhone 8 Plus"
-		case "iPhone10,3", "iPhone10,6": 				deviceIdentifier = "iPhone X"
+		case "iPhone10,3", "iPhone10,6", "iPhone11,2", "iPhone11,4", "iPhone11,6", "iPhone11,8": 								deviceIdentifier = "iPhone X"
         case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4":deviceIdentifier = "iPad 2"
         case "iPad3,1", "iPad3,2", "iPad3,3":           deviceIdentifier = "iPad 3"
         case "iPad3,4", "iPad3,5", "iPad3,6":           deviceIdentifier = "iPad 4"
