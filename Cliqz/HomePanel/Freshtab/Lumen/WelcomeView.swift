@@ -68,6 +68,7 @@ class WelcomeView: UIView {
 			make.height.equalTo(50)
 		}
 		self.isUserInteractionEnabled = false
+		descriptionLabel.isHidden = true
 	}
 
 }
