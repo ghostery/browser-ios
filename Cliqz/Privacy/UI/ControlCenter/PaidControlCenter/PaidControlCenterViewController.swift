@@ -192,7 +192,6 @@ class PaidControlCenterViewController: ControlCenterViewController {
 		lumenDashboardMode = isEnabled ? .Normal : .Disabled
 		tabs.tintColor = Lumen.Dashboard.segmentedControlColor(lumenTheme, lumenDashboardMode)
 		tabs.isUserInteractionEnabled = isEnabled
-		self.upgradeButton?.updateViewState(isEnabled: isEnabled)
 		dashboard.update()
 	}
 }
