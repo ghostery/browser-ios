@@ -10,9 +10,16 @@ import UIKit
 
 extension UIAlertController {
     class func getRestoreTabsAlert() -> UIAlertController {
+
+        #if PAID
+        let message = NSLocalizedString("Looks like Lumen crashed previously. Would you like to restore your tabs?", tableName: "Lumen", comment: "Restore Tabs Prompt Description")
+        #else
+        let message = NSLocalizedString("Looks like Ghostery crashed previously. Would you like to restore your tabs?", tableName: "Ghostery", comment: "Restore Tabs Prompt Description")
+        #endif
+        
         return UIAlertController(
             title: NSLocalizedString("Well, this is embarrassing.", tableName: "Cliqz", comment: "Restore Tabs Prompt Title"),
-            message: NSLocalizedString("Looks like Ghostery crashed previously. Would you like to restore your tabs?", tableName: "Cliqz", comment: "Restore Tabs Prompt Description"),
+            message: message,
             preferredStyle: .alert
         )
     }
