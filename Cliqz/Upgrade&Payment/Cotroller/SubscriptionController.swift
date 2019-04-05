@@ -65,6 +65,8 @@ public class SubscriptionController {
         switch getCurrentSubscription() {
         case .limited:
             UserPreferences.instance.isProtectionOn = false
+        case .premium(let premiumType, _):
+            UserPreferences.instance.isProtectionOn = premiumType.hasDashboard()
         default:
             return
         }
@@ -102,18 +104,6 @@ public class SubscriptionController {
         return storeService.getSubscriptionUserId()
     }
     
-    public func isVPNEnabled() -> Bool {
-        let currentSubscription = getCurrentSubscription()
-        switch currentSubscription {
-        case .trial(_):
-            return true
-        case .premium(let premiumType, _):
-            return premiumType.hasVPN()
-        default:
-            return false
-        }
-    }
-
     public func getCurrentSubscription() -> LumenSubscriptionType {
 
         if let purchasedProductIdentifier = UserDefaults.standard.string(forKey: purchasedProductIdentifierKey),
@@ -130,11 +120,48 @@ public class SubscriptionController {
         return .limited
     }
     
-    public func hasBasicSubscription() -> Bool {
+    public func getAvailableUpgradeOptions() -> [PremiumType] {
         let currentSubscription = getCurrentSubscription()
         switch currentSubscription {
         case .premium(let premiumType, _):
-            return premiumType == .Basic
+            if premiumType.hasDashboard() {
+                return [.Basic, .BasicAndVpn]
+            }
+            return [.Vpn, .BasicAndVpn]
+        default:
+            return [.Basic, .BasicAndVpn, .Vpn]
+        }
+    }
+    
+    public func isVPNEnabled() -> Bool {
+        let currentSubscription = getCurrentSubscription()
+        switch currentSubscription {
+        case .trial(_):
+            return true
+        case .premium(let premiumType, _):
+            return premiumType.hasVPN()
+        default:
+            return false
+        }
+    }
+    
+    public func isDashboardEnabled() -> Bool {
+        let currentSubscription = getCurrentSubscription()
+        switch currentSubscription {
+        case .trial(_):
+            return true
+        case .premium(let premiumType, _):
+            return premiumType.hasDashboard()
+        default:
+            return false
+        }
+    }
+    
+    public func hasSubscription(_ premiumType: PremiumType) -> Bool {
+        let currentSubscription = getCurrentSubscription()
+        switch currentSubscription {
+        case .premium(let premiumType, _):
+            return premiumType == premiumType
         default:
             return false
         }

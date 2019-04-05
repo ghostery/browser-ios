@@ -30,7 +30,7 @@ class UpgradLumenViewController: UIViewController {
         NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue]
     
     private var isConditionsHidden = true
-    private let premiumTypes: [PremiumType] = SubscriptionController.shared.hasBasicSubscription() ? [.Pro, .Basic] : [.Plus, .Pro, .Basic]
+    private let premiumTypes: [PremiumType] = SubscriptionController.shared.getAvailableUpgradeOptions()
     private var lastShosenPremiumType: PremiumType?
     
     override func viewDidLoad() {
@@ -351,7 +351,7 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let premiumType = self.premiumTypes[indexPath.row]
-        if premiumType == .Pro {
+        if premiumType == .BasicAndVpn {
             return 150
         }
         return 135.0
