@@ -20,9 +20,11 @@ class SubscriptionTableViewCell: UITableViewCell {
     let priceLabel = UILabel()
     let descriptionLabel = UILabel()
     let bestOfferLabel = UILabel()
+    let subscribedIcon = UIImageView()
     let subscribeButton = SubscribeButton()
     let frameView = UIImageView()
     var isProCell: Bool = false
+    var isSubscribed: Bool = false
     
     var buyButtonHandler: ((_ premiumType: PremiumType) -> Void)?
     var premiumType: PremiumType? {
@@ -53,6 +55,9 @@ class SubscriptionTableViewCell: UITableViewCell {
         subscribeButton.setTitle(NSLocalizedString("SUBSCRIBE", tableName: "Lumen", comment: "Subscribe Button"), for: .normal)
         subscribeButton.addTarget(self, action: #selector(subscribeButtonTapped), for: .touchUpInside)
         self.addSubview(subscribeButton)
+        
+        subscribedIcon.image = UIImage(named: "VPN_Checkmark")
+        self.addSubview(subscribedIcon)
 
     }
     
@@ -75,6 +80,20 @@ class SubscriptionTableViewCell: UITableViewCell {
         bestOfferLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .medium)
         bestOfferLabel.textColor = UIColor.black
         bestOfferLabel.isHidden = !isProCell
+        
+        subscribedIcon.isHidden = !isSubscribed
+        
+        if isSubscribed {
+            subscribeButton.setTitle(NSLocalizedString("SUBSCRIBED", tableName: "Lumen", comment: "Subscribe Button"), for: .normal)
+            subscribeButton.isUserInteractionEnabled = false
+            subscribeButton.backgroundColor = UIColor.clear
+            subscribeButton.setTitleColor(UIColor.lumenBrightBlue, for: .normal)
+        } else {
+            subscribeButton.setTitle(NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Subscribe Button"), for: .normal)
+            subscribeButton.isUserInteractionEnabled = true
+            subscribeButton.backgroundColor = UIColor.lumenBrightBlue
+            subscribeButton.setTitleColor(UIColor.white, for: .normal)
+        }
     }
     
     private func setConstraints() {
@@ -105,17 +124,6 @@ class SubscriptionTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(20.0)
         }
         
-        subscribeButton.snp.remakeConstraints { (make) in
-            if isProCell {
-                make.trailing.equalToSuperview().inset(20.0)
-            } else {
-                make.trailing.equalToSuperview().inset(30.0)
-            }
-            make.centerY.equalTo(priceLabel)
-            make.width.equalTo(110.0)
-            make.height.equalTo(30.0)
-        }
-        
         frameView.snp.remakeConstraints { (make) in
             if isProCell {
                 make.leading.trailing.equalToSuperview().inset(10)
@@ -124,6 +132,19 @@ class SubscriptionTableViewCell: UITableViewCell {
             }
             make.top.bottom.equalToSuperview().inset(5)
             
+        }
+        
+        subscribeButton.snp.remakeConstraints { (make) in
+            make.trailing.equalToSuperview().inset(isProCell ? 20.0 : 30)
+            make.centerY.equalTo(priceLabel).offset(isSubscribed ? 10 : 0)
+            make.width.equalTo(110.0)
+            make.height.equalTo(30.0)
+        }
+        
+        subscribedIcon.snp.remakeConstraints { (make) in
+            make.centerY.equalTo(priceLabel).offset(-10)
+            make.centerX.equalTo(subscribeButton)
+            make.size.equalTo(11)
         }
     }
     
@@ -141,17 +162,7 @@ class SubscriptionTableViewCell: UITableViewCell {
         bestOfferLabel.text = NSLocalizedString("BEST OFFER\nLIMITED TIME ONLY", tableName: "Lumen", comment: "BEST OFFER\nLIMITED TIME ONLY")
             
         isProCell = premiumType == .BasicAndVpn
-        if SubscriptionController.shared.hasSubscription(premiumType) {
-            subscribeButton.setTitle(NSLocalizedString("SUBSCRIBED", tableName: "Lumen", comment: "Subscribe Button"), for: .normal)
-            subscribeButton.isUserInteractionEnabled = false
-            subscribeButton.backgroundColor = UIColor.clear
-            subscribeButton.setTitleColor(UIColor.lumenBrightBlue, for: .normal)
-        } else {
-            subscribeButton.setTitle(NSLocalizedString("UPGRADE", tableName: "Lumen", comment: "Subscribe Button"), for: .normal)
-            subscribeButton.isUserInteractionEnabled = true
-            subscribeButton.backgroundColor = UIColor.lumenBrightBlue
-            subscribeButton.setTitleColor(UIColor.white, for: .normal)
-        }
+        isSubscribed = SubscriptionController.shared.hasSubscription(premiumType)
         self.setStyles()
         self.setConstraints()
     }
