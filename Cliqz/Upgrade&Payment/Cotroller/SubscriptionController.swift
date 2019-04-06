@@ -160,8 +160,8 @@ public class SubscriptionController {
     public func hasSubscription(_ premiumType: PremiumType) -> Bool {
         let currentSubscription = getCurrentSubscription()
         switch currentSubscription {
-        case .premium(let premiumType, _):
-            return premiumType == premiumType
+        case .premium(let purchasedPremiumType, _):
+            return purchasedPremiumType == premiumType
         default:
             return false
         }

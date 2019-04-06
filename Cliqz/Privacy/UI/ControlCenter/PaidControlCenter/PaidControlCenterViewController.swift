@@ -111,9 +111,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
     }
 
     @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
-        if !UserPreferences.instance.isProtectionOn {
-            self.privacyControl.setState(isOn: true)
-        }
+        self.privacyControl.setState(isOn: true)
         self.enableView()
     }
 
