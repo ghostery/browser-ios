@@ -49,7 +49,7 @@ public enum PremiumType: String {
         case .Vpn:
             return NSLocalizedString("PROTECTION FROM HACKERS WITH VPN", tableName: "Lumen", comment: "VPN Subscription Description")
         case .BasicAndVpn:
-            return NSLocalizedString("ULTIMATE PROTECTION ONLINE +\nPROTECTION FROM HACKERS WITH VPN", tableName: "Lumen", comment: "Basic + VPN Subscription Description")
+			return NSLocalizedString("ULTIMATE PROTECTION ONLINE PROTECTION FROM HACKERS WITH VPN", tableName: "Lumen", value: "ULTIMATE PROTECTION ONLINE +\nPROTECTION FROM HACKERS WITH VPN", comment: "Basic + VPN Subscription Description")
         }
     }
     
