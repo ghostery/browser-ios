@@ -243,6 +243,7 @@ class SettingsPrefs {
     func updateSendUsageDataPref(_ newValue: Bool) {
         LocalDataStore.set(value: newValue, forKey: SettingsPrefs.SendUsageData)
         Engine.sharedInstance.setPref("modules.anolysis.enabled", prefValue: newValue)
+        Engine.sharedInstance.setPref("telemetry", prefValue: newValue)
     }
 
     // MARK: - Private helper metods
