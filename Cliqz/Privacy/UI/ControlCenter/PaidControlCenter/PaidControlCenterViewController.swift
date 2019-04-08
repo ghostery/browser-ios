@@ -44,6 +44,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
                                                name: .NEVPNStatusDidChange,
                                                object: nil)
         
+        SubscriptionController.shared.updateUltimateProtectionStatus()
         dashboard.dataSource = cellDataSource
         
         self.addChildViewController(dashboard)
