@@ -60,7 +60,7 @@ public class SubscriptionController {
         UserDefaults.standard.set(productIdentifier, forKey: purchasedProductIdentifierKey)
     }
     
-    private func updateUltimateProtectionStatus() {
+    func updateUltimateProtectionStatus() {
         #if PAID
         switch getCurrentSubscription() {
         case .limited:
