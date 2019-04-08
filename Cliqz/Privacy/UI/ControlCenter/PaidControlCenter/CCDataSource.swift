@@ -134,7 +134,7 @@ class CCDataSource {
                                widget: CCCompaniesWidget(),
                                cellHeight: 175)
         
-        let phishingProtection = CCCell(title: NSLocalizedString("Phishing Protection", tableName: "Lumen", comment:"[Lumen->Dashboard] Phishing Protection widget title"),
+        let phishingProtection = CCCell(title: NSLocalizedString("Websites checked", tableName: "Lumen", comment:"[Lumen->Dashboard] Phishing Protection widget title"),
                                         description: phishingDesc,
                                         widget: CCAntiPhishingWidget(),
                                         cellHeight: 120)
