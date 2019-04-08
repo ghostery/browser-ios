@@ -58,6 +58,13 @@ class LegacyTelemetryHelper: NSObject {
         sendSignal(signal)
     }
     
+    class func logTelemetrySetting(state: Bool) {
+        var signal: [String : Any] = ["type": "settings", "action": "toggle", "target": "send_telemetry", "version": 1]
+        signal["state"] = state ? "on" : "off"
+
+        sendSignal(signal)
+    }
+    
     class func logStateChanged(state: String) {
         let signal: [String : Any] = ["type": "app", "action": "stateChange", "state": state, "version": 1]
         sendSignal(signal)
