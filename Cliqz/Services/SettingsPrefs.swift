@@ -244,6 +244,7 @@ class SettingsPrefs {
         LocalDataStore.set(value: newValue, forKey: SettingsPrefs.SendUsageData)
         Engine.sharedInstance.setPref("modules.anolysis.enabled", prefValue: newValue)
         Engine.sharedInstance.setPref("telemetry", prefValue: newValue)
+        LegacyTelemetryHelper.logTelemetrySetting(state: newValue)
     }
 
     // MARK: - Private helper metods
