@@ -159,7 +159,7 @@ class SubscriptionTableViewCell: UITableViewCell {
         nameLabel.text = premiumType.getName()
         priceLabel.text = premiumType.getPrice()
         descriptionLabel.text = premiumType.getDescription()
-		bestOfferLabel.text = NSLocalizedString("BEST OFFER\nLIMITED TIME ONLY", tableName: "Lumen", value:"BEST OFFER\nLIMITED TIME ONLY", comment: "BEST OFFER\nLIMITED TIME ONLY")
+		bestOfferLabel.text = NSLocalizedString("BEST OFFER LIMITED TIME ONLY", tableName: "Lumen", value:"BEST OFFER\nLIMITED TIME ONLY", comment: "BEST OFFER\nLIMITED TIME ONLY")
 
         isProCell = premiumType == .BasicAndVpn
         isSubscribed = SubscriptionController.shared.hasSubscription(premiumType)
