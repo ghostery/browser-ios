@@ -6,7 +6,7 @@ This branch (master)   [![Build Status](https://dev.azure.com/cliqzci/IOS/_apis/
 
 This branch is for mainline development.
 
-This branch only works with Xcode 9.3 and supports iOS 10, and 11.
+This branch only works with Xcode 10.1 and supports iOS 10, and 11.
 
 This branch is written in Swift 4
 
@@ -22,35 +22,68 @@ We encourage you to participate in this open source project. We love Pull Reques
 Building the code
 -----------------
 
-> __As of April 2018, this project requires Xcode 9.3.__
-> __Latest Node version 10 breaks. Use node v9.__
+As of __April 2019__, this project requires the following versions of dependencies:
+* MacOS Mojave
+* Xcode 10.1
+* Node.js 9
+* Cocoapods 1.5.3
 
-1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
-1. Install Carthage
-    ```shell
-    brew update
-    brew install carthage
-    ```
-1. Install [cocoadpods](https://cocoapods.org/)
-    ```shell
-    bundle install
-    ```
-1. Fork the repository https://github.com/ghostery/browser-ios
-1. Clone the forked repository:
-    ```shell
-    git clone https://github.com/YOUR_USERNAME/ghostery-ios
-    ```
-1. Pull in the project dependencies:
-    ```shell
-    cd ghostery-ios
-    sh ./bootstrap.sh
-    npm install
-    npm run bundle
-    bundle exec pod install
-    ```
-1. Open `Client.xcworkspace` in Xcode.
-1. Build the `Fennec` scheme in Xcode.
+Make sure you have [homebrew](https://brew.sh/) installed:
+```shell
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew update
+```
 
+Then setup the project following these steps:
+1. Install [Xcode 10.1](https://download.developer.apple.com/Developer_Tools/Xcode_10.1/Xcode_10.1.xip)
+  * Open the .xip archive
+  * Move Xcode to `Application` folder
+  * Setup Xcode and install CLI tools with the following commands:
+```shell
+sudo xcode-select -switch /Applications/Xcode.app
+xcode-select --install
+```
+2. Install Node.js 9 (recommended: use [nvm](https://github.com/creationix/nvm)) + latest `npm` (this assumes you are using bash as your shell, if not, replace `bash` by your shell in the following commands):
+```shell
+brew install curl
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+source ~/.bashrc
+nvm install 9
+npm install -g npm@latest
+```
+3. Install Carthage
+ ```shell
+brew install carthage
+```
+4. Install Ruby `bundler`:
+```sh
+sudo gem install bundler
+bundle install
+```
+5. Install [cocoadpods](https://cocoapods.org/) version **1.5.3**
+```shell
+sudo gem install cocoapods -v 1.5.3
+```
+6. Fork the repository https://github.com/ghostery/browser-ios from GitHub UI
+7. Clone the forked repository + add upstream remote:
+```shell
+git clone https://github.com/YOUR_USERNAME/ghostery-ios
+cd ghostery-ios
+git remote add upstream https://github.com/ghostery/browser-ios
+git fetch upstream
+git checkout upstream/master
+git checkout -b my-working-branch
+```
+8. Pull in the project dependencies:
+```shell
+sh ./bootstrap.sh
+npm ci
+npm run bundle-lumen
+bundle exec pod install
+npm run postinstall
+```
+9. Open `Client.xcworkspace` in Xcode.
+10. Build the `Fennec` scheme in Xcode.
 
 ## Building User Scripts
 
