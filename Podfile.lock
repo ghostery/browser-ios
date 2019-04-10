@@ -8,49 +8,57 @@ PODS:
   - Charts/Core (3.0.5)
   - CRToast (0.0.9)
   - DoubleConversion (1.1.5)
-  - Folly (2016.10.31.00):
+  - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
     - glog
   - glog (0.3.4)
   - KKDomain (0.0.1)
   - Purchases (2.0.0)
-  - React (0.56.1):
-    - React/Core (= 0.56.1)
+  - React (0.59.4):
+    - React/Core (= 0.59.4)
   - react-native-webrtc (1.58.3):
     - React
-  - React/Core (0.56.1):
-    - yoga (= 0.56.1.React)
-  - React/CxxBridge (0.56.1):
-    - Folly (= 2016.10.31.00)
+  - React/Core (0.59.4):
+    - yoga (= 0.59.4.React)
+  - React/CxxBridge (0.59.4):
+    - Folly (= 2018.10.22.00)
     - React/Core
     - React/cxxreact
-  - React/cxxreact (0.56.1):
+    - React/jsiexecutor
+  - React/cxxreact (0.59.4):
     - boost-for-react-native (= 1.63.0)
-    - Folly (= 2016.10.31.00)
-    - React/jschelpers
+    - DoubleConversion
+    - Folly (= 2018.10.22.00)
+    - glog
     - React/jsinspector
-  - React/DevSupport (0.56.1):
+  - React/DevSupport (0.59.4):
     - React/Core
     - React/RCTWebSocket
-  - React/fishhook (0.56.1)
-  - React/jschelpers (0.56.1):
-    - Folly (= 2016.10.31.00)
-    - React/PrivateDatabase
-  - React/jsinspector (0.56.1)
-  - React/PrivateDatabase (0.56.1)
-  - React/RCTAnimation (0.56.1):
+  - React/fishhook (0.59.4)
+  - React/jsi (0.59.4):
+    - DoubleConversion
+    - Folly (= 2018.10.22.00)
+    - glog
+  - React/jsiexecutor (0.59.4):
+    - DoubleConversion
+    - Folly (= 2018.10.22.00)
+    - glog
+    - React/cxxreact
+    - React/jsi
+  - React/jsinspector (0.59.4)
+  - React/RCTAnimation (0.59.4):
     - React/Core
-  - React/RCTBlob (0.56.1):
+  - React/RCTBlob (0.59.4):
     - React/Core
-  - React/RCTImage (0.56.1):
+  - React/RCTImage (0.59.4):
     - React/Core
     - React/RCTNetwork
-  - React/RCTNetwork (0.56.1):
+  - React/RCTNetwork (0.59.4):
     - React/Core
-  - React/RCTText (0.56.1):
+  - React/RCTText (0.59.4):
     - React/Core
-  - React/RCTWebSocket (0.56.1):
+  - React/RCTWebSocket (0.59.4):
     - React/Core
     - React/fishhook
     - React/RCTBlob
@@ -73,7 +81,7 @@ PODS:
   - RxSwift (4.4.0):
     - RxAtomic (~> 4.4)
   - SVProgressHUD (2.2.5)
-  - yoga (0.56.1.React)
+  - yoga (0.59.4.React)
 
 DEPENDENCIES:
   - AWSCore (~> 2.6)
@@ -152,11 +160,11 @@ SPEC CHECKSUMS:
   Charts: 45cdc985b764c838b35ee47eb1365d15735f6d1a
   CRToast: 5a78c22b921c5ed3487488af605bc403a9c92fed
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
-  Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
+  Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   KKDomain: 6883615bda1dfc6a6257f399ee85a02618837757
   Purchases: 17496bdab0d0fb678f5f647c4c7039bca3b8263c
-  React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
+  React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
   react-native-webrtc: 31b6d3f1e3e2ce373aa43fd682b04367250f807d
   Realm: 9eaecad54712d6246d08ba34c10f354e4715d7d3
   RealmSwift: 1fe08b4ebaeeaacf17f9ba0343f7b25c9fc31fa6
@@ -168,7 +176,7 @@ SPEC CHECKSUMS:
   RxAtomic: eacf60db868c96bfd63320e28619fe29c179656f
   RxSwift: 5976ecd04fc2fefd648827c23de5e11157faa973
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
+  yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
 PODFILE CHECKSUM: 0d7d3bafbb96f227eaa54ba4ae98de503f3d9bbb
 
