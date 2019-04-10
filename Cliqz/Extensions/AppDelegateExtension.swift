@@ -30,7 +30,7 @@ extension AppDelegate {
      * Navigation appearance for QLPreviewController needs to be treated separately.
      * We leave titleTextAttributes unchanged, as we don't want to show the title yet. In future we might consider to redesign this part.
     */
-    func customizeNnavigationBarAppearaceForQLPreviewController() {
+    func customizeNavigationBarAppearaceForQLPreviewController() {
         let navigationAppearanceForQLPreview = UINavigationBar.appearance(whenContainedInInstancesOf: [QLPreviewController.self])
         navigationAppearanceForQLPreview.tintColor = UIColor.cliqzBlueSystem
     }
@@ -43,7 +43,7 @@ extension AppDelegate {
         navigationBarAppearace.barTintColor = UIColor.cliqzBluePrimary
         #endif
         
-        self.customizeNnavigationBarAppearaceForQLPreviewController()
+        self.customizeNavigationBarAppearaceForQLPreviewController()
         
         navigationBarAppearace.isTranslucent = false
         navigationBarAppearace.tintColor = UIColor.white
