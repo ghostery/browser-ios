@@ -79,6 +79,7 @@ git checkout -b my-working-branch
 sh ./bootstrap.sh
 npm ci
 npm run bundle-lumen
+# Or for Ghostery: npm run bundle-ghostery
 bundle exec pod install
 npm run postinstall
 ```
