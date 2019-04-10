@@ -6,7 +6,7 @@ This branch (master)   [![Build Status](https://dev.azure.com/cliqzci/IOS/_apis/
 
 This branch is for mainline development.
 
-This branch only works with Xcode 10.1 and supports iOS 10, and 11.
+This branch only works with Xcode 10.1 and supports iOS 11 and above.
 
 This branch is written in Swift 4
 
