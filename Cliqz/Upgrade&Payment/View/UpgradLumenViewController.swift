@@ -137,6 +137,8 @@ class UpgradLumenViewController: UIViewController {
         restoreButton.setTitleColor(UIColor.lumenTextBlue, for: .normal)
         restoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 16.0, weight: .regular)
         restoreButton.layer.borderColor = UIColor.lumenTextBlue.cgColor
+        restoreButton.clipsToBounds = true
+        restoreButton.setBackgroundImage(UIImage.from(color: UIColor.cliqzBlueThreeSecondary), for: .highlighted)
         
         conditionButton.setTitleColor(UIColor.lumenTextBlue, for: .normal)
         conditionButton.titleLabel?.font = UIFont.systemFont(ofSize: 12.0, weight: .medium)
