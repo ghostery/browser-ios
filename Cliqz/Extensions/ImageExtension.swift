@@ -96,4 +96,15 @@ extension UIImage {
         
         return img
     }
+    
+    static func from(color: UIColor) -> UIImage {
+        let frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(frame.size)
+        let context = UIGraphicsGetCurrentContext()
+        context!.setFillColor(color.cgColor)
+        context!.fill(frame)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image!
+    }
 }
