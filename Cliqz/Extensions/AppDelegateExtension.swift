@@ -8,6 +8,7 @@
 
 import UIKit
 import NetworkExtension
+import QuickLook
 
 let InstallDateKey = "InstallDateKey"
 #if GHOSTERY
@@ -25,6 +26,15 @@ extension AppDelegate {
         }
     }
     
+    /*
+     * Navigation appearance for QLPreviewController needs to be treated separately.
+     * We leave titleTextAttributes unchanged, as we don't want to show the title yet. In future we might consider to redesign this part.
+    */
+    func customizeNnavigationBarAppearaceForQLPreviewController() {
+        let navigationAppearanceForQLPreview = UINavigationBar.appearance(whenContainedInInstancesOf: [QLPreviewController.self])
+        navigationAppearanceForQLPreview.tintColor = UIColor.cliqzBlueSystem
+    }
+    
     func customizeNnavigationBarAppearace() {
         let navigationBarAppearace = UINavigationBar.appearance()
         #if PAID
@@ -32,6 +42,9 @@ extension AppDelegate {
         #else
         navigationBarAppearace.barTintColor = UIColor.cliqzBluePrimary
         #endif
+        
+        self.customizeNnavigationBarAppearaceForQLPreviewController()
+        
         navigationBarAppearace.isTranslucent = false
         navigationBarAppearace.tintColor = UIColor.white
         navigationBarAppearace.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]

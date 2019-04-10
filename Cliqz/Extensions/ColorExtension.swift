@@ -414,6 +414,7 @@ extension UIColor {
     //Secondary Colors
     static let cliqzBlueOneSecondary = UIColor(colorString: "0078CA")
     static let cliqzBlueTwoSecondary = UIColor(colorString: "2B5993")
+    static let cliqzBlueSystem = UIColor(colorString: "57A6FD")
     static let cliqzGrayOneSecondary = UIColor(colorString: "E7ECEE")
     static let cliqzGrayTwoSecondary = UIColor(colorString: "BFCBD6")
     static let cliqzGrayThreeSecondary = UIColor(colorString: "607c85")
