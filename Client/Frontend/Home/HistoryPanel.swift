@@ -524,7 +524,10 @@ extension HistoryPanel: UITableViewDataSourcePrefetching {
                     }
 
                     let indexPath = self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                    /* Cliqz: fixed the section shifting as we don't show `syncAndRecentlyClosed` section
                     return IndexPath(row: indexPath.row, section: indexPath.section + 1)
+                     */
+                    return IndexPath(row: indexPath.row, section: indexPath.section)
                 })
 
                 self.tableView.insertRows(at: indexPaths, with: .automatic)
