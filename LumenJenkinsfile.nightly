@@ -192,7 +192,7 @@ def getChangeString(passedBuilds) {
 def getIssueList(){
     def list = []
     def changes = getChangeString(passedBuilds)
-    def re = /IB2-([0-9])*/
+    def re = /IP-([0-9])*/
     def y = changes =~ re
     while (y){
         list.add(y.group().toString())
