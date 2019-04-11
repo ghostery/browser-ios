@@ -18,6 +18,7 @@ class VPNCountryController: UIViewController {
     
     let tableView = UITableView()
     let gradient = BrowserGradientView()
+    let countries = VPNEndPointManager.shared.getAvailableCountries()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,13 +45,6 @@ class VPNCountryController: UIViewController {
     }
     
     func setStyling() {
-//        //this fixes the animation for the light theme
-//        if lumenTheme == .Light {
-//            self.view.backgroundColor = .white
-//        }
-//        else {
-//            self.view.backgroundColor = .clear
-//        }
         self.navigationController?.navigationBar.tintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
         self.navigationController?.navigationBar.barTintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
         self.navigationController?.navigationBar.backgroundColor = .clear
@@ -79,22 +73,30 @@ extension VPNCountryController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return VPNEndPointManager.shared.countries.count
+        return countries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CountryCell", for: indexPath) as! CustomVPNCountryCell
+        let country = countries[indexPath.row]
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
-        cell.textLabel?.text = VPNEndPointManager.shared.countries[indexPath.row].name;
-        cell.textLabel?.textColor = Lumen.VPN.countryTextColor(lumenTheme, .Normal)
+        if country.disabled {
+            cell.textLabel?.text = country.name + " " + NSLocalizedString("(coming soon)", tableName: "Lumen", comment: "[VPN] coming soon label beside country name");
+            cell.isUserInteractionEnabled = false
+            cell.textLabel?.textColor = Lumen.VPN.countryDisabledTextColor(lumenTheme, .Normal)
+        } else {
+            cell.textLabel?.text = country.name;
+            cell.isUserInteractionEnabled = true
+            cell.textLabel?.textColor = Lumen.VPN.countryTextColor(lumenTheme, .Normal)
+        }
         
         //do the setup
         return cell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let country = VPNEndPointManager.shared.countries[indexPath.row]
+        let country = countries[indexPath.row]
         if country == VPNEndPointManager.shared.selectedCountry {
             tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
         }
@@ -121,7 +123,7 @@ extension VPNCountryController: UITableViewDataSource {
 extension VPNCountryController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let country = VPNEndPointManager.shared.countries[indexPath.row]
+        let country = countries[indexPath.row]
         self.delegate?.didSelectCountry(shouldReconnect: country != VPNEndPointManager.shared.selectedCountry)
         VPNEndPointManager.shared.selectedCountry = country
         
@@ -155,7 +157,6 @@ class CustomVPNCountryCell: UITableViewCell {
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
-        
         if selected == true {
             tickView.isHidden = false
         }

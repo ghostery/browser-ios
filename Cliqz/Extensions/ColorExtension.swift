@@ -215,6 +215,11 @@ struct Lumen {
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
         }
         
+        static let countryDisabledTextColor : LumenColor = { name, mode in
+            let combo: LumenColorCombo  = [.Light: [.Normal: UIColor(colorString: "BDC0CE")], .Dark: [.Normal: UIColor(colorString: "BDC0CE")]]
+            return combo[name]?[mode] ?? Lumen.fallback(name, combo)
+        }
+        
         static let navigationBarTextColor : LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .lumenBrightBlue], .Dark: [.Normal: .white]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
