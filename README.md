@@ -86,6 +86,8 @@ npm run postinstall
 9. Open `Client.xcworkspace` in Xcode.
 10. Build the `Fennec` scheme in Xcode.
 
+Note: When you run `bundle install`, you might get following error `An error occurred while installing unf_ext (0.0.7.5), and Bundler cannot continue.`. Above error happens with ruby 2.5.1. Just make sure to use 2.5.3 ruby version `rvm use 2.5.3` and problem will be fixed. 
+
 ## Building User Scripts
 
 User Scripts (JavaScript injected into the `WKWebView`) are compiled, concatenated and minified using [webpack](https://webpack.js.org/). User Scripts to be aggregated are placed in the following directories:
