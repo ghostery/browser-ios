@@ -93,6 +93,7 @@
 		1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */; };
 		1E650C9C2091E35D0070C670 /* BrowserViewController+GhosteryMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */; };
 		1E65E3D422326C7C0069E1B7 /* LumenURLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E65E3D322326C7C0069E1B7 /* LumenURLBar.swift */; };
+		1E70C74E225E111300427EBB /* VPNEndPointManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E70C74D225E111300427EBB /* VPNEndPointManager.swift */; };
 		1E72FE7B22415CC8004FEB68 /* BrowserViewController+ContextualMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E72FE7A22415CC8004FEB68 /* BrowserViewController+ContextualMessages.swift */; };
 		1E72FE8D224A6924004FEB68 /* CliqzPrivateModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E72FE8C224A6924004FEB68 /* CliqzPrivateModeButton.swift */; };
 		1E72FEF2224D03BC004FEB68 /* CliqzStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6F247C20AF0749009C3D0D /* CliqzStrings.swift */; };
@@ -1535,6 +1536,7 @@
 		1E64AEDD210F19EC00565C0B /* Ghostery-Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "Ghostery-Licenses.html"; sourceTree = "<group>"; };
 		1E650C9A2091E3220070C670 /* BrowserViewController+GhosteryMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+GhosteryMigration.swift"; sourceTree = "<group>"; };
 		1E65E3D322326C7C0069E1B7 /* LumenURLBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenURLBar.swift; sourceTree = "<group>"; };
+		1E70C74D225E111300427EBB /* VPNEndPointManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNEndPointManager.swift; sourceTree = "<group>"; };
 		1E72FE7A22415CC8004FEB68 /* BrowserViewController+ContextualMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ContextualMessages.swift"; sourceTree = "<group>"; };
 		1E72FE8C224A6924004FEB68 /* CliqzPrivateModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CliqzPrivateModeButton.swift; sourceTree = "<group>"; };
 		1E78A389214BB0EB005E2539 /* LogoLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoLoaderTests.swift; sourceTree = "<group>"; };
@@ -3812,6 +3814,7 @@
 				AF6C8AFB21873B5D006F8166 /* VPNViewController.swift */,
 				4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */,
 				1E2F488A225256C400B717B7 /* VPNInfoView.swift */,
+				1E70C74D225E111300427EBB /* VPNEndPointManager.swift */,
 			);
 			path = VPN;
 			sourceTree = "<group>";
@@ -6666,6 +6669,7 @@
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
 				74821F8E1DAD8F1400EEEA72 /* ActivityStreamHighlightCell.swift in Sources */,
 				1E244CD92180A082004A73E9 /* CCViewController.swift in Sources */,
+				1E70C74E225E111300427EBB /* VPNEndPointManager.swift in Sources */,
 				E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */,
 				1E2C435A21F89E6500891FB2 /* LumenWhiteTheme.swift in Sources */,
 				D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */,
