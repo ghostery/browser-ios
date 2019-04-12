@@ -85,7 +85,7 @@ class VPNEndPointManager {
     
     //TODO: [IP-426] to be removed and get the countries from the backend
     private func fillInDummyCountries() {
-        for id in ["us", "de", "tr", "pl", "it", "gr", "hu", "at", "es", "nl", "fr", "pt", "gb", "ca", "ba", "bn", "hr", "in", "ro", "rs", "ua"] {
+        for id in ["us", "de", "ba", "bn", "fr", "gr", "in", "it", "ca", "hr", "nl", "at", "pl", "pt", "ro", "rs", "es", "tr", "ua", "hu", "gb"] {
             if let name = CountriesLookup[id] {
                 self.countries.append(VPNCountry(id: id, name: name, endpoint: "", remoteID: ""))
             }
