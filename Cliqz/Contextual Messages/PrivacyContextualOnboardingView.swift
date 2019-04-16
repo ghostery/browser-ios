@@ -64,7 +64,8 @@ class PrivacyContextualOnboardingView: UIView {
 		}
 		infoLabel.snp.makeConstraints { make in
 			make.top.equalTo(titleLabel.snp.bottom)
-			make.left.right.equalToSuperview()
+			make.right.equalToSuperview().offset(-10)
+            make.left.equalToSuperview().offset(10)
 			make.height.equalTo(30)
 		}
 	}
