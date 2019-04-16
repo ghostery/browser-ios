@@ -243,8 +243,7 @@ class SettingsPrefs {
     func updateSendUsageDataPref(_ newValue: Bool) {
         LocalDataStore.set(value: newValue, forKey: SettingsPrefs.SendUsageData)
         LegacyTelemetryHelper.logTelemetrySetting(state: newValue)
-        Engine.sharedInstance.setPref("modules.anolysis.enabled", prefValue: newValue)
-        Engine.sharedInstance.setPref("toolkit.telemetry.enabled", prefValue: newValue)
+        Engine.sharedInstance.setPref("telemetry", prefValue: newValue)
     }
 
     // MARK: - Private helper metods
