@@ -9,9 +9,15 @@
 import UIKit
 
 public enum PremiumType: String {
+    #if BETA
+    case Basic  = "com.cliqz.ios.lumen.staging.sale.basic"
+    case Vpn   = "com.cliqz.ios.lumen.staging.sale.vpn"
+    case BasicAndVpn    = "com.cliqz.ios.lumen.staging.sale.basic_vpn"
+    #else
     case Basic  = "com.cliqz.ios.lumen.sale.basic"
     case Vpn   = "com.cliqz.ios.lumen.sale.vpn"
     case BasicAndVpn    = "com.cliqz.ios.lumen.sale.basic_vpn"
+    #endif
     
     func hasVPN() -> Bool {
         switch self {
