@@ -81,12 +81,11 @@ extension VPNCountryController: UITableViewDataSource {
         let country = countries[indexPath.row]
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
+        cell.textLabel?.text = country.name
         if country.disabled {
-            cell.textLabel?.text = country.name + " " + NSLocalizedString("(coming soon)", tableName: "Lumen", comment: "[VPN] coming soon label beside country name");
             cell.isUserInteractionEnabled = false
             cell.textLabel?.textColor = Lumen.VPN.countryDisabledTextColor(lumenTheme, .Normal)
         } else {
-            cell.textLabel?.text = country.name;
             cell.isUserInteractionEnabled = true
             cell.textLabel?.textColor = Lumen.VPN.countryTextColor(lumenTheme, .Normal)
         }
