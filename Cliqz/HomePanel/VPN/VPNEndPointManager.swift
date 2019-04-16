@@ -62,10 +62,10 @@ class VPNEndPointManager {
         "nl" : NSLocalizedString("Netherlands", tableName: "Lumen", comment: "VPN country name for Netherlands"),
         "fr" : NSLocalizedString("France", tableName: "Lumen", comment: "VPN country name for France"),
         "pt" : NSLocalizedString("Portugal", tableName: "Lumen", comment: "VPN country name for Portugal"),
-        "gb" : NSLocalizedString("UK", tableName: "Lumen", comment: "VPN country name for UK"),
+        "uk" : NSLocalizedString("UK", tableName: "Lumen", comment: "VPN country name for UK"),
         "ca" : NSLocalizedString("Canada", tableName: "Lumen", comment: "VPNcountry name for Canada"),
         "ba" : NSLocalizedString("Bosnia", tableName: "Lumen", comment: "VPN country name for Bosnia"),
-        "bn" : NSLocalizedString("Bulgaria", tableName: "Lumen", comment: "VPN country name for Bulgaria"),
+        "bg" : NSLocalizedString("Bulgaria", tableName: "Lumen", comment: "VPN country name for Bulgaria"),
         "hr" : NSLocalizedString("Croatia", tableName: "Lumen", comment: "VPN country name for Croatia"),
         "in" : NSLocalizedString("India", tableName: "Lumen", comment: "VPN country name for India"),
         "ro" : NSLocalizedString("Romania", tableName: "Lumen", comment: "VPN country name for Romania"),
@@ -79,36 +79,18 @@ class VPNEndPointManager {
     static let shared = VPNEndPointManager()
     
     init() {
-        fillInDummyCountries()
+        generateStaticCountries()
         getVPNCredentialsFromServer()
     }
     
-    //TODO: [IP-426] to be removed and get the countries from the backend
-    private func fillInDummyCountries() {
-        for id in ["us", "de", "ba", "bn", "fr", "gr", "in", "it", "ca", "hr", "nl", "at", "pl", "pt", "ro", "rs", "es", "tr", "ua", "hu", "gb"] {
+    private func generateStaticCountries() {
+        for id in ["us", "de", "ba", "bg", "fr", "gr", "in", "it", "ca", "hr", "nl", "at", "pl", "pt", "ro", "rs", "es", "tr", "ua", "hu", "uk"] {
             if let name = CountriesLookup[id] {
                 self.countries.append(VPNCountry(id: id, name: name, endpoint: "", remoteID: ""))
             }
         }
     }
     
-    //TODO: [IP-426] replace these two methods with the underneath one to get the countries from the backend
-    private func getVPNCredentialsFromServer() {
-        VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
-            for cred in credentials {
-                if let country = self?.country(id: cred.country.lowercased()) {
-                    country.endpoint = cred.serverIP
-                    country.remoteID = cred.remoteID
-                    self?.setCreds(country: country, username: cred.username, password: cred.password)
-                }
-            }
-        }
-    }
-    private  func country(id: String) -> VPNCountry? {
-        return countries.filter{$0.id == id}.first
-    }
-    
-    /* [IP-426] getting the countries from the backend
     private func getVPNCredentialsFromServer() {
         VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
             guard let self = self, credentials.count > 0 else { return }
@@ -121,12 +103,24 @@ class VPNEndPointManager {
                     self.countries.append(country)
                     self.setCreds(country: country, username: cred.username, password: cred.password)
                 }
-                self?.observable.on(.next(true))
             }
+            
+            self.sortCountries()
         }
     }
-    */
-    
+    private func sortCountries() {
+        // Sort countries alphabetically
+        self.countries = self.countries.sorted { $0.name < $1.name }
+        // Move Germany & USA to the top
+        let topCountries = self.countries.filter {$0.id == "us" || $0.id == "de"}.sorted { $0.name > $1.name }
+        for country in topCountries {
+            if let index = self.countries.index(of: country) {
+                self.countries.remove(at: index)
+                self.countries.insert(country, at: 0)
+            }
+        }
+        
+    }
     //MARK:- Public APIs
     //MARK: Credentials
     func setCreds(country: VPNCountry, username: String, password: String) {
