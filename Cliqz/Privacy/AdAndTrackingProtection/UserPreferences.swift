@@ -63,6 +63,7 @@ extension Notification.Name {
         }
         set {
             userDefaults().set(newValue, forKey: IsProtectionOnKey)
+            Engine.sharedInstance.setPref("lumen.protection.isEnabled", prefValue: newValue)
             NotificationCenter.default.post(name: Notification.Name.privacyStatusChanged, object: self, userInfo: ["newValue": newValue])
         }
     }
