@@ -724,6 +724,7 @@ class BrowserViewController: UIViewController {
 
         // Cliqz: bring footer to front so that the tab toolbar will be visible all time
         self.view.bringSubview(toFront: footer)
+        self.bringVpnToFrontIfShown()
         
         urlBar.setNeedsUpdateConstraints()
 

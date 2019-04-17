@@ -237,10 +237,8 @@ class VPNViewController: UIViewController {
     }
     
     @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
-        upgradeView?.removeFromSuperview()
-        upgradeView = nil
-        upgradeButton?.removeFromSuperview()
-        upgradeButton = nil
+        self.removeUpgradeView()
+        self.removeUpgradeButton()
         setConstraints()
     }
     
@@ -294,24 +292,45 @@ class VPNViewController: UIViewController {
         switch currentSubscription {
         case .trial(_):
             if let trialRemainingDays = currentSubscription.trialRemainingDays(), trialRemainingDays < 4 {
-                self.upgradeView = UpgradeView(view: "vpn")
-                self.upgradeView?.delegate = self
-                view.addSubview(upgradeView!)
+                self.addUpgradeView()
             }
         case .limited:
-            vpnDefinitionButton.removeFromSuperview()
-            let title = NSLocalizedString("Unlock the VPN feature to get the best out of Lumen.", tableName: "Lumen", comment: "Unlock the VPN feature text")
-            let action = NSLocalizedString("LEARN MORE", tableName: "Lumen", comment: "LEARN MORE action")
-            upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel),
-                                                     underlinedText: (action, UIColor.lumenTextBlue),
-                                                     position: .next,
-                                                     view: "vpn")
-            upgradeButton?.addTarget(self, action: #selector(showUpgradeViewController), for: .touchUpInside)
-            self.view.addSubview(upgradeButton!)
+            self.addUpgradeButton()
         default:
             break
         }
         #endif
+    }
+    
+    private func addUpgradeView() {
+        self.upgradeView = UpgradeView(view: "vpn")
+        self.upgradeView?.delegate = self
+        view.addSubview(upgradeView!)
+    }
+    
+    private func removeUpgradeView() {
+        upgradeView?.removeFromSuperview()
+        upgradeView = nil
+    }
+    
+    private func addUpgradeButton() {
+        vpnDefinitionButton.removeFromSuperview()
+        let title = NSLocalizedString("Unlock the VPN feature to get the best out of Lumen.", tableName: "Lumen", comment: "Unlock the VPN feature text")
+        let action = NSLocalizedString("LEARN MORE", tableName: "Lumen", comment: "LEARN MORE action")
+        upgradeButton = ButtonWithUnderlinedText(startText: (title, UIColor.theme.lumenSubscription.upgradeLabel),
+                                                 underlinedText: (action, UIColor.lumenTextBlue),
+                                                 position: .next,
+                                                 view: "vpn")
+        upgradeButton?.addTarget(self, action: #selector(showUpgradeViewController), for: .touchUpInside)
+        self.view.addSubview(upgradeButton!)
+    }
+    
+    private func removeUpgradeButton() {
+        upgradeButton?.removeFromSuperview()
+        upgradeButton = nil
+        if vpnDefinitionButton.superview == nil {
+            view.addSubview(vpnDefinitionButton)
+        }
     }
     
     private func setConstraints() {

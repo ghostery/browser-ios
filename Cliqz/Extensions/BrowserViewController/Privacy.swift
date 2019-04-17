@@ -68,15 +68,22 @@ extension BrowserViewController {
     
     func hideVpnPanel() {
         for childViewController in self.childViewControllers {
-            if let c = childViewController as? UINavigationController {
-                c.willMove(toParentViewController: nil)
-                c.beginAppearanceTransition(true, animated: false)
-                c.view.removeFromSuperview()
-                c.endAppearanceTransition()
-                c.removeFromParentViewController()
+            if let controller = childViewController as? UINavigationController {
+                controller.willMove(toParentViewController: nil)
+                controller.beginAppearanceTransition(true, animated: false)
+                controller.view.removeFromSuperview()
+                controller.endAppearanceTransition()
+                controller.removeFromParentViewController()
             }
         }
-        
+    }
+    
+    func bringVpnToFrontIfShown() {
+        for childViewController in self.childViewControllers {
+            if let controller = childViewController as? UINavigationController {
+                self.view.bringSubview(toFront: controller.view)
+            }
+        }
     }
     
     
