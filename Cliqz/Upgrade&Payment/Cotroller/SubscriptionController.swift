@@ -60,7 +60,18 @@ public class SubscriptionController {
         UserDefaults.standard.set(productIdentifier, forKey: purchasedProductIdentifierKey)
     }
     
-    func updateUltimateProtectionStatus() {
+    func disableProtectionIfNotAllowedByLicense() {
+        #if PAID
+        switch getCurrentSubscription() {
+        case .limited:
+            UserPreferences.instance.isProtectionOn = false
+        default:
+            return
+        }
+        #endif
+    }
+    
+    private func updateUltimateProtectionStatus() {
         #if PAID
         switch getCurrentSubscription() {
         case .limited:
