@@ -43,8 +43,6 @@ class PaidControlCenterViewController: ControlCenterViewController {
                                                selector: #selector(VPNStatusDidChange(notification:)),
                                                name: .NEVPNStatusDidChange,
                                                object: nil)
-        
-        SubscriptionController.shared.updateUltimateProtectionStatus()
         dashboard.dataSource = cellDataSource
         
         self.addChildViewController(dashboard)
@@ -181,7 +179,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
     }
 
 	@objc func privacyStatuChanged(control: UISwitch) {
-		UserPreferences.instance.isProtectionOn = control.isOn
+		SubscriptionController.shared.updateIsProtectionOnState(on: control.isOn)
 //		lumenDashboardMode = control.isOn ? .Normal : .Disabled
 		updateUIState(isEnabled: control.isOn)
         LegacyTelemetryHelper.logDashboard(action: "click", target: "toggle", state: control.isOn ? "on" : "off")

@@ -30,26 +30,32 @@ public class SubscriptionController {
             guard let self = self else { return }
             self.savePurchasedProduct(productIdentifier: lumenPurchaseInfo.productIdentifier)
             self.saveExpirationDate(lumenPurchaseInfo.expirationDate)
-            self.updateUltimateProtectionStatus()
+            self.updateProtectionStateOnSubscriptionChange()
         }).disposed(by: disposeBag)
 
         if getTrialRemainingDays() == nil {
             saveTrialRemainingDays(TrialPeriod)
         }
-        self.updateUltimateProtectionStatus()
+        self.disableProtectionIfNotAllowedByLicense()
     }
     
+    
+    func saveTrialRemainingDays(_ remainingDays: Int) {
+        UserDefaults.standard.set(remainingDays, forKey: trialRemainingDaysKey)
+        NotificationCenter.default.post(name: .SubscriptionRefreshNotification, object: nil)
+    }
+    
+    func updateIsProtectionOnState(on: Bool) {
+        UserPreferences.instance.isProtectionOn = on
+    }
+    
+    // MARK: Private methods
     private func saveExpirationDate(_ date: Date) {
         UserDefaults.standard.set(date, forKey: expirationDateKey)
     }
     
     private func getExpirationDate() -> Date? {
         return UserDefaults.standard.object(forKey: expirationDateKey) as? Date
-    }
-    
-    func saveTrialRemainingDays(_ remainingDays: Int) {
-        UserDefaults.standard.set(remainingDays, forKey: trialRemainingDaysKey)
-        NotificationCenter.default.post(name: .SubscriptionRefreshNotification, object: nil)
     }
     
     private func getTrialRemainingDays() -> Int? {
@@ -60,16 +66,28 @@ public class SubscriptionController {
         UserDefaults.standard.set(productIdentifier, forKey: purchasedProductIdentifierKey)
     }
     
-    func updateUltimateProtectionStatus() {
+    private func disableProtectionIfNotAllowedByLicense() {
         #if PAID
-        switch getCurrentSubscription() {
-        case .limited:
-            UserPreferences.instance.isProtectionOn = false
-        case .premium(let premiumType, _):
-            UserPreferences.instance.isProtectionOn = premiumType.hasDashboard()
-        default:
-            return
+        if !self.canEnableProtection() {
+            self.updateIsProtectionOnState(on: false)
         }
+        #endif
+    }
+    
+    private func updateProtectionStateOnSubscriptionChange() {
+        self.updateIsProtectionOnState(on: self.canEnableProtection())
+    }
+    
+    private func canEnableProtection() -> Bool {
+        #if PAID
+        var canEnable = false
+        switch getCurrentSubscription() {
+        case .limited, .trial(_):
+            canEnable = false
+        case .premium(let premiumType, _):
+            canEnable = premiumType.hasDashboard()
+        }
+        return canEnable
         #endif
     }
     
