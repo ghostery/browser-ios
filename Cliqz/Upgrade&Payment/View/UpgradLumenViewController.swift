@@ -61,7 +61,7 @@ class UpgradLumenViewController: UIViewController {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
-    
+
     private func setupComponents() {
         self.view.addSubview(containerView)
         
@@ -69,55 +69,52 @@ class UpgradLumenViewController: UIViewController {
         closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
         containerView.addSubview(closeButton)
         
-        logoImage.image = UIImage(named: "Lumen_Logo")
-        containerView.addSubview(logoImage)
-        
+//        logoImage.image = UIImage(named: "Lumen_Logo")
+//        containerView.addSubview(logoImage)
+		
         setupBundlesView()
         containerView.addSubview(bundlesView)
         
         
         restoreButton.addTarget(self, action: #selector(restoreSubscription), for: .touchUpInside)
         restoreButton.setTitle(NSLocalizedString("Restore Subscription", tableName: "Lumen", comment: "[Upgrade Flow] Restore Subscription button"), for: .normal)
-        restoreButton.layer.borderWidth = 1.0
-        restoreButton.layer.cornerRadius = UIDevice.current.isSmallIphoneDevice() ? 15 : 20
-        containerView.addSubview(restoreButton)
-        
-        conditionButton.addTarget(self, action: #selector(toggleConditions), for: .touchUpInside)
-        conditionButton.setTitle(NSLocalizedString("Conditions", tableName: "Lumen", comment: "[Upgrade Flow] Conditions button"), for: .normal)
-        containerView.addSubview(conditionButton)
-        
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(toggleConditions))
-        swipeUp.direction = .up
-        conditionButton.addGestureRecognizer(swipeUp)
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(toggleConditions))
-        swipeDown.direction = .down
-        conditionButton.addGestureRecognizer(swipeDown)
+		
+		// TODO: Commented for now to fix the layout for Apple submission, but we might need to change again the UI in near future.
+	
+//        restoreButton.layer.borderWidth = 1.0
+//        restoreButton.layer.cornerRadius = UIDevice.current.isSmallIphoneDevice() ? 15 : 20
+//        containerView.addSubview(restoreButton)
+		
+//        conditionButton.addTarget(self, action: #selector(toggleConditions), for: .touchUpInside)
+//        conditionButton.setTitle(NSLocalizedString("Conditions", tableName: "Lumen", comment: "[Upgrade Flow] Conditions button"), for: .normal)
+//        containerView.addSubview(conditionButton)
+		
+//        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(toggleConditions))
+//        swipeUp.direction = .up
+//        conditionButton.addGestureRecognizer(swipeUp)
+//        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(toggleConditions))
+//        swipeDown.direction = .down
+//        conditionButton.addGestureRecognizer(swipeDown)
 
         
-        arrowImage.image = UIImage(named: "Conditions_Arrow_Up")
-        containerView.addSubview(arrowImage)
-        
-        
+//        arrowImage.image = UIImage(named: "Conditions_Arrow_Up")
+//        containerView.addSubview(arrowImage)
+		
         conditionsLabel.numberOfLines = 0
         conditionsLabel.text = NSLocalizedString("Subscriptions will be applied to your iTunes account on confirmation. Subscriptions will automatically renew unless canceled within 24-hours before the end of the current period‌. You can cancel anytime in your iTunes account settings. Any unused portion of a free trial will be forfeited if you purchase a subscription.", tableName: "Lumen", comment: "[Upgrade Flow] Conditions text")
         conditionsLabel.textColor = UIColor(colorString: "BDC0CE")
         conditionsLabel.textAlignment = .center
-        containerView.addSubview(conditionsLabel)
 
-        
         let eulaButtonTitle = NSMutableAttributedString(string: NSLocalizedString("End User License Agreement", tableName: "Lumen", comment: "[Upgrade Flow] Privacy Policy button"),
                                                                  attributes: buttonAttributes)
         eulaButton.setAttributedTitle(eulaButtonTitle, for: .normal)
         eulaButton.addTarget(self, action: #selector(showEula), for: .touchUpInside)
-        containerView.addSubview(eulaButton)
-        
 
         let privacyPolicyButtonTitle = NSMutableAttributedString(string: NSLocalizedString("Privacy Policy", tableName: "Lumen", comment: "[Upgrade Flow] Privacy Policy button"),
                                                                  attributes: buttonAttributes)
         privacyPolicyButton.setAttributedTitle(privacyPolicyButtonTitle, for: .normal)
         privacyPolicyButton.addTarget(self, action: #selector(showPrivacyPolicy), for: .touchUpInside)
-        containerView.addSubview(privacyPolicyButton)
-        
+
         view.addSubview(gradient)
         view.sendSubview(toBack: gradient)
     }
@@ -126,9 +123,9 @@ class UpgradLumenViewController: UIViewController {
         bundlesView.register(SubscriptionTableViewCell.self, forCellReuseIdentifier: "ProductCell")
         bundlesView.separatorColor = UIColor.clear
         bundlesView.allowsSelection = false
-        bundlesView.isScrollEnabled = false
         bundlesView.delegate = self
         bundlesView.dataSource = self
+		bundlesView.tableFooterView = self.footerView()
     }
     
     private func setStyles() {
@@ -166,70 +163,29 @@ class UpgradLumenViewController: UIViewController {
             make.width.equalTo(44.0)
             make.height.equalTo(44.0)
         }
-        
-        logoImage.snp.makeConstraints { (make) in
-            if UIDevice.current.isSmallIphoneDevice() {
-                make.top.equalToSuperview()
-            } else {
-                make.top.equalToSuperview().inset(10.0)
-            }
-            make.centerX.equalToSuperview()
-        }
-        
+		
+		// TODO: Commented for now to fix the layout for Apple submission, but we might need to change again the UI in near future.
+//        logoImage.snp.makeConstraints { (make) in
+//            if UIDevice.current.isSmallIphoneDevice() {
+//                make.top.equalToSuperview()
+//            } else {
+//                make.top.equalToSuperview().inset(10.0)
+//            }
+//            make.centerX.equalToSuperview()
+//        }
+		
         
         bundlesView.snp.makeConstraints { (make) in
-            if UIDevice.current.isSmallIphoneDevice() {
-                make.top.equalTo(logoImage.snp.bottom)
-            } else {
-                make.top.equalTo(logoImage.snp.bottom).offset(10.0)
-            }
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(415.0)
+			make.top.equalTo(self.closeButton.snp.bottom)
+			make.leading.trailing.equalToSuperview()
+			make.bottom.equalToSuperview()
+//            if UIDevice.current.isSmallIphoneDevice() {
+//                make.top.equalToSuperview()
+//            } else {
+//                make.top.equalToSuperview().offset(10.0)
+//            }
         }
-        
-        restoreButton.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            
-            if UIDevice.current.isSmallIphoneDevice() {
-                make.bottom.equalTo(conditionButton.snp.top)
-                make.width.equalTo(200.0)
-                make.height.equalTo(30.0)
-            } else {
-                make.bottom.equalTo(conditionButton.snp.top).offset(-10.0)
-                make.width.equalTo(230.0)
-                make.height.equalTo(40.0)
-            }
-            
-        }
-        
-        conditionButton.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(arrowImage.snp.top)
-            make.height.equalTo(25.0)
-        }
-        
-        arrowImage.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(5.0)
-            make.width.equalTo(45.0)
-            make.height.equalTo(9.0)
-        }
-        
-        conditionsLabel.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(15.0)
-            make.top.equalTo(arrowImage.snp.bottom).offset(10.0 + notchOffset)
-        }
-        
-        eulaButton.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(conditionsLabel.snp.bottom).offset(5.0)
-        }
-        
-        privacyPolicyButton.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(eulaButton.snp.bottom).offset(5)
-        }
+
     }
     
     @objc func closeView() {
@@ -370,6 +326,39 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
         }
         return cell
     }
+
+	fileprivate func footerView() -> UIView {
+		// TODO: if we keep this solutin the height should be calculated
+		let footerView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 210))
+		footerView.addSubview(self.restoreButton)
+		footerView.addSubview(self.conditionsLabel)
+		footerView.addSubview(self.eulaButton)
+		footerView.addSubview(self.privacyPolicyButton)
+	
+		restoreButton.snp.makeConstraints { (make) in
+			make.centerX.equalToSuperview()
+			make.top.equalToSuperview()
+			make.width.equalTo(200.0)
+			make.height.equalTo(30.0)
+		}
+
+		conditionsLabel.snp.makeConstraints { (make) in
+			make.centerX.equalToSuperview()
+			make.leading.trailing.equalToSuperview().inset(15.0)
+			make.top.equalTo(restoreButton.snp.bottom).offset(3)
+		}
+
+		eulaButton.snp.makeConstraints { (make) in
+			make.centerX.equalToSuperview()
+			make.top.equalTo(conditionsLabel.snp.bottom).offset(5)
+		}
+
+		privacyPolicyButton.snp.makeConstraints { (make) in
+			make.centerX.equalToSuperview()
+			make.top.equalTo(eulaButton.snp.bottom).offset(5)
+		}
+		return footerView
+	}
 
 	private func subscriptionsComingSoon() {
 		let title = NSLocalizedString("Coming Soon!", tableName: "Lumen", comment: "Temporary message title instead of Subscriptions")
