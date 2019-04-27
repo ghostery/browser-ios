@@ -148,6 +148,10 @@ class VPNEndPointManager {
         }
     }
     
+    func updateVPNCredentials() {
+        getVPNCredentialsFromServer()
+    }
+    
     //MARK:- VPN Countries
     var selectedCountry: VPNCountry {
         set {

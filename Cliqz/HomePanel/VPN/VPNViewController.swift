@@ -476,12 +476,6 @@ class VPNViewController: UIViewController {
     }
     
     @objc func connectButtonPressed(_ sender: Any) {
-        //try to connect
-        guard SubscriptionController.shared.isVPNEnabled() else {
-            displayUnlockVPNAlert()
-            return
-        }
-		
         if (NEVPNManager.shared().connection.status == .connected) {
             VPN.disconnectVPN()
             LegacyTelemetryHelper.logVPN(action: "click", target: "toggle", state: "off")
@@ -490,6 +484,11 @@ class VPNViewController: UIViewController {
                                          location: VPNEndPointManager.shared.selectedCountry.id,
                                          connectionTime: getConnectionTime())
         } else {
+            guard SubscriptionController.shared.isVPNEnabled() else {
+                displayUnlockVPNAlert()
+                return
+            }
+            
             shouldVPNReconnect = isFirstConnection()
             VPN.connect2VPN()
             LegacyTelemetryHelper.logVPN(action: "click", target: "toggle", state: "on")

@@ -31,6 +31,7 @@ public class SubscriptionController {
             self.savePurchasedProduct(productIdentifier: lumenPurchaseInfo.productIdentifier)
             self.saveExpirationDate(lumenPurchaseInfo.expirationDate)
             self.updateProtectionStateOnSubscriptionChange()
+            VPNEndPointManager.shared.updateVPNCredentials()
         }).disposed(by: disposeBag)
 
         if getTrialRemainingDays() == nil {
