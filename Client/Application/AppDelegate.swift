@@ -16,6 +16,7 @@ import CoreSpotlight
 import UserNotifications
 // Cliqz: Import Realm
 import RealmSwift
+import StoreKit
 
 private let log = Logger.browserLogger
 
@@ -315,6 +316,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             BuddyBuildSDK.setup()
         #endif
         */
+        
+        // Cliqz: registering for AdNetworkAttribution
+        if #available(iOS 11.3, *) {
+            SKAdNetwork.registerAppForAdNetworkAttribution()
+        }
         
         window!.makeKeyAndVisible()
 
