@@ -9,7 +9,7 @@
 import UIKit
 
 protocol VPNCountryControllerProtocol: class {
-    func didSelectCountry(shouldReconnect: Bool)
+    func didSelectCountry(country: VPNCountry)
 }
 
 class VPNCountryController: UIViewController {
@@ -123,7 +123,7 @@ extension VPNCountryController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let country = countries[indexPath.row]
-        self.delegate?.didSelectCountry(shouldReconnect: country != VPNEndPointManager.shared.selectedCountry)
+        self.delegate?.didSelectCountry(country: country)
         VPNEndPointManager.shared.selectedCountry = country
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
