@@ -90,17 +90,10 @@ class VPN {
     }
     
     private var connectedCountry: VPNCountry?
-    private var reachabilityManager: NetworkReachabilityManager?
     private var disconnectionBlock: (() -> Void)?
     
-    private func configureReachability(host: String) {
-        self.reachabilityManager = NetworkReachabilityManager(host: host)
-    }
-    
     private func shouldReconnect() -> Bool {
-        let isVPNDisconnected = self.status == .disconnected
-        let isNetworkReachable = self.reachabilityManager?.isReachable ?? false
-        return self.retryCount > 0 && isVPNDisconnected && isNetworkReachable
+        return self.retryCount > 0
     }
     
     @objc private func VPNStatusDidChange(notification: Notification) {
@@ -138,7 +131,6 @@ class VPN {
             NEVPNManager.shared().saveToPreferences(completionHandler: { _ in
                 if VPN.startTunnel() {
                     VPN.shared.connectedCountry = country
-                    VPN.shared.configureReachability(host: country.endpoint)
                 }
             })
         }
@@ -154,8 +146,6 @@ class VPN {
     
     private static func resetConnection() {
         VPN.shared.retryCount = 0
-        VPN.shared.reachabilityManager?.stopListening()
-        VPN.shared.reachabilityManager = nil
         VPN.shared.connectedCountry = nil
     }
     
