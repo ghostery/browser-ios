@@ -16,161 +16,11 @@ struct VPNUX {
     static let secondaryBlue = UIColor(red:0.00, green:0.61, blue:0.92, alpha:1.00)
 }
 
-class VPN {
-    
-    static let shared = VPN()
-
-    let shouldTryToReconnectKey = "VPNShouldTryToReconnectKey"
-    var shouldTryToReconnect: Bool {
-        set {
-            UserDefaults.standard.set(newValue, forKey: shouldTryToReconnectKey)
-            UserDefaults.standard.synchronize()
-        }
-        get {
-            if let value = UserDefaults.standard.value(forKey: shouldTryToReconnectKey) as? Bool {
-                return value
-            }
-            
-            return false //default
-        }
-    }
-    
-    //do a last status, and try to reconnect if the last status is connected.
-    let lastStatusKey = "VPNLastStatusKey"
-    var lastStatus: NEVPNStatus {
-        set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: lastStatusKey)
-            UserDefaults.standard.synchronize()
-        }
-        get {
-            if let statusRaw = UserDefaults.standard.value(forKey: lastStatusKey) as? Int {
-                if let status = NEVPNStatus(rawValue: statusRaw) {
-                    return status
-                }
-            }
-            
-            return .disconnected //default
-        }
-    }
-    
-    let connectDateKey = "VPNConnectDateKey"
-    var connectDate: Date? {
-        set {
-            if newValue == nil {
-                UserDefaults.standard.removeObject(forKey: connectDateKey)
-                UserDefaults.standard.synchronize()
-            }
-            else {
-                UserDefaults.standard.set(newValue, forKey: connectDateKey)
-                UserDefaults.standard.synchronize()
-            }
-        }
-        get {
-            if let cDate = UserDefaults.standard.value(forKey: connectDateKey) as? Date {
-                return cDate
-            }
-            
-            return nil //default
-        }
-    }
-    
-    init() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(VPNStatusDidChange(notification:)),
-                                               name: .NEVPNStatusDidChange,
-                                               object: nil)
-    }
-
-    func checkConnection() {
-        guard SubscriptionController.shared.isVPNEnabled() else {
-            VPN.disconnectVPN()
-            NEVPNManager.shared().removeFromPreferences { (error) in
-                if let e = error {
-                    print("Could not remove VPN configurations, with the following error: \(e.localizedDescription)")
-                }
-            }
-            return
-        }
-        
-        if (lastStatus == .connected && status != .connected) {
-            VPN.connect2VPN()
-        }
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    var status: NEVPNStatus {
-        return NEVPNManager.shared().connection.status
-    }
-
-    //TODO: Tries to reconnect without end. Maybe this is not a good idea.
-    @objc func VPNStatusDidChange(notification: Notification) {
-        //keep button up to date.
-        lastStatus = status
-        
-        if status == .connected {
-            VPN.shared.shouldTryToReconnect = true
-        }
-        
-        if (status == .disconnected && shouldTryToReconnect) {
-            VPN.connect2VPN()
-        }
-    }
-    
-    static func disconnectVPN() {
-        VPN.shared.shouldTryToReconnect = false
-        NEVPNManager.shared().connection.stopVPNTunnel()
-        
-    }
-    
-    static func connect2VPN() {
-        let country = VPNEndPointManager.shared.selectedCountry
-        guard let creds = VPNEndPointManager.shared.getCredentials(country: country),
-			!country.endpoint.isEmpty else { return }
-
-        NEVPNManager.shared().loadFromPreferences { (error) in
-			let ikeProtocol = NEVPNProtocolIKEv2()
-			ikeProtocol.authenticationMethod = .none
-			ikeProtocol.username = creds.username
-			ikeProtocol.passwordReference = creds.password
-			ikeProtocol.serverAddress = country.endpoint
-			ikeProtocol.remoteIdentifier = country.remoteID
-			ikeProtocol.useExtendedAuthentication = true
-			ikeProtocol.childSecurityAssociationParameters.encryptionAlgorithm = .algorithmAES256
-			ikeProtocol.childSecurityAssociationParameters.integrityAlgorithm = .SHA256
-			ikeProtocol.disconnectOnSleep = false
-
-			//Need to figure out how to do this properly. If we do it like this it will say that the configuration is invalid.
-//                let alwaysConnected = NEOnDemandRule()
-//                alwaysConnected.interfaceTypeMatch = .any
-//                NEVPNManager.shared().onDemandRules = [alwaysConnected]
-			NEVPNManager.shared().protocolConfiguration = ikeProtocol
-			NEVPNManager.shared().isOnDemandEnabled = true
-			NEVPNManager.shared().isEnabled = true
-
-			NEVPNManager.shared().saveToPreferences(completionHandler: { (error) in
-				do {
-					try NEVPNManager.shared().connection.startVPNTunnel()
-				}
-				catch (let error) {
-					print("VPN Connecttion failed --- \(error)")
-					VPN.shared.shouldTryToReconnect = false
-				}
-			})
-        }
-    }
-}
-
 protocol VPNViewControllerDelegate: class {
     func vpnOpenURLInNewTab(_ url: URL)
 }
     
 class VPNViewController: UIViewController {
-
-    //used to reconnect when changing countries
-    var shouldVPNReconnect = false
 
     let tableView = UITableView()
     let mapView = UIImageView()
@@ -412,9 +262,6 @@ class VPNViewController: UIViewController {
             //start timer
             timer = Timer.scheduledTimer(timeInterval: 0.95, target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
             timer?.fire()
-            if VPN.shared.connectDate == nil {
-                VPN.shared.connectDate = Date()
-            }
             LegacyTelemetryHelper.logVPN(action: "connect",
                                          location: VPNEndPointManager.shared.selectedCountry.id)
         }
@@ -425,7 +272,6 @@ class VPNViewController: UIViewController {
             self.connectButton.set(state: .Connect)
             timer?.invalidate()
             timer = nil
-            VPN.shared.connectDate = nil
         }
         else if VPNStatus == .disconnecting {
             self.connectButton.set(state: .Disconnecting)
@@ -455,28 +301,17 @@ class VPNViewController: UIViewController {
     func updateVPNInfoView() {
         self.vpnInfoView.updateView(VPNStatus == .connected)
     }
+
     
     @objc func VPNStatusDidChange(notification: Notification) {
         //keep button up to date.
         updateVPNInfoView()
         updateConnectButton()
         updateMapView()
-        
-        //reconnect when changing countries
-        if (VPNStatus == .disconnected && shouldVPNReconnect == true) {
-            shouldVPNReconnect = false
-            VPN.connect2VPN()
-        }
-		
-        if (VPNStatus == .disconnected) {
-            LegacyTelemetryHelper.logVPN(action: "error",
-                                         location: VPNEndPointManager.shared.selectedCountry.id,
-                                         connectionTime: getConnectionTime())
-        }
     }
     
     @objc func connectButtonPressed(_ sender: Any) {
-        if (NEVPNManager.shared().connection.status == .connected) {
+        if (VPN.shared.status == .connected) {
             VPN.disconnectVPN()
             LegacyTelemetryHelper.logVPN(action: "click", target: "toggle", state: "off")
             
@@ -488,8 +323,6 @@ class VPNViewController: UIViewController {
                 displayUnlockVPNAlert()
                 return
             }
-            
-            shouldVPNReconnect = isFirstConnection()
             VPN.connect2VPN()
             LegacyTelemetryHelper.logVPN(action: "click", target: "toggle", state: "on")
         }
@@ -617,17 +450,13 @@ extension VPNViewController: UITableViewDelegate {
 }
 
 extension VPNViewController: VPNCountryControllerProtocol {
-    func didSelectCountry(shouldReconnect: Bool) {
+    func didSelectCountry(country: VPNCountry) {
         LegacyTelemetryHelper.logVPN(action: "click",
                                      target: "location",
                                      location: VPNEndPointManager.shared.selectedCountry.id)
-
-        if (VPN.shared.status == .connected && shouldReconnect) {
-            //country changed
-            //reconnect if necessary
-            VPN.disconnectVPN()
-            shouldVPNReconnect = true
-        }
+        //country changed, reconnect if necessary
+        VPN.countryDidChange(country: country)
+        
         //change the name of the country in the button
         self.tableView.reloadData()
     }
