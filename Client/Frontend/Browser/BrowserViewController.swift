@@ -629,14 +629,7 @@ class BrowserViewController: UIViewController {
             show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
         }
         showQueuedAlertIfAvailable()
-        
-        #if PAID
-        //Cliqz: add Contextual Message if needed (mainly for Dashboard)
-        if let messageType = ContextualMessagesViewModel.shared.getContextualMessageType() {
-            self.showContextualMessage(messageType: messageType)
-        }
 
-        #endif
     }
 
     // THe logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in

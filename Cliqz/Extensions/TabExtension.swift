@@ -150,7 +150,11 @@ class CurrentPageInfo: NSObject {
             return ["blocked": self.blocked, "sources": self.sources.map{$0.toDict()}]
         }
     }
-    
+
+	typealias AppIDsStatsDictionary = [[String: Any]]
+	typealias BugIDsStatsDictionary = [String: Any]
+	typealias PageInfoDictionary = [String: Any]
+
     unowned let tab: Tab
     
     var host: String? = nil
@@ -163,7 +167,12 @@ class CurrentPageInfo: NSObject {
     
     var currentPage: URL? = nil
     var dataSentForCurrentPage = false
-    
+	
+	private let dataUpdateQueue = DispatchQueue(label: "TabPageInfoUpdateQueue")
+
+	private var statsChecksCount: Int = 0
+	private static var statsChecksChunkSize: Int = 10
+
     init(tab: Tab) {
         self.tab = tab
         super.init()
@@ -176,7 +185,28 @@ class CurrentPageInfo: NSObject {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
+	func pageTrackersStats() -> (tabID: Int, pageInfo: PageInfoDictionary, apps: AppIDsStatsDictionary, bugs: BugIDsStatsDictionary)? {
+		guard bugIDs.count > 0 else {
+			return nil
+		}
+		let tabID = self.tab.tabID
+		let apps = convertAppIds()
+		let bugs = convertBugIds()
+	
+		let timeStamp = Int((self.startLoadTime?.timeIntervalSince1970 ?? 0.0) * 1000.0)
+		let pageInfo: PageInfoDictionary
+	
+		if let pt = self.pageTiming {
+		let pageTime: [String: Any] = ["timing": pt.toDict()]
+		pageInfo = ["timestamp": timeStamp, "pageTiming": pageTime, "host": self.host ?? ""]
+		}
+		else {
+		pageInfo = ["timestamp": timeStamp, "host": self.host ?? ""]
+		}
+		return (tabID, pageInfo, apps, bugs)
+	}
+
     /**
      * Stats from ghostery when a navigation event happens.
      * @param tabId int
@@ -211,66 +241,57 @@ class CurrentPageInfo: NSObject {
         
         //Should I push if there were no trackers detected?
         //Answer is no.
-        guard bugIDs.count > 0 else { /*print("Will send -- No trackers for \(String(describing: currentPage))"); */ return}
-        
-        let tabID = self.tab.tabID
-        let apps = convertAppIds()
-        let bugs = convertBugIds()
-        
-        let timeStamp = Int((self.startLoadTime?.timeIntervalSince1970 ?? 0.0) * 1000.0)
-        let pageInfo: [String: Any]
-        
-        if let pt = self.pageTiming {
-            let pageTime: [String: Any] = ["timing": pt.toDict()]
-            pageInfo = ["timestamp": timeStamp, "pageTiming": pageTime, "host": self.host ?? ""]
-        }
-        else {
-            pageInfo = ["timestamp": timeStamp, "host": self.host ?? ""]
-        }
-        
+		
+		guard let stats = self.pageTrackersStats() else {
+			return
+		}
         //send stuff here
         
         //let currentP = self.currentPage
         DispatchQueue.global(qos: .utility).async {
             //print("Will send data for tab = \(tabID) and page = \(String(describing: currentP))")
-            Engine.sharedInstance.getBridge().callAction("insights:pushGhosteryPageStats", args: [tabID, pageInfo, apps, bugs])
-            ContextualMessagesViewModel.shared.onboardingDataSynced()
+            Engine.sharedInstance.getBridge().callAction("insights:pushGhosteryPageStats", args: [stats.0, stats.1, stats.2, stats.3])
         }
         
     }
-    
+	
+	func clearTrackersData() {
+		self.dataUpdateQueue.async {
+			self.appIDs.removeAll()
+			self.bugIDs.removeAll()
+		}
+	}
+
     func pageChanged() {
-        checkTabStats()
+//        checkTabStats()
         //send data: Make sure data is sent once for a page - Done using a flag (dataSentForCurrentPage)
         //TODO: call sendData() to send stats for current page only when navigating to next page or when closing the current tab
         sendData()
         //reset
         reset()
+		ContextualMessagesViewModel.shared.setReadyForPrivacyMessages()
     }
-    private func checkTabStats() {
-        guard UserPreferences.instance.isProtectionOn == true else { return }
-        guard bugIDs.count > 0 else { return }
 
-        let tabID = self.tab.tabID
-        let apps = convertAppIds()
-        let bugs = convertBugIds()
-        
-        let timeStamp = Int((self.startLoadTime?.timeIntervalSince1970 ?? 0.0) * 1000.0)
-        let pageInfo: [String: Any] = ["timestamp": timeStamp, "host": self.host ?? ""]
+    private func checkTabStatsForContextualMessage() {
+		guard self.bugIDs.count - self.statsChecksCount * CurrentPageInfo.statsChecksChunkSize >= CurrentPageInfo.statsChecksChunkSize else { return }
+        guard UserPreferences.instance.isProtectionOn == true else { return }
+		guard ContextualMessagesViewModel.shared.shouldShowContextualMessage() else { return }
+        guard let pageData = self.pageTrackersStats() else { return }
+
         let currentHost = self.host
         DispatchQueue.global(qos: .utility).async {
-            Engine.sharedInstance.getBridge().callAction("insights:getGhosteryPageStats", args: [tabID, pageInfo, apps, bugs], callback: { (tabDashboardStats) in
-                if currentHost == self.host {
+            Engine.sharedInstance.getBridge().callAction("insights:getGhosteryPageStats", args: [pageData.tabID, pageData.pageInfo, pageData.apps, pageData.bugs], callback: {[weak self] (tabDashboardStats) in
+                if currentHost == self?.host {
+					self?.statsChecksCount += 1
                     if let result = tabDashboardStats["result"] as? [String: Any],
                         let blockedAds = result["adsBlocked"] as? Int,
-                        let trackerCompanies  = self.getTrackers(result) {
-                        print(result)
-                        if let messageType = ContextualMessagesViewModel.shared.getContextualMessageType(blockedAds: blockedAds, trackerCompanies: trackerCompanies) {
+                        let trackerCompanies  = self?.getTrackers(result) {
+						if trackerCompanies.count > 0 || blockedAds > 0,
+							let messageType = ContextualMessagesViewModel.shared.getContextualMessageType(blockedAds: blockedAds, trackerCompanies: trackerCompanies) {
                             NotificationCenter.default.post(name: Notification.Name.ContextualMessageNotification, object: messageType)
-                        }
-                    }
-                    
-                }
+                    	}
+                	}
+				}
             })
         }
     }
@@ -295,11 +316,10 @@ class CurrentPageInfo: NSObject {
         self.host = nil
         self.startLoadTime = nil
         self.pageTiming = nil
-        self.appIDs.removeAll()
-        self.bugIDs.removeAll()
+		self.clearTrackersData()
         self.dataSentForCurrentPage = false
     }
-    
+
     //Page loaded event
     //Careful: This event can come after the page was changed. Check the currentURL.
     @objc func pageTimingReceived(_ notification: Notification) {
@@ -322,16 +342,7 @@ class CurrentPageInfo: NSObject {
         guard UserPreferences.instance.isProtectionOn == true else { return }
         //filter by tab id.
         //then add the tracker info to the arrays
-        func addSourceTo(dict: inout [Int: Info], source: Source, id: Int) {
-            if let info = dict[id] {
-                info.sources.append(source)
-            }
-            else {
-                let info = Info(blocked: true) //blocked is true always for now.
-                info.sources = [source]
-                dict[id] = info
-            }
-        }
+
         
         if let userInfo = notification.userInfo as? [String: Any], let tabIdentifier = userInfo["tabID"] as? Int, tabIdentifier == tab.tabID {
             
@@ -349,37 +360,61 @@ class CurrentPageInfo: NSObject {
                 self.host = domainURL.absoluteString
                 self.startLoadTime = Date()
             }
-            
-            guard let bug = userInfo["bug"] as? TrackerListBug, let sourceURL = userInfo["sourceURL"] as? URL else {return}
-            let source = Source(src: sourceURL.absoluteString, blocked: true) //blocked is true always for now.
-            let appID = bug.appId
-            
-            addSourceTo(dict: &bugIDs, source: source, id: bug.bugId)
-            addSourceTo(dict: &appIDs, source: source, id: appID)
+            self.updatetrackersInfo(userInfo: userInfo)
+			checkTabStatsForContextualMessage()
         }
     }
-    
-    func convertAppIds() -> [[String: Any]] {
-        var array: [[String: Any]] = []
-        
-        for (key, value) in appIDs {
-            var dict: [String: Any] = [:]
-            dict["id"] = key
-            dict["blocked"] = value.blocked
-            dict["sources"] = value.sources.map{$0.toDict()}
-            array.append(dict)
-        }
-        
+
+	private func updatetrackersInfo(userInfo: [String: Any]) {
+		guard let bug = userInfo["bug"] as? TrackerListBug, let sourceURL = userInfo["sourceURL"] as? URL else {return}
+		let source = Source(src: sourceURL.absoluteString, blocked: true) //blocked is true always for now.
+		let appID = bug.appId
+		
+		self.dataUpdateQueue.async {
+			if let info = self.bugIDs[bug.bugId] {
+				info.sources.append(source)
+			}
+			else {
+				let info = Info(blocked: true) //blocked is true always for now.
+				info.sources = [source]
+				self.bugIDs[bug.bugId] = info
+			}
+		}
+		self.dataUpdateQueue.async {
+			if let info = self.appIDs[appID] {
+				info.sources.append(source)
+			}
+			else {
+				let info = Info(blocked: true) //blocked is true always for now.
+				info.sources = [source]
+				self.appIDs[appID] = info
+			}
+		}
+//		addSourceTo(dict: &bugIDs, source: source, id: bug.bugId)
+//		addSourceTo(dict: &appIDs, source: source, id: appID)
+	}
+	
+    private func convertAppIds() -> AppIDsStatsDictionary {
+		var array: AppIDsStatsDictionary = []
+		self.dataUpdateQueue.sync {
+			for (key, value) in appIDs {
+				var dict: [String: Any] = [:]
+				dict["id"] = key
+				dict["blocked"] = value.blocked
+				dict["sources"] = value.sources.map{$0.toDict()}
+				array.append(dict)
+			}
+		}
         return array
     }
     
-    func convertBugIds() -> [String: Any] {
-        var dict = [String: Any]()
-        
-        for (key, value) in bugIDs {
-            dict[String(key)] = value.toDict()
-        }
-        
+    private func convertBugIds() -> BugIDsStatsDictionary {
+        var dict = BugIDsStatsDictionary()
+		self.dataUpdateQueue.sync {
+			for (key, value) in bugIDs {
+				dict[String(key)] = value.toDict()
+			}
+		}
         return dict
     }
 }
