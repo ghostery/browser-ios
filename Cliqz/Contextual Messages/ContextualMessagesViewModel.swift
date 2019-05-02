@@ -21,21 +21,21 @@ extension Notification.Name {
 
 class ContextualMessagesViewModel: NSObject {
     
-    private static let LastShowMessageDateKey = "contextualMessage.any.show.date"
-    private static let OnboardingMessageDismissedKey = "contextualMessage.onboarding.show"
-    private static let OnboardingDataSyncedKey = "contextualMessage.onboarding.synced"
-    private static let LastExpiredTrailsMessageDateKey = "contextualMessage.expiredTrial.show.date"
+    private static let lastShowMessageDateKey = "contextualMessage.any.show.date"
+    private static let onboardingMessageDismissedKey = "contextualMessage.onboarding.show"
+    private static let lastExpiredTrailsMessageDateKey = "contextualMessage.expiredTrial.show.date"
     private static let adBlockingMessageCountKey = "contextualMessage.adBlocking.show.count"
     private static let antiTrackingMessageCountKey = "contextualMessage.antiTracking.show.count"
-    
+	private static let canShowPrivacyMessageKey = "contextualMessage.privacy.canshow"
+
     static let shared = ContextualMessagesViewModel()
     
     func getContextualMessageType(blockedAds: Int = 0, trackerCompanies: [String] = [String]()) -> ContextualMessageType? {
-        if shouldShowOnboardingMesage() {
+        if shouldShowOnboardingMessage() {
             return .onboarding
         }
         
-        guard shouldShowContextualMessage() else {
+        guard shouldShowPrivacyContextualMessage() else {
             return nil
         }
         
@@ -59,11 +59,11 @@ class ContextualMessagesViewModel: NSObject {
     func contextualMessageShown(_ type: ContextualMessageType) {
         switch type {
         case .onboarding:
-            UserDefaults.standard.set(true, forKey: ContextualMessagesViewModel.OnboardingMessageDismissedKey)
+            UserDefaults.standard.set(true, forKey: ContextualMessagesViewModel.onboardingMessageDismissedKey)
             LegacyTelemetryHelper.logMessage(action: "show", topic: "onboarding_dashboard", style: "notification", view: "web")
         
         case .expiredTrial:
-            UserDefaults.standard.set(Date(), forKey: ContextualMessagesViewModel.LastExpiredTrailsMessageDateKey)
+            UserDefaults.standard.set(Date(), forKey: ContextualMessagesViewModel.lastExpiredTrailsMessageDateKey)
             LegacyTelemetryHelper.logMessage(action: "show", topic: "upgrade", style: "notification", view: "web")
         
         case .adBlocking:
@@ -78,20 +78,50 @@ class ContextualMessagesViewModel: NSObject {
             
         }
     }
-    
-    func onboardingDataSynced() {
-        UserDefaults.standard.set(true, forKey: ContextualMessagesViewModel.OnboardingDataSyncedKey)
-    }
-    
+
+	/*
+	* General check if any of Contextual messages can be shown.
+	*/
+	func shouldShowContextualMessage() -> Bool {
+		if shouldShowOnboardingMessage() {
+			return true
+		}
+		return shouldShowPrivacyContextualMessage()
+	}
+
+	/*
+	* There are some precondicions for Privacy messages to be shown. First onBoarding messages should be shown already and after user should be navigated to another page before to show privacy message.
+	*/
+	func setReadyForPrivacyMessages() {
+		if shouldShowOnboardingMessage() {
+			return
+		}
+		UserDefaults.standard.set(true, forKey: ContextualMessagesViewModel.canShowPrivacyMessageKey)
+	}
+
+	/*
+	* Check the criteria of Adblock or Antitracker contextual messages should be shown. First of all dashboard message should be already shown.
+		If one is shown already, the second one can be shown after 1 day at least.
+	*/
+	private func shouldShowPrivacyContextualMessage() -> Bool {
+		guard UserDefaults.standard.bool(forKey: ContextualMessagesViewModel.canShowPrivacyMessageKey) else {
+			return false
+		}
+		guard let lastShowDate = UserDefaults.standard.value(forKey: ContextualMessagesViewModel.lastShowMessageDateKey) as? Date,
+			let daysCount = lastShowDate.daysUntil(Date()) else {
+				return true
+		}
+		return daysCount > 0
+	}
+
     //MARK:- private helper methods
     /*
      * Show on first page the user visits (right from beginning; don't wait until page is loaded)
      * Keep showing on all web pages, but not on start tab, VPN view, etc. until user has clicked on the dashboard icon, thus opening the dashboard for the first time
      */
-    private func shouldShowOnboardingMesage() -> Bool {
-        let onboardingDataSynced = UserDefaults.standard.bool(forKey: ContextualMessagesViewModel.OnboardingDataSyncedKey)
-        let onboardingMessageDismissed = UserDefaults.standard.bool(forKey: ContextualMessagesViewModel.OnboardingMessageDismissedKey)
-        return onboardingDataSynced && !onboardingMessageDismissed
+    private func shouldShowOnboardingMessage() -> Bool {
+        let onboardingMessageDismissed = UserDefaults.standard.bool(forKey: ContextualMessagesViewModel.onboardingMessageDismissedKey)
+        return !onboardingMessageDismissed
     }
     
     /*
@@ -102,7 +132,7 @@ class ContextualMessagesViewModel: NSObject {
     private func shouldShowExpiredTrialMessage() -> Bool {
         guard SubscriptionController.shared.getCurrentSubscription().isLimitedSubscription() else { return false }
         
-        guard let lastShowDate = UserDefaults.standard.value(forKey: ContextualMessagesViewModel.LastExpiredTrailsMessageDateKey) as? Date,
+        guard let lastShowDate = UserDefaults.standard.value(forKey: ContextualMessagesViewModel.lastExpiredTrailsMessageDateKey) as? Date,
             let daysCount = lastShowDate.daysUntil(Date()) else {
                 return true
         }
@@ -145,14 +175,7 @@ class ContextualMessagesViewModel: NSObject {
     }
     
     private func didShowContextualMessage() {
-        UserDefaults.standard.set(Date(), forKey: ContextualMessagesViewModel.LastShowMessageDateKey)
+        UserDefaults.standard.set(Date(), forKey: ContextualMessagesViewModel.lastShowMessageDateKey)
     }
-    
-    private func shouldShowContextualMessage() -> Bool {
-        guard let lastShowDate = UserDefaults.standard.value(forKey: ContextualMessagesViewModel.LastShowMessageDateKey) as? Date,
-            let daysCount = lastShowDate.daysUntil(Date()) else {
-            return true
-        }
-        return daysCount > 0
-    }
+	
 }

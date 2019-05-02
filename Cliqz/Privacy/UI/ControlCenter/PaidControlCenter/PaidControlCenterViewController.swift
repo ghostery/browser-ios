@@ -37,14 +37,26 @@ class PaidControlCenterViewController: ControlCenterViewController {
     
     var currentPeriod: Period = .Today
     private let overlay = UIView()
-    
+	
+	private let openTabs: [Tab]
+
+	init(openTabs: [Tab]) {
+		self.openTabs = openTabs
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+
     override func setupComponents() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(VPNStatusDidChange(notification:)),
                                                name: .NEVPNStatusDidChange,
                                                object: nil)
         dashboard.dataSource = cellDataSource
-        
+        dashboard.delegate = self
+
         self.addChildViewController(dashboard)
 		self.view.addSubview(privacyControl)
         self.view.addSubview(tabs)
@@ -60,7 +72,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
         setStyle()
         setConstraints()
 
-		CCWidgetManager.shared.update(period: currentPeriod, dashboard: self.dashboard)
+		CCWidgetManager.shared.startDataUpdate(period: currentPeriod, dashboard: self.dashboard, openTabs: self.openTabs)
 		cellDataSource.tapHandler = { [weak self] (widget) in
 			var vc: UIViewController?
 			switch widget {
@@ -107,6 +119,7 @@ class PaidControlCenterViewController: ControlCenterViewController {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+		CCWidgetManager.shared.stopDataUpdate()
     }
 
     @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
@@ -169,8 +182,8 @@ class PaidControlCenterViewController: ControlCenterViewController {
             LegacyTelemetryHelper.logDashboard(action: "click", target: "past")
         }
         
-		CCWidgetManager.shared.update(period: currentPeriod, dashboard: dashboard)
-//		dashboard.update()
+		CCWidgetManager.shared.startDataUpdate(period: currentPeriod, dashboard: self.dashboard, openTabs: self.openTabs)
+		//		dashboard.update()
     }
     
     @objc func VPNStatusDidChange(notification: Notification) {
@@ -264,5 +277,13 @@ extension PaidControlCenterViewController : UpgradeLumenDelegate {
         self.setStyle()
         self.setConstraints()
     }
+}
+
+extension PaidControlCenterViewController: CCCollectionViewDelegate {
+	func didResetData() {
+		for tab in self.openTabs {
+			tab.currentPageInfo?.clearTrackersData()
+		}
+	}
 }
 #endif

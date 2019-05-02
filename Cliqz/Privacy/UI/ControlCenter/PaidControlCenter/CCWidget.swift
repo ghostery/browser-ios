@@ -161,7 +161,9 @@ class CCWidgetManager {
     
     var todayInfo: Info = Info.zero
     var last7DaysInfo: Info = Info.zero
-    
+
+	private var timer: DispatchSourceTimer?
+
     func registerWidget(widget: CCWidget) {
         registeredWidgets.insert(widget)
     }
@@ -169,13 +171,41 @@ class CCWidgetManager {
     func updateAppearance(dashboard: CCCollectionViewController?) {
         self.update(period: currentPeriod, dashboard: dashboard)
     }
-    
+
+	func startDataUpdate(period: Period, dashboard: CCCollectionViewController?, openTabs: [Tab]?) {
+		self.stopDataUpdate()
+		let queue = DispatchQueue(label: "com.lumen.dashboard.timer")
+		timer = DispatchSource.makeTimerSource(queue: queue)
+		timer?.schedule(deadline: .now(), repeating: .seconds(1))
+		timer?.setEventHandler { [weak self] in
+			self?.update(period: period, dashboard: dashboard, openTabs: openTabs)
+		}
+		timer?.resume()
+	}
+
+	func stopDataUpdate() {
+		timer?.cancel()
+		timer = nil
+	}
+
     //period changed
-	func update(period: Period, dashboard: CCCollectionViewController?) {
+	func update(period: Period, dashboard: CCCollectionViewController?, openTabs: [Tab]? = nil) {
         currentPeriod = period
         //push update
-        
-        Engine.sharedInstance.getBridge().callAction("insights:getDashboardStats", args: [currentPeriod.toString()]) { [weak self] (response) in
+		
+		var tabsInfo = [[String: Any]]()
+		if let tabs = openTabs {
+			for tab in tabs {
+				if let info = tab.currentPageInfo?.pageTrackersStats() {
+					tabsInfo.append(["tabId" : info.tabID,
+									 "pageInfo": info.pageInfo,
+									 "apps": info.apps,
+									 "bugs": info.bugs])
+				}
+			}
+		}
+
+        Engine.sharedInstance.getBridge().callAction("insights:getDashboardStats", args: [currentPeriod.toString(), tabsInfo]) { [weak self] (response) in
             //print("getDashboardStats = \(response)")
 			if let info = self?.parseResponse(response: response) {
 //                let widgets = self?.registeredWidgets {

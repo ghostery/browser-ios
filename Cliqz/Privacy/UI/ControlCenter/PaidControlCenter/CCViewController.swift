@@ -16,6 +16,10 @@ protocol CCCollectionDataSourceProtocol: class {
     func horizontalPadding() -> CGFloat
 }
 
+protocol CCCollectionViewDelegate: class {
+	func didResetData()
+}
+
 struct CCUX {
     static let HorizontalContentWigetRatio: CGFloat = 300 / 777
     static let VerticalContentWidgetRatio: CGFloat = 130 / 175
@@ -29,6 +33,7 @@ class CCCollectionViewController: UIViewController {
 	let resetStatsButtons = UIButton(type: .custom)
 
     weak var dataSource: CCCollectionDataSourceProtocol? = nil
+	weak var delegate: CCCollectionViewDelegate? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,6 +124,7 @@ class CCCollectionViewController: UIViewController {
 						//TODO: What should I do in this case?
 					}
 					else {
+						self?.delegate?.didResetData()
 						CCWidgetManager.shared.updateAppearance(dashboard: self)
 					}
 				})

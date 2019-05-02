@@ -124,7 +124,7 @@ extension BrowserViewController {
         }
         
         #if PAID
-            let controlCenter = PaidControlCenterViewController()
+            let controlCenter = PaidControlCenterViewController(openTabs: self.tabManager.tabs)
         #else
             let controlCenter = ControlCenterViewController()
             if let pageURL = pageUrl {
