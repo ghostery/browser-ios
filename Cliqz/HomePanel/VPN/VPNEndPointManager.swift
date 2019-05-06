@@ -110,16 +110,15 @@ class VPNEndPointManager {
     }
     private func sortCountries() {
         // Sort countries alphabetically
-        self.countries = self.countries.sorted { $0.name < $1.name }
+        self.countries = self.countries.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
         // Move Germany & USA to the top
-        let topCountries = self.countries.filter {$0.id == "us" || $0.id == "de"}.sorted { $0.name > $1.name }
+        let topCountries = self.countries.filter {$0.id == "us" || $0.id == "de"}.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedDescending }
         for country in topCountries {
             if let index = self.countries.index(of: country) {
                 self.countries.remove(at: index)
                 self.countries.insert(country, at: 0)
             }
         }
-        
     }
     //MARK:- Public APIs
     //MARK: Credentials
