@@ -26,10 +26,12 @@ extension BrowserViewController {
     
     func showContextualMessage(messageType: ContextualMessageType) {
         #if PAID
-        self.contextualMessageView?.removeFromSuperview()
-        self.contextualMessageView = nil
-        
-        switch messageType {
+		guard self.contextualMessageView == nil else {
+			self.webViewContainer.bringSubview(toFront: contextualMessageView!)
+			return
+		}
+
+		switch messageType {
         case .onboarding:
             contextualMessageView = DashboardContextualOnboardingView()
             break
