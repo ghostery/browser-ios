@@ -121,8 +121,8 @@ class UpgradeView: UIView {
     }
     
     @objc func upgradeToPremium() {
-        delegate?.showUpgradeViewController()
         LegacyTelemetryHelper.logMessage(action: "click", topic: "upgrade", style: "notification", view: view, target: "upgrade")
+        delegate?.showUpgradeViewController()
     }
 }
 
