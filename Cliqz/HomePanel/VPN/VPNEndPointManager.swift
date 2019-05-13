@@ -97,12 +97,11 @@ class VPNEndPointManager {
             self.countries.removeAll()
             
             for cred in credentials {
-                let id = cred.country.lowercased()
-                if let name = self.CountriesLookup[id] {
-                    let country = VPNCountry(id: id, name: name, endpoint: cred.serverIP, remoteID: cred.remoteID)
-                    self.countries.append(country)
-                    self.setCreds(country: country, username: cred.username, password: cred.password)
-                }
+                let id = cred.countryCode.lowercased()
+                let name = self.CountriesLookup[id] ?? cred.country
+                let country = VPNCountry(id: id, name: name, endpoint: cred.serverIP, remoteID: cred.remoteID)
+                self.countries.append(country)
+                self.setCreds(country: country, username: cred.username, password: cred.password)
             }
             
             self.sortCountries()
