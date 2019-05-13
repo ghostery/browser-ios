@@ -11,7 +11,8 @@ import Alamofire
 import SwiftyJSON
 
 struct VPNData {
-	let country: String
+    let country: String
+	let countryCode: String
 	let username: String
 	let password: String
 	let remoteID: String
@@ -58,9 +59,10 @@ class VPNCredentialsService {
                             for node in nodes {
                                 if let data = node.dictionary,
                                     let ip = data["ipAddress"]?.string,
-                                    let country = data["countryCode"]?.string,
+                                    let countryCode = data["countryCode"]?.string,
+                                    let country = data["country"]?.string,
                                     let name = data["name"]?.string {
-                                    result.append(VPNData(country: country, username: username, password: password, remoteID: name, serverIP: ip, port: 0))
+                                    result.append(VPNData(country: country, countryCode: countryCode, username: username, password: password, remoteID: name, serverIP: ip, port: 0))
                                 }
                             }
                         }

@@ -151,7 +151,7 @@ class VPN {
     }
     
     static func countryDidChange(country: VPNCountry) {
-        if VPN.shared.connectedCountry != country {
+        if VPN.shared.connectedCountry != nil && VPN.shared.connectedCountry != country {
             VPN.shared.connectedCountry = nil
             VPN.reconnectVPN()
         }
