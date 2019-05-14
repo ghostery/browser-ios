@@ -70,8 +70,6 @@
 	<string></string>
 	<key>LeanplumProductionKey</key>
 	<string></string>
-	<key>LumenAPIKey</key>
-	<string></string>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>MozWhatsNewTopic</key>
@@ -99,10 +97,6 @@
 	</array>
 	<key>PocketEnvironmentAPIKey</key>
 	<string>$(POCKET_API_KEY)</string>
-	<key>RevenuecatAPIKey</key>
-	<string></string>
-	<key>SentryDSN</key>
-	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>CharisSILB.ttf</string>

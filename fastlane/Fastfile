@@ -243,13 +243,14 @@ platform :ios do
   lane :lumenBeta do
 
     # Configuring Sentry DSN
-    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
+    sh("sed -i '' 's|sentryDSN:\ String?\ =\ nil|sentryDSN:\ String?\ =\ \"'$SentryDSN'\"|' ../Cliqz/Resources/APIKeys.swift")
 
     # Configuring Revenuecat APIs
-    sh("cd .. && plutil -replace RevenuecatAPIKey -string $RevenuecatAPIKey Client/Info.plist")
+    sh("sed -i '' 's|revenuecatAPI:\ String?\ =\ nil|revenuecatAPI:\ String?\ =\ \"'$RevenuecatAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
 
     # Configuring Lumen APIs
-    sh("cd .. && plutil -replace LumenAPIKey -string $LumenAPIKey Client/Info.plist")
+    sh("sed -i '' 's|lumenAPI:\ String?\ =\ nil|lumenAPI:\ String?\ =\ \"'$lumenAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
+    
 
     # Building ReactNative Entension
     sh("cd .. && npm run bundle-lumen")
@@ -310,13 +311,13 @@ platform :ios do
   lane :lumenRelease do
 
     # Configuring Sentry DSN
-    sh("cd .. && plutil -replace SentryDSN -string $SentryDSN Client/Info.plist")
+    sh("sed -i '' 's|sentryDSN:\ String?\ =\ nil|sentryDSN:\ String?\ =\ \"'$SentryDSN'\"|' ../Cliqz/Resources/APIKeys.swift")
 
     # Configuring Revenuecat APIs
-    sh("cd .. && plutil -replace RevenuecatAPIKey -string $RevenuecatAPIKey Client/Info.plist")
+    sh("sed -i '' 's|revenuecatAPI:\ String?\ =\ nil|revenuecatAPI:\ String?\ =\ \"'$RevenuecatAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
 
     # Configuring Lumen APIs
-    sh("cd .. && plutil -replace LumenAPIKey -string $LumenAPIKey Client/Info.plist")
+    sh("sed -i '' 's|lumenAPI:\ String?\ =\ nil|lumenAPI:\ String?\ =\ \"'$lumenAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
 
     # Building ReactNative Entension
     sh("cd .. && npm run bundle-lumen")

@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import Shared
 
 struct VPNData {
     let country: String
@@ -22,7 +23,6 @@ struct VPNData {
 
 class VPNCredentialsService {
 	
-	private static let APIKey = "LumenAPIKey"
     private static let DeviceIDKey = "Lumen.DeviceID"
 
 	#if BETA
@@ -31,7 +31,7 @@ class VPNCredentialsService {
 	private static let vpnAPIURL = "https://auth.lumenbrowser.com/get_credentials"
 	#endif
 	class func getVPNCredentials(completion: @escaping ([VPNData]) -> Void) {
-		guard let apiKey = Bundle.main.object(forInfoDictionaryKey: VPNCredentialsService.APIKey) as? String, !apiKey.isEmpty,
+		guard let apiKey = APIKeys.lumenAPI, !apiKey.isEmpty,
 				let subscriptionUserId = SubscriptionController.shared.getSubscriptionUserId() else {
 			print("API Key is not available in Info.plist")
 			return
