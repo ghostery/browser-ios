@@ -21,8 +21,7 @@ public class Sentry {
     public static var crashedLastLaunch: Bool {
         return Client.shared?.crashedLastLaunch() ?? false
     }
-
-    private let SentryDSNKey = "SentryDSN"
+    
     private let SentryDeviceAppHashKey = "SentryDeviceAppHash"
     private let DefaultDeviceAppHash = "0000000000000000000000000000000000000000"
     private let DeviceAppHashLength = UInt(20)
@@ -44,7 +43,7 @@ public class Sentry {
             return
         }
 
-        guard let dsn = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
+        guard let dsn = APIKeys.sentryDSN, !dsn.isEmpty else {
             Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
             return
         }

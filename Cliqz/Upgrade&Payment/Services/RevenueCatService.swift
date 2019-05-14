@@ -10,6 +10,7 @@ import UIKit
 import StoreKit
 import RxSwift
 import Purchases
+import Shared
 
 class RevenueCatService: NSObject, IAPService {
     private var purchases: Purchases?
@@ -18,7 +19,7 @@ class RevenueCatService: NSObject, IAPService {
     
     override init() {
         super.init()
-        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "RevenuecatAPIKey") as? String, !apiKey.isEmpty else {
+        guard let apiKey = APIKeys.revenuecatAPI, !apiKey.isEmpty else {
             print("RevenuecatAPIKey is not available in Info.plist")
             return
         }
