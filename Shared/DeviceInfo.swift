@@ -25,6 +25,15 @@ open class DeviceInfo {
         }
         return identifier
     }
+    
+    open class func appInstallationDate() -> Date? {
+        let fileManager = FileManager.default
+        if let documentFoldersURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).last {
+            let attributes = try? fileManager.attributesOfItem(atPath: documentFoldersURL.path) as Dictionary
+            return attributes?[FileAttributeKey.creationDate] as? Date
+        }
+        return nil
+    }
 
     /// Return the client name, which can be either "Fennec on Stefan's iPod" or simply "Stefan's iPod" if the application display name cannot be obtained.
     open class func defaultClientName() -> String {
