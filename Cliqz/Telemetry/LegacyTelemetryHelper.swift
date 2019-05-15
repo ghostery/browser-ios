@@ -69,6 +69,12 @@ class LegacyTelemetryHelper: NSObject {
         let signal: [String : Any] = ["type": "app", "action": "stateChange", "state": state, "version": 1]
         sendSignal(signal)
     }
+    
+    class func logPush(action: String, topic: String) {
+       let signal: [String : Any] = ["type": "push", "action": action, "topic": topic, "version": 1]
+        sendSignal(signal)
+    }
+    
     private class func sendSignal(_ signal: [String: Any]) {
         #if PAID
         DispatchQueue.global(qos: .utility).async {

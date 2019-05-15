@@ -634,6 +634,7 @@
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
 		C50C4FA32277428B009B362E /* VPN.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50C4FA22277428A009B362E /* VPN.swift */; };
 		C5B8BAC72281AD4A0048D699 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B8BABD2281AC1F0048D699 /* APIKeys.swift */; };
+		C599C1B1228ADEE5006985F1 /* UserNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C599C1B0228ADEE5006985F1 /* UserNotificationsManager.swift */; };
 		C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */; };
 		C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
 		C8611CB01F71AEBA00C3DE7D /* NoImageModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */; };
@@ -2073,6 +2074,7 @@
 		C4F3B2991CFCF93A00966259 /* ButtonToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonToast.swift; sourceTree = "<group>"; };
 		C50C4FA22277428A009B362E /* VPN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPN.swift; sourceTree = "<group>"; };
 		C5B8BABD2281AC1F0048D699 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
+		C599C1B0228ADEE5006985F1 /* UserNotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationsManager.swift; sourceTree = "<group>"; };
 		C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewSwizzled.swift; sourceTree = "<group>"; };
 		C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeTests.swift; sourceTree = "<group>"; };
 		C88601B71F4228AD00BBDE4F /* ContentBlockerSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlockerSettingViewController.swift; sourceTree = "<group>"; };
@@ -3577,6 +3579,7 @@
 		4F8F3C0D202CB39F001C1A0F /* Cliqz */ = {
 			isa = PBXGroup;
 			children = (
+				C599C1A7228ADEC7006985F1 /* Notifications */,
 				1E54236A222008200021020F /* Contextual Messages */,
 				4FDC333621FF618E001215EF /* Upgrade&Payment */,
 				1E8C403921F89A4F00873CB7 /* Theme */,
@@ -4015,6 +4018,14 @@
 				1EDF0B1E207B837F00856493 /* KeyboardAccessoryView.swift */,
 			);
 			path = URLBar;
+			sourceTree = "<group>";
+		};
+		C599C1A7228ADEC7006985F1 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				C599C1B0228ADEE5006985F1 /* UserNotificationsManager.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		C8F457A61F1FD75A000CB895 /* BrowserViewController */ = {
@@ -6787,6 +6798,7 @@
 				AF03AA2A20BC129A00A9D097 /* ApplyDefaultsOperation.swift in Sources */,
 				AF6FA97B20652C8F00D7F9F0 /* URLInterceptor.swift in Sources */,
 				E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */,
+				C599C1B1228ADEE5006985F1 /* UserNotificationsManager.swift in Sources */,
 				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
 				AFD165B620C6C03B00379381 /* UpdateOperation.swift in Sources */,
 				39DD030D1CD53E1900BC09B3 /* HomePageHelper.swift in Sources */,
