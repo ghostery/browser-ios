@@ -455,8 +455,7 @@ struct LumenIntroCard: Codable, Equatable {
        
         
         let onboardingStrings = CliqzStrings.LumenOnboarding()
-		let langCode = Locale.current.languageCode ?? "en"
-		let dashboardImageName = "lumen-Dashboard_\(langCode)"
+		let dashboardImageName = "lumen-Dashboard"
         let welcome = LumenIntroCard(title: onboardingStrings.introTitle, text: onboardingStrings.introText, imageName: dashboardImageName)
 //        let adblock = LumenIntroCard(title: onboardingStrings.adblockerTitle, text: onboardingStrings.adblockerText, imageName: "lumen-Adblock")
         let vpn = LumenIntroCard(title: onboardingStrings.vpnTitle, text: onboardingStrings.vpnText, imageName: "lumen-VPN")

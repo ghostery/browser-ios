@@ -103,6 +103,7 @@ extension VPNCountryController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
+		headerView.backgroundColor = UIColor.lumenDeepBlue
         let headerLabel = UILabel()
         headerLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         headerLabel.textColor = UIColor.lumenBrightBlue
