@@ -340,6 +340,11 @@ platform :ios do
       readonly: true,
       verbose: true
     )
+    
+    increment_build_number(
+      build_number: latest_testflight_build_number + 1,
+      xcodeproj: "Client.xcodeproj"
+    )
 
     build_app(
       workspace: "Client.xcworkspace",
