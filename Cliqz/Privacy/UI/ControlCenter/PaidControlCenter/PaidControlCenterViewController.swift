@@ -209,7 +209,8 @@ class PaidControlCenterViewController: ControlCenterViewController {
 extension PaidControlCenterViewController : UpgradeLumenDelegate {
     @objc func showUpgradeViewController() {
         let upgradLumenViewController = UpgradLumenViewController()
-        self.present(upgradLumenViewController, animated: true, completion: nil)
+        let navigationController = UpgradLumenNavigationController(rootViewController: upgradLumenViewController)
+        self.present(navigationController, animated: true, completion: nil)
     }
 	
     fileprivate func addUpgradeViewIfRequired() {

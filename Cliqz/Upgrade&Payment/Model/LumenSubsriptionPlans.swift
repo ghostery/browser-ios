@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum LumenSubsriptionPlanType: String {
+public enum LumenSubscriptionPlanType: String {
 	#if BETA
 	case basic  = "com.cliqz.ios.lumen.staging.sale.basic"
 	case vpn   = "com.cliqz.ios.lumen.staging.sale.vpn"
@@ -44,7 +44,7 @@ enum PromoType: String {
 	case freeMonth = "freeMonth"
 }
 
-public struct LumenSubsriptionPromoPlanType {
+public struct LumenSubscriptionPromoPlanType {
 	let code: String
 	let promoID: String
 	let type: PromoType

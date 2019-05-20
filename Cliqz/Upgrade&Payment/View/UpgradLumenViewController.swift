@@ -8,6 +8,16 @@
 
 import UIKit
 
+class UpgradLumenNavigationController: UINavigationController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return ThemeManager.instance.statusBarStyle
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+}
+
 class UpgradLumenViewController: UIViewController {
     #if PAID
     private let containerView = UIView()
@@ -31,7 +41,7 @@ class UpgradLumenViewController: UIViewController {
         NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue]
     
     private var isConditionsHidden = true
-    private var lastShosenPremiumType: LumenSubsriptionPlanType?
+    private var lastShosenPremiumType: LumenSubscriptionPlanType?
 
 	private let subscriptionsDataSource = MainSubscriptionsDataSource()
 
@@ -350,7 +360,7 @@ class UpgradLumenViewController: UIViewController {
 		self.present(alertView, animated: true)
 	}
 
-	private func navigateToPromoSubscription(promoType: LumenSubsriptionPromoPlanType) {
+	private func navigateToPromoSubscription(promoType: LumenSubscriptionPromoPlanType) {
 		let promoViewController = PromoUpgradeViewController(promoType)
 		self.navigationController?.pushViewController(promoViewController, animated: false)
 	}
@@ -372,7 +382,7 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath) as! SubscriptionTableViewCell
 		cell.subscriptionInfo = subscriptionsDataSource.subscriptionInfo(indexPath: indexPath)
 //        cell.premiumType = self.premiumTypes[indexPath.row]
-//        cell.buyButtonHandler = { [weak self] premiumType in
+//        cell.buyButtonHandler = { [weak self] subscritionPlan in
 //            SubscriptionController.shared.buyProduct(premiumType)
 //            self?.lastShosenPremiumType = premiumType
 //            self?.telemetryTarget = premiumType.getTelemeteryTarget()
@@ -391,13 +401,12 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
 		footerView.addSubview(self.privacyPolicyButton)
 	
 		restoreButton.snp.makeConstraints { (make) in
-			make.centerX.equalToSuperview()
+			make.left.equalToSuperview().inset(30.0)
 			make.top.equalToSuperview()
-			make.width.equalTo(200.0)
 			make.height.equalTo(30.0)
 		}
 		promoCodeButton.snp.makeConstraints { (make) in
-			make.right.equalToSuperview()
+			make.right.equalToSuperview().inset(30.0)
 			make.top.equalToSuperview()
 			make.height.equalTo(30.0)
 		}

@@ -12,13 +12,13 @@ import SwiftyJSON
 class PromoCodesManager {
 
 //	private var promoCodes: [String: JSON]?
-	private var promoCodes = [String: LumenSubsriptionPromoPlanType]()
+	private var promoCodes = [String: LumenSubscriptionPromoPlanType]()
 
 	func isValidPromoCode(_ code: String) -> Bool {
 		return self.promoCodes[code] != nil
 	}
 
-	func getPromoType(_ code: String) -> LumenSubsriptionPromoPlanType? {
+	func getPromoType(_ code: String) -> LumenSubscriptionPromoPlanType? {
 		if let plan = self.promoCodes[code] {
 			return plan
 		}
@@ -40,7 +40,7 @@ class PromoCodesManager {
 							let promoID = promoDict["ID"]?.string,
 							let strType = promoDict["type"]?.string,
 							let type = PromoType(rawValue: strType) {
-							self.promoCodes[code] = LumenSubsriptionPromoPlanType(code: code, promoID: promoID, type: type)
+							self.promoCodes[code] = LumenSubscriptionPromoPlanType(code: code, promoID: promoID, type: type)
 						}
 					}
 				}

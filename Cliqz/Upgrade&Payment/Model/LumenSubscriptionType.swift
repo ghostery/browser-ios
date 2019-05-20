@@ -11,7 +11,7 @@ import Foundation
 public enum LumenSubscriptionType {
     case limited
     case trial(Int)
-    case premium(LumenSubsriptionPlanType, Date)
+    case premium(LumenSubscriptionPlanType, Date)
     
     func trialRemainingDays() -> Int? {
         switch self {
