@@ -12,7 +12,7 @@ import UIKit
 
 class PromoUpgradeViewController: UIViewController {
 
-	private let promoType: LumenSubsriptionPromoPlanType
+	private let promoType: LumenSubscriptionPromoPlanType
 	
 	private let promoValidityLabel = UILabel()
 	private let promoCodeLabel = UILabel()
@@ -23,7 +23,7 @@ class PromoUpgradeViewController: UIViewController {
 	private let privacyPolicyButton = UIButton()
 	private let dataSource: PromoSubscriptionsDataSource
 
-	init(_ promoType: LumenSubsriptionPromoPlanType) {
+	init(_ promoType: LumenSubscriptionPromoPlanType) {
 		self.promoType = promoType
 		self.dataSource = PromoSubscriptionsDataSource(promoType: promoType)
 		super.init(nibName: nil, bundle: nil)
@@ -63,12 +63,11 @@ class PromoUpgradeViewController: UIViewController {
 		self.view.addSubview(subscriptionsTableView)
 
 		conditionsLabel.numberOfLines = 0
-		conditionsLabel.text = NSLocalizedString("", tableName: "Lumen", comment: "[Upgrade Flow] Conditions text")
+		conditionsLabel.text = self.dataSource.getConditionText() //NSLocalizedString("", tableName: "Lumen", comment: "[Upgrade Flow] Conditions text")
 		conditionsLabel.textColor = UIColor(colorString: "BDC0CE")
 
 		conditionsLabel.textAlignment = .center
 		conditionsLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .regular)
-		
 
 		let buttonAttributes : [NSAttributedStringKey: Any] = [
 			NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0, weight: .medium),

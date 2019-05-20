@@ -21,7 +21,7 @@ public class SubscriptionController {
     private let trialRemainingDaysKey = "Lumen.TrialRemainingDays"
     private let trialExpiredViewLastDismissedKey = "Lumen.TrialExpiredView.lastDismissed"
     private let disposeBag = DisposeBag()
-    var availableSubscriptions = [LumenSubsriptionPlanType : SKProduct]()
+    var availableSubscriptions = [LumenSubscriptionPlanType : SKProduct]()
     
     //MARK:- initialization
     init() {
@@ -102,14 +102,14 @@ public class SubscriptionController {
             guard let self = self, let products = products, success else { return }
             self.availableSubscriptions.removeAll()
             for product in products {
-                if let premiumType = LumenSubsriptionPlanType.init(rawValue: product.productIdentifier) {
+                if let premiumType = LumenSubscriptionPlanType.init(rawValue: product.productIdentifier) {
                     self.availableSubscriptions[premiumType] = product
                 }
             }
         }
     }
     
-    public func buyProduct(_ premiumType: LumenSubsriptionPlanType) {
+    public func buyProduct(_ premiumType: LumenSubscriptionPlanType) {
         if let product = availableSubscriptions[premiumType] {
             storeService.buyProduct(product)
         }
@@ -130,7 +130,7 @@ public class SubscriptionController {
     public func getCurrentSubscription() -> LumenSubscriptionType {
 
         if let purchasedProductIdentifier = UserDefaults.standard.string(forKey: purchasedProductIdentifierKey),
-            let permiumType = LumenSubsriptionPlanType.init(rawValue: purchasedProductIdentifier),
+            let permiumType = LumenSubscriptionPlanType.init(rawValue: purchasedProductIdentifier),
             let expirationDate = getExpirationDate(), Date().timeIntervalSince(expirationDate) < 0 {
             return .premium(permiumType, expirationDate)
         }
@@ -143,7 +143,7 @@ public class SubscriptionController {
         return .limited
     }
     
-    public func getAvailableUpgradeOptions() -> [LumenSubsriptionPlanType] {
+    public func getAvailableUpgradeOptions() -> [LumenSubscriptionPlanType] {
         let currentSubscription = getCurrentSubscription()
         switch currentSubscription {
         case .premium(let premiumType, _):
@@ -180,7 +180,7 @@ public class SubscriptionController {
         }
     }
     
-    public func hasSubscription(_ premiumType: LumenSubsriptionPlanType) -> Bool {
+    public func hasSubscription(_ premiumType: LumenSubscriptionPlanType) -> Bool {
         let currentSubscription = getCurrentSubscription()
         switch currentSubscription {
         case .premium(let purchasedPremiumType, _):

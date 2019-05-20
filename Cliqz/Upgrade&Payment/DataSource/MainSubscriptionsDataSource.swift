@@ -10,7 +10,7 @@ import Foundation
 
 class MainSubscriptionsDataSource {
 	
-	private let subscriptionPlans: [LumenSubsriptionPlanType] = SubscriptionController.shared.getAvailableUpgradeOptions()
+	private let subscriptionPlans: [LumenSubscriptionPlanType] = SubscriptionController.shared.getAvailableUpgradeOptions()
 
 	init() {
 	}
@@ -37,10 +37,10 @@ class MainSubscriptionsDataSource {
 		default:
 			break
 		}
-		return SubscriptionInfo(subscriptionID: plan.rawValue, name: getName(of: plan), price: getPrice(of: plan), description: getDescription(of: plan), offerDetails: offerDetails, isSubscribed: SubscriptionController.shared.hasSubscription(plan))
+        return SubscriptionInfo(subscriptionID: plan.rawValue, name: getName(of: plan), price: getPrice(of: plan), priceDetails: nil, description: getDescription(of: plan), offerDetails: offerDetails, isSubscribed: SubscriptionController.shared.hasSubscription(plan))
 	}
 	
-	func getName(of plan: LumenSubsriptionPlanType) -> String {
+	func getName(of plan: LumenSubscriptionPlanType) -> String {
 		switch plan {
 		case .basic:
 			return NSLocalizedString("BASIC", tableName: "Lumen", comment: "BASIC Subscription name")
@@ -51,7 +51,7 @@ class MainSubscriptionsDataSource {
 		}
 	}
 	
-	func getDescription(of plan: LumenSubsriptionPlanType) -> String {
+	func getDescription(of plan: LumenSubscriptionPlanType) -> String {
 		switch plan {
 		case .basic:
 			return NSLocalizedString("ULTIMATE PROTECTION ONLINE", tableName: "Lumen", comment: "BASIC Subscription Description")
@@ -62,7 +62,7 @@ class MainSubscriptionsDataSource {
 		}
 	}
 	
-	func getPrice(of plan: LumenSubsriptionPlanType) -> String {
+	func getPrice(of plan: LumenSubscriptionPlanType) -> String {
 		switch plan {
 		case .basic:
 			return NSLocalizedString("1,99 €/MONTH", tableName: "Lumen", comment: "BASIC Subscription price")
@@ -73,7 +73,7 @@ class MainSubscriptionsDataSource {
 		}
 	}
 	
-	func getTelemeteryTarget(of plan: LumenSubsriptionPlanType) -> String {
+	func getTelemeteryTarget(of plan: LumenSubscriptionPlanType) -> String {
 		switch plan {
 		case .basic:
 			return "subscribe_basic"

@@ -10,9 +10,9 @@ import Foundation
 
 class PromoSubscriptionsDataSource {
 	
-	private let subscriptionPlan: LumenSubsriptionPromoPlanType
+	private let subscriptionPlan: LumenSubscriptionPromoPlanType
 	
-	init(promoType: LumenSubsriptionPromoPlanType) {
+	init(promoType: LumenSubscriptionPromoPlanType) {
 		subscriptionPlan = promoType
 	}
 
@@ -36,7 +36,7 @@ class PromoSubscriptionsDataSource {
 		default:
 			break
 		}
-		return SubscriptionInfo(subscriptionID: subscriptionPlan.promoID, name: getName(), price: getPrice(), description: getDescription(), offerDetails: offerDetails, isSubscribed: false)
+        return SubscriptionInfo(subscriptionID: subscriptionPlan.promoID, name: getName(), price: getPrice(), priceDetails: nil, description: getDescription(), offerDetails: offerDetails, isSubscribed: false)
 	}
 
 	func getName() -> String {
