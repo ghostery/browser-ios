@@ -153,7 +153,8 @@ class LumenFreshtabViewController: FreshtabViewController {
 
 	fileprivate func showUpgradeOptionsViewController() {
 		let upgradLumenViewController = UpgradLumenViewController()
-		self.present(upgradLumenViewController, animated: true, completion: nil)
+		let navController = UINavigationController(rootViewController: upgradLumenViewController)
+		self.present(navController, animated: true, completion: nil)
 	}
 }
 

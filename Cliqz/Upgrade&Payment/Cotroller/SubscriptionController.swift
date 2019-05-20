@@ -21,7 +21,7 @@ public class SubscriptionController {
     private let trialRemainingDaysKey = "Lumen.TrialRemainingDays"
     private let trialExpiredViewLastDismissedKey = "Lumen.TrialExpiredView.lastDismissed"
     private let disposeBag = DisposeBag()
-    var availableSubscriptions = [PremiumType : SKProduct]()
+    var availableSubscriptions = [LumenSubsriptionPlanType : SKProduct]()
     
     //MARK:- initialization
     init() {
@@ -102,14 +102,14 @@ public class SubscriptionController {
             guard let self = self, let products = products, success else { return }
             self.availableSubscriptions.removeAll()
             for product in products {
-                if let premiumType = PremiumType.init(rawValue: product.productIdentifier) {
+                if let premiumType = LumenSubsriptionPlanType.init(rawValue: product.productIdentifier) {
                     self.availableSubscriptions[premiumType] = product
                 }
             }
         }
     }
     
-    public func buyProduct(_ premiumType: PremiumType) {
+    public func buyProduct(_ premiumType: LumenSubsriptionPlanType) {
         if let product = availableSubscriptions[premiumType] {
             storeService.buyProduct(product)
         }
@@ -130,7 +130,7 @@ public class SubscriptionController {
     public func getCurrentSubscription() -> LumenSubscriptionType {
 
         if let purchasedProductIdentifier = UserDefaults.standard.string(forKey: purchasedProductIdentifierKey),
-            let permiumType = PremiumType.init(rawValue: purchasedProductIdentifier),
+            let permiumType = LumenSubsriptionPlanType.init(rawValue: purchasedProductIdentifier),
             let expirationDate = getExpirationDate(), Date().timeIntervalSince(expirationDate) < 0 {
             return .premium(permiumType, expirationDate)
         }
@@ -143,16 +143,16 @@ public class SubscriptionController {
         return .limited
     }
     
-    public func getAvailableUpgradeOptions() -> [PremiumType] {
+    public func getAvailableUpgradeOptions() -> [LumenSubsriptionPlanType] {
         let currentSubscription = getCurrentSubscription()
         switch currentSubscription {
         case .premium(let premiumType, _):
             if premiumType.hasDashboard() {
-                return [.Basic, .BasicAndVpn]
+                return [.basic, .basicAndVpn]
             }
-            return [.Vpn, .BasicAndVpn]
+            return [.vpn, .basicAndVpn]
         default:
-            return [.Basic, .BasicAndVpn, .Vpn]
+            return [.basic, .basicAndVpn, .vpn]
         }
     }
     
@@ -180,7 +180,7 @@ public class SubscriptionController {
         }
     }
     
-    public func hasSubscription(_ premiumType: PremiumType) -> Bool {
+    public func hasSubscription(_ premiumType: LumenSubsriptionPlanType) -> Bool {
         let currentSubscription = getCurrentSubscription()
         switch currentSubscription {
         case .premium(let purchasedPremiumType, _):

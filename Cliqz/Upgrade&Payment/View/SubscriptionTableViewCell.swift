@@ -26,13 +26,21 @@ class SubscriptionTableViewCell: UITableViewCell {
     var isProCell: Bool = false
     var isSubscribed: Bool = false
     
-    var buyButtonHandler: ((_ premiumType: PremiumType) -> Void)?
-    var premiumType: PremiumType? {
-        didSet {
-            guard let premiumType = premiumType else { return }
-            configureCell(premiumType)
-        }
-    }
+    var buyButtonHandler: ((_ subscritionPlan: String) -> Void)?
+//    var premiumType: PremiumType? {
+//        didSet {
+//            guard let premiumType = premiumType else { return }
+//            configureCell(premiumType)
+//        }
+//    }
+
+	var subscriptionInfo: SubscriptionInfo? {
+		didSet {
+			guard let subscriptionInfo = subscriptionInfo else { return }
+			configureCell(subscriptionInfo)
+		}
+	}
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupComponents()
@@ -155,21 +163,21 @@ class SubscriptionTableViewCell: UITableViewCell {
         super.layoutSubviews()
     }
     
-    private func configureCell(_ premiumType: PremiumType) {
-        nameLabel.text = premiumType.getName()
-        priceLabel.text = premiumType.getPrice()
-        descriptionLabel.text = premiumType.getDescription()
-		bestOfferLabel.text = NSLocalizedString("BEST OFFER LIMITED TIME ONLY", tableName: "Lumen", value:"BEST OFFER\nLIMITED TIME ONLY", comment: "BEST OFFER\nLIMITED TIME ONLY")
+	private func configureCell(_ subscriptionInfo: SubscriptionInfo) {
+        nameLabel.text = subscriptionInfo.name
+        priceLabel.text = subscriptionInfo.price //premiumType.getPrice()
+        descriptionLabel.text = subscriptionInfo.description //premiumType.getDescription()
+		bestOfferLabel.text = subscriptionInfo.offerDetails //NSLocalizedString("BEST OFFER LIMITED TIME ONLY", tableName: "Lumen", value:"BEST OFFER\nLIMITED TIME ONLY", comment: "BEST OFFER\nLIMITED TIME ONLY")
 
-        isProCell = premiumType == .BasicAndVpn
-        isSubscribed = SubscriptionController.shared.hasSubscription(premiumType)
+        isProCell = subscriptionInfo.offerDetails != nil
+        isSubscribed = subscriptionInfo.isSubscribed //SubscriptionController.shared.hasSubscription(premiumType)
         self.setStyles()
         self.setConstraints()
     }
     
     @objc func subscribeButtonTapped() {
-        if let premiumType = self.premiumType {
-            buyButtonHandler?(premiumType)
+        if let subscriptionInfo = self.subscriptionInfo {
+            buyButtonHandler?(subscriptionInfo.subscriptionID)
         }
     }
     
