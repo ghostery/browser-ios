@@ -249,7 +249,7 @@ platform :ios do
     sh("sed -i '' 's|revenuecatAPI:\ String?\ =\ nil|revenuecatAPI:\ String?\ =\ \"'$RevenuecatAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
 
     # Configuring Lumen APIs
-    sh("sed -i '' 's|lumenAPI:\ String?\ =\ nil|lumenAPI:\ String?\ =\ \"'$lumenAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
+    sh("sed -i '' 's|lumenAPI:\ String?\ =\ nil|lumenAPI:\ String?\ =\ \"'$LumenAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
     
 
     # Building ReactNative Entension
@@ -317,7 +317,7 @@ platform :ios do
     sh("sed -i '' 's|revenuecatAPI:\ String?\ =\ nil|revenuecatAPI:\ String?\ =\ \"'$RevenuecatAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
 
     # Configuring Lumen APIs
-    sh("sed -i '' 's|lumenAPI:\ String?\ =\ nil|lumenAPI:\ String?\ =\ \"'$lumenAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
+    sh("sed -i '' 's|lumenAPI:\ String?\ =\ nil|lumenAPI:\ String?\ =\ \"'$LumenAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
 
     # Building ReactNative Entension
     sh("cd .. && npm run bundle-lumen")
