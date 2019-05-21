@@ -8,17 +8,26 @@
 
 import Foundation
 
-public enum LumenSubscriptionPlanType: String {
-	#if BETA
-	case basic  = "com.cliqz.ios.lumen.staging.sale.basic"
-	case vpn   = "com.cliqz.ios.lumen.staging.sale.vpn"
-	case basicAndVpn    = "com.cliqz.ios.lumen.staging.sale.basic_vpn"
-	#else
-	case basic  = "com.cliqz.ios.lumen.sale.basic"
-	case vpn   = "com.cliqz.ios.lumen.sale.vpn"
-	case basicAndVpn    = "com.cliqz.ios.lumen.sale.basic_vpn"
-	#endif
-	
+public enum LumenSubscriptionPlanType {
+	case basic(String)
+	case vpn(String)
+	case basicAndVpn(String)
+
+    func hasAssociatedString(string: String) -> Bool {
+        return self.associatedString() == string
+    }
+    
+    func associatedString() -> String? {
+        switch self {
+        case .basic(let val):
+            return val
+        case .basicAndVpn(let val):
+            return val
+        case .vpn(let val):
+            return val
+        }
+    }
+
 	func hasVPN() -> Bool {
 		switch self {
 		case .vpn, .basicAndVpn:
@@ -36,7 +45,34 @@ public enum LumenSubscriptionPlanType: String {
 			return false
 		}
 	}
-	
+}
+
+extension LumenSubscriptionPlanType: Equatable {
+    public static func ==(lhs: LumenSubscriptionPlanType, rhs:LumenSubscriptionPlanType) -> Bool {
+        switch lhs {
+        case .basic(_):
+            switch rhs {
+            case .basic(_):
+                return true
+            default:
+                return false
+            }
+        case .basicAndVpn(_):
+            switch rhs {
+            case .basicAndVpn:
+                return true
+            default:
+                return false
+            }
+        case .vpn:
+            switch rhs {
+            case .vpn:
+                return true
+            default:
+                return false
+            }
+        }
+    }
 }
 
 enum PromoType: String {

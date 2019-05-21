@@ -250,7 +250,8 @@ class UpgradLumenViewController: UIViewController {
         let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("Retry", tableName: "Lumen", comment: "Retry button title in payment failing transaction alert"), style: .default) {[weak self] (action) in
             if let premiumType = self?.lastShosenPremiumType {
-                SubscriptionController.shared.buyProduct(premiumType)
+                // TODO: PK
+//                SubscriptionController.shared.buyProduct(premiumType)
             }
         })
         
