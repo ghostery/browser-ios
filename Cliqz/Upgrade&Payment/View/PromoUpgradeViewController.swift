@@ -11,7 +11,8 @@ import UIKit
 #if PAID
 
 class PromoUpgradeViewController: UIViewController {
-	
+
+
 	private let promoValidityLabel = UILabel()
 	private let promoCodeLabel = UILabel()
 

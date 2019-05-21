@@ -144,7 +144,6 @@ public class SubscriptionController {
         }
         return false
     }
-
     public func requestProducts() {
         storeService.requestProducts {[weak self] (success, products) in
             guard let self = self, let products = products, success else { return }
