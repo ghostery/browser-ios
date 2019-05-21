@@ -11,6 +11,9 @@ import StoreKit
 import RxSwift
 
 public class SubscriptionController {
+    
+   
+
     public static let shared = SubscriptionController()
     
     //MARK:- Private variables
@@ -21,7 +24,9 @@ public class SubscriptionController {
     private let trialRemainingDaysKey = "Lumen.TrialRemainingDays"
     private let trialExpiredViewLastDismissedKey = "Lumen.TrialExpiredView.lastDismissed"
     private let disposeBag = DisposeBag()
-    var availableSubscriptions = [LumenSubscriptionPlanType : SKProduct]()
+    var standartSubscriptions = [SKProduct]()
+    var promoSubscriptions = [SKProduct]()
+    var supportedProductPlans = [LumenSubscriptionPlanType]()
     
     //MARK:- initialization
     init() {
@@ -38,7 +43,9 @@ public class SubscriptionController {
             saveTrialRemainingDays(TrialPeriod)
         }
         self.disableProtectionIfNotAllowedByLicense()
+        self.initializeSupportedProducts()
     }
+    
     
     
     func saveTrialRemainingDays(_ remainingDays: Int) {
@@ -53,6 +60,29 @@ public class SubscriptionController {
     }
     
     // MARK: Private methods
+    private func initializeSupportedProducts() {
+        // TODO: put correct ids
+        #if BETA
+        let basicPlan = LumenSubscriptionPlanType.basic("com.basic")
+        let basicVPNPlan = LumenSubscriptionPlanType.basic("com.basic.vpn")
+        let VPNPlan = LumenSubscriptionPlanType.basic("com.vpn")
+        let promoPlan = LumenSubscriptionPlanType.basic("com.vpn.promo")
+        let promoVPNPlan = LumenSubscriptionPlanType.basic("com.vpn.promo1")
+        #else
+        let basicPlan = LumenSubscriptionPlanType.basic("com.basic")
+        let basicVPNPlan = LumenSubscriptionPlanType.basicAndVpn("com.basic.vpn")
+        let VPNPlan = LumenSubscriptionPlanType.vpn("com.vpn")
+        let promoPlan = LumenSubscriptionPlanType.basic("com.vpn.promo")
+        let promoVPNPlan = LumenSubscriptionPlanType.basic("com.vpn.promo1")
+        #endif
+    
+        self.supportedProductPlans.append(basicPlan)
+        self.supportedProductPlans.append(basicVPNPlan)
+        self.supportedProductPlans.append(VPNPlan)
+//        self.supportedProductPlans.append(promoPlan)
+//        self.supportedProductPlans.append(promoVPNPlan)
+    }
+    
     private func saveExpirationDate(_ date: Date) {
         UserDefaults.standard.set(date, forKey: expirationDateKey)
     }
@@ -96,23 +126,45 @@ public class SubscriptionController {
         return canEnable
     }
     
+    private func subscriptionPlan(for productIdentifier: String) -> LumenSubscriptionPlanType? {
+        for supportedPlans in self.supportedProductPlans {
+            if supportedPlans.hasAssociatedString(string: productIdentifier) {
+                return supportedPlans
+            }
+        }
+        return nil
+    }
+    
     //MARK:- Subscriptions
+    
+    func isProductSupported(product: SKProduct) -> Bool {
+        for supportedProduct in self.supportedProductPlans {
+            if supportedProduct.hasAssociatedString(string: product.productIdentifier) {
+                return true
+            }
+        }
+        return false
+    }
     public func requestProducts() {
         storeService.requestProducts {[weak self] (success, products) in
             guard let self = self, let products = products, success else { return }
-            self.availableSubscriptions.removeAll()
+            self.standartSubscriptions.removeAll()
+            self.promoSubscriptions.removeAll()
             for product in products {
-                if let premiumType = LumenSubscriptionPlanType.init(rawValue: product.productIdentifier) {
-                    self.availableSubscriptions[premiumType] = product
+                if self.isProductSupported(product: product) {
+                    // TODO: base on entitlements
+                    if product.introductoryPrice != nil {
+                        self.promoSubscriptions.append(product)
+                    } else {
+                        self.standartSubscriptions.append(product)
+                    }
                 }
             }
         }
     }
     
-    public func buyProduct(_ premiumType: LumenSubscriptionPlanType) {
-        if let product = availableSubscriptions[premiumType] {
-            storeService.buyProduct(product)
-        }
+    public func buyProduct(_ product: SKProduct) {
+        storeService.buyProduct(product)
     }
     
     public class func canMakePayments() -> Bool {
@@ -130,7 +182,7 @@ public class SubscriptionController {
     public func getCurrentSubscription() -> LumenSubscriptionType {
 
         if let purchasedProductIdentifier = UserDefaults.standard.string(forKey: purchasedProductIdentifierKey),
-            let permiumType = LumenSubscriptionPlanType.init(rawValue: purchasedProductIdentifier),
+            let permiumType = self.subscriptionPlan(for: purchasedProductIdentifier),
             let expirationDate = getExpirationDate(), Date().timeIntervalSince(expirationDate) < 0 {
             return .premium(permiumType, expirationDate)
         }
@@ -145,15 +197,17 @@ public class SubscriptionController {
     
     public func getAvailableUpgradeOptions() -> [LumenSubscriptionPlanType] {
         let currentSubscription = getCurrentSubscription()
-        switch currentSubscription {
-        case .premium(let premiumType, _):
-            if premiumType.hasDashboard() {
-                return [.basic, .basicAndVpn]
-            }
-            return [.vpn, .basicAndVpn]
-        default:
-            return [.basic, .basicAndVpn, .vpn]
-        }
+//        switch currentSubscription {
+//        case .premium(let premiumType, _):
+//            if premiumType.hasDashboard() {
+//                return [.basic, .basicAndVpn]
+//            }
+//            return [.vpn, .basicAndVpn]
+//        default:
+//            return [.basic, .basicAndVpn, .vpn]
+//        }
+        // TODO: PK
+        return self.supportedProductPlans
     }
     
     public func isVPNEnabled() -> Bool {

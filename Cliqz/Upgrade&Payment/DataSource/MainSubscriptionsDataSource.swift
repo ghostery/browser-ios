@@ -21,15 +21,20 @@ class MainSubscriptionsDataSource {
 
 	func subscriptionHeight(indexPath: IndexPath) -> CGFloat {
 		let premiumType = self.subscriptionPlans[indexPath.row]
-		if premiumType == .basicAndVpn {
-			return 150
-		}
-		return 135.0
+        switch premiumType {
+        case .basicAndVpn(_):
+            return 150
+        default:
+            return 135.0
+        }
 	}
 
 	//TODO offr text
 	func subscriptionInfo(indexPath: IndexPath) -> SubscriptionInfo? {
 		let plan = subscriptionPlans[indexPath.row]
+        guard let productIdentifier = plan.associatedString() else {
+            return nil
+        }
 		var offerDetails: String? = nil
 		switch plan {
 		case .basicAndVpn:
@@ -37,7 +42,8 @@ class MainSubscriptionsDataSource {
 		default:
 			break
 		}
-        return SubscriptionInfo(subscriptionID: plan.rawValue, name: getName(of: plan), price: getPrice(of: plan), priceDetails: nil, description: getDescription(of: plan), offerDetails: offerDetails, isSubscribed: SubscriptionController.shared.hasSubscription(plan))
+        
+        return SubscriptionInfo(subscriptionID: productIdentifier, name: getName(of: plan), price: getPrice(of: plan), priceDetails: nil, description: getDescription(of: plan), offerDetails: offerDetails, isSubscribed: SubscriptionController.shared.hasSubscription(plan))
 	}
 	
 	func getName(of plan: LumenSubscriptionPlanType) -> String {
