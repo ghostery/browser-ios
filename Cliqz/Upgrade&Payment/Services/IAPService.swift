@@ -11,7 +11,7 @@ import StoreKit
 import RxSwift
 
 public typealias ProductIdentifier = String
-public typealias ProductsRequestCompletionHandler = (_ success: Bool, _ products: [SKProduct]?) -> Void
+public typealias ProductsRequestCompletionHandler = (_ success: Bool, _ products: [(product: SKProduct, group: String)]?) -> Void
 
 extension Notification.Name {
     static let ProductPurchaseSuccessNotification = Notification.Name("ProductPurchaseSuccessNotification")

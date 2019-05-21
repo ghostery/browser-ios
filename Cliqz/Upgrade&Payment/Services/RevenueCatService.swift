@@ -29,7 +29,7 @@ class RevenueCatService: NSObject, IAPService {
     
     public func requestProducts(completionHandler: @escaping ProductsRequestCompletionHandler) {
         guard let purchases = self.purchases else {
-            completionHandler(false, [SKProduct]())
+            completionHandler(false, [(product: SKProduct, group: String)]())
             return
         }
 		purchases.entitlements { (entitlements, error) in
@@ -38,11 +38,11 @@ class RevenueCatService: NSObject, IAPService {
 				return
 			}
 			print("Loaded list of products...")
-			var products = [SKProduct]()
-			for entitlement in entitlements.values {
-				for offering in entitlement.offerings.values {
+			var products = [(product: SKProduct, group: String)]()
+			for (key,value) in entitlements {
+				for offering in value.offerings.values {
 					if let product = offering.activeProduct {
-						products.append(product)
+						products.append((product, key))
 					}
 				}
 			}

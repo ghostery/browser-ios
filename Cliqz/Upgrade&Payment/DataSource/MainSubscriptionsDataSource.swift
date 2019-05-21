@@ -7,20 +7,18 @@
 //
 
 import Foundation
+import StoreKit
 
 class MainSubscriptionsDataSource {
 	
-	private let subscriptionPlans: [LumenSubscriptionPlanType] = SubscriptionController.shared.getAvailableUpgradeOptions()
-
-	init() {
-	}
+    private let subscriptionPlans: [(product: SKProduct,plan: LumenSubscriptionPlanType)] = SubscriptionController.shared.getAvailableUpgradeOptions()
 	
 	func subscriptionsCount() -> Int {
 		return subscriptionPlans.count
 	}
 
 	func subscriptionHeight(indexPath: IndexPath) -> CGFloat {
-		let premiumType = self.subscriptionPlans[indexPath.row]
+		let premiumType = self.subscriptionPlans[indexPath.row].plan
         switch premiumType {
         case .basicAndVpn(_):
             return 150
@@ -31,7 +29,7 @@ class MainSubscriptionsDataSource {
 
 	//TODO offr text
 	func subscriptionInfo(indexPath: IndexPath) -> SubscriptionInfo? {
-		let plan = subscriptionPlans[indexPath.row]
+		let plan = subscriptionPlans[indexPath.row].plan
         guard let productIdentifier = plan.associatedString() else {
             return nil
         }
