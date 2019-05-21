@@ -11,8 +11,6 @@ import UIKit
 #if PAID
 
 class PromoUpgradeViewController: UIViewController {
-
-	private let promoType: LumenSubscriptionPromoPlanType
 	
 	private let promoValidityLabel = UILabel()
 	private let promoCodeLabel = UILabel()
@@ -23,9 +21,9 @@ class PromoUpgradeViewController: UIViewController {
 	private let privacyPolicyButton = UIButton()
 	private let dataSource: PromoSubscriptionsDataSource
 
-	init(_ promoType: LumenSubscriptionPromoPlanType) {
-		self.promoType = promoType
-		self.dataSource = PromoSubscriptionsDataSource(promoType: promoType)
+	init(_ dataSource: PromoSubscriptionsDataSource) {
+//		self.promoType = promoType
+		self.dataSource = dataSource
 		super.init(nibName: nil, bundle: nil)
 	}
 
@@ -47,7 +45,8 @@ class PromoUpgradeViewController: UIViewController {
 		self.promoValidityLabel.textAlignment = .center
 		self.view.addSubview(self.promoValidityLabel)
 
-		self.promoCodeLabel.text = self.promoType.code
+		// TODO: get from DataSource
+		//self.promoCodeLabel.text = self.promoType.code
 		self.promoCodeLabel.textAlignment = .center
 		self.promoCodeLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
 		self.promoCodeLabel.textColor = UIColor(colorString: "D9A8B5")

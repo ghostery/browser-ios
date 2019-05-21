@@ -10,11 +10,12 @@ import Foundation
 
 class MainSubscriptionsDataSource {
 	
-	private let subscriptionPlans: [LumenSubscriptionPlanType] = SubscriptionController.shared.getAvailableUpgradeOptions()
+	private let subscriptionPlans: [LumenSubscriptionPlanType] //= SubscriptionController.shared.getAvailableUpgradeOptions()
 
-	init() {
+	init(_ subscriptionPlans: [LumenSubscriptionPlanType]) {
+		self.subscriptionPlans = subscriptionPlans
 	}
-	
+
 	func subscriptionsCount() -> Int {
 		return subscriptionPlans.count
 	}

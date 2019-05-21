@@ -12,7 +12,7 @@ class PromoSubscriptionsDataSource {
 	
 	private let subscriptionPlan: LumenSubscriptionPromoPlanType
 	
-	init(promoType: LumenSubscriptionPromoPlanType) {
+	init(promoType: LumenSubscriptionPromoPlanType, promoProducts: Any? = nil) {
 		subscriptionPlan = promoType
 	}
 

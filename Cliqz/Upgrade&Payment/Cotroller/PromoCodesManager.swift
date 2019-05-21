@@ -14,6 +14,8 @@ class PromoCodesManager {
 //	private var promoCodes: [String: JSON]?
 	private var promoCodes = [String: LumenSubscriptionPromoPlanType]()
 
+	static let shared = PromoCodesManager()
+
 	func isValidPromoCode(_ code: String) -> Bool {
 		return self.promoCodes[code] != nil
 	}

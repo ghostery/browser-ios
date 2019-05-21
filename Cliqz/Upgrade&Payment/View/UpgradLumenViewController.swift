@@ -43,10 +43,19 @@ class UpgradLumenViewController: UIViewController {
     private var isConditionsHidden = true
     private var lastShosenPremiumType: LumenSubscriptionPlanType?
 
-	private let subscriptionsDataSource = MainSubscriptionsDataSource()
+	private let subscriptionsDataSource: MainSubscriptionsDataSource // = MainSubscriptionsDataSource()
 
-	private let promoCodesManager = PromoCodesManager()
+//	private let promoCodesManager = PromoCodesManager()
 
+	init(_ dataSource: MainSubscriptionsDataSource) {
+		subscriptionsDataSource = dataSource
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -346,9 +355,9 @@ class UpgradLumenViewController: UIViewController {
 	}
 
 	private func applyPromoCode(code: String?) {
-		if let code = code, promoCodesManager.isValidPromoCode(code),
-			let promoType = promoCodesManager.getPromoType(code) {
-			self.navigateToPromoSubscription(promoType: promoType)
+		if let code = code, PromoCodesManager.shared.isValidPromoCode(code),
+			let promoViewController = UpgradeViewControllerFactory.promoUpgradeViewController(promoCode: code) {
+			self.navigationController?.pushViewController(promoViewController, animated: false)
 		} else {
 			showInvalidPomorAlert()
 		}
@@ -359,11 +368,6 @@ class UpgradLumenViewController: UIViewController {
 		let closeAction = UIAlertAction(title: NSLocalizedString("Close", tableName: "Lumen", comment: "[Upgrade flow] Close button title on invalid promo  code alert"), style: .cancel)
 		alertView.addAction(closeAction)
 		self.present(alertView, animated: true)
-	}
-
-	private func navigateToPromoSubscription(promoType: LumenSubscriptionPromoPlanType) {
-		let promoViewController = PromoUpgradeViewController(promoType)
-		self.navigationController?.pushViewController(promoViewController, animated: false)
 	}
 
     #endif

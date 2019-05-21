@@ -136,7 +136,6 @@ public class SubscriptionController {
     }
     
     //MARK:- Subscriptions
-    
     func isProductSupported(product: SKProduct) -> Bool {
         for supportedProduct in self.supportedProductPlans {
             if supportedProduct.hasAssociatedString(string: product.productIdentifier) {
@@ -145,6 +144,7 @@ public class SubscriptionController {
         }
         return false
     }
+
     public func requestProducts() {
         storeService.requestProducts {[weak self] (success, products) in
             guard let self = self, let products = products, success else { return }
