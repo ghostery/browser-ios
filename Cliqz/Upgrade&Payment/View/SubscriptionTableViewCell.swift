@@ -26,7 +26,7 @@ class SubscriptionTableViewCell: UITableViewCell {
     var isProCell: Bool = false
     var isSubscribed: Bool = false
     
-    var buyButtonHandler: ((_ subscritionPlan: String) -> Void)?
+    var buyButtonHandler: ((_ product: LumenSubscriptionProduct) -> Void)?
 //    var premiumType: PremiumType? {
 //        didSet {
 //            guard let premiumType = premiumType else { return }
@@ -34,7 +34,7 @@ class SubscriptionTableViewCell: UITableViewCell {
 //        }
 //    }
 
-	var subscriptionInfo: SubscriptionInfo? {
+	var subscriptionInfo: SubscriptionCellInfo? {
 		didSet {
 			guard let subscriptionInfo = subscriptionInfo else { return }
 			configureCell(subscriptionInfo)
@@ -163,7 +163,7 @@ class SubscriptionTableViewCell: UITableViewCell {
         super.layoutSubviews()
     }
     
-	private func configureCell(_ subscriptionInfo: SubscriptionInfo) {
+	private func configureCell(_ subscriptionInfo: SubscriptionCellInfo) {
         nameLabel.text = subscriptionInfo.name
         priceLabel.text = subscriptionInfo.price //premiumType.getPrice()
         descriptionLabel.text = subscriptionInfo.description //premiumType.getDescription()
@@ -177,7 +177,7 @@ class SubscriptionTableViewCell: UITableViewCell {
     
     @objc func subscribeButtonTapped() {
         if let subscriptionInfo = self.subscriptionInfo {
-            buyButtonHandler?(subscriptionInfo.subscriptionID)
+            buyButtonHandler?(subscriptionInfo.lumenProduct)
         }
     }
     

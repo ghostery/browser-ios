@@ -9,42 +9,29 @@
 import Foundation
 import StoreKit
 
-class MainSubscriptionsDataSource {
+class StandardSubscriptionsDataSource {
 	
-    private let subscriptionPlans: [(product: SKProduct,plan: LumenSubscriptionPlanType)] = SubscriptionController.shared.getAvailableUpgradeOptions()
+    var subscriptionInfos = [SubscriptionCellInfo]()
+    init(subscriptions: [(product: SKProduct,plan: LumenSubscriptionPlanType)]) {
+        self.generateSubscriptionInfos(subscriptions: subscriptions)
+    }
 	
 	func subscriptionsCount() -> Int {
-		return subscriptionPlans.count
+		return self.subscriptionInfos.count
 	}
 
 	func subscriptionHeight(indexPath: IndexPath) -> CGFloat {
-		let premiumType = self.subscriptionPlans[indexPath.row].plan
-        switch premiumType {
-        case .basicAndVpn(_):
-            return 150
-        default:
-            return 135.0
-        }
+		let subscription = self.subscriptionInfos[indexPath.row]
+        return subscription.height
 	}
 
-	//TODO offr text
-	func subscriptionInfo(indexPath: IndexPath) -> SubscriptionInfo? {
-		let plan = subscriptionPlans[indexPath.row].plan
-        guard let productIdentifier = plan.associatedString() else {
-            return nil
-        }
-		var offerDetails: String? = nil
-		switch plan {
-		case .basicAndVpn:
-			offerDetails = NSLocalizedString("BEST OFFER LIMITED TIME ONLY", tableName: "Lumen", value:"BEST OFFER\nLIMITED TIME ONLY", comment: "BEST OFFER\nLIMITED TIME ONLY")
-		default:
-			break
-		}
-        
-        return SubscriptionInfo(subscriptionID: productIdentifier, name: getName(of: plan), price: getPrice(of: plan), priceDetails: nil, description: getDescription(of: plan), offerDetails: offerDetails, isSubscribed: SubscriptionController.shared.hasSubscription(plan))
+	func subscriptionInfo(indexPath: IndexPath) -> SubscriptionCellInfo? {
+		return self.subscriptionInfos[indexPath.row]
 	}
+    
+    // MARK: Private methods
 	
-	func getName(of plan: LumenSubscriptionPlanType) -> String {
+	private func getName(of plan: LumenSubscriptionPlanType) -> String {
 		switch plan {
 		case .basic:
 			return NSLocalizedString("BASIC", tableName: "Lumen", comment: "BASIC Subscription name")
@@ -55,7 +42,7 @@ class MainSubscriptionsDataSource {
 		}
 	}
 	
-	func getDescription(of plan: LumenSubscriptionPlanType) -> String {
+	private func getDescription(of plan: LumenSubscriptionPlanType) -> String {
 		switch plan {
 		case .basic:
 			return NSLocalizedString("ULTIMATE PROTECTION ONLINE", tableName: "Lumen", comment: "BASIC Subscription Description")
@@ -66,18 +53,8 @@ class MainSubscriptionsDataSource {
 		}
 	}
 	
-	func getPrice(of plan: LumenSubscriptionPlanType) -> String {
-		switch plan {
-		case .basic:
-			return NSLocalizedString("1,99 €/MONTH", tableName: "Lumen", comment: "BASIC Subscription price")
-		case .vpn:
-			return NSLocalizedString("4,99 €/MONAT", tableName: "Lumen", comment: "VPN Subscription price")
-		case .basicAndVpn:
-			return NSLocalizedString("4,99 €/MONTH", tableName: "Lumen", comment: "Basic + VPN Subscription price")
-		}
-	}
 	
-	func getTelemeteryTarget(of plan: LumenSubscriptionPlanType) -> String {
+	private func getTelemeteryTarget(of plan: LumenSubscriptionPlanType) -> String {
 		switch plan {
 		case .basic:
 			return "subscribe_basic"
@@ -88,5 +65,21 @@ class MainSubscriptionsDataSource {
 		}
 	}
 
+    private func generateSubscriptionInfos(subscriptions: [(product: SKProduct,plan: LumenSubscriptionPlanType)]) {
+        self.subscriptionInfos.removeAll()
+        for subscription in subscriptions {
+            var offerDetails: String? = nil
+            var height:CGFloat = 135.0
+            switch subscription.plan {
+            case .basicAndVpn(_):
+                offerDetails = NSLocalizedString("BEST OFFER LIMITED TIME ONLY", tableName: "Lumen", value:"BEST OFFER\nLIMITED TIME ONLY", comment: "BEST OFFER\nLIMITED TIME ONLY")
+                height = 150
+            default:
+                break
+            }
+            let info = SubscriptionCellInfo(name: self.getName(of: subscription.plan), priceDetails: nil, description: self.getDescription(of: subscription.plan), offerDetails: offerDetails, isSubscribed: SubscriptionController.shared.hasSubscription(subscription.plan), height: height, product: subscription.product)
+            self.subscriptionInfos.append(info)
+        }
+    }
 
 }

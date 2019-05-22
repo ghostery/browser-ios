@@ -7,13 +7,23 @@
 //
 
 import Foundation
+import StoreKit
 
-struct SubscriptionInfo {
-	let subscriptionID: String
+struct SubscriptionCellInfo {
 	let name: String
-	let price: String
 	let priceDetails: String?
 	let description: String
 	let offerDetails: String?
 	let isSubscribed: Bool
+    let height: CGFloat
+    weak var product: SKProduct?
+    var price: String {
+        guard let product = self.product else {
+            return ""
+        }
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = product.priceLocale
+        return formatter.string(from: product.price) ?? ""
+    }
 }

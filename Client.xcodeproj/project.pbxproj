@@ -426,9 +426,9 @@
 		4F648C1B228C56C000F9C751 /* promoCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 4F648C12228C56C000F9C751 /* promoCodes.json */; };
 		4F648C1D228C58C100F9C751 /* PromoUpgradeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F648C1C228C58C100F9C751 /* PromoUpgradeViewController.swift */; };
 		4F648C1F228C5B2C00F9C751 /* PromoCodesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F648C1E228C5B2C00F9C751 /* PromoCodesManager.swift */; };
-		4F648C22228DF8A500F9C751 /* MainSubscriptionsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F648C21228DF8A500F9C751 /* MainSubscriptionsDataSource.swift */; };
+		4F648C22228DF8A500F9C751 /* StandardSubscriptionsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F648C21228DF8A500F9C751 /* StandardSubscriptionsDataSource.swift */; };
 		4F648C24228DF8C200F9C751 /* PromoSubscriptionsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F648C23228DF8C200F9C751 /* PromoSubscriptionsDataSource.swift */; };
-		4F648C26228DFCC300F9C751 /* SubscriptionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F648C25228DFCC300F9C751 /* SubscriptionInfo.swift */; };
+		4F648C26228DFCC300F9C751 /* SubscriptionCellInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F648C25228DFCC300F9C751 /* SubscriptionCellInfo.swift */; };
 		4F648C28228EC36700F9C751 /* LumenSubsriptionPlans.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F648C27228EC36700F9C751 /* LumenSubsriptionPlans.swift */; };
 		4F69309A2048185600FB0B2E /* TopSitesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6930992048185600FB0B2E /* TopSitesDataSource.swift */; };
 		4F70E0CB22258F8B00412270 /* LumenPrivacyStateControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70E0CA22258F8B00412270 /* LumenPrivacyStateControl.swift */; };
@@ -633,8 +633,9 @@
 		C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EFEECE1CEBB6F2009762A4 /* BackForwardTableViewCell.swift */; };
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
 		C50C4FA32277428B009B362E /* VPN.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50C4FA22277428A009B362E /* VPN.swift */; };
-		C5B8BAC72281AD4A0048D699 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B8BABD2281AC1F0048D699 /* APIKeys.swift */; };
 		C599C1B1228ADEE5006985F1 /* UserNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C599C1B0228ADEE5006985F1 /* UserNotificationsManager.swift */; };
+		C59E5CFE22954141001FF955 /* LumenSubscriptionProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59E5CFD22954141001FF955 /* LumenSubscriptionProduct.swift */; };
+		C5B8BAC72281AD4A0048D699 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B8BABD2281AC1F0048D699 /* APIKeys.swift */; };
 		C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */; };
 		C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
 		C8611CB01F71AEBA00C3DE7D /* NoImageModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */; };
@@ -1872,9 +1873,9 @@
 		4F648C12228C56C000F9C751 /* promoCodes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = promoCodes.json; sourceTree = "<group>"; };
 		4F648C1C228C58C100F9C751 /* PromoUpgradeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoUpgradeViewController.swift; sourceTree = "<group>"; };
 		4F648C1E228C5B2C00F9C751 /* PromoCodesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoCodesManager.swift; sourceTree = "<group>"; };
-		4F648C21228DF8A500F9C751 /* MainSubscriptionsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSubscriptionsDataSource.swift; sourceTree = "<group>"; };
+		4F648C21228DF8A500F9C751 /* StandardSubscriptionsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardSubscriptionsDataSource.swift; sourceTree = "<group>"; };
 		4F648C23228DF8C200F9C751 /* PromoSubscriptionsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoSubscriptionsDataSource.swift; sourceTree = "<group>"; };
-		4F648C25228DFCC300F9C751 /* SubscriptionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionInfo.swift; sourceTree = "<group>"; };
+		4F648C25228DFCC300F9C751 /* SubscriptionCellInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionCellInfo.swift; sourceTree = "<group>"; };
 		4F648C27228EC36700F9C751 /* LumenSubsriptionPlans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenSubsriptionPlans.swift; sourceTree = "<group>"; };
 		4F6930992048185600FB0B2E /* TopSitesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDataSource.swift; sourceTree = "<group>"; };
 		4F70E0CA22258F8B00412270 /* LumenPrivacyStateControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenPrivacyStateControl.swift; sourceTree = "<group>"; };
@@ -2073,8 +2074,9 @@
 		C4EFEECE1CEBB6F2009762A4 /* BackForwardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardTableViewCell.swift; sourceTree = "<group>"; };
 		C4F3B2991CFCF93A00966259 /* ButtonToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonToast.swift; sourceTree = "<group>"; };
 		C50C4FA22277428A009B362E /* VPN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPN.swift; sourceTree = "<group>"; };
-		C5B8BABD2281AC1F0048D699 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		C599C1B0228ADEE5006985F1 /* UserNotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationsManager.swift; sourceTree = "<group>"; };
+		C59E5CFD22954141001FF955 /* LumenSubscriptionProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenSubscriptionProduct.swift; sourceTree = "<group>"; };
+		C5B8BABD2281AC1F0048D699 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewSwizzled.swift; sourceTree = "<group>"; };
 		C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeTests.swift; sourceTree = "<group>"; };
 		C88601B71F4228AD00BBDE4F /* ContentBlockerSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlockerSettingViewController.swift; sourceTree = "<group>"; };
@@ -3553,7 +3555,7 @@
 		4F648C20228DF86800F9C751 /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
-				4F648C21228DF8A500F9C751 /* MainSubscriptionsDataSource.swift */,
+				4F648C21228DF8A500F9C751 /* StandardSubscriptionsDataSource.swift */,
 				4F648C23228DF8C200F9C751 /* PromoSubscriptionsDataSource.swift */,
 			);
 			path = DataSource;
@@ -3622,8 +3624,9 @@
 				4F648C12228C56C000F9C751 /* promoCodes.json */,
 				4F934B2C22048ACD005D438C /* LumenPurchaseInfo.swift */,
 				4F934B2D22048ACD005D438C /* LumenSubscriptionType.swift */,
-				4F648C25228DFCC300F9C751 /* SubscriptionInfo.swift */,
+				4F648C25228DFCC300F9C751 /* SubscriptionCellInfo.swift */,
 				4F648C27228EC36700F9C751 /* LumenSubsriptionPlans.swift */,
+				C59E5CFD22954141001FF955 /* LumenSubscriptionProduct.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -6665,10 +6668,11 @@
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
 				7482205C1DBAB56300EEEA72 /* MailProviders.swift in Sources */,
 				C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */,
-				4F648C26228DFCC300F9C751 /* SubscriptionInfo.swift in Sources */,
+				4F648C26228DFCC300F9C751 /* SubscriptionCellInfo.swift in Sources */,
 				DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */,
 				AF6F247D20AF0749009C3D0D /* CliqzStrings.swift in Sources */,
 				D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */,
+				C59E5CFE22954141001FF955 /* LumenSubscriptionProduct.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
 				1EAFE562205FFE21006A36B4 /* CliqzOnOffSetting.swift in Sources */,
 				E68E7ADE1CAC208A00FDCA76 /* RemovePasscodeViewController.swift in Sources */,
@@ -6932,7 +6936,7 @@
 				1E51104E2170A97E0092B038 /* SettingsTableViewControllerExtension.swift in Sources */,
 				4F30F52520517A6B0049E4F6 /* ClickableUITableViewCell.swift in Sources */,
 				E6CF28E71CB43B7900151AB3 /* SensitiveViewController.swift in Sources */,
-				4F648C22228DF8A500F9C751 /* MainSubscriptionsDataSource.swift in Sources */,
+				4F648C22228DF8A500F9C751 /* StandardSubscriptionsDataSource.swift in Sources */,
 				1EEA36ED2067DD70003B6AD5 /* VideoDownloader.swift in Sources */,
 				AFF28766209B5F6E001E9B59 /* ImageExtension.swift in Sources */,
 				E68E7ADA1CAC207400FDCA76 /* ChangePasscodeViewController.swift in Sources */,
@@ -7407,7 +7411,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = lumen;
@@ -7463,7 +7467,7 @@
 				);
 				INCLUDE_SETTINGS_BUNDLE = YES;
 				INFOPLIST_FILE = Client/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MOZ_BUNDLE_DISPLAY_NAME = "Lumen Staging";
 				OTHER_LDFLAGS = (
@@ -8570,7 +8574,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = lumen;
@@ -8626,7 +8630,7 @@
 				);
 				INCLUDE_SETTINGS_BUNDLE = YES;
 				INFOPLIST_FILE = Client/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -9410,7 +9414,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = ghostery;
@@ -9466,7 +9470,7 @@
 				);
 				INCLUDE_SETTINGS_BUNDLE = YES;
 				INFOPLIST_FILE = Client/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -11173,7 +11177,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = ghostery;
@@ -11227,7 +11231,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MOZ_INTERNAL_URL_SCHEME = lumen;
 				OTHER_LDFLAGS = (
@@ -12086,7 +12090,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = ghostery;
@@ -12142,7 +12146,7 @@
 				);
 				INCLUDE_SETTINGS_BUNDLE = YES;
 				INFOPLIST_FILE = Client/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -13025,7 +13029,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = fennec;
@@ -13078,7 +13082,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -13615,7 +13619,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = "firefox-beta";
@@ -13670,7 +13674,7 @@
 				);
 				INCLUDE_SETTINGS_BUNDLE = YES;
 				INFOPLIST_FILE = Client/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -14014,7 +14018,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = ghostery;
@@ -14068,7 +14072,7 @@
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
 				INFOPLIST_FILE = Client/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",

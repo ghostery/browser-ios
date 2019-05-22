@@ -25,7 +25,7 @@ class PromoUpgradeViewController: UIViewController {
 
 	init(_ promoType: LumenSubscriptionPromoPlanType) {
 		self.promoType = promoType
-		self.dataSource = PromoSubscriptionsDataSource(promoType: promoType)
+		self.dataSource = PromoSubscriptionsDataSource(promoType: promoType, availablePromoSubscription: SubscriptionController.shared.promoSubscriptionProducts)
 		super.init(nibName: nil, bundle: nil)
 	}
 

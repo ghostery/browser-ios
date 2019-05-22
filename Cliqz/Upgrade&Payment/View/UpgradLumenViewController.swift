@@ -41,9 +41,9 @@ class UpgradLumenViewController: UIViewController {
         NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue]
     
     private var isConditionsHidden = true
-    private var lastShosenPremiumType: LumenSubscriptionPlanType?
+    private var lastChosenProduct: LumenSubscriptionProduct?
 
-	private let subscriptionsDataSource = MainSubscriptionsDataSource()
+    private let subscriptionsDataSource = StandardSubscriptionsDataSource(products: SubscriptionController.shared.standardSubscriptionProducts)
 
 	private let promoCodesManager = PromoCodesManager()
 
@@ -249,9 +249,8 @@ class UpgradLumenViewController: UIViewController {
         let errorDescirption = NSLocalizedString("We are sorry, but something went wrong. The payment was not successful, please try again.", tableName: "Lumen", comment: "Error message when there is failing payment transaction")
         let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("Retry", tableName: "Lumen", comment: "Retry button title in payment failing transaction alert"), style: .default) {[weak self] (action) in
-            if let premiumType = self?.lastShosenPremiumType {
-                // TODO: PK
-//                SubscriptionController.shared.buyProduct(premiumType)
+            if let lumenProduct = self?.lastChosenProduct {
+                SubscriptionController.shared.buyProduct(lumenProduct.product)
             }
         })
         
@@ -381,14 +380,15 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath) as! SubscriptionTableViewCell
-		cell.subscriptionInfo = subscriptionsDataSource.subscriptionInfo(indexPath: indexPath)
-//        cell.premiumType = self.premiumTypes[indexPath.row]
-//        cell.buyButtonHandler = { [weak self] subscritionPlan in
-//            SubscriptionController.shared.buyProduct(premiumType)
-//            self?.lastShosenPremiumType = premiumType
-//            self?.telemetryTarget = premiumType.getTelemeteryTarget()
-//            LegacyTelemetryHelper.logPayment(action: "click", target: self?.telemetryTarget)
-//        }
+        let subscriptionInfo = subscriptionsDataSource.subscriptionInfo(indexPath: indexPath)
+		cell.subscriptionInfo = subscriptionInfo
+        cell.buyButtonHandler = { [weak self] subscriptionProduct in
+            SubscriptionController.shared.buyProduct(subscriptionProduct.product)
+            self?.lastChosenProduct = subscriptionProduct
+            // TODO: check for promo
+            self?.telemetryTarget = subscriptionProduct.telemeteryTarget()
+            LegacyTelemetryHelper.logPayment(action: "click", target: self?.telemetryTarget)
+        }
         return cell
     }
 
