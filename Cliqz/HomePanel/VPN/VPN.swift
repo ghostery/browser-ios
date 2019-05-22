@@ -26,9 +26,6 @@ class VPN {
                                                selector: #selector(VPNStatusDidChange(notification:)),
                                                name: .NEVPNStatusDidChange,
                                                object: nil)
-        if NEVPNManager.shared().protocolConfiguration == nil {
-            lastStatus = .invalid
-        }
     }
     
     func checkConnection() {
@@ -129,6 +126,10 @@ class VPN {
     }
     
     static func connect2VPN() {
+        if NEVPNManager.shared().protocolConfiguration == nil {
+            VPN.shared.lastStatus = .invalid
+        }
+        
         let country = VPNEndPointManager.shared.selectedCountry
         guard let creds = VPNEndPointManager.shared.getCredentials(country: country),
             !country.endpoint.isEmpty else { return }

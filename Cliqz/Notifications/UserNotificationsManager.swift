@@ -24,7 +24,8 @@ private enum SubscriptionReminderOption: Int, CaseIterable {
 class UserNotificationsManager: NSObject {
     
     private let subscriptionReminderCategoryKey = "cliqz.subscriptionReminderCategory"
-    
+	private let promoCodeUserInfoKey = "promoCode"
+
     func requestAuthorization() {
         if #available(iOS 12.0, *) {
             let center = UNUserNotificationCenter.current()
@@ -103,9 +104,11 @@ class UserNotificationsManager: NSObject {
         }
         
         let content = UNMutableNotificationContent()
+		// TODO: Add default promoCode for local notification to PromoCodeManager. Add API to get default PromoCode and info.
+		let userInfo = [promoCodeUserInfoKey: "LUMEN2019"]
         content.body = NSLocalizedString("Limited time offer: 50% off for Lumen protection + VPN. Code: LUMEN2019", tableName: "Lumen", comment: "Local Notification message")
         content.sound = UNNotificationSound.default()
-
+		content.userInfo = userInfo
         let timeInterval = triggerDate.timeIntervalSince(Date())
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
@@ -114,15 +117,26 @@ class UserNotificationsManager: NSObject {
     
     private func createScheduleDate(byAdding days: Int, to date: Date) -> Date? {
         let calendar = Calendar.current
-        let triggerDate = calendar.date(byAdding: .day, value: days, to: date)
+		let triggerDate = calendar.date(byAdding: .day, value: days, to: date)
         var dateComponent = calendar.dateComponents([.day, .year, .month, .timeZone, .calendar], from: triggerDate!)
         dateComponent.hour = 9
         return calendar.date(from: dateComponent)
     }
 }
 
+
 extension UserNotificationsManager: UNUserNotificationCenterDelegate {
+    #if PAID
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        LegacyTelemetryHelper.logPush(action: "click", topic: "discount")
+		guard let userInfo = response.notification.request.content.userInfo as? [String: String],
+		let promoCode = userInfo[self.promoCodeUserInfoKey] else {
+			return
+		}
+		if let promoViewController = UpgradeViewControllerFactory.promoUpgradeViewController(promoCode: promoCode) {
+			UIApplication.topViewController()?.present(promoViewController, animated: false)
+			LegacyTelemetryHelper.logPush(action: "click", topic: "discount")
+		}
     }
+    #endif
 }
+

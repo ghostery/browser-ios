@@ -8,6 +8,16 @@
 
 import UIKit
 
+class UpgradLumenNavigationController: UINavigationController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return ThemeManager.instance.statusBarStyle
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+}
+
 class UpgradLumenViewController: UIViewController {
     #if PAID
     private let containerView = UIView()
@@ -15,6 +25,7 @@ class UpgradLumenViewController: UIViewController {
     private let logoImage = UIImageView()
     private let bundlesView = UITableView()
     private let restoreButton = UIButton()
+	private var promoCodeButton: UIButton?
     private let conditionButton = UIButton()
     private let arrowImage = UIImageView()
     private let conditionsLabel = UILabel()
@@ -22,7 +33,7 @@ class UpgradLumenViewController: UIViewController {
     private let privacyPolicyButton = UIButton()
     private let gradient = BrowserGradientView()
     private let notchOffset = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
-    private var telemetryTarget: String?
+    private var telemetrySignals: [String:String]?
     
     private let buttonAttributes : [NSAttributedStringKey: Any] = [
         NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0, weight: .medium),
@@ -30,15 +41,26 @@ class UpgradLumenViewController: UIViewController {
         NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue]
     
     private var isConditionsHidden = true
-    private let premiumTypes: [PremiumType] = SubscriptionController.shared.getAvailableUpgradeOptions()
-    private var lastShosenPremiumType: PremiumType?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private var selectedProduct: LumenSubscriptionProduct?
 
+    private var subscriptionsDataSource:StandardSubscriptionsDataSource!
+
+	init(_ dataSource: StandardSubscriptionsDataSource) {
+		subscriptionsDataSource = dataSource
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+    override func viewDidLoad() {
+        super.viewDidLoad()		
         self.setupComponents()
         self.setStyles()
         self.setConstraints()
+		self.navigationController?.navigationBar.isHidden = false
+
         NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseSuccessNotification(_:)),
                                                name: .ProductPurchaseSuccessNotification,
                                                object: nil)
@@ -48,6 +70,7 @@ class UpgradLumenViewController: UIViewController {
         
         LegacyTelemetryHelper.logPayment(action: "show")
     }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -64,14 +87,25 @@ class UpgradLumenViewController: UIViewController {
 
     private func setupComponents() {
         self.view.addSubview(containerView)
-        
-        closeButton.setImage(UIImage(named: "Close_UpgradeView"), for: .normal)
-        closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
-        containerView.addSubview(closeButton)
-        
+		
+		self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "Close_UpgradeView"), style: .plain, target: self, action: #selector(closeView))
+		self.navigationItem.rightBarButtonItem?.tintColor = UIColor.lumenTextBlue
+		self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+		self.navigationController?.navigationBar.shadowImage = UIImage()
+		self.navigationController?.navigationBar.isTranslucent = true
+		
 //        logoImage.image = UIImage(named: "Lumen_Logo")
 //        containerView.addSubview(logoImage)
 		
+        switch SubscriptionController.shared.getCurrentSubscription() {
+        case .limited, .trial(_):
+            promoCodeButton = UIButton()
+            promoCodeButton?.setTitle(NSLocalizedString("Promo Code", tableName: "Lumen", comment: "[Upgrade Flow] Promo Code Button title"), for: .normal)
+            promoCodeButton?.addTarget(self, action: #selector(enterPromoCode), for: .touchUpInside)
+        default:
+            break
+        }
+        
         setupBundlesView()
         containerView.addSubview(bundlesView)
         
@@ -115,8 +149,8 @@ class UpgradLumenViewController: UIViewController {
         privacyPolicyButton.setAttributedTitle(privacyPolicyButtonTitle, for: .normal)
         privacyPolicyButton.addTarget(self, action: #selector(showPrivacyPolicy), for: .touchUpInside)
 
-        view.addSubview(gradient)
-        view.sendSubview(toBack: gradient)
+		self.view.addSubview(gradient)
+        self.view.sendSubview(toBack: gradient)
     }
     
     private func setupBundlesView() {
@@ -136,7 +170,14 @@ class UpgradLumenViewController: UIViewController {
         restoreButton.layer.borderColor = UIColor.lumenTextBlue.cgColor
         restoreButton.clipsToBounds = true
         restoreButton.setBackgroundImage(UIImage.from(color: UIColor.cliqzBlueThreeSecondary), for: .highlighted)
-        
+		
+		if let promoCodeButton = self.promoCodeButton {
+			promoCodeButton.setTitleColor(UIColor.lumenTextBlue, for: .normal)
+			promoCodeButton.titleLabel?.font = UIFont.systemFont(ofSize: 16.0, weight: .regular)
+			promoCodeButton.layer.borderColor = UIColor.lumenTextBlue.cgColor
+			promoCodeButton.clipsToBounds = true
+			promoCodeButton.setBackgroundImage(UIImage.from(color: UIColor.cliqzBlueThreeSecondary), for: .highlighted)
+		}
         conditionButton.setTitleColor(UIColor.lumenTextBlue, for: .normal)
         conditionButton.titleLabel?.font = UIFont.systemFont(ofSize: 12.0, weight: .medium)
         
@@ -148,42 +189,17 @@ class UpgradLumenViewController: UIViewController {
     
     private func setConstraints() {
         containerView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view.safeArea.top)
-            make.bottom.equalTo(self.view.safeArea.bottom)
-            make.leading.equalTo(self.view.safeArea.leading)
-            make.trailing.equalTo(self.view.safeArea.trailing)
+			make.edges.equalToSuperview()
         }
         
         gradient.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
         
-        closeButton.snp.makeConstraints { (make) in
-            make.top.trailing.equalToSuperview().inset(10.0)
-            make.width.equalTo(44.0)
-            make.height.equalTo(44.0)
-        }
-		
-		// TODO: Commented for now to fix the layout for Apple submission, but we might need to change again the UI in near future.
-//        logoImage.snp.makeConstraints { (make) in
-//            if UIDevice.current.isSmallIphoneDevice() {
-//                make.top.equalToSuperview()
-//            } else {
-//                make.top.equalToSuperview().inset(10.0)
-//            }
-//            make.centerX.equalToSuperview()
-//        }
-		
-        
         bundlesView.snp.makeConstraints { (make) in
-			make.top.equalTo(self.closeButton.snp.bottom)
+			make.top.equalTo(self.view.snp.top)
 			make.leading.trailing.equalToSuperview()
 			make.bottom.equalToSuperview()
-//            if UIDevice.current.isSmallIphoneDevice() {
-//                make.top.equalToSuperview()
-//            } else {
-//                make.top.equalToSuperview().offset(10.0)
-//            }
         }
 
     }
@@ -194,11 +210,11 @@ class UpgradLumenViewController: UIViewController {
     }
     
     @objc func restoreSubscription() {
-        telemetryTarget = "restore"
-        LegacyTelemetryHelper.logPayment(action: "click", target: telemetryTarget)
+        self.telemetrySignals?["target"] = "restore"
+        LegacyTelemetryHelper.logPayment(action: "click", target: self.telemetrySignals?["target"])
         SubscriptionController.shared.restorePurchases()
-    }
-    
+	}
+
     @objc func showEula() {
         self.dismiss(animated: false) {[weak self] in
             self?.navigateToUrl("https://lumenbrowser.com/lumen_eula.html")
@@ -212,18 +228,25 @@ class UpgradLumenViewController: UIViewController {
     }
     
     @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
-        LegacyTelemetryHelper.logPayment(action: "success", target: telemetryTarget)
+        LegacyTelemetryHelper.logPayment(action: "success", target: self.telemetrySignals?["target"])
+        self.selectedProduct = nil
+        self.telemetrySignals = nil
         self.dismiss(animated: true)
     }
     
     @objc func handlePurchaseErrorNotification(_ notification: Notification) {
-        LegacyTelemetryHelper.logPayment(action: "error", target: telemetryTarget)
+        guard let lumenProduct = self.selectedProduct else {
+            return
+        }
+        
+        self.selectedProduct = nil
+        
+        LegacyTelemetryHelper.logPayment(action: "error", target: self.telemetrySignals?["target"])
         let errorDescirption = NSLocalizedString("We are sorry, but something went wrong. The payment was not successful, please try again.", tableName: "Lumen", comment: "Error message when there is failing payment transaction")
         let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Retry", tableName: "Lumen", comment: "Retry button title in payment failing transaction alert"), style: .default) {[weak self] (action) in
-            if let premiumType = self?.lastShosenPremiumType {
-                SubscriptionController.shared.buyProduct(premiumType)
-            }
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Retry", tableName: "Lumen", comment: "Retry button title in payment failing transaction alert"), style: .default) {(action) in
+            self.selectedProduct = lumenProduct
+            SubscriptionController.shared.buyProduct(lumenProduct.product)
         })
         
         alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Lumen", comment: "Cancel button title in payment failing transaction alert"), style: .default, handler: nil))
@@ -264,7 +287,6 @@ class UpgradLumenViewController: UIViewController {
                     make.top.equalTo(self.arrowImage.snp.bottom).offset(10.0)
                 }
             }
-            
         } else {
             UIView.animate(withDuration: 0.5) {
                 self.arrowImage.image = UIImage(named: "Conditions_Arrow_Up")
@@ -298,31 +320,88 @@ class UpgradLumenViewController: UIViewController {
                 + privacyPolicyButton.bounds.size.height
                 + 35.0
     }
+
+	@objc func enterPromoCode() {
+        LegacyTelemetryHelper.logPayment(action: "click", target: "code")
+		var promoCodeTextField: UITextField?
+		let alertView = UIAlertController(title: NSLocalizedString("Enter your promo code", tableName: "Lumen", comment: "[Upgrade flow] Promo code alert view title") , message: nil, preferredStyle: .alert)
+		alertView.addTextField { (textField) in
+			promoCodeTextField = textField
+			print("Hi")
+		}
+		let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Lumen", comment: "[Upgrade flow] Cancel button title in appling promo code alert"), style: .cancel)
+		alertView.addAction(cancelAction)
+		let applyAction = UIAlertAction(title: NSLocalizedString("Apply", tableName: "Lumen", comment: "[Upgrade flow] Apply promo code button title in in appling promo code alert"), style: .default) { [weak self] (action) in
+			let x = promoCodeTextField?.text
+			self?.applyPromoCode(code: x)
+		}
+		alertView.addAction(applyAction)
+		self.present(alertView, animated: true)
+	}
+
+	private func applyPromoCode(code: String?) {
+		if let code = code, PromoCodesManager.shared.isValidPromoCode(code) {
+            let promoType = PromoCodesManager.shared.getPromoType(code)
+            if let productID = promoType?.promoID {
+                SubscriptionController.shared.isEligible(for: productID) {[weak self] (eligible) in
+                    if eligible {
+                        if let promoViewController = UpgradeViewControllerFactory.promoUpgradeViewController(promoCode: code) {
+                            self?.navigationController?.pushViewController(promoViewController, animated: false)
+                        } else {
+                            assert(false, "Design problem, please investigate")
+                            self?.showInvalidPromoAlert()
+                        }
+                    } else {
+                        self?.showNotEligible()
+                    }
+                }
+            
+            } else {
+                showInvalidPromoAlert()
+            }
+		} else {
+			showInvalidPromoAlert()
+		}
+	}
+
+    private func showNotEligible() {
+        LegacyTelemetryHelper.logPromoPayment(action: "show", view: "error", topic: "not_eligible")
+        let alertView = UIAlertController(title: NSLocalizedString("Sorry, it seems you have used a code before", tableName: "Lumen", comment: "[Upgrade flow] Invalid Promo code alert view title") , message: nil, preferredStyle: .alert)
+        let closeAction = UIAlertAction(title: NSLocalizedString("Close", tableName: "Lumen", comment: "[Upgrade flow] Close button title on invalid promo  code alert"), style: .cancel)
+        alertView.addAction(closeAction)
+        self.present(alertView, animated: true)
+    }
+    
+	private func showInvalidPromoAlert() {
+        LegacyTelemetryHelper.logPromoPayment(action: "show", view: "error", topic: "invalid_code")
+		let alertView = UIAlertController(title: NSLocalizedString("Sorry, this code does not seem to work", tableName: "Lumen", comment: "[Upgrade flow] Invalid Promo code alert view title") , message: nil, preferredStyle: .alert)
+		let closeAction = UIAlertAction(title: NSLocalizedString("Close", tableName: "Lumen", comment: "[Upgrade flow] Close button title on invalid promo  code alert"), style: .cancel)
+		alertView.addAction(closeAction)
+		self.present(alertView, animated: true)
+	}
+
     #endif
 }
 
 #if PAID
 extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.premiumTypes.count
+		return subscriptionsDataSource.subscriptionsCount()
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let premiumType = self.premiumTypes[indexPath.row]
-        if premiumType == .BasicAndVpn {
-            return 150
-        }
-        return 135.0
+		return subscriptionsDataSource.subscriptionHeight(indexPath: indexPath)
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath) as! SubscriptionTableViewCell
-        cell.premiumType = self.premiumTypes[indexPath.row]
-        cell.buyButtonHandler = { [weak self] premiumType in
-            SubscriptionController.shared.buyProduct(premiumType)
-            self?.lastShosenPremiumType = premiumType
-            self?.telemetryTarget = premiumType.getTelemeteryTarget()
-            LegacyTelemetryHelper.logPayment(action: "click", target: self?.telemetryTarget)
+        let subscriptionInfo = subscriptionsDataSource.subscriptionInfo(indexPath: indexPath)
+		cell.subscriptionInfo = subscriptionInfo
+        cell.buyButtonHandler = { [weak self] subscriptionProduct in
+            SubscriptionController.shared.buyProduct(subscriptionProduct.product)
+            self?.selectedProduct = subscriptionProduct
+            self?.telemetrySignals = subscriptionInfo?.telemetrySignals
+            LegacyTelemetryHelper.logPayment(action: "click", target: self?.telemetrySignals?["target"])
         }
         return cell
     }
@@ -334,25 +413,28 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
 		footerView.addSubview(self.conditionsLabel)
 		footerView.addSubview(self.eulaButton)
 		footerView.addSubview(self.privacyPolicyButton)
-	
+		if let promoCodeButton = self.promoCodeButton{
+			footerView.addSubview(promoCodeButton)
+			promoCodeButton.snp.makeConstraints { (make) in
+				make.right.equalToSuperview().inset(30.0)
+				make.top.equalToSuperview()
+				make.height.equalTo(30.0)
+			}
+		}
 		restoreButton.snp.makeConstraints { (make) in
-			make.centerX.equalToSuperview()
+			make.left.equalToSuperview().inset(30.0)
 			make.top.equalToSuperview()
-			make.width.equalTo(200.0)
 			make.height.equalTo(30.0)
 		}
-
 		conditionsLabel.snp.makeConstraints { (make) in
 			make.centerX.equalToSuperview()
 			make.leading.trailing.equalToSuperview().inset(15.0)
 			make.top.equalTo(restoreButton.snp.bottom).offset(3)
 		}
-
 		eulaButton.snp.makeConstraints { (make) in
 			make.centerX.equalToSuperview()
 			make.top.equalTo(conditionsLabel.snp.bottom).offset(5)
 		}
-
 		privacyPolicyButton.snp.makeConstraints { (make) in
 			make.centerX.equalToSuperview()
 			make.top.equalTo(eulaButton.snp.bottom).offset(5)

@@ -18,6 +18,7 @@ class SubscribeButton: UIButton {
 class SubscriptionTableViewCell: UITableViewCell {
     let nameLabel = UILabel()
     let priceLabel = UILabel()
+	let priceSubtitleLabel = UILabel()
     let descriptionLabel = UILabel()
     let bestOfferLabel = UILabel()
     let subscribedIcon = UIImageView()
@@ -26,13 +27,15 @@ class SubscriptionTableViewCell: UITableViewCell {
     var isProCell: Bool = false
     var isSubscribed: Bool = false
     
-    var buyButtonHandler: ((_ premiumType: PremiumType) -> Void)?
-    var premiumType: PremiumType? {
-        didSet {
-            guard let premiumType = premiumType else { return }
-            configureCell(premiumType)
-        }
-    }
+    var buyButtonHandler: ((_ product: LumenSubscriptionProduct) -> Void)?
+
+	var subscriptionInfo: SubscriptionCellInfo? {
+		didSet {
+			guard let subscriptionInfo = subscriptionInfo else { return }
+			configureCell(subscriptionInfo)
+		}
+	}
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupComponents()
@@ -43,6 +46,7 @@ class SubscriptionTableViewCell: UITableViewCell {
     private func setupComponents() {
         self.addSubview(nameLabel)
         self.addSubview(priceLabel)
+		self.addSubview(priceSubtitleLabel)
         descriptionLabel.numberOfLines = 0
         self.addSubview(descriptionLabel)
         bestOfferLabel.numberOfLines = 0
@@ -68,7 +72,10 @@ class SubscriptionTableViewCell: UITableViewCell {
         
         priceLabel.font = UIFont.systemFont(ofSize: 18.0, weight: .medium)
         priceLabel.textColor = UIColor.white
-        
+
+		priceSubtitleLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .medium)
+		priceSubtitleLabel.textColor = UIColor(colorString: "D9A8B5")
+
         descriptionLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .medium)
         descriptionLabel.textColor = UIColor(colorString: "BDC0CE")
         
@@ -117,7 +124,12 @@ class SubscriptionTableViewCell: UITableViewCell {
             make.leading.equalTo(nameLabel.snp.leading)
             make.top.equalTo(nameLabel.snp.bottom).offset(23.0)
         }
-        
+		
+		priceSubtitleLabel.snp.remakeConstraints { (make) in
+			make.leading.equalTo(nameLabel.snp.leading)
+			make.top.equalTo(priceLabel.snp.bottom).offset(3.0)
+		}
+	
         descriptionLabel.snp.remakeConstraints { (make) in
             make.leading.equalTo(nameLabel.snp.leading)
             make.trailing.equalToSuperview().inset(25.0)
@@ -155,21 +167,22 @@ class SubscriptionTableViewCell: UITableViewCell {
         super.layoutSubviews()
     }
     
-    private func configureCell(_ premiumType: PremiumType) {
-        nameLabel.text = premiumType.getName()
-        priceLabel.text = premiumType.getPrice()
-        descriptionLabel.text = premiumType.getDescription()
-		bestOfferLabel.text = NSLocalizedString("BEST OFFER LIMITED TIME ONLY", tableName: "Lumen", value:"BEST OFFER\nLIMITED TIME ONLY", comment: "BEST OFFER\nLIMITED TIME ONLY")
+	private func configureCell(_ subscriptionInfo: SubscriptionCellInfo) {
+        nameLabel.text = subscriptionInfo.name
+        priceLabel.text = subscriptionInfo.localizedPrice //premiumType.getPrice()
+		priceSubtitleLabel.text = subscriptionInfo.promoPriceLocalizedDetails
+        descriptionLabel.text = subscriptionInfo.description //premiumType.getDescription()
+		bestOfferLabel.text = subscriptionInfo.offerDetails //NSLocalizedString("BEST OFFER LIMITED TIME ONLY", tableName: "Lumen", value:"BEST OFFER\nLIMITED TIME ONLY", comment: "BEST OFFER\nLIMITED TIME ONLY")
 
-        isProCell = premiumType == .BasicAndVpn
-        isSubscribed = SubscriptionController.shared.hasSubscription(premiumType)
+        isProCell = subscriptionInfo.offerDetails != nil
+        isSubscribed = subscriptionInfo.isSubscribed //SubscriptionController.shared.hasSubscription(premiumType)
         self.setStyles()
         self.setConstraints()
     }
     
     @objc func subscribeButtonTapped() {
-        if let premiumType = self.premiumType {
-            buyButtonHandler?(premiumType)
+        if let subscriptionInfo = self.subscriptionInfo {
+            buyButtonHandler?(subscriptionInfo.lumenProduct)
         }
     }
     

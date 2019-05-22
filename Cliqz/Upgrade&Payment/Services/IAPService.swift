@@ -11,7 +11,7 @@ import StoreKit
 import RxSwift
 
 public typealias ProductIdentifier = String
-public typealias ProductsRequestCompletionHandler = (_ success: Bool, _ products: [SKProduct]?) -> Void
+public typealias ProductsRequestCompletionHandler = (_ success: Bool, _ products: [(product: SKProduct, group: String)]?) -> Void
 
 extension Notification.Name {
     static let ProductPurchaseSuccessNotification = Notification.Name("ProductPurchaseSuccessNotification")
@@ -21,6 +21,7 @@ extension Notification.Name {
 
 protocol IAPService {
     func requestProducts(completionHandler: @escaping ProductsRequestCompletionHandler)
+    func isUserPromoEligible(productID:String, completion: @escaping (Bool) -> Void)
     func buyProduct(_ product: SKProduct)
     func restorePurchases()
     func getSubscriptionUserId() -> String?
