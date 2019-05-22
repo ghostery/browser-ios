@@ -11,6 +11,7 @@ import StoreKit
 import RxSwift
 
 public class SubscriptionController {
+
     public static let shared = SubscriptionController()
     
     //MARK:- Private variables
@@ -21,7 +22,9 @@ public class SubscriptionController {
     private let trialRemainingDaysKey = "Lumen.TrialRemainingDays"
     private let trialExpiredViewLastDismissedKey = "Lumen.TrialExpiredView.lastDismissed"
     private let disposeBag = DisposeBag()
-    var availableSubscriptions = [PremiumType : SKProduct]()
+    var standardSubscriptionProducts = [LumenSubscriptionProduct]()
+    var promoSubscriptionProducts = [LumenSubscriptionProduct]()
+    var supportedProductPlans = [LumenSubscriptionPlanType]()
     
     //MARK:- initialization
     init() {
@@ -38,8 +41,8 @@ public class SubscriptionController {
             saveTrialRemainingDays(TrialPeriod)
         }
         self.disableProtectionIfNotAllowedByLicense()
+        self.initializeSupportedProducts()
     }
-    
     
     func saveTrialRemainingDays(_ remainingDays: Int) {
         UserDefaults.standard.set(remainingDays, forKey: trialRemainingDaysKey)
@@ -53,6 +56,28 @@ public class SubscriptionController {
     }
     
     // MARK: Private methods
+    private func initializeSupportedProducts() {
+        #if BETA
+        let basicPlan = LumenSubscriptionPlanType.basic("com.cliqz.ios.lumen.staging.sale.basic")
+        let basicVPNPlan = LumenSubscriptionPlanType.basic("com.cliqz.ios.lumen.staging.sale.basic_vpn")
+        let VPNPlan = LumenSubscriptionPlanType.basic("com.cliqz.ios.lumen.staging.sale.vpn")
+        let promoFree = LumenSubscriptionPlanType.basicAndVpn("com.cliqz.ios.lumen.staging.promo.free.basic_vpn")
+        let promoHalf = LumenSubscriptionPlanType.basicAndVpn("com.cliqz.ios.lumen.staging.promo.half.basic_vpn")
+        #else
+        let basicPlan = LumenSubscriptionPlanType.basic("com.cliqz.ios.lumen.sale.basic")
+        let basicVPNPlan = LumenSubscriptionPlanType.basicAndVpn("com.cliqz.ios.lumen.sale.basic_vpn")
+        let VPNPlan = LumenSubscriptionPlanType.vpn("com.cliqz.ios.lumen.sale.vpn")
+        let promoFree = LumenSubscriptionPlanType.basicAndVpn("com.cliqz.ios.lumen.promo.free.basic_vpn")
+        let promoHalf = LumenSubscriptionPlanType.basicAndVpn("com.cliqz.ios.lumen.promo.half.basic_vpn")
+        #endif
+    
+        self.supportedProductPlans.append(basicPlan)
+        self.supportedProductPlans.append(basicVPNPlan)
+        self.supportedProductPlans.append(VPNPlan)
+        self.supportedProductPlans.append(promoFree)
+        self.supportedProductPlans.append(promoHalf)
+    }
+    
     private func saveExpirationDate(_ date: Date) {
         UserDefaults.standard.set(date, forKey: expirationDateKey)
     }
@@ -96,23 +121,41 @@ public class SubscriptionController {
         return canEnable
     }
     
+    private func supportedSubscriptionPlan(for productIdentifier: String) -> LumenSubscriptionPlanType? {
+        for supportedPlans in self.supportedProductPlans {
+            if supportedPlans.hasAssociatedString(string: productIdentifier) {
+                return supportedPlans
+            }
+        }
+        return nil
+    }
+    
     //MARK:- Subscriptions
     public func requestProducts() {
         storeService.requestProducts {[weak self] (success, products) in
             guard let self = self, let products = products, success else { return }
-            self.availableSubscriptions.removeAll()
-            for product in products {
-                if let premiumType = PremiumType.init(rawValue: product.productIdentifier) {
-                    self.availableSubscriptions[premiumType] = product
+            self.standardSubscriptionProducts.removeAll()
+            self.promoSubscriptionProducts.removeAll()
+            for productPair in products {
+                let product = productPair.product
+                if let plan = self.supportedSubscriptionPlan(for: product.productIdentifier) {
+                    let lumenProduct = LumenSubscriptionProduct(product: product, plan: plan)
+                    if productPair.group == "Premium Promo" {
+                        self.promoSubscriptionProducts.append(lumenProduct)
+                    } else {
+                        self.standardSubscriptionProducts.append(lumenProduct)
+                    }
                 }
             }
         }
     }
     
-    public func buyProduct(_ premiumType: PremiumType) {
-        if let product = availableSubscriptions[premiumType] {
-            storeService.buyProduct(product)
-        }
+    public func isEligible(for productID: String, completion:@escaping (Bool) -> Void) {
+        storeService.isUserPromoEligible(productID: productID, completion: completion)
+    }
+    
+    public func buyProduct(_ product: SKProduct) {
+        storeService.buyProduct(product)
     }
     
     public class func canMakePayments() -> Bool {
@@ -130,7 +173,7 @@ public class SubscriptionController {
     public func getCurrentSubscription() -> LumenSubscriptionType {
 
         if let purchasedProductIdentifier = UserDefaults.standard.string(forKey: purchasedProductIdentifierKey),
-            let permiumType = PremiumType.init(rawValue: purchasedProductIdentifier),
+            let permiumType = self.supportedSubscriptionPlan(for: purchasedProductIdentifier),
             let expirationDate = getExpirationDate(), Date().timeIntervalSince(expirationDate) < 0 {
             return .premium(permiumType, expirationDate)
         }
@@ -143,16 +186,15 @@ public class SubscriptionController {
         return .limited
     }
     
-    public func getAvailableUpgradeOptions() -> [PremiumType] {
+    public func getAvailableUpgradeOptions() -> [LumenSubscriptionProduct] {
         let currentSubscription = getCurrentSubscription()
+        
         switch currentSubscription {
         case .premium(let premiumType, _):
-            if premiumType.hasDashboard() {
-                return [.Basic, .BasicAndVpn]
-            }
-            return [.Vpn, .BasicAndVpn]
+            let availableSubscriptions = self.standardSubscriptionProducts.filter { $0.subscriptionPlan != premiumType }
+            return availableSubscriptions
         default:
-            return [.Basic, .BasicAndVpn, .Vpn]
+            return self.standardSubscriptionProducts
         }
     }
     
@@ -180,7 +222,7 @@ public class SubscriptionController {
         }
     }
     
-    public func hasSubscription(_ premiumType: PremiumType) -> Bool {
+    public func hasSubscription(_ premiumType: LumenSubscriptionPlanType) -> Bool {
         let currentSubscription = getCurrentSubscription()
         switch currentSubscription {
         case .premium(let purchasedPremiumType, _):

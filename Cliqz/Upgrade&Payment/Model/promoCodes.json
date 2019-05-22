@@ -1,0 +1,13 @@
+[
+	{
+		"code": "OHBABY",
+		"ID": "com.cliqz.ios.lumen.promo.free.basic_vpn",
+		"type": "freeMonth"
+	},
+	{
+		"code": "LUMEN2019",
+		"ID": "com.cliqz.ios.lumen.promo.half.basic_vpn",
+		"type": "half"
+	}
+    
+]

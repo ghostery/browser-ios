@@ -473,8 +473,8 @@ extension VPNViewController: Themeable {
 
 extension VPNViewController : UpgradeLumenDelegate {
     @objc func showUpgradeViewController() {
-        let upgradLumenViewController = UpgradLumenViewController()
-        self.present(upgradLumenViewController, animated: true, completion: nil)
+		let viewController = UpgradeViewControllerFactory.standardUpgradeViewController()
+        self.present(viewController, animated: true, completion: nil)
     }
 }
 

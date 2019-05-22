@@ -146,14 +146,15 @@ class LumenFreshtabViewController: FreshtabViewController {
 			w.snp.makeConstraints { (make) in
 				make.top.equalTo(self.topSitesViewController.view.snp.bottom).offset(20)	
 				make.left.right.equalToSuperview().inset(10)
-//				make.top.equalTo()
 			}
 		}
 	}
 
 	fileprivate func showUpgradeOptionsViewController() {
-		let upgradLumenViewController = UpgradLumenViewController()
-		self.present(upgradLumenViewController, animated: true, completion: nil)
+        #if PAID
+		let viewController = UpgradeViewControllerFactory.standardUpgradeViewController()
+		self.present(viewController, animated: true, completion: nil)
+        #endif
 	}
 }
 
