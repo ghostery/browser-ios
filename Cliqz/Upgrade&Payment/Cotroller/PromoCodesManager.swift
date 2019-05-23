@@ -59,8 +59,16 @@ class PromoCodesManager {
     
     private var staticPromoList: [JSON] {
         let promo1 = ["code": "OHBABY", "ID": "com.cliqz.ios.lumen.promo.free.basic_vpn", "type": "freeMonth"] as [String: Any]
-        let promo2 = ["code": "OBABY", "ID": "com.cliqz.ios.lumen.promo.free.basic_vpn", "type": "freeMonth"] as [String: Any]
-        let promo3 = ["code": "LUMEN2019", "ID": "com.cliqz.ios.lumen.promo.half.basic_vpn", "type": "half"]
-        return [JSON(promo1), JSON(promo2), JSON(promo3)]
+        let promo2 = ["code": "ohbaby", "ID": "com.cliqz.ios.lumen.promo.free.basic_vpn", "type": "freeMonth"] as [String: Any]
+        let promo3 = ["code": "Ohbaby", "ID": "com.cliqz.ios.lumen.promo.free.basic_vpn", "type": "freeMonth"] as [String: Any]
+        let promo4 = ["code": "OhBaby", "ID": "com.cliqz.ios.lumen.promo.free.basic_vpn", "type": "freeMonth"] as [String: Any]
+        let promo5 = ["code": "OBABY", "ID": "com.cliqz.ios.lumen.promo.free.basic_vpn", "type": "freeMonth"] as [String: Any]
+        let promo6 = ["code": "Obaby", "ID": "com.cliqz.ios.lumen.promo.free.basic_vpn", "type": "freeMonth"] as [String: Any]
+        let promo7 = ["code": "obaby", "ID": "com.cliqz.ios.lumen.promo.free.basic_vpn", "type": "freeMonth"] as [String: Any]
+        let promo8 = ["code": "OBaby", "ID": "com.cliqz.ios.lumen.promo.free.basic_vpn", "type": "freeMonth"] as [String: Any]
+        let promo9 = ["code": "LUMEN2019", "ID": "com.cliqz.ios.lumen.promo.half.basic_vpn", "type": "half"]
+        let promo10 = ["code": "lumen2019", "ID": "com.cliqz.ios.lumen.promo.half.basic_vpn", "type": "half"]
+        let promo11 = ["code": "Lumen2019", "ID": "com.cliqz.ios.lumen.promo.half.basic_vpn", "type": "half"]
+        return [JSON(promo1), JSON(promo2), JSON(promo3), JSON(promo4), JSON(promo5), JSON(promo6), JSON(promo7), JSON(promo8), JSON(promo9), JSON(promo10), JSON(promo11)]
     }
 }
