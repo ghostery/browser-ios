@@ -16,11 +16,11 @@ class PromoCodesManager {
 	static let shared = PromoCodesManager()
 
 	func isValidPromoCode(_ code: String) -> Bool {
-		return self.promoCodes[code.lowercased()] != nil
+		return self.promoCodes[code.uppercased()] != nil
 	}
 
 	func getPromoType(_ code: String) -> LumenSubscriptionPromoPlanType? {
-		if let plan = self.promoCodes[code.lowercased()] {
+		if let plan = self.promoCodes[code.uppercased()] {
 			return plan
 		}
 		return nil
@@ -48,7 +48,7 @@ class PromoCodesManager {
     private func initializePromoCodes(dictionaries: [JSON]) {
         for promo in dictionaries {
             if let promoDict = promo.dictionary,
-                let code = promoDict["code"]?.string?.lowercased(),
+                let code = promoDict["code"]?.string?.uppercased(),
                 let promoID = promoDict["ID"]?.string,
                 let strType = promoDict["type"]?.string,
                 let type = PromoType(rawValue: strType) {

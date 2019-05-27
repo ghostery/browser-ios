@@ -9,26 +9,23 @@
 import Foundation
 import StoreKit
 
-class StandardSubscriptionsDataSource {
-	
-    var subscriptionInfos = [SubscriptionCellInfo]()
-    init(products: [LumenSubscriptionProduct]) {
-        self.generateSubscriptionInfos(products: products)
+class StandardSubscriptionsDataSource: SubscriptionDataSoruce {
+    
+    func fetchProducts(completion: ((Bool) -> Void)? = nil) {
+        guard let delegate = self.delegate else {
+            completion?(false)
+            return
+        }
+        delegate.retrieveStandartProducts {[weak self] (products) in
+            guard products.count > 0 else {
+                completion?(false)
+                return
+            }
+            self?.generateSubscriptionInfos(products: products)
+            completion?(true)
+        }
     }
 	
-	func subscriptionsCount() -> Int {
-		return self.subscriptionInfos.count
-	}
-
-	func subscriptionHeight(indexPath: IndexPath) -> CGFloat {
-		let subscription = self.subscriptionInfos[indexPath.row]
-        return subscription.height
-	}
-
-	func subscriptionInfo(indexPath: IndexPath) -> SubscriptionCellInfo? {
-		return self.subscriptionInfos[indexPath.row]
-	}
-    
     // MARK: Private methods
     private func telemeterySignals(product: LumenSubscriptionProduct) -> [String:String] {
         switch product.subscriptionPlan {
