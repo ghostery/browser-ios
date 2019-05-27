@@ -32,8 +32,10 @@ class UpgradLumenViewController: UIViewController {
     private let eulaButton = UIButton()
     private let privacyPolicyButton = UIButton()
     private let gradient = BrowserGradientView()
+    private let loadingView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     private let notchOffset = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
     private var telemetrySignals: [String:String]?
+    
     
     private let buttonAttributes : [NSAttributedStringKey: Any] = [
         NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12.0, weight: .medium),
@@ -69,6 +71,8 @@ class UpgradLumenViewController: UIViewController {
                                                object: nil)
         
         LegacyTelemetryHelper.logPayment(action: "show")
+        
+        self.fetchProducts()
     }
     
     deinit {
@@ -84,6 +88,18 @@ class UpgradLumenViewController: UIViewController {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
+    
+    private func fetchProducts() {
+        self.startLoadingAnimation()
+        self.subscriptionsDataSource.fetchProducts {[weak self] (success) in
+            if success {
+                self?.bundlesView.reloadData()
+            } else {
+                self?.showProductsRetrievalFailedAlert()
+            }
+            self?.stopLoadingAnimation()
+        }
+    }
 
     private func setupComponents() {
         self.view.addSubview(containerView)
@@ -93,9 +109,6 @@ class UpgradLumenViewController: UIViewController {
 		self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
 		self.navigationController?.navigationBar.shadowImage = UIImage()
 		self.navigationController?.navigationBar.isTranslucent = true
-		
-//        logoImage.image = UIImage(named: "Lumen_Logo")
-//        containerView.addSubview(logoImage)
 		
         switch SubscriptionController.shared.getCurrentSubscription() {
         case .limited, .trial(_):
@@ -113,27 +126,6 @@ class UpgradLumenViewController: UIViewController {
         restoreButton.addTarget(self, action: #selector(restoreSubscription), for: .touchUpInside)
         restoreButton.setTitle(NSLocalizedString("Restore Subscription", tableName: "Lumen", comment: "[Upgrade Flow] Restore Subscription button"), for: .normal)
 		
-		// TODO: Commented for now to fix the layout for Apple submission, but we might need to change again the UI in near future.
-	
-//        restoreButton.layer.borderWidth = 1.0
-//        restoreButton.layer.cornerRadius = UIDevice.current.isSmallIphoneDevice() ? 15 : 20
-//        containerView.addSubview(restoreButton)
-		
-//        conditionButton.addTarget(self, action: #selector(toggleConditions), for: .touchUpInside)
-//        conditionButton.setTitle(NSLocalizedString("Conditions", tableName: "Lumen", comment: "[Upgrade Flow] Conditions button"), for: .normal)
-//        containerView.addSubview(conditionButton)
-		
-//        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(toggleConditions))
-//        swipeUp.direction = .up
-//        conditionButton.addGestureRecognizer(swipeUp)
-//        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(toggleConditions))
-//        swipeDown.direction = .down
-//        conditionButton.addGestureRecognizer(swipeDown)
-
-        
-//        arrowImage.image = UIImage(named: "Conditions_Arrow_Up")
-//        containerView.addSubview(arrowImage)
-		
         conditionsLabel.numberOfLines = 0
         conditionsLabel.text = NSLocalizedString("Subscriptions will be applied to your iTunes account on confirmation. Subscriptions will automatically renew unless canceled within 24-hours before the end of the current period‌. You can cancel anytime in your iTunes account settings. Any unused portion of a free trial will be forfeited if you purchase a subscription.", tableName: "Lumen", comment: "[Upgrade Flow] Conditions text")
         conditionsLabel.textColor = UIColor(colorString: "BDC0CE")
@@ -148,9 +140,10 @@ class UpgradLumenViewController: UIViewController {
                                                                  attributes: buttonAttributes)
         privacyPolicyButton.setAttributedTitle(privacyPolicyButtonTitle, for: .normal)
         privacyPolicyButton.addTarget(self, action: #selector(showPrivacyPolicy), for: .touchUpInside)
-
+        
 		self.view.addSubview(gradient)
         self.view.sendSubview(toBack: gradient)
+        self.view.addSubview(self.loadingView)
     }
     
     private func setupBundlesView() {
@@ -201,7 +194,21 @@ class UpgradLumenViewController: UIViewController {
 			make.leading.trailing.equalToSuperview()
 			make.bottom.equalToSuperview()
         }
-
+        
+        loadingView.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.equalTo(50)
+            make.height.equalTo(50)
+        }
+    }
+    
+    private func startLoadingAnimation() {
+        self.loadingView.startAnimating()
+    }
+    
+    private func stopLoadingAnimation() {
+        self.loadingView.stopAnimating()
     }
     
     @objc func closeView() {
@@ -260,6 +267,19 @@ class UpgradLumenViewController: UIViewController {
         {
             browserViewController.settingsOpenURLInNewTab(url)
         }
+    }
+    
+    private func showProductsRetrievalFailedAlert() {
+        let errorDescirption = NSLocalizedString("Sorry, Lumen cannot connect to the Internet.", tableName: "Lumen", comment: "Error when can't get list of available subscriptions")
+        let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Retry", tableName: "Lumen", comment: "Retry button title in payment failing transaction alert"), style: .default) {[weak self] (action) in
+            self?.fetchProducts()
+        })
+        
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Close", tableName: "Lumen", comment: "Closing subscription screen"), style: .default, handler: {[weak self] (action) in
+            self?.dismiss(animated: true, completion: nil)
+        }))
+        self.present(alertController, animated: true, completion: nil)
     }
     
     @objc func toggleConditions() {

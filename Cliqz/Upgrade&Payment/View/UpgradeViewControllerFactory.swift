@@ -11,8 +11,7 @@ import Foundation
 class UpgradeViewControllerFactory {
     #if PAID
 	class func standardUpgradeViewController() -> UIViewController {
-		let subscirptionPlans = SubscriptionController.shared.getAvailableUpgradeOptions()
-		let dataSource = StandardSubscriptionsDataSource(products: subscirptionPlans)
+        let dataSource = StandardSubscriptionsDataSource(delegate: SubscriptionController.shared)
 		let upgradLumenViewController = UpgradLumenViewController(dataSource)
 		let navController = UpgradLumenNavigationController(rootViewController: upgradLumenViewController)
 		return navController
@@ -20,8 +19,7 @@ class UpgradeViewControllerFactory {
 
 	class func promoUpgradeViewController(promoCode: String) -> PromoUpgradeViewController? {
 		if let promoType = PromoCodesManager.shared.getPromoType(promoCode) {
-			// TODO: producs list should be provided
-			let promoDataSource = PromoSubscriptionsDataSource(promoType: promoType, availablePromoSubscription: SubscriptionController.shared.promoSubscriptionProducts)
+			let promoDataSource = PromoSubscriptionsDataSource(promoType: promoType, delegate: SubscriptionController.shared)
 			let promoViewController = PromoUpgradeViewController(promoDataSource)
 			return promoViewController
 		}
