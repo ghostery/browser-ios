@@ -8,29 +8,37 @@
 
 import Foundation
 
-class PromoSubscriptionsDataSource {
+class PromoSubscriptionsDataSource: SubscriptionDataSoruce {
 	
     var promoType: LumenSubscriptionPromoPlanType
     
-    private var subscriptionInfo: SubscriptionCellInfo?
-    
-	
-    init(promoType: LumenSubscriptionPromoPlanType, availablePromoSubscription: [LumenSubscriptionProduct]) {
+    init(promoType: LumenSubscriptionPromoPlanType, delegate: SubscriptionDataSourceDelegate) {
         self.promoType = promoType
-        if let promoProduct = availablePromoSubscription.filter({ $0.product.productIdentifier == promoType.promoID }).first {
-			self.subscriptionInfo = SubscriptionCellInfo(priceDetails: nil, promoPriceDetails: getPromoPriceDetails(), offerDetails: self.offerDetails(plan: promoType), isSubscribed: SubscriptionController.shared.hasSubscription(promoProduct.subscriptionPlan), height: 150, telemetrySignals: self.telemeterySignals(), lumenProduct: promoProduct)
-        }
+        super.init(delegate: delegate)
 	}
+    
+    func fetchProducts(completion: ((Bool) -> Void)? = nil) {
+        guard let delegate = self.delegate else {
+            completion?(false)
+            return
+        }
+        delegate.retrievePromoProducts {[weak self] (availablePromoSubscription) in
+            guard availablePromoSubscription.count > 0 , let self = self else {
+                completion?(false)
+                return
+            }
+            if let promoProduct = availablePromoSubscription.filter({ $0.product.productIdentifier == self.promoType.promoID }).first {
+                self.subscriptionInfos = [SubscriptionCellInfo(priceDetails: nil, promoPriceDetails: self.getPromoPriceDetails(), offerDetails: self.offerDetails(plan: self.promoType), isSubscribed: SubscriptionController.shared.hasSubscription(promoProduct.subscriptionPlan), height: 150, telemetrySignals: self.telemeterySignals(), lumenProduct: promoProduct)]
+            }
+            completion?(true)
+        }
+    }
 
-	func subscriptionsCount() -> Int {
+	override func subscriptionsCount() -> Int {
 		return 1
 	}
 
-	func subscriptionHeight(indexPath: IndexPath) -> CGFloat {
-        return self.subscriptionInfo?.height ?? 0
-	}
-
-	func subscriptionInfo(indexPath: IndexPath) -> SubscriptionCellInfo? {
+	override func subscriptionInfo(indexPath: IndexPath) -> SubscriptionCellInfo? {
 		guard indexPath.row == 0 else {
 			return nil
 		}
@@ -69,6 +77,10 @@ class PromoSubscriptionsDataSource {
 	}
     
     // MARK: Private methods
+    
+    private var subscriptionInfo: SubscriptionCellInfo? {
+        return self.subscriptionInfos.first
+    }
     
     private func offerDetails(plan: LumenSubscriptionPromoPlanType) -> String? {
         switch plan.type {

@@ -633,6 +633,7 @@
 		C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E3985F1D22C409004E89BA /* TopTabsLayout.swift */; };
 		C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EFEECE1CEBB6F2009762A4 /* BackForwardTableViewCell.swift */; };
 		C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F3B2991CFCF93A00966259 /* ButtonToast.swift */; };
+		C50B4A91229C46AA00B5FBEB /* SubscriptionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50B4A88229C46A900B5FBEB /* SubscriptionDataSource.swift */; };
 		C50C4FA32277428B009B362E /* VPN.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50C4FA22277428A009B362E /* VPN.swift */; };
 		C599C1B1228ADEE5006985F1 /* UserNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C599C1B0228ADEE5006985F1 /* UserNotificationsManager.swift */; };
 		C59E5CFE22954141001FF955 /* LumenSubscriptionProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59E5CFD22954141001FF955 /* LumenSubscriptionProduct.swift */; };
@@ -2075,6 +2076,7 @@
 		C4E3985F1D22C409004E89BA /* TopTabsLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTabsLayout.swift; sourceTree = "<group>"; };
 		C4EFEECE1CEBB6F2009762A4 /* BackForwardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardTableViewCell.swift; sourceTree = "<group>"; };
 		C4F3B2991CFCF93A00966259 /* ButtonToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonToast.swift; sourceTree = "<group>"; };
+		C50B4A88229C46A900B5FBEB /* SubscriptionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionDataSource.swift; sourceTree = "<group>"; };
 		C50C4FA22277428A009B362E /* VPN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPN.swift; sourceTree = "<group>"; };
 		C599C1B0228ADEE5006985F1 /* UserNotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationsManager.swift; sourceTree = "<group>"; };
 		C59E5CFD22954141001FF955 /* LumenSubscriptionProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenSubscriptionProduct.swift; sourceTree = "<group>"; };
@@ -3557,6 +3559,7 @@
 		4F648C20228DF86800F9C751 /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
+				C50B4A88229C46A900B5FBEB /* SubscriptionDataSource.swift */,
 				4F648C21228DF8A500F9C751 /* StandardSubscriptionsDataSource.swift */,
 				4F648C23228DF8C200F9C751 /* PromoSubscriptionsDataSource.swift */,
 			);
@@ -6684,6 +6687,7 @@
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
 				4F30F52720517C210049E4F6 /* SearchViewDelegate.swift in Sources */,
+				C50B4A91229C46AA00B5FBEB /* SubscriptionDataSource.swift in Sources */,
 				E60D03181D511398002FE3F6 /* SyncStatusResolver.swift in Sources */,
 				AF53D3BC206A346B0012A11F /* TabExtension.swift in Sources */,
 				1EAFE563205FFE21006A36B4 /* ShowCliqzPageSetting.swift in Sources */,

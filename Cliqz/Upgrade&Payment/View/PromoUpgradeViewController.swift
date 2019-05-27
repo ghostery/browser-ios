@@ -24,6 +24,7 @@ class PromoUpgradeViewController: UIViewController {
 	private let dataSource: PromoSubscriptionsDataSource
     private var selectedProduct: LumenSubscriptionProduct?
     private let gradient = BrowserGradientView()
+    private let loadingView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     
 	init(_ dataSource: PromoSubscriptionsDataSource) {
 		self.dataSource = dataSource
@@ -53,6 +54,7 @@ class PromoUpgradeViewController: UIViewController {
         
         let telemetryView = self.dataSource.telemeterySignals()["view"]
         LegacyTelemetryHelper.logPromoPayment(action: "show", view: telemetryView)
+        self.fetchProducts()
     }
     
     deinit {
@@ -89,6 +91,31 @@ class PromoUpgradeViewController: UIViewController {
         })
         
         alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Lumen", comment: "Cancel button title in payment failing transaction alert"), style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func fetchProducts() {
+        self.startLoadingAnimation()
+        self.dataSource.fetchProducts { (success) in
+            if success {
+                self.subscriptionsTableView.reloadData()
+            } else {
+                self.showProductsRetrievalFailedAlert()
+            }
+            self.stopLoadingAnimation()
+        }
+    }
+    
+    private func showProductsRetrievalFailedAlert() {
+        let errorDescirption = NSLocalizedString("Sorry, Lumen cannot connect to the Internet.", tableName: "Lumen", comment: "Error when can't get list of available subscriptions")
+        let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Retry", tableName: "Lumen", comment: "Retry button title in payment failing transaction alert"), style: .default) {[weak self] (action) in
+            self?.fetchProducts()
+        })
+        
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Close", tableName: "Lumen", comment: "Closing subscription screen"), style: .default, handler: {[weak self] (action) in
+            self?.dismiss(animated: true, completion: nil)
+        }))
         self.present(alertController, animated: true, completion: nil)
     }
 
@@ -138,6 +165,7 @@ class PromoUpgradeViewController: UIViewController {
         
         self.view.addSubview(gradient)
         self.view.sendSubview(toBack: gradient)
+        self.view.addSubview(self.loadingView)
 	}
 
 	private func setConstraints() {
@@ -169,7 +197,22 @@ class PromoUpgradeViewController: UIViewController {
 			make.leading.trailing.equalToSuperview()
 			make.bottom.equalToSuperview()
 		}
+        
+        loadingView.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.equalTo(50)
+            make.height.equalTo(50)
+        }
 	}
+    
+    private func startLoadingAnimation() {
+        self.loadingView.startAnimating()
+    }
+    
+    private func stopLoadingAnimation() {
+        self.loadingView.stopAnimating()
+    }
 
 	private func showCloseButton() {
 		self.closeButton = UIButton(type: .custom)

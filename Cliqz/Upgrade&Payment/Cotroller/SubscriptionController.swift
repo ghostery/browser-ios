@@ -10,6 +10,8 @@ import Foundation
 import StoreKit
 import RxSwift
 
+public typealias LumenProductRequestCompletion = ([LumenSubscriptionProduct], [LumenSubscriptionProduct]) -> Void
+
 public class SubscriptionController {
 
     public static let shared = SubscriptionController()
@@ -22,6 +24,9 @@ public class SubscriptionController {
     private let trialRemainingDaysKey = "Lumen.TrialRemainingDays"
     private let trialExpiredViewLastDismissedKey = "Lumen.TrialExpiredView.lastDismissed"
     private let disposeBag = DisposeBag()
+    private var isProductRequestInProgress = false
+    private var productRequestCompletions: [LumenProductRequestCompletion] = []
+    
     var standardSubscriptionProducts = [LumenSubscriptionProduct]()
     var promoSubscriptionProducts = [LumenSubscriptionProduct]()
     var supportedProductPlans = [LumenSubscriptionPlanType]()
@@ -130,23 +135,50 @@ public class SubscriptionController {
         return nil
     }
     
-    //MARK:- Subscriptions
-    public func requestProducts() {
-        storeService.requestProducts {[weak self] (success, products) in
-            guard let self = self, let products = products, success else { return }
-            self.standardSubscriptionProducts.removeAll()
-            self.promoSubscriptionProducts.removeAll()
-            for productPair in products {
-                let product = productPair.product
-                if let plan = self.supportedSubscriptionPlan(for: product.productIdentifier) {
-                    let lumenProduct = LumenSubscriptionProduct(product: product, plan: plan)
-                    if productPair.group == "Premium Promo" {
-                        self.promoSubscriptionProducts.append(lumenProduct)
-                    } else {
-                        self.standardSubscriptionProducts.append(lumenProduct)
-                    }
+    private func productsReceived(products: [(product: SKProduct, group: String)]) {
+        self.standardSubscriptionProducts.removeAll()
+        self.promoSubscriptionProducts.removeAll()
+        for productPair in products {
+            let product = productPair.product
+            if let plan = self.supportedSubscriptionPlan(for: product.productIdentifier) {
+                let lumenProduct = LumenSubscriptionProduct(product: product, plan: plan)
+                if productPair.group == "Premium Promo" {
+                    self.promoSubscriptionProducts.append(lumenProduct)
+                } else {
+                    self.standardSubscriptionProducts.append(lumenProduct)
                 }
             }
+        }
+    }
+    
+    //MARK:- Subscriptions
+    public func requestProducts(completion:LumenProductRequestCompletion? = nil) {
+        if let completion = completion {
+            self.productRequestCompletions.append(completion)
+        }
+        guard !self.isProductRequestInProgress else {
+            return
+        }
+        
+        self.isProductRequestInProgress = true
+        storeService.requestProducts {[weak self] (success, products) in
+            guard let self = self else { return }
+            guard let products = products, success else {
+                self.isProductRequestInProgress = false
+                self.productRequestCompletions.forEach({ (block) in
+                    block(self.standardSubscriptionProducts, self.promoSubscriptionProducts)
+                })
+                return
+            }
+            
+            self.productsReceived(products: products)
+            
+            self.productRequestCompletions.forEach({ (block) in
+                block(self.standardSubscriptionProducts, self.promoSubscriptionProducts)
+            })
+            
+            self.isProductRequestInProgress = false
+            self.productRequestCompletions.removeAll()
         }
     }
     
@@ -251,6 +283,28 @@ public class SubscriptionController {
     
     public func trialExpiredViewDismissed() {
         UserDefaults.standard.set(Date(), forKey: trialExpiredViewLastDismissedKey)
+    }
+}
+
+extension SubscriptionController: SubscriptionDataSourceDelegate {
+    func retrievePromoProducts(completion:@escaping ([LumenSubscriptionProduct]) -> Void) {
+        if self.promoSubscriptionProducts.count > 0 {
+            completion(self.promoSubscriptionProducts)
+        } else {
+            self.requestProducts { (standart, promo) in
+                completion(promo)
+            }
+        }
+    }
+    
+    func retrieveStandartProducts(completion:@escaping ([LumenSubscriptionProduct]) -> Void) {
+        if self.standardSubscriptionProducts.count > 0 {
+            completion(self.standardSubscriptionProducts)
+        } else {
+            self.requestProducts { (standart, promo) in
+                completion(promo)
+            }
+        }
     }
 }
 
