@@ -34,10 +34,6 @@ class PromoSubscriptionsDataSource: SubscriptionDataSoruce {
         }
     }
 
-	override func subscriptionsCount() -> Int {
-		return 1
-	}
-
 	override func subscriptionInfo(indexPath: IndexPath) -> SubscriptionCellInfo? {
 		guard indexPath.row == 0 else {
 			return nil
