@@ -302,7 +302,7 @@ extension SubscriptionController: SubscriptionDataSourceDelegate {
             completion(self.standardSubscriptionProducts)
         } else {
             self.requestProducts { (standart, promo) in
-                completion(promo)
+                completion(standart)
             }
         }
     }
