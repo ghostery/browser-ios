@@ -31,7 +31,7 @@ class AppStatus {
     
     class func distVersion() -> String {
         let versionDescriptor = AppStatus.getVersionDescriptor()
-        return "\(versionDescriptor.version.trim()) (\(versionDescriptor.buildNumber))"
+        return "\(versionDescriptor.version.trim()) (\(versionDescriptor.commitHash ?? versionDescriptor.buildNumber))"
     }
     
     class func extensionVersion() -> String {
@@ -47,7 +47,7 @@ class AppStatus {
         return ""
     }
     
-    fileprivate class func getVersionDescriptor() -> (version: String, buildNumber: String) {
+    fileprivate class func getVersionDescriptor() -> (version: String, buildNumber: String, commitHash: String?) {
         
         var version = "0"
         var buildNumber = "0"
@@ -58,7 +58,8 @@ class AppStatus {
         if let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
             buildNumber = bundleVersion
         }
+        let commitHash = Bundle.main.infoDictionary?["CommitHash"] as? String
         
-        return (version, buildNumber)
+        return (version, buildNumber, commitHash)
     }
 }
