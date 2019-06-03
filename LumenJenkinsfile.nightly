@@ -91,6 +91,7 @@ node('gideon') {
                             export MATCH_KEYCHAIN_NAME=ios-build.keychain
                             rm -rf ../build-tools
                             export app_name=Lumen
+                            export CommitHash=`git rev-parse --short HEAD`
                             echo de > shipping_locales.txt && echo en-US >> shipping_locales.txt
                             fastlane importLocalizations
                             fastlane lumenBeta
