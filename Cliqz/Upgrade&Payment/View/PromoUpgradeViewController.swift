@@ -98,12 +98,18 @@ class PromoUpgradeViewController: UIViewController {
         self.startLoadingAnimation()
         self.dataSource.fetchProducts { (success) in
             if success {
-                self.subscriptionsTableView.reloadData()
+                self.reloadData()
             } else {
                 self.showProductsRetrievalFailedAlert()
             }
             self.stopLoadingAnimation()
         }
+    }
+    
+    private func reloadData() {
+        self.subscriptionsTableView.reloadData()
+        self.conditionsLabel.text = self.dataSource.getConditionText()
+        self.promoCodeLabel.text = self.dataSource.promoText()
     }
     
     private func showProductsRetrievalFailedAlert() {
@@ -142,7 +148,7 @@ class PromoUpgradeViewController: UIViewController {
 		self.view.addSubview(subscriptionsTableView)
 
 		conditionsLabel.numberOfLines = 0
-		conditionsLabel.text = self.dataSource.getConditionText() //NSLocalizedString("", tableName: "Lumen", comment: "[Upgrade Flow] Conditions text")
+		conditionsLabel.text = self.dataSource.getConditionText()
 		conditionsLabel.textColor = UIColor(colorString: "BDC0CE")
 
 		conditionsLabel.textAlignment = .center

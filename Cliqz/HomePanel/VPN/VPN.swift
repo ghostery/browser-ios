@@ -100,6 +100,11 @@ class VPN {
         
         if status == .connected {
             VPN.shared.retryCount = maxRetryCount
+            
+            // this is a case when application was started already connected to VPN
+            if VPN.shared.connectedCountry == nil {
+                VPN.shared.connectedCountry = VPNEndPointManager.shared.selectedCountry
+            }
         } else if status == .disconnected {
             let vpnConfigurationBecomeValid = (lastStatus == .invalid)
             self.disconnectionBlock?()

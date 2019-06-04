@@ -45,8 +45,8 @@ public class SubscriptionController {
         if getTrialRemainingDays() == nil {
             saveTrialRemainingDays(TrialPeriod)
         }
-        self.disableProtectionIfNotAllowedByLicense()
         self.initializeSupportedProducts()
+        self.disableProtectionIfNotAllowedByLicense()
     }
     
     func saveTrialRemainingDays(_ remainingDays: Int) {
@@ -302,7 +302,7 @@ extension SubscriptionController: SubscriptionDataSourceDelegate {
             completion(self.standardSubscriptionProducts)
         } else {
             self.requestProducts { (standart, promo) in
-                completion(promo)
+                completion(standart)
             }
         }
     }
