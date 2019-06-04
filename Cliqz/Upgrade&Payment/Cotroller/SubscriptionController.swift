@@ -45,8 +45,8 @@ public class SubscriptionController {
         if getTrialRemainingDays() == nil {
             saveTrialRemainingDays(TrialPeriod)
         }
-        self.disableProtectionIfNotAllowedByLicense()
         self.initializeSupportedProducts()
+        self.disableProtectionIfNotAllowedByLicense()
     }
     
     func saveTrialRemainingDays(_ remainingDays: Int) {

@@ -274,8 +274,13 @@ platform :ios do
       verbose: true
     )
 
+    version = get_version_number(
+      xcodeproj: "Client.xcodeproj", 
+      target: "Client"
+    )
+
     increment_build_number(
-      build_number: latest_testflight_build_number + 1,
+      build_number: latest_testflight_build_number(version: version) + 1,
       xcodeproj: "Client.xcodeproj"
     )
 
@@ -340,9 +345,14 @@ platform :ios do
       readonly: true,
       verbose: true
     )
+
+    version = get_version_number(
+      xcodeproj: "Client.xcodeproj", 
+      target: "Client"
+    )
     
     increment_build_number(
-      build_number: latest_testflight_build_number + 1,
+      build_number: latest_testflight_build_number(version: version) + 1,
       xcodeproj: "Client.xcodeproj"
     )
 
