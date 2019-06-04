@@ -250,7 +250,9 @@ platform :ios do
 
     # Configuring Lumen APIs
     sh("sed -i '' 's|lumenAPI:\ String?\ =\ nil|lumenAPI:\ String?\ =\ \"'$LumenAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
-    
+
+    # Configure CommitHash
+    sh("cd .. && plutil -replace CommitHash -string $CommitHash Client/Info.plist")
 
     # Building ReactNative Entension
     sh("cd .. && npm run bundle-lumen")
@@ -318,6 +320,9 @@ platform :ios do
 
     # Configuring Lumen APIs
     sh("sed -i '' 's|lumenAPI:\ String?\ =\ nil|lumenAPI:\ String?\ =\ \"'$LumenAPIKey'\"|' ../Cliqz/Resources/APIKeys.swift")
+
+    # Configure CommitHash
+    sh("cd .. && plutil -replace CommitHash -string $CommitHash Client/Info.plist")
 
     # Building ReactNative Entension
     sh("cd .. && npm run bundle-lumen")
