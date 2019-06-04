@@ -40,4 +40,22 @@ public enum LumenSubscriptionType {
             return premiumType.hasVPN() ? "plus" : "basic"
         }
     }
+    
+    func description() -> String {
+        switch self {
+        case .limited:
+            return "free"
+        case .trial(_):
+            return "trial"
+        case .premium(let premiumType, _):
+            switch premiumType {
+            case .basic(_):
+                return "basic"
+            case .basicAndVpn(_):
+                return "basic_vpn"
+            case .vpn(_):
+                return "vpn"
+            }
+        }
+    }
 }
