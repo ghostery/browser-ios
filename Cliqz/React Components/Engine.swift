@@ -84,6 +84,7 @@ open class Engine {
         }
         #if PAID
             params["lumen.protection.isEnabled"] = UserPreferences.instance.isProtectionOn
+            params["lumen.subscription"] = SubscriptionController.shared.getCurrentSubscription().description()
         #endif
         Engine.sharedInstance.getBridge().publishEvent("mobile-browser:notify-preferences", args: [params])
     }

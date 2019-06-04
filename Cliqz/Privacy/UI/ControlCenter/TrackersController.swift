@@ -298,7 +298,7 @@ extension TrackersController: UITableViewDataSource, UITableViewDelegate {
 		cell.infoButtonAction = { [weak self] (button, trackerName) in
 			var url = "https://whotracks.me/tracker-not-found.html"
 			if let t = trackerName {
-				if let d = Engine.sharedInstance.getBridge().callAction("mobile-cards:getTrackerDetails", args: [t.lowercased()]) as? [String: Any],
+				if let d = Engine.sharedInstance.getBridge().callAction("insights:getTrackerDetails", args: [t.lowercased()]) as? [String: Any],
 					let result = d["result"] as? [String: String],
 					let wtm = result["wtm"] {
 					url = "https://whotracks.me/trackers/\(wtm).html"
