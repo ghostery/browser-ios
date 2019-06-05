@@ -14,7 +14,7 @@ jobs:
         brand: 'ghostery'
         scheme: 'Fennec'
         actions: 'clean build test'
-        testbranch: 'azure-pipelines'
+        testbranch: 'master'
       Lumen:
         brand: 'lumen'
         scheme: 'Lumen'
