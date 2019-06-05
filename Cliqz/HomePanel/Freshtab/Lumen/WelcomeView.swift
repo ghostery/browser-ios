@@ -54,11 +54,11 @@ class WelcomeView: UIView {
 		self.addSubview(titleLabel)
 		self.addSubview(descriptionLabel)
 		imageView.snp.makeConstraints { make in
-			make.top.equalTo(self)
+			make.top.equalTo(self).offset(-18)
 			make.centerX.equalToSuperview()
 		}
 		titleLabel.snp.makeConstraints { make in
-			make.top.equalTo(imageView.snp.bottom).offset(15)
+			make.top.equalTo(imageView.snp.bottom)
 			make.left.right.equalToSuperview()
 			make.height.equalTo(30)
 		}
