@@ -180,5 +180,7 @@
 	</array>
 	<key>VPNPass</key>
 	<string></string>
+	<key>CommitHash</key>
+	<string></string>
 </dict>
 </plist>

@@ -83,8 +83,10 @@ open class Engine {
             params["incognito"] = privateMode
         }
         #if PAID
-            params["lumen.protection.isEnabled"] = UserPreferences.instance.isProtectionOn
+            Engine.sharedInstance.setPref("lumen.subscription", prefValue: SubscriptionController.shared.getCurrentSubscription().description())
+            Engine.sharedInstance.setPref("lumen.protection.isEnabled", prefValue: UserPreferences.instance.isProtectionOn)
         #endif
+        
         Engine.sharedInstance.getBridge().publishEvent("mobile-browser:notify-preferences", args: [params])
     }
     
