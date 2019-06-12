@@ -5,6 +5,7 @@
 import Alamofire
 import Foundation
 import Shared
+import SwiftyJSON
 
 let SearchSuggestClientErrorDomain = "org.mozilla.firefox.SearchSuggestClient"
 let SearchSuggestClientErrorInvalidEngine = 0
@@ -44,32 +45,42 @@ class SearchSuggestClient {
 
         request = alamofire.request(url!)
             .validate(statusCode: 200..<300)
-            .responseJSON { response in
-                if let error = response.result.error {
-                    callback(nil, error as NSError?)
+            .responseData { dataResponse in
+                guard let data = dataResponse.data else {
+                    let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
+                    callback(nil, error)
+                    return
+                }
+
+                // Check if we got any data at all
+                guard data.count > 0 else {
+                    callback(nil, nil)
                     return
                 }
 
                 // The response will be of the following format:
                 //    ["foobar",["foobar","foobar2000 mac","foobar skins",...]]
                 // That is, an array of at least two elements: the search term and an array of suggestions.
-                let array = response.result.value as? NSArray
-                if array?.count ?? 0 < 2 {
-                    let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
-                    callback(nil, error)
+
+                // Cliqz
+                // Some result suggestion providers (mainly google) return ASCII formatted JSON instead of UTF-8 formatted JSON
+                // Try decoding the data as UTF-8 JSON first, since that's the JSON spec
+                let jsonUTF8 = JSON(data)
+                if let array = jsonUTF8.arrayObject, array.count > 1, let suggestions = array[1] as? [String] {
+                    callback(suggestions, nil)
                     return
                 }
 
-                let suggestions = array?[1] as? [String]
-                if suggestions == nil {
-                    let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
-                    callback(nil, error)
+                // If that fails, try ASCII
+                if let jsonAsCIIString = String(data: data, encoding: .ascii), let array = JSON(parseJSON: jsonAsCIIString).arrayObject, array.count > 1, let suggestions = array[1] as? [String] {
+                    callback(suggestions, nil)
                     return
                 }
 
-                callback(suggestions!, nil)
-        }
-
+                // If both decoding mechanisms failed, return an error
+                let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
+                callback(nil, error)
+            }
     }
 
     func cancelPendingRequest() {
