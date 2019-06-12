@@ -23,6 +23,9 @@ platform :ios do
   end
   
   lane :importLocalizations do
+    #Remove old localization files 
+    sh ("rm -rf ../../build-tools ../import-locales-env ../Client/*.lproj")
+
     # Import Firefox localizations
     import_repository(
       url: 'https://github.com/cliqz-oss/ios-l10n-scripts.git',
