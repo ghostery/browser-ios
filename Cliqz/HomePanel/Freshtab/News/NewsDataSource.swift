@@ -47,7 +47,7 @@ class NewsDataSource {
 		if let news = self.getNews(at: at) {
 			let newsViewModel = NewsCellViewModel(news)
 			if let url = newsViewModel.logoURL {
-				LogoLoader.loadLogo(url, completionBlock: { (image, logoInfo, error) in
+				LogoLoader.shared.loadLogo(url, completionBlock: { (image, logoInfo, error) in
 					if let img = image {
 						newsViewModel.logo.value = img
 					} else if let info = logoInfo {

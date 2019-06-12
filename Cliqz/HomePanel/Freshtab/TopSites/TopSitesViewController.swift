@@ -186,7 +186,7 @@ extension TopSitesViewController: UICollectionViewDataSource, UICollectionViewDe
 			cell.tag = indexPath.row
 			let url = topSite.url
             cell.logoContainerView.alpha = 0.0
-			LogoLoader.loadLogo(url, completionBlock: { (img, logoInfo, error) in
+			LogoLoader.shared.loadLogo(url, completionBlock: { (img, logoInfo, error) in
 				if cell.tag == indexPath.row {
 					if let img = img {
 						cell.setLogo(img)
