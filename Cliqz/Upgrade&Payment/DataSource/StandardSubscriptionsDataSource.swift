@@ -9,9 +9,9 @@
 import Foundation
 import StoreKit
 
-class StandardSubscriptionsDataSource: SubscriptionDataSoruce {
-    
-    func fetchProducts(completion: ((Bool) -> Void)? = nil) {
+class StandardSubscriptionsDataSource: SubscriptionDataSource {
+	
+    override func fetchProducts(completion: ((Bool) -> Void)? = nil) {
         guard let delegate = self.delegate else {
             completion?(false)
             return
@@ -25,10 +25,14 @@ class StandardSubscriptionsDataSource: SubscriptionDataSoruce {
             completion?(true)
         }
     }
-	
-    // MARK: Private methods
-    private func telemeterySignals(product: LumenSubscriptionProduct) -> [String:String] {
-        switch product.subscriptionPlan {
+    
+    override func telemeterySignals(product: LumenSubscriptionProduct? = nil) -> [String:String] {
+        guard product != nil else {
+            assert(false, "Design problem, product shouldn't be nil. Investigate!")
+            return [:]
+        }
+        
+        switch product!.subscriptionPlan {
         case .basic:
             return ["target" : "subscribe_basic", "view" : "regular" ]
         case .vpn:
@@ -36,6 +40,10 @@ class StandardSubscriptionsDataSource: SubscriptionDataSoruce {
         case .basicAndVpn:
             return ["target" : "subscribe_basic_vpn", "view" : "regular" ]
         }
+    }
+    
+    override func getConditionText() -> String {
+        return NSLocalizedString("Subscriptions will be applied to your iTunes account on confirmation. Subscriptions will automatically renew unless canceled within 24-hours before the end of the current period‌. You can cancel anytime in your iTunes account settings. Any unused portion of a free trial will be forfeited if you purchase a subscription.", tableName: "Lumen", comment: "[Upgrade Flow] Conditions text")
     }
     
     private func generateSubscriptionInfos(products: [LumenSubscriptionProduct]) {
@@ -46,7 +54,7 @@ class StandardSubscriptionsDataSource: SubscriptionDataSoruce {
             switch product.subscriptionPlan {
             case .basicAndVpn(_):
                 offerDetails = NSLocalizedString("BEST OFFER LIMITED TIME ONLY", tableName: "Lumen", value:"BEST OFFER\nLIMITED TIME ONLY", comment: "BEST OFFER\nLIMITED TIME ONLY")
-                height = 150
+                height = kSubscriptionCellHeight
             default:
                 break
             }
@@ -58,5 +66,4 @@ class StandardSubscriptionsDataSource: SubscriptionDataSoruce {
             return left.lumenProduct.subscriptionPlan < right.lumenProduct.subscriptionPlan
         }
     }
-
 }
