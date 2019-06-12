@@ -57,7 +57,7 @@ class OffrView: UIView {
         titleLabel.text = offr.title
         descriptionLabel.text = offr.description
         if let logoURL = offr.logoURL {
-            LogoLoader.downloadImage(logoURL, completed: { (logoImage, error) in
+            LogoLoader.shared.downloadImage(logoURL, completed: { (logoImage, error) in
                 self.logoView.image = logoImage
             })
         }

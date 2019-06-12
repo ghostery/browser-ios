@@ -111,7 +111,7 @@ class CliqzHistoryPanel: HistoryPanel {
             cell.tag = indexPath.row
             cell.imageShadowView.alpha = 0.0
             cell.imageShadowView.transform = CGAffineTransform.init(scaleX: 0.8, y: 0.8)
-            LogoLoader.loadLogo(site.tileURL.absoluteString, completionBlock: { (img, logoInfo, error) in
+            LogoLoader.shared.loadLogo(site.tileURL.absoluteString, completionBlock: { (img, logoInfo, error) in
                 if cell.tag == indexPath.row {
                     if let img = img {
                         cell.customImageView.image = img
