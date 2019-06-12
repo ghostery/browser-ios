@@ -34,32 +34,25 @@ extension String {
 }
 
 class LogoLoader {
-    
+    static var shared = LogoLoader()
+
     private static let dbVersion = "1537258816173"
-    private static var _logoDB: JSON?
-    private static var logoDB: JSON? {
-        get {
-            if self._logoDB == nil {
-                if let path = Bundle.main.path(forResource: "logo-database", ofType: "json"),
-                    let jsonData = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe) as Data {
-                    self._logoDB = JSON(jsonData)
-                }
-            }
-            return self._logoDB
+    private static let dispatchQueue = DispatchQueue(label: "com.cliqz.logoLoader", attributes: .concurrent);
+
+    private lazy var logoDB: JSON? = {
+        if let path = Bundle.main.path(forResource: "logo-database", ofType: "json"),
+            let jsonData = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe) as Data {
+            return JSON(jsonData)
         }
-        set {
-            self._logoDB = newValue
-        }
-    }
-    
-	private static let dispatchQueue = DispatchQueue(label: "com.cliqz.logoLoader", attributes: .concurrent);
-	
-	
-    class func loadLogo(_ url: String, completionBlock: @escaping (_ image: UIImage?, _ logoInfo: LogoInfo?,  _ error: Error?) -> Void) {
-        dispatchQueue.async {
-            let details = fetchLogoDetails(url)
+
+        return nil
+    }()
+
+    func loadLogo(_ url: String, completionBlock: @escaping (_ image: UIImage?, _ logoInfo: LogoInfo?,  _ error: Error?) -> Void) {
+        LogoLoader.dispatchQueue.async {
+            let details = self.fetchLogoDetails(url)
             if let u = details.url {
-                LogoLoader.downloadImage(u, completed: { (image, error) in
+                self.downloadImage(u, completed: { (image, error) in
                     DispatchQueue.main.async {
                         completionBlock(image, details, error)
                     }
@@ -70,19 +63,19 @@ class LogoLoader {
                 }
             }
         }
-	}
-	
-	class func downloadImage(_ url: String, completed: @escaping (_ image: UIImage?, _ error:  Error?) -> Void) {
-		if let u = URL(string: url) {
-			SDWebImageManager.shared().loadImage(with: u, options: SDWebImageOptions.highPriority, progress: nil, completed: { (image, _, error, _, _, _) in
-				completed(image, error)
-			})
-		} else {
-			completed(nil, nil)
-		}
-	}
-	
-    class func fetchLogoDetails(_ url: String) -> LogoInfo {
+    }
+
+    func downloadImage(_ url: String, completed: @escaping (_ image: UIImage?, _ error:  Error?) -> Void) {
+        if let u = URL(string: url) {
+            SDWebImageManager.shared().loadImage(with: u, options: SDWebImageOptions.highPriority, progress: nil, completed: { (image, _, error, _, _, _) in
+                completed(image, error)
+            })
+        } else {
+            completed(nil, nil)
+        }
+    }
+
+    func fetchLogoDetails(_ url: String) -> LogoInfo {
         var logoDetails = LogoInfo()
         logoDetails.color = nil
         logoDetails.fontSize = 16
@@ -91,6 +84,7 @@ class LogoLoader {
         if url.contains("tz.de") {
             fixedURL = "http://tz.de"
         }
+
         if let domainName = self.domainName(fixedURL), //URLParser.getURLDetails(fixedURL),
             let hostName = URL(string: fixedURL)?.host,
             let db = self.logoDB,
@@ -107,9 +101,9 @@ class LogoLoader {
                     if info != JSON.null,
                         let r = info["r"].string,
                         domainRule.contains(r) || info == list.last {
-                        
+
                         if let doesLogoExist = info["l"].number, doesLogoExist == 1 {
-                            logoDetails.url = "https://cdn.cliqz.com/brands-database/database/\(self.dbVersion)/pngs/\(domainName)/\(r)_192.png"
+                            logoDetails.url = "https://cdn.cliqz.com/brands-database/database/\(LogoLoader.dbVersion)/pngs/\(domainName)/\(r)_192.png"
                         }
                         logoDetails.color = info["b"].string
                         if let txt = info["t"].string {
@@ -134,17 +128,17 @@ class LogoLoader {
         }
         return logoDetails
     }
-    
-    private class func generateDomainRule(_ host: String, _ domain: String) -> String {
+
+    func generateDomainRule(_ host: String, _ domain: String) -> String {
         if let address = host.lastIndex(of: domain) {
             let rule = "\(host.subString(to: address))$\(host.subString(from: address + domain.count))"
             return rule
         }
         return "\(domain).$"
-        
+
     }
-    
-    class func domainName(_ urlString: String) -> String? {
+
+    func domainName(_ urlString: String) -> String? {
         if let url = NSURL(string: urlString),
             let domain = url.host?.registeredDomain(),
             let suffix = url.publicSuffix() {
@@ -153,6 +147,4 @@ class LogoLoader {
         }
         return nil
     }
-    
 }
-
