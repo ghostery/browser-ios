@@ -14,9 +14,10 @@ class AboutSettingsTableViewController: SubSettingsTableViewController {
     #else
     private let settings = [CliqzPrivacyPolicySetting(), EulaSetting(), CliqzLicenseAndAcknowledgementsSetting(), imprintSetting()]
     #endif
-    private let info = [(NSLocalizedString("Version", tableName: "Cliqz", comment: "Application Version number"), AppStatus.distVersion()),
-                        (NSLocalizedString("Extension", tableName: "Cliqz", comment: "Extension version number"), AppStatus.extensionVersion()),
-                        (NSLocalizedString("Device Id", tableName: "Cliqz", comment: "Device Id"), VPNCredentialsService.getDeviceId())]
+    private let info: [(String, () -> (String?))] = [(NSLocalizedString("Version", tableName: "Cliqz", comment: "Application Version number"), { return AppStatus.distVersion() }),
+                                                     (NSLocalizedString("Extension", tableName: "Cliqz", comment: "Extension version number"), { return AppStatus.extensionVersion() }),
+                                                     (NSLocalizedString("Device Id", tableName: "Cliqz", comment: "Device Id"), { return VPNCredentialsService.getDeviceId() }),
+                                                     (NSLocalizedString("Developer Flag", tableName: "Cliqz", comment: "Developer Flag"), { return " \(UserPreferences.instance.isDeveloperModeOn ? "On" : "Off")" })]
     
     private var showExtraInfo = !AppStatus.isRelease()
     
@@ -62,20 +63,21 @@ class AboutSettingsTableViewController: SubSettingsTableViewController {
             cell.selectionStyle = .none
             let infoTuple = info[indexPath.row]
             cell.textLabel?.text = infoTuple.0
-            cell.detailTextLabel?.text = infoTuple.1
+            cell.detailTextLabel?.text = infoTuple.1()
         }
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == 0 else {
-            return
+        if indexPath.section == 0 {
+            let setting = settings[indexPath.row]
+            setting.onClick(self.navigationController)
+        } else if indexPath.section == 1 && indexPath.row == info.count-1 {
+            // Developer Mode
+            UserPreferences.instance.isDeveloperModeOn.toggle()
+            tableView.reloadData()
         }
-        
-        let setting = settings[indexPath.row]
-        setting.onClick(self.navigationController)
     }
-    
 }
 
