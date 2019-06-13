@@ -1,0 +1,34 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+MOZ_BUNDLE_DISPLAY_NAME = Cliqz Browser
+
+// Bundle Identifier
+MOZ_BUNDLE_ID = com.cliqz
+
+MOZ_BUNDLE_SHARETO_ID = com.cliqz.ShareTo
+
+CLIENT_ENTITLEMENT = Client/Client.entitlements
+
+MOZ_INTERNAL_URL_ID = com.cliqz
+
+MOZ_INTERNAL_URL_SCHEME = cliqz
+
+LAUNCH_SCREEN = GhosteryLaunchScreen
+
+SHORTCUT_PRIVATE_TAB_TITLE = ShortcutItemTitleNewGhostTab
+
+SHORTCUT_PRIVATE_TAB_ICON = quick_action_new_ghost_tab
+
+// Flag to indicate if we want to include the debug settings bundle or not
+INCLUDE_SETTINGS_BUNDLE = NO
+
+// Adjust SDK Variables
+ADJUST_ENVIRONMENT =
+ADJUST_APP_TOKEN =
+
+// Leanplum SDK Variables
+LEANPLUM_ENVIRONMENT =
+LEANPLUM_APP_ID =
+LEANPLUM_KEY =
