@@ -60,8 +60,10 @@ extension UIImage {
     static func controlCenterNormalIcon() -> UIImage? {
         #if PAID
         return UIImage(named: "dashboard_button_freshtab")
-        #else
+        #elseif GHOSTERY
         return UIImage(named: "ghosty")
+		#else
+		return UIImage(named: "cliqz_dashboard_icon")
         #endif
     }
 
@@ -76,11 +78,13 @@ extension UIImage {
     static func controlCenterPrivateIcon() -> UIImage? {
         #if PAID
         return UIImage(named: "dashboard_button_freshtab")
+		#elseif GHOSTERY
+		return UIImage(named: "ghostyPrivate")
         #else
-        return UIImage(named: "ghostyPrivate")
+		return UIImage(named: "cliqz_dashboard_private_icon")
         #endif
     }
-    
+
     class func circle(diameter: CGFloat, color: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: diameter, height: diameter), false, 0)
         let ctx = UIGraphicsGetCurrentContext()!
