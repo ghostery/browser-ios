@@ -15,7 +15,7 @@ MOZ_INTERNAL_URL_ID = com.cliqz
 
 MOZ_INTERNAL_URL_SCHEME = cliqz
 
-LAUNCH_SCREEN = GhosteryLaunchScreen
+LAUNCH_SCREEN = CliqzLaunchScreen
 
 SHORTCUT_PRIVATE_TAB_TITLE = ShortcutItemTitleNewGhostTab
 
