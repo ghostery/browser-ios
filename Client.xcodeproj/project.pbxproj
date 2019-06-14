@@ -383,7 +383,7 @@
 		4F304595204FEC5500C99162 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68F36971EA694000048CF44 /* PanelDataObservers.swift */; };
 		4F304598204FEE5500C99162 /* jsengine.bundle.js in Resources */ = {isa = PBXBuildFile; fileRef = 4F304597204FEE5500C99162 /* jsengine.bundle.js */; };
 		4F3045CB204FF0C500C99162 /* CliqzSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3045B2204FF0C500C99162 /* CliqzSearchViewController.swift */; };
-		4F3046AD204FF0EA00C99162 /* Cliqz.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3046AC204FF0EA00C99162 /* Cliqz.xcassets */; };
+		4F3046AD204FF0EA00C99162 /* Common.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3046AC204FF0EA00C99162 /* Common.xcassets */; };
 		4F3046AF204FF14200C99162 /* SubscriptionsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3046AE204FF14100C99162 /* SubscriptionsHandler.swift */; };
 		4F3046B1204FF18700C99162 /* AppStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3046B0204FF18700C99162 /* AppStatus.swift */; };
 		4F3046B7204FF65800C99162 /* SettingsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3046B4204FF65800C99162 /* SettingsPrefs.swift */; };
@@ -415,6 +415,7 @@
 		4F30F52520517A6B0049E4F6 /* ClickableUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F30F52320517A6B0049E4F6 /* ClickableUITableViewCell.swift */; };
 		4F30F52720517C210049E4F6 /* SearchViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F30F52620517C210049E4F6 /* SearchViewDelegate.swift */; };
 		4F30F5512051E3F90049E4F6 /* etld.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F30F5422051E3F90049E4F6 /* etld.plist */; };
+		4F34F21C22B3C1790035EA92 /* Cliqz.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F34F21B22B3C1790035EA92 /* Cliqz.xcassets */; };
 		4F3FA4E32044194400A9E7F6 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3FA4E22044194400A9E7F6 /* ColorExtension.swift */; };
 		4F3FA4E520444FE900A9E7F6 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3FA4E420444FE900A9E7F6 /* StringExtension.swift */; };
 		4F4033C42086358D00AD2A8D /* ControlCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4033C32086358D00AD2A8D /* ControlCenterViewController.swift */; };
@@ -1834,7 +1835,7 @@
 		4F19FBC520FE2DE300BF0643 /* GhosteryLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GhosteryLaunchScreen.xib; sourceTree = "<group>"; };
 		4F304597204FEE5500C99162 /* jsengine.bundle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = jsengine.bundle.js; path = Cliqz/JSEngine/jsengine.bundle.js; sourceTree = SOURCE_ROOT; };
 		4F3045B2204FF0C500C99162 /* CliqzSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqzSearchViewController.swift; sourceTree = "<group>"; };
-		4F3046AC204FF0EA00C99162 /* Cliqz.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Cliqz.xcassets; sourceTree = "<group>"; };
+		4F3046AC204FF0EA00C99162 /* Common.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Common.xcassets; sourceTree = "<group>"; };
 		4F3046AE204FF14100C99162 /* SubscriptionsHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionsHandler.swift; sourceTree = "<group>"; };
 		4F3046B0204FF18700C99162 /* AppStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStatus.swift; sourceTree = "<group>"; };
 		4F3046B4204FF65800C99162 /* SettingsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPrefs.swift; sourceTree = "<group>"; };
@@ -1867,6 +1868,7 @@
 		4F30F52620517C210049E4F6 /* SearchViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewDelegate.swift; sourceTree = "<group>"; };
 		4F30F5422051E3F90049E4F6 /* etld.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = etld.plist; sourceTree = "<group>"; };
 		4F34F21222B394720035EA92 /* CliqzClient copy.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "CliqzClient copy.entitlements"; sourceTree = "<group>"; };
+		4F34F21B22B3C1790035EA92 /* Cliqz.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Cliqz.xcassets; sourceTree = "<group>"; };
 		4F3FA4E22044194400A9E7F6 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		4F3FA4E420444FE900A9E7F6 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		4F4033C32086358D00AD2A8D /* ControlCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCenterViewController.swift; sourceTree = "<group>"; };
@@ -3477,11 +3479,12 @@
 				1EAFE4EF205BDEC0006A36B4 /* cliqz.json */,
 				4F30F5422051E3F90049E4F6 /* etld.plist */,
 				4F3046BA204FF69200C99162 /* logo-database.json */,
-				4F3046AC204FF0EA00C99162 /* Cliqz.xcassets */,
+				4F3046AC204FF0EA00C99162 /* Common.xcassets */,
 				4F304597204FEE5500C99162 /* jsengine.bundle.js */,
 				1EBB08AA2068FC9600C6DFFE /* Eula.html */,
 				1E5CEA5321BA7CEE00EC0226 /* Lumen.stringsdict */,
 				C5B8BABD2281AC1F0048D699 /* APIKeys.swift */,
+				4F34F21B22B3C1790035EA92 /* Cliqz.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -5911,7 +5914,7 @@
 				F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */,
 				4F3046BB204FF69200C99162 /* logo-database.json in Resources */,
 				4F53287521F7579F00FC7F12 /* 3rd_party_cookies_blocker.json in Resources */,
-				4F3046AD204FF0EA00C99162 /* Cliqz.xcassets in Resources */,
+				4F3046AD204FF0EA00C99162 /* Common.xcassets in Resources */,
 				7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */,
 				4F9DD64320BD562B00107976 /* disconnect-social.json in Resources */,
 				E49943F71AE69EDD00BF9DE4 /* Intro.xcassets in Resources */,
@@ -5972,6 +5975,7 @@
 				1E64AEDE210F19EC00565C0B /* Ghostery-Licenses.html in Resources */,
 				D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */,
 				1EAFE524205FBBBC006A36B4 /* CliqzLaunchScreen.xib in Resources */,
+				4F34F21C22B3C1790035EA92 /* Cliqz.xcassets in Resources */,
 				1E5CEA5121BA7CEE00EC0226 /* Lumen.stringsdict in Resources */,
 				AF6FA97420652C6800D7F9F0 /* postload.js in Resources */,
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
