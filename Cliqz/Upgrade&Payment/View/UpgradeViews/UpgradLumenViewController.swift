@@ -8,17 +8,8 @@
 
 import UIKit
 
-class UpgradLumenNavigationController: UINavigationController {
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return ThemeManager.instance.statusBarStyle
-    }
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-}
 
-class UpgradLumenViewController: UIViewController {
+class UpgradLumenViewController: BaseUpgradeViewController {
     #if PAID
     private let containerView = UIView()
     private let closeButton = UIButton()
@@ -31,8 +22,7 @@ class UpgradLumenViewController: UIViewController {
     private let conditionsLabel = UILabel()
     private let eulaButton = UIButton()
     private let privacyPolicyButton = UIButton()
-    private let gradient = BrowserGradientView()
-    private let loadingView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    
     private let notchOffset = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
     private var telemetrySignals: [String:String]?
     
@@ -43,18 +33,6 @@ class UpgradLumenViewController: UIViewController {
         NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue]
     
     private var isConditionsHidden = true
-    private var selectedProduct: LumenSubscriptionProduct?
-
-    private var subscriptionsDataSource:StandardSubscriptionsDataSource!
-
-	init(_ dataSource: StandardSubscriptionsDataSource) {
-		subscriptionsDataSource = dataSource
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 	
     override func viewDidLoad() {
         super.viewDidLoad()		
@@ -75,32 +53,6 @@ class UpgradLumenViewController: UIViewController {
         self.fetchProducts()
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return ThemeManager.instance.statusBarStyle
-    }
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-    
-    private func fetchProducts() {
-        self.startLoadingAnimation()
-        self.subscriptionsDataSource.fetchProducts {[weak self] (success) in
-            if success {
-                self?.bundlesView.reloadData()
-            } else {
-                self?.showProductsRetrievalFailedAlert()
-            }
-            self?.stopLoadingAnimation()
-        }
-    }
-
     private func setupComponents() {
         self.view.addSubview(containerView)
 		
@@ -127,7 +79,7 @@ class UpgradLumenViewController: UIViewController {
         restoreButton.setTitle(NSLocalizedString("Restore Subscription", tableName: "Lumen", comment: "[Upgrade Flow] Restore Subscription button"), for: .normal)
 		
         conditionsLabel.numberOfLines = 0
-        conditionsLabel.text = NSLocalizedString("Subscriptions will be applied to your iTunes account on confirmation. Subscriptions will automatically renew unless canceled within 24-hours before the end of the current period‌. You can cancel anytime in your iTunes account settings. Any unused portion of a free trial will be forfeited if you purchase a subscription.", tableName: "Lumen", comment: "[Upgrade Flow] Conditions text")
+        conditionsLabel.text = self.dataSource.getConditionText()
         conditionsLabel.textColor = UIColor(colorString: "BDC0CE")
         conditionsLabel.textAlignment = .center
 
@@ -203,18 +155,6 @@ class UpgradLumenViewController: UIViewController {
         }
     }
     
-    private func startLoadingAnimation() {
-        self.loadingView.startAnimating()
-    }
-    
-    private func stopLoadingAnimation() {
-        self.loadingView.stopAnimating()
-    }
-    
-    @objc func closeView() {
-        LegacyTelemetryHelper.logPayment(action: "click", target: "close")
-        self.dismiss(animated: true)
-    }
     
     @objc func restoreSubscription() {
         self.telemetrySignals?["target"] = "restore"
@@ -222,125 +162,16 @@ class UpgradLumenViewController: UIViewController {
         SubscriptionController.shared.restorePurchases()
 	}
 
-    @objc func showEula() {
-        self.dismiss(animated: false) {[weak self] in
-            self?.navigateToUrl("https://lumenbrowser.com/lumen_eula.html")
-        }
-    }
-    
-    @objc func showPrivacyPolicy() {
-        self.dismiss(animated: false) {[weak self] in
-            self?.navigateToUrl("https://lumenbrowser.com/dse.html")
-        }
-    }
-    
-    @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
+    @objc override func handlePurchaseSuccessNotification(_ notification: Notification) {
         LegacyTelemetryHelper.logPayment(action: "success", target: self.telemetrySignals?["target"])
-        self.selectedProduct = nil
         self.telemetrySignals = nil
-        self.dismiss(animated: true)
+        super.handlePurchaseSuccessNotification(notification)
     }
     
-    @objc func handlePurchaseErrorNotification(_ notification: Notification) {
-        guard let lumenProduct = self.selectedProduct else {
-            return
-        }
-        
-        self.selectedProduct = nil
-        
-        LegacyTelemetryHelper.logPayment(action: "error", target: self.telemetrySignals?["target"])
-        let errorDescirption = NSLocalizedString("We are sorry, but something went wrong. The payment was not successful, please try again.", tableName: "Lumen", comment: "Error message when there is failing payment transaction")
-        let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Retry", tableName: "Lumen", comment: "Retry button title in payment failing transaction alert"), style: .default) {(action) in
-            self.selectedProduct = lumenProduct
-            SubscriptionController.shared.buyProduct(lumenProduct.product)
-        })
-        
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", tableName: "Lumen", comment: "Cancel button title in payment failing transaction alert"), style: .default, handler: nil))
-        self.present(alertController, animated: true, completion: nil)
+    override func reloadData() {
+        self.bundlesView.reloadData()
     }
     
-    private func navigateToUrl(_ urlString: String) {
-        if let appDel = UIApplication.shared.delegate as? AppDelegate,
-            let browserViewController = appDel.browserViewController,
-            let url = URL(string: urlString)
-        {
-            browserViewController.settingsOpenURLInNewTab(url)
-        }
-    }
-    
-    private func showProductsRetrievalFailedAlert() {
-        let errorDescirption = NSLocalizedString("Sorry, Lumen cannot connect to the Internet.", tableName: "Lumen", comment: "Error when can't get list of available subscriptions")
-        let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Retry", tableName: "Lumen", comment: "Retry button title in payment failing transaction alert"), style: .default) {[weak self] (action) in
-            self?.fetchProducts()
-        })
-        
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Close", tableName: "Lumen", comment: "Closing subscription screen"), style: .default, handler: {[weak self] (action) in
-            self?.dismiss(animated: true, completion: nil)
-        }))
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
-    @objc func toggleConditions() {
-        LegacyTelemetryHelper.logPayment(action: "click", target: "conditions")
-        if isConditionsHidden {
-            UIView.animate(withDuration: 0.5) {
-                let conditionsOffset = -1.0 * self.getContidionOffet()
-                self.arrowImage.image = UIImage(named: "Conditions_Arrow_Down")
-                self.containerView.snp.remakeConstraints { (make) in
-                    make.top.equalTo(self.view.safeArea.top).offset(conditionsOffset)
-                    make.bottom.equalTo(self.view.safeArea.bottom)
-                    make.leading.equalTo(self.view.safeArea.leading)
-                    make.trailing.equalTo(self.view.safeArea.trailing)
-                }
-                self.arrowImage.snp.remakeConstraints { (make) in
-                    make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().offset(conditionsOffset)
-                    make.width.equalTo(45)
-                    make.height.equalTo(9)
-                }
-                
-                self.conditionsLabel.snp.remakeConstraints { (make) in
-                    make.centerX.equalToSuperview()
-                    make.leading.trailing.equalToSuperview().inset(15.0)
-                    make.top.equalTo(self.arrowImage.snp.bottom).offset(10.0)
-                }
-            }
-        } else {
-            UIView.animate(withDuration: 0.5) {
-                self.arrowImage.image = UIImage(named: "Conditions_Arrow_Up")
-                self.containerView.snp.remakeConstraints { (make) in
-                    make.top.equalTo(self.view.safeArea.top)
-                    make.bottom.equalTo(self.view.safeArea.bottom)
-                    make.leading.equalTo(self.view.safeArea.leading)
-                    make.trailing.equalTo(self.view.safeArea.trailing)
-                }
-                self.arrowImage.snp.remakeConstraints { (make) in
-                    make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(5.0)
-                    make.width.equalTo(45.0)
-                    make.height.equalTo(9.0)
-                }
-                
-                self.conditionsLabel.snp.remakeConstraints { (make) in
-                    make.centerX.equalToSuperview()
-                    make.leading.trailing.equalToSuperview().inset(15.0)
-                    make.top.equalTo(self.arrowImage.snp.bottom).offset(10.0 + self.notchOffset)
-                }
-            }
-        }
-        
-        isConditionsHidden = !isConditionsHidden
-    }
-    
-    func getContidionOffet() -> CGFloat {
-        return conditionsLabel.bounds.size.height
-                + eulaButton.bounds.size.height
-                + privacyPolicyButton.bounds.size.height
-                + 35.0
-    }
-
 	@objc func enterPromoCode() {
         LegacyTelemetryHelper.logPayment(action: "click", target: "code")
 		var promoCodeTextField: UITextField?
@@ -406,16 +237,16 @@ class UpgradLumenViewController: UIViewController {
 #if PAID
 extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return subscriptionsDataSource.subscriptionsCount()
+		return dataSource.subscriptionsCount()
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return subscriptionsDataSource.subscriptionHeight(indexPath: indexPath)
+		return dataSource.subscriptionHeight(indexPath: indexPath)
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath) as! SubscriptionTableViewCell
-        let subscriptionInfo = subscriptionsDataSource.subscriptionInfo(indexPath: indexPath)
+        let subscriptionInfo = dataSource.subscriptionInfo(indexPath: indexPath)
 		cell.subscriptionInfo = subscriptionInfo
         cell.buyButtonHandler = { [weak self] subscriptionProduct in
             SubscriptionController.shared.buyProduct(subscriptionProduct.product)
@@ -427,7 +258,6 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
 	fileprivate func footerView() -> UIView {
-		// TODO: if we keep this solutin the height should be calculated
 		let footerView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 210))
 		footerView.addSubview(self.restoreButton)
 		footerView.addSubview(self.conditionsLabel)
