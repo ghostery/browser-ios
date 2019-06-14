@@ -9,7 +9,7 @@ MOZ_BUNDLE_ID = com.cliqz
 
 MOZ_BUNDLE_SHARETO_ID = com.cliqz.ShareTo
 
-CLIENT_ENTITLEMENT = Client/Client.entitlements
+CLIENT_ENTITLEMENT = Cliqz/Resources/CliqzClient.entitlements
 
 MOZ_INTERNAL_URL_ID = com.cliqz
 

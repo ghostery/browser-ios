@@ -1866,6 +1866,7 @@
 		4F30F52320517A6B0049E4F6 /* ClickableUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClickableUITableViewCell.swift; sourceTree = "<group>"; };
 		4F30F52620517C210049E4F6 /* SearchViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewDelegate.swift; sourceTree = "<group>"; };
 		4F30F5422051E3F90049E4F6 /* etld.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = etld.plist; sourceTree = "<group>"; };
+		4F34F21222B394720035EA92 /* CliqzClient copy.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "CliqzClient copy.entitlements"; sourceTree = "<group>"; };
 		4F3FA4E22044194400A9E7F6 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		4F3FA4E420444FE900A9E7F6 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		4F4033C32086358D00AD2A8D /* ControlCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCenterViewController.swift; sourceTree = "<group>"; };
@@ -3462,6 +3463,7 @@
 		4F304596204FEE3B00C99162 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4F34F21222B394720035EA92 /* CliqzClient copy.entitlements */,
 				1E79A98F21A6F8A900EAC6E6 /* LumenClient.entitlements */,
 				1E244CDB2180A327004A73E9 /* Paid.xcassets */,
 				1E0B0B862174C20D0088C520 /* PaidLaunchScreen.xib */,
@@ -11014,6 +11016,7 @@
 				INFOPLIST_FILE = Client/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = cliqz;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -11074,6 +11077,7 @@
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = cliqz;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_NOTIFICATIONSERVICE";
@@ -11109,6 +11113,7 @@
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = cliqz;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_SHARETO_ID)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -11134,6 +11139,7 @@
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = cliqz;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).Today";
 				PRODUCT_NAME = Today;
