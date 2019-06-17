@@ -70,7 +70,7 @@ jobs:
 # Job to Test the Build
 - job: Cliqz_IOS_CI_Test
   dependsOn: Cliqz_IOS_CI_Build
-  condition: succeeded()
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
   timeoutInMinutes: 120
   strategy:
     matrix:
