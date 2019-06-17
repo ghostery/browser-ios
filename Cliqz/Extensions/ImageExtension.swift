@@ -43,8 +43,10 @@ extension UIImage {
 	static func defaultFavicon() -> UIImage? {
 		#if PAID
         return UIImage(named: "PaidFavicon")
-        #else
+		#elseif GHOSTERY
         return UIImage(named: "ghosteryFavicon")
+		#else
+		return UIImage(named: "cliqzFavIcon")
         #endif
 	}
     

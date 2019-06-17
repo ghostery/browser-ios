@@ -911,13 +911,15 @@ fileprivate class EmptyPrivateTabsView: UIView {
         #endif
         addSubview(titleLabel)
         addSubview(descriptionLabel)
+		#if !CLIQZ
         addSubview(iconImageView)
+		#endif
         addSubview(learnMoreButton)
 
         titleLabel.snp.makeConstraints { make in
             make.center.equalTo(self)
         }
-
+		#if !CLIQZ
         iconImageView.snp.makeConstraints { make in
             make.bottom.equalTo(titleLabel.snp.top).offset(-EmptyPrivateTabsViewUX.TextMargin)
             /* Cliqz: shifted the ghosty image to apprear centered
@@ -925,6 +927,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
             */
             make.centerX.equalTo(self).offset(10)
         }
+		#endif
 
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(EmptyPrivateTabsViewUX.TextMargin)
