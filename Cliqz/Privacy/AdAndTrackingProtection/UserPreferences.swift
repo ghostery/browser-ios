@@ -49,10 +49,30 @@ extension Notification.Name {
     let AdblockingModeKey = "AdblockingMode"
     let PrevAdblockingModeKey = "PreviousAdblockingMode"
     let PauseGhosteryDateKey = "PauseGhosteryDate"
+
+    let IsDeveloperModeOnKey = "IsDeveloperModeOnKey"
+
+    /// If `true`, send a `developer` flag in the telemetry data.
+    ///
+    /// Activate devloper mode by going to Settings -> About and perform a two finger long press gesture to show the advanced options.
+    ///
+    /// @see https://cliqztix.atlassian.net/browse/IP-550
+    var isDeveloperModeOn: Bool {
+        get {
+            if let val = userDefaults().value(forKey: IsDeveloperModeOnKey) as? Bool {
+                return val
+            }
+
+            return false
+        }
+        set {
+            userDefaults().set(newValue, forKey: IsDeveloperModeOnKey)
+            Engine.sharedInstance.setPref("developer", prefValue: newValue)
+        }
+    }
     
     #if PAID
     let IsProtectionOnKey = "IsProtectionOnKey"
-    let IsDeveloperModeOnKey = "IsDeveloperModeOnKey"
     
     var isProtectionOn: Bool {
         get {
@@ -66,20 +86,6 @@ extension Notification.Name {
             userDefaults().set(newValue, forKey: IsProtectionOnKey)
             Engine.sharedInstance.setPref("lumen.protection.isEnabled", prefValue: newValue)
             NotificationCenter.default.post(name: Notification.Name.privacyStatusChanged, object: self, userInfo: ["newValue": newValue])
-        }
-    }
-
-    var isDeveloperModeOn: Bool {
-        get {
-            if let val = userDefaults().value(forKey: IsDeveloperModeOnKey) as? Bool {
-                return val
-            }
-
-            return false
-        }
-        set {
-            userDefaults().set(newValue, forKey: IsDeveloperModeOnKey)
-            Engine.sharedInstance.setPref("developer", prefValue: newValue)
         }
     }
     
