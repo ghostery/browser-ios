@@ -75,13 +75,11 @@ node('gideon') {
                                 usernameVariable: 'GITHUB_USERNAME',
                             ],
                             string(credentialsId: '8b4f7459-c446-4058-be61-3c3d98fe72e2', variable: 'ITUNES_USER'),
-                            string(credentialsId: 'Lumen_SentryKey', variable: 'SentryDSN'),
-                            string(credentialsId: '05be12cd-5177-4adf-9812-809f01451fa0', variable: 'FASTLANE_PASSWORD'),
-                            string(credentialsId: 'ee93743c-b0be-46aa-b49a-ab3caaea4f67', variable: 'MATCH_PASSWORD'),
+                            string(credentialsId: 'c21d2e60-e4b9-4f75-bad7-6736398a1a05', variable: 'SentryDSN'),
+                            string(credentialsId: '070139a0-b210-4692-ab5f-5444f4aadac1', variable: 'FASTLANE_PASSWORD'),
+                            string(credentialsId: 'a1904e28-d791-4118-b8ed-3ff064aee9a4', variable: 'MATCH_PASSWORD'),
                             string(credentialsId: 'f206e880-e09a-4369-a3f6-f86ee94481f2', variable: 'SENTRY_AUTH_TOKEN'),
-                            string(credentialsId: 'ab91f92a-4588-4034-8d7f-c1a741fa31ab', variable: 'FASTLANE_ITC_TEAM_ID'),
-                            string(credentialsId: 'cc9215e4-ca8f-41bd-9e0b-1c2ba1900949', variable: 'LumenAPIKey'),
-                            string(credentialsId: '1593d451-3909-4b48-8b5e-9b3d289c38d1', variable: 'RevenuecatAPIKey')])
+                            string(credentialsId: 'ab91f92a-4588-4034-8d7f-c1a741fa31ab', variable: 'FASTLANE_ITC_TEAM_ID')])
                         {
                             sh '''#!/bin/bash -l
                                 set -x
@@ -89,12 +87,12 @@ node('gideon') {
                                 rm -rf /Users/vagrant/Library/Keychains/ios-build.keychain*
                                 rm -rf ../build-tools
                                 export MATCH_KEYCHAIN_NAME=ios-build.keychain
-                                export app_name=Lumen
+                                export app_name=Cliqz
                                 export CommitHash=`git rev-parse --short HEAD`
                                 export PATH="$PATH:/Users/vagrant/Library/Python/2.7/bin"
                                 echo de > shipping_locales.txt && echo en-US >> shipping_locales.txt
                                 fastlane importLocalizations
-                                fastlane lumenRelease
+                                fastlane cliqzNightly
                             '''
                         }
                     }
@@ -200,7 +198,7 @@ def getChangeString(passedBuilds) {
 def getIssueList(){
     def list = []
     def changes = getChangeString(passedBuilds)
-    def re = /IB2-([0-9])+/
+    def re = /IB-([0-9])+/
     def y = changes =~ re
     while (y){
         list.add(y.group().toString())
