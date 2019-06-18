@@ -21,5 +21,8 @@ for_platform :ios do
   for_lane :lumenRelease do
     app_identifier 'com.cliqz.ios.lumen'
   end
+  for_lane :cliqzNightly do
+    app_identifier 'com.cliqz'
+  end
   
 end
