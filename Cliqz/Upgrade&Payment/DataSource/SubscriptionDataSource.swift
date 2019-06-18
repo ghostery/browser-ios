@@ -14,13 +14,21 @@ protocol SubscriptionDataSourceDelegate: class {
     func retrievePromoProducts(completion:@escaping ([LumenSubscriptionProduct]) -> Void)
 }
 
-class SubscriptionDataSoruce {
+let kSubscriptionCellHeight: CGFloat = 150.0
+
+class SubscriptionDataSource {
+    
     weak var delegate: SubscriptionDataSourceDelegate!
     
     var subscriptionInfos = [SubscriptionCellInfo]()
     
     init(delegate: SubscriptionDataSourceDelegate) {
         self.delegate = delegate
+    }
+    
+    func fetchProducts(completion: ((Bool) -> Void)? = nil) {
+        assert(false, "Derived classes must override this method")
+        completion?(false)
     }
     
     func subscriptionsCount() -> Int {
@@ -34,5 +42,19 @@ class SubscriptionDataSoruce {
     
     func subscriptionInfo(indexPath: IndexPath) -> SubscriptionCellInfo? {
         return self.subscriptionInfos[indexPath.row]
+    }
+    
+    func telemeterySignals(product: LumenSubscriptionProduct? = nil) -> [String:String] {
+        assert(false, "Derived classes must override this method")
+        return [:]
+    }
+    
+    func getConditionText() -> String {
+        assert(false, "Derived classes must override this method")
+        return ""
+    }
+    
+    func getHeaderText() -> String? {
+        return nil
     }
 }
