@@ -45,6 +45,10 @@ class SearchSuggestClient {
 
         request = alamofire.request(url!)
             .validate(statusCode: 200..<300)
+            // Cliqz
+            // The changes below are made for https://cliqztix.atlassian.net/browse/IP-474
+            // The original firefox codebase solves this in a different way that we're not able to backport just for this function
+            // but once we rebase onto a version of the firefox mobile codebase older than June 12, we can remove these customizations.
             .responseData { dataResponse in
                 guard let data = dataResponse.data else {
                     let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
@@ -71,12 +75,14 @@ class SearchSuggestClient {
                     return
                 }
 
+                // Cliqz
                 // If that fails, try ASCII
                 if let jsonAsCIIString = String(data: data, encoding: .ascii), let array = JSON(parseJSON: jsonAsCIIString).arrayObject, array.count > 1, let suggestions = array[1] as? [String] {
                     callback(suggestions, nil)
                     return
                 }
 
+                // Cliqz
                 // If both decoding mechanisms failed, return an error
                 let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
                 callback(nil, error)
