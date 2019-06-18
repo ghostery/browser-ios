@@ -14,20 +14,21 @@ node('gideon') {
         writeFile file: 'Vagrantfile', text: '''
         Vagrant.configure("2") do |config|
             config.vm.box = "xcode-10.1"
-            
             config.vm.synced_folder ".", "/vagrant", disabled: true
-            config.vm.define "nightlyios" do |nightlyios|
-                nightlyios.vm.hostname ="nightlyios"
+            config.vm.define "publishios" do |publishios|
+                publishios.vm.hostname ="publishios"
                 
-                nightlyios.vm.network "public_network", :bridge => "en0: Ethernet 1", auto_config: false
-                nightlyios.vm.boot_timeout = 900
-                nightlyios.vm.provider "virtualbox" do |v|
-                    v.name = "nightlyios"
+                config.ssh.private_key_path = "/Users/jenkins/reusable-VMs/publishios/.vagrant/machines/publishios/virtualbox/private_key"
+                publishios.vm.network "public_network", :bridge => "en0: Ethernet 1", auto_config: false
+                publishios.vm.boot_timeout = 900
+                publishios.ssh.forward_agent = true
+                publishios.vm.provider "virtualbox" do |v|
+                    v.name = "publishios"
                     v.gui = false
                     v.memory = ENV["NODE_MEMORY"]
                     v.cpus = ENV["NODE_CPU_COUNT"]
                 end
-                nightlyios.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
+                publishios.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                     set -e
                     set -x
                     rm -f agent.jar
@@ -36,6 +37,13 @@ node('gideon') {
                 SHELL
             end
         end
+        '''
+        sh '''#!/bin/bash -l
+            set -e
+            set -x
+            mkdir -p .vagrant/machines/publishios/virtualbox
+            cd .vagrant/machines/publishios/virtualbox/
+            if [ ! -f id ]; then touch id && echo "1b070f2c-9c26-470f-9d81-58e109313b47" >> id; fi
         '''
 
         vagrant.inside(
