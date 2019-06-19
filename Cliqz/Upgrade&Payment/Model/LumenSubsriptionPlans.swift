@@ -14,7 +14,10 @@ public enum LumenSubscriptionPlanType {
 	case basicAndVpn(String)
 
     func hasAssociatedString(string: String) -> Bool {
-        return self.associatedString() == string
+        guard let associatedString = self.associatedString() else {
+            return false
+        }
+        return string.contains(associatedString)
     }
     
     func associatedString() -> String? {

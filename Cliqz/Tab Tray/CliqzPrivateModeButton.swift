@@ -34,9 +34,17 @@ class CliqzPrivateModeButton: UIButton, PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         isSelected = isPrivate
         accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
-        
-        self.setTitleColor(isPrivate ? UIColor.lumenDeepBlue : UIColor.lumenBrightBlue, for: .normal)
-        self.backgroundColor = isSelected ? UIColor.lumenBrightBlue : UIColor.clear
+		
+		// TODO: It should be moved to themes for private mode as well. Just a quick fix
+		#if PAID
+		let privateModeTitleColor = UIColor.lumenDeepBlue
+		let selectedColor = UIColor.lumenBrightBlue
+		#else
+		let privateModeTitleColor = UIColor.theme.tabTray.toolbarButtonTint
+		let selectedColor = UIColor.cliqzBluePrimary
+		#endif
+        self.setTitleColor(isPrivate ? privateModeTitleColor : UIColor.theme.tabTray.toolbarButtonTint, for: .normal)
+        self.backgroundColor = isSelected ? selectedColor : UIColor.clear
     }
     
     func setSelected(_ selected: Bool, animated: Bool = true) {
