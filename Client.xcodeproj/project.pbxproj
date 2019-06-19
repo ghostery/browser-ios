@@ -10988,7 +10988,7 @@
 			baseConfigurationReference = 6F4255CFD868632566C61A36 /* Pods-Client.cliqz.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Ghostery;
+				ASSETCATALOG_COMPILER_APPICON_NAME = CliqzAppIcon;
 				CODE_SIGN_ENTITLEMENTS = "$(CLIENT_ENTITLEMENT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
