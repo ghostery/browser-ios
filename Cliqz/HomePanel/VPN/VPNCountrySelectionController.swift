@@ -1,36 +1,40 @@
 //
-//  VPNCountryController.swift
+//  VPNCountrySelectionController.swift
 //  VPNViews
 //
 //  Created by Tim Palade on 10/26/18.
-//  Copyright © 2018 Tim Palade. All rights reserved.
+//  Copyright © 2018 Cliqz. All rights reserved.
 //
 #if PAID
 import UIKit
 
-protocol VPNCountryControllerProtocol: class {
+// TODO: Send notification when VPNEndPointManager has loaded/updated VPN Countries
+// TODO: Listen to said notification
+
+protocol VPNCountrySelectionDelegate: class {
     func didSelectCountry(country: VPNCountry)
 }
 
-class VPNCountryController: UIViewController {
+class VPNCountrySelectionController: UIViewController {
     
-    weak var delegate: VPNCountryControllerProtocol? = nil
+    weak var delegate: VPNCountrySelectionDelegate? = nil
     
     let tableView = UITableView()
-    let gradient = BrowserGradientView()
+    let backgroundView = BrowserGradientView()
     let countries = VPNEndPointManager.shared.getAvailableCountries()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(CustomVPNCountryCell.self, forCellReuseIdentifier: "CountryCell")
+        tableView.register(VPNCountrySelectionCountryCell.self, forCellReuseIdentifier: VPNCountrySelectionCountryCell.reuseIdentifier)
         
-        view.addSubview(gradient)
+        view.addSubview(backgroundView)
         view.addSubview(tableView)
-        
-        gradient.snp.makeConstraints { (make) in
+
+        // TODO: Put all the setup code in a function
+        // TODO: Remove snapkit because ugh
+        backgroundView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
         
@@ -43,7 +47,7 @@ class VPNCountryController: UIViewController {
         
         setStyling()
     }
-    
+
     func setStyling() {
         self.navigationController?.navigationBar.tintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
         self.navigationController?.navigationBar.barTintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
@@ -66,7 +70,7 @@ class VPNCountryController: UIViewController {
     }
 }
 
-extension VPNCountryController: UITableViewDataSource {
+extension VPNCountrySelectionController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -77,8 +81,10 @@ extension VPNCountryController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CountryCell", for: indexPath) as! CustomVPNCountryCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: VPNCountrySelectionCountryCell.reuseIdentifier, for: indexPath) as! VPNCountrySelectionCountryCell
         let country = countries[indexPath.row]
+
+        // TODO: This belongs in the cell class
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
         cell.textLabel?.text = country.name
@@ -95,6 +101,7 @@ extension VPNCountryController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // TODO: This belongs in cellforrowatindexpath
         let country = countries[indexPath.row]
         if country == VPNEndPointManager.shared.selectedCountry {
             tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
@@ -120,7 +127,7 @@ extension VPNCountryController: UITableViewDataSource {
     }
 }
 
-extension VPNCountryController: UITableViewDelegate {
+extension VPNCountrySelectionController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let country = countries[indexPath.row]
@@ -134,7 +141,8 @@ extension VPNCountryController: UITableViewDelegate {
     }
 }
 
-class CustomVPNCountryCell: UITableViewCell {
+class VPNCountrySelectionCountryCell: UITableViewCell {
+    static let reuseIdentifier = "VPNCountrySelectionCountryCell"
     let tickView = UIImageView()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -168,7 +176,7 @@ class CustomVPNCountryCell: UITableViewCell {
     }
 }
 
-extension VPNCountryController: Themeable {
+extension VPNCountrySelectionController: Themeable {
     func applyTheme() {
         setStyling()
         self.tableView.reloadData()
