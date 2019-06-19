@@ -573,7 +573,7 @@
 		AF53D3BC206A346B0012A11F /* TabExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF53D3BB206A346B0012A11F /* TabExtension.swift */; };
 		AF6C8AFD21873CB9006F8166 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C8AFA21873B5C006F8166 /* Keychain.swift */; };
 		AF6C8AFE21873CB9006F8166 /* VPNButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C8AFC21873B5D006F8166 /* VPNButton.swift */; };
-		AF6C8AFF21873CB9006F8166 /* VPNCountryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C8AF921873B5C006F8166 /* VPNCountryController.swift */; };
+		AF6C8AFF21873CB9006F8166 /* VPNCountrySelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C8AF921873B5C006F8166 /* VPNCountrySelectionController.swift */; };
 		AF6C8B0021873CB9006F8166 /* VPNViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6C8AFB21873B5D006F8166 /* VPNViewController.swift */; };
 		AF6F247D20AF0749009C3D0D /* CliqzStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6F247C20AF0749009C3D0D /* CliqzStrings.swift */; };
 		AF6FA97220652C6800D7F9F0 /* ghostery_content_blocker.json in Resources */ = {isa = PBXBuildFile; fileRef = AF6FA96E20652C6700D7F9F0 /* ghostery_content_blocker.json */; };
@@ -2019,7 +2019,7 @@
 		AF2B90D6217F208B00550C57 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		AF4C19B820AC7AC400D3F740 /* TopTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabs.swift; sourceTree = "<group>"; };
 		AF53D3BB206A346B0012A11F /* TabExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabExtension.swift; sourceTree = "<group>"; };
-		AF6C8AF921873B5C006F8166 /* VPNCountryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNCountryController.swift; sourceTree = "<group>"; };
+		AF6C8AF921873B5C006F8166 /* VPNCountrySelectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNCountrySelectionController.swift; sourceTree = "<group>"; };
 		AF6C8AFA21873B5C006F8166 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		AF6C8AFB21873B5D006F8166 /* VPNViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNViewController.swift; sourceTree = "<group>"; };
 		AF6C8AFC21873B5D006F8166 /* VPNButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNButton.swift; sourceTree = "<group>"; };
@@ -3865,7 +3865,7 @@
 			children = (
 				AF6C8AFA21873B5C006F8166 /* Keychain.swift */,
 				AF6C8AFC21873B5D006F8166 /* VPNButton.swift */,
-				AF6C8AF921873B5C006F8166 /* VPNCountryController.swift */,
+				AF6C8AF921873B5C006F8166 /* VPNCountrySelectionController.swift */,
 				AF6C8AFB21873B5D006F8166 /* VPNViewController.swift */,
 				4FDC331821F8BAAD001215EF /* VPNCredentialsService.swift */,
 				1E2F488A225256C400B717B7 /* VPNInfoView.swift */,
@@ -6095,6 +6095,7 @@
 				"${BUILT_PRODUCTS_DIR}/RNViewShot/RNViewShot.framework",
 				"${BUILT_PRODUCTS_DIR}/React/React.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
@@ -6120,6 +6121,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNViewShot.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
@@ -6612,7 +6614,7 @@
 				AF6C8AFD21873CB9006F8166 /* Keychain.swift in Sources */,
 				AF6C8AFE21873CB9006F8166 /* VPNButton.swift in Sources */,
 				1E351C3B21CA994800275941 /* BrowserViewController+FindInPage.swift in Sources */,
-				AF6C8AFF21873CB9006F8166 /* VPNCountryController.swift in Sources */,
+				AF6C8AFF21873CB9006F8166 /* VPNCountrySelectionController.swift in Sources */,
 				AF6C8B0021873CB9006F8166 /* VPNViewController.swift in Sources */,
 				4F304595204FEC5500C99162 /* PanelDataObservers.swift in Sources */,
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,

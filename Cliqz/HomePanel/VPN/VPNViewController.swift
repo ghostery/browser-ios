@@ -443,13 +443,13 @@ extension VPNViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         //push new view controller
-        let countryVC = VPNCountryController()
+        let countryVC = VPNCountrySelectionController()
         countryVC.delegate = self
         self.navigationController?.pushViewController(countryVC, animated: true)
     }
 }
 
-extension VPNViewController: VPNCountryControllerProtocol {
+extension VPNViewController: VPNCountrySelectionDelegate {
     func didSelectCountry(country: VPNCountry) {
         LegacyTelemetryHelper.logVPN(action: "click",
                                      target: "location",
