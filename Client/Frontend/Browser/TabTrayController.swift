@@ -1041,7 +1041,6 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
             make.leading.equalTo(self).offset(sideOffset)
             make.centerY.equalTo(self)
             make.height.equalTo(30)
-            make.width.equalTo(65)
         }
         
 
