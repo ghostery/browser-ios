@@ -14,10 +14,17 @@ struct Credentials {
 }
 
 class VPNCountry: Codable, Equatable {
-    let id: String //id from the server
-    let name: String //display name
-    var endpoint: String //endpoint address
-    var remoteID: String //endpoint address
+    /// id from the server
+    let id: String
+
+    /// display name
+    let name: String
+
+    /// endpoint address
+    var endpoint: String
+
+    /// endpoint address
+    var remoteID: String
     
     init(id: String, name: String, endpoint: String, remoteID: String) {
         self.id = id
@@ -30,16 +37,18 @@ class VPNCountry: Codable, Equatable {
         return lhs.id == rhs.id
     }
     
-    var hashPrefix: String {
+    private var keyPrefix: String {
         return "\(self.id)|\(self.endpoint)"
     }
-    
-    var usernameHash: String {
-        return "\(self.hashPrefix)|username"
+
+    /// Key for saving data about an endpoint into keychain
+    var usernameKey: String {
+        return "\(self.keyPrefix)|username"
     }
-    
-    var passwordHash: String {
-        return "\(self.hashPrefix)|password"
+
+    /// Key for saving data about an endpoint into keychain
+    var passwordKey: String {
+        return "\(self.keyPrefix)|password"
     }
     
     var disabled: Bool {
@@ -48,6 +57,9 @@ class VPNCountry: Codable, Equatable {
 }
 
 class VPNEndPointManager {
+    /// Notification that fires when the list of countries is updated
+    static let countriesUpdatedNotification = Notification.Name("VPNCountry.countriesUpdatedNotification")
+
     private let SelectedCountryKey = "VPNSelectedCountry"
     private let CountriesLookup = [
         "us" : NSLocalizedString("USA", tableName: "Lumen", comment: "VPN country name for USA"),
@@ -105,8 +117,11 @@ class VPNEndPointManager {
             }
             
             self.sortCountries()
+
+            NotificationCenter.default.post(name: VPNEndPointManager.countriesUpdatedNotification, object: self)
         }
     }
+
     private func sortCountries() {
         // Sort countries alphabetically
         self.countries = self.countries.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
@@ -119,18 +134,19 @@ class VPNEndPointManager {
             }
         }
     }
+
     //MARK:- Public APIs
     //MARK: Credentials
     func setCreds(country: VPNCountry, username: String, password: String) {
         let keychain = DAKeychain.shared
-        keychain[country.usernameHash] = username
-        keychain[country.passwordHash] = password
+        keychain[country.usernameKey] = username
+        keychain[country.passwordKey] = password
     }
     
     func getCredentials(country: VPNCountry) -> Credentials? {
         let keychain = DAKeychain.shared
-        if let username = keychain[country.usernameHash],
-            let pass = keychain.load(withKey: country.passwordHash)
+        if let username = keychain[country.usernameKey],
+            let pass = keychain.load(withKey: country.passwordKey)
         {
             return Credentials(username: username, password: pass)
         }
@@ -141,8 +157,8 @@ class VPNEndPointManager {
     
     func clearCredentials() {
         for c in self.countries {
-            DAKeychain.shared[c.usernameHash] = nil
-            DAKeychain.shared[c.passwordHash] = nil
+            DAKeychain.shared[c.usernameKey] = nil
+            DAKeychain.shared[c.passwordKey] = nil
         }
     }
     

@@ -7,8 +7,6 @@
 //
 #if PAID
 import UIKit
-
-// TODO: Send notification when VPNEndPointManager has loaded/updated VPN Countries
 // TODO: Listen to said notification
 
 protocol VPNCountrySelectionDelegate: class {
@@ -49,7 +47,7 @@ extension VPNCountrySelectionController {
     private func setupSubViews() {
         view.addSubview(backgroundView)
         view.addSubview(tableView)
-        
+
         backgroundView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
