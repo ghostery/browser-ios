@@ -7,7 +7,6 @@
 //
 #if PAID
 import UIKit
-// TODO: Listen to said notification
 
 protocol VPNCountrySelectionDelegate: class {
     func didSelectCountry(country: VPNCountry)
@@ -30,7 +29,10 @@ class VPNCountrySelectionController: UIViewController {
         tableView.dataSource = self
         tableView.register(VPNCountrySelectionCountryCell.self, forCellReuseIdentifier: VPNCountrySelectionCountryCell.reuseIdentifier)
 
-        self.navigationItem.title = NSLocalizedString("Available VPN Locations", tableName: "Lumen", comment: "[VPN] vpn locations") 
+        self.navigationItem.title = NSLocalizedString("Available VPN Locations", tableName: "Lumen", comment: "[VPN] vpn locations")
+
+        NotificationCenter.default.addObserver(self, selector: #selector(updateData),
+                                               name: VPNEndPointManager.countriesUpdatedNotification, object: nil)
 
         setupSubViews()
         applyTheme()
@@ -39,6 +41,10 @@ class VPNCountrySelectionController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+
+    @objc func updateData() {
+        tableView.reloadData()
     }
 }
 
