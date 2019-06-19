@@ -8,5 +8,25 @@ if (!global.Buffer) {
 if (!process.version) {
   process.version = '';
 }
+const chrome = {
+  cliqz: {
+    initTheme() {},
+    createUITourTarget() {},
+    deleteUITourTarget() {},
+    hideUITour() {},
+    showUITour() {},
+  },
+  webRequest: {
+    onHeadersReceived: {
+      addListener() {},
+    },
+  },
+  history: {
+    onVisited: {
+      addListener() {},
+    },
+  },
+};
+global.browser = global.chrome = chrome;
 
 global.navigator.userAgent = navigator.userAgent || UserAgent.getUserAgent();

@@ -9,7 +9,11 @@
 import React
 
 @objc(QuerySuggestion)
-open class QuerySuggestion: RCTEventEmitter {
+class QuerySuggestion: RCTEventEmitter {
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+    
     @objc(showQuerySuggestions:suggestions:)
     func showQuerySuggestions(query: NSString?, suggestions: NSArray?) {
         debugPrint("showQuerySuggestions")

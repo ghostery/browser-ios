@@ -11,10 +11,13 @@ import Shared
 import Storage
 
 @objc(BrowserActions)
-open class BrowserActions: RCTEventEmitter {
+class BrowserActions: RCTEventEmitter {
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
 
-    @objc(openLink:)
-    func openLink(url: NSString) {
+    @objc(openLink:query:)
+    public func openLink(url: NSString, query: NSString) {
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: OpenUrlSearchNotification, object: url, userInfo: nil)
         }

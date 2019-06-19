@@ -22,8 +22,10 @@ open class Engine {
         #if React_Debug
             #if PAID
                 let jsCodeLocation = URL(string: "http://localhost:8081/lumen.bundle?platform=ios")
-            #else
-                let jsCodeLocation = URL(string: "http://localhost:8081/index.bundle?platform=ios")
+            #elseif CLIQZ
+                let jsCodeLocation = URL(string: "http://localhost:8081/cliqz.bundle?platform=ios")
+            #elseif GHOSTERY
+                let jsCodeLocation = URL(string: "http://localhost:8081/ghostery.bundle?platform=ios")
             #endif
         #else
             let jsCodeLocation = Bundle.main.url(forResource: "jsengine.bundle", withExtension: "js")
@@ -34,7 +36,7 @@ open class Engine {
         //ConnectManager.sharedInstance.refresh()
     }
     
-    open func getBridge() -> JSBridge {
+    func getBridge() -> JSBridge {
         return bridge.module(for: JSBridge.self) as! JSBridge
     }
     
@@ -42,7 +44,7 @@ open class Engine {
 //        return bridge.module(for: WebRequest.self) as! WebRequest
 //    }
     
-    open func getCrypto() -> Crypto {
+    func getCrypto() -> Crypto {
         return bridge.module(for: Crypto.self) as! Crypto
     }
     

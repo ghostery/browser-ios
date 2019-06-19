@@ -10,7 +10,7 @@ import Foundation
 import React
 
 @objc(UserAgentConstants)
-open class UserAgentConstants : RCTEventEmitter {
+class UserAgentConstants : RCTEventEmitter {
     
     fileprivate var source: String {
         get {
@@ -88,6 +88,11 @@ open class UserAgentConstants : RCTEventEmitter {
         return URL(string:"https://itunes.apple.com/de/app/cliqz-browser/id1065837334?mt=8")
         #endif
     }
+    
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+    
     open override static func moduleName() -> String! {
         return "UserAgentConstants"
     }
