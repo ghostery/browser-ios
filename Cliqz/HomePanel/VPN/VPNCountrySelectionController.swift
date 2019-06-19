@@ -15,61 +15,54 @@ protocol VPNCountrySelectionDelegate: class {
     func didSelectCountry(country: VPNCountry)
 }
 
+/// Allows the user to select from a list of VPNCountry instances, reports back to the `delegate`.
 class VPNCountrySelectionController: UIViewController {
-    
+
+    // MARK: Delegation
     weak var delegate: VPNCountrySelectionDelegate? = nil
-    
-    let tableView = UITableView()
-    let backgroundView = BrowserGradientView()
-    let countries = VPNEndPointManager.shared.getAvailableCountries()
-    
+
+    // MARK: Properties
+    private let tableView = UITableView()
+    private let backgroundView = BrowserGradientView()
+    private let countries = VPNEndPointManager.shared.getAvailableCountries()
+
+    // MARK: View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(VPNCountrySelectionCountryCell.self, forCellReuseIdentifier: VPNCountrySelectionCountryCell.reuseIdentifier)
-        
-        view.addSubview(backgroundView)
-        view.addSubview(tableView)
 
-        // TODO: Put all the setup code in a function
-        // TODO: Remove snapkit because ugh
-        backgroundView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
-        
-        tableView.snp.makeConstraints { (make) in
-            make.bottom.leading.trailing.equalToSuperview()
-            make.topMargin.equalToSuperview().offset(10)
-        }
-        
         self.navigationItem.title = NSLocalizedString("Available VPN Locations", tableName: "Lumen", comment: "[VPN] vpn locations") 
-        
-        setStyling()
+
+        setupSubViews()
+        applyTheme()
     }
 
-    func setStyling() {
-        self.navigationController?.navigationBar.tintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
-        self.navigationController?.navigationBar.barTintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
-        self.navigationController?.navigationBar.backgroundColor = .clear
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)]
-        self.tableView.backgroundColor = .clear
-        self.tableView.separatorColor = Lumen.VPN.separatorColor(lumenTheme, .Normal)
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+
+    // MARK: View Setup
+    private func setupSubViews() {
+        view.addSubview(backgroundView)
+        view.addSubview(tableView)
+
+        // TODO: Remove snapkit because ugh
+        backgroundView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+
+        tableView.snp.makeConstraints { (make) in
+            make.bottom.leading.trailing.equalToSuperview()
+            make.topMargin.equalToSuperview().offset(10)
+        }
+
     }
 }
 
+// MARK: - Table View Data Source
 extension VPNCountrySelectionController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -127,6 +120,7 @@ extension VPNCountrySelectionController: UITableViewDataSource {
     }
 }
 
+// MARK: - Table View Delegate
 extension VPNCountrySelectionController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -141,46 +135,58 @@ extension VPNCountrySelectionController: UITableViewDelegate {
     }
 }
 
-class VPNCountrySelectionCountryCell: UITableViewCell {
-    static let reuseIdentifier = "VPNCountrySelectionCountryCell"
-    let tickView = UIImageView()
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(tickView)
-        
-        tickView.image = UIImage(named: "checkmark")
-        tickView.isHidden = true
-        
-        tickView.snp.makeConstraints { (make) in
-            make.width.equalTo(19.5)
-            make.height.equalTo(15)
-            make.centerY.equalToSuperview()
-            make.right.equalToSuperview().offset(-10)
-        }
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        if selected == true {
-            tickView.isHidden = false
-        }
-        else {
+// MARK: - Table View Cell
+extension VPNCountrySelectionController {
+    private class VPNCountrySelectionCountryCell: UITableViewCell {
+        static let reuseIdentifier = "VPNCountrySelectionCountryCell"
+        let tickView = UIImageView()
+
+        override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+            super.init(style: .default, reuseIdentifier: reuseIdentifier)
+            contentView.addSubview(tickView)
+
+            tickView.image = UIImage(named: "checkmark")
             tickView.isHidden = true
+
+            tickView.snp.makeConstraints { (make) in
+                make.width.equalTo(19.5)
+                make.height.equalTo(15)
+                make.centerY.equalToSuperview()
+                make.right.equalToSuperview().offset(-10)
+            }
         }
-        
-        super.setSelected(selected, animated: animated)
+
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
+        override func setSelected(_ selected: Bool, animated: Bool) {
+            if selected == true {
+                tickView.isHidden = false
+            }
+            else {
+                tickView.isHidden = true
+            }
+
+            super.setSelected(selected, animated: animated)
+        }
     }
 }
 
+// MARK: - Themable
 extension VPNCountrySelectionController: Themeable {
     func applyTheme() {
-        setStyling()
+        self.navigationController?.navigationBar.tintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
+        self.navigationController?.navigationBar.barTintColor = Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)
+        self.navigationController?.navigationBar.backgroundColor = .clear
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : Lumen.VPN.navigationBarTextColor(lumenTheme, .Normal)]
+        self.tableView.backgroundColor = .clear
+        self.tableView.separatorColor = Lumen.VPN.separatorColor(lumenTheme, .Normal)
+
         self.tableView.reloadData()
     }
-    
+
 }
 #endif
