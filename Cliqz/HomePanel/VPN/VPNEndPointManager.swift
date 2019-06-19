@@ -61,7 +61,7 @@ class VPNEndPointManager {
     static let countriesUpdatedNotification = Notification.Name("VPNCountry.countriesUpdatedNotification")
 
     private let SelectedCountryKey = "VPNSelectedCountry"
-    private let CountriesLookup = [
+    private static let countryNameLookupTable = [
         "us" : NSLocalizedString("USA", tableName: "Lumen", comment: "VPN country name for USA"),
         "de" : NSLocalizedString("Germany", tableName: "Lumen", comment: "VPN country name for Germany"),
         "tr" : NSLocalizedString("Turkey", tableName: "Lumen", comment: "VPN country name for Turkey"),
@@ -83,34 +83,27 @@ class VPNEndPointManager {
         "ro" : NSLocalizedString("Romania", tableName: "Lumen", comment: "VPN country name for Romania"),
         "rs" : NSLocalizedString("Serbia", tableName: "Lumen", comment: "VPN country name for Serbia"),
         "ua" : NSLocalizedString("Ukraine", tableName: "Lumen", comment: "VPN country name for Ukraine")
-        ]
-    
+    ]
+
+
     private var countries = [VPNCountry]()
     
-    //MARK:- Singlton & Init
+    // MARK:- Singleton & Init
     static let shared = VPNEndPointManager()
     
     init() {
-        generateStaticCountries()
         getVPNCredentialsFromServer()
     }
     
-    private func generateStaticCountries() {
-        for id in ["us", "de", "ba", "bg", "fr", "gr", "in", "it", "ca", "hr", "nl", "at", "pl", "pt", "ro", "rs", "es", "tr", "ua", "hu", "uk"] {
-            if let name = CountriesLookup[id] {
-                self.countries.append(VPNCountry(id: id, name: name, endpoint: "", remoteID: ""))
-            }
-        }
-    }
-    
     private func getVPNCredentialsFromServer() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10.2) {
         VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
             guard let self = self, credentials.count > 0 else { return }
             self.countries.removeAll()
             
             for cred in credentials {
                 let id = cred.countryCode.lowercased()
-                let name = self.CountriesLookup[id] ?? cred.country
+                let name = VPNEndPointManager.countryNameLookupTable[id] ?? cred.country
                 let country = VPNCountry(id: id, name: name, endpoint: cred.serverIP, remoteID: cred.remoteID)
                 self.countries.append(country)
                 self.setCreds(country: country, username: cred.username, password: cred.password)
@@ -119,6 +112,7 @@ class VPNEndPointManager {
             self.sortCountries()
 
             NotificationCenter.default.post(name: VPNEndPointManager.countriesUpdatedNotification, object: self)
+        }
         }
     }
 

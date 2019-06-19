@@ -20,19 +20,23 @@ class VPNCountrySelectionController: UIViewController {
     // MARK: Properties
     private let tableView = UITableView()
     private let backgroundView = BrowserGradientView()
-    private let countries = VPNEndPointManager.shared.getAvailableCountries()
+    private var countries = VPNEndPointManager.shared.getAvailableCountries()
 
     // MARK: View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.tintColor = UIColor.white
         tableView.register(VPNCountrySelectionCountryCell.self, forCellReuseIdentifier: VPNCountrySelectionCountryCell.reuseIdentifier)
 
         self.navigationItem.title = NSLocalizedString("Available VPN Locations", tableName: "Lumen", comment: "[VPN] vpn locations")
 
         NotificationCenter.default.addObserver(self, selector: #selector(updateData),
                                                name: VPNEndPointManager.countriesUpdatedNotification, object: nil)
+        tableView.refreshControl?.addTarget(self, action: #selector(updateData), for: UIControl.Event.valueChanged)
 
         setupSubViews()
         applyTheme()
@@ -41,10 +45,36 @@ class VPNCountrySelectionController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+
+        // Update the VPN Credentials each time we show this view
+        VPNEndPointManager.shared.updateVPNCredentials()
     }
 
-    @objc func updateData() {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateLoadingIndicator()
+    }
+
+    @objc private func updateData() {
+        countries = VPNEndPointManager.shared.getAvailableCountries()
         tableView.reloadData()
+        updateLoadingIndicator()
+    }
+
+    private func updateLoadingIndicator() {
+        // Only show the loading indicator if no data is available in the app
+        var newContentOffset: CGPoint = CGPoint(x: 0, y: 0)
+        if countries.count == 0 {
+            newContentOffset = CGPoint(x: 0, y: -(self.tableView.refreshControl?.frame.size.height ?? 10))
+            self.tableView.refreshControl?.beginRefreshing()
+        } else {
+            newContentOffset = CGPoint(x: 0, y: 0)
+            self.tableView.refreshControl?.endRefreshing()
+        }
+
+        UIView.animate(withDuration: 0.25) {
+            self.tableView.contentOffset = newContentOffset
+        }
     }
 }
 
@@ -53,6 +83,8 @@ extension VPNCountrySelectionController {
     private func setupSubViews() {
         view.addSubview(backgroundView)
         view.addSubview(tableView)
+
+        self.tableView.refreshControl?.tintColor = UIColor.white
 
         backgroundView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
