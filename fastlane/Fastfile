@@ -401,7 +401,7 @@ platform :ios do
     sh("cd .. && npm run bundle-ghostery")
 
     create_keychain(
-      path: "/Users/kiizajosephbazaare/Library/Keychains/"+ENV["MATCH_KEYCHAIN_NAME"],
+      path: "/Users/vagrant/Library/Keychains/"+ENV["MATCH_KEYCHAIN_NAME"],
       password: ENV["MATCH_PASSWORD"],
       default_keychain: true,
       unlock: true,
