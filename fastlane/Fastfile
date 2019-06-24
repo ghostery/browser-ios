@@ -244,7 +244,6 @@ platform :ios do
     )
   end
 
-
   lane :lumenBeta do
 
     # Configuring Sentry DSN
@@ -319,7 +318,6 @@ platform :ios do
     )
   end
 
-
   lane :lumenRelease do
 
     # Configuring Sentry DSN
@@ -382,7 +380,7 @@ platform :ios do
     )
 
     upload_to_testflight(
-      changelog: "Lumen Brwoser",
+      changelog: "Lumen Browser",
       demo_account_required: "false",
       skip_waiting_for_build_processing: "true"
     )
@@ -394,4 +392,72 @@ platform :ios do
     )
   end
 
+  lane :cliqzNightly do
+
+    # Configuring Sentry DSN
+    sh("sed -i '' 's|sentryDSN:\ String?\ =\ nil|sentryDSN:\ String?\ =\ \"'$SentryDSN'\"|' ../Cliqz/Resources/APIKeys.swift")
+
+    # Building ReactNative Extension
+    sh("cd .. && npm run bundle-ghostery")
+
+    create_keychain(
+      path: "/Users/vagrant/Library/Keychains/"+ENV["MATCH_KEYCHAIN_NAME"],
+      password: ENV["MATCH_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
+
+    match(
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+      keychain_password: ENV["MATCH_PASSWORD"],
+      git_branch: "browser-ios",
+      app_identifier: ["com.cliqz", "com.cliqz.ShareTo"],
+      readonly: true,
+      verbose: true
+    )
+
+    increment_version_number(
+      version_number:"1.12.0", 
+      xcodeproj:"Client.xcodeproj"
+    )
+
+    version = get_version_number(
+      xcodeproj: "Client.xcodeproj", 
+      target: "Client"
+    )
+
+    increment_build_number(
+      build_number: latest_testflight_build_number(version: version) + 1,
+      xcodeproj: "Client.xcodeproj"
+    )
+
+    build_app(
+      workspace: "Client.xcworkspace",
+      clean: "true",
+      scheme: "Cliqz",
+      xcconfig: "Client/Configuration/Cliqz.xcconfig",
+      xcargs: "OTHER_SWIFT_FLAGS\='$(value) -DRELEASE'",
+      skip_profile_detection: "true",
+      export_options: {
+        provisioningProfiles: {
+          "com.cliqz" => "CLIQZ App Store",
+          "com.cliqz.ShareTo" => "CliqzShareTo Distribution",
+        }
+      }
+    )
+
+    upload_to_testflight(
+      changelog: "Cliqz Nightly build",
+      demo_account_required: "false",
+      skip_waiting_for_build_processing: "true"
+    )
+
+    sentry_upload_dsym(
+      auth_token: ENV["SENTRY_AUTH_TOKEN"],
+      org_slug: 'cliqz',
+      project_slug: 'cliqz',
+    )
+  end
 end

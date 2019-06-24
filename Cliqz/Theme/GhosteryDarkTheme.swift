@@ -10,9 +10,9 @@ import UIKit
 
 #if !PAID
 // Convenience reference to these normal mode colors which are used in a few color classes.
-fileprivate let defaultBackground = UIColor.lumenDeepBlue
+fileprivate let defaultBackground = UIColor.cliqzBluePrimary
 fileprivate let defaultSeparator = UIColor.Photon.Grey60
-fileprivate let defaultTextAndTint = UIColor.Photon.Grey10
+fileprivate let defaultTextAndTint = UIColor.Photon.Grey40
 fileprivate let defaultTextSelectionColor = UIColor(colorString: "7C90D1")
 
 fileprivate class DarkTableViewColor: TableViewColor {
@@ -37,36 +37,37 @@ fileprivate class DarkActionMenuColor: ActionMenuColor {
 fileprivate class DarkURLBarColor: URLBarColor {
     override var border: UIColor { return defaultBackground }
     override func activeBorder(_ isPrivate: Bool) -> UIColor {
-        return !isPrivate ? UIColor.lumenBrightBlue : defaultBackground
+		//TODO: For now I keep both options as probably it should be changed in future for private mode
+        return !isPrivate ? UIColor.lightGray :  UIColor.lightGray
     }
     override func textSelectionHighlight(_ isPrivate: Bool) -> TextSelectionHighlight {
         let color = isPrivate ? defaultTextSelectionColor : defaultTextSelectionColor
         return (labelMode: color.withAlphaComponent(1), textFieldMode: color)
         
     }
-    override var urlbarButtonTitleText: UIColor { return UIColor.lumenBrightBlue }
+    override var urlbarButtonTitleText: UIColor { return UIColor.white }
     override var urlbarButtonTint: UIColor { return UIColor.Photon.Grey10 }
     override var pageOptionsUnselected: UIColor { return UIColor.white }
 }
 
 fileprivate class DarkBrowserColor: BrowserColor {
     override var background: UIColor { return defaultBackground }
-    override var tint: UIColor { return UIColor.lumenBrightBlue }
+    override var tint: UIColor { return UIColor.white }
 }
 
 // The back/forward/refresh/menu button (bottom toolbar)
 fileprivate class DarkToolbarButtonColor: ToolbarButtonColor {
-    override var selectedTint: UIColor { return UIColor.lumenBrightBlue }
+    override var selectedTint: UIColor { return UIColor.white }
     override var disabledTint: UIColor { return UIColor(colorString: "193162") }
 }
 
 fileprivate class DarkTabTrayColor: TabTrayColor {
     override var tabTitleText: UIColor { return defaultTextAndTint }
-    override var tabTitleBlur: UIBlurEffectStyle { return UIBlurEffectStyle.dark }
+    override var tabTitleBlur: UIBlurEffectStyle { return UIBlurEffectStyle.extraLight }
     override var background: UIColor { return UIColor.Photon.Grey90 }
     override var cellBackground: UIColor { return defaultBackground }
-    override var toolbar: UIColor { return defaultBackground }
-    override var toolbarButtonTint: UIColor { return UIColor.lumenBrightBlue }
+    override var toolbar: UIColor { return UIColor.black }
+    override var toolbarButtonTint: UIColor { return UIColor.white }
     override var cellCloseButton: UIColor { return defaultTextAndTint }
     override var cellTitleBackground: UIColor { return UIColor.Photon.Grey70 }
     override var searchBackground: UIColor { return UIColor.Photon.Grey60 }
@@ -85,7 +86,8 @@ fileprivate class DarkTopTabsColor: TopTabsColor {
 
 fileprivate class DarkTextFieldColor: TextFieldColor {
     override func background(_ isPrivate: Bool) -> UIColor {
-        return isPrivate ?  UIColor(colorString: "3D3F4E") : UIColor.lumenBrightBlue
+		// TODO: it needs to be checked for the final designreview if both should be white or not. It was  UIColor(colorString: "3D3F4E") before. But it seems this is not right color
+        return isPrivate ? UIColor.white : UIColor.white
     }
     override var textAndTint: UIColor { return defaultTextAndTint }
     

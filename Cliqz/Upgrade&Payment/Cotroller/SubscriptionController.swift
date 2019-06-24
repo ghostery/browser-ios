@@ -68,12 +68,14 @@ public class SubscriptionController {
         let VPNPlan = LumenSubscriptionPlanType.basic("com.cliqz.ios.lumen.staging.sale.vpn")
         let promoFree = LumenSubscriptionPlanType.basicAndVpn("com.cliqz.ios.lumen.staging.promo.free.basic_vpn")
         let promoHalf = LumenSubscriptionPlanType.basicAndVpn("com.cliqz.ios.lumen.staging.promo.half.basic_vpn")
+        let rcPromoPremium = LumenSubscriptionPlanType.basicAndVpn("rc_promo_[Staging] Premium Sale")
         #else
         let basicPlan = LumenSubscriptionPlanType.basic("com.cliqz.ios.lumen.sale.basic")
         let basicVPNPlan = LumenSubscriptionPlanType.basicAndVpn("com.cliqz.ios.lumen.sale.basic_vpn")
         let VPNPlan = LumenSubscriptionPlanType.vpn("com.cliqz.ios.lumen.sale.vpn")
         let promoFree = LumenSubscriptionPlanType.basicAndVpn("com.cliqz.ios.lumen.promo.free.basic_vpn")
         let promoHalf = LumenSubscriptionPlanType.basicAndVpn("com.cliqz.ios.lumen.promo.half.basic_vpn")
+        let rcPromoPremium = LumenSubscriptionPlanType.basicAndVpn("rc_promo_Premium Sale")
         #endif
     
         self.supportedProductPlans.append(basicPlan)
@@ -81,6 +83,7 @@ public class SubscriptionController {
         self.supportedProductPlans.append(VPNPlan)
         self.supportedProductPlans.append(promoFree)
         self.supportedProductPlans.append(promoHalf)
+        self.supportedProductPlans.append(rcPromoPremium)
     }
     
     private func saveExpirationDate(_ date: Date) {
