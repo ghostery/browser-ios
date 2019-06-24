@@ -78,9 +78,9 @@ public class SubscriptionController {
         let rcPromoPremium = LumenSubscriptionPlanType.basicAndVpn("rc_promo_Premium Sale")
         #endif
     
-        self.supportedProductPlans.append(basicPlan)
         self.supportedProductPlans.append(basicVPNPlan)
         self.supportedProductPlans.append(VPNPlan)
+        self.supportedProductPlans.append(basicPlan)
         self.supportedProductPlans.append(promoFree)
         self.supportedProductPlans.append(promoHalf)
         self.supportedProductPlans.append(rcPromoPremium)

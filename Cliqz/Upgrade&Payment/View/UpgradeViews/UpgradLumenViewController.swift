@@ -41,16 +41,17 @@ class UpgradLumenViewController: BaseUpgradeViewController {
         self.setConstraints()
 		self.navigationController?.navigationBar.isHidden = false
 
-        NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseSuccessNotification(_:)),
-                                               name: .ProductPurchaseSuccessNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseErrorNotification(_:)),
-                                               name: .ProductPurchaseErrorNotification,
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive(_:)),
+                                               name: .UIApplicationDidBecomeActive,
                                                object: nil)
         
         LegacyTelemetryHelper.logPayment(action: "show")
         
         self.fetchProducts()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func setupComponents() {
@@ -61,12 +62,13 @@ class UpgradLumenViewController: BaseUpgradeViewController {
 		self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
 		self.navigationController?.navigationBar.shadowImage = UIImage()
 		self.navigationController?.navigationBar.isTranslucent = true
-		
+        
         switch SubscriptionController.shared.getCurrentSubscription() {
         case .limited, .trial(_):
             promoCodeButton = UIButton()
             promoCodeButton?.setTitle(NSLocalizedString("Promo Code", tableName: "Lumen", comment: "[Upgrade Flow] Promo Code Button title"), for: .normal)
             promoCodeButton?.addTarget(self, action: #selector(enterPromoCode), for: .touchUpInside)
+            self.updatePromoButtonState()
         default:
             break
         }
@@ -96,6 +98,10 @@ class UpgradLumenViewController: BaseUpgradeViewController {
 		self.view.addSubview(gradient)
         self.view.sendSubview(toBack: gradient)
         self.view.addSubview(self.loadingView)
+    }
+    
+    private func updatePromoButtonState() {
+        promoCodeButton?.isHidden = !UserPreferences.instance.shouldShowPromoCode
     }
     
     private func setupBundlesView() {
@@ -162,6 +168,13 @@ class UpgradLumenViewController: BaseUpgradeViewController {
         SubscriptionController.shared.restorePurchases()
 	}
 
+    @objc func applicationDidBecomeActive(_ notification: Notification) {
+        if UserNotificationsManager().isNotificationPresentedToUser() {
+            UserPreferences.instance.shouldShowPromoCode = true
+        }
+        self.updatePromoButtonState()
+    }
+    
     @objc override func handlePurchaseSuccessNotification(_ notification: Notification) {
         LegacyTelemetryHelper.logPayment(action: "success", target: self.telemetrySignals?["target"])
         self.telemetrySignals = nil
