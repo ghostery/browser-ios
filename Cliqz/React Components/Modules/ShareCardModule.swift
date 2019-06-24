@@ -9,7 +9,11 @@
 import React
 
 @objc(ShareCardModule)
-open class ShareCardModule: RCTEventEmitter {
+class ShareCardModule: RCTEventEmitter {
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+    
     @objc(share:success:error:)
     func share(data: NSDictionary, success: RCTResponseSenderBlock, error: RCTResponseErrorBlock) {
         debugPrint("share")

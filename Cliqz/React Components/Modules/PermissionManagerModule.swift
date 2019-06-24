@@ -11,6 +11,10 @@ import React
 @objc(PermissionManagerModule)
 class PermissionManagerModule: RCTEventEmitter {
     
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+    
     let permissions = ["ACCESS_FINE_LOCATION": "LocationPermission", "WRITE_EXTERNAL_STORAGE": "Undefined for iOS"]
     let results = ["GRANTED": "Success", "REJECTED": "Failure"]
     

@@ -10,7 +10,10 @@ import Foundation
 import React
 
 @objc(JSBridge)
-open class JSBridge : RCTEventEmitter {
+class JSBridge : RCTEventEmitter {
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
 
 	enum Action: String {
 		case cleanData = "insights:clearData"

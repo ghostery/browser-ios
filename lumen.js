@@ -1,7 +1,6 @@
-import 'process-nextick-args';
 import 'react-native/Libraries/Core/InitializeCore';
-import setup from './setup';
-import React from 'react';
+import './setup';
+import 'process-nextick-args';
 import { AppRegistry } from 'react-native';
 import { startup } from 'browser-core-lumen-ios';
 

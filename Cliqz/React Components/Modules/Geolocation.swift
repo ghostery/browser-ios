@@ -10,6 +10,10 @@ import React
 
 @objc(GeoLocation)
 class GeoLocation: RCTEventEmitter {
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+    
     @objc(getCurrentPosition:reject:)
     func getCurrentPosition(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         //use only the resolve block
