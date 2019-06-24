@@ -11,6 +11,10 @@ import React
 @objc(SearchEnginesModule)
 class SearchEnginesModule: RCTEventEmitter {
     
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+    
     @objc(getSearchEngines:reject:)
     func getSearchEngines(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         

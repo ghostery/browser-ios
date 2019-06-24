@@ -11,12 +11,15 @@ import React
 
 
 @objc(Crypto)
-open class Crypto : RCTEventEmitter {
+class Crypto : RCTEventEmitter {
     private let privateKeyTag = "com.connect.cliqz.private"
     private let publicKeyTag = "com.connect.cliqz.public"
     private let blockSizeInBytes = 256
     private let secNoPadding = SecPadding.init(rawValue: 0)
     
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
     
     @objc(generateRandomSeed:reject:)
     func generateRandomSeed(_ resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void {

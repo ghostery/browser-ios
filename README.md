@@ -49,7 +49,7 @@ brew install curl
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 source ~/.bashrc
 nvm install 9
-npm install -g npm@latest
+npm install -g npm@6.7.0
 ```
 3. Install Carthage
  ```shell
@@ -80,6 +80,7 @@ sh ./bootstrap.sh
 npm ci
 npm run bundle-lumen
 # Or for Ghostery: npm run bundle-ghostery
+rm -rf Pods
 bundle exec pod install
 npm run postinstall
 ```

@@ -9,7 +9,11 @@
 import React
 
 @objc(Telemetry)
-open class TelemetryJS: RCTEventEmitter {
+class TelemetryJS: RCTEventEmitter {
+    
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
     
     open override static func moduleName() -> String! {
         return "Telemetry"

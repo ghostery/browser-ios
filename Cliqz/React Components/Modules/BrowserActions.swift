@@ -11,10 +11,13 @@ import Shared
 import Storage
 
 @objc(BrowserActions)
-open class BrowserActions: RCTEventEmitter {
+class BrowserActions: RCTEventEmitter {
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
 
-    @objc(openLink:)
-    func openLink(url: NSString) {
+    @objc(openLink:query:)
+    public func openLink(url: NSString, query: NSString) {
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: OpenUrlSearchNotification, object: url, userInfo: nil)
         }
@@ -49,22 +52,27 @@ open class BrowserActions: RCTEventEmitter {
     }
 
     @objc(searchHistory:callback:)
-    func searchHistory(query: NSString, callback: RCTResponseSenderBlock) {
+    func searchHistory(query: NSString, callback: @escaping RCTResponseSenderBlock) {
         debugPrint("searchHistory")
-        callback([getHistory()])
-    }
 
-    func getHistory() -> [[String: String]] {
-        var results: [[String: String]] = []
-        if let r = HistoryListener.shared.historyResults {
-            for site in r {
-                if let siteUrl = site?.url, let url = URL(string: siteUrl), !isDuckduckGoRedirectURL(url) {
-                    let d = ["url": site!.url, "title": site!.title]
-                    results.append(d)
+        DispatchQueue.main.async {
+            if let appDel = UIApplication.shared.delegate as? AppDelegate {
+                if let profile = appDel.profile {
+                    var results: [[String: String]] = []
+                    let frecentHistory = profile.history.getFrecentHistory()
+                    frecentHistory.getSites(whereURLContains: query as String, historyLimit: 100, bookmarksLimit: 5)
+                    >>== { (sites: Cursor) in
+                        for site in sites {
+                            if let siteUrl = site?.url, let url = URL(string: siteUrl), !self.isDuckduckGoRedirectURL(url) {
+                                let d = ["url": site!.url, "title": site!.title]
+                                results.append(d)
+                            }
+                        }
+                        callback([results])
+                    }
                 }
             }
         }
-        return results
     }
     
     private func isDuckduckGoRedirectURL(_ url: URL) -> Bool {

@@ -11,7 +11,12 @@ import React
 let AutoCompleteNotification = Notification.Name(rawValue: "reactAutoCompleteNotification")
 
 @objc(AutoCompletion)
-open class AutoCompletion: RCTEventEmitter {
+class AutoCompletion: RCTEventEmitter {
+    
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+    
     @objc(autoComplete:)
     func autoComplete(data: NSString) {
         debugPrint("autocomplete -- \(data)")
