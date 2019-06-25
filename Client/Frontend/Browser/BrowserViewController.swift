@@ -1029,7 +1029,7 @@ class BrowserViewController: UIViewController {
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        guard let webView = object as? WKWebView else {
+        guard let webView = object as? WKWebView, let tab = tabManager[webView] else {
             assert(false)
             return
         }
@@ -1038,9 +1038,14 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        if let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
+            // This is zero-cost if already installed. It needs to be checked frequently (hence every event here triggers this function), as when a new tab is created it requires multiple attempts to setup the handler correctly.
+            helper.replaceGestureHandlerIfNeeded()
+        }
+        
         switch path {
         case .estimatedProgress:
-            guard webView == tabManager.selectedTab?.webView else { break }
+            guard tab === tabManager.selectedTab else { break }
             if !(webView.url?.isLocalUtility ?? false) {
                 urlBar.updateProgressBar(Float(webView.estimatedProgress))
                 // Profiler.end triggers a screenshot, and a delay is needed here to capture the correct screen
@@ -1054,7 +1059,7 @@ class BrowserViewController: UIViewController {
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
 
-            if webView == tabManager.selectedTab?.webView {
+             if tab === tabManager.selectedTab {
                 navigationToolbar.updateReloadStatus(loading)
             }
 
@@ -1084,14 +1089,14 @@ class BrowserViewController: UIViewController {
                 navigateInTab(tab: tab)
             }
         case .canGoBack:
-            guard webView == tabManager.selectedTab?.webView,
-                let canGoBack = change?[.newKey] as? Bool else { break }
-            
+            guard tab === tabManager.selectedTab, let canGoBack = change?[.newKey] as? Bool else {
+                break
+            }
             navigationToolbar.updateBackStatus(canGoBack)
         case .canGoForward:
-            guard webView == tabManager.selectedTab?.webView,
-                let canGoForward = change?[.newKey] as? Bool else { break }
-
+            guard tab === tabManager.selectedTab, let canGoForward = change?[.newKey] as? Bool else {
+                break
+            }
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")

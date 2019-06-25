@@ -249,7 +249,7 @@
       buildConfiguration = "Fennec">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Fennec"
+      buildConfiguration = "LumenDebug"
       revealArchiveInOrganizer = "YES">
       <PreActions>
          <ExecutionAction
