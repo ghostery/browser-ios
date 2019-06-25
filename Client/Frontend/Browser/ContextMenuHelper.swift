@@ -16,19 +16,19 @@ class ContextMenuHelper: NSObject {
         let title: String?
         let alt: String?
     }
-    
+
     fileprivate weak var tab: Tab?
-    
+
     weak var delegate: ContextMenuHelperDelegate?
-    
+
     fileprivate var nativeHighlightLongPressRecognizer: UILongPressGestureRecognizer?
     fileprivate var elements: Elements?
-    
+
     required init(tab: Tab) {
         super.init()
         self.tab = tab
     }
-    
+
     // BVC KVO events for all changes on the webview will call this.
     // It is called frequently during a page load (particularly on progress changes and URL changes).
     // As of iOS 12, WKContentView gesture setup is async, but it has been called by the time
@@ -40,36 +40,36 @@ class ContextMenuHelper: NSObject {
             }
         }
     }
-    
+
     private func replaceWebViewLongPress() {
         // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
         // See also https://bugs.webkit.org/show_bug.cgi?id=193366
-        
+
         nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:")
-        
+
         if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") {
             nativeLongPressRecognizer.removeTarget(nil, action: nil)
             nativeLongPressRecognizer.addTarget(self, action: #selector(self.longPressGestureDetected))
         }
     }
-    
+
     func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UILongPressGestureRecognizer? {
         let result = tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined().first(where: {
             (($0 as? UILongPressGestureRecognizer) != nil) && $0.description.contains(descriptionFragment)
         })
         return result as? UILongPressGestureRecognizer
     }
-    
+
     @objc func longPressGestureDetected(_ sender: UIGestureRecognizer) {
         if sender.state == .cancelled {
             delegate?.contextMenuHelper(self, didCancelGestureRecognizer: sender)
             return
         }
-        
+
         guard sender.state == .began else {
             return
         }
-        
+
         // To prevent the tapped link from proceeding with navigation, "cancel" the native WKWebView
         // `_highlightLongPressRecognizer`. This preserves the original behavior as seen here:
         // https://github.com/WebKit/webkit/blob/d591647baf54b4b300ca5501c21a68455429e182/Source/WebKit/UIProcess/ios/WKContentViewInteraction.mm#L1600-L1614
@@ -78,10 +78,10 @@ class ContextMenuHelper: NSObject {
             nativeHighlightLongPressRecognizer.isEnabled = false
             nativeHighlightLongPressRecognizer.isEnabled = true
         }
-        
+
         if let elements = self.elements {
             delegate?.contextMenuHelper(self, didLongPressElements: elements, gestureRecognizer: sender)
-            
+
             self.elements = nil
         }
     }
@@ -91,28 +91,28 @@ extension ContextMenuHelper: TabContentScript {
     class func name() -> String {
         return "ContextMenuHelper"
     }
-    
+
     func scriptMessageHandlerName() -> String? {
         return "contextMenuMessageHandler"
     }
-    
+
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard let data = message.body as? [String: AnyObject] else {
             return
         }
-        
+
         var linkURL: URL?
         if let urlString = data["link"] as? String,
             let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowed) {
             linkURL = URL(string: escapedURLString)
         }
-        
+
         var imageURL: URL?
         if let urlString = data["image"] as? String,
             let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowed) {
             imageURL = URL(string: escapedURLString)
         }
-        
+
         if linkURL != nil || imageURL != nil {
             let title = data["title"] as? String
             let alt = data["alt"] as? String
@@ -122,3 +122,4 @@ extension ContextMenuHelper: TabContentScript {
         }
     }
 }
+
