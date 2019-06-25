@@ -58,6 +58,10 @@ class VPNCountrySelectionController: UIViewController {
         updateLoadingIndicator()
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     @objc private func beginUpdatingData() {
         countries = []
         tableView.reloadData()
@@ -72,11 +76,16 @@ class VPNCountrySelectionController: UIViewController {
     }
 
     @objc private func receivedError(_ notification: Notification) {
-        // guard let userInfo = notification.userInfo as? [String: Error], let error = userInfo["error"] else { return }
+        if let userInfo = notification.userInfo as? [String: Error], let error = userInfo["error"] {
+            print(error)
+        }
 
         let alert = UIAlertController(
             title: nil,
-            message: NSLocalizedString("Sorry, there was a problem updating the country list.", comment: ""),
+            message: NSLocalizedString(
+                "Sorry, there was a problem updating the country list.",
+                comment: "Shown in the VPN Country selection when the list of countries cannot be loaded."
+            ),
             preferredStyle: .alert
         )
 

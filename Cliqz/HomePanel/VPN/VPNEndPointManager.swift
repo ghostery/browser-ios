@@ -106,7 +106,7 @@ class VPNEndPointManager {
                 NotificationCenter.default.post(
                     name: VPNEndPointManager.countriesUpdateErrorNotification,
                     object: nil,
-                    userInfo: ["error": error!]
+                    userInfo: error == nil ? nil : ["error": error!]
                 )
                 return
             }
