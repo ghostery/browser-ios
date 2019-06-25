@@ -266,6 +266,7 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
             self?.selectedProduct = subscriptionProduct
             self?.telemetrySignals = subscriptionInfo?.telemetrySignals
             LegacyTelemetryHelper.logPayment(action: "click", target: self?.telemetrySignals?["target"])
+            self?.startLoadingAnimation()
         }
         return cell
     }

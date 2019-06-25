@@ -67,6 +67,7 @@ class BaseUpgradeViewController: UIViewController {
     }
     
     @objc func handlePurchaseErrorNotification(_ notification: Notification) {
+        self.stopLoadingAnimation()
         guard let lumenProduct = self.selectedProduct else {
             return
         }
