@@ -34,9 +34,9 @@ class VPNCountrySelectionController: UIViewController {
 
         self.navigationItem.title = NSLocalizedString("Available VPN Locations", tableName: "Lumen", comment: "[VPN] vpn locations")
 
-        NotificationCenter.default.addObserver(self, selector: #selector(updateData),
+        NotificationCenter.default.addObserver(self, selector: #selector(receiveUpdatedData),
                                                name: VPNEndPointManager.countriesUpdatedNotification, object: nil)
-        tableView.refreshControl?.addTarget(self, action: #selector(updateData), for: UIControl.Event.valueChanged)
+        tableView.refreshControl?.addTarget(self, action: #selector(beginUpdatingData), for: UIControl.Event.valueChanged)
 
         setupSubViews()
         applyTheme()
@@ -55,7 +55,14 @@ class VPNCountrySelectionController: UIViewController {
         updateLoadingIndicator()
     }
 
-    @objc private func updateData() {
+    @objc private func beginUpdatingData() {
+        countries = []
+        tableView.reloadData()
+        VPNEndPointManager.shared.updateVPNCredentials()
+        updateLoadingIndicator()
+    }
+
+    @objc private func receiveUpdatedData() {
         countries = VPNEndPointManager.shared.getAvailableCountries()
         tableView.reloadData()
         updateLoadingIndicator()
@@ -63,17 +70,17 @@ class VPNCountrySelectionController: UIViewController {
 
     private func updateLoadingIndicator() {
         // Only show the loading indicator if no data is available in the app
-        var newContentOffset: CGPoint = CGPoint(x: 0, y: 0)
-        if countries.count == 0 {
-            newContentOffset = CGPoint(x: 0, y: -(self.tableView.refreshControl?.frame.size.height ?? 10))
-            self.tableView.refreshControl?.beginRefreshing()
-        } else {
-            newContentOffset = CGPoint(x: 0, y: 0)
-            self.tableView.refreshControl?.endRefreshing()
-        }
+        let newContentOffset = countries.count == 0 ?
+            CGPoint(x: 0, y: -(self.tableView.refreshControl?.frame.size.height ?? 0)-15) : CGPoint(x: 0, y: 0)
 
         UIView.animate(withDuration: 0.25) {
             self.tableView.contentOffset = newContentOffset
+        }
+
+        if countries.count == 0 {
+            self.tableView.refreshControl?.beginRefreshing()
+        } else {
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
 }

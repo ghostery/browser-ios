@@ -96,7 +96,6 @@ class VPNEndPointManager {
     }
     
     private func getVPNCredentialsFromServer() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10.2) {
         VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
             guard let self = self, credentials.count > 0 else { return }
             self.countries.removeAll()
@@ -112,7 +111,6 @@ class VPNEndPointManager {
             self.sortCountries()
 
             NotificationCenter.default.post(name: VPNEndPointManager.countriesUpdatedNotification, object: self)
-        }
         }
     }
 
