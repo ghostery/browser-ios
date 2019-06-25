@@ -51,6 +51,7 @@ extension Notification.Name {
     let PauseGhosteryDateKey = "PauseGhosteryDate"
 
     let IsDeveloperModeOnKey = "IsDeveloperModeOnKey"
+    let ShowPromoCodeKey = "ShowPromoCodeKey"
 
     /// If `true`, send a `developer` flag in the telemetry data.
     ///
@@ -68,6 +69,19 @@ extension Notification.Name {
         set {
             userDefaults().set(newValue, forKey: IsDeveloperModeOnKey)
             Engine.sharedInstance.setPref("developer", prefValue: newValue)
+        }
+    }
+    
+    var shouldShowPromoCode: Bool {
+        get {
+            if let val = userDefaults().value(forKey: ShowPromoCodeKey) as? Bool {
+                return val
+            }
+            
+            return false
+        }
+        set {
+            userDefaults().set(newValue, forKey: ShowPromoCodeKey)
         }
     }
     

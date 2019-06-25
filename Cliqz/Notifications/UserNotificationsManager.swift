@@ -55,6 +55,17 @@ class UserNotificationsManager: NSObject {
         center.removeAllPendingNotificationRequests()
     }
     
+    func isNotificationPresentedToUser() -> Bool {
+        guard let installationDate = DeviceInfo.appInstallationDate() else  {
+            return false
+        }
+      
+        guard let firstScheduleDate = self.createScheduleDate(byAdding: SubscriptionReminderOption.dayThree.rawValue, to: installationDate) else {
+            return false
+        }
+        return firstScheduleDate.compare(Date()) == .orderedAscending
+    }
+    
     // MARK: private methods
     private func addNotificationRequests() {
         let center = UNUserNotificationCenter.current()

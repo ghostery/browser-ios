@@ -397,6 +397,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         #endif
         // Cliqz: log state changed
         LegacyTelemetryHelper.logStateChanged(state: "Active")
+        
+        // Cliqz: to show promo if notification was already presented
+        if UserNotificationsManager().isNotificationPresentedToUser() {
+            UserPreferences.instance.shouldShowPromoCode = true
+        }
 
         let defaults = UserDefaults()
         defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
