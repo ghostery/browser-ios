@@ -58,7 +58,7 @@ class SearchSuggestClient {
 
                 // Check if we got any data at all
                 guard data.count > 0 else {
-                    callback(nil, nil)
+                    callback([], nil)
                     return
                 }
 
