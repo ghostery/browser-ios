@@ -165,6 +165,7 @@ class UpgradLumenViewController: BaseUpgradeViewController {
     @objc func restoreSubscription() {
         self.telemetrySignals?["target"] = "restore"
         LegacyTelemetryHelper.logPayment(action: "click", target: self.telemetrySignals?["target"])
+        startLoadingAnimation()
         SubscriptionController.shared.restorePurchases()
 	}
 
@@ -266,6 +267,7 @@ extension UpgradLumenViewController: UITableViewDelegate, UITableViewDataSource 
             self?.selectedProduct = subscriptionProduct
             self?.telemetrySignals = subscriptionInfo?.telemetrySignals
             LegacyTelemetryHelper.logPayment(action: "click", target: self?.telemetrySignals?["target"])
+            self?.startLoadingAnimation()
         }
         return cell
     }

@@ -135,8 +135,8 @@ class VPN {
             VPN.shared.lastStatus = .invalid
         }
         
-        let country = VPNEndPointManager.shared.selectedCountry
-        guard let creds = VPNEndPointManager.shared.getCredentials(country: country),
+        guard let country = VPNEndPointManager.shared.selectedCountry,
+            let creds = VPNEndPointManager.shared.getCredentials(country: country),
             !country.endpoint.isEmpty else { return }
         
         NEVPNManager.shared().loadFromPreferences { (error) in
@@ -180,9 +180,11 @@ class VPN {
         }
         catch (let error) {
             print("VPN Connecttion failed --- \(error)")
-            LegacyTelemetryHelper.logVPN(action: "error",
-                                         location: VPNEndPointManager.shared.selectedCountry.id,
+            if let selectedCountry = VPNEndPointManager.shared.selectedCountry {
+                LegacyTelemetryHelper.logVPN(action: "error",
+                                         location: selectedCountry.id,
                                          connectionTime: 0)
+            }
             VPN.shared.retryCount = 0
         }
         
