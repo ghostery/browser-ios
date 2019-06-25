@@ -152,15 +152,8 @@ class BaseUpgradeViewController: UIViewController {
             make.left.equalTo(view)
             make.right.equalTo(view)
         }
-
-        loadingView.removeFromSuperview()
-        view.addSubview(loadingView)
-        loadingView.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-            make.width.equalTo(50)
-            make.height.equalTo(50)
-        }
+        
+        view.bringSubview(toFront: loadingView)
         loadingView.startAnimating()
 
         UIView.animate(withDuration: 0.5) {
