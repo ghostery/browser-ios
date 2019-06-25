@@ -55,7 +55,9 @@ class RevenueCatService: NSObject, IAPService {
         print("Buying \(product.productIdentifier)...")
 		purchases?.makePurchase(product, { (transaction, purchaserInfo, error) in
             if let error = error as? SKError, error.code != .paymentCancelled {
-                NotificationCenter.default.post(name: .ProductPurchaseErrorNotification, object: error.localizedDescription)
+                NotificationCenter.default.post(name: .ProductPurchaseErrorNotification, object: nil)
+            } else if let error = error as? SKError, error.code == .paymentCancelled {
+                NotificationCenter.default.post(name: .ProductPurchaseCancelledNotification, object: nil)
             } else if let purchaserInfo = purchaserInfo {
                 self.processPurchaseInfo(purchaserInfo)
             }
@@ -81,6 +83,8 @@ class RevenueCatService: NSObject, IAPService {
 		purchases?.restoreTransactions({ (purchaserInfo, error) in
             if let error = error as? SKError, error.code != .paymentCancelled {
                 NotificationCenter.default.post(name: .ProductPurchaseErrorNotification, object: error.localizedDescription)
+            } else if let error = error as? SKError, error.code == .paymentCancelled {
+                NotificationCenter.default.post(name: .ProductPurchaseCancelledNotification, object: nil)
             } else if let purchaserInfo = purchaserInfo {
                 self.processPurchaseInfo(purchaserInfo)
             }
@@ -104,12 +108,13 @@ extension RevenueCatService: PurchasesDelegate {
     private func processPurchaseInfo(_ purchaserInfo: PurchaserInfo) {
         guard let identifier = getLastestIdentifier(purchaserInfo),
             let expirationDate = purchaserInfo.expirationDate(forProductIdentifier: identifier) else {
+                NotificationCenter.default.post(name: .ProductPurchaseCancelledNotification, object: nil)
             return
         }
         let lumenPurchaseInfo = LumenPurchaseInfo(productIdentifier: identifier, expirationDate: expirationDate)
         print("processPurchaseInfo -> identifier: \(identifier), expirationDate: \(expirationDate)")
         observable.onNext(lumenPurchaseInfo)
-        NotificationCenter.default.post(name: .ProductPurchaseSuccessNotification, object: identifier)
+        NotificationCenter.default.post(name: .ProductPurchaseSuccessNotification, object: nil)
     }
     
     fileprivate func getLastestIdentifier(_ purchaserInfo: PurchaserInfo) -> String? {

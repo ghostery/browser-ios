@@ -165,6 +165,7 @@ class UpgradLumenViewController: BaseUpgradeViewController {
     @objc func restoreSubscription() {
         self.telemetrySignals?["target"] = "restore"
         LegacyTelemetryHelper.logPayment(action: "click", target: self.telemetrySignals?["target"])
+        startLoadingAnimation()
         SubscriptionController.shared.restorePurchases()
 	}
 

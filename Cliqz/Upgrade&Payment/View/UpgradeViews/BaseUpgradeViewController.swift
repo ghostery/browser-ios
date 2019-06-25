@@ -20,6 +20,12 @@ class UpgradLumenNavigationController: UINavigationController {
 class BaseUpgradeViewController: UIViewController {
     #if PAID
     let loadingView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    let loadingOverlay: UIView = {
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurredEffectView = UIVisualEffectView(effect: blurEffect)
+        return blurredEffectView
+    }()
+
     let dataSource: SubscriptionDataSource
     
     var selectedProduct: LumenSubscriptionProduct?
@@ -39,6 +45,9 @@ class BaseUpgradeViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseSuccessNotification(_:)),
                                                name: .ProductPurchaseSuccessNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseCancelledNotification(_:)),
+                                               name: .ProductPurchaseCancelledNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handlePurchaseErrorNotification(_:)),
                                                name: .ProductPurchaseErrorNotification,
@@ -64,6 +73,11 @@ class BaseUpgradeViewController: UIViewController {
     @objc func handlePurchaseSuccessNotification(_ notification: Notification) {
         self.selectedProduct = nil
         self.dismiss(animated: true)
+    }
+
+    @objc func handlePurchaseCancelledNotification(_ notification: Notification) {
+        self.selectedProduct = nil
+        self.stopLoadingAnimation()
     }
     
     @objc func handlePurchaseErrorNotification(_ notification: Notification) {
@@ -127,14 +141,44 @@ class BaseUpgradeViewController: UIViewController {
         }
     }
 
-    private func startLoadingAnimation() {
-        self.loadingView.startAnimating()
+    // MARK: - Loading
+    func startLoadingAnimation() {
+
+        loadingOverlay.alpha = 0
+        view.addSubview(loadingOverlay)
+        loadingOverlay.snp.makeConstraints { (make) in
+            make.top.equalTo(view)
+            make.bottom.equalTo(view)
+            make.left.equalTo(view)
+            make.right.equalTo(view)
+        }
+
+        loadingView.removeFromSuperview()
+        view.addSubview(loadingView)
+        loadingView.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.equalTo(50)
+            make.height.equalTo(50)
+        }
+        loadingView.startAnimating()
+
+        UIView.animate(withDuration: 0.5) {
+            self.loadingOverlay.alpha = 0.8
+        }
     }
     
-    private func stopLoadingAnimation() {
+    func stopLoadingAnimation() {
         self.loadingView.stopAnimating()
+
+        UIView.animate(withDuration: 0.25, animations: {
+            self.loadingOverlay.alpha = 0
+        }) { finished in
+            self.loadingOverlay.removeFromSuperview()
+        }
     }
-    
+
+    // MARK: - Alerts
     private func showProductsRetrievalFailedAlert() {
         let errorDescirption = NSLocalizedString("Sorry, Lumen cannot connect to the Internet.", tableName: "Lumen", comment: "Error when can't get list of available subscriptions")
         let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
