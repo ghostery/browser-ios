@@ -30,10 +30,16 @@ class VPNCredentialsService {
 	#else
 	private static let vpnAPIURL = "https://auth.lumenbrowser.com/get_credentials"
 	#endif
-	class func getVPNCredentials(completion: @escaping ([VPNData]) -> Void) {
+
+    enum VPNError: Error {
+        case apiKeyNotAvailable
+    }
+
+	class func getVPNCredentials(completion: @escaping ([VPNData]?, Error?) -> Void) {
 		guard let apiKey = APIKeys.lumenAPI, !apiKey.isEmpty,
 				let subscriptionUserId = SubscriptionController.shared.getSubscriptionUserId() else {
 			print("API Key is not available in Info.plist")
+            completion(nil, VPNError.apiKeyNotAvailable)
 			return
 		}
 		if let deviceId = getDeviceId() {
@@ -68,12 +74,13 @@ class VPNCredentialsService {
                         }
                     }
                 } else {
-					print(response.error ?? "No Error from response") // TODO proper Error
+					print(response.error ?? "No Error from response")
+                    completion(nil, response.error)
 				}
-				completion(result)
+				completion(result, nil)
 			}
 		} else {
-			completion([VPNData]())
+			completion([VPNData](), nil)
 		}
 	}
     

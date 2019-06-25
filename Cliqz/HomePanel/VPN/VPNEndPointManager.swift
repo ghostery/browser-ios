@@ -14,10 +14,17 @@ struct Credentials {
 }
 
 class VPNCountry: Codable, Equatable {
-    let id: String //id from the server
-    let name: String //display name
-    var endpoint: String //endpoint address
-    var remoteID: String //endpoint address
+    /// id from the server
+    let id: String
+
+    /// display name
+    let name: String
+
+    /// endpoint address
+    var endpoint: String
+
+    /// endpoint address
+    var remoteID: String
     
     init(id: String, name: String, endpoint: String, remoteID: String) {
         self.id = id
@@ -30,16 +37,18 @@ class VPNCountry: Codable, Equatable {
         return lhs.id == rhs.id
     }
     
-    var hashPrefix: String {
+    private var keyPrefix: String {
         return "\(self.id)|\(self.endpoint)"
     }
-    
-    var usernameHash: String {
-        return "\(self.hashPrefix)|username"
+
+    /// Key for saving data about an endpoint into keychain
+    var usernameKey: String {
+        return "\(self.keyPrefix)|username"
     }
-    
-    var passwordHash: String {
-        return "\(self.hashPrefix)|password"
+
+    /// Key for saving data about an endpoint into keychain
+    var passwordKey: String {
+        return "\(self.keyPrefix)|password"
     }
     
     var disabled: Bool {
@@ -48,8 +57,16 @@ class VPNCountry: Codable, Equatable {
 }
 
 class VPNEndPointManager {
+    /// Notification that fires when the list of countries is updated
+    static let countriesUpdatedNotification = Notification.Name("VPNCountry.countriesUpdatedNotification")
+
+    /// Notification that fires when the list of countries could not be updated due to an error
+    ///
+    /// Should include an Error instance in the userInfo, key "error"
+    static let countriesUpdateErrorNotification = Notification.Name("VPNCountry.countriesUpdateErrorNotification")
+
     private let SelectedCountryKey = "VPNSelectedCountry"
-    private let CountriesLookup = [
+    private static let countryNameLookupTable = [
         "us" : NSLocalizedString("USA", tableName: "Lumen", comment: "VPN country name for USA"),
         "de" : NSLocalizedString("Germany", tableName: "Lumen", comment: "VPN country name for Germany"),
         "tr" : NSLocalizedString("Turkey", tableName: "Lumen", comment: "VPN country name for Turkey"),
@@ -71,42 +88,46 @@ class VPNEndPointManager {
         "ro" : NSLocalizedString("Romania", tableName: "Lumen", comment: "VPN country name for Romania"),
         "rs" : NSLocalizedString("Serbia", tableName: "Lumen", comment: "VPN country name for Serbia"),
         "ua" : NSLocalizedString("Ukraine", tableName: "Lumen", comment: "VPN country name for Ukraine")
-        ]
-    
+    ]
+
+
     private var countries = [VPNCountry]()
     
-    //MARK:- Singlton & Init
+    // MARK:- Singleton & Init
     static let shared = VPNEndPointManager()
     
     init() {
-        generateStaticCountries()
         getVPNCredentialsFromServer()
     }
     
-    private func generateStaticCountries() {
-        for id in ["us", "de", "ba", "bg", "fr", "gr", "in", "it", "ca", "hr", "nl", "at", "pl", "pt", "ro", "rs", "es", "tr", "ua", "hu", "uk"] {
-            if let name = CountriesLookup[id] {
-                self.countries.append(VPNCountry(id: id, name: name, endpoint: "", remoteID: ""))
-            }
-        }
-    }
-    
     private func getVPNCredentialsFromServer() {
-        VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
+        VPNCredentialsService.getVPNCredentials { [weak self] (credentials, error) in
+            guard error == nil, let credentials = credentials else {
+                NotificationCenter.default.post(
+                    name: VPNEndPointManager.countriesUpdateErrorNotification,
+                    object: nil,
+                    userInfo: error == nil ? nil : ["error": error!]
+                )
+                return
+            }
+
             guard let self = self, credentials.count > 0 else { return }
             self.countries.removeAll()
             
             for cred in credentials {
                 let id = cred.countryCode.lowercased()
-                let name = self.CountriesLookup[id] ?? cred.country
+                let name = VPNEndPointManager.countryNameLookupTable[id] ?? cred.country
                 let country = VPNCountry(id: id, name: name, endpoint: cred.serverIP, remoteID: cred.remoteID)
                 self.countries.append(country)
                 self.setCreds(country: country, username: cred.username, password: cred.password)
             }
             
             self.sortCountries()
+
+            NotificationCenter.default.post(name: VPNEndPointManager.countriesUpdatedNotification, object: self)
         }
     }
+
     private func sortCountries() {
         // Sort countries alphabetically
         self.countries = self.countries.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
@@ -119,18 +140,19 @@ class VPNEndPointManager {
             }
         }
     }
+
     //MARK:- Public APIs
     //MARK: Credentials
     func setCreds(country: VPNCountry, username: String, password: String) {
         let keychain = DAKeychain.shared
-        keychain[country.usernameHash] = username
-        keychain[country.passwordHash] = password
+        keychain[country.usernameKey] = username
+        keychain[country.passwordKey] = password
     }
     
     func getCredentials(country: VPNCountry) -> Credentials? {
         let keychain = DAKeychain.shared
-        if let username = keychain[country.usernameHash],
-            let pass = keychain.load(withKey: country.passwordHash)
+        if let username = keychain[country.usernameKey],
+            let pass = keychain.load(withKey: country.passwordKey)
         {
             return Credentials(username: username, password: pass)
         }
@@ -141,8 +163,8 @@ class VPNEndPointManager {
     
     func clearCredentials() {
         for c in self.countries {
-            DAKeychain.shared[c.usernameHash] = nil
-            DAKeychain.shared[c.passwordHash] = nil
+            DAKeychain.shared[c.usernameKey] = nil
+            DAKeychain.shared[c.passwordKey] = nil
         }
     }
     

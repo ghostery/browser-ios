@@ -1,6 +1,7 @@
 # Uncomment this line to define a global platform for your project
 platform :ios, '11.0'
 use_frameworks!
+inhibit_all_warnings!
 
 def project_pods
     react_path = './node_modules/react-native'

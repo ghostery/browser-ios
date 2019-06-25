@@ -441,15 +441,20 @@ extension VPNViewController: UITableViewDataSource {
 extension VPNViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+
+        guard SubscriptionController.shared.isVPNEnabled() else {
+            displayUnlockVPNAlert()
+            return
+        }
         
         //push new view controller
-        let countryVC = VPNCountryController()
+        let countryVC = VPNCountrySelectionController()
         countryVC.delegate = self
         self.navigationController?.pushViewController(countryVC, animated: true)
     }
 }
 
-extension VPNViewController: VPNCountryControllerProtocol {
+extension VPNViewController: VPNCountrySelectionDelegate {
     func didSelectCountry(country: VPNCountry) {
         LegacyTelemetryHelper.logVPN(action: "click",
                                      target: "location",
