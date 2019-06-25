@@ -71,7 +71,7 @@ class BaseUpgradeViewController: UIViewController {
             return
         }
         self.selectedProduct = nil
-        let telemetrySignals = self.dataSource.telemeterySignals()
+        let telemetrySignals = self.dataSource.telemeterySignals(product: lumenProduct)
         LegacyTelemetryHelper.logPromoPayment(action: "error", target: telemetrySignals["target"], view: telemetrySignals["view"])
         let errorDescirption = NSLocalizedString("We are sorry, but something went wrong. The payment was not successful, please try again.", tableName: "Lumen", comment: "Error message when there is failing payment transaction")
         let alertController = UIAlertController(title: "", message: errorDescirption, preferredStyle: .alert)
