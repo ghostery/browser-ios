@@ -173,7 +173,7 @@ class VPNEndPointManager {
     }
     
     //MARK:- VPN Countries
-    var selectedCountry: VPNCountry {
+    var selectedCountry: VPNCountry? {
         set {
             UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: SelectedCountryKey)
             UserDefaults.standard.synchronize()
@@ -182,7 +182,7 @@ class VPNEndPointManager {
             if let data = UserDefaults.standard.value(forKey: SelectedCountryKey) as? Data, let country = try? PropertyListDecoder().decode(VPNCountry.self, from: data) {
                 return country
             }
-            return countries.first!
+            return countries.first
         }
     }
     

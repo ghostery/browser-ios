@@ -262,8 +262,9 @@ class VPNViewController: UIViewController {
             //start timer
             timer = Timer.scheduledTimer(timeInterval: 0.95, target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
             timer?.fire()
-            LegacyTelemetryHelper.logVPN(action: "connect",
-                                         location: VPNEndPointManager.shared.selectedCountry.id)
+            if let selectedCountry = VPNEndPointManager.shared.selectedCountry {
+            LegacyTelemetryHelper.logVPN(action: "connect", location: selectedCountry.id)
+            }
         }
         else if VPNStatus == .disconnected {
             if self.connectButton.currentState == .Connecting || self.connectButton.currentState == .Connect {
@@ -314,10 +315,12 @@ class VPNViewController: UIViewController {
         if (VPN.shared.status == .connected) {
             VPN.disconnectVPN()
             LegacyTelemetryHelper.logVPN(action: "click", target: "toggle", state: "off")
-            
-            LegacyTelemetryHelper.logVPN(action: "disconnect",
-                                         location: VPNEndPointManager.shared.selectedCountry.id,
+
+            if let selectedCountry = VPNEndPointManager.shared.selectedCountry {
+                LegacyTelemetryHelper.logVPN(action: "disconnect",
+                                         location: selectedCountry.id,
                                          connectionTime: getConnectionTime())
+            }
         } else {
             guard SubscriptionController.shared.isVPNEnabled() else {
                 displayUnlockVPNAlert()
@@ -426,7 +429,7 @@ extension VPNViewController: UITableViewDataSource {
         cell.textLabel?.text = NSLocalizedString("Choose VPN Location", tableName: "Lumen", comment: "[VPN] vpn choose location")
         cell.textLabel?.textColor = Lumen.VPN.selectTextColor(lumenTheme, .Normal)
         cell.backgroundColor = .clear
-        cell.detailTextLabel?.text = VPNEndPointManager.shared.selectedCountry.name
+        cell.detailTextLabel?.text = VPNEndPointManager.shared.selectedCountry?.name
         cell.detailTextLabel?.textColor = Lumen.VPN.selectDetailTextColor(lumenTheme, .Normal)
         cell.selectionStyle = .none
         
@@ -458,7 +461,7 @@ extension VPNViewController: VPNCountrySelectionDelegate {
     func didSelectCountry(country: VPNCountry) {
         LegacyTelemetryHelper.logVPN(action: "click",
                                      target: "location",
-                                     location: VPNEndPointManager.shared.selectedCountry.id)
+                                     location: country.id)
         //country changed, reconnect if necessary
         VPN.countryDidChange(country: country)
         
