@@ -60,6 +60,11 @@ class VPNEndPointManager {
     /// Notification that fires when the list of countries is updated
     static let countriesUpdatedNotification = Notification.Name("VPNCountry.countriesUpdatedNotification")
 
+    /// Notification that fires when the list of countries could not be updated due to an error
+    ///
+    /// Should include an Error instance in the userInfo, key "error"
+    static let countriesUpdateErrorNotification = Notification.Name("VPNCountry.countriesUpdateErrorNotification")
+
     private let SelectedCountryKey = "VPNSelectedCountry"
     private static let countryNameLookupTable = [
         "us" : NSLocalizedString("USA", tableName: "Lumen", comment: "VPN country name for USA"),
@@ -96,7 +101,16 @@ class VPNEndPointManager {
     }
     
     private func getVPNCredentialsFromServer() {
-        VPNCredentialsService.getVPNCredentials { [weak self] (credentials) in
+        VPNCredentialsService.getVPNCredentials { [weak self] (credentials, error) in
+            guard error == nil, let credentials = credentials else {
+                NotificationCenter.default.post(
+                    name: VPNEndPointManager.countriesUpdateErrorNotification,
+                    object: nil,
+                    userInfo: ["error": error!]
+                )
+                return
+            }
+
             guard let self = self, credentials.count > 0 else { return }
             self.countries.removeAll()
             

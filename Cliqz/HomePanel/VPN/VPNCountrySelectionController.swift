@@ -36,6 +36,9 @@ class VPNCountrySelectionController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(receiveUpdatedData),
                                                name: VPNEndPointManager.countriesUpdatedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedError(_:)),
+                                               name: VPNEndPointManager.countriesUpdateErrorNotification, object: nil)
+
         tableView.refreshControl?.addTarget(self, action: #selector(beginUpdatingData), for: UIControl.Event.valueChanged)
 
         setupSubViews()
@@ -66,6 +69,26 @@ class VPNCountrySelectionController: UIViewController {
         countries = VPNEndPointManager.shared.getAvailableCountries()
         tableView.reloadData()
         updateLoadingIndicator()
+    }
+
+    @objc private func receivedError(_ notification: Notification) {
+        // guard let userInfo = notification.userInfo as? [String: Error], let error = userInfo["error"] else { return }
+
+        let alert = UIAlertController(
+            title: nil,
+            message: NSLocalizedString("Sorry, there was a problem updating the country list.", comment: ""),
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Retry", comment: "Default action"), style: .default, handler: { _ in
+            self.beginUpdatingData()
+        }))
+
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""), style: .cancel, handler: { _ in
+
+        }))
+
+        self.present(alert, animated: true, completion: nil)
     }
 
     private func updateLoadingIndicator() {
