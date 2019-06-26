@@ -237,6 +237,12 @@ class SettingsPrefs {
         if let sendUsageDataPref = LocalDataStore.value(forKey: SettingsPrefs.SendUsageData) as? Bool {
             return sendUsageDataPref
         }
+		#if CLIQZ
+		let oldCliqzPrefKey = "sendTelemetry"
+		if let sendUsageDataPref = LocalDataStore.value(forKey: oldCliqzPrefKey) as? Bool {
+			return sendUsageDataPref
+		}
+		#endif
         return defaultValue
     }
     
