@@ -47,7 +47,7 @@ fileprivate class DarkURLBarColor: URLBarColor {
     }
     override var urlbarButtonTitleText: UIColor { return UIColor.white }
     override var urlbarButtonTint: UIColor { return UIColor.Photon.Grey10 }
-    override var pageOptionsUnselected: UIColor { return UIColor.white }
+    override var pageOptionsUnselected: UIColor { return UIColor.cliqzBluePrimary }
 }
 
 fileprivate class DarkBrowserColor: BrowserColor {
