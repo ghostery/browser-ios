@@ -317,6 +317,8 @@ class ShareViewController: UIViewController {
 		// Cliqz
 		#if PAID
         navigationItem.titleView = UIImageView(image: UIImage(named: "lumenIcon"))
+		#elseif CLIQZ
+		navigationItem.titleView = UIImageView(image: UIImage(named: "cliqzIcon"))
 		#endif
 		// Cliqz End
         navigationItem.titleView?.contentMode = .scaleAspectFit
@@ -409,12 +411,16 @@ extension ShareViewController {
             if isSearch {
 				#if PAID
 				return "lumen://open-text?text=\(encoded)"
+				#elseif CLIQZ
+				return "cliqz://open-text?text=\(encoded)"
 				#else
                 return "ghostery://open-text?text=\(encoded)"
 				#endif
             }
 			#if PAID
 			return "lumen://open-url?url=\(encoded)"
+			#elseif CLIQZ
+			return "cliqz://open-url?url=\(encoded)"
 			#else
             return "ghostery://open-url?url=\(encoded)"
 			#endif

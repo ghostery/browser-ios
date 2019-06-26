@@ -92,7 +92,13 @@ extension CliqzStrings {
         public static let NewForgetTabTitle = NSLocalizedString("Hotkeys.NewPrivateTab.DiscoveryTitle", tableName: "Lumen", value: "New Private Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
         public static let ShareLoadInBackgroundDone = NSLocalizedString("ShareExtension.LoadLumenInBackgroundActionDone.Title", tableName: "Lumen", value: "Loading in Lumen", comment: "Share extension label shown after user has performed 'Load in Background' action.")
     
-    #else
+    #elseif CLIQZ
+		public static let ShareOpenInCliqz = NSLocalizedString("ShareExtension.OpenInGhosteryAction.Title", tableName: "Cliqz", value: "Open in Cliqz", comment: "Action label on share extension to immediately open page in Cliqz.")
+		public static let ShareSearchInCliqz = NSLocalizedString("ShareExtension.SeachInGhosteryAction.Title", tableName: "Cliqz", value: "Search in Cliqz", comment: "Action label on share extension to search for the selected text in Cliqz.")
+		public static let OpenInNewForgetTabContextMenuTitle = NSLocalizedString("HomePanel.ContextMenu.OpenInNewForgetTab", tableName: "Cliqz", value: "Open in New Private Tab", comment: "The title for the Open in New Forget Tab context menu action for sites in Home Panels")
+		public static let NewForgetTabTitle = NSLocalizedString("Hotkeys.NewForgetTab.DiscoveryTitle", tableName: "Cliqz", value: "New Private Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
+		public static let ShareLoadInBackgroundDone = NSLocalizedString("ShareExtension.LoadGhosteryInBackgroundActionDone.Title", tableName: "Cliqz", value: "Loading in Cliqz", comment: "Share extension label shown after user has performed 'Load in Background' action.")
+	#else
         public static let ShareOpenInCliqz = NSLocalizedString("ShareExtension.OpenInGhosteryAction.Title", tableName: "Cliqz", value: "Open in Ghostery", comment: "Action label on share extension to immediately open page in Ghostery.")
     
         public static let ShareSearchInCliqz = NSLocalizedString("ShareExtension.SeachInGhosteryAction.Title", tableName: "Cliqz", value: "Search in Ghostery", comment: "Action label on share extension to search for the selected text in Ghostery.")
