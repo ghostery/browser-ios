@@ -185,7 +185,7 @@ platform :ios do
     sentry_upload_dsym(
       auth_token: ENV["SENTRY_AUTH_TOKEN"],
       org_slug: 'cliqz',
-      project_slug: 'ghostery',
+      project_slug: 'ghostery-ios',
     )
   end
 
@@ -240,7 +240,7 @@ platform :ios do
     sentry_upload_dsym(
       auth_token: ENV["SENTRY_AUTH_TOKEN"],
       org_slug: 'cliqz',
-      project_slug: 'ghostery',
+      project_slug: 'ghostery-ios',
     )
   end
 
@@ -314,7 +314,7 @@ platform :ios do
     sentry_upload_dsym(
       auth_token: ENV["SENTRY_AUTH_TOKEN"],
       org_slug: 'cliqz',
-      project_slug: 'cliqzpaid',
+      project_slug: 'lumen-staging-ios',
     )
   end
 
@@ -388,7 +388,7 @@ platform :ios do
     sentry_upload_dsym(
       auth_token: ENV["SENTRY_AUTH_TOKEN"],
       org_slug: 'cliqz',
-      project_slug: 'lumen',
+      project_slug: 'lumen-ios',
     )
   end
 
@@ -457,7 +457,7 @@ platform :ios do
     sentry_upload_dsym(
       auth_token: ENV["SENTRY_AUTH_TOKEN"],
       org_slug: 'cliqz',
-      project_slug: 'cliqz',
+      project_slug: 'cliqz-ios',
     )
   end
 end
