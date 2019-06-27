@@ -378,6 +378,7 @@
 		4F0445E2203344E300E2C0C7 /* LogoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0445E1203344E300E2C0C7 /* LogoLoader.swift */; };
 		4F0445E720334D3400E2C0C7 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0445E620334D3400E2C0C7 /* UIDeviceExtension.swift */; };
 		4F0445E920334DC800E2C0C7 /* LocalDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0445E820334DC700E2C0C7 /* LocalDataStore.swift */; };
+		4F0A8F2622C50A940038469A /* BrowserViewController+CliqzMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0A8F2522C50A940038469A /* BrowserViewController+CliqzMigration.swift */; };
 		4F1860332088F3DC00A86D4C /* Privacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1860322088F3DC00A86D4C /* Privacy.swift */; };
 		4F19FBD420FE2DE500BF0643 /* GhosteryLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F19FBC520FE2DE300BF0643 /* GhosteryLaunchScreen.xib */; };
 		4F304595204FEC5500C99162 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68F36971EA694000048CF44 /* PanelDataObservers.swift */; };
@@ -1831,6 +1832,7 @@
 		4F0445E1203344E300E2C0C7 /* LogoLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoLoader.swift; sourceTree = "<group>"; };
 		4F0445E620334D3400E2C0C7 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		4F0445E820334DC700E2C0C7 /* LocalDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalDataStore.swift; sourceTree = "<group>"; };
+		4F0A8F2522C50A940038469A /* BrowserViewController+CliqzMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+CliqzMigration.swift"; sourceTree = "<group>"; };
 		4F1860322088F3DC00A86D4C /* Privacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Privacy.swift; sourceTree = "<group>"; };
 		4F19FBC520FE2DE300BF0643 /* GhosteryLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GhosteryLaunchScreen.xib; sourceTree = "<group>"; };
 		4F304597204FEE5500C99162 /* jsengine.bundle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = jsengine.bundle.js; path = Cliqz/JSEngine/jsengine.bundle.js; sourceTree = SOURCE_ROOT; };
@@ -3563,6 +3565,7 @@
 				4F1860322088F3DC00A86D4C /* Privacy.swift */,
 				AF4C19B820AC7AC400D3F740 /* TopTabs.swift */,
 				1E72FE7A22415CC8004FEB68 /* BrowserViewController+ContextualMessages.swift */,
+				4F0A8F2522C50A940038469A /* BrowserViewController+CliqzMigration.swift */,
 			);
 			path = BrowserViewController;
 			sourceTree = "<group>";
@@ -6653,6 +6656,7 @@
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
 				1EC9C75420CFF6F200082652 /* BrowserViewControllerHelper.swift in Sources */,
 				4F30F50E2051670C0049E4F6 /* JSBridge.swift in Sources */,
+				4F0A8F2622C50A940038469A /* BrowserViewController+CliqzMigration.swift in Sources */,
 				EB9A179C20E69A7F00B12184 /* DarkTheme.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
