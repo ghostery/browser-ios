@@ -240,7 +240,11 @@ class RestoreTopSitesSetting: Setting {
 class FAQSetting: Setting {
     
     override var title: NSAttributedString? {
+		#if CLIQZ
+		return NSAttributedString(string: NSLocalizedString("FAQ & Support", tableName: "Cliqz", comment: "[Settings] FAQ"), attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.general.highlightBlue])
+		#else
         return NSAttributedString(string: NSLocalizedString("FAQ", tableName: "Cliqz", comment: "[Settings] FAQ"), attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.general.highlightBlue])
+		#endif
     }
     
     override var url: URL? {

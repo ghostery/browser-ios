@@ -190,7 +190,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
                 SendUsageDataSetting(settings: self),
 //                lumenThemeSetting
             ]
-        #else
+        #elseif GHOSTERY
             let helpSettings = [
                 FAQSetting(delegate: settingsDelegate),
                 SupportSetting(delegate: settingsDelegate),
@@ -200,6 +200,13 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
                 SendUsageDataSetting(settings: self),
                 MyOffrzSetting()
             ]
+		#else
+			let helpSettings = [
+				FAQSetting(delegate: settingsDelegate),
+				SendCrashReportsSetting(settings: self),
+				SendUsageDataSetting(settings: self),
+				MyOffrzSetting()
+			]
         #endif
         
         return helpSettings
