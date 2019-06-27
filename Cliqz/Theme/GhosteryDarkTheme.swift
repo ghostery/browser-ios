@@ -94,7 +94,7 @@ fileprivate class DarkTextFieldColor: TextFieldColor {
 }
 
 fileprivate class DarkHomePanelColor: HomePanelColor {
-    override var toolbarBackground: UIColor { return defaultBackground }
+    override var toolbarBackground: UIColor { return UIColor.black }
     override var toolbarHighlight: UIColor { return UIColor.Photon.Blue40 }
     override var toolbarTint: UIColor { return UIColor.Photon.Grey30 }
     override var panelBackground: UIColor { return UIColor.Photon.Grey90 }

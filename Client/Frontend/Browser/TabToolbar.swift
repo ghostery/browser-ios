@@ -331,7 +331,12 @@ extension TabToolbar: TabToolbarProtocol {
 
 extension TabToolbar: Themeable, PrivateModeUI {
     func applyTheme() {
-        backgroundColor = UIColor.theme.browser.background
+		// CLIQZ: because of design inconsistency for Cliqz we have to use different color.
+		#if PAID
+		backgroundColor = UIColor.theme.browser.background
+		#else
+        backgroundColor = UIColor.theme.homePanel.toolbarBackground
+		#endif
         helper?.setTheme(forButtons: actionButtons)
     }
 
