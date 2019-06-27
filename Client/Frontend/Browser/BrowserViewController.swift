@@ -575,6 +575,11 @@ class BrowserViewController: UIViewController {
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
+		//Cliqz: Open new tab and show update info page first time after update
+		#if CLIQZ
+		self.showCliqzUpdateInfoPageFirstTime()
+		#endif
+		//Cliqz: end
     }
 
     fileprivate func crashedLastLaunch() -> Bool {
