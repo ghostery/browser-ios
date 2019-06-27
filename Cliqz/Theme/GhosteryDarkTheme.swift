@@ -41,7 +41,7 @@ fileprivate class DarkURLBarColor: URLBarColor {
         return !isPrivate ? UIColor.lightGray :  UIColor.lightGray
     }
     override func textSelectionHighlight(_ isPrivate: Bool) -> TextSelectionHighlight {
-        let color = isPrivate ? defaultTextSelectionColor : defaultTextSelectionColor
+        let color = isPrivate ? UIColor(colorString: "AEC5DA") : defaultTextSelectionColor
         return (labelMode: color.withAlphaComponent(1), textFieldMode: color)
         
     }
@@ -87,7 +87,7 @@ fileprivate class DarkTopTabsColor: TopTabsColor {
 fileprivate class DarkTextFieldColor: TextFieldColor {
     override func background(_ isPrivate: Bool) -> UIColor {
 		// TODO: it needs to be checked for the final designreview if both should be white or not. It was  UIColor(colorString: "3D3F4E") before. But it seems this is not right color
-        return isPrivate ? UIColor.white : UIColor.white
+        return isPrivate ? UIColor(colorString: "2B6895") : UIColor.white
     }
     override var textAndTint: UIColor { return defaultTextAndTint }
     
