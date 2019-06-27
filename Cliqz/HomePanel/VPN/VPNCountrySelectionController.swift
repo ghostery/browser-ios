@@ -21,6 +21,7 @@ class VPNCountrySelectionController: UIViewController {
     private let tableView = UITableView()
     private let backgroundView = BrowserGradientView()
     private var countries = VPNEndPointManager.shared.getAvailableCountries()
+    private var shouldInhibitErrorAlerts = false
 
     // MARK: View LifeCycle
     override func viewDidLoad() {
@@ -76,6 +77,8 @@ class VPNCountrySelectionController: UIViewController {
     }
 
     @objc private func receivedError(_ notification: Notification) {
+        guard shouldInhibitErrorAlerts == false else { return }
+
         if let userInfo = notification.userInfo as? [String: Error], let error = userInfo["error"] {
             print(error)
         }
@@ -168,6 +171,10 @@ extension VPNCountrySelectionController: UITableViewDataSource {
 // MARK: - Table View Delegate
 extension VPNCountrySelectionController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // When we set a new country, the VPN might reconnect or disconnect, cancelling our previous request.
+        // This will result in an error message, which we don't want to see in that case, because we're seeing
+        // expected behaviour.
+        shouldInhibitErrorAlerts = true
 
         let country = countries[indexPath.row]
         self.delegate?.didSelectCountry(country: country)
