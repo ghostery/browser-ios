@@ -398,7 +398,7 @@ platform :ios do
     sh("sed -i '' 's|sentryDSN:\ String?\ =\ nil|sentryDSN:\ String?\ =\ \"'$SentryDSN'\"|' ../Cliqz/Resources/APIKeys.swift")
 
     # Building ReactNative Extension
-    sh("cd .. && npm run bundle-ghostery")
+    sh("cd .. && npm run bundle-cliqz")
 
     create_keychain(
       path: "/Users/vagrant/Library/Keychains/"+ENV["MATCH_KEYCHAIN_NAME"],
@@ -419,7 +419,7 @@ platform :ios do
     )
 
     increment_version_number(
-      version_number:"1.12.0", 
+      version_number:"2.0.0", 
       xcodeproj:"Client.xcodeproj"
     )
 
