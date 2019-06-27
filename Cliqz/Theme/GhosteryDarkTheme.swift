@@ -12,8 +12,8 @@ import UIKit
 // Convenience reference to these normal mode colors which are used in a few color classes.
 fileprivate let defaultBackground = UIColor.cliqzBluePrimary
 fileprivate let defaultSeparator = UIColor.Photon.Grey60
-fileprivate let defaultTextAndTint = UIColor.Photon.Grey40
-fileprivate let defaultTextSelectionColor = UIColor(colorString: "7C90D1")
+fileprivate let defaultTextAndTint = UIColor.black
+fileprivate let defaultTextSelectionColor = UIColor(colorString: "CFDCEC")
 
 fileprivate class DarkTableViewColor: TableViewColor {
     override var rowBackground: UIColor { return UIColor.Photon.Grey70 }
