@@ -111,7 +111,14 @@ class VPNEndPointManager {
                 return
             }
 
-            guard let self = self, credentials.count > 0 else { return }
+            guard let self = self, credentials.count > 0 else {
+                NotificationCenter.default.post(
+                    name: VPNEndPointManager.countriesUpdateErrorNotification,
+                    object: nil,
+                    userInfo: nil
+                )
+                return
+            }
             self.countries.removeAll()
             
             for cred in credentials {
