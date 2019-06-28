@@ -16,14 +16,14 @@ fileprivate let defaultTextAndTint = UIColor.black
 fileprivate let defaultTextSelectionColor = UIColor(colorString: "CFDCEC")
 
 fileprivate class DarkTableViewColor: TableViewColor {
-    override var rowBackground: UIColor { return UIColor.Photon.Grey70 }
+    override var rowBackground: UIColor { return UIColor.white }
     override var rowText: UIColor { return defaultTextAndTint }
     override var rowDetailText: UIColor { return UIColor.Photon.Grey30 }
     override var disabledRowText: UIColor { return UIColor.Photon.Grey40 }
-    override var separator: UIColor { return UIColor.Photon.Grey60 }
-    override var headerBackground: UIColor { return UIColor.Photon.Grey80 }
+    override var separator: UIColor { return UIColor.Photon.Grey30 }
+    override var headerBackground: UIColor { return UIColor.white }
     override var headerTextLight: UIColor { return UIColor.Photon.Grey30 }
-    override var headerTextDark: UIColor { return UIColor.Photon.Grey30 }
+    override var headerTextDark: UIColor { return UIColor.cliqzBluePrimary }
     override var syncText: UIColor { return defaultTextAndTint }
 }
 
@@ -136,6 +136,7 @@ fileprivate class DarkGeneralColor: GeneralColor {
     override var settingsTextPlaceholder: UIColor? { return UIColor.black }
     override var faviconBackground: UIColor { return UIColor.Photon.White100 }
     override var passcodeDot: UIColor { return UIColor.Photon.Grey40 }
+	override var controlTint: UIColor { return UIColor.cliqzBluePrimary }
 }
 
 class DarkTheme: NormalTheme {
