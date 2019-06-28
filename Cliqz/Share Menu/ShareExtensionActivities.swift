@@ -11,10 +11,10 @@ import UIKit
 extension ShareExtensionHelper {
     
     func getApplicationActivities() -> [UIActivity] {
-        #if PAID
-            let applicationActivities = [UIActivity]()
+        #if GHOSTERY
+			let applicationActivities = [WiFiProtectionActivity()]
         #else
-            let applicationActivities = [WiFiProtectionActivity()]
+			let applicationActivities = [UIActivity]()
         #endif
         return applicationActivities
     }
