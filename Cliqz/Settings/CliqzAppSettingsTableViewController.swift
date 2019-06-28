@@ -21,10 +21,13 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         // Connect is not available in Paid Product
         #else
         // Connect
+		// Temporaray Connect is removed from Cliqz as well, as it was not tested and mainted for some time
+		/*
         let conenctSettings = [CliqzConnectSetting(settings: self)]
         let connectSettingsTitle = NSLocalizedString("Connect", tableName: "Cliqz", comment: "[Settings] Connect section title")
         let connectSettingsFooter = NSLocalizedString("Connect Cliqz on your computer with Cliqz on your iOS device. This will allow you to send tabs from your desktop to your mobile device. You can also directly download videos from your desktop browser to your mobile device.", tableName: "Cliqz", comment: "[Settings] Connect section footer")
         settings += [ SettingSection(title: NSAttributedString(string: connectSettingsTitle), footerTitle: NSAttributedString(string: connectSettingsFooter), children: conenctSettings)]
+		*/
         #endif
 		
 		// Account Settings
