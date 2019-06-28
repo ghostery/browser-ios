@@ -139,8 +139,11 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
             // [IP-315] Disable theme switching: remove from settings
             //ThemeSetting(settings: self),
             ]
-        
-        let statusText = NSLocalizedString("When Opening Ghostery", tableName: "Cliqz", comment: "Description displayed under the ”Offer to Open Copied Link” option.")
+		#if CLIQZ
+        let statusText = NSLocalizedString("When Opening Cliqz", tableName: "Cliqz", comment: "Description displayed under the ”Offer to Open Copied Link” option.")
+		#else
+		let statusText = NSLocalizedString("When Opening Ghostery", tableName: "Cliqz", comment: "Description displayed under the ”Offer to Open Copied Link” option.")
+		#endif
         browsingAndHistorySettings += [
             BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
                         titleText: Strings.SettingsOfferClipboardBarTitle,
