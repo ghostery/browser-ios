@@ -17,7 +17,7 @@ PODS:
   - Purchases (2.0.0)
   - React (0.59.4):
     - React/Core (= 0.59.4)
-  - react-native-webrtc (1.58.3):
+  - react-native-webrtc (1.69.2):
     - React
   - React/Core (0.59.4):
     - yoga (= 0.59.4.React)
@@ -165,7 +165,7 @@ SPEC CHECKSUMS:
   KKDomain: 6883615bda1dfc6a6257f399ee85a02618837757
   Purchases: 17496bdab0d0fb678f5f647c4c7039bca3b8263c
   React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
-  react-native-webrtc: 31b6d3f1e3e2ce373aa43fd682b04367250f807d
+  react-native-webrtc: b80865c92f8caec8b13d1e692192e56aecb42a7c
   Realm: 9eaecad54712d6246d08ba34c10f354e4715d7d3
   RealmSwift: 1fe08b4ebaeeaacf17f9ba0343f7b25c9fc31fa6
   RNDeviceInfo: b375b3374cda3203d6d48cea8c07e46ba1169e26
