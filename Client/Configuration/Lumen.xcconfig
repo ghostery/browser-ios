@@ -9,6 +9,8 @@ MOZ_BUNDLE_ID = com.cliqz.ios.lumen
 
 MOZ_BUNDLE_SHARETO_ID = com.cliqz.ios.lumen.ShareTo
 
+MOZ_PRODUCT_NAME = Lumen
+
 MOZ_INTERNAL_URL_ID = group.com.cliqz.ios.lumen
 
 MOZ_INTERNAL_URL_SCHEME = lumen
