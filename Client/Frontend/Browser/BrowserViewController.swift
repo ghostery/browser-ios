@@ -918,8 +918,10 @@ class BrowserViewController: UIViewController {
                 /* Cliqz: added offset to hide the white line in top of the search view in iPhoneX
                 make.top.equalTo(self.urlBar.snp.bottom)
                 */
-                make.top.equalTo(self.urlBar.snp.bottom).offset(-1)
-                make.left.right.bottom.equalTo(self.view)
+                make.top.equalTo(self.urlBar.snp.bottom).offset(-15)
+                make.left.equalTo(self.view).offset(10)
+                make.right.equalTo(self.view).offset(-10)
+                make.bottom.equalTo(self.view)
                 return
             }
             

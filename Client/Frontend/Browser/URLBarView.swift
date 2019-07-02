@@ -14,12 +14,12 @@ struct URLBarViewUX {
 
     static let LocationLeftPadding: CGFloat = 8
     static let Padding: CGFloat = 10
-    static let LocationHeight: CGFloat = 40
+    static let LocationHeight: CGFloat = 35
     static let ButtonHeight: CGFloat = 44
     static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 8
     static let TextFieldBorderWidth: CGFloat = 1
-    static let TextFieldBorderWidthSelected: CGFloat = 4
+    static let TextFieldBorderWidthSelected: CGFloat = 1
     static let ProgressBarHeight: CGFloat = 3
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
@@ -113,7 +113,7 @@ class URLBarView: UIView {
         locationContainer.layer.shadowColor = self.locationBorderColor.cgColor
         locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
         locationContainer.layer.borderColor = self.locationBorderColor.cgColor
-        locationContainer.backgroundColor = .clear
+        locationContainer.backgroundColor = .white
         return locationContainer
     }()
     
@@ -222,8 +222,8 @@ class URLBarView: UIView {
     func commonInit() {
         locationContainer.addSubview(locationView)
 
-        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         menuButton, forwardButton, backButton, stopReloadButton, locationContainer, privateModeBadge].forEach {
+        [scrollToTopButton, line, tabsButton, progressBar, showQRScannerButton,
+         menuButton, forwardButton, backButton, stopReloadButton, locationContainer, cancelButton, privateModeBadge].forEach {
             addSubview($0)
         }
 
@@ -313,8 +313,8 @@ class URLBarView: UIView {
             self.locationContainer.snp.remakeConstraints { make in
                 let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
                 make.height.equalTo(height)
-                make.trailing.equalTo(self.showQRScannerButton.snp.leading)
-                make.leading.equalTo(self.cancelButton.snp.trailing)
+                make.leftMargin.equalToSuperview().offset(10)
+                make.rightMargin.equalToSuperview().offset(10)
                 make.centerY.equalTo(self)
             }
             self.locationView.snp.remakeConstraints { make in
@@ -376,7 +376,7 @@ class URLBarView: UIView {
         locationTextField.attributedPlaceholder = self.locationView.placeholder
         locationContainer.addSubview(locationTextField)
         locationTextField.snp.remakeConstraints { make in
-            make.edges.equalTo(self.locationView)
+            make.edges.equalTo(self.locationView.urlTextField)
         }
 
         locationTextField.applyTheme()
@@ -483,6 +483,7 @@ class URLBarView: UIView {
     func prepareOverlayAnimation() {
         // Make sure everything is showing during the transition (we'll hide it afterwards).
         bringSubview(toFront: self.locationContainer)
+        bringSubview(toFront: cancelButton)
         cancelButton.isHidden = false
         showQRScannerButton.isHidden = false
         progressBar.isHidden = false
@@ -494,6 +495,11 @@ class URLBarView: UIView {
     }
 
     func transitionToOverlay(_ didCancel: Bool = false) {
+        locationView.backgroundColor = UIColor.white
+        locationView.urlTextField.textColor = UIColor.black
+        locationTextField?.backgroundColor = UIColor.white
+        locationTextField?.textColor = UIColor.black
+
         cancelButton.alpha = inOverlayMode ? 1 : 0
         showQRScannerButton.alpha = inOverlayMode ? 1 : 0
         progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
@@ -510,7 +516,7 @@ class URLBarView: UIView {
             line.isHidden = inOverlayMode
             // Make the editable text field span the entire URL bar, covering the lock and reader icons.
             locationTextField?.snp.remakeConstraints { make in
-                make.edges.equalTo(self.locationView)
+                make.edges.equalTo(self.locationView.urlTextField)
             }
         } else {
             // Shrink the editable text field back to the size of the location view before hiding it.
@@ -735,10 +741,10 @@ extension URLBarView: Themeable {
 
         cancelTintColor = UIColor.theme.browser.tint
         showQRButtonTintColor = UIColor.theme.browser.tint
-        backgroundColor = UIColor.theme.browser.background
-        line.backgroundColor = UIColor.theme.browser.urlBarDivider
+        backgroundColor =  UIColor.theme.browser.background
+        line.backgroundColor = UIColor.white // UIColor.theme.browser.urlBarDivider
 
-        locationBorderColor = UIColor.theme.urlbar.border
+        locationBorderColor =  UIColor.white //UIColor.theme.urlbar.border
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
     }
 }

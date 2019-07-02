@@ -122,7 +122,7 @@ class CliqzURLBar: URLBarView {
         }
         
         cancelButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.safeArea.trailing).inset(10)
+            make.trailing.equalTo(self.safeArea.trailing).inset(15)
             make.centerY.equalTo(self.locationContainer)
             make.width.equalTo(self.cancelButton.intrinsicContentSize.width)
             make.height.equalTo(URLBarViewUX.ButtonHeight)
@@ -193,11 +193,11 @@ class CliqzURLBar: URLBarView {
         super.updateConstraints()
         if inOverlayMode {
             // In overlay mode, we always show the location view full width
-            self.locationContainer.layer.borderWidth = UXOverrides.TextFieldBorderWidthSelected
+            self.locationContainer.layer.borderWidth = 0//UXOverrides.TextFieldBorderWidthSelected
             self.locationContainer.snp.remakeConstraints { make in
                 let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
                 make.height.equalTo(height)
-                make.trailing.equalTo(self.cancelButton.snp.leading).offset(-10)
+                make.trailing.equalTo(self.safeArea.trailing).offset(-10)
                 make.leading.equalTo(self.safeArea.leading).offset(10)
                 make.centerY.equalTo(self)
             }
@@ -205,7 +205,7 @@ class CliqzURLBar: URLBarView {
                 make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: UXOverrides.TextFieldBorderWidthSelected))
             }
             self.locationTextField?.snp.remakeConstraints { make in
-                make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
+                make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: 100))
             }
         } else {
             self.dashboardButton.snp.remakeConstraints { (make) in
@@ -232,7 +232,7 @@ class CliqzURLBar: URLBarView {
                 make.height.equalTo(URLBarViewUX.LocationHeight+2)
                 make.centerY.equalTo(self)
             }
-            self.locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
+            self.locationContainer.layer.borderWidth = 0//URLBarViewUX.TextFieldBorderWidth
             self.locationView.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidth))
             }
