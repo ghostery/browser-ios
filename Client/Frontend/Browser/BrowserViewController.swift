@@ -927,8 +927,11 @@ class BrowserViewController: UIViewController {
             self.searchController = nil
             
             addChildViewController(cliqzSearchController!)
-            
-            view.addSubview(cliqzSearchController!.view)
+
+            UIView.transition(with: self.view, duration: 0.5, options: .curveEaseInOut, animations: {
+                self.view.addSubview(self.cliqzSearchController!.view)
+            }, completion: nil)
+
             cliqzSearchController!.view.snp.makeConstraints { make in
                 /* Cliqz: added offset to hide the white line in top of the search view in iPhoneX
                 make.top.equalTo(self.urlBar.snp.bottom)
