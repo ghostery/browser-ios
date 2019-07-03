@@ -2291,8 +2291,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
 		// Cliqz: Don't show onboarding for Cliqz for now
         // Cliqz: However, do use CliqzIntroViewController's startBrowsing method to set the blocker settings to recommended settings
 		#if CLIQZ
-        let introViewController = CliqzIntroViewController()
-        introViewController.startBrowsing()
+        CliqzIntroViewController.setupBlocking(blockOptionSelected: .recommended)
 		return false
 		#endif
 
