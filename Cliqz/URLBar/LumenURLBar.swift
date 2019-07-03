@@ -83,15 +83,10 @@ class LumenURLBar: CliqzURLBar {
         super.updateConstraints()
         if !inOverlayMode {
             self.locationContainer.snp.remakeConstraints { make in
-                if self.toolbarIsShowing {
-                    // If we are showing a toolbar, show the text field next to the forward button
-                    make.leading.equalTo(self.stopReloadButton.snp.trailing).offset(URLBarViewUX.Padding)
-                } else {
-                    // Otherwise, left align the location view
-                    make.leading.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
-                }
-                make.trailing.equalTo(self.vpnAccessButton.snp.leading)
-                make.height.equalTo(URLBarViewUX.LocationHeight+2)
+                let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
+                make.height.equalTo(height)
+                make.leading.equalTo(self.safeArea.leading).offset(10)
+                make.trailing.equalTo(self.vpnAccessButton.snp.leading)//.offset(-URLBarViewUX.Padding)
                 make.centerY.equalTo(self)
             }
         }
