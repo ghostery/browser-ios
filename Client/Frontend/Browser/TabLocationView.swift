@@ -369,7 +369,7 @@ extension TabLocationView: Themeable {
         backgroundColor = UIColor.theme.textField.background
          */
         backgroundColor = UIColor.white // TODO:PK apply theme
-        urlTextField.textColor = UIColor.theme.textField.textAndTint
+        urlTextField.textColor = UIColor.black //UIColor.theme.textField.textAndTint// TODO:PK apply theme
         readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
         readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
         
