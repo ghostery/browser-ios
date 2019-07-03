@@ -2289,7 +2289,10 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController: IntroViewControllerDelegate {
     @discardableResult func presentIntroViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
 		// Cliqz: Don't show onboarding for Cliqz for now
+        // Cliqz: However, do use CliqzIntroViewController's startBrowsing method to set the blocker settings to recommended settings
 		#if CLIQZ
+        let introViewController = CliqzIntroViewController()
+        introViewController.startBrowsing()
 		return false
 		#endif
 
@@ -2303,9 +2306,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
 		#if PAID
 			let introViewController = LumenIntroViewController()
 		#else
-			/* Cliqz: Change to CliqzIntroViewController
-			let introViewController = IntroViewController()
-			*/
 			let introViewController = CliqzIntroViewController()
 		#endif
 
