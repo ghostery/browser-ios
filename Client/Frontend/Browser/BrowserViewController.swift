@@ -52,6 +52,7 @@ class BrowserViewController: UIViewController {
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
     var statusBarOverlay: UIView!
+    /* Cliqz: background cover for notch */
     let notchAreaCover = UIView()
     fileprivate(set) var toolbar: TabToolbar?
     /* Cliqz: Replace Search Controller with Firefox Search Controller
@@ -367,8 +368,10 @@ class BrowserViewController: UIViewController {
 
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
-
+        /* Cliqz: background cover for notch */
+        #if PAID
         view.addSubview(notchAreaCover)
+        #endif
 
         // Temporary work around for covering the non-clipped web view content
         statusBarOverlay = UIView()
@@ -482,11 +485,14 @@ class BrowserViewController: UIViewController {
             make.left.right.equalTo(self.view)
         }
 
+        /* Cliqz: background cover for notch */
+        #if PAID
         notchAreaCover.snp.makeConstraints { (make) in
             make.topMargin.equalTo(self.view.safeAreaLayoutGuide.snp.topMargin)
             make.left.right.equalTo(self.view)
             make.bottom.equalTo(self.header.snp.bottom)
         }
+        #endif
 
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer)
@@ -927,13 +933,22 @@ class BrowserViewController: UIViewController {
                 /* Cliqz: added offset to hide the white line in top of the search view in iPhoneX
                 make.top.equalTo(self.urlBar.snp.bottom)
                 */
+                #if PAID
                 make.top.equalTo(self.urlBar.snp.bottom).offset(-18)
                 make.leading.equalTo(self.urlBar.locationContainer.snp.leading)
                 make.trailing.equalTo(self.urlBar.locationContainer.snp.trailing)
                 make.bottom.equalTo(self.view)
+                #else
+                make.top.equalTo(self.urlBar.snp.bottom).offset(-1)
+                make.left.right.bottom.equalTo(self.view)
+                #endif
                 return
             }
+            
+            /* Cliqz: Lumen new design. Bringig header on top of search */
+            #if PAID
             view.bringSubview(toFront: header)
+            #endif
             
             homePanelController?.view?.isHidden = true
             

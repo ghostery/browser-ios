@@ -368,7 +368,7 @@ extension TabLocationView: Themeable {
         /* Cliqz: Moved setting of the backgroundColor to applyUIMode
         backgroundColor = UIColor.theme.textField.background
          */
-        backgroundColor = UIColor.white
+        backgroundColor = UIColor.white // TODO:PK apply theme
         urlTextField.textColor = UIColor.theme.textField.textAndTint
         readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
         readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
