@@ -52,6 +52,7 @@ class BrowserViewController: UIViewController {
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
     var statusBarOverlay: UIView!
+    let notchAreaCover = UIView()
     fileprivate(set) var toolbar: TabToolbar?
     /* Cliqz: Replace Search Controller with Firefox Search Controller
     var searchController: SearchViewController?
@@ -367,6 +368,8 @@ class BrowserViewController: UIViewController {
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
 
+        view.addSubview(notchAreaCover)
+
         // Temporary work around for covering the non-clipped web view content
         statusBarOverlay = UIView()
         view.addSubview(statusBarOverlay)
@@ -477,6 +480,12 @@ class BrowserViewController: UIViewController {
         header.snp.makeConstraints { make in
             scrollController.headerTopConstraint = make.top.equalTo(self.topLayoutGuide.snp.bottom).constraint
             make.left.right.equalTo(self.view)
+        }
+
+        notchAreaCover.snp.makeConstraints { (make) in
+            make.topMargin.equalTo(self.view.safeAreaLayoutGuide.snp.topMargin)
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.header.snp.bottom)
         }
 
         webViewContainerBackdrop.snp.makeConstraints { make in
@@ -2783,6 +2792,7 @@ extension BrowserViewController: Themeable {
 
         // Cliqz - change color of status bar overlay
         statusBarOverlay.backgroundColor = urlBar.backgroundColor
+        notchAreaCover.backgroundColor = UIColor.theme.browser.background
     }
 }
 
