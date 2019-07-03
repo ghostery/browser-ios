@@ -42,7 +42,7 @@ class CliqzTabLocationView: TabLocationView {
         #if !PAID
         lockImageView.tintColor = UIColor.black
         #else
-        lockImageView.tintColor = UIColor.white
+        lockImageView.tintColor = UIColor.blue
         #endif
         
         // re-init contectView

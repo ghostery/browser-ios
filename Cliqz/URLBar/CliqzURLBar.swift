@@ -53,12 +53,14 @@ class CliqzURLBar: URLBarView {
     
     private lazy var _cancelButton: UIButton = {
         let cancelButton = InsetButton()
+        cancelButton.backgroundColor = UIColor.white
         //cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.setTitle(NSLocalizedString("Cancel", tableName: "Cliqz", comment: "Cancel button title in the urlbar"), for: .normal)
         cancelButton.setTitleColor(UIColor.cliqzBlueTwoSecondary, for: UIControlState.highlighted)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
+        cancelButton.contentEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 8)
         return cancelButton
     }()
     
@@ -122,10 +124,17 @@ class CliqzURLBar: URLBarView {
         }
         
         cancelButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.safeArea.trailing).inset(15)
+            make.trailing.equalTo(self.locationContainer.snp.trailing).inset(10)
             make.centerY.equalTo(self.locationContainer)
             make.width.equalTo(self.cancelButton.intrinsicContentSize.width)
             make.height.equalTo(URLBarViewUX.ButtonHeight)
+        }
+
+        cancelButtonSeparator.snp.makeConstraints { make in
+            make.trailing.equalTo(self.cancelButton.snp.leading)
+            make.centerY.equalTo(self.locationContainer)
+            make.width.equalTo(1)
+            make.height.equalTo(26)
         }
         
         backButton.snp.makeConstraints { make in
@@ -193,7 +202,7 @@ class CliqzURLBar: URLBarView {
         super.updateConstraints()
         if inOverlayMode {
             // In overlay mode, we always show the location view full width
-            self.locationContainer.layer.borderWidth = 0//UXOverrides.TextFieldBorderWidthSelected
+            self.locationContainer.layer.borderWidth = 0.1//UXOverrides.TextFieldBorderWidthSelected
             self.locationContainer.snp.remakeConstraints { make in
                 let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
                 make.height.equalTo(height)
@@ -205,7 +214,10 @@ class CliqzURLBar: URLBarView {
                 make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: UXOverrides.TextFieldBorderWidthSelected))
             }
             self.locationTextField?.snp.remakeConstraints { make in
-                make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: 100))
+                make.height.equalTo(self.locationView)
+                make.leading.equalTo(self.locationView.snp.leading).offset(10)
+                make.trailing.equalTo(self.cancelButtonSeparator.snp.leading)
+                make.centerY.equalTo(self.locationView)
             }
         } else {
             self.dashboardButton.snp.remakeConstraints { (make) in
@@ -264,6 +276,7 @@ class CliqzURLBar: URLBarView {
         super.applyTheme()
         dashboardButton.applyTheme()
         cancelButton.setTitleColor(UIColor.theme.urlbar.urlbarButtonTitleText, for: [])
+        cancelButtonSeparator.backgroundColor = UIColor.blue
     }
 
 	
