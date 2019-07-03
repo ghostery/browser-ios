@@ -246,32 +246,41 @@ class CliqzIntroViewController: UIViewController {
         
         #if PAID
         #else
+        CliqzIntroViewController.setupBlocking(blockOptionSelected: blockOptionSelected)
+        #endif
+        
+        delegate?.introViewControllerDidFinish(self, requestToLogin: false)
+    }
+
+    #if PAID
+    #else
+    static func setupBlocking(blockOptionSelected: BlockOption) {
         let populateOp = PopulateBlockedTrackersOperation()
-        
+
         var loadOp: LoadTrackerListOperation? = nil
-        
+
         let loadOperations = GlobalPrivacyQueue.shared.operations.filter { (op) -> Bool in
             return op is LoadTrackerListOperation && !(op.isFinished || op.isCancelled)
         }
-        
+
         if !loadOperations.isEmpty, let loadOperation = loadOperations.first as? LoadTrackerListOperation {
             loadOp = loadOperation
         }
-        
+
         func addOp(operation: Operation) {
             if let loadOperation = loadOp {
                 operation.addDependency(loadOperation)
             }
-            
+
             populateOp.addDependency(operation)
-            
+
             GlobalPrivacyQueue.shared.addOperation(operation)
             GlobalPrivacyQueue.shared.addOperation(populateOp)
         }
-        
+
         if blockOptionSelected != .recommended {
             let blockOption: ChangeTrackersOperation.BlockOption =  blockOptionSelected == .all ? .blockAll : .unblockAll
-            
+
             let operation = ChangeTrackersOperation(blockOption: blockOption)
             addOp(operation: operation)
         }
@@ -281,11 +290,8 @@ class CliqzIntroViewController: UIViewController {
             UserDefaults.standard.set(true, forKey: trackersDefaultsAreAppliedKey)
             UserDefaults.standard.synchronize()
         }
-        
-        #endif
-        
-        delegate?.introViewControllerDidFinish(self, requestToLogin: false)
     }
+    #endif
     
     func login() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: true)
