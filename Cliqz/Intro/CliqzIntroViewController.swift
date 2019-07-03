@@ -252,6 +252,8 @@ class CliqzIntroViewController: UIViewController {
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
     }
 
+    #if PAID
+    #else
     static func setupBlocking(blockOptionSelected: BlockOption) {
         let populateOp = PopulateBlockedTrackersOperation()
 
@@ -289,6 +291,7 @@ class CliqzIntroViewController: UIViewController {
             UserDefaults.standard.synchronize()
         }
     }
+    #endif
     
     func login() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: true)
