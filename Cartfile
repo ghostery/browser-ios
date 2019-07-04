@@ -16,4 +16,5 @@ github "farhanpatel/JSONSchema.swift"       "master"
 # Cliqz: Disable FireFox Telemetry & EarlyGray
 # github "st3fan/EarlGrey"                    "master"
 # github "mozilla-mobile/telemetry-ios"       "v1.1.0"
-github "mozilla-mobile/MappaMundi"          "master"
+# Cliqz: Pinning MappaMundi to a specific commit because newer versions require A-Star, which requires Swift 5
+github "mozilla-mobile/MappaMundi"          "02b6f0b404d0a7178c47c073550936016f42981e"

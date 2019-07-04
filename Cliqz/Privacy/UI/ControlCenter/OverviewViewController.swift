@@ -836,7 +836,7 @@ class OverviewViewController: UIViewController {
 		self.restrictSiteButton.setTitle(restrictTitle, for: .normal)
 		self.restrictSiteButton.addTarget(self, action: #selector(restrictSitePressed), for: .touchUpInside)
 
-        let pauseGhostery = NSLocalizedString("Pause", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Pause Ad blocking button title")
+    let pauseGhostery = NSLocalizedString("Pause", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Pause Ad blocking button title")
 		self.pauseGhosteryButton.setTitle(pauseGhostery, for: .normal)
         self.pauseGhosteryButton.addTarget(self, action: #selector(pauseGhosteryPressed), for: .touchUpInside)
         self.pauseGhosteryButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
