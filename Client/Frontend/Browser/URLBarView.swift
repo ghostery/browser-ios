@@ -110,10 +110,15 @@ class URLBarView: UIView {
     lazy var locationContainer: UIView = {
         let locationContainer = TabLocationContainerView()
         locationContainer.translatesAutoresizingMaskIntoConstraints = false
-        locationContainer.layer.shadowColor = UIColor.blue.cgColor // TODO: PK customize
+        locationContainer.layer.shadowColor = self.locationBorderColor.cgColor
         locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
         locationContainer.layer.borderColor = self.locationBorderColor.cgColor
-        locationContainer.backgroundColor = .white // TODO: PK customize
+        /// Cliqz: lumen URL bar design
+        #if PAID
+        locationContainer.backgroundColor = .white
+        #else
+        locationContainer.backgroundColor = .clear
+        #endif
         return locationContainer
     }()
     
@@ -753,12 +758,11 @@ extension URLBarView: Themeable {
 
         cancelTintColor = UIColor.theme.browser.tint
         showQRButtonTintColor = UIColor.theme.browser.tint
-        backgroundColor =  UIColor.clear// UIColor.theme.browser.background // TODO:PK APPLY THEME
-        line.backgroundColor = UIColor.white // UIColor.theme.browser.urlBarDivider // TODO:PK APPLY THEME
+        backgroundColor =  UIColor.URLBar.backgroundColor
+        line.backgroundColor = UIColor.URLBar.deviderColor
 
-        locationBorderColor =  UIColor.white //UIColor.theme.urlbar.border // TODO:PK APPLY THEME
-        locationContainer.layer.shadowColor = UIColor.blue.cgColor // TODO:PK APPLY THEME
-        locationContainer.layer.shadowRadius = 2 // TODO:PK APPLY THEME
+        locationBorderColor =  UIColor.URLBar.borderColor
+        locationContainer.layer.shadowColor = locationBorderColor.cgColor
     }
 }
 
@@ -780,8 +784,8 @@ class TabLocationContainerView: UIView {
     
     private struct LocationContainerUX {
         static let CornerRadius: CGFloat = 4
-        static let ShadowRadius: CGFloat = 4 // TODO: PK APPLY THEME
-        static let ShadowOpacity: Float = 0.5 // TODO: PK APPLY THEME
+        static let ShadowRadius: CGFloat = 4 // TODO:PK APPLY THEME
+        static let ShadowOpacity: Float = 0.5 // TODO:PK APPLY THEME
     }
     
     override init(frame: CGRect) {
@@ -858,9 +862,9 @@ extension ToolbarTextField: Themeable {
         /* Cliqz: Changed background color
         backgroundColor = UIColor.theme.textField.background
          */
-        backgroundColor = UIColor.white //AutocompleteTextField.customBackgroundColor //TODO:PK apply theme
-        textColor = UIColor.black //UIColor.theme.textField.textAndTint // TODO: PK APPLY THEME
-        clearButtonTintColor = UIColor.blue //TODO:PK apply theme
+        backgroundColor = UIColor.URLBar.queryTextFieldBackgroundColor
+        textColor = UIColor.URLBar.queryTextFieldTextColor
+        clearButtonTintColor = UIColor.URLBar.clearButtonColor
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
     }
 

@@ -176,7 +176,14 @@ class TabLocationView: UIView {
     
     lazy var pageOptionsButton: ToolbarButton = {
         let pageOptionsButton = ToolbarButton(frame: .zero)
+
+        /// Cliqz: new lumen design
+        #if PAID
+        pageOptionsButton.setImage(UIImage.templateImageNamed("menu_vertical"), for: .normal)
+        #else
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
+        #endif
+
         pageOptionsButton.addTarget(self, action: #selector(didPressPageOptionsButton), for: .touchUpInside)
         pageOptionsButton.isAccessibilityElement = true
         /* Cliqz: Always display pageOptionsButton
@@ -368,8 +375,8 @@ extension TabLocationView: Themeable {
         /* Cliqz: Moved setting of the backgroundColor to applyUIMode
         backgroundColor = UIColor.theme.textField.background
          */
-        backgroundColor = UIColor.white // TODO:PK apply theme
-        urlTextField.textColor = UIColor.black //UIColor.theme.textField.textAndTint// TODO:PK apply theme
+        urlTextField.textColor = UIColor.URLBar.textColor
+        #if !PAID
         readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
         readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
         
@@ -377,6 +384,15 @@ extension TabLocationView: Themeable {
         pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
         separatorLine.backgroundColor = UIColor.theme.textField.separator
+        #else
+        readerModeButton.selectedTintColor = UIColor.black
+        readerModeButton.unselectedTintColor = UIColor.lumenURLBarPurple
+
+        pageOptionsButton.selectedTintColor = UIColor.black
+        pageOptionsButton.unselectedTintColor = UIColor.lumenURLBarPurple
+        pageOptionsButton.tintColor = UIColor.lumenURLBarPurple
+        separatorLine.backgroundColor = UIColor.lumenURLBarPurple
+        #endif
     }
 }
 

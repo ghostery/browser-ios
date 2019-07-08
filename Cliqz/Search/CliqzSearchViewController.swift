@@ -136,7 +136,6 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 	override func viewDidLoad() {
 		super.viewDidLoad()
         
-        self.view.backgroundColor = .white // TODO:PK apply theme
         self.searchView.backgroundColor = .clear
         self.view.addSubview(backgroundImage)
         self.backgroundImage.snp.makeConstraints { (make) in
@@ -148,7 +147,9 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         }
 
 		KeyboardHelper.defaultHelper.addDelegate(self)
-//        backgroundImage.image = BackgroundImageManager.shared.getImage() // TODO:PK apply theme
+        #if !PAID
+        backgroundImage.image = BackgroundImageManager.shared.getImage()
+        #endif
 
         NotificationCenter.default.addObserver(self, selector: #selector(showOpenSettingsAlert(_:)), name: NSNotification.Name(rawValue: LocationManager.NotificationShowOpenLocationSettingsAlert), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.DeviceOrientationChanged, object: nil)
@@ -230,7 +231,9 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
     }
     
     @objc func orientationDidChange(_ notification: Notification) {
-//        backgroundImage.image = BackgroundImageManager.shared.getImage() // TODO:PK apply theme
+        #if !PAID
+        backgroundImage.image = BackgroundImageManager.shared.getImage()
+        #endif
     }
 }
 

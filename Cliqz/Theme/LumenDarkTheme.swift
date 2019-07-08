@@ -41,8 +41,8 @@ fileprivate class DarkURLBarColor: URLBarColor {
         return !isPrivate ? UIColor.lumenBrightBlue : defaultBackground
     }
     override func textSelectionHighlight(_ isPrivate: Bool) -> TextSelectionHighlight {
-        let color = isPrivate ? UIColor.lumenPurple : UIColor.lumenPurple
-        return (labelMode: color.withAlphaComponent(1), textFieldMode: color)
+        let color = UIColor.lumenURLBarPurple
+        return (labelMode: color.withAlphaComponent(0.6), textFieldMode: color)
         
     }
     override var urlbarButtonTitleText: UIColor { return UIColor.lumenTextBlue }
