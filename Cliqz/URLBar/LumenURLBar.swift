@@ -131,7 +131,7 @@ class LumenURLBar: CliqzURLBar {
 
     override func applyTheme() {
         super.applyTheme()
-        cancelButtonSeparator.backgroundColor = UIColor.blue
+        cancelButtonSeparator.backgroundColor = UIColor.lumenURLBarPurple
     }
 }
 #endif

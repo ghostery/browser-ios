@@ -14,12 +14,21 @@ struct URLBarViewUX {
 
     static let LocationLeftPadding: CGFloat = 8
     static let Padding: CGFloat = 10
-    static let LocationHeight: CGFloat = 35 // TODO:PK customize
-    static let ButtonHeight: CGFloat = 35   // TODO:PK customize
+    #if PAID
+    static let LocationHeight: CGFloat = 35
+    static let ButtonHeight: CGFloat = 35
+    #else
+    static let LocationHeight: CGFloat = 40
+    static let ButtonHeight: CGFloat = 44
+    #endif
     static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 8
     static let TextFieldBorderWidth: CGFloat = 1
-    static let TextFieldBorderWidthSelected: CGFloat = 1 // TODO:PK customize
+    #if PAID
+    static let TextFieldBorderWidthSelected: CGFloat = 1
+    #else
+    static let TextFieldBorderWidthSelected: CGFloat = 4
+    #endif
     static let ProgressBarHeight: CGFloat = 3
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
@@ -784,8 +793,8 @@ class TabLocationContainerView: UIView {
     
     private struct LocationContainerUX {
         static let CornerRadius: CGFloat = 4
-        static let ShadowRadius: CGFloat = 4 // TODO:PK APPLY THEME
-        static let ShadowOpacity: Float = 0.5 // TODO:PK APPLY THEME
+        static let ShadowRadius: CGFloat = 2
+        static let ShadowOpacity: Float = 1 
     }
     
     override init(frame: CGRect) {
