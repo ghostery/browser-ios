@@ -26,10 +26,11 @@
   "dependencies": {
     "@babel/runtime": "^7.2.0",
     "@cliqz/indexeddbshim": "^4.1.2",
+    "@cliqz/url-parser": "^1.0.2",
     "appium": "1.9.0",
     "browser-core": "https://s3.amazonaws.com/cdncliqz/update/edge/cliqz-ios/master/1.38.0.1b131.7bdc200.tgz",
-    "browser-core-cliqz-ios": "https://s3.amazonaws.com/cdncliqz/update/edge/cliqz-ios/master/3.38.0.134.8dba982.tgz",
-    "browser-core-lumen-ios": "https://s3.amazonaws.com/cdncliqz/update/edge/lumen-ios/master/13.39.0.4.2f93d3c.tgz",
+    "browser-core-cliqz-ios": "https://s3.amazonaws.com/cdncliqz/update/edge/cliqz-ios/master/3.39.0.25.4908295.tgz",
+    "browser-core-lumen-ios": "https://s3.amazonaws.com/cdncliqz/update/edge/lumen-ios/master/13.39.0.25.4908295.tgz",
     "buffer": "5.0.7",
     "https-browserify": "1.0.0",
     "page-metadata-parser": "^1.1.2",
