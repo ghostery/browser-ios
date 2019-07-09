@@ -1052,7 +1052,7 @@ class OverviewViewController: UIViewController {
             self.pauseGhosteryButton.backgroundColor = UIColor.cliqzBluePrimary
         }
         else {
-            self.pauseGhosteryButton.setTitle(NSLocalizedString("Pause Ghostery", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Pause Ghostery button title"), for: .normal)
+            self.pauseGhosteryButton.setTitle(NSLocalizedString("Pause", tableName: "Cliqz", comment: "[ControlCenter -> Overview] Pause Ghostery button title"), for: .normal)
             self.pauseGhosteryButton.backgroundColor = UIColor.white
         }
     }
