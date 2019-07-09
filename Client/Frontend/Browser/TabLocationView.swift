@@ -380,7 +380,6 @@ extension TabLocationView: Themeable {
         backgroundColor = UIColor.theme.textField.background
          */
         urlTextField.textColor = UIColor.URLBar.textColor
-        #if !PAID
         readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
         readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
         
@@ -388,15 +387,6 @@ extension TabLocationView: Themeable {
         pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
         separatorLine.backgroundColor = UIColor.theme.textField.separator
-        #else
-        readerModeButton.selectedTintColor = UIColor.black
-        readerModeButton.unselectedTintColor = UIColor.lumenURLBarPurple
-
-        pageOptionsButton.selectedTintColor = UIColor.black
-        pageOptionsButton.unselectedTintColor = UIColor.lumenURLBarPurple
-        pageOptionsButton.tintColor = UIColor.lumenURLBarPurple
-        separatorLine.backgroundColor = UIColor.lumenURLBarPurple
-        #endif
     }
 }
 

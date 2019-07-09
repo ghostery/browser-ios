@@ -917,20 +917,21 @@ class BrowserViewController: UIViewController {
         searchLoader!.addListener(HistoryListener.shared)
         
         if SettingsPrefs.shared.getCliqzSearchPref() {
+            homePanelController?.view?.isHidden = true
+
             cliqzSearchController = CliqzSearchViewController(profile: self.profile)
+            cliqzSearchController!.view.frame = CGRect.zero
             cliqzSearchController!.delegate = self
-            
+
             //remove seachController
             searchController?.willMove(toParentViewController: nil)
             searchController?.view.removeFromSuperview()
             searchController?.removeFromParentViewController()
             self.searchController = nil
-            
+
             addChildViewController(cliqzSearchController!)
 
-            UIView.transition(with: self.view, duration: 0.5, options: .curveEaseInOut, animations: {
-                self.view.addSubview(self.cliqzSearchController!.view)
-            }, completion: nil)
+            self.view.addSubview(self.cliqzSearchController!.view)
 
             cliqzSearchController!.view.snp.makeConstraints { make in
                 /* Cliqz: added offset to hide the white line in top of the search view in iPhoneX
@@ -952,8 +953,6 @@ class BrowserViewController: UIViewController {
             #if PAID
             view.bringSubview(toFront: header)
             #endif
-            
-            homePanelController?.view?.isHidden = true
             
             cliqzSearchController!.didMove(toParentViewController: self)
             

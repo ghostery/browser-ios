@@ -129,9 +129,15 @@ class LumenURLBar: CliqzURLBar {
         vpnAccessButton.alpha = inOverlayMode ? 0 : 1
     }
 
-    override func applyTheme() {
-        super.applyTheme()
-        cancelButtonSeparator.backgroundColor = UIColor.lumenURLBarPurple
+    override func applyUIMode(isPrivate: Bool) {
+        super.applyUIMode(isPrivate: isPrivate)
+        self.locationContainer.layer.borderWidth = isPrivate ? 0 : 0.1
+        self.locationContainer.backgroundColor = isPrivate ? .privateURLBarBackground : .white
+        self.cancelButton.backgroundColor = isPrivate ? .privateURLBarBackground : .white
+        let titleColor = isPrivate ? .white : UIColor.theme.urlbar.urlbarButtonTitleText
+        self.cancelButton.setTitleColor(titleColor, for: [])
+        cancelButtonSeparator.backgroundColor = isPrivate ? .white : UIColor.lumenURLBarPurple
     }
+
 }
 #endif

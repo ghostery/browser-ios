@@ -43,7 +43,9 @@ extension UIColor {
 	static let lumenTextBlue = UIColor(rgb: 0x3987FF)
     static let lumenURLBarBlue = UIColor(rgb: 0x3647D0)
     static let lumenURLBarPurple = UIColor(rgb: 0xACADFF)
+    static let privateURLBarBackground = UIColor(colorString: "3D3F4E")
 
+    // TODO: Theming approach should be reworked as there are many different approaches taken currently
     struct URLBar {
         static var lockIconColor: UIColor {
             #if PAID
@@ -56,6 +58,14 @@ extension UIColor {
         static var textColor: UIColor {
             #if PAID
             return UIColor.black
+            #else
+            return UIColor.theme.textField.textAndTint
+            #endif
+        }
+
+        static var privateTabTintColor: UIColor {
+            #if PAID
+            return UIColor.white
             #else
             return UIColor.theme.textField.textAndTint
             #endif

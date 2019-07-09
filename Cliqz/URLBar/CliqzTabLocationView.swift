@@ -97,5 +97,27 @@ class CliqzTabLocationView: TabLocationView {
 extension TabLocationView: PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         backgroundColor = UIColor.theme.textField.background(isPrivate)
+        urlTextField.textColor = isPrivate ? UIColor.URLBar.privateTabTintColor : UIColor.URLBar.textColor
+        lockImageView.tintColor = isPrivate ? UIColor.URLBar.privateTabTintColor : UIColor.URLBar.lockIconColor
+
+        #if PAID
+        if !isPrivate {
+            readerModeButton.selectedTintColor = UIColor.black
+            readerModeButton.unselectedTintColor = UIColor.lumenURLBarPurple
+
+            pageOptionsButton.selectedTintColor = UIColor.black
+            pageOptionsButton.unselectedTintColor = UIColor.lumenURLBarPurple
+            pageOptionsButton.tintColor = UIColor.lumenURLBarPurple
+            separatorLine.backgroundColor = UIColor.lumenURLBarPurple
+        } else {
+            readerModeButton.selectedTintColor = UIColor.lumenURLBarPurple
+            readerModeButton.unselectedTintColor = UIColor.URLBar.privateTabTintColor
+
+            pageOptionsButton.selectedTintColor = UIColor.lumenURLBarPurple
+            pageOptionsButton.unselectedTintColor = UIColor.URLBar.privateTabTintColor
+            pageOptionsButton.tintColor = UIColor.URLBar.privateTabTintColor
+            separatorLine.backgroundColor = UIColor.URLBar.privateTabTintColor
+        }
+        #endif
     }
 }

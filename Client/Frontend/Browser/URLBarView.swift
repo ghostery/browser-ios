@@ -122,12 +122,6 @@ class URLBarView: UIView {
         locationContainer.layer.shadowColor = self.locationBorderColor.cgColor
         locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
         locationContainer.layer.borderColor = self.locationBorderColor.cgColor
-        /// Cliqz: lumen URL bar design
-        #if PAID
-        locationContainer.backgroundColor = .white
-        #else
-        locationContainer.backgroundColor = .clear
-        #endif
         return locationContainer
     }()
     
@@ -824,6 +818,8 @@ class TabLocationContainerView: UIView {
 
 class ToolbarTextField: AutocompleteTextField {
 
+    static var isPrivate: Bool = false
+
     @objc dynamic var clearButtonTintColor: UIColor? {
         didSet {
             // Clear previous tinted image that's cache and ask for a relayout
@@ -874,11 +870,21 @@ extension ToolbarTextField: Themeable {
         backgroundColor = UIColor.URLBar.queryTextFieldBackgroundColor
         textColor = UIColor.URLBar.queryTextFieldTextColor
         clearButtonTintColor = UIColor.URLBar.clearButtonColor
+
+        #if PAID
+        if ToolbarTextField.isPrivate {
+            backgroundColor = UIColor.privateURLBarBackground
+            textColor = UIColor.URLBar.privateTabTintColor
+            clearButtonTintColor = UIColor.URLBar.privateTabTintColor
+        }
+        #endif
+
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
     }
 
     // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
     static func applyUIMode(isPrivate: Bool) {
+        ToolbarTextField.isPrivate = isPrivate
         textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate)
         // Cliqz: set the customBackgroundColor
         customBackgroundColor = UIColor.theme.textField.background(isPrivate)
