@@ -286,6 +286,7 @@ extension CliqzSearchViewController {
     }
 
     fileprivate func showLumenSearchLeavingWarning(url: URL) {
+        LegacyTelemetryHelper.logLumenSearchWarning(action: "show")
         UserPreferences.instance.shouldShowNonPrivateSearchWarningMessage = false
         let title = NSLocalizedString("You are leaving the anonymous search", comment: "In other search engines searching alert title")
         var localizedMessage = NSLocalizedString("Your query will be sent to", comment: "In other search engines searching alert message")
@@ -293,8 +294,11 @@ extension CliqzSearchViewController {
             localizedMessage = "\(localizedMessage) \(host)"
         }
         let alertController = UIAlertController (title: title, message: localizedMessage, preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Back", comment: "In other search engines searching alert back button title"), style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Back", comment: "In other search engines searching alert back button title"), style: .cancel) { (_) in
+            LegacyTelemetryHelper.logLumenSearchWarning(action: "click", target: "back")
+        }
         let continueAction = UIAlertAction(title: NSLocalizedString("Continue", comment: "In other search engines searching alert continue button title"), style: .default) { (_) in
+            LegacyTelemetryHelper.logLumenSearchWarning(action: "click", target: "continue")
             if !self.inSelectionMode {
                 self.delegate?.didSelectURL(url, searchQuery: self.searchQuery)
             } else {
