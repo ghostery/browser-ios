@@ -575,11 +575,6 @@ class BrowserViewController: UIViewController {
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
-		//Cliqz: Open new tab and show update info page first time after update
-		#if CLIQZ
-		self.showCliqzUpdateInfoPageFirstTime()
-		#endif
-		//Cliqz: end
     }
 
     fileprivate func crashedLastLaunch() -> Bool {
@@ -635,6 +630,11 @@ class BrowserViewController: UIViewController {
         }
         showQueuedAlertIfAvailable()
 
+        //Cliqz: Open new tab and show update info page first time after update
+        #if CLIQZ
+        self.showCliqzUpdateInfoPageFirstTime()
+        #endif
+        //Cliqz: end
     }
 
     // THe logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in
@@ -2287,7 +2287,14 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController: IntroViewControllerDelegate {
+    /// Needs documentation: What does the return value mean? 
     @discardableResult func presentIntroViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
+        //Cliqz: This is temporary. We should remove this once we have an Intro.
+        if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
+            self.launchFxAFromDeeplinkURL(url)
+            return true
+        }
+
 		// Cliqz: Don't show onboarding for Cliqz for now
 		#if CLIQZ
         // Setup Default Blocking Settings
@@ -2298,12 +2305,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
 		return false
 		#endif
         // End Cliqz
-
-        //Cliqz: This is temporary. We should remove this once we have an Intro.        
-        if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
-            self.launchFxAFromDeeplinkURL(url)
-            return true
-        }
 
         if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
 		#if PAID
