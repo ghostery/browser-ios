@@ -52,6 +52,7 @@ extension Notification.Name {
 
     let IsDeveloperModeOnKey = "IsDeveloperModeOnKey"
     let ShowPromoCodeKey = "ShowPromoCodeKey"
+    let ShowNonPrivateSearchWarningKey = "ShowPromoCodeKey"
 
     /// If `true`, send a `developer` flag in the telemetry data.
     ///
@@ -82,6 +83,19 @@ extension Notification.Name {
         }
         set {
             userDefaults().set(newValue, forKey: ShowPromoCodeKey)
+        }
+    }
+
+    var shouldShowNonPrivateSearchWarningMessage: Bool {
+        get {
+            if let val = userDefaults().value(forKey: ShowNonPrivateSearchWarningKey) as? Bool {
+                return val
+            }
+
+            return true
+        }
+        set {
+            userDefaults().set(newValue, forKey: ShowNonPrivateSearchWarningKey)
         }
     }
     

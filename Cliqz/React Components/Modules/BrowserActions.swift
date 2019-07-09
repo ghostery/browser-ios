@@ -19,7 +19,7 @@ class BrowserActions: RCTEventEmitter {
     @objc(openLink:query:isSearchEngine:)
     public func openLink(url: NSString, query: NSString, isSearchEngine: Bool) {
         DispatchQueue.main.async {
-            NotificationCenter.default.post(name: OpenUrlSearchNotification, object: url, userInfo: nil)
+            NotificationCenter.default.post(name: OpenUrlSearchNotification, object: url, userInfo: [OpenURLIsSearchEngineKey: isSearchEngine])
         }
     }
 
