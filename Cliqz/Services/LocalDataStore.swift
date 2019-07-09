@@ -15,9 +15,18 @@ class LocalDataStore {
         defaults.set(value, forKey: forKey)
         defaults.synchronize()
     }
+
+    class func set(integer: Int, forKey: String) {
+        defaults.set(integer, forKey: forKey)
+        defaults.synchronize()
+    }
     
     class func value(forKey: String) -> Any? {
         return defaults.value(forKey: forKey) as Any?
+    }
+
+    class func integer(forKey: String) -> Int? {
+        return defaults.integer(forKey: forKey)
     }
     
     class func removeObject(forKey: String) {

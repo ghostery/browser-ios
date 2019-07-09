@@ -31,14 +31,14 @@ extension BrowserViewController {
 	}
 
 	private func isUpdateInfoPageSeen() -> Bool {
-		if let _ = LocalDataStore.value(forKey: BrowserViewController.updateSeenKey) {
+		if let updateSeen = LocalDataStore.integer(forKey: BrowserViewController.updateSeenKey), updateSeen == 1 {
 			return true
 		}
 		return false
 	}
 
 	private func markUpdateInfoPageSeen() {
-		LocalDataStore.set(value: true, forKey: BrowserViewController.updateSeenKey)
+		LocalDataStore.set(integer: 1, forKey: BrowserViewController.updateSeenKey)
 	}
 
 }
