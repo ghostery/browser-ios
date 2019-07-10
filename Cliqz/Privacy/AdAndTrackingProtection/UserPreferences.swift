@@ -52,7 +52,7 @@ extension Notification.Name {
 
     let IsDeveloperModeOnKey = "IsDeveloperModeOnKey"
     let ShowPromoCodeKey = "ShowPromoCodeKey"
-    let ShowNonPrivateSearchWarningKey = "ShowPromoCodeKey"
+    let ShowNonPrivateSearchWarningKey = "ShowNonPrivateSearchWarningKey"
 
     /// If `true`, send a `developer` flag in the telemetry data.
     ///
