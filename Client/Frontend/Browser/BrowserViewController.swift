@@ -920,7 +920,6 @@ class BrowserViewController: UIViewController {
             homePanelController?.view?.isHidden = true
 
             cliqzSearchController = CliqzSearchViewController(profile: self.profile)
-            cliqzSearchController!.view.frame = CGRect.zero
             cliqzSearchController!.delegate = self
 
             //remove seachController
@@ -948,12 +947,14 @@ class BrowserViewController: UIViewController {
                 #endif
                 return
             }
-            
+
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
             /* Cliqz: Lumen new design. Bringig header on top of search */
             #if PAID
             view.bringSubview(toFront: header)
             #endif
-            
+
             cliqzSearchController!.didMove(toParentViewController: self)
             
             if let tab = tabManager.selectedTab {
