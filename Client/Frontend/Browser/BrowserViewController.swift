@@ -815,25 +815,28 @@ class BrowserViewController: UIViewController {
         }
         homePanelController.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
 
+        #if PAID
+        homePanelController.view.alpha = 1
+        self.webViewContainer.accessibilityElementsHidden = true
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+        //Cliqz: Hide the webView
+        self.hideWebview()
+        //end
+        // Cliqz: update URLBar State
+        self.urlBar.updateDashboardButtonState(.empty)
+        #else
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
-        UIView.animate(withDuration: 0.2, animations: { () -> Void in
+        UIView.animate(withDuration: 1, animations: { () -> Void in
             homePanelController.view.alpha = 1
         }, completion: { finished in
             if finished {
                 self.webViewContainer.accessibilityElementsHidden = true
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             }
-            //Cliqz: Hide the webView
-            #if PAID
-            self.hideWebview()
-            #endif
-            //end
-			// Cliqz: update URLBar State
-			#if PAID
-			self.urlBar.updateDashboardButtonState(.empty)
-			#endif
         })
+        #endif
+
         view.setNeedsUpdateConstraints()
         
         // Cliqz: Send Notification
@@ -846,8 +849,9 @@ class BrowserViewController: UIViewController {
             UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { [unowned self] () -> Void in
                 #if PAID
                 self.showWebview()
-                #endif
+                #else
                 controller.view.alpha = 0
+                #endif
             }, completion: { _ in
                 controller.willMove(toParentViewController: nil)
                 controller.view.removeFromSuperview()
