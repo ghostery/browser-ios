@@ -7,6 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 
+let LumenSearchEngineDisplayName = "Lumen"
 private let log = Logger.browserLogger
 
 private let OrderedEngineNames = "search.orderedEngineNames"

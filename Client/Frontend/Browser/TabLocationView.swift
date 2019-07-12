@@ -108,14 +108,19 @@ class TabLocationView: UIView {
         }
     }
 
-    lazy var placeholder: NSAttributedString = {
+    var placeholder: NSAttributedString  {
         #if PAID
-        let placeholderText = NSLocalizedString("Search anonymously", comment: "The text shown in the URL bar on about:home")
+        let placeholderText: String!
+        if SettingsPrefs.shared.isLumenDefaultSearchEngine {
+            placeholderText = NSLocalizedString("Search anonymously", comment: "The text shown in the URL bar on about:home")
+        } else {
+            placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
+        }
         #else
         let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
         #endif
         return NSAttributedString(string: placeholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.Photon.Grey40])
-    }()
+    }
 
     lazy var urlTextField: UITextField = {
         let urlTextField = DisplayTextField()

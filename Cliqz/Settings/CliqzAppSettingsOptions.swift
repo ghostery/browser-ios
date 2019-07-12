@@ -110,7 +110,15 @@ class ComplementarySearchSetting: Setting, SearchEnginePickerDelegate {
         // Order alphabetically, so that picker is always consistently ordered.
         // Every engine is a valid choice for the default engine, even the current default engine.
         let searchEngines = profile.searchEngines
-        searchEnginePicker.engines = searchEngines.orderedEngines.sorted { e, f in e.shortName < f.shortName }
+        var models = searchEngines.orderedEngines.sorted { e, f in e.shortName < f.shortName }
+        if let lumenSearch = models.filter({ $0.shortName == LumenSearchEngineDisplayName }).first {
+            if let index = models.index(of:lumenSearch) {
+                models.remove(at: index)
+            }
+            models.insert(lumenSearch, at: 0)
+        }
+        searchEnginePicker.engines = models
+        
         searchEnginePicker.delegate = self
         searchEnginePicker.selectedSearchEngineName = searchEngines.defaultEngine.shortName
         navigationController?.pushViewController(searchEnginePicker, animated: true)
