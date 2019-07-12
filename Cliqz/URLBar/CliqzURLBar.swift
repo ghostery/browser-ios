@@ -50,16 +50,19 @@ class CliqzURLBar: URLBarView {
     let ghostyHeight = 54.0
     let ghostyWidth = 54.0
     #endif
-    
-    private lazy var _cancelButton: UIButton = {
+
+    public func createCancelButton() -> UIButton {
         let cancelButton = InsetButton()
-        //cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.setTitle(NSLocalizedString("Cancel", tableName: "Cliqz", comment: "Cancel button title in the urlbar"), for: .normal)
         cancelButton.setTitleColor(UIColor.cliqzBlueTwoSecondary, for: UIControlState.highlighted)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
+    }
+
+    private lazy var _cancelButton: UIButton = {
+        return self.createCancelButton()
     }()
     
     override var cancelButton: UIButton {
@@ -94,6 +97,15 @@ class CliqzURLBar: URLBarView {
         debugPrint("pressed ghosty")
         NotificationCenter.default.post(name: Notification.Name.GhosteryButtonPressed, object: self.currentURL?.absoluteString)
     }
+
+    func setupCancelButtonConstraints() {
+        cancelButton.snp.makeConstraints { make in
+            make.trailing.equalTo(self.safeArea.trailing).inset(10)
+            make.centerY.equalTo(self.locationContainer)
+            make.width.equalTo(self.cancelButton.intrinsicContentSize.width)
+            make.height.equalTo(URLBarViewUX.ButtonHeight)
+        }
+    }
     
     override func setupConstraints() {
         
@@ -121,12 +133,7 @@ class CliqzURLBar: URLBarView {
             make.edges.equalTo(self.locationContainer)
         }
         
-        cancelButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.safeArea.trailing).inset(10)
-            make.centerY.equalTo(self.locationContainer)
-            make.width.equalTo(self.cancelButton.intrinsicContentSize.width)
-            make.height.equalTo(URLBarViewUX.ButtonHeight)
-        }
+        self.setupCancelButtonConstraints()
         
         backButton.snp.makeConstraints { make in
             make.leading.equalTo(self.safeArea.leading).offset(URLBarViewUX.Padding)
@@ -188,12 +195,9 @@ class CliqzURLBar: URLBarView {
         super.transitionToOverlay()
         dashboardButton.alpha = inOverlayMode ? 0 : 1
     }
-    
-    override func updateConstraints() {
-        super.updateConstraints()
-        if inOverlayMode {
-            // In overlay mode, we always show the location view full width
-            self.locationContainer.layer.borderWidth = UXOverrides.TextFieldBorderWidthSelected
+
+    func layoutLocationContainer(inOverlay: Bool) {
+        if inOverlay {
             self.locationContainer.snp.remakeConstraints { make in
                 let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
                 make.height.equalTo(height)
@@ -201,25 +205,8 @@ class CliqzURLBar: URLBarView {
                 make.leading.equalTo(self.safeArea.leading).offset(10)
                 make.centerY.equalTo(self)
             }
-            self.locationView.snp.remakeConstraints { make in
-                make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: UXOverrides.TextFieldBorderWidthSelected))
-            }
-            self.locationTextField?.snp.remakeConstraints { make in
-                make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
-            }
+            self.locationContainer.layer.borderWidth = UXOverrides.TextFieldBorderWidthSelected
         } else {
-            self.dashboardButton.snp.remakeConstraints { (make) in
-                if self.toolbarIsShowing {
-                    make.trailing.equalTo(self.menuButton.snp.leading)
-                }
-                else {
-                    make.trailing.equalTo(self.safeArea.trailing)//.offset(-URLBarViewUX.Padding)
-                }
-                make.width.equalTo(ghostyWidth)
-                make.height.equalTo(ghostyHeight)
-                make.centerY.equalTo(self)
-            }
-            
             self.locationContainer.snp.remakeConstraints { make in
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
@@ -233,6 +220,37 @@ class CliqzURLBar: URLBarView {
                 make.centerY.equalTo(self)
             }
             self.locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
+        }
+    }
+
+    func layoutLocationTextField() {
+        self.locationTextField?.snp.remakeConstraints { make in
+            make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
+        }
+    }
+    
+    override func updateConstraints() {
+        super.updateConstraints()
+        if inOverlayMode {
+            // In overlay mode, we always show the location view full width
+            self.layoutLocationContainer(inOverlay: true)
+            self.locationView.snp.remakeConstraints { make in
+                make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: UXOverrides.TextFieldBorderWidthSelected))
+            }
+            self.layoutLocationTextField()
+        } else {
+            self.dashboardButton.snp.remakeConstraints { (make) in
+                if self.toolbarIsShowing {
+                    make.trailing.equalTo(self.menuButton.snp.leading)
+                }
+                else {
+                    make.trailing.equalTo(self.safeArea.trailing)//.offset(-URLBarViewUX.Padding)
+                }
+                make.width.equalTo(ghostyWidth)
+                make.height.equalTo(ghostyHeight)
+                make.centerY.equalTo(self)
+            }
+            self.layoutLocationContainer(inOverlay: false)
             self.locationView.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationContainer).inset(UIEdgeInsets(equalInset: URLBarViewUX.TextFieldBorderWidth))
             }

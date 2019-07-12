@@ -52,6 +52,8 @@ class BrowserViewController: UIViewController {
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
     var statusBarOverlay: UIView!
+    /* Cliqz: background cover for notch */
+    let notchAreaCover = UIView()
     fileprivate(set) var toolbar: TabToolbar?
     /* Cliqz: Replace Search Controller with Firefox Search Controller
     var searchController: SearchViewController?
@@ -366,6 +368,10 @@ class BrowserViewController: UIViewController {
 
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
+        /* Cliqz: background cover for notch */
+        #if PAID
+        view.addSubview(notchAreaCover)
+        #endif
 
         // Temporary work around for covering the non-clipped web view content
         statusBarOverlay = UIView()
@@ -478,6 +484,15 @@ class BrowserViewController: UIViewController {
             scrollController.headerTopConstraint = make.top.equalTo(self.topLayoutGuide.snp.bottom).constraint
             make.left.right.equalTo(self.view)
         }
+
+        /* Cliqz: background cover for notch */
+        #if PAID
+        notchAreaCover.snp.makeConstraints { (make) in
+            make.topMargin.equalTo(self.view.safeAreaLayoutGuide.snp.topMargin)
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.header.snp.bottom)
+        }
+        #endif
 
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer)
@@ -800,25 +815,28 @@ class BrowserViewController: UIViewController {
         }
         homePanelController.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
 
+        #if PAID
+        homePanelController.view.alpha = 1
+        self.webViewContainer.accessibilityElementsHidden = true
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+        //Cliqz: Hide the webView
+        self.hideWebview()
+        //end
+        // Cliqz: update URLBar State
+        self.urlBar.updateDashboardButtonState(.empty)
+        #else
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
-        UIView.animate(withDuration: 0.2, animations: { () -> Void in
+        UIView.animate(withDuration: 1, animations: { () -> Void in
             homePanelController.view.alpha = 1
         }, completion: { finished in
             if finished {
                 self.webViewContainer.accessibilityElementsHidden = true
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             }
-            //Cliqz: Hide the webView
-            #if PAID
-            self.hideWebview()
-            #endif
-            //end
-			// Cliqz: update URLBar State
-			#if PAID
-			self.urlBar.updateDashboardButtonState(.empty)
-			#endif
         })
+        #endif
+
         view.setNeedsUpdateConstraints()
         
         // Cliqz: Send Notification
@@ -831,8 +849,9 @@ class BrowserViewController: UIViewController {
             UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { [unowned self] () -> Void in
                 #if PAID
                 self.showWebview()
-                #endif
+                #else
                 controller.view.alpha = 0
+                #endif
             }, completion: { _ in
                 controller.willMove(toParentViewController: nil)
                 controller.view.removeFromSuperview()
@@ -902,29 +921,44 @@ class BrowserViewController: UIViewController {
         searchLoader!.addListener(HistoryListener.shared)
         
         if SettingsPrefs.shared.getCliqzSearchPref() {
+            homePanelController?.view?.isHidden = true
+
             cliqzSearchController = CliqzSearchViewController(profile: self.profile)
             cliqzSearchController!.delegate = self
-            
+
             //remove seachController
             searchController?.willMove(toParentViewController: nil)
             searchController?.view.removeFromSuperview()
             searchController?.removeFromParentViewController()
             self.searchController = nil
-            
+
             addChildViewController(cliqzSearchController!)
-            
-            view.addSubview(cliqzSearchController!.view)
+
+            self.view.addSubview(self.cliqzSearchController!.view)
+
             cliqzSearchController!.view.snp.makeConstraints { make in
                 /* Cliqz: added offset to hide the white line in top of the search view in iPhoneX
                 make.top.equalTo(self.urlBar.snp.bottom)
                 */
+                #if PAID
+                make.top.equalTo(self.urlBar.snp.bottom).offset(-18)
+                make.leading.equalTo(self.urlBar.locationContainer.snp.leading)
+                make.trailing.equalTo(self.urlBar.locationContainer.snp.trailing)
+                make.bottom.equalTo(self.view)
+                #else
                 make.top.equalTo(self.urlBar.snp.bottom).offset(-1)
                 make.left.right.bottom.equalTo(self.view)
+                #endif
                 return
             }
-            
-            homePanelController?.view?.isHidden = true
-            
+
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+            /* Cliqz: Lumen new design. Bringig header on top of search */
+            #if PAID
+            view.bringSubview(toFront: header)
+            #endif
+
             cliqzSearchController!.didMove(toParentViewController: self)
             
             if let tab = tabManager.selectedTab {
@@ -1664,7 +1698,11 @@ extension BrowserViewController: URLBarDelegate {
         // We couldn't build a URL, so check for a matching search keyword.
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard let possibleKeywordQuerySeparatorSpace = trimmedText.index(of: " ") else {
+            #if PAID
+            urlBar.locationTextField?.resignFirstResponder()
+            #else
             submitSearchText(text, forTab: currentTab)
+            #endif
             return
         }
 
@@ -2784,6 +2822,7 @@ extension BrowserViewController: Themeable {
 
         // Cliqz - change color of status bar overlay
         statusBarOverlay.backgroundColor = urlBar.backgroundColor
+        notchAreaCover.backgroundColor = UIColor.theme.browser.background
     }
 }
 

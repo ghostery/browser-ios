@@ -14,12 +14,21 @@ struct URLBarViewUX {
 
     static let LocationLeftPadding: CGFloat = 8
     static let Padding: CGFloat = 10
+    #if PAID
+    static let LocationHeight: CGFloat = 35
+    static let ButtonHeight: CGFloat = 35
+    #else
     static let LocationHeight: CGFloat = 40
     static let ButtonHeight: CGFloat = 44
+    #endif
     static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 8
     static let TextFieldBorderWidth: CGFloat = 1
+    #if PAID
+    static let TextFieldBorderWidthSelected: CGFloat = 1
+    #else
     static let TextFieldBorderWidthSelected: CGFloat = 4
+    #endif
     static let ProgressBarHeight: CGFloat = 3
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
@@ -113,11 +122,13 @@ class URLBarView: UIView {
         locationContainer.layer.shadowColor = self.locationBorderColor.cgColor
         locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
         locationContainer.layer.borderColor = self.locationBorderColor.cgColor
-        locationContainer.backgroundColor = .clear
         return locationContainer
     }()
     
     let line = UIView()
+
+    /* Cliqz: text filed and cancel button separator */
+    let cancelButtonSeparator = UIView()
 
     /* Cliqz: replaced TabsButton with CliqzTabsButton which has icon and no counter
     lazy var tabsButton: TabsButton = {
@@ -222,8 +233,8 @@ class URLBarView: UIView {
     func commonInit() {
         locationContainer.addSubview(locationView)
 
-        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         menuButton, forwardButton, backButton, stopReloadButton, locationContainer, privateModeBadge].forEach {
+        [scrollToTopButton, line, tabsButton, progressBar, showQRScannerButton,
+         menuButton, forwardButton, backButton, stopReloadButton, locationContainer, cancelButton, cancelButtonSeparator, privateModeBadge].forEach {
             addSubview($0)
         }
 
@@ -483,7 +494,18 @@ class URLBarView: UIView {
     func prepareOverlayAnimation() {
         // Make sure everything is showing during the transition (we'll hide it afterwards).
         bringSubview(toFront: self.locationContainer)
+
+        /* Cliqz: Lumen design */
+        #if PAID
+        bringSubview(toFront: cancelButton)
+        bringSubview(toFront: cancelButtonSeparator)
+        #endif
+
         cancelButton.isHidden = false
+
+        /* Cliqz: Lumen design */
+        cancelButtonSeparator.isHidden = cancelButton.isHidden
+
         showQRScannerButton.isHidden = false
         progressBar.isHidden = false
         menuButton.isHidden = !toolbarIsShowing
@@ -522,6 +544,8 @@ class URLBarView: UIView {
 
     func updateViewsForOverlayModeAndToolbarChanges() {
         cancelButton.isHidden = !inOverlayMode
+        /* Cliqz: Lumen design */
+        cancelButtonSeparator.isHidden = cancelButton.isHidden
         showQRScannerButton.isHidden = !inOverlayMode
         progressBar.isHidden = inOverlayMode
         menuButton.isHidden = !toolbarIsShowing || inOverlayMode
@@ -542,6 +566,8 @@ class URLBarView: UIView {
 
         if !overlay {
             removeLocationTextField()
+            /* Cliqz: Lumen design */
+            cancelButtonSeparator.isHidden = true
         }
 
         UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: {
@@ -735,10 +761,10 @@ extension URLBarView: Themeable {
 
         cancelTintColor = UIColor.theme.browser.tint
         showQRButtonTintColor = UIColor.theme.browser.tint
-        backgroundColor = UIColor.theme.browser.background
-        line.backgroundColor = UIColor.theme.browser.urlBarDivider
+        backgroundColor =  UIColor.URLBar.backgroundColor
+        line.backgroundColor = UIColor.URLBar.deviderColor
 
-        locationBorderColor = UIColor.theme.urlbar.border
+        locationBorderColor =  UIColor.URLBar.borderColor
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
     }
 }
@@ -762,7 +788,7 @@ class TabLocationContainerView: UIView {
     private struct LocationContainerUX {
         static let CornerRadius: CGFloat = 4
         static let ShadowRadius: CGFloat = 2
-        static let ShadowOpacity: Float = 1
+        static let ShadowOpacity: Float = 1 
     }
     
     override init(frame: CGRect) {
@@ -791,6 +817,8 @@ class TabLocationContainerView: UIView {
 }
 
 class ToolbarTextField: AutocompleteTextField {
+
+    static var isPrivate: Bool = false
 
     @objc dynamic var clearButtonTintColor: UIColor? {
         didSet {
@@ -839,14 +867,24 @@ extension ToolbarTextField: Themeable {
         /* Cliqz: Changed background color
         backgroundColor = UIColor.theme.textField.background
          */
-        backgroundColor = AutocompleteTextField.customBackgroundColor
-        textColor = UIColor.theme.textField.textAndTint
-        clearButtonTintColor = textColor
+        backgroundColor = UIColor.URLBar.queryTextFieldBackgroundColor
+        textColor = UIColor.URLBar.queryTextFieldTextColor
+        clearButtonTintColor = UIColor.URLBar.clearButtonColor
+
+        #if PAID
+        if ToolbarTextField.isPrivate {
+            backgroundColor = UIColor.privateURLBarBackground
+            textColor = UIColor.URLBar.privateTabTintColor
+            clearButtonTintColor = UIColor.URLBar.privateTabTintColor
+        }
+        #endif
+
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
     }
 
     // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
     static func applyUIMode(isPrivate: Bool) {
+        ToolbarTextField.isPrivate = isPrivate
         textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate)
         // Cliqz: set the customBackgroundColor
         customBackgroundColor = UIColor.theme.textField.background(isPrivate)

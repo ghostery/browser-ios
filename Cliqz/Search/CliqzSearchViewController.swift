@@ -30,6 +30,7 @@ protocol SearchViewDelegate: class {
 	func dismissKeyboard()
 }
 
+let OpenURLIsSearchEngineKey = "OpenURLIsSearchEngineKey"
 let OpenUrlSearchNotification = NSNotification.Name(rawValue: "mobile-search:openUrl")
 let CopyValueSearchNotification = NSNotification.Name(rawValue: "mobile-search:copyValue")
 let HideKeyboardSearchNotification = NSNotification.Name(rawValue: "mobile-search:hideKeyboard")
@@ -136,7 +137,6 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 	override func viewDidLoad() {
 		super.viewDidLoad()
         
-        self.view.backgroundColor = .clear
         self.searchView.backgroundColor = .clear
         self.view.addSubview(backgroundImage)
         self.backgroundImage.snp.makeConstraints { (make) in
@@ -148,8 +148,10 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         }
 
 		KeyboardHelper.defaultHelper.addDelegate(self)
+        #if !PAID
         backgroundImage.image = BackgroundImageManager.shared.getImage()
-        
+        #endif
+
         NotificationCenter.default.addObserver(self, selector: #selector(showOpenSettingsAlert(_:)), name: NSNotification.Name(rawValue: LocationManager.NotificationShowOpenLocationSettingsAlert), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: Notification.Name.DeviceOrientationChanged, object: nil)
     }
@@ -230,7 +232,9 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
     }
     
     @objc func orientationDidChange(_ notification: Notification) {
+        #if !PAID
         backgroundImage.image = BackgroundImageManager.shared.getImage()
+        #endif
     }
 }
 
@@ -241,6 +245,14 @@ extension CliqzSearchViewController {
     @objc func didSelectUrl(_ notification: Notification) {
         if let url_str = notification.object as? NSString, let encodedString = url_str.addingPercentEncoding(
             withAllowedCharacters: NSCharacterSet.urlFragmentAllowed), let url = URL(string: encodedString as String) {
+            #if PAID
+            if UserPreferences.instance.shouldShowNonPrivateSearchWarningMessage, let _ = notification.userInfo?[OpenURLIsSearchEngineKey] {
+                self.showLumenSearchLeavingWarning(url: url)
+                return
+            }
+            #endif
+
+
             if !inSelectionMode {
                 delegate?.didSelectURL(url, searchQuery: self.searchQuery)
             } else {
@@ -271,6 +283,31 @@ extension CliqzSearchViewController {
     
     @objc func shareLocation(_ notification: Notification) {
         LocationManager.sharedInstance.shareLocation()
+    }
+
+    fileprivate func showLumenSearchLeavingWarning(url: URL) {
+        LegacyTelemetryHelper.logLumenSearchWarning(action: "show")
+        UserPreferences.instance.shouldShowNonPrivateSearchWarningMessage = false
+        let title = NSLocalizedString("You are leaving the anonymous search", comment: "In other search engines searching alert title")
+        var localizedMessage = NSLocalizedString("Your query will be sent to", comment: "In other search engines searching alert message")
+        if let host = url.host {
+            localizedMessage = "\(localizedMessage) \(host)"
+        }
+        let alertController = UIAlertController (title: title, message: localizedMessage, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Back", comment: "In other search engines searching alert back button title"), style: .cancel) { (_) in
+            LegacyTelemetryHelper.logLumenSearchWarning(action: "click", target: "back")
+        }
+        let continueAction = UIAlertAction(title: NSLocalizedString("Continue", comment: "In other search engines searching alert continue button title"), style: .default) { (_) in
+            LegacyTelemetryHelper.logLumenSearchWarning(action: "click", target: "continue")
+            if !self.inSelectionMode {
+                self.delegate?.didSelectURL(url, searchQuery: self.searchQuery)
+            } else {
+                self.inSelectionMode = false
+            }
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(continueAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     fileprivate func callPhoneNumber(_ phoneNumber: String) {

@@ -109,7 +109,11 @@ class TabLocationView: UIView {
     }
 
     lazy var placeholder: NSAttributedString = {
+        #if PAID
+        let placeholderText = NSLocalizedString("Search anonymously", comment: "The text shown in the URL bar on about:home")
+        #else
         let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
+        #endif
         return NSAttributedString(string: placeholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.Photon.Grey40])
     }()
 
@@ -176,7 +180,14 @@ class TabLocationView: UIView {
     
     lazy var pageOptionsButton: ToolbarButton = {
         let pageOptionsButton = ToolbarButton(frame: .zero)
+
+        /// Cliqz: new lumen design
+        #if PAID
+        pageOptionsButton.setImage(UIImage.templateImageNamed("menu_vertical"), for: .normal)
+        #else
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
+        #endif
+
         pageOptionsButton.addTarget(self, action: #selector(didPressPageOptionsButton), for: .touchUpInside)
         pageOptionsButton.isAccessibilityElement = true
         /* Cliqz: Always display pageOptionsButton
@@ -368,7 +379,7 @@ extension TabLocationView: Themeable {
         /* Cliqz: Moved setting of the backgroundColor to applyUIMode
         backgroundColor = UIColor.theme.textField.background
          */
-        urlTextField.textColor = UIColor.theme.textField.textAndTint
+        urlTextField.textColor = UIColor.URLBar.textColor
         readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
         readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
         

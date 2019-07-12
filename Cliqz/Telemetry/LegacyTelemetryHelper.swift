@@ -58,6 +58,14 @@ class LegacyTelemetryHelper: NSObject {
         
         sendSignal(signal)
     }
+
+    class func logLumenSearchWarning(action: String, target: String? = nil) {
+        var signal: [String : Any] = ["type": "search", "view": "leave", "version": 1]
+        if let target = target { signal["target"] = target }
+        signal["action"] = action
+
+        sendSignal(signal)
+    }
     
     class func logDashboard(action: String, target: String? = nil, state: String? = nil) {
         var signal: [String : Any] = ["type": "dashboard", "action": action, "version": 1]

@@ -41,6 +41,84 @@ extension UIColor {
     static let lumenPurple = UIColor(colorString: "1E2247")
     static let lumenDisabled = UIColor(colorString: "BDC0CE")
 	static let lumenTextBlue = UIColor(rgb: 0x3987FF)
+    static let lumenURLBarBlue = UIColor(rgb: 0x3647D0)
+    static let lumenURLBarPurple = UIColor(rgb: 0xACADFF)
+    static let privateURLBarBackground = UIColor(colorString: "3D3F4E")
+
+    // TODO: Theming approach should be reworked as there are many different approaches taken currently
+    struct URLBar {
+        static var lockIconColor: UIColor {
+            #if PAID
+            return .lumenURLBarPurple
+            #else
+            return UIColor.black
+            #endif
+        }
+
+        static var textColor: UIColor {
+            #if PAID
+            return UIColor.black
+            #else
+            return UIColor.theme.textField.textAndTint
+            #endif
+        }
+
+        static var privateTabTintColor: UIColor {
+            #if PAID
+            return UIColor.white
+            #else
+            return UIColor.theme.textField.textAndTint
+            #endif
+        }
+
+        static var backgroundColor: UIColor {
+            #if PAID
+            return UIColor.clear
+            #else
+            return UIColor.theme.browser.background
+            #endif
+        }
+
+        static var deviderColor: UIColor {
+            #if PAID
+            return .lumenURLBarPurple
+            #else
+            return UIColor.theme.browser.urlBarDivider
+            #endif
+        }
+
+        static var borderColor: UIColor {
+            #if PAID
+            return UIColor.white
+            #else
+            return UIColor.theme.urlbar.border
+            #endif
+        }
+
+        static var clearButtonColor: UIColor {
+            #if PAID
+            return .lumenURLBarPurple
+            #else
+            return UIColor.theme.textField.textAndTint
+            #endif
+        }
+
+        static var queryTextFieldBackgroundColor: UIColor {
+            #if PAID
+            return UIColor.white
+            #else
+            return AutocompleteTextField.customBackgroundColor
+            #endif
+        }
+
+        static var queryTextFieldTextColor: UIColor {
+            #if PAID
+            return UIColor.black
+            #else
+            return UIColor.theme.textField.textAndTint
+            #endif
+        }
+    }
 }
 
 struct Lumen {
@@ -117,7 +195,6 @@ struct Lumen {
     }
     
     struct URLBar {
-        
         static let backgroundColor : LumenColor = { name, mode in
             let combo: LumenColorCombo  = [.Light: [.Normal: .white, .Private: .white], .Dark: [.Normal: .lumenDeepBlue, .Private: .lumenDeepBlue]]
             return combo[name]?[mode] ?? Lumen.fallback(name, combo)
