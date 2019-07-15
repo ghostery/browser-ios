@@ -121,6 +121,7 @@ class VPNViewController: UIViewController {
         connectButton.setTitleColor(.blue, for: .normal)
         connectButton.tintColor = .blue
         connectButton.addTarget(self, action: #selector(connectButtonPressed), for: .touchUpInside)
+        connectButton.accessibilityValue = "initial"
 
         mapLabel.text = NSLocalizedString("Active for all apps on this iPhone", tableName: "Lumen", comment: "VPN map label when it is ON")
         mapLabel.textColor = UIColor.white
@@ -256,8 +257,8 @@ class VPNViewController: UIViewController {
     }
     
     func updateConnectButton() {
-        
         if VPNStatus == .connected {
+            self.connectButton.accessibilityValue = "connected"
             self.connectButton.set(state: .Disconnect)
             //start timer
             timer = Timer.scheduledTimer(timeInterval: 0.95, target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
@@ -265,8 +266,8 @@ class VPNViewController: UIViewController {
             if let selectedCountry = VPNEndPointManager.shared.selectedCountry {
             LegacyTelemetryHelper.logVPN(action: "connect", location: selectedCountry.id)
             }
-        }
-        else if VPNStatus == .disconnected {
+        } else if VPNStatus == .disconnected {
+            self.connectButton.accessibilityValue = "disconnected"
             if self.connectButton.currentState == .Connecting || self.connectButton.currentState == .Connect {
                 self.connectButton.set(state: .Retry)
             }
@@ -275,12 +276,15 @@ class VPNViewController: UIViewController {
             timer = nil
         }
         else if VPNStatus == .disconnecting {
+            self.connectButton.accessibilityValue = "disconnecting"
             self.connectButton.set(state: .Disconnecting)
         }
         else if VPNStatus == .connecting {
+            self.connectButton.accessibilityValue = "connecting"
             self.connectButton.set(state: .Connecting)
         }
         else {
+            self.connectButton.accessibilityValue = "other"
             self.connectButton.set(state: .Connect)
         }
     }
