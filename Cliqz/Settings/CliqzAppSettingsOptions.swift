@@ -106,21 +106,22 @@ class ComplementarySearchSetting: Setting, SearchEnginePickerDelegate {
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
+        #if PAID
+        let searchEnginePicker = LumenSearchEnginePicker()
+        searchEnginePicker.profile = self.profile
+        searchEnginePicker.searchEnginesUpdated = { [weak self] in
+            searchEnginePicker.engines = self?.models
+            searchEnginePicker.tableView.reloadData()
+        }
+        #else
         let searchEnginePicker = SearchEnginePicker()
+        #endif
         // Order alphabetically, so that picker is always consistently ordered.
         // Every engine is a valid choice for the default engine, even the current default engine.
-        let searchEngines = profile.searchEngines
-        var models = searchEngines.orderedEngines.sorted { e, f in e.shortName < f.shortName }
-        if let lumenSearch = models.filter({ $0.shortName == LumenSearchEngineDisplayName }).first {
-            if let index = models.index(of:lumenSearch) {
-                models.remove(at: index)
-            }
-            models.insert(lumenSearch, at: 0)
-        }
-        searchEnginePicker.engines = models
+        searchEnginePicker.engines = self.models
         
         searchEnginePicker.delegate = self
-        searchEnginePicker.selectedSearchEngineName = searchEngines.defaultEngine.shortName
+        searchEnginePicker.selectedSearchEngineName = profile.searchEngines.defaultEngine.shortName
         navigationController?.pushViewController(searchEnginePicker, animated: true)
         self.navigationController = navigationController
     }
@@ -131,6 +132,19 @@ class ComplementarySearchSetting: Setting, SearchEnginePickerDelegate {
         }
         _ = navigationController?.popViewController(animated: true)
     }
+
+    private var models: [OpenSearchEngine] {
+        let searchEngines = profile.searchEngines
+        var models = searchEngines.orderedEngines.sorted { e, f in e.shortName < f.shortName }
+        if let lumenSearch = models.filter({ $0.shortName == LumenSearchEngineDisplayName }).first {
+            if let index = models.index(of:lumenSearch) {
+                models.remove(at: index)
+            }
+            models.insert(lumenSearch, at: 0)
+        }
+        return models
+    }
+
 }
 
 class AutoForgetTabSetting: CliqzOnOffSetting {
