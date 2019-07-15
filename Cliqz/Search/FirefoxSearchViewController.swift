@@ -168,6 +168,9 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
         searchEngineScrollView.snp.remakeConstraints { make in
             make.left.right.equalTo(self.view)
             make.bottom.equalTo(self.view).offset(-keyboardHeight)
+            #if PAID
+            make.height.equalTo(0)
+            #endif
         }
     }
     
