@@ -116,8 +116,6 @@ class ComplementarySearchSetting: Setting, SearchEnginePickerDelegate {
         #else
         let searchEnginePicker = SearchEnginePicker()
         #endif
-        // Order alphabetically, so that picker is always consistently ordered.
-        // Every engine is a valid choice for the default engine, even the current default engine.
         searchEnginePicker.engines = self.models
         
         searchEnginePicker.delegate = self
@@ -134,6 +132,8 @@ class ComplementarySearchSetting: Setting, SearchEnginePickerDelegate {
     }
 
     private var models: [OpenSearchEngine] {
+        // Order alphabetically, so that picker is always consistently ordered.
+        // Every engine is a valid choice for the default engine, even the current default engine.
         let searchEngines = profile.searchEngines
         var models = searchEngines.orderedEngines.sorted { e, f in e.shortName < f.shortName }
         if let lumenSearch = models.filter({ $0.shortName == LumenSearchEngineDisplayName }).first {
