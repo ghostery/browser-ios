@@ -79,12 +79,21 @@ class SettingsPrefs {
     func updateHumanWebPref(_ newValue: Bool) {
         self.updatePref(SettingsPrefs.HumanWebPrefKey, value: newValue as AnyObject)
     }
+
+    var isLumenDefaultSearchEngine: Bool {
+        let defaultSearchEngine = profile?.searchEngines.defaultEngine
+        return defaultSearchEngine?.shortName == LumenSearchEngineDisplayName
+    }
     
     func getCliqzSearchPref() -> Bool {
         if let humanWebPref = self.getBoolPref(SettingsPrefs.CliqzSearchPrefKey) {
             return humanWebPref
         }
+        #if PAID
+        return self.isLumenDefaultSearchEngine
+        #else
         return true
+        #endif
     }
     
     func updateCliqzSearchPref(_ newValue: Bool) {
@@ -161,7 +170,11 @@ class SettingsPrefs {
         if let querySuggestionPref = self.getBoolPref(SettingsPrefs.querySuggestionPrefKey) {
             return querySuggestionPref
         }
+        #if PAID
+        return self.isLumenDefaultSearchEngine
+        #else
         return true
+        #endif
     }
     
     func getLimitMobileDataUsagePref() -> Bool {
