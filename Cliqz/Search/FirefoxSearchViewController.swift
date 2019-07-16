@@ -168,6 +168,7 @@ class FirefoxSearchViewController: SiteTableViewController, KeyboardHelperDelega
         searchEngineScrollView.snp.remakeConstraints { make in
             make.left.right.equalTo(self.view)
             make.bottom.equalTo(self.view).offset(-keyboardHeight)
+            /* Cliqz: for Lumen we need to hide the search engines suggestion bar on top of keyboard. */
             #if PAID
             make.height.equalTo(0)
             #endif

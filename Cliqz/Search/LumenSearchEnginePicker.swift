@@ -13,7 +13,7 @@ class LumenSearchEnginePicker: SearchEnginePicker {
 
     var profile: Profile?
     var searchEnginesUpdated: (() -> Void)?
-
+    private let addSearchEngineCellIdentifier = "addSearchEngineCellIdentifier"
     // MARK: - Table view data source
 
     override func viewDidLoad() {
@@ -38,12 +38,14 @@ class LumenSearchEnginePicker: SearchEnginePicker {
         if indexPath.section == 0 {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
-
-        let cell = ThemedTableViewCell()
-        cell.accessoryType = .disclosureIndicator
-        cell.textLabel?.text = NSLocalizedString("Add Search Engine", comment: "Add search engine setting name")
+        var cell = tableView.dequeueReusableCell(withIdentifier: addSearchEngineCellIdentifier)
+        if cell == nil {
+            cell = ThemedTableViewCell(style: .default, reuseIdentifier: addSearchEngineCellIdentifier)
+            cell!.accessoryType = .disclosureIndicator
+        }
+        cell!.textLabel?.text = NSLocalizedString("Add Search Engine", comment: "Add search engine setting name")
         
-        return cell
+        return cell!
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
