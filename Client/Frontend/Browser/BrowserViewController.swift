@@ -827,7 +827,7 @@ class BrowserViewController: UIViewController {
         #else
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
-        UIView.animate(withDuration: 1, animations: { () -> Void in
+        UIView.animate(withDuration: 0.2, animations: { () -> Void in
             homePanelController.view.alpha = 1
         }, completion: { finished in
             if finished {
