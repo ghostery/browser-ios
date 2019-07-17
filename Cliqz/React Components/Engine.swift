@@ -31,7 +31,7 @@ open class Engine {
             let jsCodeLocation = Bundle.main.url(forResource: "jsengine.bundle", withExtension: "js")
         #endif
         
-        rootView = RCTRootView( bundleURL: jsCodeLocation, moduleName: "ExtensionApp", initialProperties: nil, launchOptions: nil )
+        rootView = RCTRootView( bundleURL: jsCodeLocation, moduleName: "ExtensionApp", initialProperties: ["showSearchOnboarding": true], launchOptions: nil )
         bridge = rootView.bridge
         //ConnectManager.sharedInstance.refresh()
     }
