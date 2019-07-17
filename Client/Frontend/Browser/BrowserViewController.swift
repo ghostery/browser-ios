@@ -1698,14 +1698,15 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
+        /* Cliqz: hiding keyboard for Lumen search */
+        if SettingsPrefs.shared.isLumenDefaultSearchEngine {
+            urlBar.locationTextField?.resignFirstResponder()
+            return
+        }
         // We couldn't build a URL, so check for a matching search keyword.
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard let possibleKeywordQuerySeparatorSpace = trimmedText.index(of: " ") else {
-            if SettingsPrefs.shared.isLumenDefaultSearchEngine {
-                urlBar.locationTextField?.resignFirstResponder()
-            } else {
-                submitSearchText(text, forTab: currentTab)
-            }
+            submitSearchText(text, forTab: currentTab)
             return
         }
 
