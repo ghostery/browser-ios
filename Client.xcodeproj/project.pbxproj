@@ -212,6 +212,8 @@
 		28F596A11ACA13CA0071DDCC /* InfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F596A01ACA13CA0071DDCC /* InfoTests.swift */; };
 		28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA4363B1ABB8448008031D1 /* LiveAccountTest.swift */; };
 		28FDFF0C1C1F725800840F86 /* SeparatorTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */; };
+		2979623922DF695E00604955 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2979623822DF695E00604955 /* Onboarding.swift */; };
+		2979624322DF697900604955 /* OnboardingBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 2979624222DF697900604955 /* OnboardingBridge.m */; };
 		2C28F96C201B2D4C00ABA8A5 /* MailAppSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C28F96B201B2D4C00ABA8A5 /* MailAppSettingsTests.swift */; };
 		2C2A5EF41E68469500F02659 /* PrivateBrowsingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */; };
 		2C2A91291FA2410D002E36BD /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2A91281FA2410D002E36BD /* HistoryTests.swift */; };
@@ -1667,6 +1669,8 @@
 		28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IndependentRecordSynchronizer.swift; path = Synchronizers/IndependentRecordSynchronizer.swift; sourceTree = "<group>"; };
 		28F596A01ACA13CA0071DDCC /* InfoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoTests.swift; path = SyncTests/InfoTests.swift; sourceTree = "<group>"; };
 		28FDFF0B1C1F725800840F86 /* SeparatorTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorTableCell.swift; sourceTree = "<group>"; };
+		2979623822DF695E00604955 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
+		2979624222DF697900604955 /* OnboardingBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OnboardingBridge.m; sourceTree = "<group>"; };
 		2C28F96B201B2D4C00ABA8A5 /* MailAppSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailAppSettingsTests.swift; sourceTree = "<group>"; };
 		2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTest.swift; sourceTree = "<group>"; };
 		2C2A91281FA2410D002E36BD /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
@@ -3515,6 +3519,8 @@
 			children = (
 				4F30F4F42051670C0049E4F6 /* AutoCompletion.swift */,
 				4F30F4F52051670C0049E4F6 /* AutoCompletionBridge.m */,
+				2979623822DF695E00604955 /* Onboarding.swift */,
+				2979624222DF697900604955 /* OnboardingBridge.m */,
 				4F30F4F62051670C0049E4F6 /* BrowserActions.swift */,
 				4F30F4F72051670C0049E4F6 /* BrowserActionsBridge.m */,
 				4F30F4F82051670C0049E4F6 /* Crypto.swift */,
@@ -6931,6 +6937,7 @@
 				E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */,
 				AFA1DE0C2088BE0500B27B8A /* BlockListFileManager.swift in Sources */,
 				1E23E61D22258D0B0004FAAF /* LegacyTelemetryHelper.swift in Sources */,
+				2979624322DF697900604955 /* OnboardingBridge.m in Sources */,
 				4F30F50A2051670C0049E4F6 /* BrowserActions.swift in Sources */,
 				1E2C435C21F89E8100891FB2 /* LumenDarkTheme.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
@@ -7042,6 +7049,7 @@
 				4FE43F5B221EE96D00045527 /* WelcomeView.swift in Sources */,
 				1E3CBC152057D83700898B05 /* CliqzAppSettingsTableViewController.swift in Sources */,
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
+				2979623922DF695E00604955 /* Onboarding.swift in Sources */,
 				D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */,
 				E49943F51AE6879C00BF9DE4 /* IntroViewController.swift in Sources */,
 			);
