@@ -590,6 +590,9 @@ class BrowserViewController: UIViewController {
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
+
+        /* Cliqz: Updating placeholder to show anonymous search for Lumen */
+        urlBar.updatePlaceHolders()
     }
 
     fileprivate func crashedLastLaunch() -> Bool {

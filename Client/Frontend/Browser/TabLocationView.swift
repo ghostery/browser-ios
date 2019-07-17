@@ -326,6 +326,11 @@ class TabLocationView: UIView {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
 
+    /* Cliqz: Updating placeholder for Lumen search. */
+    func updateTextFieldPlaceHolder() {
+        self.urlTextField.attributedPlaceholder = self.placeholder
+    }
+
     fileprivate func updateTextWithURL() {
         if let host = url?.host, AppConstants.MOZ_PUNYCODE {
             urlTextField.text = url?.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())

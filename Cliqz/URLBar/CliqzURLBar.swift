@@ -228,6 +228,10 @@ class CliqzURLBar: URLBarView {
             make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
         }
     }
+
+    func updatePlaceHolders() {
+        self.locationView.updateTextFieldPlaceHolder()
+    }
     
     override func updateConstraints() {
         super.updateConstraints()
