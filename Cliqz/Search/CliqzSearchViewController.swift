@@ -246,7 +246,8 @@ extension CliqzSearchViewController {
         if let url_str = notification.object as? NSString, let encodedString = url_str.addingPercentEncoding(
             withAllowedCharacters: NSCharacterSet.urlFragmentAllowed), let url = URL(string: encodedString as String) {
             #if PAID
-            if UserPreferences.instance.shouldShowNonPrivateSearchWarningMessage, let _ = notification.userInfo?[OpenURLIsSearchEngineKey] {
+            let isSearchEngine = notification.userInfo?[OpenURLIsSearchEngineKey] as? Bool
+            if UserPreferences.instance.shouldShowNonPrivateSearchWarningMessage, isSearchEngine ?? false {
                 self.showLumenSearchLeavingWarning(url: url)
                 return
             }
