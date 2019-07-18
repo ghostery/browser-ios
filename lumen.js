@@ -2,7 +2,7 @@ import 'react-native/Libraries/Core/InitializeCore';
 import './setup';
 import 'process-nextick-args';
 import React from 'react';
-import { AppRegistry, StyleSheet, View, Text, ScrollView, NativeModules, Image, NativeEventEmitter } from 'react-native';
+import { AppRegistry, StyleSheet, View, Text, ScrollView, NativeModules, NativeEventEmitter, TouchableWithoutFeedback } from 'react-native';
 import { startup } from 'browser-core-lumen-ios';
 import Cliqz from './cliqzWrapper';
 import { setDefaultSearchEngine } from 'browser-core-lumen-ios/build/modules/core/search-engines';
@@ -14,6 +14,8 @@ import SearchUIVertical from 'browser-core-lumen-ios/build/modules/mobile-cards-
 import { Provider as CliqzProvider } from 'browser-core-lumen-ios/build/modules/mobile-cards/cliqz';
 import { Provider as ThemeProvider } from 'browser-core-lumen-ios/build/modules/mobile-cards-vertical/withTheme';
 import Onboarding from './lumen-onboarding';
+import inject from 'browser-core-lumen-ios/build/modules/core/kord/inject';
+import NativeDrawable, { normalizeUrl } from 'browser-core-lumen-ios/build/modules/mobile-cards/components/custom/NativeDrawable';
 
 const nativeBridge = NativeModules.JSBridge;
 
@@ -36,7 +38,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5    
+    borderBottomRightRadius: 5
   },
   searchEnginesContainer: {
     flexDirection: 'row',
@@ -45,8 +47,8 @@ const styles = StyleSheet.create({
     marginBottom: 100,
   },
   searchEngineIcon: {
-    height: 20,
-    width: 20,
+    height: 73,
+    width: 73,
     borderRadius: 10,
     overflow: 'hidden',
   },
@@ -61,6 +63,7 @@ class MobileCards extends React.Component {
         results: [],
         meta: {}
       },
+      hasQuery: false,
       theme: 'lumen-light'
     }
 
@@ -84,18 +87,20 @@ class MobileCards extends React.Component {
     this.eventEmitter.removeAllListeners();
   }
 
-  onAction = ({ action, args, id }) => {
+  onAction = async ({ action, args, id }) => {
     const [module, name] = action.split(':');
-    // TODO chrmod: it breaks in `inject.es` when you type clear and type again
-    // TODO chrmod: block messages
-    return this.appStart.then((app) => {
-      return app.modules[module].action(name, ...args).then((response) => {
-        if (typeof id !== 'undefined') {
-          nativeBridge.replyToAction(id, response);
-        }
-        return response;
+    if (this.state.onboarding === true && module === 'search' && name === 'startSearch') {
+      // don't start search until onboarding is finished
+      this.retryLastSearch = () => this.onAction({ action, args, id });
+      this.setState({
+        hasQuery: true,
       });
-    }).catch(e => console.error(e));
+      return;
+    }
+    const response = await inject.module(module).action(name, ...args);
+    if (typeof id !== 'undefined') {
+      nativeBridge.replyToAction(id, response);
+    }
   }
 
   setSearchEngine = (engine) => {
@@ -113,8 +118,22 @@ class MobileCards extends React.Component {
 
   updateResults = results => this.setState({ results, onboarding: false });
 
-  onTryNowPressed = () => {
-    // TODO chrmod: let messages pass
+  onTryNowPressed = (choice) => {
+    NativeModules.Onboarding.tryLumenSearch(choice);
+    setTimeout(() => {
+      this.setState({
+        onboarding: false,
+      }, () => {
+        if (choice && this.retryLastSearch) {
+          this.retryLastSearch();
+          this.retryLastSearch = null;
+        }
+      });
+    }, 1000); // wait for onboarding animation to finish
+  }
+
+  openLink = (url) => {
+    NativeModules.BrowserActions.openLink(url, this.state.results.query, true);
   }
 
   render() {
@@ -124,7 +143,7 @@ class MobileCards extends React.Component {
     const SearchComponent = layout === "horizontal" ? SearchUI : SearchUIVertical;
     if (this.state.onboarding) {
       return (
-        <Onboarding onTryNowPressed={this.onTryNowPressed} />
+        <Onboarding onChoice={this.onTryNowPressed} hasQuery={this.state.hasQuery}/>
       );
     } else {
       NativeModules.QuerySuggestion.showQuerySuggestions(query, suggestions);
@@ -137,7 +156,7 @@ class MobileCards extends React.Component {
                   results={results}
                   meta={meta}
                   theme={appearance}
-                  style={{ backgroundColor: 'transparent', }}
+                  style={{ backgroundColor: 'white', paddingTop: 9 }}
                   cardListStyle={{ paddingLeft: 0, paddingRight: 0 }}
                   header={<View />}
                   separator={<View style={{ height: 0.5, backgroundColor: '#D9D9D9' }} />}
@@ -160,18 +179,30 @@ class MobileCards extends React.Component {
                   </View>
                   <View style={styles.searchEnginesContainer}>
                     { /* TODO chrmod: list + send openlink event onclick + real pngs */ }
-                    <Image
-                      style={styles.searchEngineIcon}
-                      source={{ uri: 'https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png' }}
-                    />
-                    <Image
-                      style={styles.searchEngineIcon}
-                      source={{ uri: 'https://duckduckgo.com/assets/icons/meta/DDG-icon_256x256.png' }}
-                    />
-                    <Image
-                      style={styles.searchEngineIcon}
-                      source={{ uri: 'https://www.sclance.com/pngs/bing-png/bing_png_121500.png' }}
-                    />
+                    <TouchableWithoutFeedback
+                      onPress={() => this.openLink(`https://google.com/search?q=${encodeURIComponent(this.state.results.query)}`)}
+                    >
+                      <NativeDrawable
+                        style={styles.searchEngineIcon}
+                        source={normalizeUrl('google.svg')}
+                      />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                      onPress={() => this.openLink(`https://duckduckgo.com/?q=${encodeURIComponent(this.state.results.query)}`)}
+                    >
+                      <NativeDrawable
+                        style={styles.searchEngineIcon}
+                        source={normalizeUrl('ddg.svg')}
+                      />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                      onPress={() => this.openLink(`https://www.bing.com/search?q=${encodeURIComponent(this.state.results.query)}`)}
+                    >
+                      <NativeDrawable
+                        style={styles.searchEngineIcon}
+                        source={normalizeUrl('bing.svg')}
+                      />
+                    </TouchableWithoutFeedback>
                   </View>
                 </>
               </ScrollView>

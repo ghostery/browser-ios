@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableWithoutFeedback, Animated, Easing, NativeModules } from 'react-native';
+import { StyleSheet, View, Text, TouchableWithoutFeedback, Animated, Easing } from 'react-native';
+import { XmlEntities } from 'html-entities';
 
 const styles = StyleSheet.create({
   container: {
@@ -38,6 +39,15 @@ export default class Onboarding extends React.Component {
     isClicked: false,
   }
 
+  get checkMark() {
+    if (!this._checkMark) {
+      const entities = new XmlEntities();
+      this._checkMark = entities.decode('&#10003;');
+    }
+
+    return this._checkMark;
+  }
+
   componentWillMount() {
     this.animatedValue = new Animated.Value(0);
     this.interpolateColor = (from, to) => this.animatedValue.interpolate({
@@ -50,9 +60,8 @@ export default class Onboarding extends React.Component {
     });
   }
 
-  onPress = () => {
-    NativeModules.Onboarding.tryLumenSearch(true);
-    this.props.onTryNowPressed();
+  onPress = (choice) => {
+    this.props.onChoice(choice);
     Animated.timing(this.animatedValue, {
       toValue: 150,
       duration: 250,
@@ -63,8 +72,8 @@ export default class Onboarding extends React.Component {
 
   render() {
     // TODO chrmod: translations
-    const tryNowText = this.state.isClicked ? 'v' : 'TRY NOW';
-    const noThanksText = this.state.isClicked ? 'START TYPING' : 'NO, THANKS';
+    const tryNowText = this.state.isClicked ? this.checkMark : 'TRY NOW';
+    const noThanksText = this.state.isClicked ? (this.props.hasQuery ? 'SEARCH ACTIVATED' : 'START TYPING') : 'NO, THANKS';
     const animatedStyle = {
       backgroundColor: this.interpolateColor('#3647D0', '#AEAFFF'),
       width: this.interplateWidth,
@@ -86,12 +95,12 @@ export default class Onboarding extends React.Component {
         >
           This can be changed anytime in settings.
         </Animated.Text>
-        <TouchableWithoutFeedback disabled={this.state.isClicked} onPress={this.onPress}>
+        <TouchableWithoutFeedback disabled={this.state.isClicked} onPress={() => this.onPress(true)}>
           <Animated.View style={[styles.tryNow, animatedStyle]}>
             <Text style={{ fontWeight: '700', fontSize: 14, lineHeight: 17, color: 'white' }}>{tryNowText}</Text>
           </Animated.View>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback disabled={this.state.isClicked}>
+        <TouchableWithoutFeedback disabled={this.state.isClicked} onPress={() => this.onPress(false)}>
           <>
             <Animated.Text style={{ letterSpacing: -0.2, marginTop: 20, fontSize: 14, lineHeight: 17, fontWeight: '700', color: this.interpolateColor('#3647D0', '#3647D0')}}>{noThanksText}</Animated.Text>
           </>
