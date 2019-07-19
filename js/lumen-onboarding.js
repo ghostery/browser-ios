@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableWithoutFeedback, Animated, Easing } from 'react-native';
 import { XmlEntities } from 'html-entities';
+import t from './i18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -72,8 +73,8 @@ export default class Onboarding extends React.Component {
 
   render() {
     // TODO chrmod: translations
-    const tryNowText = this.state.isClicked ? this.checkMark : 'TRY NOW';
-    const noThanksText = this.state.isClicked ? (this.props.hasQuery ? 'SEARCH ACTIVATED' : 'START TYPING') : 'NO, THANKS';
+    const tryNowText = this.state.isClicked ? this.checkMark : t('onboarding_action_accept');
+    const noThanksText = this.state.isClicked ? (this.props.hasQuery ? t('onboarding_result_with_query') : t('onboarding_result_without_query')) : t('onboarding_action_reject');
     const animatedStyle = {
       backgroundColor: this.interpolateColor('#3647D0', '#AEAFFF'),
       width: this.interplateWidth,
@@ -83,17 +84,17 @@ export default class Onboarding extends React.Component {
         <Animated.Text
           style={[styles.title, { color: this.interpolateColor('#3647D0', '#FFFFFF') }]}
         >
-          New: Anonymous Search
+          {t('onboarding_title')}
         </Animated.Text>
         <Animated.Text
           style={[styles.text, { color: this.interpolateColor('#A9ACC4', '#FFFFFF') }]}
         >
-          Activate now to search anonymously.
+          {t('onboarding_description_line1')}
         </Animated.Text>
         <Animated.Text
           style={[styles.text, { color: this.interpolateColor('#A9ACC4', '#FFFFFF') }]}
         >
-          This can be changed anytime in settings.
+          {t('onboarding_description_line2')}
         </Animated.Text>
         <TouchableWithoutFeedback disabled={this.state.isClicked} onPress={() => this.onPress(true)}>
           <Animated.View style={[styles.tryNow, animatedStyle]}>

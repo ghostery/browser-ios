@@ -13,9 +13,10 @@ import SearchUI from 'browser-core-lumen-ios/build/modules/mobile-cards/SearchUI
 import SearchUIVertical from 'browser-core-lumen-ios/build/modules/mobile-cards-vertical/SearchUI';
 import { Provider as CliqzProvider } from 'browser-core-lumen-ios/build/modules/mobile-cards/cliqz';
 import { Provider as ThemeProvider } from 'browser-core-lumen-ios/build/modules/mobile-cards-vertical/withTheme';
-import Onboarding from './lumen-onboarding';
+import Onboarding from './js/lumen-onboarding';
 import inject from 'browser-core-lumen-ios/build/modules/core/kord/inject';
 import NativeDrawable, { normalizeUrl } from 'browser-core-lumen-ios/build/modules/mobile-cards/components/custom/NativeDrawable';
+import t from './js/i18n';
 
 const nativeBridge = NativeModules.JSBridge;
 
@@ -163,19 +164,19 @@ class MobileCards extends React.Component {
                   footer={<View />}
                 />
                 <>
-                  { /* TODO chrmod: colors and font sizes and translations */ }
+                  { /* TODO chrmod: colors and font sizes */ }
                   { results.length === 0 &&
                     <View style={{ backgroundColor: 'white', height: 80, alignItems: 'center', justifyContent: 'center' }}>
-                      <Text style={{ color: '#656d7e' }}>KEINE TREFFER GEFUNDEN</Text>
+                      <Text style={{ color: '#656d7e' }}></Text>
                     </View>
                   }
                   <View style={styles.footer}>
                     <Text style={{ color: 'white', }}>
-                      DIESE SUCHANFRAGE IST ANONYM
+                      {t('search_footer')}
                     </Text>
                   </View>
                   <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 20 }}>
-                    <Text style={{ color: 'white' }}>Lumen Suche trotzdem verlassen?</Text>
+                    <Text style={{ color: 'white' }}>{t('search_alternative_search_engines_info')}</Text>
                   </View>
                   <View style={styles.searchEnginesContainer}>
                     { /* TODO chrmod: list + send openlink event onclick + real pngs */ }
