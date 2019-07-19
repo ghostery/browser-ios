@@ -58,14 +58,9 @@ brew install carthage
 4. Install Ruby `bundler`:
 ```sh
 sudo gem install bundler
-bundle install
 ```
-5. Install [cocoadpods](https://cocoapods.org/) version **1.5.3**
-```shell
-sudo gem install cocoapods -v 1.5.3
-```
-6. Fork the repository https://github.com/ghostery/browser-ios from GitHub UI
-7. Clone the forked repository + add upstream remote:
+5. Fork the repository https://github.com/ghostery/browser-ios from GitHub UI
+6. Clone the forked repository + add upstream remote:
 ```shell
 git clone https://github.com/YOUR_USERNAME/ghostery-ios
 cd ghostery-ios
@@ -74,18 +69,19 @@ git fetch upstream
 git checkout upstream/master
 git checkout -b my-working-branch
 ```
-8. Pull in the project dependencies:
+7. Pull in the project dependencies:
 ```shell
 sh ./bootstrap.sh
-npm ci
-npm run bundle-lumen
-# Or for Ghostery: npm run bundle-ghostery
+npm run bundle-ghostery
+# Or for Cliqz: npm run bundle-cliqz
+# Or for Lumen: npm run bundle-lumen
 rm -rf Pods
+bundle install
 bundle exec pod install
 npm run postinstall
 ```
-9. Open `Client.xcworkspace` in Xcode.
-10. Build the `Fennec` scheme in Xcode.
+8. Open `Client.xcworkspace` in Xcode.
+9. Build the `Ghostery`/`Cliqz`/`Lumen` scheme in Xcode.
 
 Note: When you run `bundle install`, you might get following error `An error occurred while installing unf_ext (0.0.7.5), and Bundler cannot continue.`. Above error happens with ruby 2.5.1. Just make sure to use 2.5.3 ruby version `rvm use 2.5.3` and problem will be fixed. 
 

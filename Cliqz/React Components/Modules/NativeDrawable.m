@@ -11,13 +11,14 @@
 #import <React/RCTViewManager.h>
 
 @interface NativeDrawable : RCTViewManager
+@property BOOL hasTint;
 @end
 
 @implementation NativeDrawable
 
 RCT_EXPORT_MODULE()
 
-- (UIView *)view
+- (UIImageView *)view
 {
     UIImageView* imageView = [[UIImageView alloc] init];
     [imageView setContentMode:UIViewContentModeScaleAspectFit];
@@ -30,6 +31,7 @@ RCT_CUSTOM_VIEW_PROPERTY(color, NSString, UIImageView) {
     if (color != nil) {
         view.image = [view.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [view setTintColor: color];
+        [self setHasTint:YES];
     }
     else {
         NSLog(@"color %@ is not valid", json);
@@ -41,6 +43,10 @@ RCT_CUSTOM_VIEW_PROPERTY(source, NSString, UIImageView)
     NSString *imageName = (NSString*)json;
     if (imageName != nil) {
         UIImage* image = [UIImage imageNamed:imageName];
+        if (self.hasTint) {
+            image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        }
+        
         if (image != nil) {
             [view setImage:image];
         }

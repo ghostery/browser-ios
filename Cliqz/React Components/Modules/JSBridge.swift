@@ -59,7 +59,8 @@ class JSBridge : RCTEventEmitter {
     }
     
     override open func supportedEvents() -> [String]! {
-        return ["callAction", "publishEvent"]
+        // TODO chrmod: clean native bridge
+        return ["action", "callAction", "publishEvent"]
     }
 
     override open func constantsToExport() -> [AnyHashable : Any]! {
@@ -118,7 +119,7 @@ class JSBridge : RCTEventEmitter {
             self.eventCallbacks[actionId] = callback
         }
         // only send event - callback is handled in action reply
-        self.sendEvent(withName: "callAction", body: ["id": actionId, "action": functionName, "args": args])
+        self.sendEvent(withName: "action", body: ["id": actionId, "action": functionName, "args": args])
         
     }
     
