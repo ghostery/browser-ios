@@ -890,7 +890,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func showSearchController() {
+    func showSearchController() {
         /* Cliqz: Replace Search Controller
         if searchController != nil {
             return
@@ -923,7 +923,8 @@ class BrowserViewController: UIViewController {
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
         searchLoader!.addListener(HistoryListener.shared)
         
-        if SettingsPrefs.shared.getCliqzSearchPref() {
+        // TODO:PK add telemetry
+        if SettingsPrefs.shared.getCliqzSearchPref() || UserPreferences.instance.showSearchOnboarding {
             homePanelController?.view?.isHidden = true
 
             cliqzSearchController = CliqzSearchViewController(profile: self.profile)
@@ -1000,7 +1001,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func hideSearchController() {
+    func hideSearchController() {
         /*Cliqz: Hide cliqzSearch or firefoxSearch
         if let searchController = searchController {
             searchController.willMove(toParentViewController: nil)
@@ -2348,7 +2349,13 @@ extension BrowserViewController: IntroViewControllerDelegate {
 		#endif
         // End Cliqz
 
-        if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
+        /* Cliqz: determining the first launch. */
+        let isFirstLaunch = profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil
+        if isFirstLaunch {
+            UserPreferences.instance.showSearchOnboarding = false
+        }
+
+        if force || isFirstLaunch {
 		#if PAID
 			let introViewController = LumenIntroViewController()
 		#else

@@ -10,9 +10,11 @@ import UIKit
 
 class LegacyTelemetryHelper: NSObject {
     
-    class func logOnboarding(action: String, page: Int, target: String? = nil) {
-        var signal: [String : Any] = ["type": "onboarding", "action": action, "page": page, "version": 1]
+    class func logOnboarding(action: String, page: Int? = nil, target: String? = nil, topic: String? = nil) {
+        var signal: [String : Any] = ["type": "onboarding", "action": action, "version": 1]
         if let target = target { signal["target"] = target }
+        if let page = page { signal["page"] = page }
+        if let topic = topic { signal["topic"] = topic }
         
         sendSignal(signal)
     }

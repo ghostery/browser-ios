@@ -23,4 +23,9 @@ extension BrowserViewController: SearchViewDelegate {
 	func dismissKeyboard() {
 		urlBar.hideKeyboard()
 	}
+
+    func closeSearchOnboarding() {
+        hideSearchController()
+        showSearchController()
+    }
 }
