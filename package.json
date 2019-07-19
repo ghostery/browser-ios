@@ -29,7 +29,7 @@
     "@cliqz/url-parser": "^1.0.2",
     "appium": "1.9.0",
     "browser-core": "https://s3.amazonaws.com/cdncliqz/update/edge/cliqz-ios/master/1.38.0.1b131.7bdc200.tgz",
-    "browser-core-cliqz-ios": "https://s3.amazonaws.com/cdncliqz/update/edge/cliqz-ios/master/3.39.0.25.4908295.tgz",
+    "browser-core-cliqz-ios": "https://s3.amazonaws.com/cdncliqz/update/edge/cliqz-ios/master/3.39.0.50.76d6dc1.tgz",
     "browser-core-lumen-ios": "https://s3.amazonaws.com/cdncliqz/update/edge/lumen-ios/master/13.39.0.50.76d6dc1.tgz",
     "buffer": "5.0.7",
     "html-entities": "^1.2.1",
