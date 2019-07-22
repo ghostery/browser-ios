@@ -28,6 +28,11 @@ open class BrowserDB {
         }
 
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil, schema: schema, files: files)
+
+        if filename == "browser.db" {
+            // Cliqz: new method call to extend tables if needed
+            self.extendedInit()
+        }
     }
 
     // For testing purposes or other cases where we want to ensure that this `BrowserDB`
