@@ -19,6 +19,11 @@ open class BrowserDB {
     open static let MaxVariableNumber = 999
 
     public init(filename: String, secretKey: String? = nil, schema: Schema, files: FileAccessor) {
+        // Cliqz
+        if filename == "browser.db" {
+            BrowserDB.preInit(filename: filename, schema: schema, files: files)
+        }
+
         log.debug("Initializing BrowserDB: \(filename).")
 
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
@@ -28,6 +33,11 @@ open class BrowserDB {
         }
 
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil, schema: schema, files: files)
+
+        // Cliqz
+        if filename == "browser.db" {
+            self.postInit()
+        }
     }
 
     // For testing purposes or other cases where we want to ensure that this `BrowserDB`
