@@ -89,11 +89,15 @@ extension Notification.Name {
 
     var showSearchOnboarding: Bool {
         get {
+            #if PAID
             if let val = userDefaults().value(forKey: ShowSearchOnboarding) as? Bool {
                 return val
             }
 
             return true
+            #else
+            return false
+            #endif
         }
         set {
             userDefaults().set(newValue, forKey: ShowSearchOnboarding)
