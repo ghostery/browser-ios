@@ -93,6 +93,14 @@ class JSBridge : RCTEventEmitter {
             }
         }
     }
+
+    @objc(getConfig:reject:)
+    func getConfig(resolve: @escaping RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        if SettingsPrefs.shared.isLumenDefaultSearchEngine {
+            UserPreferences.instance.showSearchOnboarding = false
+        }
+        resolve(["onboarding": UserPreferences.instance.showSearchOnboarding])
+    }
     
     /// Call an action over the JSBridge and execute a callback with the result. Invokation of the callback is
     /// not guaranteed, for example if the function is never registered. Unlike the synchronous version, this

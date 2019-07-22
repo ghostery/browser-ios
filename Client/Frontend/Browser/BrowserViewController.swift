@@ -890,7 +890,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func showSearchController() {
+    func showSearchController() {
         /* Cliqz: Replace Search Controller
         if searchController != nil {
             return
@@ -915,15 +915,20 @@ class BrowserViewController: UIViewController {
         
         searchController!.didMove(toParentViewController: self)
         */
-        if (searchController != nil && SettingsPrefs.shared.getCliqzSearchPref() == false) ||
-            (cliqzSearchController != nil && SettingsPrefs.shared.getCliqzSearchPref() == true){
+        let shouldShowCliqzSearch = SettingsPrefs.shared.getCliqzSearchPref() || self.shouldShowSearchOnboarding()
+        if (searchController != nil && !shouldShowCliqzSearch) ||
+            (cliqzSearchController != nil && shouldShowCliqzSearch){
             return
         }
         
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
         searchLoader!.addListener(HistoryListener.shared)
         
-        if SettingsPrefs.shared.getCliqzSearchPref() {
+        if shouldShowCliqzSearch {
+            if self.shouldShowSearchOnboarding() {
+                LegacyTelemetryHelper.logOnboarding(action: "show", topic: "search")
+            } 
+
             homePanelController?.view?.isHidden = true
 
             cliqzSearchController = CliqzSearchViewController(profile: self.profile)
@@ -1000,7 +1005,11 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func hideSearchController() {
+    private func shouldShowSearchOnboarding() -> Bool {
+        return UserPreferences.instance.showSearchOnboarding
+    }
+
+    func hideSearchController() {
         /*Cliqz: Hide cliqzSearch or firefoxSearch
         if let searchController = searchController {
             searchController.willMove(toParentViewController: nil)
@@ -1681,12 +1690,16 @@ extension BrowserViewController: URLBarDelegate {
             searchController?.searchQuery = text
             searchLoader?.query = text
 			*/
-			if !text.isEmpty {
-                cliqzSearchController?.searchQuery = text
-				searchController?.searchQuery = text
-				searchLoader?.query = text
-			}
+            self.updateSearchQuery(query: text)
 			// End Cliqz
+        }
+    }
+
+    func updateSearchQuery(query: String) {
+        if !query.isEmpty {
+            cliqzSearchController?.searchQuery = query
+            searchController?.searchQuery = query
+            searchLoader?.query = query
         }
     }
 
@@ -2348,7 +2361,13 @@ extension BrowserViewController: IntroViewControllerDelegate {
 		#endif
         // End Cliqz
 
-        if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
+        /* Cliqz: determining the first launch. */
+        let isFirstLaunch = profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil
+        if isFirstLaunch {
+            UserPreferences.instance.showSearchOnboarding = false
+        }
+
+        if force || isFirstLaunch {
 		#if PAID
 			let introViewController = LumenIntroViewController()
 		#else

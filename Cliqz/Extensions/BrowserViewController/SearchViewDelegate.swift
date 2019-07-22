@@ -23,4 +23,21 @@ extension BrowserViewController: SearchViewDelegate {
 	func dismissKeyboard() {
 		urlBar.hideKeyboard()
 	}
+
+    func closeSearchOnboarding() {
+        let query = cliqzSearchController?.searchQuery
+        hideSearchController()
+        showSearchController()
+        if let query = query {
+            updateSearchQuery(query: query)
+        }
+    }
+
+    func makeLumenDefaultSearch() {
+        let lumenSearchEngine = self.profile.searchEngines.orderedEngines.filter { $0.shortName == LumenSearchEngineDisplayName }.first
+        if let engine = lumenSearchEngine {
+            self.profile.searchEngines.defaultEngine = engine
+            self.urlBar.updatePlaceHolders()
+        }
+    }
 }

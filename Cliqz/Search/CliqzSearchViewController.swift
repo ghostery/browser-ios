@@ -28,6 +28,8 @@ protocol SearchViewDelegate: class {
     func didSelectURL(_ url: URL, searchQuery: String?)
     func autoCompeleteQuery(_ autoCompleteText: String)
 	func dismissKeyboard()
+    func closeSearchOnboarding()
+    func makeLumenDefaultSearch()
 }
 
 let OpenURLIsSearchEngineKey = "OpenURLIsSearchEngineKey"
@@ -37,6 +39,8 @@ let HideKeyboardSearchNotification = NSNotification.Name(rawValue: "mobile-searc
 let CallSearchNotification = NSNotification.Name(rawValue: "mobile-search:call")
 let MapSearchNotification = NSNotification.Name(rawValue: "mobile-search:map")
 let ShareLocationSearchNotification = NSNotification.Name(rawValue: "mobile-search:share-location")
+let MakeLumenDefaultSearchNotification = NSNotification.Name(rawValue: "mobile-search:makeLumenDefaultSearchEngine")
+let CloseSearchOnboardingNotification = NSNotification.Name(rawValue: "mobile-search:closeSearchOnboarding")
 
 let SearchEngineChangedNotification = Notification.Name(rawValue: "SearchEngineChangedNotification")
 
@@ -120,6 +124,8 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
         NotificationCenter.default.addObserver(self, selector: #selector(openMap), name: MapSearchNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(shareLocation), name: ShareLocationSearchNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(autocomplete(_:)), name: AutoCompleteNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(closeSearchOnboarding(_:)), name: CloseSearchOnboardingNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(makeLumenDefaultSearch(_:)), name: MakeLumenDefaultSearchNotification, object: nil)
         
         //TODO: Send notification when search engine is changed
         NotificationCenter.default.addObserver(self, selector: #selector(searchEngineChanged), name: SearchEngineChangedNotification, object: nil)
@@ -284,6 +290,20 @@ extension CliqzSearchViewController {
     
     @objc func shareLocation(_ notification: Notification) {
         LocationManager.sharedInstance.shareLocation()
+    }
+
+    @objc func closeSearchOnboarding(_ notification: Notification) {
+        LegacyTelemetryHelper.logOnboarding(action: "click", target: "cancel", topic: "search")
+        UserPreferences.instance.showSearchOnboarding = false
+        delegate?.closeSearchOnboarding()
+    }
+
+    @objc func makeLumenDefaultSearch(_ notification: Notification) {
+        LegacyTelemetryHelper.logOnboarding(action: "click", target: "try", topic: "search")
+        UserPreferences.instance.showSearchOnboarding = false
+        if !SettingsPrefs.shared.isLumenDefaultSearchEngine {
+           delegate?.makeLumenDefaultSearch()
+        }
     }
 
     fileprivate func showLumenSearchLeavingWarning(url: URL) {

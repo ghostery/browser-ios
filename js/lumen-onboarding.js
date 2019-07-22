@@ -102,9 +102,9 @@ export default class Onboarding extends React.Component {
           </Animated.View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback disabled={this.state.isClicked} onPress={() => this.onPress(false)}>
-          <>
+          <View>
             <Animated.Text style={{ letterSpacing: -0.2, marginTop: 20, fontSize: 14, lineHeight: 17, fontWeight: '700', color: this.interpolateColor('#3647D0', '#3647D0')}}>{noThanksText}</Animated.Text>
-          </>
+          </View>
         </TouchableWithoutFeedback>
       </View>
     );

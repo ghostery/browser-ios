@@ -19,9 +19,13 @@ class Onboarding: RCTEventEmitter {
     func tryLumenSearch(accepted: Bool) {
         debugPrint("tryLumenSearch -- \(accepted)")
         if accepted {
-            // TODO: PK this is try now case. Change Lumen to default search engine. UI will be handled by extenstion
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: MakeLumenDefaultSearchNotification, object: nil, userInfo: nil)
+            }
         } else {
-            // TODO: PK close cliqz search and open queary with default search engine
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: CloseSearchOnboardingNotification, object: nil, userInfo: nil)
+            }
         }
     }
 }
