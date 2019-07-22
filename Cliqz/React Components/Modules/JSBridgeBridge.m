@@ -13,5 +13,6 @@
 RCT_EXTERN_METHOD(replyToAction:(nonnull NSInteger *)actionId result:(NSDictionary *)result)
 RCT_EXTERN_METHOD(registerAction:)
 RCT_EXTERN_METHOD(pushEvent:(nonnull NSString *)eventId data:(NSArray *)data)
+RCT_EXTERN_METHOD(getConfig:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 
 @end

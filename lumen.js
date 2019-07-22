@@ -59,11 +59,12 @@ class MobileCards extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      onboarding: props.showSearchOnboarding,
+      onboarding: false,
       results: {
         results: [],
         meta: {}
       },
+      isReady: false,
       hasQuery: false,
       theme: 'lumen-light'
     }
@@ -71,7 +72,16 @@ class MobileCards extends React.Component {
     this.cliqz = new Cliqz();
     this.isDeveloper = prefs.get('developer', false);
     this.appStart = appStart || Promise.resolve();
+    this.init();
+  }
 
+  async init() {
+    await this.appStart;
+    const config = await nativeBridge.getConfig();
+    this.setState({
+      onboarding: config.onboarding,
+      isReady: true,
+    });
     events.sub('search:results', this.updateResults);
     events.sub('mobile-browser:notify-preferences', this.updatePreferences);
     events.sub('mobile-browser:set-search-engine', this.setSearchEngine);
@@ -138,6 +148,9 @@ class MobileCards extends React.Component {
   }
 
   render() {
+    if (!this.state.isReady) {
+      return null;
+    }
     const { results, suggestions, meta, query } = this.state.results;
     const appearance = this.state.theme;
     const layout = 'vertical';
