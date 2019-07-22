@@ -243,8 +243,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 extension CliqzSearchViewController {
     
     @objc func didSelectUrl(_ notification: Notification) {
-        if let url_str = notification.object as? NSString, let encodedString = url_str.addingPercentEncoding(
-            withAllowedCharacters: NSCharacterSet.urlFragmentAllowed), let url = URL(string: encodedString as String) {
+        if let url_str = notification.object as? NSString, let url = URL(string: url_str as String) {
             #if PAID
             let isSearchEngine = notification.userInfo?[OpenURLIsSearchEngineKey] as? Bool
             if UserPreferences.instance.shouldShowNonPrivateSearchWarningMessage, isSearchEngine ?? false {
