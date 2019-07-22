@@ -96,7 +96,8 @@ class JSBridge : RCTEventEmitter {
 
     @objc(getConfig:reject:)
     func getConfig(resolve: @escaping RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        resolve(["onboarding": UserPreferences.instance.showSearchOnboarding])
+        let shouldShowOnboarding = UserPreferences.instance.showSearchOnboarding && !SettingsPrefs.shared.isLumenDefaultSearchEngine
+        resolve(["onboarding": shouldShowOnboarding])
     }
     
     /// Call an action over the JSBridge and execute a callback with the result. Invokation of the callback is

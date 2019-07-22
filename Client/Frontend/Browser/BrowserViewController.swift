@@ -915,7 +915,7 @@ class BrowserViewController: UIViewController {
         
         searchController!.didMove(toParentViewController: self)
         */
-        let shouldShowCliqzSearch = SettingsPrefs.shared.getCliqzSearchPref() || UserPreferences.instance.showSearchOnboarding
+        let shouldShowCliqzSearch = SettingsPrefs.shared.getCliqzSearchPref() || self.shouldShowSearchOnboarding()
         if (searchController != nil && !shouldShowCliqzSearch) ||
             (cliqzSearchController != nil && shouldShowCliqzSearch){
             return
@@ -924,8 +924,14 @@ class BrowserViewController: UIViewController {
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
         searchLoader!.addListener(HistoryListener.shared)
         
-        // TODO:PK add telemetry
         if shouldShowCliqzSearch {
+            if self.shouldShowSearchOnboarding() {
+                LegacyTelemetryHelper.logOnboarding(action: "show", topic: "search")
+            } else {
+                /// Never show onboarding if Lumen was already a search engine
+                UserPreferences.instance.showSearchOnboarding = false
+            }
+
             homePanelController?.view?.isHidden = true
 
             cliqzSearchController = CliqzSearchViewController(profile: self.profile)
@@ -1000,6 +1006,12 @@ class BrowserViewController: UIViewController {
             
             searchController!.didMove(toParentViewController: self)
         }
+    }
+
+    private func shouldShowSearchOnboarding() -> Bool {
+        let showOboarding = UserPreferences.instance.showSearchOnboarding
+        let isLumenDefault = SettingsPrefs.shared.isLumenDefaultSearchEngine
+        return showOboarding && !isLumenDefault
     }
 
     func hideSearchController() {
