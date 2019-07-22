@@ -927,10 +927,7 @@ class BrowserViewController: UIViewController {
         if shouldShowCliqzSearch {
             if self.shouldShowSearchOnboarding() {
                 LegacyTelemetryHelper.logOnboarding(action: "show", topic: "search")
-            } else {
-                /// Never show onboarding if Lumen was already a search engine
-                UserPreferences.instance.showSearchOnboarding = false
-            }
+            } 
 
             homePanelController?.view?.isHidden = true
 
@@ -1009,9 +1006,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func shouldShowSearchOnboarding() -> Bool {
-        let showOboarding = UserPreferences.instance.showSearchOnboarding
-        let isLumenDefault = SettingsPrefs.shared.isLumenDefaultSearchEngine
-        return showOboarding && !isLumenDefault
+        return UserPreferences.instance.showSearchOnboarding
     }
 
     func hideSearchController() {
@@ -2369,7 +2364,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         /* Cliqz: determining the first launch. */
         let isFirstLaunch = profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil
         if isFirstLaunch {
-            UserPreferences.instance.showSearchOnboarding = false
+//            UserPreferences.instance.showSearchOnboarding = false
         }
 
         if force || isFirstLaunch {

@@ -29,6 +29,7 @@ protocol SearchViewDelegate: class {
     func autoCompeleteQuery(_ autoCompleteText: String)
 	func dismissKeyboard()
     func closeSearchOnboarding()
+    func makeLumenDefaultSearch()
 }
 
 let OpenURLIsSearchEngineKey = "OpenURLIsSearchEngineKey"
@@ -301,10 +302,7 @@ extension CliqzSearchViewController {
         LegacyTelemetryHelper.logOnboarding(action: "click", target: "try", topic: "search")
         UserPreferences.instance.showSearchOnboarding = false
         if !SettingsPrefs.shared.isLumenDefaultSearchEngine {
-            let lumenSearchEngine = self.profile.searchEngines.orderedEngines.filter { $0.shortName == LumenSearchEngineDisplayName }.first
-            if let engine = lumenSearchEngine {
-                self.profile.searchEngines.defaultEngine = engine
-            }
+           delegate?.makeLumenDefaultSearch()
         }
     }
 
