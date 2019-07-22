@@ -2,9 +2,18 @@ import 'react-native/Libraries/Core/InitializeCore';
 import './setup';
 import 'process-nextick-args';
 import React from 'react';
-import { AppRegistry, StyleSheet, View, Text, ScrollView, NativeModules, NativeEventEmitter, TouchableWithoutFeedback } from 'react-native';
+import {
+  AppRegistry,
+  StyleSheet, View,
+  Text,
+  ScrollView,
+  NativeModules,
+  NativeEventEmitter,
+  TouchableWithoutFeedback,
+  Image,
+} from 'react-native';
+
 import { startup } from 'browser-core-lumen-ios';
-import Cliqz from './cliqzWrapper';
 import { setDefaultSearchEngine } from 'browser-core-lumen-ios/build/modules/core/search-engines';
 import { addConnectionChangeListener, removeConnectionChangeListener } from 'browser-core-lumen-ios/build/modules/platform/network';
 import prefs from 'browser-core-lumen-ios/build/modules/core/prefs';
@@ -13,9 +22,11 @@ import SearchUI from 'browser-core-lumen-ios/build/modules/mobile-cards/SearchUI
 import SearchUIVertical from 'browser-core-lumen-ios/build/modules/mobile-cards-vertical/SearchUI';
 import { Provider as CliqzProvider } from 'browser-core-lumen-ios/build/modules/mobile-cards/cliqz';
 import { Provider as ThemeProvider } from 'browser-core-lumen-ios/build/modules/mobile-cards-vertical/withTheme';
-import Onboarding from './js/lumen-onboarding';
 import inject from 'browser-core-lumen-ios/build/modules/core/kord/inject';
 import NativeDrawable, { normalizeUrl } from 'browser-core-lumen-ios/build/modules/mobile-cards/components/custom/NativeDrawable';
+
+import Onboarding from './js/lumen-onboarding';
+import Cliqz from './cliqzWrapper';
 import t from './js/i18n';
 
 const nativeBridge = NativeModules.JSBridge;
@@ -34,24 +45,29 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   footer: {
-    height: 20,
+    height: 40,
     backgroundColor: '#656d7e',
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   searchEnginesContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginTop: 20,
     marginBottom: 100,
+    textAlign: 'center',
   },
   searchEngineIcon: {
-    height: 73,
-    width: 73,
+    height: 74,
+    width: 74,
     borderRadius: 10,
     overflow: 'hidden',
+  },
+  searchEngineText: {
+    color: 'white',
+    textAlign: 'center',
   },
 });
 
@@ -180,7 +196,7 @@ class MobileCards extends React.Component {
                   { /* TODO chrmod: colors and font sizes */ }
                   { results.length === 0 &&
                     <View style={{ backgroundColor: 'white', height: 80, alignItems: 'center', justifyContent: 'center' }}>
-                      <Text style={{ color: '#656d7e' }}></Text>
+                      <Text style={{ color: '#656d7e' }}>{t('search_no_results')}</Text>
                     </View>
                   }
                   <View style={styles.footer}>
@@ -192,30 +208,38 @@ class MobileCards extends React.Component {
                     <Text style={{ color: 'white' }}>{t('search_alternative_search_engines_info')}</Text>
                   </View>
                   <View style={styles.searchEnginesContainer}>
-                    { /* TODO chrmod: list + send openlink event onclick + real pngs */ }
                     <TouchableWithoutFeedback
                       onPress={() => this.openLink(`https://google.com/search?q=${encodeURIComponent(this.state.results.query)}`)}
                     >
-                      <NativeDrawable
-                        style={styles.searchEngineIcon}
-                        source={normalizeUrl('google.svg')}
-                      />
+                      <View>
+                        <NativeDrawable
+                          style={styles.searchEngineIcon}
+                          source={normalizeUrl('google.svg')}
+                        />
+                        <Text style={styles.searchEngineText}>Google</Text>
+                      </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback
                       onPress={() => this.openLink(`https://duckduckgo.com/?q=${encodeURIComponent(this.state.results.query)}`)}
                     >
-                      <NativeDrawable
-                        style={styles.searchEngineIcon}
-                        source={normalizeUrl('ddg.svg')}
-                      />
+                      <View>
+                        <NativeDrawable
+                          style={styles.searchEngineIcon}
+                          source={normalizeUrl('ddg.svg')}
+                        />
+                        <Text style={styles.searchEngineText}>DuckDuckGo</Text>
+                      </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback
                       onPress={() => this.openLink(`https://www.bing.com/search?q=${encodeURIComponent(this.state.results.query)}`)}
                     >
-                      <NativeDrawable
-                        style={styles.searchEngineIcon}
-                        source={normalizeUrl('bing.svg')}
-                      />
+                      <View>
+                        <NativeDrawable
+                          style={styles.searchEngineIcon}
+                          source={normalizeUrl('bing.svg')}
+                        />
+                        <Text style={styles.searchEngineText}>Bing</Text>
+                      </View>
                     </TouchableWithoutFeedback>
                   </View>
                 </>
