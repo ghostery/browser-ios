@@ -25,7 +25,11 @@ extension BrowserViewController: SearchViewDelegate {
 	}
 
     func closeSearchOnboarding() {
+        let query = cliqzSearchController?.searchQuery
         hideSearchController()
         showSearchController()
+        if let query = query {
+            updateSearchQuery(query: query)
+        }
     }
 }

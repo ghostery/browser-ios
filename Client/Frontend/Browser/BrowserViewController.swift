@@ -915,8 +915,9 @@ class BrowserViewController: UIViewController {
         
         searchController!.didMove(toParentViewController: self)
         */
-        if (searchController != nil && SettingsPrefs.shared.getCliqzSearchPref() == false) ||
-            (cliqzSearchController != nil && SettingsPrefs.shared.getCliqzSearchPref() == true){
+        let shouldShowCliqzSearch = SettingsPrefs.shared.getCliqzSearchPref() || UserPreferences.instance.showSearchOnboarding
+        if (searchController != nil && !shouldShowCliqzSearch) ||
+            (cliqzSearchController != nil && shouldShowCliqzSearch){
             return
         }
         
@@ -924,7 +925,7 @@ class BrowserViewController: UIViewController {
         searchLoader!.addListener(HistoryListener.shared)
         
         // TODO:PK add telemetry
-        if SettingsPrefs.shared.getCliqzSearchPref() || UserPreferences.instance.showSearchOnboarding {
+        if shouldShowCliqzSearch {
             homePanelController?.view?.isHidden = true
 
             cliqzSearchController = CliqzSearchViewController(profile: self.profile)
@@ -1682,12 +1683,16 @@ extension BrowserViewController: URLBarDelegate {
             searchController?.searchQuery = text
             searchLoader?.query = text
 			*/
-			if !text.isEmpty {
-                cliqzSearchController?.searchQuery = text
-				searchController?.searchQuery = text
-				searchLoader?.query = text
-			}
+            self.updateSearchQuery(query: text)
 			// End Cliqz
+        }
+    }
+
+    func updateSearchQuery(query: String) {
+        if !query.isEmpty {
+            cliqzSearchController?.searchQuery = query
+            searchController?.searchQuery = query
+            searchLoader?.query = query
         }
     }
 
