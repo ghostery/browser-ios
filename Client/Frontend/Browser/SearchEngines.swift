@@ -243,4 +243,16 @@ class SearchEngines {
             return index1! < index2!
         }
     }
+
+    /* Cliqz: Lumen Search Engine Migration */
+    func isSearchDefaultEngineSaved() -> Bool {
+        return prefs.stringArrayForKey(OrderedEngineNames) != nil
+    }
+
+    func saveGoogleAsDefault() {
+        let google = self.getOrderedEngines().filter { $0.shortName == "Google" }.first
+        if let google = google {
+            self.defaultEngine = google
+        }
+    }
 }

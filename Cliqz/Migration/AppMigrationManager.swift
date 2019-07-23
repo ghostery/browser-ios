@@ -48,8 +48,9 @@ class AppMigrationManager {
             UserPreferences.instance.showSearchOnboarding = false
         } else if from == initialVersion { // means lower then 1.0.7
             UserPreferences.instance.showSearchOnboarding = true
-            let defaultSearch = profile.searchEngines.defaultEngine
-            profile.searchEngines.defaultEngine = defaultSearch
+            if !profile.searchEngines.isSearchDefaultEngineSaved() {
+                profile.searchEngines.saveGoogleAsDefault()
+            }
         } else {
             print("Migrating from version \(from!) to \(to)")
         }
