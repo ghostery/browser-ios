@@ -171,7 +171,7 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
     
     override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-        Engine.sharedInstance.getBridge().callAction("search:stopSearch", args: [["contextId": "mobile-cards"]])
+        Engine.sharedInstance.getBridge().callAction("search:stopSearch", args: [["entryPoint": ""], ["contextId": "mobile-cards"]])
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: LocationManager.NotificationUserLocationAvailable), object: nil)
     }
 
