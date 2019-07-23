@@ -10,7 +10,7 @@ import {
   NativeModules,
   NativeEventEmitter,
   TouchableWithoutFeedback,
-  Image,
+  YellowBox,
 } from 'react-native';
 
 import { startup } from 'browser-core-lumen-ios';
@@ -28,6 +28,14 @@ import NativeDrawable, { normalizeUrl } from 'browser-core-lumen-ios/build/modul
 import Onboarding from './js/lumen-onboarding';
 import Cliqz from './cliqzWrapper';
 import t from './js/i18n';
+
+YellowBox.ignoreWarnings([
+  'Warning: NetInfo', // TODO: use netinfo from community package
+  'Module RNSqlite2 requires main queue', // TODO: update the lib
+  'Module RNFSManager requires main queue', // TODO: update the lib
+  'Module RNDeviceInfo requires main queue', // TODO: update the lib
+  'RCTBridge required', // TODO: potentially https://github.com/facebook/react-native/issues/16376
+]);
 
 const nativeBridge = NativeModules.JSBridge;
 
@@ -89,6 +97,7 @@ class MobileCards extends React.Component {
     this.isDeveloper = prefs.get('developer', false);
     this.appStart = appStart || Promise.resolve();
     this.init();
+    this.scrollRef = React.createRef();
   }
 
   async init() {
@@ -104,6 +113,7 @@ class MobileCards extends React.Component {
     addConnectionChangeListener();
     this.eventEmitter = new NativeEventEmitter(nativeBridge);
     this.eventEmitter.addListener('action', this.onAction);
+    this.eventEmitter.addListener('publishEvent', this.onEvent);
   }
 
   componentWillUnmount() {
@@ -114,6 +124,8 @@ class MobileCards extends React.Component {
     this.eventEmitter.removeAllListeners();
   }
 
+  onEvent = () => {}
+
   onAction = async ({ action, args, id }) => {
     const [module, name] = action.split(':');
     if (this.state.onboarding === true && module === 'search' && name === 'startSearch') {
@@ -122,6 +134,10 @@ class MobileCards extends React.Component {
       this.setState({
         hasQuery: true,
       });
+      return;
+    }
+    if (action === 'core:setPref') {
+      prefs.set(...args);
       return;
     }
     const response = await inject.module(module).action(name, ...args);
@@ -143,7 +159,12 @@ class MobileCards extends React.Component {
     });
   }
 
-  updateResults = results => this.setState({ results, onboarding: false });
+  updateResults = results => {
+    if (this.scrollRef.current) {
+      this.scrollRef.current.scrollTo({ y: 0, animated: false });
+    }
+    this.setState({ results, onboarding: false });
+  }
 
   onTryNowPressed = (choice) => {
     NativeModules.Onboarding.tryLumenSearch(choice);
@@ -181,7 +202,10 @@ class MobileCards extends React.Component {
         <View style={styles.container}>
           <CliqzProvider value={this.cliqz}>
             <ThemeProvider value={appearance}>
-              <ScrollView bounces={false} >
+              <ScrollView
+                bounces={false}
+                ref={this.scrollRef}
+              >
                 <SearchComponent
                   results={results}
                   meta={meta}

@@ -15,4 +15,8 @@ class LocaleConstants: NSObject {
         return ["lang": Locale.current.languageCode ?? "en", "locale": Locale.current.identifier]
     }
 
+    @objc
+    static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
 }
