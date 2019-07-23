@@ -192,10 +192,12 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
             self.privateMode = privateMode
             Engine.updateExtensionPreferences(privateMode: privateMode)
             if privateMode && privateModeOverlay.superview == nil {
+                #if !PAID
                 backgroundImage.addSubview(privateModeOverlay)
                 privateModeOverlay.snp.makeConstraints { (make) in
                     make.edges.equalToSuperview()
                 }
+                #endif
             }
         }
     }
