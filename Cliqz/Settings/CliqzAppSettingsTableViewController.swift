@@ -141,7 +141,7 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
-                        titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
+                        titleText: NSLocalizedString("Settings.SaveLogins.Title", comment: "Setting to enable the built-in password manager")),
             LimitMobileDataUsageSetting(settings: self),
             // [IP-315] Disable theme switching: remove from settings
             //ThemeSetting(settings: self),
