@@ -90,7 +90,8 @@ class MobileCards extends React.Component {
       },
       isReady: false,
       hasQuery: false,
-      theme: 'lumen-light'
+      theme: 'lumen-light',
+      query: '',
     }
 
     this.cliqz = new Cliqz();
@@ -132,9 +133,14 @@ class MobileCards extends React.Component {
       // don't start search until onboarding is finished
       this.retryLastSearch = () => this.onAction({ action, args, id });
       this.setState({
+        query: args[0],
         hasQuery: true,
       });
       return;
+    } else {
+      this.setState({
+        query: args[0],
+      });
     }
     if (action === 'core:setPref') {
       prefs.set(...args);
@@ -180,8 +186,28 @@ class MobileCards extends React.Component {
     }, 1000); // wait for onboarding animation to finish
   }
 
-  openLink = (url) => {
-    NativeModules.BrowserActions.openLink(url, this.state.results.query, true);
+  openSearchEngineLink = async (url, index) => {
+    const results = this.state.results || {};
+    const meta = results.meta || {};
+    const query = this.state.query;
+    await inject.module('mobile-cards').action('openLink', url, {
+      action: 'click',
+      elementName: 'icon',
+      isFromAutoCompletedUrl: false,
+      isNewTab: false,
+      isPrivateMode: false,
+      isPrivateResult: meta.isPrivate,
+      query,
+      isSearchEngine: true,
+      rawResult: {
+        index: index,
+        url,
+        provider: 'instant',
+        type: 'supplementary-search',
+      },
+      resultOrder: meta.resultOrder,
+      url,
+    });
   }
 
   render() {
@@ -233,7 +259,7 @@ class MobileCards extends React.Component {
                   </View>
                   <View style={styles.searchEnginesContainer}>
                     <TouchableWithoutFeedback
-                      onPress={() => this.openLink(`https://google.com/search?q=${encodeURIComponent(this.state.results.query)}`)}
+                      onPress={() => this.openSearchEngineLink(`https://google.com/search?q=${encodeURIComponent(this.state.query)}`, 0)}
                     >
                       <View>
                         <NativeDrawable
@@ -244,7 +270,7 @@ class MobileCards extends React.Component {
                       </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback
-                      onPress={() => this.openLink(`https://duckduckgo.com/?q=${encodeURIComponent(this.state.results.query)}`)}
+                      onPress={() => this.openSearchEngineLink(`https://duckduckgo.com/?q=${encodeURIComponent(this.state.query)}`, 1)}
                     >
                       <View>
                         <NativeDrawable
@@ -255,7 +281,7 @@ class MobileCards extends React.Component {
                       </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback
-                      onPress={() => this.openLink(`https://www.bing.com/search?q=${encodeURIComponent(this.state.results.query)}`)}
+                      onPress={() => this.openSearchEngineLink(`https://www.bing.com/search?q=${encodeURIComponent(this.state.query)}`, 2)}
                     >
                       <View>
                         <NativeDrawable
