@@ -44,7 +44,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var receivedURLs = [URL]()
     var unifiedTelemetry: UnifiedTelemetry?
-    
+
+    private var appMigrationManager: AppMigrationManager?
+
     //Cliqz: RealmDB path
     var realmDir: URL {
         return URL(fileURLWithPath: (try! profile!.files.getAndEnsureDirectory("RealmDB"))).appendingPathComponent("default.realm")
@@ -143,6 +145,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.window!.tintColor = .cliqzBluePrimary
         #endif
         //Cliqz: end
+
+        #if PAID
+        appMigrationManager = AppMigrationManager(profile: profile)
+        appMigrationManager?.migrateIfNeeded()
+        #endif
 
         unifiedTelemetry = UnifiedTelemetry(profile: profile)
 

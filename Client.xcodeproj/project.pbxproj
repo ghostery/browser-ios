@@ -642,6 +642,7 @@
 		C50A330B22B12F8B006236F9 /* UpgradLumenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50A330822B12F8B006236F9 /* UpgradLumenViewController.swift */; };
 		C50B4A91229C46AA00B5FBEB /* SubscriptionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50B4A88229C46A900B5FBEB /* SubscriptionDataSource.swift */; };
 		C50C4FA32277428B009B362E /* VPN.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50C4FA22277428A009B362E /* VPN.swift */; };
+		C5835DE922E7312C00A229C8 /* AppMigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5835DE822E7312C00A229C8 /* AppMigrationManager.swift */; };
 		C599C1B1228ADEE5006985F1 /* UserNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C599C1B0228ADEE5006985F1 /* UserNotificationsManager.swift */; };
 		C59E5CFE22954141001FF955 /* LumenSubscriptionProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59E5CFD22954141001FF955 /* LumenSubscriptionProduct.swift */; };
 		C5B06A6A22DCA45C0007AA7E /* LumenSearchEnginePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B06A6922DCA45C0007AA7E /* LumenSearchEnginePicker.swift */; };
@@ -2097,6 +2098,7 @@
 		C50A330822B12F8B006236F9 /* UpgradLumenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpgradLumenViewController.swift; sourceTree = "<group>"; };
 		C50B4A88229C46A900B5FBEB /* SubscriptionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionDataSource.swift; sourceTree = "<group>"; };
 		C50C4FA22277428A009B362E /* VPN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPN.swift; sourceTree = "<group>"; };
+		C5835DE822E7312C00A229C8 /* AppMigrationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationManager.swift; sourceTree = "<group>"; };
 		C599C1B0228ADEE5006985F1 /* UserNotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationsManager.swift; sourceTree = "<group>"; };
 		C59E5CFD22954141001FF955 /* LumenSubscriptionProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenSubscriptionProduct.swift; sourceTree = "<group>"; };
 		C5B06A6922DCA45C0007AA7E /* LumenSearchEnginePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumenSearchEnginePicker.swift; sourceTree = "<group>"; };
@@ -3614,6 +3616,7 @@
 		4F8F3C0D202CB39F001C1A0F /* Cliqz */ = {
 			isa = PBXGroup;
 			children = (
+				C5835DDF22E7310700A229C8 /* Migration */,
 				C599C1A7228ADEC7006985F1 /* Notifications */,
 				1E54236A222008200021020F /* Contextual Messages */,
 				4FDC333621FF618E001215EF /* Upgrade&Payment */,
@@ -4068,6 +4071,14 @@
 				C50A330822B12F8B006236F9 /* UpgradLumenViewController.swift */,
 			);
 			path = UpgradeViews;
+			sourceTree = "<group>";
+		};
+		C5835DDF22E7310700A229C8 /* Migration */ = {
+			isa = PBXGroup;
+			children = (
+				C5835DE822E7312C00A229C8 /* AppMigrationManager.swift */,
+			);
+			path = Migration;
 			sourceTree = "<group>";
 		};
 		C599C1A7228ADEC7006985F1 /* Notifications */ = {
@@ -6879,6 +6890,7 @@
 				E650754E1E37F6AE006961AC /* GeometryExtensions.swift in Sources */,
 				AF6FA99120652D4600D7F9F0 /* TrackerStore.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
+				C5835DE922E7312C00A229C8 /* AppMigrationManager.swift in Sources */,
 				4F4033C42086358D00AD2A8D /* ControlCenterViewController.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,

@@ -2363,10 +2363,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
         /* Cliqz: determining the first launch. */
         let isFirstLaunch = profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil
-        if isFirstLaunch {
-            UserPreferences.instance.showSearchOnboarding = false
-        }
-
+        
         if force || isFirstLaunch {
 		#if PAID
 			let introViewController = LumenIntroViewController()
