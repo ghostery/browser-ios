@@ -211,7 +211,11 @@ class SearchEngines {
     /// Get all known search engines, possibly as ordered by the user.
     fileprivate func getOrderedEngines() -> [OpenSearchEngine] {
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
-        let unorderedEngines = customEngines + SearchEngines.getUnorderedBundledEnginesFor(locale: locale)
+        var unorderedEngines = customEngines + SearchEngines.getUnorderedBundledEnginesFor(locale: locale)
+
+        #if !PAID
+        unorderedEngines = unorderedEngines.filter{ $0.shortName != LumenSearchEngineDisplayName }
+        #endif
 
         // might not work to change the default.
         guard let orderedEngineNames = prefs.stringArrayForKey(OrderedEngineNames) else {
