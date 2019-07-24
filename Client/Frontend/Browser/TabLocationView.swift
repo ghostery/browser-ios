@@ -112,7 +112,7 @@ class TabLocationView: UIView {
         #if PAID
         let placeholderText: String!
         if SettingsPrefs.shared.isLumenDefaultSearchEngine {
-            placeholderText = NSLocalizedString("Search anonymously", comment: "The text shown in the URL bar on about:home")
+            placeholderText = NSLocalizedString("Search anonymously", tableName: "Cliqz", comment: "The text shown in the URL bar on about:home")
         } else {
             placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
         }

@@ -1020,7 +1020,8 @@ class BrowserViewController: UIViewController {
             searchLoader = nil
         }
         */
-        if SettingsPrefs.shared.getCliqzSearchPref() {
+        let shouldShowCliqzSearch = SettingsPrefs.shared.getCliqzSearchPref() || self.shouldShowSearchOnboarding()
+        if shouldShowCliqzSearch {
             if let cliqzSearchController = cliqzSearchController {
                 cliqzSearchController.willMove(toParentViewController: nil)
                 cliqzSearchController.view.removeFromSuperview()
@@ -1690,7 +1691,11 @@ extension BrowserViewController: URLBarDelegate {
             searchController?.searchQuery = text
             searchLoader?.query = text
 			*/
-            self.updateSearchQuery(query: text)
+
+            let shouldSendQuery = tabManager.selectedTab?.url?.absoluteString.lowercased().stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces) != text
+            if shouldSendQuery {
+                self.updateSearchQuery(query: text)
+            }
 			// End Cliqz
         }
     }
