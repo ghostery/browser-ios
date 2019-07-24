@@ -16,10 +16,18 @@ const styles = StyleSheet.create({
   tryNow: {
     backgroundColor: '#3647D0',
     borderRadius: 14,
-    alignItems: 'center',
+    display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
     height: 36,
     marginTop: 20,
+    width: 'auto',
+  },
+  tryNowText: {
+    fontWeight: '700',
+    fontSize: 14,
+    lineHeight: 17,
+    color: 'white',
   },
   title: {
     letterSpacing: 0.25,
@@ -32,7 +40,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16,
     fontWeight: '500',
-  }
+  },
+  text: {
+    textAlign: "center",
+    width: '90%',
+  },
 });
 
 export default class Onboarding extends React.Component {
@@ -57,7 +69,7 @@ export default class Onboarding extends React.Component {
     });
     this.interplateWidth = this.animatedValue.interpolate({
       inputRange: [0, 150],
-      outputRange: [95, 36]
+      outputRange: [140, 36]
     });
   }
 
@@ -98,7 +110,7 @@ export default class Onboarding extends React.Component {
         </Animated.Text>
         <TouchableWithoutFeedback disabled={this.state.isClicked} onPress={() => this.onPress(true)}>
           <Animated.View style={[styles.tryNow, animatedStyle]}>
-            <Text style={{ fontWeight: '700', fontSize: 14, lineHeight: 17, color: 'white' }}>{tryNowText}</Text>
+            <Text style={styles.tryNowText}>{tryNowText}</Text>
           </Animated.View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback disabled={this.state.isClicked} onPress={() => this.onPress(false)}>

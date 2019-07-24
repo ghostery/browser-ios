@@ -118,6 +118,9 @@ class MobileCards extends React.Component {
   }
 
   componentWillUnmount() {
+    if (!this.eventEmitter) {
+      return;
+    }
     events.un_sub('mobile-browser:notify-preferences', this.updatePreferences);
     events.un_sub('mobile-browser:set-search-engine', this.setSearchEngine);
     events.un_sub('search:results', this.updateResults);
