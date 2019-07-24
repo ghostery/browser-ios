@@ -29,7 +29,11 @@ private struct TabLocationViewUX {
 struct TabLocationViewUX {
     static let HostFontColor = UIColor.black
     static let BaseURLFontColor = UIColor.Photon.Grey50
-    static let Spacing: CGFloat = 5 // TODO:PK check cliqz
+    #if PAID
+    static let Spacing: CGFloat = 5
+    #else
+    static let Spacing: CGFloat = 8
+    #endif
     static let StatusIconSize: CGFloat = 18
     static let TPIconSize: CGFloat = 24
     static let ButtonSize: CGFloat = 44
