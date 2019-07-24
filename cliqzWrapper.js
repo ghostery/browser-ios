@@ -1,13 +1,11 @@
-import inject from 'browser-core-lumen-ios/build/modules/core/kord/inject';
-
-const callAction = (module, action, ...args) => inject.module(module).action(action, ...args);
-const createModuleWrapper = (module, actions) =>
+const callAction = (inject, module, action, ...args) => inject.module(module).action(action, ...args);
+const createModuleWrapper = (inject, module, actions) =>
   actions.reduce((all, action) =>
-    ({ ...all, [action]: callAction.bind(null, module, action) }), {});
+    ({ ...all, [action]: callAction.bind(null, inject, module, action) }), {});
 
 export default class Cliqz {
-  constructor() {
-    this.mobileCards = createModuleWrapper('mobile-cards', [
+  constructor(inject) {
+    this.mobileCards = createModuleWrapper(inject, 'mobile-cards', [
       'openLink',
       'callNumber',
       'openMap',
@@ -18,8 +16,8 @@ export default class Cliqz {
       'getTrackerDetails',
     ]);
 
-    this.core = createModuleWrapper('core', []);
-    this.search = createModuleWrapper('search', ['getSnippet', 'reportHighlight']);
-    this.geolocation = createModuleWrapper('geolocation', ['updateGeoLocation']);
+    this.core = createModuleWrapper(inject, 'core', []);
+    this.search = createModuleWrapper(inject, 'search', ['getSnippet', 'reportHighlight']);
+    this.geolocation = createModuleWrapper(inject, 'geolocation', ['updateGeoLocation']);
   }
 }
