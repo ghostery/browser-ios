@@ -310,8 +310,8 @@ extension CliqzSearchViewController {
     fileprivate func showLumenSearchLeavingWarning(url: URL) {
         LegacyTelemetryHelper.logLumenSearchWarning(action: "show")
         UserPreferences.instance.shouldShowNonPrivateSearchWarningMessage = false
-        let title = NSLocalizedString("You are leaving the anonymous search", comment: "In other search engines searching alert title")
-        var localizedMessage = NSLocalizedString("Your query will be sent to", comment: "In other search engines searching alert message")
+        let title = NSLocalizedString("You are leaving the anonymous search", tableName: "Cliqz", comment: "In other search engines searching alert title")
+        var localizedMessage = NSLocalizedString("Your query will be sent to", tableName: "Cliqz", comment: "In other search engines searching alert message")
         if let host = url.host {
             localizedMessage = "\(localizedMessage) \(host)"
         }
