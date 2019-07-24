@@ -1020,7 +1020,8 @@ class BrowserViewController: UIViewController {
             searchLoader = nil
         }
         */
-        if SettingsPrefs.shared.getCliqzSearchPref() {
+        let shouldShowCliqzSearch = SettingsPrefs.shared.getCliqzSearchPref() || self.shouldShowSearchOnboarding()
+        if shouldShowCliqzSearch {
             if let cliqzSearchController = cliqzSearchController {
                 cliqzSearchController.willMove(toParentViewController: nil)
                 cliqzSearchController.view.removeFromSuperview()
