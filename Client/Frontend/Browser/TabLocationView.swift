@@ -29,7 +29,7 @@ private struct TabLocationViewUX {
 struct TabLocationViewUX {
     static let HostFontColor = UIColor.black
     static let BaseURLFontColor = UIColor.Photon.Grey50
-    static let Spacing: CGFloat = 8
+    static let Spacing: CGFloat = 5 // TODO:PK check cliqz
     static let StatusIconSize: CGFloat = 18
     static let TPIconSize: CGFloat = 24
     static let ButtonSize: CGFloat = 44
@@ -246,18 +246,29 @@ class TabLocationView: UIView {
             make.edges.equalTo(self)
         }
 
-        lockImageView.snp.makeConstraints { make in
-            make.width.equalTo(TabLocationViewUX.StatusIconSize)
-            make.height.equalTo(TabLocationViewUX.ButtonSize)
-        }
         trackingProtectionButton.snp.makeConstraints { make in
             make.width.equalTo(TabLocationViewUX.TPIconSize)
             make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
 
+        #if PAID
+        pageOptionsButton.snp.makeConstraints { make in
+            make.size.equalTo(30)
+        }
+        lockImageView.snp.makeConstraints { make in
+            make.width.equalTo(26)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
+        }
+        #else
         pageOptionsButton.snp.makeConstraints { make in
             make.size.equalTo(TabLocationViewUX.ButtonSize)
         }
+        lockImageView.snp.makeConstraints { make in
+            make.width.equalTo(TabLocationViewUX.StatusIconSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
+        }
+        #endif
+        
         separatorLine.snp.makeConstraints { make in
             make.width.equalTo(1)
             make.height.equalTo(26)
