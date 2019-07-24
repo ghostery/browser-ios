@@ -54,7 +54,6 @@ class MobileCards extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      onboarding: props.showSearchOnboarding,
       results: {
         results: [],
         meta: {}
@@ -62,7 +61,7 @@ class MobileCards extends React.Component {
       theme: 'light'
     }
 
-    this.cliqz = new Cliqz();
+    this.cliqz = new Cliqz(inject);
     this.isDeveloper = prefs.get('developer', false);
     this.appStart = appStart || Promise.resolve();
 

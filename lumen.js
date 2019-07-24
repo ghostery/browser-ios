@@ -10,7 +10,6 @@ import {
   NativeModules,
   NativeEventEmitter,
   TouchableWithoutFeedback,
-  YellowBox,
 } from 'react-native';
 
 import { startup } from 'browser-core-lumen-ios';
@@ -28,14 +27,6 @@ import NativeDrawable, { normalizeUrl } from 'browser-core-lumen-ios/build/modul
 import Onboarding from './js/lumen-onboarding';
 import Cliqz from './cliqzWrapper';
 import t from './js/i18n';
-
-YellowBox.ignoreWarnings([
-  'Warning: NetInfo', // TODO: use netinfo from community package
-  'Module RNSqlite2 requires main queue', // TODO: update the lib
-  'Module RNFSManager requires main queue', // TODO: update the lib
-  'Module RNDeviceInfo requires main queue', // TODO: update the lib
-  'RCTBridge required', // TODO: potentially https://github.com/facebook/react-native/issues/16376
-]);
 
 const nativeBridge = NativeModules.JSBridge;
 
@@ -94,7 +85,7 @@ class MobileCards extends React.Component {
       query: '',
     }
 
-    this.cliqz = new Cliqz();
+    this.cliqz = new Cliqz(inject);
     this.isDeveloper = prefs.get('developer', false);
     this.appStart = appStart || Promise.resolve();
     this.init();
