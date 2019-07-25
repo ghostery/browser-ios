@@ -34,8 +34,7 @@ extension BrowserDB {
         // TODO
         let newProfilePath = URL(fileURLWithPath: files.rootPath)
 
-        var oldProfilePath = FileManager.default.urls(for: .documentDirectory,
-                                                    in: .userDomainMask).first!
+        var oldProfilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         oldProfilePath.appendPathComponent("profile.profile")
 
         let fileManager = FileManager()
