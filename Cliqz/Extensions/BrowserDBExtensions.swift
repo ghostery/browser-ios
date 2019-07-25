@@ -33,8 +33,10 @@ extension BrowserDB {
     private static func moveOldDatabase(filename: String, secretKey: String? = nil, schema: Schema, files: FileAccessor) {
         // TODO
         let newProfilePath = URL(fileURLWithPath: files.rootPath)
-        let appSandboxPath = newProfilePath.deletingLastPathComponent()
-        let oldProfilePath = appSandboxPath.appendingPathComponent("Documents").appendingPathComponent("profile.profile")
+
+        var oldProfilePath = FileManager.default.urls(for: .documentDirectory,
+                                                    in: .userDomainMask).first!
+        oldProfilePath.appendPathComponent("profile.profile")
 
         let fileManager = FileManager()
         if fileManager.fileExists(atPath: oldProfilePath.path) {
