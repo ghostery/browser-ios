@@ -43,7 +43,7 @@ class LumenSearchEnginePicker: SearchEnginePicker {
             cell = ThemedTableViewCell(style: .default, reuseIdentifier: addSearchEngineCellIdentifier)
             cell!.accessoryType = .disclosureIndicator
         }
-        cell!.textLabel?.text = NSLocalizedString("Add Search Engine", comment: "Add search engine setting name")
+        cell!.textLabel?.text = NSLocalizedString("Settings.AddCustomEngine", value: "Add Search Engine", comment: "The button text in Search Settings that opens the Custom Search Engine view.")
         
         return cell!
     }

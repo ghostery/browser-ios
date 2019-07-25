@@ -23,6 +23,7 @@ class LumenURLBar: CliqzURLBar {
         } else {
             button.setImage(UIImage(named: "VPN_OFF"), for: .normal)
         }
+        button.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0)
         return button
     }()
     

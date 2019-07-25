@@ -99,10 +99,11 @@ class DashboardButton: InsetButton {
 			make.bottom.equalToSuperview().offset(-4)
 		}
 		#else
-		let height: CGFloat = 40.0
+		let height: CGFloat = 30.0
 		let width = (dashboardIcon.image?.widthOverHeight() ?? 1.0) * height
 		dashboardIcon.snp.remakeConstraints { (make) in
-			make.center.equalToSuperview()
+            make.leading.equalToSuperview()
+			make.centerY.equalToSuperview()
 			make.height.equalTo(height)
 			make.width.equalTo(width)
 		}

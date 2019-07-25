@@ -45,7 +45,7 @@ class CliqzURLBar: URLBarView {
     }
     #if PAID
     let ghostyHeight = 38.0
-    let ghostyWidth = 38.0
+    let ghostyWidth = 36.0
     #else
     let ghostyHeight = 54.0
     let ghostyWidth = 54.0
