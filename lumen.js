@@ -45,16 +45,40 @@ const styles = StyleSheet.create({
   },
   footer: {
     height: 40,
-    backgroundColor: '#656d7e',
+    backgroundColor: '#464961',
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
+  footerText: {
+    color: '#A3A4B0',
+    fontSize: 11.5,
+  },
+  noResults: {
+    backgroundColor: 'white',
+    paddingTop: 24,
+    paddingBottom: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noResultsText: {
+    color: '#656d7e',
+    fontSize: 14,
+  },
+  searchEnginesHeader: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 30,
+  },
+  searchEnginesHeaderText: {
+    color: 'white',
+    fontSize: 12,
+  },
   searchEnginesContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 100,
     textAlign: 'center',
   },
@@ -67,6 +91,7 @@ const styles = StyleSheet.create({
   searchEngineText: {
     color: 'white',
     textAlign: 'center',
+    fontSize: 12,
   },
 });
 
@@ -237,19 +262,18 @@ class MobileCards extends React.Component {
                   footer={<View />}
                 />
                 <>
-                  { /* TODO chrmod: colors and font sizes */ }
-                  { results.length === 0 &&
-                    <View style={{ backgroundColor: 'white', height: 80, alignItems: 'center', justifyContent: 'center' }}>
-                      <Text style={{ color: '#656d7e' }}>{t('search_no_results')}</Text>
+                  {results.length === 0 &&
+                    <View style={styles.noResults}>
+                      <Text style={styles.noResultsText}>{t('search_no_results')}</Text>
                     </View>
                   }
                   <View style={styles.footer}>
-                    <Text style={{ color: 'white', }}>
+                    <Text style={styles.footerText}>
                       {t('search_footer')}
                     </Text>
                   </View>
-                  <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 20 }}>
-                    <Text style={{ color: 'white' }}>{t('search_alternative_search_engines_info')}</Text>
+                  <View style={styles.searchEnginesHeader}>
+                    <Text style={styles.searchEnginesHeaderText}>{t('search_alternative_search_engines_info')}</Text>
                   </View>
                   <View style={styles.searchEnginesContainer}>
                     <TouchableWithoutFeedback
