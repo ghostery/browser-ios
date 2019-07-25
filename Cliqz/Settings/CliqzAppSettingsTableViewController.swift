@@ -43,11 +43,9 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
         var searchSettings = generateSearchSettings(prefs: prefs)
         let searchSettingsTitle = NSLocalizedString("Search", tableName: "Cliqz", comment: "[Settings] Search section title")
         #if PAID
-        if SettingsPrefs.shared.isLumenDefaultSearchEngine {
-            let showSuggestion = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
-            let suggestion = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.querySuggestionPrefKey, defaultValue: true, titleText: showSuggestion)
-            searchSettings.append(suggestion)
-        }
+        let showSuggestion = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
+        let suggestion = BoolSetting(prefs: prefs, prefKey: SettingsPrefs.querySuggestionPrefKey, defaultValue: true, titleText: showSuggestion)
+        searchSettings.append(suggestion)
         #endif
         settings += [ SettingSection(title: NSAttributedString(string: searchSettingsTitle), children: searchSettings)]
 
