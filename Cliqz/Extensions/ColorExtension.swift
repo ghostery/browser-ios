@@ -42,7 +42,7 @@ extension UIColor {
     static let lumenDisabled = UIColor(colorString: "BDC0CE")
 	static let lumenTextBlue = UIColor(rgb: 0x3987FF)
     static let lumenURLBarBlue = UIColor(rgb: 0x3647D0)
-    static let lumenURLBarPurple = UIColor(rgb: 0xACADFF)
+    static let lumenURLBarPurple = UIColor(rgb: 0x3987FF)
     static let privateURLBarBackground = UIColor(colorString: "3D3F4E")
 
     // TODO: Theming approach should be reworked as there are many different approaches taken currently

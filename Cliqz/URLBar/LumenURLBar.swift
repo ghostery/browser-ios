@@ -9,6 +9,8 @@
 import UIKit
 import NetworkExtension
 #if PAID
+
+private let borderPadding = 3
 class LumenURLBar: CliqzURLBar {
     
     lazy var vpnAccessButton: UIButton = {
@@ -21,11 +23,25 @@ class LumenURLBar: CliqzURLBar {
         } else {
             button.setImage(UIImage(named: "VPN_OFF"), for: .normal)
         }
+        button.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0)
         return button
     }()
     
     var status: NEVPNStatus {
         return NEVPNManager.shared().connection.status;
+    }
+
+    private func addShadow() {
+        self.locationContainer.layer.shadowOffset = CGSize(width: 0, height: 1)
+        self.locationContainer.layer.shadowColor = UIColor.lumenPurple.cgColor
+        self.locationContainer.layer.masksToBounds = false
+        self.locationContainer.layer.shadowRadius = 5
+        self.locationContainer.layer.shadowOpacity = 0.3
+    }
+
+    private func removeShadow() {
+        self.locationContainer.layer.shadowRadius = 0
+        self.locationContainer.layer.shadowOpacity = 0
     }
 
     override func createCancelButton() -> UIButton {
@@ -37,9 +53,11 @@ class LumenURLBar: CliqzURLBar {
 
     override func layoutLocationContainer(inOverlay: Bool) {
         let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
-        self.locationContainer.layer.borderWidth = 0.1
+        self.locationContainer.layer.borderWidth = 0
 
         if inOverlay {
+            self.addShadow()
+            self.locationView.contentView.isHidden = true
             self.locationContainer.snp.remakeConstraints { make in
                 make.height.equalTo(height)
                 make.trailing.equalTo(self.safeArea.trailing).offset(-10)
@@ -47,6 +65,8 @@ class LumenURLBar: CliqzURLBar {
                 make.centerY.equalTo(self)
             }
         } else {
+            self.removeShadow()
+            self.locationView.contentView.isHidden = false
             self.locationContainer.snp.remakeConstraints { make in
                 make.height.equalTo(height)
                 make.leading.equalTo(self.safeArea.leading).offset(10)
@@ -58,9 +78,8 @@ class LumenURLBar: CliqzURLBar {
 
     override func layoutLocationTextField() {
         self.locationTextField?.snp.remakeConstraints { make in
-            make.height.equalTo(self.locationView)
-            make.leading.equalTo(self.locationView.snp.leading).offset(10)
-            make.trailing.equalTo(self.cancelButtonSeparator.snp.leading)
+            make.leading.equalTo(self.locationView.snp.leading).offset(9)
+            make.trailing.equalTo(self.cancelButtonSeparator.snp.leading).inset(-borderPadding)
             make.centerY.equalTo(self.locationView)
         }
     }
@@ -89,7 +108,7 @@ class LumenURLBar: CliqzURLBar {
 
     override func setupCancelButtonConstraints() {
         cancelButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.locationContainer.snp.trailing).inset(10)
+            make.trailing.equalTo(self.locationContainer.snp.trailing).inset(borderPadding)
             make.centerY.equalTo(self.locationContainer)
             make.width.equalTo(self.cancelButton.intrinsicContentSize.width)
             make.height.equalTo(URLBarViewUX.ButtonHeight)
@@ -100,7 +119,7 @@ class LumenURLBar: CliqzURLBar {
         super.setupConstraints()
 
         cancelButtonSeparator.snp.makeConstraints { make in
-            make.trailing.equalTo(self.cancelButton.snp.leading)
+            make.trailing.equalTo(self.cancelButton.snp.leading).inset(-borderPadding)
             make.centerY.equalTo(self.locationContainer)
             make.width.equalTo(1)
             make.height.equalTo(26)
@@ -131,9 +150,8 @@ class LumenURLBar: CliqzURLBar {
 
     override func applyUIMode(isPrivate: Bool) {
         super.applyUIMode(isPrivate: isPrivate)
-        self.locationContainer.layer.borderWidth = isPrivate ? 0 : 0.1
         self.locationContainer.backgroundColor = isPrivate ? .privateURLBarBackground : .white
-        self.cancelButton.backgroundColor = isPrivate ? .privateURLBarBackground : .white
+        self.cancelButton.backgroundColor = UIColor.clear
         let titleColor = isPrivate ? .white : UIColor.theme.urlbar.urlbarButtonTitleText
         self.cancelButton.setTitleColor(titleColor, for: [])
         cancelButtonSeparator.backgroundColor = isPrivate ? .white : UIColor.lumenURLBarPurple

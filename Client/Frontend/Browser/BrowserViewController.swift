@@ -1903,6 +1903,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
         // Cliqz: Close control center or vpn panel
+        self.hideSearchController()
         self.hidePrivacyPanel()
 		self.homePanelController?.shouldShowKeyboard = true
 		// Cliqz: End

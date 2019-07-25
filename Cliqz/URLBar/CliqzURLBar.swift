@@ -45,7 +45,7 @@ class CliqzURLBar: URLBarView {
     }
     #if PAID
     let ghostyHeight = 38.0
-    let ghostyWidth = 38.0
+    let ghostyWidth = 36.0
     #else
     let ghostyHeight = 54.0
     let ghostyWidth = 54.0
@@ -55,6 +55,7 @@ class CliqzURLBar: URLBarView {
         let cancelButton = InsetButton()
         cancelButton.setTitle(NSLocalizedString("Cancel", tableName: "Cliqz", comment: "Cancel button title in the urlbar"), for: .normal)
         cancelButton.setTitleColor(UIColor.cliqzBlueTwoSecondary, for: UIControlState.highlighted)
+        cancelButton.titleLabel?.font = self.locationView.urlTextField.font
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
@@ -182,6 +183,7 @@ class CliqzURLBar: URLBarView {
     }
 
     func setStyle() {
+        locationView.layer.cornerRadius = 10
         locationContainer.layer.cornerRadius = 10
         locationContainer.clipsToBounds = true
     }
@@ -223,7 +225,7 @@ class CliqzURLBar: URLBarView {
         }
     }
 
-    func layoutLocationTextField() {
+    override func layoutLocationTextField() {
         self.locationTextField?.snp.remakeConstraints { make in
             make.edges.equalTo(self.locationView).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding, bottom: 0, right: URLBarViewUX.LocationLeftPadding))
         }

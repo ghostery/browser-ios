@@ -389,8 +389,14 @@ class URLBarView: UIView {
         locationTextField.snp.remakeConstraints { make in
             make.edges.equalTo(self.locationView)
         }
-
+        self.layoutLocationTextField()
         locationTextField.applyTheme()
+    }
+
+    func layoutLocationTextField() {
+        self.locationTextField?.snp.remakeConstraints { make in
+            make.edges.equalTo(self.locationView)
+        }
     }
 
     override func becomeFirstResponder() -> Bool {
