@@ -161,6 +161,17 @@ class MobileCards extends React.Component {
         query: args[0],
       });
     }
+
+    // Clear the screen on search session end
+    if (module === 'search' && name === 'stopSearch') {
+      this.setState({
+        results: {
+          results: [],
+          meta: {},
+        },
+      });
+    }
+
     if (action === 'core:setPref') {
       prefs.set(...args);
       return;
