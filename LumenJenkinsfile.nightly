@@ -30,8 +30,8 @@ node('gideon') {
                         set -e
                         set -x
                         rm -f agent.jar
-                        curl -LO #{ENV['JENKINS_URL']}/jnlpJars/agent.jar
-                        nohup java -jar agent.jar -jnlpUrl #{ENV['JENKINS_URL']}/computer/#{ENV['NODE_ID']}/slave-agent.jnlp -secret #{ENV["NODE_SECRET"]} &
+                        curl -LO https://raw.githubusercontent.com/ghostery/browser-ios/master/jenkins.py
+                        python jenkins.py --url #{ENV['JENKINS_URL']} --node #{ENV['NODE_ID']} --secret #{ENV["NODE_SECRET"]} &
                     SHELL
                 end
             end
