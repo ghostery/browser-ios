@@ -24,7 +24,7 @@ extension TabLocationView {
 
 class CliqzTabLocationView: TabLocationView {
     
-    private lazy var videoDownloadButton: UIButton = {
+    fileprivate lazy var videoDownloadButton: UIButton = {
         let videoDownloadButton = UIButton(frame: CGRect.zero)
         videoDownloadButton.setImage(UIImage(named: "downloadVideo"), for: .normal)
         videoDownloadButton.addTarget(self, action: #selector(SELtapVideoDownloadButton), for: .touchUpInside)
@@ -114,7 +114,20 @@ extension TabLocationView: PrivateModeUI {
             pageOptionsButton.unselectedTintColor = UIColor.lumenURLBarPurple
             pageOptionsButton.tintColor = UIColor.lumenURLBarPurple
             separatorLine.backgroundColor = UIColor.lumenURLBarPurple
+
+            if let cliqzTab = self as? CliqzTabLocationView {
+                #if PAID
+                cliqzTab.videoDownloadButton.tintColor =  UIColor.lumenURLBarPurple
+                #else
+                cliqzTab.videoDownloadButton.tintColor =  UIColor.cliqzBluePrimary
+                #endif
+            }
+
         } else {
+            if let cliqzTab = self as? CliqzTabLocationView {
+                cliqzTab.videoDownloadButton.tintColor =  UIColor.URLBar.privateTabTintColor
+            }
+            
             readerModeButton.selectedTintColor = UIColor.lumenURLBarPurple
             readerModeButton.unselectedTintColor = UIColor.URLBar.privateTabTintColor
 

@@ -1039,7 +1039,7 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
          */
         maskButton.snp.makeConstraints { make in
             make.leading.equalTo(self).offset(sideOffset)
-            make.centerY.equalTo(self)
+            make.centerY.equalTo(addTabButton)
             make.height.equalTo(30)
         }
         
