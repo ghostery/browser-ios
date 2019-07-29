@@ -19,7 +19,7 @@ class CliqzPrivateModeButton: UIButton, PrivateModeUI {
         
         self.clipsToBounds = true
         self.layer.cornerRadius = 5
-        
+        self.contentEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2)
         #if PAID
         setTitle(NSLocalizedString("Private", tableName: "Lumen", comment: "Private mode toggle button"), for: .normal)
         #else
