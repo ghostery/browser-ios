@@ -34,6 +34,11 @@ class CliqzTabLocationView: TabLocationView {
         videoDownloadButton.contentHorizontalAlignment = .left
         videoDownloadButton.accessibilityIdentifier = "TabLocationView.downloadVideoButton"
         videoDownloadButton.accessibilityLabel = NSLocalizedString("Download Video", comment: "Accessibility label for the Download Video button")
+        #if PAID
+        videoDownloadButton.tintColor =  UIColor.lumenURLBarPurple
+        #else
+        videoDownloadButton.tintColor =  UIColor.cliqzBluePrimary
+        #endif
         return videoDownloadButton
     }()
     

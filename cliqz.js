@@ -85,7 +85,7 @@ class MobileCards extends React.Component {
     const [module, name] = action.split(':');
     const response = await inject.module(module).action(name, ...args);
     if (typeof id !== 'undefined') {
-      nativeBridge.replyToAction(id, response);
+      nativeBridge.replyToAction(id, { result: response });
     }
   }
 
