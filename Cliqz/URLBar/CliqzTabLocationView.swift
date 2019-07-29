@@ -37,7 +37,7 @@ class CliqzTabLocationView: TabLocationView {
         #if PAID
         videoDownloadButton.tintColor =  UIColor.lumenURLBarPurple
         #else
-        videoDownloadButton.tintColor =  UIColor.white
+        videoDownloadButton.tintColor =  UIColor.cliqzBluePrimary
         #endif
         return videoDownloadButton
     }()
