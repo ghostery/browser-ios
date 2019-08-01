@@ -251,7 +251,20 @@ class CliqzSearchViewController : UIViewController, KeyboardHelperDelegate, UIAl
 extension CliqzSearchViewController {
     
     @objc func didSelectUrl(_ notification: Notification) {
-        if let url_str = notification.object as? NSString, let url = URL(string: url_str as String) {
+        // ReactNative is not sending encoded URL always, so for that we should have fall back mechanism
+        guard let url_str = notification.object as? String else {
+            return
+        }
+        var url: URL?
+        
+        if let selectedUrl = URL(string: url_str) {
+            url = selectedUrl
+        } else if let encodedString = url_str.addingPercentEncoding(
+            withAllowedCharacters: NSCharacterSet.urlFragmentAllowed) {
+            url = URL(string: encodedString)
+        }
+
+        if  let url = url {
             #if PAID
             let isSearchEngine = notification.userInfo?[OpenURLIsSearchEngineKey] as? Bool
             if UserPreferences.instance.shouldShowNonPrivateSearchWarningMessage, isSearchEngine ?? false {
