@@ -25,6 +25,7 @@ node('gideon') {
                         v.gui = false
                         v.memory = ENV["NODE_MEMORY"]
                         v.cpus = ENV["NODE_CPU_COUNT"]
+                        v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd','--medium', 'a9a6be82-497a-427c-b56b-ec1ff5cbb8fc']
                     end
                     nightlylumen.vm.provision "shell", privileged: false, run: "always", inline: <<-SHELL#!/bin/bash -l
                         set -e
