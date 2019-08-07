@@ -22,7 +22,7 @@ fileprivate class DarkTableViewColor: TableViewColor {
     override var disabledRowText: UIColor { return UIColor.Photon.Grey40 }
     override var separator: UIColor { return UIColor.Photon.Grey30 }
     override var headerBackground: UIColor { return UIColor.white }
-    override var headerTextLight: UIColor { return UIColor.Photon.Grey30 }
+    override var headerTextLight: UIColor { return UIColor.darkGray }
     override var headerTextDark: UIColor { return UIColor.cliqzBluePrimary }
     override var syncText: UIColor { return defaultTextAndTint }
 }
