@@ -218,7 +218,6 @@ class CliqzAppSettingsTableViewController: AppSettingsTableViewController {
 				FAQSetting(delegate: settingsDelegate),
 				SendCrashReportsSetting(settings: self),
 				SendUsageDataSetting(settings: self),
-				MyOffrzSetting()
 			]
         #endif
         
