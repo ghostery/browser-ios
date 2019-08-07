@@ -77,29 +77,6 @@ class TabTrayController: UIViewController {
     #endif
     //Cliqz: end
 
-    lazy var searchBar: UITextField = {
-        let searchBar = SearchBarTextField()
-        searchBar.backgroundColor = UIColor.theme.tabTray.searchBackground
-        searchBar.leftView = UIImageView(image: UIImage(named: "quickSearch"))
-        searchBar.leftViewMode = .unlessEditing
-        searchBar.textColor = UIColor.theme.tabTray.tabTitleText
-        searchBar.attributedPlaceholder = NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7)])
-        searchBar.clearButtonMode = .never
-        searchBar.delegate = self
-        searchBar.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
-        return searchBar
-    }()
-
-    var searchBarHolder = UIView()
-
-    var roundedSearchBarHolder: UIView = {
-        let roundedView = UIView()
-        roundedView.backgroundColor = UIColor.theme.tabTray.searchBackground
-        roundedView.layer.cornerRadius = 4
-        roundedView.layer.masksToBounds = true
-        return roundedView
-    }()
-
     lazy var cancelButton: UIButton = {
         let cancelButton = UIButton()
         cancelButton.setImage(UIImage.templateImageNamed("close-medium"), for: .normal)
@@ -147,7 +124,7 @@ class TabTrayController: UIViewController {
 
         // these will be animated during view show/hide transition
         statusBarBG.alpha = 0
-        searchBarHolder.alpha = 0
+        //searchBarHolder.alpha = 0
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -202,10 +179,7 @@ class TabTrayController: UIViewController {
         view.sendSubview(toBack: gradient)
         #endif
 
-        searchBarHolder.addSubview(roundedSearchBarHolder)
-        searchBarHolder.addSubview(searchBar)
-        searchBarHolder.backgroundColor = UIColor.theme.tabTray.toolbar
-        [collectionView, toolbar, searchBarHolder, cancelButton].forEach { view.addSubview($0) }
+        [collectionView, toolbar, cancelButton].forEach { view.addSubview($0) }
         makeConstraints()
 
         // The statusBar needs a background color
@@ -269,24 +243,6 @@ class TabTrayController: UIViewController {
             make.left.right.bottom.equalTo(view)
             make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
-        cancelButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self.roundedSearchBarHolder.snp.centerY)
-            make.trailing.equalTo(self.roundedSearchBarHolder.snp.trailing).offset(-8)
-        }
-
-        searchBarHolder.snp.makeConstraints { make in
-            make.leading.equalTo(view.safeArea.leading)
-            make.trailing.equalTo(view.safeArea.trailing)
-            make.height.equalTo(TabTrayControllerUX.SearchBarHeight)
-            self.tabLayoutDelegate.searchHeightConstraint = make.bottom.equalTo(self.topLayoutGuide.snp.bottom).constraint
-        }
-        searchBar.snp.makeConstraints { make in
-            make.edges.equalTo(searchBarHolder).inset(UIEdgeInsetsMake(15, 20, 10, 40))
-        }
-
-        roundedSearchBarHolder.snp.makeConstraints { make in
-            make.edges.equalTo(searchBarHolder).inset(UIEdgeInsetsMake(15, 10, 10, 10))
-        }
 
         //Cliqz: Add gradient
         #if PAID
@@ -322,16 +278,6 @@ class TabTrayController: UIViewController {
         tabDisplayManager.isPrivate = !tabDisplayManager.isPrivate
         tabManager.willSwitchTabMode(leavingPBM: privateMode)
         privateMode = !privateMode
-
-        if privateMode, privateTabsAreEmpty() {
-            UIView.animate(withDuration: 0.2) {
-                self.searchBarHolder.alpha = 0
-            }
-        } else {
-            UIView.animate(withDuration: 0.2) {
-                self.searchBarHolder.alpha = 1
-            }
-        }
 
         if tabDisplayManager.searchActive {
             self.didPressCancel()
@@ -413,11 +359,6 @@ extension TabTrayController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        if privateMode, privateTabsAreEmpty() {
-            UIView.animate(withDuration: 0.2) {
-                self.searchBarHolder.alpha = 0
-            }
-        }
     }
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {}
     func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {}
@@ -427,11 +368,6 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
-        if privateMode {
-            UIView.animate(withDuration: 0.2) {
-                self.searchBarHolder.alpha = 1
-            }
-        }
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
@@ -448,7 +384,6 @@ extension TabTrayController: UITextFieldDelegate {
         UIView.animate(withDuration: 0.1) {
             self.cancelButton.isHidden = true
         }
-        self.searchBar.resignFirstResponder()
     }
 
     @objc func textDidChange(textField: UITextField) {
@@ -490,7 +425,6 @@ extension TabTrayController: UITextFieldDelegate {
     func clearSearch() {
         tabDisplayManager.searchActive = false
         tabDisplayManager.searchedTabs = []
-        searchBar.text = ""
         ensureMainThread {
             self.tabDisplayManager.performTabUpdates()
         }
@@ -559,7 +493,6 @@ extension TabTrayController {
     @objc func appWillResignActiveNotification() {
         if privateMode {
             collectionView.alpha = 0
-            searchBarHolder.alpha = 0
         }
     }
 
@@ -568,10 +501,6 @@ extension TabTrayController {
         // as part of a private mode tab
         UIView.animate(withDuration: 0.2) {
             self.collectionView.alpha = 1
-
-            if self.privateMode, !self.privateTabsAreEmpty() {
-                self.searchBarHolder.alpha = 1
-            }
         }
     }
 }
@@ -723,7 +652,6 @@ extension TabTrayController {
 
 fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
-    var searchHeightConstraint: Constraint?
     let scrollView: UIScrollView
     var lastYOffset: CGFloat = 0
 
@@ -788,22 +716,17 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
             scrollDirection = .up
         }
         if checkRubberbandingForDelta(delta, for: scrollView) {
-
-            let offset = clamp(abs(scrollView.contentOffset.y), min: 0, max: TabTrayControllerUX.SearchBarHeight)
-            searchHeightConstraint?.update(offset: offset)
-            scrollView.contentInset = UIEdgeInsets(top: offset, left: 0, bottom: 0, right: 0)
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         } else {
             self.hideSearch()
         }
     }
 
     func showSearch() {
-        searchHeightConstraint?.update(offset: TabTrayControllerUX.SearchBarHeight)
         scrollView.contentInset = UIEdgeInsets(top: TabTrayControllerUX.SearchBarHeight, left: 0, bottom: 0, right: 0)
     }
 
     func hideSearch() {
-        searchHeightConstraint?.update(offset: 0)
         scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 
