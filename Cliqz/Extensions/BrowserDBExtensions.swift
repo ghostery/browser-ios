@@ -11,14 +11,23 @@ import Deferred
 import Shared
 import Sentry
 
+let cliqzOldBowserDatabaseHasBeenMovedKey = "com.cliqz.cliqzOldBowserDatabaseHasBeenMoved"
+let cliqzOldBowserMigrationHasHappenedKey = "com.cliqz.cliqzOldBowserMigrationHasHappened"
+
 // Cliqz
 extension BrowserDB {
     static func preInit(filename: String, secretKey: String? = nil, schema: Schema, files: FileAccessor) {
-        moveOldDatabase(filename: filename, schema: schema, files: files)
+        if UserDefaults.standard.bool(forKey: cliqzOldBowserDatabaseHasBeenMovedKey) {
+            moveOldDatabase(filename: filename, schema: schema, files: files)
+            UserDefaults.standard.set(true, forKey: cliqzOldBowserDatabaseHasBeenMovedKey)
+        }
     }
     
     func postInit() {
-        migrateCliqzBookmarks()
+        if UserDefaults.standard.bool(forKey: cliqzOldBowserMigrationHasHappenedKey) {
+            migrateCliqzBookmarks()
+            UserDefaults.standard.set(true, forKey: cliqzOldBowserMigrationHasHappenedKey)
+        }
     }
 
     // MARK: - Private Implementation
@@ -93,10 +102,9 @@ extension BrowserDB {
             ('parent', 'child', 'idx')
             VALUES (?, ?, ?);
             """
-        for oldBookmark in oldBookmarks where oldBookmark != nil {
-            highestIDX += 1
-            _ = self.run(insertIntoBookmarksLocalStructureSQL, withArgs: ["mobile______", oldBookmark!.guid, highestIDX])
-        }
+        _ = self.run(oldBookmarks.enumerated().map { (index, oldBookmark) in
+            return (insertIntoBookmarksLocalStructureSQL, ["mobile______", oldBookmark!.guid, highestIDX + index])
+        })
     }
 
     private class func idxFactory(_ row: SDRow) -> Int {
