@@ -47,7 +47,7 @@ final class BlockingCoordinator {
     private var isUpdating = false
     private var shouldUpdateAgain = false
     
-    private unowned let webView: WKWebView
+    private weak var webView: WKWebView?
     
     class func isAdblockerOn(domain: String?) -> Bool {
         
@@ -122,8 +122,10 @@ final class BlockingCoordinator {
         DispatchQueue.main.async {
             debugPrint("Coordinated Update")
             if GlobalPrivacyQueue.shared.operations.filter(opFilter).count == 0 {
+                guard let webView = self.webView else { return }
+
                 debugPrint("Add to Update Queue")
-                let updateOp = UpdateOperation(webView: self.webView, domain: self.webView.url?.normalizedHost)
+                let updateOp = UpdateOperation(webView: webView, domain: webView.url?.normalizedHost)
                 #if !PAID
                 updateOp.addDependency(TrackerList.instance.populateOp)
                 #endif
