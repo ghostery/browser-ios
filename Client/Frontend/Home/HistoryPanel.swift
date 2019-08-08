@@ -527,6 +527,17 @@ extension HistoryPanel: UITableViewDataSourcePrefetching {
                     /* Cliqz: fixed the section shifting as we don't show `syncAndRecentlyClosed` section
                     return IndexPath(row: indexPath.row, section: indexPath.section + 1)
                      */
+
+                    guard indexPath.section >= 0 && indexPath.section < Section.count else {
+                        Sentry.shared.send(message: "CLIQZ-IOS-15YD", tag: .general, extra: ["description": "wrong section", "section": String(indexPath.section)])
+                        return nil
+                    }
+                    let rowsCount = self.tableView(self.tableView, numberOfRowsInSection: indexPath.section)
+                    guard indexPath.row >= 0 && indexPath.row < rowsCount else {
+                        Sentry.shared.send(message: "CLIQZ-IOS-15YD", tag: .general, extra: ["description": "wrong row", "row": String(indexPath.row), "rowsCount": String(rowsCount)])
+                        return nil
+                    }
+
                     return IndexPath(row: indexPath.row, section: indexPath.section)
                 })
 
