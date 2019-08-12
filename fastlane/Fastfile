@@ -37,6 +37,8 @@ platform :ios do
     # revert changes that Firefox did to InfoPlist.strings
     sh("cd .. && git checkout Client/en.lproj/InfoPlist.strings")
     sh("cd .. && git checkout Client/en.lproj/Cliqz.strings")
+    sh("cd .. && git checkout Client/de.lproj/InfoPlist.strings")
+    sh("cd .. && git checkout Client/de.lproj/Cliqz.strings")
 
 
     # Import Cliqz localizations
@@ -396,6 +398,9 @@ platform :ios do
 
     # Configuring Sentry DSN
     sh("sed -i '' 's|sentryDSN:\ String?\ =\ nil|sentryDSN:\ String?\ =\ \"'$SentryDSN'\"|' ../Cliqz/Resources/APIKeys.swift")
+
+    # Configure CommitHash
+    sh("cd .. && plutil -replace CommitHash -string $CommitHash Client/Info.plist")
 
     # Building ReactNative Extension
     sh("cd .. && npm run bundle-cliqz")
