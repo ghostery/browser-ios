@@ -106,16 +106,13 @@ class ComplementarySearchSetting: Setting, SearchEnginePickerDelegate {
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
-        #if PAID
         let searchEnginePicker = LumenSearchEnginePicker()
         searchEnginePicker.profile = self.profile
         searchEnginePicker.searchEnginesUpdated = { [weak self] in
             searchEnginePicker.engines = self?.models
             searchEnginePicker.tableView.reloadData()
         }
-        #else
-        let searchEnginePicker = SearchEnginePicker()
-        #endif
+
         searchEnginePicker.engines = self.models
         
         searchEnginePicker.delegate = self
