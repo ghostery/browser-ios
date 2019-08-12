@@ -37,9 +37,6 @@ platform :ios do
     # revert changes that Firefox did to InfoPlist.strings
     sh("cd .. && git checkout Client/en.lproj/InfoPlist.strings")
     sh("cd .. && git checkout Client/en.lproj/Cliqz.strings")
-    sh("cd .. && git checkout Client/de.lproj/InfoPlist.strings")
-    sh("cd .. && git checkout Client/de.lproj/Cliqz.strings")
-
 
     # Import Cliqz localizations
     import_repository(
