@@ -67,6 +67,8 @@ PODS:
   - Realm/Headers (3.7.6)
   - RealmSwift (3.7.6):
     - Realm (= 3.7.6)
+  - RNCAsyncStorage (1.6.1):
+    - React
   - RNDeviceInfo (0.9.3):
     - React
   - RNFS (2.8.1):
@@ -101,6 +103,7 @@ DEPENDENCIES:
   - React/RCTText (from `./node_modules/react-native`)
   - React/RCTWebSocket (from `./node_modules/react-native`)
   - RealmSwift (~> 3.7.0)
+  - "RNCAsyncStorage (from `./node_modules/@react-native-community/async-storage`)"
   - RNDeviceInfo (from `./node_modules/react-native-device-info`)
   - RNFS (from `./node_modules/react-native-fs`)
   - RNSqlite2 (from `./node_modules/react-native-sqlite-2/ios/`)
@@ -135,6 +138,8 @@ EXTERNAL SOURCES:
     :path: "./node_modules/react-native"
   react-native-webrtc:
     :path: "./node_modules/react-native-webrtc"
+  RNCAsyncStorage:
+    :path: "./node_modules/@react-native-community/async-storage"
   RNDeviceInfo:
     :path: "./node_modules/react-native-device-info"
   RNFS:
@@ -168,6 +173,7 @@ SPEC CHECKSUMS:
   react-native-webrtc: 541532f2a980f99f4d83dcfb93aec042d5b51027
   Realm: 9eaecad54712d6246d08ba34c10f354e4715d7d3
   RealmSwift: 1fe08b4ebaeeaacf17f9ba0343f7b25c9fc31fa6
+  RNCAsyncStorage: 621bad7a889b5bf1583a52547f2dcd3a4d1ff15e
   RNDeviceInfo: dc3cbee96cd2392cf03d6ff6191dc15f1606a166
   RNFS: 44ef20bb355e894d86a439be668c3c5ac70838a5
   RNSqlite2: 181ae6674f53598008e7a64d8c2273c3df5d98b7
@@ -178,6 +184,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   yoga: 684513b14b03201579ba3cee20218c9d1298b0cc
 
-PODFILE CHECKSUM: 6c421bc1c58bb527722fc9ee7e749de3a6c712f7
+PODFILE CHECKSUM: 11aa095b008c0632404f5f9da8f50da2ce77628e
 
 COCOAPODS: 1.7.5

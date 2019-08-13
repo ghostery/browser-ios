@@ -29,6 +29,7 @@ def project_pods
     pod 'SVProgressHUD'
     pod 'RNUserAgent', :path => './node_modules/react-native-user-agent/ios/'
     pod 'Purchases' 
+    pod 'RNCAsyncStorage', :path => './node_modules/@react-native-community/async-storage'
 end
 
 target 'Client' do
