@@ -444,8 +444,8 @@ platform :ios do
       skip_profile_detection: "true",
       export_options: {
         provisioningProfiles: {
-          "com.cliqz" => "CLIQZ App Store",
-          "com.cliqz.ShareTo" => "CliqzShareTo Distribution",
+          "com.cliqz" => "match AppStore com.cliqz",
+          "com.cliqz.ShareTo" => "match AppStore com.cliqz.ShareTo",
         }
       }
     )
