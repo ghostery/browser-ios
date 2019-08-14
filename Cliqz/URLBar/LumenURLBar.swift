@@ -5,10 +5,9 @@
 //  Created by Mahmoud Adam on 3/8/19.
 //  Copyright © 2019 Cliqz. All rights reserved.
 //
-
+#if PAID
 import UIKit
 import NetworkExtension
-#if PAID
 
 private let borderPadding = 3
 class LumenURLBar: CliqzURLBar {
