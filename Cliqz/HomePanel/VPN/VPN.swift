@@ -5,7 +5,7 @@
 //  Created by Pavel Kirakosyan on 29.04.19.
 //  Copyright © 2019 Cliqz. All rights reserved.
 //
-
+#if PAID
 import Foundation
 
 import NetworkExtension
@@ -216,3 +216,4 @@ class VPN {
         return ikeProtocol
     }
 }
+#endif
