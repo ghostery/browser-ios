@@ -364,6 +364,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // button will be in the incorrect position and overlap with the input text. Not clear if
         // that is an iOS bug or not.
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
+        
+        UIBarButtonItem.appearance().tintColor = UIColor.cliqzBluePrimary
 
         return shouldPerformAdditionalDelegateHandling
     }
