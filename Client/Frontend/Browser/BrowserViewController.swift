@@ -1647,12 +1647,7 @@ extension BrowserViewController: URLBarDelegate {
         let urlActions = self.getLongPressLocationBarActions(with: urlBar)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        if #available(iOS 11.0, *), let tab = self.tabManager.selectedTab {
-            let trackingProtectionMenu = self.getTrackingMenu(for: tab, presentingOn: urlBar)
-            self.presentSheetWith(actions: [urlActions, trackingProtectionMenu], on: self, from: urlBar)
-        } else {
-            self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
-        }
+        self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
         // Cliqz: Close control center or vpn panel
         self.hidePrivacyPanel()
     }
