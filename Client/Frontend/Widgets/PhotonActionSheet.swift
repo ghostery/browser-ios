@@ -95,7 +95,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let button = UIButton()
         button.setTitle(Strings.CloseButtonTitle, for: .normal)
         button.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
-        button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
+        button.setTitleColor(UIColor.theme.actionMenu.foreground, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
         button.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
