@@ -353,7 +353,7 @@ extension HomePanelContextMenu {
         /* Cliqz: changed the icon of new private tab and the translated string
         let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
         */
-        let openInNewPrivateTabAction = PhotonActionSheetItem(title: CliqzStrings.OpenInNewForgetTabContextMenuTitle, iconString: "quick_action_new_ghost_tab") { action in
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: CliqzStrings.OpenInNewForgetTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
