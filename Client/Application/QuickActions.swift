@@ -56,6 +56,9 @@ class QuickActions: NSObject {
     }
 
     @discardableResult func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType, withUserData userData: [AnyHashable: Any] = [AnyHashable: Any](), toApplication application: UIApplication) -> Bool {
+        // disable dynamic quick actions
+        return false
+
         // add the quick actions version so that it is always in the user info
         var userData: [AnyHashable: Any] = userData
         userData[QuickActions.QuickActionsVersionKey] = QuickActions.QuickActionsVersion

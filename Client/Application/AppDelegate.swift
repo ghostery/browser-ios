@@ -367,6 +367,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
         UIBarButtonItem.appearance().tintColor = UIColor.cliqzBluePrimary
 
+        // disable dynamic quick actions
+        UIApplication.shared.shortcutItems?.removeAll()
+
         return shouldPerformAdditionalDelegateHandling
     }
 
