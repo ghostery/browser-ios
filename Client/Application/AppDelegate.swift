@@ -358,6 +358,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // that is an iOS bug or not.
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
+        // disable dynamic quick actions
+        UIApplication.shared.shortcutItems?.removeAll()
+
         return shouldPerformAdditionalDelegateHandling
     }
 
