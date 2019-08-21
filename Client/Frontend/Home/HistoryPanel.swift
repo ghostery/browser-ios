@@ -225,18 +225,19 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         guard let site = siteForIndexPath(indexPath) else {
             return
         }
-        profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in }
-        /* Cliqz: system is expecting tableview to perform delete operation with in the same RunLoop, that's why we moved the deletion out of asynchronous callback to fix the animation issue.
+ 
         profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
-        */
+            guard site == self.siteForIndexPath(indexPath) else {
+                self.reloadData()
+                return
+            }
+
             self.tableView.beginUpdates()
             self.groupedSites.remove(site)
             self.tableView.deleteRows(at: [indexPath], with: .right)
             self.tableView.endUpdates()
             self.updateEmptyPanelState()
-        /*
         }
-        */
     }
 
     func pinToTopSites(_ site: Site) {
