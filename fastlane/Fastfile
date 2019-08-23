@@ -421,7 +421,7 @@ platform :ios do
     )
 
     increment_version_number(
-      version_number:"2.0.3", 
+      version_number:"2.0.4", 
       xcodeproj:"Client.xcodeproj"
     )
 
