@@ -44,8 +44,8 @@ class ShareExtensionHelper: NSObject {
         activityItems.append(self)
         
         // Cliqz: Added footer text to the share items
-        let footerText = generateFooterText()
-        activityItems.append(footerText as AnyObject)
+        // let footerText = generateFooterText()
+        // activityItems.append(footerText as AnyObject)
 
         /* Cliqz: Added Application activities
         let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
