@@ -10,8 +10,14 @@
 #import <UIKit/UIKit.h>
 #import <React/RCTViewManager.h>
 
-@interface NativeDrawable : RCTViewManager
+@interface NativeDrawableImageView : UIImageView
 @property BOOL hasTint;
+@end
+
+@implementation NativeDrawableImageView
+@end
+
+@interface NativeDrawable : RCTViewManager
 @end
 
 @implementation NativeDrawable
@@ -20,20 +26,19 @@ RCT_EXPORT_MODULE()
 
 - (UIImageView *)view
 {
-    UIImageView* imageView = [[UIImageView alloc] init];
+    NativeDrawableImageView* imageView = [[NativeDrawableImageView alloc] init];
     [imageView setContentMode:UIViewContentModeScaleAspectFit];
     return imageView;
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(color, NSString, UIImageView) {
     NSString *color_str = (NSString*)json;
-    UIColor* color = [NativeDrawable colorFromHexString:color_str];
-    if (color != nil) {
+    UIColor* uicolor = [NativeDrawable colorFromHexString:color_str];
+    if (uicolor) {
         view.image = [view.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [view setTintColor: color];
-        [self setHasTint:YES];
-    }
-    else {
+        [view setTintColor: uicolor];
+        [(NativeDrawableImageView*)view setHasTint:YES];
+    } else {
         NSLog(@"color %@ is not valid", json);
     }
 }
@@ -41,16 +46,15 @@ RCT_CUSTOM_VIEW_PROPERTY(color, NSString, UIImageView) {
 RCT_CUSTOM_VIEW_PROPERTY(source, NSString, UIImageView)
 {
     NSString *imageName = (NSString*)json;
-    if (imageName != nil) {
+    if (imageName) {
         UIImage* image = [UIImage imageNamed:imageName];
-        if (self.hasTint) {
+        if (((NativeDrawableImageView*) view).hasTint) {
             image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
         
-        if (image != nil) {
+        if (image) {
             [view setImage:image];
-        }
-        else {
+        } else {
             NSLog(@"image %@ is missing", imageName);
         }
     }
