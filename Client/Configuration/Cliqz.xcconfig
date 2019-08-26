@@ -19,7 +19,7 @@ MOZ_INTERNAL_URL_SCHEME = cliqz
 
 LAUNCH_SCREEN = CliqzLaunchScreen
 
-SHORTCUT_PRIVATE_TAB_TITLE = ShortcutItemTitleNewForgetTab
+SHORTCUT_PRIVATE_TAB_TITLE = ShortcutItemTitleNewPrivateTab
 
 SHORTCUT_PRIVATE_TAB_ICON = quick_action_new_private_tab
 
