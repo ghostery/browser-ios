@@ -17,5 +17,6 @@
 
 #import "Shared-Bridging-Header.h"
 #import "Storage-Bridging-Header.h"
+#import "ObjC.h"
 
 #endif

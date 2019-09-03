@@ -139,11 +139,15 @@ class LogoLoader {
     }
 
     func domainName(_ urlString: String) -> String? {
-        if let url = NSURL(string: urlString),
-            let domain = url.host?.registeredDomain(),
-            let suffix = url.publicSuffix() {
-            let domainName = domain.subString(to: domain.count - suffix.count - 1)
-            return domainName
+        if let url = NSURL(string: urlString) {
+            var domain: String?
+            var suffix: String?
+            try? ObjC.catchException { domain = url.host?.registeredDomain() }
+            try? ObjC.catchException { suffix = url.publicSuffix() }
+
+            if let domain = domain, let suffix = suffix {
+                return domain.subString(to: domain.count - suffix.count - 1)
+            }
         }
         return nil
     }
