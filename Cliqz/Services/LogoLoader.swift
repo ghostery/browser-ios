@@ -85,47 +85,60 @@ class LogoLoader {
             fixedURL = "http://tz.de"
         }
 
-        if let domainName = self.domainName(fixedURL), //URLParser.getURLDetails(fixedURL),
+        if
+            let domainName = self.domainName(fixedURL), //URLParser.getURLDetails(fixedURL),
             let hostName = URL(string: fixedURL)?.host,
-            let db = self.logoDB,
-            db != JSON.null,
-            db["domains"] != JSON.null {
-            let details = db["domains"]
-            let host = details[domainName]
+            let db = self.logoDB?.dictionary,
+            let details = db["domains"]?.dictionary
+        {
             logoDetails.hostName = domainName
             logoDetails.prefix = domainName.subString(to: min(2, domainName.count)).capitalized
-            if let list = host.array,
-                list.count > 0 {
+            if
+                let list = details[domainName]?.array,
+                list.count > 0
+            {
                 let domainRule = generateDomainRule(hostName, domainName)
-                for info in list {
-                    if info != JSON.null,
-                        let r = info["r"].string,
-                        domainRule.contains(r) || info == list.last {
-
-                        if let doesLogoExist = info["l"].number, doesLogoExist == 1 {
+                for infos in list {
+                    if
+                        infos != JSON.null,
+                        let info = infos.dictionary,
+                        let r = info["r"]?.string,
+                        domainRule.contains(r) || infos == list.last
+                    {
+                        if let doesLogoExist = info["l"]?.number, doesLogoExist == 1 {
                             logoDetails.url = "https://cdn.cliqz.com/brands-database/database/\(LogoLoader.dbVersion)/pngs/\(domainName)/\(r)_192.png"
                         }
-                        logoDetails.color = info["b"].string
-                        if let txt = info["t"].string {
+
+                        if let color = info["b"]?.string {
+                            logoDetails.color = color
+                        }
+
+                        if let txt = info["t"]?.string {
                             logoDetails.prefix = txt
                         }
+
                         if r != "$", let address = hostName.lastIndex(of: domainName) {
                             logoDetails.hostName = hostName.subString(to: address + domainName.count)
                         }
+
                         break
                     }
                 }
             }
         }
+
         if logoDetails.color == nil {
             logoDetails.color = "000000"
-            let palette = self.logoDB?["palette"]
-            if let list = palette?.array,
-                let asciiVal = logoDetails.hostName?.asciiValue() {
+            if
+                let db = self.logoDB?.dictionary,
+                let list = db["palette"]?.array,
+                let asciiVal = logoDetails.hostName?.asciiValue()
+            {
                 let idx = asciiVal % list.count
                 logoDetails.color = list[idx].string
             }
         }
+
         return logoDetails
     }
 
@@ -139,11 +152,15 @@ class LogoLoader {
     }
 
     func domainName(_ urlString: String) -> String? {
-        if let url = NSURL(string: urlString),
-            let domain = url.host?.registeredDomain(),
-            let suffix = url.publicSuffix() {
-            let domainName = domain.subString(to: domain.count - suffix.count - 1)
-            return domainName
+        if let url = NSURL(string: urlString) {
+            var domain: String?
+            var suffix: String?
+            try? ObjC.catchException { domain = url.host?.registeredDomain() }
+            try? ObjC.catchException { suffix = url.publicSuffix() }
+
+            if let domain = domain, let suffix = suffix {
+                return domain.subString(to: domain.count - suffix.count - 1)
+            }
         }
         return nil
     }

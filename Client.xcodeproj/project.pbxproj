@@ -371,6 +371,7 @@
 		3D9CA9A81EF84D04002434DD /* NoImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CA9A71EF84D04002434DD /* NoImageTests.swift */; };
 		3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */; };
 		3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */; };
+		46000BB3231E7408001C5F83 /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 46000BB2231E7408001C5F83 /* ObjC.m */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
 		4F0445D72033324500E2C0C7 /* NewsDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0445D62033324500E2C0C7 /* NewsDataService.swift */; };
 		4F0445D92033326F00E2C0C7 /* FreshtabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0445D82033326F00E2C0C7 /* FreshtabViewController.swift */; };
@@ -1829,6 +1830,8 @@
 		3D9CA9A71EF84D04002434DD /* NoImageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageTests.swift; sourceTree = "<group>"; };
 		3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipBoardTests.swift; sourceTree = "<group>"; };
 		3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTests.swift; sourceTree = "<group>"; };
+		46000BB2231E7408001C5F83 /* ObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
+		46000BBC231E7427001C5F83 /* ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		4D0527A49CAC1D17E47BCD99 /* Pods-Storage.ghostery.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Storage.ghostery.xcconfig"; path = "Pods/Target Support Files/Pods-Storage/Pods-Storage.ghostery.xcconfig"; sourceTree = "<group>"; };
 		4D0D9DC90142EBD6431A7259 /* Pods-Client.fennec_enterprise.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Client.fennec_enterprise.xcconfig"; path = "Pods/Target Support Files/Pods-Client/Pods-Client.fennec_enterprise.xcconfig"; sourceTree = "<group>"; };
@@ -3446,6 +3449,8 @@
 				4F0445E1203344E300E2C0C7 /* LogoLoader.swift */,
 				1EEA369420615725003B6AD5 /* DownloadManager.swift */,
 				AF7DD43F20F785D30090956F /* CustomSimpleToast.swift */,
+				46000BB2231E7408001C5F83 /* ObjC.m */,
+				46000BBC231E7427001C5F83 /* ObjC.h */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -7039,6 +7044,7 @@
 				1E3C5388209AFEDA00286CA4 /* TabTrayDoneButton.swift in Sources */,
 				4F30F5132051670C0049E4F6 /* ShareCardModule.swift in Sources */,
 				4F30F5162051670C0049E4F6 /* SubscriptionModuleBridge.m in Sources */,
+				46000BB3231E7408001C5F83 /* ObjC.m in Sources */,
 				4F30F51B2051670C0049E4F6 /* Engine.swift in Sources */,
 				F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
