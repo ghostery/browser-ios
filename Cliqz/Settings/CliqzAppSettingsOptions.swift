@@ -380,7 +380,13 @@ class SendUsageDataSetting: CliqzOnOffSetting {
 class MyOffrzSetting: ShowCliqzPageSetting {
     
     override func getTitle() -> String {
+        #if CLIQZ
         return NSLocalizedString("About MyOffrz", tableName: "Cliqz", comment: "[Settings] About MyOffrz")
+        #endif
+
+        #if GHOSTERY
+        return NSLocalizedString("About Ghostery Rewards", tableName: "Cliqz", comment: "[Settings] About Ghostery Rewards")
+        #endif
     }
     
     override func getPageName() -> String {

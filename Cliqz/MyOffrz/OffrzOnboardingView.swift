@@ -59,8 +59,15 @@ class OffrzOnboardingView: UIView {
         hideButton.setImage(UIImage.templateImageNamed("tab_close"), for: UIControlState())
 		hideButton.addTarget(self, action: #selector(hideOnboardingView) , for: .touchUpInside)
 		self.addSubview(hideButton)
-		
-		descriptionLabel.text = NSLocalizedString("Receive attractive discounts and bargains with MyOffrz.", tableName: "Cliqz", comment: "[MyOffrz] MyOffrz description")
+
+        #if CLIQZ
+        descriptionLabel.text = NSLocalizedString("Receive attractive discounts and bargains with MyOffrz.", tableName: "Cliqz", comment: "[MyOffrz] MyOffrz description")
+        #endif
+
+        #if GHOSTERY
+        descriptionLabel.text = NSLocalizedString("Receive attractive discounts and bargains with Ghostery Rewards.", tableName: "Cliqz", comment: "[MyOffrz] Ghostery Rewards description")
+        #endif
+
 		self.addSubview(descriptionLabel)
 		
 		moreButton.setTitle(NSLocalizedString("LEARN MORE", tableName: "Cliqz", comment: "[MyOffrz] Learn more button title"), for: .normal)
