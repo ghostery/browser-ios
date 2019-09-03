@@ -392,6 +392,13 @@ class MyOffrzSetting: ShowCliqzPageSetting {
     override func getPageName() -> String {
         return "myoffrz"
     }
+
+    #if CLIQZ
+    override var url: URL? {
+        return URL(string: "https://cliqz.com/myoffrz")
+    }
+    #endif
+
     #if GHOSTERY
     override var url: URL? {
         return URL(string: "https://www.ghostery.com/faqs/what-is-ghostery-rewards/")
