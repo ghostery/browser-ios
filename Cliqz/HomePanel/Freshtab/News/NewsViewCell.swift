@@ -27,14 +27,32 @@ class NewsCellViewModel {
 			url = ""
 		}
 		let fullTitle = NSMutableAttributedString()
-        let customAttributes = NewsCellViewModel.getCustomLabelAttributes()
         
-		if news.isBreaking ?? false,
-			let t = news.breakingLabel {
-			fullTitle.append(NSAttributedString(string: t.uppercased() + ": ", attributes: customAttributes))
-		} else if let locallbl = news.localLabel {
-			fullTitle.append(NSAttributedString(string: locallbl.uppercased() + ": ", attributes: customAttributes))
-		}
+        if
+            news.isBreaking ?? false,
+            let t = news.breakingLabel
+        {
+            fullTitle.append(
+                NSAttributedString(
+                    string: t.uppercased() + ": ",
+                    attributes: [
+                        NSAttributedStringKey.foregroundColor: UIColor.cliqzRedFunctional,
+                        NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16),
+                    ]
+                )
+            )
+        } else if let locallbl = news.localLabel {
+            fullTitle.append(
+                NSAttributedString(
+                    string: locallbl.uppercased() + ": ",
+                    attributes: [
+                        NSAttributedStringKey.foregroundColor: UIColor.cliqzBluePrimary,
+                        NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16),
+                    ]
+                )
+            )
+        }
+
 		if let shortTitle = news.shortTitle {
 			fullTitle.append(NSAttributedString(string: shortTitle))
 		} else if let t = news.title {
@@ -44,14 +62,6 @@ class NewsCellViewModel {
 		logo = Variable(nil)
 		logoInfo = Variable(nil)
 	}
-    
-    private class func getCustomLabelAttributes() -> [NSAttributedStringKey : Any] {
-        
-        let customAttributes = [NSAttributedStringKey.foregroundColor: UIColor.cliqzBluePrimary,
-                                NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)]
-        
-        return customAttributes
-    }
 }
 
 class NewsViewCell: ClickableUITableViewCell {
