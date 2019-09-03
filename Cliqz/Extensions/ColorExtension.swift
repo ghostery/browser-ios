@@ -508,6 +508,7 @@ extension UIColor {
     static let cliqzGreenLightFunctional = UIColor(colorString: "9ECC42")
     static let cliqzGreenDarkFunctional = UIColor(colorString: "67A73A")
     static let cliqzPinkFunctional = UIColor(colorString: "FF7E74")
+    static let cliqzRedFunctional = UIColor(colorString: "FF403D")
     static let cliqzGrayFunctional = UIColor(colorString: "97A4AE")
     
     //Other
