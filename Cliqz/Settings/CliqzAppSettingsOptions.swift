@@ -387,6 +387,8 @@ class MyOffrzSetting: ShowCliqzPageSetting {
         #if GHOSTERY
         return NSLocalizedString("About Ghostery Rewards", tableName: "Cliqz", comment: "[Settings] About Ghostery Rewards")
         #endif
+
+        return ""
     }
     
     override func getPageName() -> String {
