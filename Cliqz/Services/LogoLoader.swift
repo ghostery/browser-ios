@@ -39,7 +39,7 @@ class LogoLoader {
     private static let dbVersion = "1537258816173"
     private static let dispatchQueue = DispatchQueue(label: "com.cliqz.logoLoader", attributes: .concurrent);
 
-    private lazy var logoDB: JSON? = {
+    private static var LogoDB: JSON? = {
         if let path = Bundle.main.path(forResource: "logo-database", ofType: "json"),
             let jsonData = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe) as Data {
             return JSON(jsonData)
@@ -88,7 +88,7 @@ class LogoLoader {
         if
             let domainName = self.domainName(fixedURL), //URLParser.getURLDetails(fixedURL),
             let hostName = URL(string: fixedURL)?.host,
-            let db = self.logoDB?.dictionary,
+            let db = LogoLoader.LogoDB?.dictionary,
             let details = db["domains"]?.dictionary
         {
             logoDetails.hostName = domainName
@@ -130,7 +130,7 @@ class LogoLoader {
         if logoDetails.color == nil {
             logoDetails.color = "000000"
             if
-                let db = self.logoDB?.dictionary,
+                let db = LogoLoader.LogoDB?.dictionary,
                 let list = db["palette"]?.array,
                 let asciiVal = logoDetails.hostName?.asciiValue()
             {
