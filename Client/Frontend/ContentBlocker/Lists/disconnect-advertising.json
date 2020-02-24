@@ -437,8 +437,6 @@
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?traffiliate\\.com","load-type":["third-party"],"unless-domain":["*dsnrmg.com","*dsnrgroup.com","*traffiliate.com","*z5x.net"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?z5x\\.com","load-type":["third-party"],"unless-domain":["*dsnrmg.com","*dsnrgroup.com","*traffiliate.com","*z5x.net"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?z5x\\.net","load-type":["third-party"],"unless-domain":["*dsnrmg.com","*dsnrgroup.com","*traffiliate.com","*z5x.net"]}},
-{"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?dada\\.pro","load-type":["third-party"],"unless-domain":["*dada.eu","*dada.pro","*simply.com"]}},
-{"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?simply\\.com","load-type":["third-party"],"unless-domain":["*dada.eu","*dada.pro","*simply.com"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?dataxu\\.com","load-type":["third-party"],"unless-domain":["*dataxu.com","*mexad.com","*w55c.net"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?dataxu\\.net","load-type":["third-party"],"unless-domain":["*dataxu.com","*mexad.com","*w55c.net"]}},
 {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?mexad\\.com","load-type":["third-party"],"unless-domain":["*dataxu.com","*mexad.com","*w55c.net"]}},
