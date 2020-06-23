@@ -1,4 +1,8 @@
-Cliqz for iOS
+# DEPRECATED - Ghostery for iOS version 2.x
+
+This project is no longer active.  Please see our [current iOS browser](https://github.com/ghostery/user-agent-ios) project for Ghostery iOS v3+.
+
+Ghostery for iOS
 ===============
 
 This branch (master)   [![Build Status](https://dev.azure.com/cliqzci/IOS/_apis/build/status/ghostery.browser-ios)](https://dev.azure.com/cliqzci/IOS/_build/latest?definitionId=1)
